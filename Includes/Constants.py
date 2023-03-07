@@ -1,0 +1,7 @@
+DEBUG_MODE = True
+SCRIPT_NAME = "L4D Hud Editor"
+PERSISTENT_DATA_PATH = SCRIPT_NAME + ".json"
+PERSISTENT_DATA = []
+GAME_TITLE = "Left 4 Dead 2"
+GAME_EXE = "left4dead2.exe"
+GAME_APPID = 550
