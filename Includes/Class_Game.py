@@ -21,17 +21,30 @@ class Game:
         self.steam_info = get_steam_info(self.persistent_data)
         self.installer = Installer(self.persistent_data, self)
 
+        self.game_title = "Left 4 Dead 2"
+        self.game_exe = "left4dead2.exe"
+        self.game_appid = 550
+
         # set metadata
-        # self.active_exe = os.path.join(self.active_dir, GAME_EXE)
+        # self.active_exe = os.path.join(self.active_dir, self.game_exe)
         # print(self.active_exe)
         # self.run("user")
         # input('press enter to force close game')
         # self.close()
         # self.run("dev")
 
+    def get_title(self):
+        return self.game_title
+
+    def get_exe(self):
+        return self.game_exe
+
+    def get_appid(self):
+        return self.game_appid
+
     def close(self):
         for proc in psutil.process_iter(['name']):
-            if proc.info['name'] == GAME_EXE:
+            if proc.info['name'] == self.get_exe():
                 proc.kill()
         # print('close() game force closed')
     
@@ -56,7 +69,7 @@ class Game:
                 ValueError("Invalid type parameter")
 
         # run the game through steam to prevent steam issues
-        game_args = f"-applaunch {str(GAME_APPID)}"
+        game_args = f"-applaunch {str(self.get_appid())}"
         game_args += " -novid" # skip intro videos
         game_args += " -console" # enable developer console
 

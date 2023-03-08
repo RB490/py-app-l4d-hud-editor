@@ -10,15 +10,29 @@ import tkinter as tk
 from tkinter import filedialog
 
 def copy_directory_contents(src_dir, dest_dir, ignore_file=None):
+    # Create the destination directory if it doesn't already exist
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
-    for item in os.listdir(src_dir):
-        src_path = os.path.join(src_dir, item)
-        dest_path = os.path.join(dest_dir, item)
-        if os.path.isdir(src_path):
-            copy_directory_contents(src_path, dest_path, ignore_file)
-        elif item != ignore_file:
-            shutil.copy2(src_path, dest_path)
+
+    # Traverse the source directory using os.walk and create a list of all files to be copied
+    src_files = []
+    for root, dirs, files in os.walk(src_dir):
+        for filename in files:
+            if filename != ignore_file:
+                src_files.append(os.path.join(root, filename))
+
+    # Iterate over the list of source files and copy each file to the destination directory
+    for src_path in src_files:
+        relative_path = os.path.relpath(src_path, src_dir) # Calculate the relative path of the source file
+        dest_path = os.path.join(dest_dir, relative_path)
+        
+        # Create the destination directory if it doesn't already exist
+        relative_dir = os.path.dirname(dest_path)
+        if not os.path.exists(relative_dir):
+            os.makedirs(relative_dir)
+
+        # Overwrites file in destination
+        shutil.copy2(src_path, dest_path)
 
 def get_dir_size(path):
     total = 0
