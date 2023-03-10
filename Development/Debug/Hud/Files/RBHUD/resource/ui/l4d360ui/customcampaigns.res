@@ -1,0 +1,326 @@
+"Resource/UI/L4D360UI/CustomCampaigns.res"
+{
+	"CustomCampaigns" //#L4D360UI_CustomCampaigns_FriendsTitle #L4D360UI_CustomCampaigns_SystemLinkTitle
+	{
+		"ControlName"					"Frame"
+		"fieldName"						"CustomCampaigns"
+		"xpos"							"0"
+		"ypos"							"0"
+		"wide"							"f0"
+		"tall"							"479"
+		"autoResize"					"0"
+		"pinCorner"						"0"
+		"visible"						"1"
+		"enabled"						"1"
+		"tabPosition"					"0"
+	}	
+	
+	"ImgBackground" [$WIN32]
+	{
+		"ControlName"			"L4DMenuBackground"
+		"fieldName"				"ImgBackground"
+		"xpos"							"c-260"		[$WIN32]
+		"ypos"							"90"
+		"zpos"							"-1"
+		"wide"							"340"		[$WIN32]
+		"tall"							"267"
+		"autoResize"			"0"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"fillColor"				"TransparentBlack"
+	}
+	
+	"Background_Header"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"Background_Header"
+		"xpos"				"0"
+		"ypos"				"20"
+		"wide"			"f0"
+		"tall"			"40"	//22
+		"visible"		"1"
+		"enabled"		"1"
+		"zpos"			"-150033"
+		"bgcolor_override"	"TransparentBlack"
+	}
+	
+	"Background_ButtonSave"
+	{
+		"ControlName"	"Panel"
+		"fieldName"		"Background_ButtonSave"
+		"xpos"				"0"
+		"ypos"				"65"
+		"wide"			"f0"
+		"tall"			"20"	//22
+		"visible"		"1"
+		"enabled"		"1"
+		"zpos"			"-1500"
+		"bgcolor_override"	"TransparentBlack"
+	}
+	
+	"GameDetailsBackground"
+	{
+		"ControlName"			"ImagePanel"
+		"fieldName"			"GameDetailsBackground"
+		"xpos"				"c84"
+		"ypos"				"90"
+		"zpos"				"-1"
+		"wide"				"205"
+		"tall"				"267" 
+		"autoResize"			"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"			"0"
+		"fillColor"			"TransparentBlack"
+	}
+	
+	"GplCustomCampaigns"
+	{
+		"ControlName"				"GenericPanelList"
+		"fieldName"				"GplCustomCampaigns"
+		"xpos"							"c-260"		[$WIN32]
+		"ypos"							"90"
+		"zpos"							"0"
+		"wide"							"340"		[$WIN32]
+		"tall"							"267"
+		"zpos"					"1"
+		"autoResize"				"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"				"1"
+		"navUp"					"BtnCancel"
+		"navDown"				"BtnSelect"
+		
+		"zpos"							"10000"
+		"bgcolor_override" 				"TransparentBlack"
+	}
+
+	"LblNoCampaignsFound"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"LblNoCampaignsFound"
+		"xpos"				"c-225"
+		"ypos"				"380"
+		"wide"				"400"
+		"tall"				"18"
+		"zpos"				"2"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"0" 
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"labelText"						"#L4D360UI_No_CustomCampaigns_Installed"
+		"textAlignment"					"west"
+		"Font"							"DefaultBold"
+	}
+	
+	"ImgLevelImage"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"			"ImgLevelImage"
+		"xpos"				"c89"
+		"ypos"				"95"
+		"zpos"				"1"
+		"wide"				"119"
+		"tall"				"60"
+		"scaleImage"			"1"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"			"0"
+		"image"				"maps/any"
+		"scaleImage"			"1"
+	}	
+	
+	"LblName"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"LblName"
+		"xpos"				"c89"
+		"ypos"				"160"
+		"wide"				"305"
+		"tall"				"15" 
+		"zpos"				"1"
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"font"				"DefaultLarge"
+		"textAlignment"		"west"
+		"labelText"		""
+	}
+	
+	"LblAuthor"
+	{
+		"ControlName"					"Label"
+		"fieldName"					"LblAuthor"
+		"xpos"				"c89"
+		"zpos"						"2"
+		"ypos"						"175"
+		"wide"						"305"
+		"tall"						"15" 
+		"autoResize"					"0"
+		"pinCorner"					"0"
+		"visible"					"0"
+		"enabled"					"1"
+		"tabPosition"					"0"
+		"labelText"					""
+		"textAlignment"					"west"
+		"Font"						"DefaultMedium"
+		"fgcolor_override"				"Label.DisabledFgColor1"
+	}
+	
+	"LblDescription"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"LblDescription"
+		"xpos"				"c89"
+		"ypos"				"190"
+		"zpos"				"1"
+		"wide"				"305"
+		"tall"				"75" 
+		"autoResize"		"0"
+		"pinCorner"			"0"
+		"visible"			"1"
+		"enabled"			"1"
+		"tabPosition"		"0"
+		"labelText"					""
+		"Font"				"Default"
+		"textAlignment"		"north-west"
+		"wrap"				"1"
+		"brighttext"		"1"
+		"dulltext"			"0"
+	}
+	
+	"BtnSelect"
+	{
+		"ControlName"			"L4D360HybridButton"
+		"fieldName"				"BtnSelect"
+		"xpos"					"c30"
+		"ypos"					"68"
+		"zpos"					"1"
+		"wide"					"50"
+		"tall"					"15"
+		"autoResize"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"wrap"					"1"
+		"labelText"				"#L4D360UI_CustomCampaign_Select"
+		"tooltiptext"			"#L4D360UI_CustomCampaign_Select_Tooltip"
+		"style"					"MainMenuSmallButton"
+		"command"				"Select"
+		EnabledTextInsetX		"2"
+		DisabledTextInsetX		"2"
+		FocusTextInsetX			"2"
+		OpenTextInsetX			"2"
+		"navUp"					"GplCustomCampaigns"
+		"navDown"				"BtnCancel"
+	}
+	
+	"BtnCancel"
+	{
+		"ControlName"			"L4D360HybridButton"
+		"fieldName"				"BtnCancel"
+		"xpos"					"c-260"
+		"ypos"					"68"
+		"zpos"					"1"
+		"wide"					"50"
+		"tall"					"15"
+		"autoResize"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"wrap"					"1"
+		"labelText"				"#L4D360UI_Cancel_Caps"
+		"tooltiptext"			"#L4D360UI_Tooltip_Cancel"
+		"style"					"MainMenuSmallButton"
+		"command"				"Back"
+		EnabledTextInsetX		"2"
+		DisabledTextInsetX		"2"
+		FocusTextInsetX			"2"
+		OpenTextInsetX			"2"
+		"navUp"				"BtnSelect"
+		"navDown"			"GplCustomCampaigns"
+	}
+	
+	
+	
+	
+	
+	
+		"IconForwardArrow"
+	{
+		"ControlName"			"ImagePanel"
+		"fieldName"				"IconForwardArrow"
+		"xpos"					"c-2269999"
+		"ypos"					"415"
+		"wide"					"15"
+		"tall"					"15"
+		"scaleImage"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"image"					"icon_button_arrow_right"
+		"scaleImage"			"1"
+	}
+		"IconBackArrow"
+	{
+		"ControlName"			"ImagePanel"
+		"fieldName"				"IconBackArrow"
+		"xpos"					"c-226999"
+		"ypos"					"435"
+		"wide"					"15"
+		"tall"					"15"
+		"scaleImage"			"1"
+		"pinCorner"				"0"
+		"visible"				"1"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"image"					"icon_button_arrow_left"
+		"scaleImage"			"1"
+	}
+	"Divider1"
+	{
+		"ControlName"			"ImagePanel"
+		"fieldName"				"Divider1"
+		"xpos"					"c-238"	
+		"ypos"					"115"	
+		"zpos"					"2"
+		"wide"					"450"
+		"tall"					"2"
+		"autoResize"			"0"
+		"pinCorner"				"0"
+		"visible"				"0"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"image"					"divider_gradient"
+		"scaleImage"			"1"
+	}
+	
+	"Divider2"
+	{
+		"ControlName"			"ImagePanel"
+		"fieldName"				"Divider2"
+		"xpos"					"c-238"	
+		"ypos"					"297"	
+		"zpos"					"2"
+		"wide"					"450"
+		"tall"					"2"
+		"autoResize"			"0"
+		"pinCorner"				"0"
+		"visible"				"0"
+		"enabled"				"1"
+		"tabPosition"			"0"
+		"image"					"divider_gradient"
+		"scaleImage"			"1"
+	}
+}

@@ -1,0 +1,64 @@
+
+
+^^^^^^^^^^^^^ completed ^^^^^^^^^^^^^
+
+Get inspiration by downloading good huds, checking them out, and storing them in the inspiration with a few screenshots
+
+FEATURES
+	
+	feature -> scavenge end of match scoreboard
+	
+	feature -> scavenge tie breaker panel
+	
+	feature -> survival end of match scoreboard
+	
+	feature -> motd
+	
+	feature -> versus end of round scoreboard
+	feature -> versus/scavenge rematch panel (gets shown under versus end of match scoreboard - on a black background)
+		^ which file positions it?
+	
+	feature -> versus localplayer hud
+	
+	feature -> versus teammate panel hud
+		
+IMPROVEMENTS
+	
+	improvement -> use steam avatar instead of normal head? https://youtu.be/GBmdNZXcHPQp
+	
+	improvement -> try different fonts. maybe there is a more 'fitting' font - more square-y that fits with all the sharp cornered panels
+
+	improvement -> instead of 20 pixels on all the edges, try more and less to see if it could be better
+	
+	improvement -> hudanimations -> item pickup -> add a quick flash when first picked up
+		^ add gained knowledge to hudanimations.txt description
+
+BUGS
+
+	bug -> rightclick chatbar in lobby crashes the game
+
+	bug -> give item instructor icon is invis
+
+	bug -> normal spectate doesnt say anything? shouldnt it say who im spectating
+
+	bug -> teammate idle status doesn't show
+	
+	bug -> captions overlap with infected teammate panels
+		^ and xpos differs from resolution to resolution because the fonts are different sizes
+	
+MODDING
+	addons -> stock background
+
+	addons -> crosshairs -> right now the edges of the crosshair texture are fucked. maybe thats why lv uses 128x128? use 128x128.
+	addons -> crosshairs -> add border around dev1ce crosshair
+	addons -> crosshairs -> modify addoninfo.txt's?
+	addons -> crosshairs -> compile & add to export
+	
+ADVANCED / IMPOSSIBLE
+	advanced / impossible -> modify survivor healthbar under target id if possible. same as the other bars
+
+	advanced / impossible -> Vertical infected ability bars
+	
+	advanced / impossible -> hide all game instructor messages except usefull ones. witch startled/ item pickup
+		instructor_lessons.txt doesn't seem to be read ingame. neither with all entries completely removed or empty entries
+		entries are in left4dead2_english.txt which doesnt seem to get read when its in vpk for no reason

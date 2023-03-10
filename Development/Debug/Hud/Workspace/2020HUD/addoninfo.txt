@@ -1,0 +1,9 @@
+"AddonInfo"
+{
+	addonSteamAppID		"550"
+	addonversion		"0.0"
+	addontitle			"2020HUD"
+	addonauthor			"addonauthor"
+	addontagline		"GUI"
+	addonDescription	"addonDescription"
+}

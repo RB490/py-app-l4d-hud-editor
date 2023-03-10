@@ -1,0 +1,60 @@
+
+"Resource/UI/ReadyCountdown.res"
+{
+	"ready_countdown"
+	{
+		"ControlName"	"Frame"
+		"fieldName"		"ready_countdown"
+		"xpos"			"0"
+		"ypos"			"0"
+		"wide"			"f0"
+		"tall"			"f0"
+		"autoResize"	"0"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"	"0"
+	}
+	"Seconds_1"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"Seconds_1"
+		"xpos"				"99999"
+		"ypos"				"2"
+		"wide"				"75"
+		"tall"				"12"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			"#L4D_s_team_ready_seconds_1"
+		"textAlignment"		"west"
+		"font"				"MenuSubTitle"
+	}
+	"Seconds_2"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"Seconds_2"
+		"xpos"				"99999"
+		"ypos"				"14"
+		"wide"				"75"
+		"tall"				"12"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			"#L4D_s_team_ready_seconds_2"
+		"textAlignment"		"west"
+		"font"				"MenuSubTitle"
+	}
+	"Countdown"
+	{
+		"ControlName"		"Label"
+		"fieldName"			"Countdown"
+		"xpos"				"c-25"
+		"ypos"				"60"
+		"wide"				"50"
+		"tall"				"50"
+		"visible"			"1"
+		"enabled"			"1"
+		"labelText"			""
+		"textAlignment"		"center"
+		"font"				"TradeGothicShadow20"
+	}
+}
