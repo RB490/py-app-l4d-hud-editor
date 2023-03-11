@@ -796,7 +796,7 @@ class ::VSLib.HUD.Countdown extends ::VSLib.HUD.Item
 			return temp;
 		}
 		
-		// Constants
+		// constants
 		const SECONDS_IN_HOUR = 3600;
 		const SECONDS_IN_MINUTE = 60;
 		

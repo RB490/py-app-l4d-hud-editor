@@ -36,7 +36,7 @@ if (!("Timers" in ::VSLib))
 }
 
 /*
- * Constants
+ * constants
  */
 
 // Passable constants

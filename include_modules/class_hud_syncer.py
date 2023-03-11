@@ -1,5 +1,9 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
 import os
+import shutil
+from include_modules.class_game import Game
+from include_modules.functions import load_data
+from include_modules.constants import DEVELOPMENT_DIR
 
 
 def get_all_files_and_dirs(dir_path):
@@ -22,7 +26,7 @@ def get_all_sub_dirs(dir_path):
 
 
 class HudSyncer:
-    """Functions providing hud syncing/unsyncing capability from the source to game dir"""
+    """functions providing hud syncing/unsyncing capability from the source to game dir"""
 
     def __init__(self):
         self.is_synced = False
@@ -94,19 +98,15 @@ class HudSyncer:
                     os.rename(target_item, target_item_backup)
                     print(f"{target_item} -> {target_item_backup}")
 
-    # print(f"custom items: {self.hud_items_custom}")
+        print(f"custom items: {self.hud_items_custom}")
 
 
-if __name__ == "__main__":
-    import shutil
-    from include_modules.class_game import Game
-    from include_modules.functions import load_data
-    from include_modules.constants import DEVELOPMENT_DIR
-
+def debug_hud_syncer():
+    """Debugs the hud syncer class"""
     os.system("cls")  # clear terminal
 
-    PERSISTENT_DATA = load_data()
-    game_instance = Game(PERSISTENT_DATA)
+    saved_data = load_data()
+    game_instance = Game(saved_data)
 
     sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "Debug", "Hud Syncer")
     if os.path.isdir(os.path.join(sync_debug_dir, "Workspace")):

@@ -3032,7 +3032,7 @@ function VSLib::Player::__CalcPickups( )
 	local btnThrow = ::VSLib.EntData._objBtnThrow[_idx];
 	local HoldingEntity = ::VSLib.EntData._objHolding[_idx];
 	
-	// Constants -- \todo @TODO Make these user-configurable
+	// constants -- \todo @TODO Make these user-configurable
 	const DISTANCE_TO_HOLD = 100.0
 	const DISTANCE_CLOSE = 256.0;
 	const OBJECT_SPEED = 25.0;
