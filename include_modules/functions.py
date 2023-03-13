@@ -5,7 +5,6 @@ import os
 import winreg
 import tkinter as tk
 from tkinter import filedialog
-
 from include_modules.constants import PERSISTENT_DATA_PATH
 
 

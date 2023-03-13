@@ -1,9 +1,26 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
 import os
 import shutil
+import hashlib
 from include_modules.class_game import Game
 from include_modules.functions import load_data
 from include_modules.constants import DEVELOPMENT_DIR
+
+
+def files_differ(in_file1, in_file2):
+    """Uses a MD5 hash to compare file differences"""
+    with open(in_file1, "rb") as file1, open(in_file2, "rb") as file2:
+        md5_f1 = hashlib.md5()
+        md5_f2 = hashlib.md5()
+        while True:
+            chunk_f1 = file1.read(1024)
+            chunk_f2 = file2.read(1024)
+            if not chunk_f1 and not chunk_f2:
+                return False  # files are the same
+            md5_f1.update(chunk_f1)
+            md5_f2.update(chunk_f2)
+            if md5_f1.digest() != md5_f2.digest():
+                return True  # files are different
 
 
 def get_all_files_and_dirs(dir_path):
@@ -35,6 +52,7 @@ class HudSyncer:
         self.target_dir_main_name = None
         self.target_sub_dir_names = None
         self.hud_items_custom = []
+        self.hud_items_previous = []
         self.hud_items = None
 
     def un_sync(self):
@@ -48,7 +66,7 @@ class HudSyncer:
         """Sync the hud"""
         print(f"source_dir: {source_dir}")
         print(f"target_dir: {target_dir}")
-        print(f"target_dir_main_name: {target_dir_main_name}")
+        # print(f"target_dir_main_name: {target_dir_main_name}")
 
         # Unsync the previous hud (if syncing different hud)
         if self.is_synced and self.source_dir != source_dir:
@@ -65,14 +83,19 @@ class HudSyncer:
         self.target_dir_root = target_dir
         self.target_dir_main_name = target_dir_main_name
         self.target_sub_dir_names = get_all_sub_dirs(target_dir)
-        self.hud_items_custom = []
-        self.hud_items = list(self.source_dir.glob("**/*"))
+        self.hud_items = get_all_files_and_dirs(self.source_dir)
 
         # Backup game files
         self._backup_target()
 
+        # Overwrite game files
+        self._overwrite_target()
+
+        # Unsync deleted items in target
+        self._remove_deleted_items()
+
         self.is_synced = True
-        input("end of sync()")
+        # input("end of sync()")
 
     def _backup_target(self):
         for target_sub_dir_name in self.target_sub_dir_names:
@@ -86,9 +109,10 @@ class HudSyncer:
                 if target_sub_dir_name == self.target_dir_main_name:
                     if not os.path.exists(target_item) and target_item not in self.hud_items_custom:
                         self.hud_items_custom.append(target_item)
-                        print(f"adding custom file: {target_item}")
+                        # print(f"adding custom file: {target_item}")
 
                 # backup existing file
+                # print(f"loop hud item: {item}")
                 if (
                     os.path.exists(target_item)
                     and not os.path.exists(target_item_backup)
@@ -96,9 +120,78 @@ class HudSyncer:
                     and not os.path.isdir(target_item)
                 ):
                     os.rename(target_item, target_item_backup)
-                    print(f"{target_item} -> {target_item_backup}")
+                    # print(f"{target_item} -> {target_item_backup}")
 
-        print(f"custom items: {self.hud_items_custom}")
+        # print(f"custom items: {self.hud_items_custom}")
+
+    def _overwrite_target(self):
+        for target_sub_dir_name in self.target_sub_dir_names:
+            target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
+
+            # only replace items in the main folder
+            if target_sub_dir_name != self.target_dir_main_name:
+                continue
+
+            for item in self.hud_items:
+                target_item = item.replace(self.source_dir, target_sub_dir)
+
+                # if item is a directory
+                if os.path.isdir(item):
+                    # create custom folder if needed
+                    if not os.path.isdir(target_item):
+                        print(f"creating dir: {target_item}")
+                        os.makedirs(target_item)
+                    continue
+
+                overwrite_target = False
+                # if item is a file
+                if os.path.isfile(target_item):
+                    # target file exists - if modified timestamps differ - overwrite
+                    if files_differ(item, target_item):
+                        overwrite_target = True
+                else:
+                    # target file does not exist - overwrite
+                    overwrite_target = True
+
+                if overwrite_target:
+                    shutil.copy(item, target_item)
+                    print(f"{item} -> {target_item}")
+
+        print("overwrite target()")
+
+    def _remove_deleted_items(self):
+        for item in self.hud_items_previous:
+            if item not in self.hud_items:
+                self._unsync_item(item)
+        self.hud_items_previous = self.hud_items
+
+    def _unsync_item(self, item):
+        print(f"_unsync_item: {item}")
+
+        for target_sub_dir_name in self.target_sub_dir_names:
+            target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
+            target_item = item.replace(self.source_dir, target_sub_dir)
+            target_item_backup = target_item + ".backup"
+
+            # delete custom folders
+            if os.path.isdir(target_item) and target_item in self.hud_items_custom:
+                shutil.rmtree(target_item)
+                self.hud_items_custom.remove(target_item)
+                continue
+
+            # unsync deleted file
+            if os.path.isfile(target_item):
+                # vanilla file
+                os.remove(target_item)
+                print(f"removing target item: {target_item}")
+                # restore backup, if available
+                if os.path.isfile(target_item_backup):
+                    shutil.move(target_item_backup, target_item)
+                    print(f"{target_item_backup} -> {target_item}")
+
+        # remove custom file from list
+        if target_item in self.hud_items_custom:
+            self.hud_items_custom.remove(target_item)
 
 
 def debug_hud_syncer():
@@ -121,3 +214,9 @@ def debug_hud_syncer():
 
     hud_syncer = HudSyncer()
     hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    input("enter to sync a second time")
+    hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # input("enter to sync a third time")
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # input("enter to sync a fourth time")
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))

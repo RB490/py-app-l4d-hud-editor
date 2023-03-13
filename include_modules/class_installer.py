@@ -6,7 +6,6 @@ import sys
 from tkinter import Tk
 from tkinter import filedialog
 import easygui
-from include_modules.class_game import Game
 from include_modules.class_vpk import VPK
 from include_modules.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
 from include_modules.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
@@ -297,12 +296,11 @@ class Installer:
         # Run, % STEAM_INFO.exePath A_Space "-applaunch " this.game.obj.appid " -novid -w 1 -h 1 -x 0 -y 0 -windowed"
 
 
-def debug_installer_class():
+def debug_installer_class(game_instance):
     """Debug installer class"""
     os.system("cls")  # clear terminal
 
     saved_data = load_data()
-    game_instance = Game(saved_data)
     inst = Installer(saved_data, game_instance)
     inst.run_installer()
     # inst.toggle_dev_mode(True)

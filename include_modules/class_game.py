@@ -5,7 +5,6 @@ import tkinter as tk
 import traceback
 import subprocess
 import psutil
-
 from include_modules.class_installer import Installer
 from include_modules.constants import DEBUG_MODE
 from include_modules.functions import get_steam_info

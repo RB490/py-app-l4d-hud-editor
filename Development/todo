@@ -1,0 +1,49 @@
+feature -> main gui -> 	add button = open default file dialog prompt to select a folder
+	+ link same function to menubar -> file -> add
+
+feature -> main gui -> 	new buttom = open default file dialog prompt to select a folder (and then copy vanilla hud files to it)
+	+ link same function to menubar -> file -> new
+
+feature -> main gui -> 	edit buttom = start function that starts hud editing. probably pass a directory to that func
+	which then creates a hud_sync instance, etc.
+	+ link same function to menubar -> file -> edit
+
+feature -> main gui -> read addoninfo.txt with some kind of module parser python thing to retrieve addon name
+
+feature -> main gui -> menubar > code dev functionality
+	Open user folder
+	Open dev folder
+	---------------
+	Enable (toggle these depending on current status, and/or add sepearate status indicator entry)
+	Disable
+	---------------
+	Install
+	Update
+	Repair
+	Verify
+	---------------
+	Remove
+
+feature -> main gui -> context menu for tree menu items
+	Edit
+	------
+	Open dir
+	Export (as vpk)
+	------
+	Remove (only from program)
+
+feature -> main gui -> menu icons
+	import tkinter as tk
+
+	root = tk.Tk()
+
+	menu_bar = tk.Menu(root)
+
+	file_menu = tk.Menu(menu_bar, tearoff=0)
+	file_icon = tk.PhotoImage(file="file_icon.gif")
+	file_menu.add_command(label="Open", compound="left", image=file_icon)
+	menu_bar.add_cascade(label="File", menu=file_menu)
+
+	root.config(menu=menu_bar)
+
+	root.mainloop()
