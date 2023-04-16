@@ -8,6 +8,11 @@ from tkinter import filedialog
 from include_modules.constants import PERSISTENT_DATA_PATH
 
 
+def start_hud_editing():
+    """Perform all the actions needed to start hud editing"""
+    print("todo")
+
+
 def copy_directory_contents(src_dir, dest_dir, ignore_file=None):
     """Copy the contents of src_dir into dest_dir overwriting if needed"""
     # Create the destination directory if it doesn't already exist

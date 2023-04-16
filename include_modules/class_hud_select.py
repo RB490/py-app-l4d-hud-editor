@@ -1,9 +1,13 @@
+"""Module import modules that should be available when the package is imported"""
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+from include_modules.functions import start_hud_editing
 
 
-class Application:
+class HudSelectGui:
+    """Class for the hud select gui"""
+
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Game List")
@@ -46,7 +50,7 @@ class Application:
         self.picture_frame.pack(padx=5, pady=5)
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.frame, text="Edit", width=45, height=1, command=self.edit_hud)
+        self.edit_button = tk.Button(self.frame, text="Edit", width=45, height=1, command=self.edit_selected_hud)
         self.edit_button.pack(pady=5, padx=5)
 
         # create a menu bar
@@ -57,7 +61,7 @@ class Application:
         file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.prompt_new_gui)
         file_menu.add_command(label="Add", accelerator="Ctrl+O", command=self.prompt_add_gui)
         file_menu.add_separator()
-        file_menu.add_command(label="Edit", accelerator="Enter")
+        file_menu.add_command(label="Edit", accelerator="Enter", command=self.edit_selected_hud)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.root.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
@@ -90,13 +94,16 @@ class Application:
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
 
+    # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
+        """Get select item from treeview"""
         selected_item = self.treeview.selection()
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
             print(item_values)
 
     def prompt_add_gui(self):
+        """Prompt user for hud folder to add"""
         root = tk.Tk()
         root.withdraw()
 
@@ -105,6 +112,7 @@ class Application:
         print("Selected folder:", folder_path)
 
     def prompt_new_gui(self):
+        """Prompt user for hud folder to create a new hud in"""
         root = tk.Tk()
         root.withdraw()
 
@@ -112,11 +120,16 @@ class Application:
 
         print("Selected folder:", folder_path)
 
-    def edit_hud(self):
-        print("todo")
+    def edit_selected_hud(self):
+        """Start hud editing for selected hud"""
+        start_hud_editing()
+
+
+def debug_hud_select_gui():
+    """Debug the gui"""
+    app = HudSelectGui()
+    app.root.mainloop()
 
 
 if __name__ == "__main__":
-    app = Application()
-    app.root.mainloop()
-    # app.prompt_add_gui()
+    debug_hud_select_gui()

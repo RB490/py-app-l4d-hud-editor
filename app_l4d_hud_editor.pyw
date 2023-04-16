@@ -10,7 +10,13 @@
 
 import os
 import atexit
+
+# pylint: disable=unused-import
+from include_modules.class_hud_select import debug_hud_select_gui
+
+# pylint: disable=unused-import
 from include_modules.class_hud_syncer import debug_hud_syncer
+
 from include_modules.constants import PERSISTENT_DATA, SCRIPT_NAME
 from include_modules.functions import load_data, save_data_on_exit
 
@@ -35,6 +41,7 @@ atexit.register(save_data_on_exit, PERSISTENT_DATA)
 # inst.toggle_dev_mode(True)
 
 # game_instance = Game(PERSISTENT_DATA)
-debug_hud_syncer()
+# debug_hud_syncer()
+debug_hud_select_gui()
 
 input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")

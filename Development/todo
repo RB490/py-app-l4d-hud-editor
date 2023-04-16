@@ -1,13 +1,7 @@
 
-feature -> main gui -> 	add button = open default file dialog prompt to select a folder
-	+ link same function to menubar -> file -> add
+feature -> main gui -> 	add button functionality
 
-feature -> main gui -> 	new buttom = open default file dialog prompt to select a folder (and then copy vanilla hud files to it)
-	+ link same function to menubar -> file -> new
-
-feature -> main gui -> 	edit buttom = start function that starts hud editing. probably pass a directory to that func
-	which then creates a hud_sync instance, etc.
-	+ link same function to menubar -> file -> edit
+feature -> main gui -> 	new buttom functionality
 
 feature -> main gui -> read addoninfo.txt with some kind of module parser python thing to retrieve addon name
 
