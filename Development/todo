@@ -1,3 +1,4 @@
+
 feature -> main gui -> 	add button = open default file dialog prompt to select a folder
 	+ link same function to menubar -> file -> add
 
@@ -47,3 +48,7 @@ feature -> main gui -> menu icons
 	root.config(menu=menu_bar)
 
 	root.mainloop()
+
+feature -> gameclass/installer -> compare pak01's between user&dev. assume user is up to date - throw a notify if out of date
+
+feature idea -> instead of using a gui for the main control use the default console interface instead - possibly with a package that has a few more options

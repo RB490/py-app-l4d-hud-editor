@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 
 
 class Application:
@@ -37,7 +38,7 @@ class Application:
         self.add_button.pack(pady=5, padx=5)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.frame, text="New", width=45, height=1, command=self.prompt_add_gui)
+        self.new_button = tk.Button(self.frame, text="New", width=45, height=1, command=self.prompt_new_gui)
         self.new_button.pack(pady=5, padx=5)
 
         # create a picture frame on the right side
@@ -45,7 +46,7 @@ class Application:
         self.picture_frame.pack(padx=5, pady=5)
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.frame, text="Edit", width=45, height=1, command=self.prompt_add_gui)
+        self.edit_button = tk.Button(self.frame, text="Edit", width=45, height=1, command=self.edit_hud)
         self.edit_button.pack(pady=5, padx=5)
 
         # create a menu bar
@@ -53,8 +54,8 @@ class Application:
 
         # File menu
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="New", accelerator="Ctrl+N")
-        file_menu.add_command(label="Open...", accelerator="Ctrl+O")
+        file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.prompt_new_gui)
+        file_menu.add_command(label="Add", accelerator="Ctrl+O", command=self.prompt_add_gui)
         file_menu.add_separator()
         file_menu.add_command(label="Edit", accelerator="Enter")
         file_menu.add_separator()
@@ -96,37 +97,23 @@ class Application:
             print(item_values)
 
     def prompt_add_gui(self):
-        add_window = tk.Toplevel(self.root)
-        add_window.title("Add Game")
+        root = tk.Tk()
+        root.withdraw()
 
-        tk.Label(add_window, text="Game Name:").pack(padx=5, pady=5)
-        game_name_entry = tk.Entry(add_window, width=50)
-        game_name_entry.pack(padx=5, pady=5)
+        folder_path = filedialog.askdirectory(title="Add HUD: Select folder")
 
-        tk.Label(add_window, text="Directory Path:").pack(padx=5, pady=5)
-        directory_entry = tk.Entry(add_window, width=50)
-        directory_entry.pack(padx=5, pady=5)
+        print("Selected folder:", folder_path)
 
-        # create a frame for radio buttons
-        radio_frame = tk.Frame(add_window)
-        radio_frame.pack(padx=5, pady=5, anchor="w")
+    def prompt_new_gui(self):
+        root = tk.Tk()
+        root.withdraw()
 
-        # create two radio buttons for game version
-        game_version = tk.StringVar()
-        game_version.set("Left 4 Dead")
+        folder_path = filedialog.askdirectory(title="New HUD: Select folder")
 
-        ttk.Radiobutton(radio_frame, text="Left 4 Dead", variable=game_version, value="Left 4 Dead").pack(side="left")
-        ttk.Radiobutton(radio_frame, text="Left 4 Dead 2", variable=game_version, value="Left 4 Dead 2").pack(
-            side="left", padx=10
-        )
+        print("Selected folder:", folder_path)
 
-        def add_game():
-            values = (game_name_entry.get(), directory_entry.get(), game_version.get())
-            self.treeview.insert("", "end", text=str(len(self.treeview.get_children()) + 1), values=values)
-            add_window.destroy()
-
-        add_button = tk.Button(add_window, text="Add", command=add_game)
-        add_button.pack(pady=5, padx=5)
+    def edit_hud(self):
+        print("todo")
 
 
 if __name__ == "__main__":
