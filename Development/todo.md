@@ -45,4 +45,5 @@ feature -> main gui -> menu icons
 
 feature -> gameclass/installer -> compare pak01's between user&dev. assume user is up to date - throw a notify if out of date
 
-feature idea -> instead of using a gui for the main control use the default console interface instead - possibly with a package that has a few more options
+#optional #do-last
+	feature idea -> instead of using a gui for the main control use the default console interface instead - possibly with a package that has a few more options
