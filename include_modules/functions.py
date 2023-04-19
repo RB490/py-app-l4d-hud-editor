@@ -8,9 +8,9 @@ from tkinter import filedialog
 from include_modules.constants import PERSISTENT_DATA_PATH
 
 
-def start_hud_editing():
+def start_hud_editing(hud_dir):
     """Perform all the actions needed to start hud editing"""
-    print("todo")
+    print(f"todo... ({hud_dir})")
 
 
 def copy_directory_contents(src_dir, dest_dir, ignore_file=None):

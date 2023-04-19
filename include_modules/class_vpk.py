@@ -54,25 +54,24 @@ class VPK:
         """
         Create a new VPK file from the specified input directory.
 
-        :param input_dir: The directory containing the files to add to the new VPK file.
+        :param input_directory: The directory containing the files to add to the new VPK file.
+        :param output_directory: The directory where the new VPK file will be saved.
+        :param output_file_name: The name of the new VPK file.
         """
+        # verify input parameters
+        if not os.path.exists(input_dir):
+            raise ValueError(f"input_directory does not exist: {input_dir}")
+        elif not os.path.exists(output_dir):
+            raise ValueError(f"output_directory does not exist: {output_dir}")
+
         # create new VPK
         new_vpk = vpk.new(input_dir)
 
-        # (apparently this step isn't needed?)
-        # iterate over all files in the input directory
-        # for dirpath, dirnames, filenames in os.walk(input_dir):
-        #     for filename in filenames:
-        #         # add the file to the VPK
-        #         full_path = os.path.join(dirpath, filename)
-        #         with open(full_path, "rb") as input_file:
-        #             new_vpk.add_file(full_path[len(input_dir) + 1 :], input_file.read())
-
         # save the VPK
-        output_file = output_file_name + ".vpk"
-        new_vpk.save(output_file)
-        output_file = os.path.join(input_dir, output_file)
-        shutil.move(output_file, os.path.join(output_dir, output_file))
+        output_file_name = os.path.splitext(output_file_name)[0] + ".vpk"
+        output_path = os.path.normpath(os.path.join(output_dir, output_file_name))
+        new_vpk.save(output_path)
+        print(f"Created VPK: {output_path}")
 
 
 if __name__ == "__main__":

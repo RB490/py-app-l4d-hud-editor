@@ -1,9 +1,11 @@
 """Module import modules that should be available when the package is imported"""
+import subprocess
 import os
-from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+from PIL import Image, ImageTk
+from include_modules.class_vpk import VPK
 from include_modules.functions import start_hud_editing
 from include_modules.functions import copy_directory_contents
 from include_modules.constants import NEW_HUD_DIR
@@ -21,12 +23,16 @@ class HudSelectGui:
         # self.root.geometry("865x390")
         self.root.minsize(865, 375)
 
-        # # load saved geometry
+        # load saved geometry
         try:
             geometry = self.persistent_data["HudSelectGuiGeometry"]
             self.root.geometry(geometry)
         except KeyError:
             self.root.geometry("1000x1000+100+100")
+
+        # initialize variables
+        self.selected_hud_name = ""
+        self.selected_hud_dir = ""
 
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
@@ -57,18 +63,26 @@ class HudSelectGui:
         self.picture_frame = tk.Frame(self.frame, width=250, height=250, bg="white")
         self.picture_frame.pack(padx=5, pady=5)
 
-        # Load the image
-        image = Image.open(os.path.join(IMAGES_DIR, "cross128.png"))
-        photo = ImageTk.PhotoImage(image)
-
-        # Add the image to a label and display it in the frame
-        self.picture_viewport = tk.Label(self.picture_frame, image=photo)
-        self.picture_viewport.image = photo  # Keep a reference to the image to prevent it from being garbage collected
+        # Add the image viewport, display it in the picture frame and set the initial image
+        self.picture_viewport = tk.Label(self.picture_frame)
         self.picture_viewport.pack()
+        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
         # create a button above the picture frame
         self.edit_button = tk.Button(self.frame, text="Edit", width=35, height=1, command=self.edit_selected_hud)
         self.edit_button.pack(pady=5, padx=5)
+
+        # Create a context menu for the treeview
+        self.context_menu = tk.Menu(self.treeview, tearoff=0)
+        self.context_menu.add_command(label="Edit", command=self.tree_edit_item)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="Open dir", command=self.tree_open_dir)
+        self.context_menu.add_command(label="Export (as vpk)", command=self.tree_export_vpk)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="Remove (only from program)", command=self.tree_remove_item)
+
+        # Bind the right-click event to show the context menu
+        self.treeview.bind("<Button-3>", self.show_tree_context_menu)
 
         # create a menu bar
         menu_bar = tk.Menu(self.root)
@@ -110,6 +124,57 @@ class HudSelectGui:
 
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
+        self.update_treeview()
+
+    def show_tree_context_menu(self, event):
+        """Show the context menu for the treeview item at the position of the mouse cursor."""
+
+        # select row under mouse
+        iid = self.treeview.identify_row(event.y)
+        if iid:
+            # mouse pointer over item
+            self.treeview.selection_set(iid)
+
+        self.context_menu.post(event.x_root, event.y_root)
+
+    def tree_edit_item(self):
+        """Edit the selected hud."""
+        self.edit_selected_hud()
+
+    def tree_open_dir(self):
+        """Open the directory of the selected hud."""
+        print("Open tree directory")
+
+        # Check if the source directory exists
+        if os.path.exists(self.selected_hud_dir):
+            # Open the source directory in the file explorer
+            subprocess.Popen(["explorer", self.selected_hud_dir])
+            print(f"Opened directory '{self.selected_hud_dir}'")
+        else:
+            print(f"Directory '{self.selected_hud_dir}' does not exist.")
+
+    def tree_export_vpk(self):
+        """Export the selected hud as a vpk file."""
+        print("Export tree as vpk")
+
+        export_path = filedialog.asksaveasfilename(
+            initialdir="/", title="Export HUD as VPK", filetypes=(("package files", "*.vpk"), ("all files", "*.*"))
+        )
+
+        if export_path:
+            print(export_path)
+            vpk_class = VPK()
+            vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
+            # vpk_class.create(self, input_dir, output_dir, output_file_name):
+
+    def tree_remove_item(self):
+        """Remove the selected hud."""
+        print("Remove tree item")
+
+        self.persistent_data["stored_huds"].remove(self.selected_hud_dir.replace("\\", "/"))  # convert path to json
+        self.selected_hud_dir = ""
+        self.selected_hud_name = ""
+
         self.update_treeview()
 
     def start_editing_hud(self):
@@ -155,11 +220,11 @@ class HudSelectGui:
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
             print(item_values)
-            name = self.treeview.item(item)["values"][0]
-            dir = self.treeview.item(item)["values"][1]
-            image = os.path.normpath(os.path.join(dir, "addonimage.jpg"))
-            print(dir)
-            print(name)
+            self.selected_hud_name = self.treeview.item(item)["values"][0]
+            self.selected_hud_dir = os.path.normpath(self.treeview.item(item)["values"][1])
+            image = os.path.join(self.selected_hud_dir, "addonimage.jpg")
+            print(self.selected_hud_dir)
+            print(self.selected_hud_name)
 
             self.change_addon_image(image)
 
@@ -188,7 +253,7 @@ class HudSelectGui:
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
-        start_hud_editing()
+        start_hud_editing(self.selected_hud_dir)
 
     def on_close(self):
         """Exit script"""

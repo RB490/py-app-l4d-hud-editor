@@ -14,14 +14,6 @@ feature -> main gui -> menubar > code dev functionality
 	---------------
 	Remove
 
-feature -> main gui -> context menu for tree menu items
-	Edit
-	------
-	Open dir
-	Export (as vpk)
-	------
-	Remove (only from program)
-
 feature -> main gui -> menu icons
 	import tkinter as tk
 
