@@ -1,12 +1,13 @@
 """Module import modules that should be available when the package is imported"""
 import os
-import shutil
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from include_modules.functions import start_hud_editing
 from include_modules.functions import copy_directory_contents
 from include_modules.constants import NEW_HUD_DIR
+from include_modules.constants import IMAGES_DIR
 
 
 class HudSelectGui:
@@ -55,6 +56,15 @@ class HudSelectGui:
         # create a picture frame on the right side
         self.picture_frame = tk.Frame(self.frame, width=250, height=250, bg="white")
         self.picture_frame.pack(padx=5, pady=5)
+
+        # Load the image
+        image = Image.open(os.path.join(IMAGES_DIR, "cross128.png"))
+        photo = ImageTk.PhotoImage(image)
+
+        # Add the image to a label and display it in the frame
+        self.picture_viewport = tk.Label(self.picture_frame, image=photo)
+        self.picture_viewport.image = photo  # Keep a reference to the image to prevent it from being garbage collected
+        self.picture_viewport.pack()
 
         # create a button above the picture frame
         self.edit_button = tk.Button(self.frame, text="Edit", width=35, height=1, command=self.edit_selected_hud)
@@ -125,6 +135,19 @@ class HudSelectGui:
             hud_name = os.path.basename(os.path.dirname(stored_hud_dir))
             self.treeview.insert("", "end", values=(hud_name, stored_hud_dir))
 
+    def change_addon_image(self, path):
+        """Load specified image into the image control"""
+        # Load the second image
+        image2 = Image.open(path)
+        photo2 = ImageTk.PhotoImage(image2)
+
+        # Change the image displayed in the label
+        print(path)
+        self.picture_viewport.configure(image=photo2)
+        self.picture_viewport.image = (
+            photo2  # Keep a reference to the new image to prevent it from being garbage collected
+        )
+
     # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
         """Get select item from treeview"""
@@ -132,6 +155,13 @@ class HudSelectGui:
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
             print(item_values)
+            name = self.treeview.item(item)["values"][0]
+            dir = self.treeview.item(item)["values"][1]
+            image = os.path.normpath(os.path.join(dir, "addonimage.jpg"))
+            print(dir)
+            print(name)
+
+            self.change_addon_image(image)
 
     def prompt_for_folder(self, title):
         """Prompt user for a folder"""
