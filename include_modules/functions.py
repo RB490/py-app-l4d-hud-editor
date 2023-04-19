@@ -111,6 +111,11 @@ def load_data():
     except (FileNotFoundError, json.JSONDecodeError):
         # print(f"Error loading data from {file_path}")
         data = {}
+
+    # if needed set default lists so they can be added to
+    if "stored_huds" not in data:
+        data["stored_huds"] = []
+
     # print("load_data: {}".format(data))
     return data
 

@@ -1,4 +1,5 @@
 """Module import modules that should be available when the package is imported"""
+import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
@@ -12,9 +13,11 @@ class HudSelectGui:
         self.persistent_data = persistent_data
         self.root = tk.Tk()
         self.root.title("Game List")
-        # self.root.geometry("800x370")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        # self.root.geometry("865x390")
+        self.root.minsize(865, 375)
 
-        # load saved geometry
+        # # load saved geometry
         try:
             geometry = self.persistent_data["HudSelectGuiGeometry"]
             self.root.geometry(geometry)
@@ -27,25 +30,16 @@ class HudSelectGui:
 
         # create a treeview with three columns
         self.treeview = ttk.Treeview(self.frame, columns=("name", "directory"), height=10)
-        self.treeview.heading("#0", text="Index")
+        self.treeview.heading("#0", text="")
         self.treeview.heading("name", text="Name")
         self.treeview.heading("directory", text="Directory")
-        self.treeview.column("#0", width=50, stretch=False)
-        self.treeview.column("name", width=100)
+        self.treeview.column("#0", width=10, stretch=False)
+        self.treeview.column("name", width=125, stretch=False)
         self.treeview.column("directory", width=400)
         self.treeview.pack(side="left", expand=True, fill="both", padx=5, pady=5)
 
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
-
-        # insert sample data into the treeview
-        self.treeview.insert("", "end", text="1", values=("Hud 1", "Directory 1"))
-        self.treeview.insert("", "end", text="2", values=("Hud 2", "Directory 2"))
-        self.treeview.insert("", "end", text="3", values=("Hud 3", "Directory 3"))
-
-        # create a frame for all widgets
-        self.frame2 = tk.Frame(self.root)
-        self.frame2.pack(side="right", fill="both", anchor="nw", expand=False)
 
         # create a button above the picture frame
         self.add_button = tk.Button(self.frame, text="Add", width=35, height=1, command=self.prompt_add_gui)
@@ -73,7 +67,7 @@ class HudSelectGui:
         file_menu.add_separator()
         file_menu.add_command(label="Edit", accelerator="Enter", command=self.edit_selected_hud)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.on_exit)
+        file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.on_close)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
         # Edit menu
@@ -103,9 +97,10 @@ class HudSelectGui:
 
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
+        self.update_treeview()
 
     def start_editing_hud(self):
-        """Start editing ghud"""
+        """Start editing hud"""
         self.save_window_geometry()
         self.root.destroy()
 
@@ -115,6 +110,17 @@ class HudSelectGui:
         geometry = self.root.geometry()
         print(f"geometry: {geometry}")
         self.persistent_data["HudSelectGuiGeometry"] = geometry
+
+    def update_treeview(self):
+        """Clear treeview & load up-to-date content"""
+
+        # Clear the existing items in the Treeview
+        self.treeview.delete(*self.treeview.get_children())
+
+        # Insert the new items from the list into the Treeview
+        for stored_hud_dir in self.persistent_data["stored_huds"]:
+            hud_name = os.path.basename(os.path.dirname(stored_hud_dir))
+            self.treeview.insert("", "end", values=(hud_name, stored_hud_dir))
 
     # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
@@ -132,9 +138,11 @@ class HudSelectGui:
         folder_path = filedialog.askdirectory(title="Add HUD: Select folder")
 
         self.persistent_data["stored_huds"].append(folder_path)
-        print(self.persistent_data["stored_huds"])
+        print(f'stored_huds: {self.persistent_data["stored_huds"]}')
 
         print("Selected folder:", folder_path)
+
+        self.update_treeview()
 
     def prompt_new_gui(self):
         """Prompt user for hud folder to create a new hud in"""
@@ -149,10 +157,12 @@ class HudSelectGui:
         """Start hud editing for selected hud"""
         start_hud_editing()
 
-    def on_exit(self):
+    def on_close(self):
         """Exit script"""
         self.save_window_geometry()
         self.root.destroy()
+        input("Press enter to quit script")
+        quit()
 
 
 def debug_hud_select_gui(persistent_data):

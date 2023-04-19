@@ -1,6 +1,4 @@
 
-feature -> main gui -> 	add button functionality
-
 feature -> main gui -> 	new buttom functionality
 
 feature -> main gui -> read addoninfo.txt with some kind of module parser python thing to retrieve addon name
@@ -47,3 +45,6 @@ feature -> gameclass/installer -> compare pak01's between user&dev. assume user 
 
 #optional #do-last
 	feature idea -> instead of using a gui for the main control use the default console interface instead - possibly with a package that has a few more options
+
+feature -> read hud's addoninfo.txt and use that name in hud select gui
+	keep the current method as a backup incase addoninfo.txt isnt avaiable
