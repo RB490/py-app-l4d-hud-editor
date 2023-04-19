@@ -1,9 +1,12 @@
 """Module import modules that should be available when the package is imported"""
 import os
+import shutil
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from include_modules.functions import start_hud_editing
+from include_modules.functions import copy_directory_contents
+from include_modules.constants import NEW_HUD_DIR
 
 
 class HudSelectGui:
@@ -130,28 +133,28 @@ class HudSelectGui:
             item_values = self.treeview.item(item)["values"]
             print(item_values)
 
-    def prompt_add_gui(self):
-        """Prompt user for hud folder to add"""
+    def prompt_for_folder(self, title):
+        """Prompt user for a folder"""
         root = tk.Tk()
         root.withdraw()
+        return filedialog.askdirectory(title=title)
 
-        folder_path = filedialog.askdirectory(title="Add HUD: Select folder")
-
-        self.persistent_data["stored_huds"].append(folder_path)
-        print(f'stored_huds: {self.persistent_data["stored_huds"]}')
-
-        print("Selected folder:", folder_path)
-
-        self.update_treeview()
+    def prompt_add_gui(self):
+        """Prompt user for hud folder to add"""
+        folder_path = self.prompt_for_folder("Add HUD: Select folder")
+        if folder_path:
+            self.persistent_data["stored_huds"].append(folder_path)
+            self.update_treeview()
+            print(f'stored_huds: {self.persistent_data["stored_huds"]}')
 
     def prompt_new_gui(self):
         """Prompt user for hud folder to create a new hud in"""
-        root = tk.Tk()
-        root.withdraw()
-
-        folder_path = filedialog.askdirectory(title="New HUD: Select folder")
-
-        print("Selected folder:", folder_path)
+        folder_path = self.prompt_for_folder("New HUD: Select folder")
+        if folder_path:
+            self.persistent_data["stored_huds"].append(folder_path)
+            copy_directory_contents(NEW_HUD_DIR, folder_path)
+            self.update_treeview()
+            print(f'stored_huds: {self.persistent_data["stored_huds"]}')
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
