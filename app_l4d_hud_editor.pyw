@@ -42,6 +42,6 @@ atexit.register(save_data_on_exit, PERSISTENT_DATA)
 
 # game_instance = Game(PERSISTENT_DATA)
 # debug_hud_syncer()
-debug_hud_select_gui()
+debug_hud_select_gui(PERSISTENT_DATA)
 
 input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")

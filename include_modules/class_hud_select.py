@@ -8,41 +8,51 @@ from include_modules.functions import start_hud_editing
 class HudSelectGui:
     """Class for the hud select gui"""
 
-    def __init__(self):
+    def __init__(self, persistent_data):
+        self.persistent_data = persistent_data
         self.root = tk.Tk()
         self.root.title("Game List")
-        self.root.geometry("800x370")
+        # self.root.geometry("800x370")
+
+        # load saved geometry
+        try:
+            geometry = self.persistent_data["HudSelectGuiGeometry"]
+            self.root.geometry(geometry)
+        except KeyError:
+            self.root.geometry("1000x1000+100+100")
 
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
-        self.frame.pack(fill="both", expand=True)
+        self.frame.pack(fill="both", anchor="nw", expand=True)
 
         # create a treeview with three columns
-        self.treeview = ttk.Treeview(self.frame, columns=("name", "directory", "game_version"), height=10)
+        self.treeview = ttk.Treeview(self.frame, columns=("name", "directory"), height=10)
         self.treeview.heading("#0", text="Index")
         self.treeview.heading("name", text="Name")
         self.treeview.heading("directory", text="Directory")
-        self.treeview.heading("game_version", text="Game Version")
-        self.treeview.column("#0", width=50)
+        self.treeview.column("#0", width=50, stretch=False)
         self.treeview.column("name", width=100)
-        self.treeview.column("directory", width=200)
-        self.treeview.column("game_version", width=200)
-        self.treeview.pack(side="left", fill="y", padx=5, pady=5)
+        self.treeview.column("directory", width=400)
+        self.treeview.pack(side="left", expand=True, fill="both", padx=5, pady=5)
 
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
 
         # insert sample data into the treeview
-        self.treeview.insert("", "end", text="1", values=("Hud 1", "Directory 1", "Left 4 Dead"))
-        self.treeview.insert("", "end", text="2", values=("Hud 2", "Directory 2", "Left 4 Dead 2"))
-        self.treeview.insert("", "end", text="3", values=("Hud 3", "Directory 3", "Left 4 Dead"))
+        self.treeview.insert("", "end", text="1", values=("Hud 1", "Directory 1"))
+        self.treeview.insert("", "end", text="2", values=("Hud 2", "Directory 2"))
+        self.treeview.insert("", "end", text="3", values=("Hud 3", "Directory 3"))
+
+        # create a frame for all widgets
+        self.frame2 = tk.Frame(self.root)
+        self.frame2.pack(side="right", fill="both", anchor="nw", expand=False)
 
         # create a button above the picture frame
-        self.add_button = tk.Button(self.frame, text="Add", width=45, height=1, command=self.prompt_add_gui)
+        self.add_button = tk.Button(self.frame, text="Add", width=35, height=1, command=self.prompt_add_gui)
         self.add_button.pack(pady=5, padx=5)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.frame, text="New", width=45, height=1, command=self.prompt_new_gui)
+        self.new_button = tk.Button(self.frame, text="New", width=35, height=1, command=self.prompt_new_gui)
         self.new_button.pack(pady=5, padx=5)
 
         # create a picture frame on the right side
@@ -50,7 +60,7 @@ class HudSelectGui:
         self.picture_frame.pack(padx=5, pady=5)
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.frame, text="Edit", width=45, height=1, command=self.edit_selected_hud)
+        self.edit_button = tk.Button(self.frame, text="Edit", width=35, height=1, command=self.edit_selected_hud)
         self.edit_button.pack(pady=5, padx=5)
 
         # create a menu bar
@@ -63,7 +73,7 @@ class HudSelectGui:
         file_menu.add_separator()
         file_menu.add_command(label="Edit", accelerator="Enter", command=self.edit_selected_hud)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.root.quit)
+        file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.on_exit)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
         # Edit menu
@@ -94,6 +104,18 @@ class HudSelectGui:
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
 
+    def start_editing_hud(self):
+        """Start editing ghud"""
+        self.save_window_geometry()
+        self.root.destroy()
+
+    def save_window_geometry(self):
+        """Save size & position"""
+        # Get the current position and size of the window
+        geometry = self.root.geometry()
+        print(f"geometry: {geometry}")
+        self.persistent_data["HudSelectGuiGeometry"] = geometry
+
     # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
         """Get select item from treeview"""
@@ -108,6 +130,9 @@ class HudSelectGui:
         root.withdraw()
 
         folder_path = filedialog.askdirectory(title="Add HUD: Select folder")
+
+        self.persistent_data["stored_huds"].append(folder_path)
+        print(self.persistent_data["stored_huds"])
 
         print("Selected folder:", folder_path)
 
@@ -124,12 +149,13 @@ class HudSelectGui:
         """Start hud editing for selected hud"""
         start_hud_editing()
 
+    def on_exit(self):
+        """Exit script"""
+        self.save_window_geometry()
+        self.root.destroy()
 
-def debug_hud_select_gui():
+
+def debug_hud_select_gui(persistent_data):
     """Debug the gui"""
-    app = HudSelectGui()
+    app = HudSelectGui(persistent_data)
     app.root.mainloop()
-
-
-if __name__ == "__main__":
-    debug_hud_select_gui()
