@@ -1,6 +1,5 @@
 """Creating & extracting VPK files"""
 import os
-import shutil
 import vpk
 
 

@@ -3,8 +3,8 @@ functions related to the game folder such as switching between user/dev modes"""
 import os
 import shutil
 import sys
-from tkinter import Tk
 from tkinter import filedialog
+from tkinter import messagebox
 import easygui
 from include_modules.class_vpk import VPK
 from include_modules.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
@@ -111,6 +111,15 @@ class Installer:
             # raise RuntimeError(f"Game executable not found in game directory: '{install_dir}'")
             return False
 
+    def run_installer_update(self):
+        print("run_installer_update: todo")
+
+    def run_installer_repair(self):
+        print("run_installer_repair: todo")
+
+    def run_installer_remove(self):
+        print("run_installer_remove: todo")
+
     def run_installer(self):
         """Runs the installer and throws errors on failure"""
         if DEBUG_MODE:
@@ -120,7 +129,7 @@ class Installer:
             try:
                 self._perform_installation()
             except RuntimeError as err_info:
-                Tk.messagebox.showerror(
+                messagebox.showerror(
                     "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
                 )
                 sys.exit()
@@ -129,6 +138,11 @@ class Installer:
         # verify the user installation is available
         if not self.is_installed("user"):
             raise AssertionError("User installation not found. Unable to install")
+
+        # verify dev mode isn't already installed
+        if self.is_installed("dev"):
+            messagebox.showinfo("Error", "Already installed!")
+            return True
 
         # delete the dev folder for debugging purposes only
         # if DEBUG_MODE and os.path.isdir(self.get_dir("dev")):
@@ -140,26 +154,26 @@ class Installer:
         self.game.close()
 
         # confirm install start
-        # if not self._prompt_install_start():
-        #     return False
+        if not self._prompt_install_start():
+            return False
 
         # 1. create dev folder template (folder & .exe) for detection incase of cancellation for cleanup
-        # self._create_dev_dir()
+        self._create_dev_dir()
 
         # 2. copy the game files into and activate the dev folder
-        # self._copy_game_files()
-        # print('finished copying files')
-        # self.activate_mode("dev")
+        self._copy_game_files()
+        print("finished copying files")
+        self.activate_mode("dev")
 
         # 3. steam verify = prompt to verify game install through steam to update and restore all game files
-        # self._prompt_game_verified()
+        self._prompt_game_verified()
 
         # 4. extract paks
-        # self._extract_paks()
-        # self._disable_paks()
+        self._extract_paks()
+        self._disable_paks()
 
         # 5. install mods
-        # self._install_mods()
+        self._install_mods()
 
         # 6. rebuild audio cache
         self._rebuild_audio()
@@ -246,8 +260,8 @@ class Installer:
         dev_dir = self.get_dir("dev")
 
         def extract_callback(filepath, output_dir):
-            vpk_class = VPK(filepath)
-            vpk_class.extract(output_dir)
+            vpk_class = VPK()
+            vpk_class.extract(filepath, output_dir)
 
         self._find_pak_files(dev_dir, extract_callback)
 
@@ -301,8 +315,7 @@ def debug_installer_class(game_instance):
     os.system("cls")  # clear terminal
 
     saved_data = load_data()
-    inst = Installer(saved_data, game_instance)
-    inst.run_installer()
-    # inst.toggle_dev_mode(True)
+    installer_instance = Installer(saved_data, game_instance)
+    installer_instance.run_installer()
 
     input("end of class_installer autoexecute")

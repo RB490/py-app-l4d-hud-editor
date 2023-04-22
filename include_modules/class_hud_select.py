@@ -2,22 +2,22 @@
 import subprocess
 import os
 import tkinter as tk
-import vdf
+from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog
+import vdf
 from PIL import Image, ImageTk
 from include_modules.class_vpk import VPK
-from include_modules.functions import start_hud_editing
-from include_modules.functions import copy_directory_contents
-from include_modules.constants import NEW_HUD_DIR
-from include_modules.constants import IMAGES_DIR
+from include_modules.functions import copy_directory_contents, start_hud_editing
+from include_modules.constants import NEW_HUD_DIR, IMAGES_DIR
 
 
 class HudSelectGui:
     """Class for the hud select gui"""
 
-    def __init__(self, persistent_data):
+    def __init__(self, persistent_data, installer_instance):
         self.persistent_data = persistent_data
+        self.installer_instance = installer_instance
         self.root = tk.Tk()
         self.root.title("Game List")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -100,18 +100,17 @@ class HudSelectGui:
 
         # Edit menu
         dev_menu = tk.Menu(menu_bar, tearoff=0)
-        dev_menu.add_command(label="User Dir")
-        dev_menu.add_command(label="Dev Dir")
+        dev_menu.add_command(label="User Dir", command=self.installer_user_dir)
+        dev_menu.add_command(label="Dev Dir", command=self.installer_dev_dir)
         dev_menu.add_separator()
-        dev_menu.add_command(label="Enable")
-        dev_menu.add_command(label="Disable")
+        dev_menu.add_command(label="Enable", command=self.installer_enable)
+        dev_menu.add_command(label="Disable", command=self.installer_disable)
         dev_menu.add_separator()
-        dev_menu.add_command(label="Install")
-        dev_menu.add_command(label="Update")
-        dev_menu.add_command(label="Repair")
-        dev_menu.add_command(label="Verify")
+        dev_menu.add_command(label="Install", command=self.installer_install)
+        dev_menu.add_command(label="Update", command=self.installer_update)
+        dev_menu.add_command(label="Repair", command=self.installer_repair)
         dev_menu.add_separator()
-        dev_menu.add_command(label="Remove")
+        dev_menu.add_command(label="Remove", command=self.installer_remove)
         menu_bar.add_cascade(label="Dev", menu=dev_menu)
 
         # Help menu with a submenu
@@ -126,6 +125,70 @@ class HudSelectGui:
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
         self.update_treeview()
+
+    def installer_user_dir(self):
+        """
+        This method returns the user directory.
+        """
+        print("Opened User Dir")
+        directory = self.installer_instance.get_dir("user")
+        if os.path.isdir(directory):
+            os.startfile(directory)
+        else:
+            messagebox.showerror("Error", "Directory does not exist!")
+
+    def installer_dev_dir(self):
+        """
+        This method returns the dev directory.
+        """
+        print("Opened Dev Dir")
+        directory = self.installer_instance.get_dir("dev")
+        if os.path.isdir(directory):
+            os.startfile(directory)
+        else:
+            messagebox.showerror("Error", "Directory does not exist!")
+
+    def installer_enable(self):
+        """
+        This method enables dev mode.
+        """
+        print("Enable dev mode")
+        self.installer_instance.activate_mode("dev")
+
+    def installer_disable(self):
+        """
+        This method disables dev mode.
+        """
+        print("Disable dev mode")
+        self.installer_instance.activate_mode("user")
+
+    def installer_install(self):
+        """
+        This method installs dev mode.
+        """
+        print("Install dev mode")
+        self.installer_instance.run_installer()
+
+    def installer_update(self):
+        """
+        This method updates dev mode.
+        """
+        print("Update dev mode")
+        self.installer_instance.run_installer_update()
+
+    def installer_repair(self):
+        """
+        This method repairs dev mode.
+        """
+        print("Repair dev mode")
+        self.installer_instance.run_installer_repair()
+
+    def installer_remove(self):
+        """
+        This method removes dev mode.
+        """
+        print("Remove dev mode")
+        self.installer_instance.run_installer_remove()
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -202,7 +265,7 @@ class HudSelectGui:
             hud_name = os.path.basename(os.path.dirname(stored_hud_dir))
             addoninfo_path = os.path.join(stored_hud_dir, "addoninfo.txt")
             if os.path.exists(addoninfo_path):
-                addon_info = vdf.load(open(addoninfo_path))
+                addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
                 hud_name = addon_info["AddonInfo"]["addontitle"]
 
             self.treeview.insert("", "end", values=(hud_name, stored_hud_dir))
@@ -270,7 +333,7 @@ class HudSelectGui:
         quit()
 
 
-def debug_hud_select_gui(persistent_data):
+def debug_hud_select_gui(persistent_data, installer_instance):
     """Debug the gui"""
-    app = HudSelectGui(persistent_data)
+    app = HudSelectGui(persistent_data, installer_instance)
     app.root.mainloop()
