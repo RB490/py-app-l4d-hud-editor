@@ -2,6 +2,7 @@
 import subprocess
 import os
 import tkinter as tk
+import vdf
 from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
@@ -197,7 +198,13 @@ class HudSelectGui:
 
         # Insert the new items from the list into the Treeview
         for stored_hud_dir in self.persistent_data["stored_huds"]:
+            # retrieve hud name (from addoninfo.txt if available)
             hud_name = os.path.basename(os.path.dirname(stored_hud_dir))
+            addoninfo_path = os.path.join(stored_hud_dir, "addoninfo.txt")
+            if os.path.exists(addoninfo_path):
+                addon_info = vdf.load(open(addoninfo_path))
+                hud_name = addon_info["AddonInfo"]["addontitle"]
+
             self.treeview.insert("", "end", values=(hud_name, stored_hud_dir))
 
     def change_addon_image(self, path):

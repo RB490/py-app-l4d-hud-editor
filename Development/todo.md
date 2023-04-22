@@ -1,5 +1,3 @@
-feature -> main gui -> read addoninfo.txt with some kind of module parser python thing to retrieve addon name
-
 feature -> main gui -> menubar > code dev functionality
 	Open user folder
 	Open dev folder

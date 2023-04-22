@@ -18,6 +18,7 @@ from include_modules.class_hud_select import debug_hud_select_gui
 from include_modules.class_hud_syncer import debug_hud_syncer
 
 from include_modules.constants import PERSISTENT_DATA, SCRIPT_NAME
+from include_modules.constants import NEW_HUD_DIR
 from include_modules.functions import load_data, save_data_on_exit
 
 # from include_modules.class_game import Game
