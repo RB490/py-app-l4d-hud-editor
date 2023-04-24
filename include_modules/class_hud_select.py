@@ -174,14 +174,14 @@ class HudSelectGui:
         This method updates dev mode.
         """
         print("Update dev mode")
-        self.installer_instance.run_installer_update()
+        self.installer_instance.run_update_or_repair("update")
 
     def installer_repair(self):
         """
         This method repairs dev mode.
         """
         print("Repair dev mode")
-        self.installer_instance.run_installer_repair()
+        self.installer_instance.run_update_or_repair("repair")
 
     def installer_remove(self):
         """

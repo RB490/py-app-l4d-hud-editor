@@ -44,6 +44,8 @@ game_instance = Game(PERSISTENT_DATA)
 installer_instance = Installer(PERSISTENT_DATA, game_instance)
 
 # debug_hud_syncer()
-debug_hud_select_gui(PERSISTENT_DATA, installer_instance)
+# debug_hud_select_gui(PERSISTENT_DATA, installer_instance)
+# installer_instance.run_update_or_repair()
+# installer_instance.run_update_or_repair("repair")
 
 input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")

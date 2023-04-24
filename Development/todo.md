@@ -1,6 +1,5 @@
-feature -> code functionality -> run_installer_update(self):
-feature -> code functionality -> run_installer_repair(self):
-feature -> code functionality -> run_installer_remove(self):
+feature -> gameclass/installer -> compare pak01's between user&dev. assume user is up to date - throw a notify if out of date
+feature -> main gui -> code remaining menubar functionality
 
 feature -> main gui -> menu icons
 	import tkinter as tk
@@ -18,12 +17,12 @@ feature -> main gui -> menu icons
 
 	root.mainloop()
 
-feature -> gameclass/installer -> compare pak01's between user&dev. assume user is up to date - throw a notify if out of date
 
-feature -> main gui -> code remaining menubar functionality
 
 #optional #do-last
 	feature idea -> instead of using a gui for the main control use the default console interface instead - possibly with a package that has a few more options
 
 feature -> read hud's addoninfo.txt and use that name in hud select gui
 	keep the current method as a backup incase addoninfo.txt isnt avaiable
+
+feature -> progress gui for the installer class

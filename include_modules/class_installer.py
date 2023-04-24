@@ -1,5 +1,6 @@
 """This module is a sub class of the game class.
 functions related to the game folder such as switching between user/dev modes"""
+import filecmp
 import os
 import shutil
 import sys
@@ -111,14 +112,107 @@ class Installer:
             # raise RuntimeError(f"Game executable not found in game directory: '{install_dir}'")
             return False
 
-    def run_installer_update(self):
-        print("run_installer_update: todo")
+    def _prompt_install_update_start(self):
+        title = f"Enable hud editing for {self.game.get_title()}?"
+        disk_space = get_dir_size_in_gb(self.get_dir("user"))
+        message = (
+            f"Update hud editing mode for {self.game.get_title()}?\n\n"
+            "- This will verify the dev folder and re-extract only outdated pak01_dirs\n"
+            "- This can take up to ~30 minutes depending on drive and processor speed\n"
+            f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
+            "- Keep any L4D games closed during this process\n\n"
+            "It is possible to cancel the setup at any time by closing the progress window"
+        )
 
-    def run_installer_repair(self):
-        print("run_installer_repair: todo")
+        choices = ["Yes", "No"]
+        response = easygui.buttonbox(message, title=title, choices=choices)
+        if response == "Yes":
+            return True
+        elif response == "No":
+            return False
+        else:
+            return False
 
-    def run_installer_remove(self):
-        print("run_installer_remove: todo")
+    def _prompt_install_repair_start(self):
+        title = f"Enable hud editing for {self.game.get_title()}?"
+        disk_space = get_dir_size_in_gb(self.get_dir("user"))
+        message = (
+            f"Update hud editing mode for {self.game.get_title()}?\n\n"
+            "- This will re-extract every pak01_dir in the dev folder\n"
+            "- This can take up to ~30 minutes depending on drive and processor speed\n"
+            f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
+            "- Keep any L4D games closed during this process\n\n"
+            "It is possible to cancel the setup at any time by closing the progress window"
+        )
+
+        choices = ["Yes", "No"]
+        response = easygui.buttonbox(message, title=title, choices=choices)
+        if response == "Yes":
+            return True
+        elif response == "No":
+            return False
+        else:
+            return False
+
+    def run_update_or_repair(self, update_or_repair):
+        """Update or repair dev mode"""
+        print("run_update_or_repair")
+        assert update_or_repair in ["update", "repair"], "Invalid mode parameter"
+        update_or_repair = update_or_repair.lower()  # lower case
+
+        # verify dev mode is already installed
+        if not self.is_installed("dev"):
+            messagebox.showinfo("Error", "Dev mode not installed!")
+            return False
+
+        # prompt continue
+        if update_or_repair == "repair":
+            if not self._prompt_install_repair_start():
+                return False
+        else:
+            if not self._prompt_install_update_start():
+                return False
+
+        # close the game
+        self.game.close()
+
+        # activate dev mode
+        self.activate_mode("dev")
+
+        # re-enable paks
+        self._enable_paks()
+
+        # verify game installation
+        if update_or_repair == "update":
+            self._prompt_game_verified()
+
+        # extract paks
+        if update_or_repair == "repair":
+            self._extract_outdated_paks()
+        else:
+            self._extract_paks()
+        self._disable_paks()
+
+        # install mods
+        self._install_mods()
+
+        # rebuild audio cache
+        self._rebuild_audio()
+
+    def run_uninstaller(self):
+        """Remove dev mode"""
+        print("run_uninstaller")
+
+        # verify dev mode is already installed
+        if not self.is_installed("dev"):
+            messagebox.showinfo("Error", "Dev mode not installed!")
+            return False
+
+        # close the game
+        self.game.close()
+
+        # remove dev mode
+        shutil.rmtree(self.get_dir("dev"))
 
     def run_installer(self):
         """Runs the installer and throws errors on failure"""
@@ -244,14 +338,54 @@ class Installer:
             return True
         return False
 
-    def _find_pak_files(self, dev_dir, callback):
-        for subdir_name in os.listdir(dev_dir):
-            subdir_path = os.path.join(dev_dir, subdir_name)
+    def _find_pak_files(self, game_dir, callback):
+        for subdir_name in os.listdir(game_dir):
+            subdir_path = os.path.join(game_dir, subdir_name)
             if os.path.isdir(subdir_path):
                 for filename in os.listdir(subdir_path):
-                    if filename == "pak01_dir.vpk":
+                    if filename == "pak01_dir.vpk" or filename == "pak01_dir.vpk.disabled":
                         filepath = os.path.join(subdir_path, filename)
                         callback(filepath, subdir_path)
+
+    def _extract_outdated_paks(self):
+        """1. Confirm which pak01_dir.vpk files are outdated by checking for differences between the user & dev modes
+        2. Extract all files from the outdated pak01_dir.vpk files to their respective root directories"""
+        print("extract outdated paks")
+
+        # retrieve pak files for user & dev modes
+        dev_dir = self.get_dir("dev")
+        user_dir = self.get_dir("user")
+
+        user_paks = []
+        dev_paks = []
+
+        def get_user_paks_callback(filepath, output_dir):
+            # vpk_class.extract(filepath, output_dir)
+            print(f"filepath={filepath}\noutput_dir={output_dir}")
+            pak_tuple = (filepath, output_dir)
+            user_paks.append(pak_tuple)
+
+        def get_dev_paks_callback(filepath, output_dir):
+            # vpk_class.extract(filepath, output_dir)
+            print(f"filepath={filepath}\noutput_dir={output_dir}")
+            pak_tuple = (filepath, output_dir)
+            dev_paks.append(pak_tuple)
+
+        self._find_pak_files(user_dir, get_user_paks_callback)
+        self._find_pak_files(dev_dir, get_dev_paks_callback)
+
+        # extract any paks that are not identical between the user & dev folders
+        i = 0
+        for dev_pak in dev_paks:
+            user_pak = user_paks[i]
+
+            print(f'comparing "{dev_pak[0]}" to "{user_pak[0]}"')
+            if not filecmp.cmp(dev_pak[0], user_pak[0]):
+                print(f'pak out of date! extracting "{dev_pak[0]}"')
+                vpk_class = VPK()
+                vpk_class.extract(dev_pak[0], dev_pak[1])
+
+            i += 1
 
     def _extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
@@ -282,6 +416,7 @@ class Installer:
             source_filepath = filepath
             target_filepath = os.path.join(subdir_path, "pak01_dir.vpk")
             os.rename(source_filepath, target_filepath)
+            print("Renaming file from", source_filepath, "to", target_filepath)
 
         self._find_pak_files(dev_dir, enable_callback)
 
