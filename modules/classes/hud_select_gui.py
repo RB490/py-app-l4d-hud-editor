@@ -7,9 +7,9 @@ from tkinter import ttk
 from tkinter import filedialog
 import vdf
 from PIL import Image, ImageTk
-from include_modules.class_vpk import VPK
-from include_modules.functions import copy_directory_contents, start_hud_editing
-from include_modules.constants import NEW_HUD_DIR, IMAGES_DIR
+from modules.classes.vpk import VPK
+from modules.utils.functions import copy_directory_contents
+from modules.utils.constants import NEW_HUD_DIR, IMAGES_DIR
 
 
 class HudSelectGui:
@@ -78,9 +78,9 @@ class HudSelectGui:
         self.context_menu.add_command(label="Edit", command=self.tree_edit_item)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="Open dir", command=self.tree_open_dir)
-        self.context_menu.add_command(label="Export (as vpk)", command=self.tree_export_vpk)
+        self.context_menu.add_command(label="Export VPK", command=self.tree_export_vpk)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Remove (only from program)", command=self.tree_remove_item)
+        self.context_menu.add_command(label="Remove", command=self.tree_remove_item)
 
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)
@@ -112,15 +112,6 @@ class HudSelectGui:
         dev_menu.add_separator()
         dev_menu.add_command(label="Remove", command=self.installer_remove)
         menu_bar.add_cascade(label="Dev", menu=dev_menu)
-
-        # Help menu with a submenu
-        help_menu = tk.Menu(menu_bar, tearoff=0)
-        help_menu.add_command(label="About")
-        help_sub_menu = tk.Menu(help_menu, tearoff=0)
-        help_sub_menu.add_command(label="Documentation")
-        help_sub_menu.add_command(label="Examples")
-        help_menu.add_cascade(label="Help", menu=help_sub_menu)
-        menu_bar.add_cascade(label="Help", menu=help_menu)
 
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
@@ -268,7 +259,7 @@ class HudSelectGui:
                 addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
                 hud_name = addon_info["AddonInfo"]["addontitle"]
 
-            self.treeview.insert("", "end", values=(hud_name, stored_hud_dir))
+            self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""
@@ -323,7 +314,7 @@ class HudSelectGui:
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
-        start_hud_editing(self.selected_hud_dir)
+        print("todo: start_hud_editing")  # self.selected_hud_dir
 
     def on_close(self):
         """Exit script"""

@@ -2,9 +2,9 @@
 import os
 import shutil
 import hashlib
-from include_modules.class_game import Game
-from include_modules.functions import load_data
-from include_modules.constants import DEVELOPMENT_DIR
+from modules.classes.game import Game
+from modules.utils.functions import load_data
+from modules.utils.constants import DEVELOPMENT_DIR
 
 
 def files_differ(in_file1, in_file2):
@@ -55,21 +55,39 @@ class HudSyncer:
         self.hud_items_previous = []
         self.hud_items = None
 
+    def get_source_dir(self):
+        """Return source directory"""
+        return self.source_dir
+
+    def get_sync_status(self):
+        """Return sync status"""
+        return self.is_synced
+
     def un_sync(self):
         """Unsync the hud"""
-        if not self.is_synced:
+        if not self.get_sync_status():
             return
 
         print("TODO: write un_sync")
 
-    def sync(self, source_dir, target_dir, target_dir_main_name):
-        """Sync the hud"""
+    def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
+        # pylint: disable=anomalous-backslash-in-string
+        """Syncs the contents of the source directory to the target directory.
+
+        Parameters:
+        source_dir (str): The path of the source directory to sync from. EG: ..\l4d-addons-huds\4. l4d2-2020HUD\source
+        target_dir (str): The path of the target directory to sync to. EG: ..\steamapps\common\Left 4 Dead 2
+        target_dir_main_name (str): The main name of the target directory,
+            used to differentiate from dlc folders and only perform
+            certain actions on the main directory. EG: 'Left 4 Dead 2'
+        """
+
         print(f"source_dir: {source_dir}")
         print(f"target_dir: {target_dir}")
         # print(f"target_dir_main_name: {target_dir_main_name}")
 
         # Unsync the previous hud (if syncing different hud)
-        if self.is_synced and self.source_dir != source_dir:
+        if self.get_sync_status() and self.source_dir != source_dir:
             self.un_sync()
 
         # Validate input

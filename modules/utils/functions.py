@@ -5,12 +5,7 @@ import os
 import winreg
 import tkinter as tk
 from tkinter import filedialog
-from include_modules.constants import PERSISTENT_DATA_PATH
-
-
-def start_hud_editing(hud_dir):
-    """Perform all the actions needed to start hud editing"""
-    print(f"todo... ({hud_dir})")
+from .constants import PERSISTENT_DATA_PATH
 
 
 def copy_directory_contents(src_dir, dest_dir, ignore_file=None):

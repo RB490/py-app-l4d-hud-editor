@@ -7,13 +7,14 @@ import sys
 from tkinter import filedialog
 from tkinter import messagebox
 import easygui
-from include_modules.class_vpk import VPK
-from include_modules.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
-from include_modules.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
+from modules.classes.vpk import VPK
+from modules.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
+from modules.utils.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
 
 
 class Installer:
-    """Sub class of the game class. functions related to the game folder such as switching between user/dev modes"""
+    """Sub class of the game class. Methods related to the game folder such as installing, updating and repairing
+    dev mode and switching between user & dev modes"""
 
     def __init__(self, persistent_data, game_class):
         self.persistent_data = persistent_data

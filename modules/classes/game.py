@@ -5,10 +5,10 @@ import tkinter as tk
 import traceback
 import subprocess
 import psutil
-from include_modules.class_installer import Installer
-from include_modules.constants import DEBUG_MODE
-from include_modules.functions import get_steam_info
-from include_modules.functions import load_data
+from modules.classes.installer import Installer
+from modules.utils.constants import DEBUG_MODE
+from modules.utils.functions import get_steam_info
+from modules.utils.functions import load_data
 
 
 class Game:
