@@ -112,33 +112,15 @@ class Installer:
             # raise RuntimeError(f"Game executable not found in game directory: '{install_dir}'")
             return False
 
-    def _prompt_install_update_start(self):
-        title = f"Enable hud editing for {self.game.get_title()}?"
+    def _prompt_start(self, install_type, message_extra=""):
+        install_type = install_type.lower()  # lower case
+        assert install_type in ["install", "update", "repair"], "Invalid mode parameter"
+
+        title = f"{install_type} hud editing for {self.game.get_title()}?".capitalize()
         disk_space = get_dir_size_in_gb(self.get_dir("user"))
         message = (
-            f"Update hud editing mode for {self.game.get_title()}?\n\n"
-            "- This will verify the dev folder and re-extract only outdated pak01_dirs\n"
-            "- This can take up to ~30 minutes depending on drive and processor speed\n"
-            f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
-            "- Keep any L4D games closed during this process\n\n"
-            "It is possible to cancel the setup at any time by closing the progress window"
-        )
-
-        choices = ["Yes", "No"]
-        response = easygui.buttonbox(message, title=title, choices=choices)
-        if response == "Yes":
-            return True
-        elif response == "No":
-            return False
-        else:
-            return False
-
-    def _prompt_install_repair_start(self):
-        title = f"Enable hud editing for {self.game.get_title()}?"
-        disk_space = get_dir_size_in_gb(self.get_dir("user"))
-        message = (
-            f"Update hud editing mode for {self.game.get_title()}?\n\n"
-            "- This will re-extract every pak01_dir in the dev folder\n"
+            f"{title}\n\n"
+            f"- {message_extra}\n"
             "- This can take up to ~30 minutes depending on drive and processor speed\n"
             f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
             "- Keep any L4D games closed during this process\n\n"
@@ -157,8 +139,8 @@ class Installer:
     def run_update_or_repair(self, update_or_repair):
         """Update or repair dev mode"""
         print("run_update_or_repair")
-        assert update_or_repair in ["update", "repair"], "Invalid mode parameter"
         update_or_repair = update_or_repair.lower()  # lower case
+        assert update_or_repair in ["update", "repair"], "Invalid mode parameter"
 
         # verify dev mode is already installed
         if not self.is_installed("dev"):
@@ -167,10 +149,10 @@ class Installer:
 
         # prompt continue
         if update_or_repair == "repair":
-            if not self._prompt_install_repair_start():
+            if not self._prompt_start("repair", "This will re-extract every pak01_dir in the dev folder"):
                 return False
         else:
-            if not self._prompt_install_update_start():
+            if not self._prompt_start("update", "Verifies the dev folder and re-extract only outdated pak01_dirs"):
                 return False
 
         # close the game
@@ -248,7 +230,7 @@ class Installer:
         self.game.close()
 
         # confirm install start
-        if not self._prompt_install_start():
+        if not self._prompt_start("install"):
             return False
 
         # 1. create dev folder template (folder & .exe) for detection incase of cancellation for cleanup
@@ -275,26 +257,6 @@ class Installer:
         # finish installation
         input("press enter to successfully finish installation")
         return True
-
-    def _prompt_install_start(self):
-        title = f"Enable hud editing for {self.game.get_title()}?"
-        disk_space = get_dir_size_in_gb(self.get_dir("user"))
-        message = (
-            f"Enable hud editing for {self.game.get_title()}?\n\n"
-            "- This can take up to ~30 minutes depending on drive and processor speed\n"
-            f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
-            "- Keep any L4D games closed during this process\n\n"
-            "It is possible to cancel the setup at any time by closing the progress window"
-        )
-
-        choices = ["Yes", "No"]
-        response = easygui.buttonbox(message, title=title, choices=choices)
-        if response == "Yes":
-            return True
-        elif response == "No":
-            return False
-        else:
-            return False
 
     def _create_dev_dir(self):
         game_user_dir = self.get_dir("user")

@@ -1,4 +1,3 @@
-feature -> gameclass/installer -> compare pak01's between user&dev. assume user is up to date - throw a notify if out of date
 feature -> main gui -> code remaining menubar functionality
 
 feature -> main gui -> menu icons
@@ -26,3 +25,6 @@ feature -> read hud's addoninfo.txt and use that name in hud select gui
 	keep the current method as a backup incase addoninfo.txt isnt avaiable
 
 feature -> progress gui for the installer class
+	install
+	update_or_repair
+	remove
