@@ -12,14 +12,14 @@ import os
 import atexit
 
 # pylint: disable=unused-import
-from modules.classes.class_hud_select_gui import debug_hud_select_gui
+from modules.classes.gui_hud_select import debug_hud_select_gui
 
 # pylint: disable=unused-import
-from modules.classes.class_hud_syncer import debug_hud_syncer
+from modules.classes.hud_syncer import debug_hud_syncer
 
-from modules.classes.class_game import Game
-from modules.classes.class_installer import Installer
-from modules.classes.class_hud_edit import HudEdit
+from modules.classes.game import Game
+from modules.classes.game_manager import GameManager
+from modules.classes.hud import Hud
 from modules.utils.constants import PERSISTENT_DATA, SCRIPT_NAME
 from modules.utils.constants import NEW_HUD_DIR
 from modules.utils.functions import load_data, save_data_on_exit
@@ -42,14 +42,15 @@ atexit.register(save_data_on_exit, PERSISTENT_DATA)
 # ====================================================================================================
 
 game_instance = Game(PERSISTENT_DATA)
-installer_instance = Installer(PERSISTENT_DATA, game_instance)
-hud_edit = HudEdit(game_instance)
+game_manager_instance = GameManager(PERSISTENT_DATA, game_instance)
+hud_edit = Hud(game_instance)
 
 # debug_hud_syncer()
-# debug_hud_select_gui(PERSISTENT_DATA, installer_instance)
-# installer_instance.run_update_or_repair()
-# installer_instance.run_update_or_repair("repair")
+# debug_hud_select_gui(PERSISTENT_DATA, game_manager_instance)
+# game_manager_instance.run_update_or_repair()
+# game_manager_instance.run_update_or_repair("repair")
 
-hud_edit.finish_editing()
+# hud_edit.finish_editing()
+game_instance.run("dev")
 
 input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")

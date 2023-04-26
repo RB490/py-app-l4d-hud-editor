@@ -1,14 +1,13 @@
 """Module providing functions related to the game. such as running and installation the dev/user versions"""
+import shutil
 import os
-import sys
-import tkinter as tk
-import traceback
 import subprocess
 import psutil
-from modules.classes.installer import Installer
-from modules.utils.constants import DEBUG_MODE
+import vdf
+from modules.classes.game_manager import GameManager
 from modules.utils.functions import get_steam_info
 from modules.utils.functions import load_data
+from modules.utils.constants import EDITOR_AUTOEXEC_PATH
 
 
 class Game:
@@ -17,7 +16,7 @@ class Game:
     def __init__(self, persistent_data):
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
-        self.installer = Installer(self.persistent_data, self)
+        self.manager = GameManager(self.persistent_data, self)
 
         self.game_title = "Left 4 Dead 2"
         self.game_exe = "left4dead2.exe"
@@ -45,15 +44,61 @@ class Game:
 
     def get_dir(self, mode):
         """Retrieve information"""
-        return self.installer.get_dir(mode)
+        return self.manager.get_dir(mode)
 
     def get_main_dir(self, mode):
         """Retrieve information"""
-        return self.installer.get_main_dir(mode)
+        return self.manager.get_main_dir(mode)
 
     def activate_mode(self, mode):
         """Switch between user/dev modes"""
-        return self.installer.activate_mode(mode)
+        return self.manager.activate_mode(mode)
+
+    def _write_config(self):
+        print("_write_config: todo")
+
+        # don't alter user installation
+        if self.manager.get_active_mode() == "user":
+            print("Cancelled writing config for user folder")
+            return
+
+        # retrieve variables
+        addons_dir = os.path.join(self.get_main_dir("dev"), "Addons")
+        config_dir = os.path.join(self.get_main_dir("dev"), "cfg")
+
+        # disable mods by overwriting them with empty files
+        dirs = [
+            addons_dir,
+            os.path.join(addons_dir, "Workshop"),
+        ]
+        # don't recurse so sourcemod doesn't break + game doesn't check subfolders
+        #   for addons anyways besides addons/workshop
+        for loop_dir in dirs:
+            for root, dirs, files in os.walk(loop_dir):
+                for file in files:
+                    if file.endswith((".vpk", ".dll")):
+                        open(os.path.join(root, file), "w", encoding="utf-8").close()
+
+        # delete config
+        open(os.path.join(config_dir, "config.cfg"), "w", encoding="utf-8").close()
+        open(os.path.join(config_dir, "config_default.cfg"), "w", encoding="utf-8").close()
+
+        # write config
+        autoexec_name = os.path.split(EDITOR_AUTOEXEC_PATH)[-1]
+        autoexec_path = os.path.join(config_dir, autoexec_name)
+
+        os.remove(os.path.join(config_dir, "valve.rc"))
+        with open(os.path.join(config_dir, "valve.rc"), "w", encoding="utf-8") as cfg_file:
+            cfg_file.write(f"exec {autoexec_name}")
+
+        shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
+
+        # disable fullscreen in video settings
+        video_settings_path = os.path.join(config_dir, "video.txt")
+        if os.path.exists(video_settings_path):
+            video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
+            video_settings["VideoConfig"]["setting.fullscreen"] = 0
+            vdf.dump(video_settings, open(video_settings_path, "w", encoding="utf-8"), pretty=True)
 
     def close(self):
         """Close game"""
@@ -64,28 +109,19 @@ class Game:
 
     def run(self, mode, wait_on_close=False):
         """Start game"""
-        match mode:
-            case "user":
-                if not self.installer.is_installed(mode):
-                    raise AssertionError("User installation not found")
-            case "dev":
-                if not self.installer.is_installed(mode):
-                    if DEBUG_MODE:
-                        self.installer.run_installer()
-                    else:
-                        # if installation failed, show a message box & quit the script
-                        try:
-                            self.installer.run_installer()
-                        except RuntimeError as error_info:
-                            # display the error message in a message box
-                            tk.messagebox.showerror("Error", str(error_info) + "\n\n" + traceback.format_exc())
-                        sys.exit()
-            case _:
-                raise ValueError("Invalid type parameter")
+        assert mode in ["user", "dev"], "Invalid mode parameter"
 
+        # activate selected mode
+        self.activate_mode(mode)
+
+        # write config
+        self._write_config()
+
+        # build game argument params
         game_args = " -novid"  # skip intro videos
         game_args += " -console"  # enable developer console
 
+        # run game
         if wait_on_close:
             # Run without waiting (opening through steam means code would not connect to left4dead2.exe)
             exe_path = os.path.join(self.get_dir("dev"), self.game_exe)

@@ -12,7 +12,7 @@ from modules.utils.functions import copy_directory_contents
 from modules.utils.constants import NEW_HUD_DIR, IMAGES_DIR
 
 
-class HudSelectGui:
+class GuiHudSelect:
     """Class for the hud select gui"""
 
     def __init__(self, persistent_data, installer_instance):
@@ -326,5 +326,5 @@ class HudSelectGui:
 
 def debug_hud_select_gui(persistent_data, installer_instance):
     """Debug the gui"""
-    app = HudSelectGui(persistent_data, installer_instance)
+    app = GuiHudSelect(persistent_data, installer_instance)
     app.root.mainloop()

@@ -4,7 +4,7 @@ from modules.classes.hud_syncer import HudSyncer
 from modules.classes.game import Game
 
 
-class HudEdit:
+class Hud:
     """Class for the hud select gui"""
 
     def __init__(self, game_instance) -> None:

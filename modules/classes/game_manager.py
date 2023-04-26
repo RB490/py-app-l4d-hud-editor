@@ -12,7 +12,7 @@ from modules.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
 from modules.utils.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
 
 
-class Installer:
+class GameManager:
     """Sub class of the game class. Methods related to the game folder such as installing, updating and repairing
     dev mode and switching between user & dev modes"""
 
@@ -23,6 +23,21 @@ class Installer:
 
         self.user_dir_id_file = "user_folder.DoNotDelete"
         self.dev_dir_id_file = "hud_dev_folder.DoNotDelete"
+
+    def get_active_mode(self):
+        """Check active game mode. User/Dev"""
+        user_id_file_path = os.path.join(self.get_active_dir(), self.user_dir_id_file)
+        dev_id_file_path = os.path.join(self.get_active_dir(), self.dev_dir_id_file)
+
+        if os.path.isfile(user_id_file_path):
+            print(f'Identified user folder with "{user_id_file_path}"')
+            return "user"
+        elif os.path.isfile(dev_id_file_path):
+            print(f'Identified dev folder with "{dev_id_file_path}"')
+            return "dev"
+        else:
+            messagebox.showinfo("Error", "Neither dev or user mode installed!\n\nCurrently unhandled.")
+            exit()
 
     def get_cfg_dir(self, mode):
         """Get the full path to the 'cfg' dir"""
@@ -35,6 +50,10 @@ class Installer:
         main_dir_name = self.game.get_title().replace(" ", "")
         main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
         return os.path.join(root_dir, main_dir_name)
+
+    def get_active_dir(self):
+        """Returns the active game directory regardless of mode"""
+        return os.path.join(self.steam_info["game_dir"], self.game.get_title())
 
     def get_dir(self, mode):
         """Get the full path to the specified mode's directory. If not found prompts to manually select"""
@@ -77,8 +96,16 @@ class Installer:
 
     def activate_mode(self, mode):
         """Activate user/dev mode by switching folder names eg. Left 4 Dead 2 & Left 4 Dead 2 User"""
-        assert self.is_installed("dev"), "Called activate_mode to activate dev mode without it being installed"
+        assert self.is_installed(mode), f"Called activate_mode to activate {mode} mode without it being installed"
 
+        # check if mode is already active
+        if self.get_active_mode() == mode:
+            return
+
+        # close game
+        self.game.close()
+
+        # activate mode
         try:
             if mode == "user":
                 os.rename(
@@ -101,17 +128,17 @@ class Installer:
         """Check if mode is installed"""
         assert mode in ["user", "dev"], "Invalid mode parameter"
 
-        # confirm mode is installed by retrieving its dir
-        install_dir = self.get_dir(mode)
-        if not os.path.isdir(install_dir):
-            return False
-
         # confirm this is the correct directory by checking the game's executable
+        install_dir = self.get_dir(mode)
         if os.path.isfile(os.path.join(install_dir, self.game.get_exe())):
             return True
+        elif mode == "dev":
+            # install dev mode if needed
+            if self.run_installer() is False:
+                raise RuntimeError("Can't continue without dev mode installed!'")
+            return True
         else:
-            # raise RuntimeError(f"Game executable not found in game directory: '{install_dir}'")
-            return False
+            raise RuntimeError(f"Game executable for {mode} mode not found in directory: '{install_dir}'")
 
     def _prompt_start(self, install_type, message_extra=""):
         install_type = install_type.lower()  # lower case
@@ -413,7 +440,7 @@ def debug_installer_class(game_instance):
     os.system("cls")  # clear terminal
 
     saved_data = load_data()
-    installer_instance = Installer(saved_data, game_instance)
-    installer_instance.run_installer()
+    game_manager_instance = GameManager(saved_data, game_instance)
+    game_manager_instance.run_installer()
 
     input("end of class_installer autoexecute")
