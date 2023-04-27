@@ -51,6 +51,11 @@ hud_edit = Hud(game_instance)
 # game_manager_instance.run_update_or_repair("repair")
 
 # hud_edit.finish_editing()
-game_instance.run("user")
+game_instance.run("dev")
+# game_instance.command.execute("map c12m2_traintunnel")
+# game_instance.command.execute("give_all_items")
+# game_instance.command.execute("echo this is a test 5!")
+game_instance.command.execute("hud_reloadscheme")
+# game_instance.command.execute("")
 
-input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")
+input("End of auto-execute (Press enter to exit)")

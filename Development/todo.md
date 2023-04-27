@@ -1,5 +1,3 @@
-feature -> ClassCommands
-
 feature -> start hud editing
 feature -> finish hud editing
 
@@ -7,6 +5,17 @@ feature -> create hud editor menu + hotkey
 
 feature -> detect game close to automatically run this function
 
+feature -> send alt+f4 to game window (if needed) in GameCommands using this:
+        import pydirectinput
+		
+		# Press the Alt key
+        pydirectinput.keyDown("alt")
+
+        # Press and release the F4 key
+        pydirectinput.press("f4")
+
+        # Release the Alt key
+        pydirectinput.keyUp("alt")
 
 #do-last
 	feature -> main gui -> menu icons

@@ -5,7 +5,8 @@ import subprocess
 import psutil
 import vdf
 from modules.classes.game_manager import GameManager
-from modules.utils.functions import get_steam_info, is_process_running, load_data
+from modules.classes.game_commands import GameCommands
+from modules.utils.functions import get_steam_info, is_process_running, load_data, get_hwnd_for_exe, wait_for_process
 from modules.utils.constants import EDITOR_AUTOEXEC_PATH
 
 
@@ -16,10 +17,12 @@ class Game:
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
         self.manager = GameManager(self.persistent_data, self)
+        self.command = GameCommands(self.persistent_data, self)
 
         self.game_title = "Left 4 Dead 2"
         self.game_exe = "left4dead2.exe"
         self.game_appid = 550
+        self.game_hwnd = None
 
         # set metadata
         # self.active_exe = os.path.join(self.active_dir, self.game_exe)
@@ -28,6 +31,14 @@ class Game:
         # input('press enter to force close game')
         # self.close()
         # self.run("dev")
+
+    def set_hwnd(self):
+        """Retrieve game hwnd"""
+        # print("Searching game window handle")
+        self.game_hwnd = get_hwnd_for_exe(self.get_exe())
+        if not self.game_hwnd:
+            raise LookupError("No window handle was found")
+        print(f"{self.get_exe()} hwnd '{self.game_hwnd}'")
 
     def get_title(self):
         """Retrieve information"""
@@ -44,6 +55,10 @@ class Game:
     def get_dir(self, mode):
         """Retrieve information"""
         return self.manager.get_dir(mode)
+
+    def get_hwnd(self):
+        """Retrieve information"""
+        return self.game_hwnd
 
     def get_main_dir(self, mode):
         """Retrieve information"""
@@ -119,8 +134,9 @@ class Game:
         # activate selected mode
         self.activate_mode(mode)
 
-        # cancel if correct game mode is already running
+        # run game
         if self.is_running():
+            self.set_hwnd()
             return
 
         # write config
@@ -140,6 +156,12 @@ class Game:
             steam_args = f" -applaunch {str(self.get_appid())}"
             steam_exe = self.steam_info.get("steam_exe")
             subprocess.Popen('"' + steam_exe + '"' + steam_args + game_args, shell=True)
+
+        # wait until game is running
+        wait_for_process(self.get_exe())
+
+        # set hwnd
+        self.set_hwnd()
 
 
 def debug_game_class():

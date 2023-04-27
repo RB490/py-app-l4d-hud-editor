@@ -31,16 +31,18 @@ class GameManager:
         """Check active game mode. User/Dev"""
         user_id_file_path = os.path.join(self.get_active_dir(), self.user_dir_id_file)
         dev_id_file_path = os.path.join(self.get_active_dir(), self.dev_dir_id_file)
+        # print(f'user_id_file_path "{user_id_file_path}"')
+        # print(f'dev_id_file_path "{dev_id_file_path}"')
 
         if os.path.isfile(user_id_file_path):
-            print(f'Identified user folder with "{user_id_file_path}"')
+            # print(f"{self.game.get_title()} is in user mode")
             return "user"
         elif os.path.isfile(dev_id_file_path):
-            print(f'Identified dev folder with "{dev_id_file_path}"')
+            # print(f"{self.game.get_title()} is in dev mode")
             return "dev"
         else:
-            messagebox.showinfo("Error", "Neither dev or user mode installed!\n\nCurrently unhandled.")
-            exit()
+            print(f"Default game folder not found! ({self.get_active_dir()})")
+            # messagebox.showinfo("Error", "Default game folder not found!")
 
     def get_cfg_dir(self, mode):
         """Get the full path to the 'cfg' dir"""
