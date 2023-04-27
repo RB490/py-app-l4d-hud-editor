@@ -5,8 +5,7 @@ import subprocess
 import psutil
 import vdf
 from modules.classes.game_manager import GameManager
-from modules.utils.functions import get_steam_info
-from modules.utils.functions import load_data
+from modules.utils.functions import get_steam_info, is_process_running, load_data
 from modules.utils.constants import EDITOR_AUTOEXEC_PATH
 
 
@@ -49,6 +48,10 @@ class Game:
     def get_main_dir(self, mode):
         """Retrieve information"""
         return self.manager.get_main_dir(mode)
+
+    def is_running(self):
+        """Checks if the game is running"""
+        return is_process_running(self.get_exe())
 
     def activate_mode(self, mode):
         """Switch between user/dev modes"""
@@ -105,7 +108,9 @@ class Game:
         for proc in psutil.process_iter(["name"]):
             if proc.info["name"] == self.get_exe():
                 proc.kill()
-        # print('close() game force closed')
+                proc.wait()  # Wait for the process to fully terminate
+                break
+        # print('close(): game force closed')
 
     def run(self, mode, wait_on_close=False):
         """Start game"""
@@ -113,6 +118,10 @@ class Game:
 
         # activate selected mode
         self.activate_mode(mode)
+
+        # cancel if correct game mode is already running
+        if self.is_running():
+            return
 
         # write config
         self._write_config()

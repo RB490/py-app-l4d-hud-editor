@@ -5,7 +5,37 @@ import os
 import winreg
 import tkinter as tk
 from tkinter import filedialog
+import psutil
 from .constants import PERSISTENT_DATA_PATH
+
+
+def is_process_running(process_name: str) -> bool:
+    """
+    Check if a process with the specified name is currently running on the system.
+
+    Parameters:
+    process_name (str): The name of the process to check for. EG: notepad.exe
+
+    Returns:
+    bool: True if the process is running, False otherwise.
+    """
+
+    # Get a list of all running processes
+    processes = psutil.process_iter()
+
+    # Check if the process is in the list of running processes
+    process_running = False
+    for process in processes:
+        if process.name() == process_name:
+            process_running = True
+            break
+
+    if process_running:
+        print(f"{process_name} is running")
+    else:
+        print(f"{process_name} is not running")
+
+    return process_running
 
 
 def copy_directory_contents(src_dir, dest_dir, ignore_file=None):

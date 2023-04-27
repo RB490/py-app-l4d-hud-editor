@@ -51,6 +51,6 @@ hud_edit = Hud(game_instance)
 # game_manager_instance.run_update_or_repair("repair")
 
 # hud_edit.finish_editing()
-game_instance.run("dev")
+game_instance.run("user")
 
 input(f"{SCRIPT_NAME}: End of auto-execute (Press enter to exit)")

@@ -13,8 +13,11 @@ from modules.utils.functions import copy_directory_contents, get_dir_size_in_gb,
 
 
 class GameManager:
-    """Sub class of the game class. Methods related to the game folder such as installing, updating and repairing
-    dev mode and switching between user & dev modes"""
+    """Sub class of the game class
+
+    Everything related to the game folder such as
+        - installing, updating and repairing dev mode and switching between user & dev modes
+        - retrieving game folder paths"""
 
     def __init__(self, persistent_data, game_class):
         self.persistent_data = persistent_data
