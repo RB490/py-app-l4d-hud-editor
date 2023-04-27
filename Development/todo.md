@@ -32,6 +32,10 @@ feature -> detect game close to automatically run this function
 
 	feature -> multi game support?
 
+	cleanup -> right now i'm passing persistent_data into various classes such as GameCommands and GameManager
+		since persistent_data seemingly only gets used in most instances to call steam_info would it be better
+		to create a steam info class that gets passed instead? or pass the required info from the steam function
+
 ------------------------------------------------------
 
 #optional #do-last
