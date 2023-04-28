@@ -24,4 +24,4 @@ EDITOR_AUTOEXEC_PATH = os.path.join(MISC_DIR, "hud_editor_autoexec.cfg")
 SCRIPT_NAME = "L4D Hud Editor"
 SCRIPT_FILE_NAME = os.path.basename(SCRIPT_DIR)
 PERSISTENT_DATA_PATH = SCRIPT_NAME + ".json"
-PERSISTENT_DATA = []
+HUD_DESCRIPTIONS_PATH = os.path.join(MISC_DIR, "hud_file_descriptions.json")

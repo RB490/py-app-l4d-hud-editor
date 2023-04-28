@@ -1,3 +1,6 @@
+feature -> browser -> modify file description hud
+feature -> expand hud class to support file descriptions
+
 feature -> start hud editing
 feature -> finish hud editing
 
@@ -34,6 +37,13 @@ feature -> send alt+f4 to game window (if needed) in GameCommands using this:
 
 		root.mainloop()
 
+	feature -> browser -> display if a file is custom & whether it's added to the hud
+		do i still want to display this?
+		how do i want to display this?
+			adding more columns
+			status bar
+			
+
 	feature -> progress gui for the installer class
 		install
 		update_or_repair
@@ -44,6 +54,20 @@ feature -> send alt+f4 to game window (if needed) in GameCommands using this:
 	cleanup -> right now i'm passing persistent_data into various classes such as GameCommands and GameManager
 		since persistent_data seemingly only gets used in most instances to call steam_info would it be better
 		to create a steam info class that gets passed instead? or pass the required info from the steam function
+
+	cleanup -> consider using a different way to use subclasses so i can directly reference them back and forth
+		currently not sure this is possible(or better) and kind of like the way im doing it now
+		current:
+			self.manager.install()
+		new:
+			self.install()
+
+		and from inside GameManager
+			current:
+				self.game.get_title()
+			new:
+				self.get_title()
+
 
 ------------------------------------------------------
 

@@ -218,7 +218,7 @@ def load_data():
     if "stored_huds" not in data:
         data["stored_huds"] = []
 
-    # print("load_data: {}".format(data))
+    # print(f"load_data: \n{json.dumps(data, sort_keys=True, indent=4)}")
     return data
 
 
@@ -234,6 +234,8 @@ def save_data(data):
     print(f"save_data: {data}")
     try:
         with open(PERSISTENT_DATA_PATH, "w", encoding="utf-8") as file:
-            json.dump(data, file)
+            # json.dump(data, file) # fastest, but doesn't allow formatting - and i use tiny jsons
+            pretty_json = json.dumps(data, sort_keys=True, indent=4)
+            file.write(pretty_json)
     except (FileNotFoundError, TypeError):
         print(f"Error saving data to {PERSISTENT_DATA_PATH}")

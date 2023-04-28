@@ -10,52 +10,30 @@
 
 import os
 import atexit
-
-# pylint: disable=unused-import
-from modules.classes.gui_hud_select import debug_hud_select_gui
-
-# pylint: disable=unused-import
-from modules.classes.hud_syncer import debug_hud_syncer
-
-from modules.classes.game import Game
-from modules.classes.game_manager import GameManager
-from modules.classes.hud import Hud
-from modules.utils.constants import PERSISTENT_DATA, SCRIPT_NAME
-from modules.utils.constants import NEW_HUD_DIR
 from modules.utils.functions import load_data, save_data_on_exit
 
-# from modules.class_game import Game
-
 os.system("cls")  # clear terminal
-
-# ====================================================================================================
-#     Load persistent data
-# ====================================================================================================
-
-PERSISTENT_DATA = load_data()
-
-# Register the save_data_on_exit function to be called when the script exits
-atexit.register(save_data_on_exit, PERSISTENT_DATA)
 
 # ====================================================================================================
 #     Auto-execute
 # ====================================================================================================
 
-game_instance = Game(PERSISTENT_DATA)
-game_manager_instance = GameManager(PERSISTENT_DATA, game_instance)
-hud_edit = Hud(game_instance)
+# ----------------------------------
+#     Load persistent data
+# ----------------------------------
 
-# debug_hud_syncer()
-# debug_hud_select_gui(PERSISTENT_DATA, game_manager_instance)
-# game_manager_instance.run_update_or_repair()
-# game_manager_instance.run_update_or_repair("repair")
+persistent_data = load_data()
 
-# hud_edit.finish_editing()
-game_instance.run("dev")
-# game_instance.command.execute("map c12m2_traintunnel")
-# game_instance.command.execute("give_all_items")
-# game_instance.command.execute("echo this is a test 5!")
-game_instance.command.execute("hud_reloadscheme")
-# game_instance.command.execute("")
+# Register the save_data_on_exit function to be called when the script exits
+atexit.register(save_data_on_exit, persistent_data)
+
+# ----------------------------------
+#     Do stuff
+# ----------------------------------
+
+
+# ----------------------------------
+#     Finish
+# ----------------------------------
 
 input("End of auto-execute (Press enter to exit)")

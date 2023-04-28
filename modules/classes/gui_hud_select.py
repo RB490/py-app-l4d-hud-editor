@@ -1,4 +1,4 @@
-"""Module import modules that should be available when the package is imported"""
+"""Module for the hud select gui class"""
 import subprocess
 import os
 import tkinter as tk
@@ -19,7 +19,7 @@ class GuiHudSelect:
         self.persistent_data = persistent_data
         self.installer_instance = installer_instance
         self.root = tk.Tk()
-        self.root.title("Game List")
+        self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         # self.root.geometry("865x390")
         self.root.minsize(865, 375)

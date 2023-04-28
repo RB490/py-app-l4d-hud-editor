@@ -175,3 +175,19 @@ def debug_game_class():
     print(result)
 
     input("end of class_game autoexecute")
+
+    # game_instance = Game(PERSISTENT_DATA)
+    # game_manager_instance = GameManager(PERSISTENT_DATA, game_instance)
+
+    # debug_hud_syncer()
+    # debug_hud_select_gui(PERSISTENT_DATA, game_manager_instance)
+    # game_manager_instance.run_update_or_repair()
+    # game_manager_instance.run_update_or_repair("repair")
+
+    # hud_edit.finish_editing()
+    # game_instance.run("dev")
+    # game_instance.command.execute("map c12m2_traintunnel")
+    # game_instance.command.execute("give_all_items")
+    # game_instance.command.execute("echo this is a test 5!")
+    # game_instance.command.execute("hud_reloadscheme")
+    # game_instance.command.execute("")
