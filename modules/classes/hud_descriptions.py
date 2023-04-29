@@ -7,7 +7,6 @@ class HudDescriptions:
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
 
     def __init__(self):
-        print("hi there")
         self.data = self.read_from_disk()
 
     def get_all_descriptions(self):

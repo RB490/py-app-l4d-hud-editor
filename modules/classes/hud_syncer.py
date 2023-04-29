@@ -219,14 +219,14 @@ def debug_hud_syncer():
     saved_data = load_data()
     game_instance = Game(saved_data)
 
-    sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "Debug", "Hud Syncer")
-    if os.path.isdir(os.path.join(sync_debug_dir, "Workspace")):
-        shutil.rmtree(os.path.join(sync_debug_dir, "Workspace"))
+    sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_syncer")
+    if os.path.isdir(os.path.join(sync_debug_dir, "workspace")):
+        shutil.rmtree(os.path.join(sync_debug_dir, "workspace"))
 
-    source_dir_template = os.path.join(sync_debug_dir, "Templates", "Small", "Debug Hud")
-    target_dir_template = os.path.join(sync_debug_dir, "Templates", "Large", "Game Dir")
-    source_dir_workspace = os.path.join(sync_debug_dir, "Workspace", "Debug Hud")
-    target_dir_workspace = os.path.join(sync_debug_dir, "Workspace", "Game Dir")
+    source_dir_template = os.path.join(sync_debug_dir, "templates", "small", "debug_hud")
+    target_dir_template = os.path.join(sync_debug_dir, "templates", "large", "game_dir")
+    source_dir_workspace = os.path.join(sync_debug_dir, "workspace", "debug_hud")
+    target_dir_workspace = os.path.join(sync_debug_dir, "workspace", "game_dir")
     shutil.copytree(source_dir_template, source_dir_workspace)
     shutil.copytree(target_dir_template, target_dir_workspace)
 

@@ -1,7 +1,6 @@
 feature -> browser -> modify file description hud
 feature -> expand hud class to support file descriptions
 
-feature -> start hud editing
 feature -> finish hud editing
 
 feature -> create hud editor menu + hotkey

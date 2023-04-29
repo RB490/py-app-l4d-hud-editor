@@ -82,10 +82,10 @@ def is_process_running(process_name: str) -> bool:
             process_running = True
             break
 
-    if process_running:
-        print(f"{process_name} is running")
-    else:
-        print(f"{process_name} is not running")
+    # if process_running:
+    #     print(f"{process_name} is running")
+    # else:
+    #     print(f"{process_name} is not running")
 
     return process_running
 

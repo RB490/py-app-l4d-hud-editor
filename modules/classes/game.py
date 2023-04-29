@@ -73,8 +73,6 @@ class Game:
         return self.manager.activate_mode(mode)
 
     def _write_config(self):
-        print("_write_config: todo")
-
         # don't alter user installation
         if self.manager.get_active_mode() == "user":
             print("Cancelled writing config for user folder")

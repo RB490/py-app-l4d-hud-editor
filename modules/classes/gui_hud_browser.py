@@ -1,11 +1,6 @@
 """Module for the hud browser gui class"""
-import os
 import tkinter as tk
 from tkinter import ttk
-from modules.classes.game import Game
-from modules.classes.hud import Hud
-from modules.utils.functions import load_data
-from modules.utils.constants import DEVELOPMENT_DIR
 
 
 class GuiHudBrowser:
@@ -130,17 +125,3 @@ class GuiHudBrowser:
     def on_close(self):
         """Runs on close"""
         print("on_close")
-
-
-def debug_hud_browser():
-    """Debug the hud browser gui"""
-    print("debug_hud_browser")
-
-    persistent_data = load_data()
-    game_instance = Game(persistent_data)
-    huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "Debug", "Hud Debug")
-    hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
-    hud_edit = Hud(game_instance)
-    hud_edit.start_editing(hud_debug_dir)
-    gui_browser = GuiHudBrowser(hud_edit)
-    gui_browser.root.mainloop()

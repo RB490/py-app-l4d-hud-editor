@@ -14,11 +14,11 @@ import os
 
 DEBUG_MODE = True
 SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DEVELOPMENT_DIR = os.path.join(SCRIPT_DIR, "Development")
+DEVELOPMENT_DIR = os.path.join(SCRIPT_DIR, "development")
 ASSETS_DIR = os.path.join(SCRIPT_DIR, "assets")
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
 NEW_HUD_DIR = os.path.join(ASSETS_DIR, "new hud template")
-MODS_DIR = os.path.join(ASSETS_DIR, "Dependencies", "Mods")
+MODS_DIR = os.path.join(ASSETS_DIR, "dependencies", "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 EDITOR_AUTOEXEC_PATH = os.path.join(MISC_DIR, "hud_editor_autoexec.cfg")
 SCRIPT_NAME = "L4D Hud Editor"
