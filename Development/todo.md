@@ -1,15 +1,18 @@
-broken imports
-	import win32gui
-	import win32process
 
-feature -> browser -> modify file description hud
-feature -> expand hud class to support file descriptions
+
+feature -> browser -> modify file description hud -> saving
+
 
 feature -> finish hud editing
 
 feature -> create hud editor menu + hotkey
 
 feature -> detect game close to automatically run this function
+
+feature -> gui icons
+feature -> gui position saving&loading
+feature -> gui button icons
+feature -> gui menu icons
 
 feature -> send alt+f4 to game window (if needed) in GameCommands using this:
         import pydirectinput
@@ -71,6 +74,7 @@ feature -> send alt+f4 to game window (if needed) in GameCommands using this:
 			new:
 				self.get_title()
 
+	cleanup -> aided with gpt's go through the script improving functions, methods and maybe also the overall structure
 
 ------------------------------------------------------
 

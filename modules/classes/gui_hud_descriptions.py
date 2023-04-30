@@ -1,89 +1,135 @@
+"""Module for the hud file descriptions gui"""
+import os
 import tkinter as tk
-import tkinter.font as tkFont
+
+from modules.utils.constants import IMAGES_DIR
 
 
-class App:
-    def __init__(self, root):
-        root.title("File")
+class GuiHudDescriptions:
+    """Class for the hud file descriptions gui"""
 
-        # root.minsize(450, 600)
+    def __init__(self, hud_instance, relative_path):
+        self.root = tk.Tk()
+        self.root.title("File")
+        self.hud = hud_instance
+        self.relative_path = relative_path
+
+        # self.root.minsize(450, 400)
+
+        # Create image buttons
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
+        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
+        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
 
         # define constants for padding and sizing
-        PADX = 10
-        PADY = 10
-        CTRL_WIDTH = 40
-        EXPAND_TRUE = True
-        FILL_BOTH = "both"
-        SIDE_TOP = "top"
-        SIDE_BOTTOM = "bottom"
-        ANCHOR_NW = "nw"
+        pad_x = 10
+        pad_y = 10
+        ctrl_w = 40
 
-        desc_frame = tk.Frame(root)
-        desc_frame.pack(fill=FILL_BOTH, expand=EXPAND_TRUE, padx=PADX, pady=(0, 0))
+        file_desc_frame = tk.Frame(self.root)
+        file_desc_frame.pack(fill="both", expand=True, padx=pad_x, pady=(0, 0))
 
-        file_desc_label = tk.Label(desc_frame, text="File description")
-        file_desc_label.pack(side=SIDE_TOP, anchor="w", padx=PADX, pady=PADY)
+        file_desc_label = tk.Label(file_desc_frame, text="File description")
+        file_desc_label.pack(side="top", anchor="w", padx=pad_x, pady=pad_y)
 
-        scrollbar = tk.Scrollbar(desc_frame)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        file_desc_scrollbar = tk.Scrollbar(file_desc_frame)
+        file_desc_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        file_desc_entry = tk.Text(desc_frame, height=6, width=CTRL_WIDTH, yscrollcommand=scrollbar.set)
-        file_desc_entry.pack(side=SIDE_TOP, fill=FILL_BOTH, expand=EXPAND_TRUE, padx=PADX, pady=0)
+        self.file_desc_text = tk.Text(file_desc_frame, height=6, width=ctrl_w, yscrollcommand=file_desc_scrollbar.set)
+        self.file_desc_text.pack(side="top", fill="both", expand=True, padx=pad_x, pady=0)
 
-        scrollbar.config(command=file_desc_entry.yview)
+        file_desc_scrollbar.config(command=self.file_desc_text.yview)
 
-        label_frame = tk.LabelFrame(root, text="Control descriptions")
-        label_frame.pack(fill=FILL_BOTH, expand=EXPAND_TRUE, padx=PADX * 2, pady=PADY * 2)
+        ctrl_label_frame = tk.LabelFrame(self.root, text="Control descriptions")
+        ctrl_label_frame.pack(fill="both", expand=True, padx=pad_x * 2, pady=pad_y * 2)
 
-        button_frame = tk.Frame(label_frame)
-        button_frame.pack(side="bottom", fill="x", expand=False, padx=PADX, pady=(0, PADY))
+        ctrl_button_frame = tk.Frame(ctrl_label_frame)
+        ctrl_button_frame.pack(side="bottom", fill="x", expand=False, padx=pad_x, pady=(0, pad_y))
 
-        variable = tk.StringVar(root)
-        variable.set("Option 1")  # default value
-
-        options = ["Option 1", "Option 2", "Option 3"]
-        option_menu = tk.OptionMenu(button_frame, variable, *options)
-        option_menu.config(width=20)
-        option_menu.pack(side="left", padx=PADX, pady=PADY)
-
-        add_button = tk.Button(button_frame, text="Add", justify="center", command=self.add_command)
-        add_button.config(width=10)
-        add_button.pack(side="left", padx=PADX, pady=PADY)
-
-        remove_button = tk.Button(button_frame, text="Remove", justify="center", command=self.remove_command)
-        remove_button.config(width=10)
-        remove_button.pack(side="left", padx=PADX, pady=PADY)
-
-        controls_frame = tk.Frame(label_frame)
-        controls_frame.pack(
-            anchor=ANCHOR_NW, side=SIDE_TOP, fill=FILL_BOTH, expand=EXPAND_TRUE, padx=PADX, pady=(PADY, 0)
+        self.ctrl_menu_variable = tk.StringVar(self.root)
+        self.ctrl_menu_variable.set("Option 1")  # default value
+        controls_list = ["Option 1", "Option 2", "Option 3"]
+        self.ctrl_menu = tk.OptionMenu(
+            ctrl_button_frame, self.ctrl_menu_variable, *controls_list, command=self.selected_ctrl
         )
+        self.ctrl_menu.config(width=25)
+        self.ctrl_menu.pack(side="left", padx=pad_x, pady=pad_y, fill="x", expand=True)
 
-        text_scrollbar = tk.Scrollbar(controls_frame)
-        text_scrollbar.pack(side="right", fill="y")
+        add_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.add_control)
+        add_ctrl_button.config(width=25, height=23)
+        add_ctrl_button.config(image=self.add_image, compound="center")
+        add_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
-        text_control = tk.Text(controls_frame, height=4, width=CTRL_WIDTH, yscrollcommand=text_scrollbar.set)
-        text_control.pack(side="bottom", fill="both", expand=True, padx=PADX, pady=(PADY, 0))
+        remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
+        remove_ctrl_button.config(width=25, height=23)
+        remove_ctrl_button.config(image=self.delete_image, compound="center")
+        remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
-        text_scrollbar.config(command=text_control.yview)
+        ctrl_desc_frame = tk.Frame(ctrl_label_frame)
+        ctrl_desc_frame.pack(anchor="nw", side="top", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
 
-        save_frame = tk.Frame(root)
-        save_frame.pack(side=SIDE_BOTTOM, expand=False, fill="x", padx=PADX, pady=(0, PADY))
+        ctrl_desc_scrollbar = tk.Scrollbar(ctrl_desc_frame)
+        ctrl_desc_scrollbar.pack(side="right", fill="y")
 
-        save_button = tk.Button(save_frame, text="Save", justify="center", width=CTRL_WIDTH, command=self.save_command)
-        save_button.pack(side=SIDE_BOTTOM, expand=True, fill="x", padx=PADX, pady=(0, PADY))
+        self.ctrl_desc_text = tk.Text(ctrl_desc_frame, height=4, width=ctrl_w, yscrollcommand=ctrl_desc_scrollbar.set)
+        self.ctrl_desc_text.pack(side="bottom", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
 
-    def add_command(self):
-        print("command")
+        ctrl_desc_scrollbar.config(command=self.ctrl_desc_text.yview)
 
-    def remove_command(self):
-        print("command")
+        save_button_frame = tk.Frame(self.root)
+        save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
 
-    def save_command(self):
-        print("command")
+        save_button = tk.Button(
+            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
+        )
+        save_button.config(image=self.save_image, compound="center")
+        save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
+        self.load_description(relative_path)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = App(root)
-    root.mainloop()
+    def load_control(self, input_ctrl):
+        # set options menu
+        self.ctrl_menu_variable.set(input_ctrl)
+
+        # set control description
+        self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
+        self.ctrl_desc_text.insert(tk.END, self.hud.get_file_control_description(self.relative_path, input_ctrl))
+
+    def load_description(self, relative_path):
+        """Load description for hud file into the gui"""
+
+        # save relative path
+        self.relative_path = relative_path
+
+        # set gui title
+        self.root.title(relative_path)
+
+        # set file description
+        self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
+        self.file_desc_text.insert(tk.END, self.hud.get_file_description(relative_path))
+
+        # update the controls list and OptionMenu with new values
+        controls_list = self.hud.get_file_controls(relative_path)
+        menu = self.ctrl_menu["menu"]  # get the OptionMenu menu object
+        menu.delete(0, "end")  # delete all existing options from the menu
+        for item in controls_list:
+            # iterate over the new controls list and add commands to the menu for each item
+            menu.add_command(label=item, command=lambda selected_item=item: self.selected_ctrl(selected_item))
+        self.load_control(controls_list[0])
+
+    def selected_ctrl(self, input_ctrl):
+        """Handle control menu selection"""
+        print("You selected:", input_ctrl)
+        self.load_control(input_ctrl)
+
+    def add_control(self):
+        """Add new control"""
+        print("add_control")
+
+    def remove_control(self):
+        """Remove control"""
+        print("remove_control")
+
+    def save_gui(self):
+        """Submit gui"""
+        print("save_gui")

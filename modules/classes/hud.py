@@ -1,11 +1,11 @@
 """Methods related to editing a hud"""
 import os
 import threading
-import time
-import psutil
-import subprocess
+from modules.classes.gui_hud_descriptions import GuiHudDescriptions
 from modules.classes.hud_descriptions import HudDescriptions
 from modules.classes.hud_syncer import HudSyncer
+
+# pylint: disable=unused-import
 from modules.classes.gui_hud_browser import GuiHudBrowser
 from modules.classes.game import Game
 from modules.utils.functions import load_data
@@ -48,6 +48,15 @@ class Hud:
         """Get information"""
         print(f"get_file_description for: {relative_path}")
         return self.desc.get_description(relative_path)
+
+    def get_file_control_description(self, relative_path, input_control):
+        """Get information"""
+        return self.desc.get_control_description(relative_path, input_control)
+
+    def get_file_controls(self, relative_path):
+        """Get information"""
+        print(f"get_file_controls for: {relative_path}")
+        return self.desc.get_controls(relative_path)
 
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""
@@ -101,6 +110,7 @@ class Hud:
 
 
 def debug_hud():
+    # pylint: disable=unused-variable
     """Debug the hud class"""
     print("debug_hud")
 
@@ -109,6 +119,11 @@ def debug_hud():
     huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
     hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
     hud_edit = Hud(game_instance)
-    hud_edit.start_editing(hud_debug_dir)
+    hud_edit.hud_dir = hud_debug_dir
+
+    hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
+    hud_desc_gui.root.mainloop()
+
+    # hud_edit.start_editing(hud_debug_dir)
     # gui_browser = GuiHudBrowser(hud_edit)
     # gui_browser.root.mainloop()

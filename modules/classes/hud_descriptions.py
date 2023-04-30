@@ -10,21 +10,49 @@ class HudDescriptions:
         self.data = self.read_from_disk()
 
     def get_all_descriptions(self):
-        """Get information"""
-        # pylint: disable=unused-variable
-        all_descriptions = {}
-        for rel_path, values in self.data.items():
-            file_desc = values["file_description"]
-            all_descriptions[values["file_name"]] = file_desc
+        """
+        Collects all file names and their corresponding descriptions from the dictionary of data,
+        and returns them in a new dictionary.
+
+        Returns:
+        --------
+        dict
+            A dictionary with file names as keys and descriptions as values.
+        """
+
+        # Create a new dictionary called all_descriptions using a dictionary comprehension that
+        #  extracts the file names and descriptions from the existing dictionary (self.data)
+        all_descriptions = {values["file_name"]: values["file_description"] for rel_path, values in self.data.items()}
+
+        # Return the newly created dictionary
         return all_descriptions
 
-    def get_description(self, relative_path):
+    def get_control_description(self, relative_path, input_control):
         """Get information"""
+        return self.data[relative_path]["file_control_descriptions"][input_control]
 
-        if relative_path in self.data:
-            return self.data[relative_path]["file_description"]
-        else:
-            return " "
+    def get_description(self, relative_path):
+        """
+        Get file description for given relative path.
+
+        If the relative path doesn't exist in the data dictionary, return an empty string.
+        """
+
+        return self.data.get(relative_path, {}).get("file_description", "")
+
+    def get_controls(self, relative_path):
+        """
+        Get a list of file control descriptions for the given relative path.
+
+        If the relative path doesn't exist in the data dictionary, return an empty list.
+        """
+
+        # Retrieve file control descriptions from the data dictionary using the provided relative path.
+        # If the key is not present, default to an empty dictionary.
+        file_controls = self.data.get(relative_path, {}).get("file_control_descriptions", {})
+
+        # Convert the dictionary of file control descriptions to a list and return it.
+        return list(file_controls)
 
     def read_from_disk(self):
         """Read persistent data from disk"""
