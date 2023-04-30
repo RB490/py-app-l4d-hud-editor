@@ -1,3 +1,7 @@
+broken imports
+	import win32gui
+	import win32process
+
 feature -> browser -> modify file description hud
 feature -> expand hud class to support file descriptions
 

@@ -4,6 +4,7 @@ from .game_manager import *
 from .game import *
 from .gui_hud_browser import *
 from .gui_hud_select import *
+from .gui_hud_descriptions import *
 from .hud_descriptions import *
 from .hud_syncer import *
 from .hud import *

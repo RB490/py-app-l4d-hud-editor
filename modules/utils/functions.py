@@ -6,7 +6,8 @@ import winreg
 import time
 import tkinter as tk
 from tkinter import filedialog
-from typing import Dict, List
+
+# from typing import Dict, List
 import win32gui
 import win32process
 import psutil
@@ -34,31 +35,24 @@ def wait_for_process(exe, timeout=None):
         time.sleep(0.1)
 
 
-def get_hwnd_for_exe(exe: str) -> int:
+def get_hwnd_for_exe(executable_name):
     # pylint: disable=c-extension-no-member
     """
-    Get the window handle for a process based on its executable name.
-
-    :param exe: The executable name of the process.
-    :type exe: str
-    :return: The window handle associated with the executable.
-    :rtype: int
-    :raises Exception: If multiple window handles are found for the given executable.
+    Retrieves the window handle for a process based on its executable name.
     """
+    for proc in psutil.process_iter(["name"]):
+        if proc.info["name"] == executable_name:
+            pid = proc.pid
+            handle_list = []
 
-    def enum_windows_callback(hwnd: int, hwnds: List[int]) -> bool:
-        if win32gui.IsWindowVisible(hwnd) and win32gui.IsWindowEnabled(hwnd):
-            _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-            if pid_to_name.get(found_pid) == exe:
-                hwnds.append(hwnd)
-        return True
+            def callback(handle, handle_list):
+                handle_list.append(handle)
 
-    pid_to_name: Dict[int, str] = {proc.pid: proc.name() for proc in psutil.process_iter()}
-    hwnds: List[int] = []
-    win32gui.EnumWindows(enum_windows_callback, hwnds)
-    if len(hwnds) > 1:
-        raise AssertionError(f"Multiple window handles found for {exe}")
-    return hwnds[0] if hwnds else None
+            win32gui.EnumWindows(callback, handle_list)
+            for handle in handle_list:
+                if win32process.GetWindowThreadProcessId(handle)[1] == pid:
+                    return handle
+    return None
 
 
 def is_process_running(process_name: str) -> bool:
