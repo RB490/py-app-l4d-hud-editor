@@ -7,7 +7,20 @@ class HudDescriptions:
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
 
     def __init__(self):
-        self.data = self.read_from_disk()
+        self.data = None
+        self.read_from_disk()
+
+    def add_control(self, relative_path, input_control):
+        """Set information"""
+        self.data[relative_path]["file_control_descriptions"][input_control] = ""
+
+    def remove_control(self, relative_path, input_control):
+        """Set information"""
+        del self.data[relative_path]["file_control_descriptions"][input_control]
+
+    def save_control_desc(self, relative_path, input_control, control_desc):
+        """Set information"""
+        self.data[relative_path]["file_control_descriptions"][input_control] = control_desc
 
     def get_all_descriptions(self):
         """
@@ -66,11 +79,13 @@ class HudDescriptions:
             data = {}
 
         # print(f"read_from_disk: \n{json.dumps(data, sort_keys=True, indent=4)}")
-        return data
+        self.data = data
+        return
 
-    def save_to_disk(self, data):
+    def save_to_disk(self):
         """Save persistent data to disk"""
-        print("save_from_disk")
+        print("save_to_disk")
+        data = self.data
         try:
             with open(HUD_DESCRIPTIONS_PATH, "w", encoding="utf-8") as file:
                 # json.dump(data, file) # fastest, but doesn't allow formatting - and i use tiny jsons

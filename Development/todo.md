@@ -1,8 +1,3 @@
-
-
-feature -> browser -> modify file description hud -> saving
-
-
 feature -> finish hud editing
 
 feature -> create hud editor menu + hotkey

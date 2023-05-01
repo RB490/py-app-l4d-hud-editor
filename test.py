@@ -1,23 +1,27 @@
-import tkinter as tk
-from tkinter import messagebox
+class HudDescriptions:
+    def read_from_disk(self):
+        print("Reading descriptions from disk...")
 
 
-class Genie_GUI:
-    def __init__(self, master):
-        self.master = master
-        master.title("Genie's OptionMenu Example")
+class Hud:
+    def __init__(self):
+        self.hud = {}
+        self.desc = HudDescriptions()
 
-        # Create the OptionMenu widget
-        options = ["Option 1", "Option 2", "Option 3"]
-        self.selected_var = tk.StringVar(value=options[0])
-        self.option_menu = tk.OptionMenu(master, self.selected_var, *options, command=self.selected_option)
-        self.option_menu.pack()
-
-    def selected_option(self, value):
-        print("Selected option:", value)
-        messagebox.showinfo("Selected Option", f"You selected {value}")
+    def some_method(self):
+        # Note that we're trying to call read_from_disk() here
+        self.desc.read_from_disk2()
 
 
-root = tk.Tk()
-gui = Genie_GUI(root)
-root.mainloop()
+# Scenario 1: Everything works fine since HudDescriptions has a read_from_disk() method
+my_hud = Hud()
+my_hud.some_method()  # "Reading descriptions from disk..." gets printed
+
+
+class AnotherClass:
+    pass
+
+
+# Scenario 2: AttributeError is raised since AnotherClass doesn't have a read_from_disk() method
+my_hud.hud["desc"] = AnotherClass()
+my_hud.some_method()  # AttributeError: 'AnotherClass' object has no attribute 'read_from_disk'

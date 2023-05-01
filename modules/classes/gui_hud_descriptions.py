@@ -1,6 +1,8 @@
 """Module for the hud file descriptions gui"""
 import os
 import tkinter as tk
+import tkinter.messagebox as messagebox
+from tkinter import simpledialog
 
 from modules.utils.constants import IMAGES_DIR
 
@@ -11,6 +13,7 @@ class GuiHudDescriptions:
     def __init__(self, hud_instance, relative_path):
         self.root = tk.Tk()
         self.root.title("File")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.hud = hud_instance
         self.relative_path = relative_path
 
@@ -85,17 +88,9 @@ class GuiHudDescriptions:
         save_button.config(image=self.save_image, compound="center")
         save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
-        self.load_description(relative_path)
+        self.load_file(relative_path)
 
-    def load_control(self, input_ctrl):
-        # set options menu
-        self.ctrl_menu_variable.set(input_ctrl)
-
-        # set control description
-        self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.ctrl_desc_text.insert(tk.END, self.hud.get_file_control_description(self.relative_path, input_ctrl))
-
-    def load_description(self, relative_path):
+    def load_file(self, relative_path):
         """Load description for hud file into the gui"""
 
         # save relative path
@@ -106,10 +101,16 @@ class GuiHudDescriptions:
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.file_desc_text.insert(tk.END, self.hud.get_file_description(relative_path))
+        self.file_desc_text.insert(tk.END, self.hud.desc.get_description(relative_path))
+
+        # load controls
+        self.load_controls()
+
+    def load_controls(self):
+        """Load controls into option menu & load the first one"""
 
         # update the controls list and OptionMenu with new values
-        controls_list = self.hud.get_file_controls(relative_path)
+        controls_list = self.hud.desc.get_controls(self.relative_path)
         menu = self.ctrl_menu["menu"]  # get the OptionMenu menu object
         menu.delete(0, "end")  # delete all existing options from the menu
         for item in controls_list:
@@ -117,19 +118,80 @@ class GuiHudDescriptions:
             menu.add_command(label=item, command=lambda selected_item=item: self.selected_ctrl(selected_item))
         self.load_control(controls_list[0])
 
+    def load_control(self, input_ctrl):
+        """Load hud file control into the gui"""
+
+        # set options menu
+        self.ctrl_menu_variable.set(input_ctrl)
+
+        # set control description
+        self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
+        self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.relative_path, input_ctrl))
+
+    def save_control_desc(self):
+        """Save control description"""
+        selected_control = self.ctrl_menu_variable.get()
+        control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
+        self.hud.desc.save_control_desc(self.relative_path, selected_control, control_desc)
+        print(control_desc)
+
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
+
+        # save currently loaded control
+        self.save_control_desc()
+
+        # load selected control
         print("You selected:", input_ctrl)
         self.load_control(input_ctrl)
 
     def add_control(self):
         """Add new control"""
-        print("add_control")
+        # Show a dialog box to get the name of the new control
+        new_control = simpledialog.askstring("New Control", "Enter the name of the new control:")
+
+        # If user entered a name and clicked OK, add the control
+        if new_control:
+            # save currently loaded control
+            self.save_control_desc()
+
+            # Add control
+            self.hud.desc.add_control(self.relative_path, new_control)
+            self.load_controls()
+            self.load_control(new_control)
+            print(f"Added {new_control}")
 
     def remove_control(self):
         """Remove control"""
-        print("remove_control")
+        selected_control = self.ctrl_menu_variable.get()
+
+        # Show a message box to confirm removal
+        if messagebox.askyesno("Remove Control", f"Are you sure you want to remove {selected_control}?"):
+            # save currently loaded control
+            self.save_control_desc()
+
+            # User clicked Yes, so remove the control
+            print(f"Removed {selected_control}")
+            self.hud.desc.remove_control(self.relative_path, selected_control)
+            self.load_controls()
 
     def save_gui(self):
         """Submit gui"""
-        print("save_gui")
+
+        # save currently loaded control
+        self.save_control_desc()
+
+        # save changes to disk
+        self.hud.desc.save_to_disk()
+
+        # close gui
+        self.root.destroy()
+
+    def on_close(self):
+        """On gui close"""
+
+        # undo changes by reloading from disk
+        self.hud.desc.read_from_disk()
+
+        # close gui
+        self.root.destroy()

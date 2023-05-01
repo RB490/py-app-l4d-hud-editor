@@ -40,23 +40,9 @@ class Hud:
             for filename in filenames:
                 full_path = os.path.join(dirpath, filename)
                 relative_path = os.path.relpath(full_path, root_folder)
-                file_desc = self.get_file_description(relative_path)
+                file_desc = self.desc.get_description(relative_path)
                 files_dict[filename] = file_desc
         return files_dict
-
-    def get_file_description(self, relative_path):
-        """Get information"""
-        print(f"get_file_description for: {relative_path}")
-        return self.desc.get_description(relative_path)
-
-    def get_file_control_description(self, relative_path, input_control):
-        """Get information"""
-        return self.desc.get_control_description(relative_path, input_control)
-
-    def get_file_controls(self, relative_path):
-        """Get information"""
-        print(f"get_file_controls for: {relative_path}")
-        return self.desc.get_controls(relative_path)
 
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""
