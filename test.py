@@ -1,27 +1,40 @@
-class HudDescriptions:
-    def read_from_disk(self):
-        print("Reading descriptions from disk...")
+import tkinter as tk
 
 
-class Hud:
+class MyForm(tk.Toplevel):
     def __init__(self):
-        self.hud = {}
-        self.desc = HudDescriptions()
+        super().__init__()
+        self.title("My Form")
 
-    def some_method(self):
-        # Note that we're trying to call read_from_disk() here
-        self.desc.read_from_disk2()
+        # Create your form widgets here
+        # ...
+
+        # Add a button to submit the form
+        btn_ok = tk.Button(self, text="OK", command=self.on_ok)
+        btn_ok.pack()
+
+        # Initialize your instance variables
+        self.result = None
+        self.var1 = tk.StringVar()
+        self.var2 = tk.StringVar()
+
+    def on_ok(self):
+        # Save the input data to the instance variables
+        self.result = {"var1": self.var1.get(), "var2": int(self.var2.get())}
+
+        # Close the window
+        self.destroy()
 
 
-# Scenario 1: Everything works fine since HudDescriptions has a read_from_disk() method
-my_hud = Hud()
-my_hud.some_method()  # "Reading descriptions from disk..." gets printed
+# In the main program, create and show the form dialog
+def show_form():
+    form = MyForm()
+    form.wait_window()  # Wait for the window to be closed
+
+    # Access the result from the form
+    if form.result:
+        print(form.result)
 
 
-class AnotherClass:
-    pass
-
-
-# Scenario 2: AttributeError is raised since AnotherClass doesn't have a read_from_disk() method
-my_hud.hud["desc"] = AnotherClass()
-my_hud.some_method()  # AttributeError: 'AnotherClass' object has no attribute 'read_from_disk'
+# Call the function to show the form
+show_form()

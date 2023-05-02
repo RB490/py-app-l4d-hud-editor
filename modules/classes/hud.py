@@ -13,7 +13,7 @@ from modules.utils.constants import DEVELOPMENT_DIR
 
 
 class Hud:
-    """Class for the hud select gui"""
+    """Class to manage hud editing"""
 
     def __init__(self, game_instance) -> None:
         assert isinstance(game_instance, Game)
@@ -22,6 +22,11 @@ class Hud:
         self.desc = HudDescriptions()
         self.hud_dir = None
         self.timer_game_exit = None
+        self.finish_editing_callback = None
+
+    def set_finish_editing_callback(self, callback):
+        """Callback to the hud select gui"""
+        self.finish_editing_callback = callback
 
     def get_dir(self):
         """Get information"""
@@ -56,7 +61,7 @@ class Hud:
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
-        print(f"start_hud_editing: todo... ({hud_dir})")
+        print(f"start_editing: ({hud_dir})")
 
         # verify parameters
         assert os.path.isdir(hud_dir)
@@ -77,9 +82,7 @@ class Hud:
         self.game.activate_mode("dev")
 
         # sync the hud to the game folder
-        # self.syncer.sync(
-        #     self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game_instance.get_main_dir("dev"))
-        # )
+        self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
 
         # run the game
         self.game.run("dev")
@@ -92,7 +95,11 @@ class Hud:
 
     def finish_editing(self):
         """Perform all the actions needed to finish hud editing"""
-        print("finish_hud_editing: todo...")
+        print("finish_editing")
+
+        # callback to the gui
+        if self.finish_editing_callback:
+            self.finish_editing_callback()
 
 
 def debug_hud():

@@ -15,9 +15,11 @@ from modules.utils.constants import NEW_HUD_DIR, IMAGES_DIR
 class GuiHudSelect:
     """Class for the hud select gui"""
 
-    def __init__(self, persistent_data, installer_instance):
+    def __init__(self, persistent_data, game_instance, hud_instance):
         self.persistent_data = persistent_data
-        self.installer_instance = installer_instance
+        self.game = game_instance
+        self.hud = hud_instance
+        self.hud.set_finish_editing_callback(self.on_finish_hud_editing)
         self.root = tk.Tk()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -117,12 +119,15 @@ class GuiHudSelect:
         self.root.config(menu=menu_bar)
         self.update_treeview()
 
+    def on_finish_hud_editing(self):
+        """Called by hud class with callback"""
+        # reopen the GUI
+        self.show()
+
     def installer_user_dir(self):
-        """
-        This method returns the user directory.
-        """
+        """This method returns the user directory."""
         print("Opened User Dir")
-        directory = self.installer_instance.get_dir("user")
+        directory = self.game.manager.get_dir("user")
         if os.path.isdir(directory):
             os.startfile(directory)
         else:
@@ -133,7 +138,7 @@ class GuiHudSelect:
         This method returns the dev directory.
         """
         print("Opened Dev Dir")
-        directory = self.installer_instance.get_dir("dev")
+        directory = self.game.manager.get_dir("dev")
         if os.path.isdir(directory):
             os.startfile(directory)
         else:
@@ -144,42 +149,42 @@ class GuiHudSelect:
         This method enables dev mode.
         """
         print("Enable dev mode")
-        self.installer_instance.activate_mode("dev")
+        self.game.manager.activate_mode("dev")
 
     def installer_disable(self):
         """
         This method disables dev mode.
         """
         print("Disable dev mode")
-        self.installer_instance.activate_mode("user")
+        self.game.manager.activate_mode("user")
 
     def installer_install(self):
         """
         This method installs dev mode.
         """
         print("Install dev mode")
-        self.installer_instance.run_installer()
+        self.game.manager.run_installer()
 
     def installer_update(self):
         """
         This method updates dev mode.
         """
         print("Update dev mode")
-        self.installer_instance.run_update_or_repair("update")
+        self.game.manager.run_update_or_repair("update")
 
     def installer_repair(self):
         """
         This method repairs dev mode.
         """
         print("Repair dev mode")
-        self.installer_instance.run_update_or_repair("repair")
+        self.game.manager.run_update_or_repair("repair")
 
     def installer_remove(self):
         """
         This method removes dev mode.
         """
         print("Remove dev mode")
-        self.installer_instance.run_installer_remove()
+        self.game.manager.run_installer_remove()
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -235,7 +240,7 @@ class GuiHudSelect:
     def start_editing_hud(self):
         """Start editing hud"""
         self.save_window_geometry()
-        self.root.destroy()
+        self.on_hide()
 
     def save_window_geometry(self):
         """Save size & position"""
@@ -316,15 +321,30 @@ class GuiHudSelect:
         """Start hud editing for selected hud"""
         print("todo: start_hud_editing")  # self.selected_hud_dir
 
+        # hide gui
+        self.on_hide()
+
+        # edit hud
+        self.hud.start_editing(self.selected_hud_dir)
+
+    def on_hide(self):
+        """Hide gui"""
+        # Hide the root window instead of closing it
+        self.root.withdraw()
+
+    def show(self):
+        """Show gui"""
+        # Show the window again
+        self.root.deiconify()
+
     def on_close(self):
         """Exit script"""
         self.save_window_geometry()
-        self.root.destroy()
-        input("Press enter to quit script")
-        quit()
+        # self.root.destroy()
+        self.on_hide()
 
 
-def debug_hud_select_gui(persistent_data, installer_instance):
+def debug_hud_select_gui(persistent_data, installer_instance, hud_instance):
     """Debug the gui"""
-    app = GuiHudSelect(persistent_data, installer_instance)
+    app = GuiHudSelect(persistent_data, installer_instance, hud_instance)
     app.root.mainloop()

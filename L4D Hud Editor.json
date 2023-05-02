@@ -1,1 +1,7 @@
-{"HudSelectGuiGeometry": "865x568+100+100", "stored_huds": ["D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"], "steam_root_dir": "E:\\Games\\Steam"}
+{
+    "HudSelectGuiGeometry": "865x568+100+100",
+    "steam_root_dir": "E:\\Games\\Steam",
+    "stored_huds": [
+        "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"
+    ]
+}
