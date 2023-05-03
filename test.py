@@ -1,40 +1,33 @@
 import tkinter as tk
 
 
-class MyForm(tk.Toplevel):
-    def __init__(self):
-        super().__init__()
-        self.title("My Form")
-
-        # Create your form widgets here
-        # ...
-
-        # Add a button to submit the form
-        btn_ok = tk.Button(self, text="OK", command=self.on_ok)
-        btn_ok.pack()
-
-        # Initialize your instance variables
-        self.result = None
-        self.var1 = tk.StringVar()
-        self.var2 = tk.StringVar()
-
-    def on_ok(self):
-        # Save the input data to the instance variables
-        self.result = {"var1": self.var1.get(), "var2": int(self.var2.get())}
-
-        # Close the window
-        self.destroy()
+def show_menu(event):
+    x, y = event.x_root, event.y_root
+    menu.tk_popup(x, y)
 
 
-# In the main program, create and show the form dialog
-def show_form():
-    form = MyForm()
-    form.wait_window()  # Wait for the window to be closed
+root = tk.Tk()
 
-    # Access the result from the form
-    if form.result:
-        print(form.result)
+# Create the right-click menu
+menu = tk.Menu(root, tearoff=0)
 
+# Add items to the menu
+menu.add_command(label="Option 1", icon="icon1.png")
+menu.add_command(label="Option 2")
 
-# Call the function to show the form
-show_form()
+# Add a submenu with more options
+submenu = tk.Menu(menu, tearoff=0)
+submenu.add_command(label="Suboption 1")
+submenu.add_command(label="Suboption 2")
+menu.add_cascade(label="Options", menu=submenu)
+
+# Add a divider
+menu.add_separator()
+
+# Add another option with an icon
+menu.add_command(label="Option 3", icon="icon2.png")
+
+# Bind the menu to a right-click event
+root.bind("<Button-3>", show_menu)
+
+root.mainloop()

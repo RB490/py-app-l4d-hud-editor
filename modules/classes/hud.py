@@ -97,6 +97,16 @@ class Hud:
         """Perform all the actions needed to finish hud editing"""
         print("finish_editing")
 
+        # Stop checking for game exit
+        if self.timer_game_exit is not None:
+            self.timer_game_exit.cancel()
+
+        # unsync hud
+        self.syncer.un_sync()
+
+        # enable user mode
+        self.game.activate_mode("user")
+
         # callback to the gui
         if self.finish_editing_callback:
             self.finish_editing_callback()

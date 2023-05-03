@@ -1,6 +1,13 @@
 
 
 feature -> create hud editor menu + hotkey
+	^ apparently this isn't quite possible very conveniently with python
+	looks like i will probably create a gui with a menu bar. and some big buttons for commonly used features
+
+	- visually display hotkeys
+	- menu bar
+	^ have every option in the menubar and certain more useful options also on the gui
+
 
 feature -> detect game close to automatically run this function
 

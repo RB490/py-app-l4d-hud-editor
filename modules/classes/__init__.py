@@ -2,6 +2,7 @@
 from .game_commands import *
 from .game_manager import *
 from .game import *
+from .gui_editor_menu import *
 from .gui_hud_browser import *
 from .gui_hud_select import *
 from .gui_hud_descriptions import *
