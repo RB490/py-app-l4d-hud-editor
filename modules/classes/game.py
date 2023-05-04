@@ -44,6 +44,17 @@ class Game:
         """Retrieve information"""
         return self.game_title
 
+    def get_version(self):
+        """Retrieve information"""
+
+        game_title = self.get_title().lower()
+        assert game_title in ["left 4 dead", "left 4 dead 2"], "Invalid game title"
+
+        if game_title == "left 4 dead":
+            return "L4D1"
+        elif game_title == "left 4 dead 2":
+            return "L4D2"
+
     def get_exe(self):
         """Retrieve information"""
         return self.game_exe

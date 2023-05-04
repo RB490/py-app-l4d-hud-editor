@@ -1,0 +1,32 @@
+{
+	"general": {
+		"Sacrifice Failed": "info_window",
+		"Tab Scoreboard": "scores",
+		"Spectating Hud": "Specgui",
+		"Versus spawn tutorial": "spawnmode",
+		"MOTD": "info",
+		"Team Switching Panel": "team",
+		"Transition Screen": "transition_stats",
+		"Versus Shut Down": "vs_shutting_down",
+		"Hide debug_zombie_panel": "debug_zombie_panel 0",
+		"Versus TooFar": "debug_zombie_panel -1",
+		"Versus BecomeTank": "debug_zombie_panel 1",
+		"Versus OtherBecomeTank": "debug_zombie_panel 2"
+	},
+	"L4D1": {
+		"Versus smoker tutorial": "spawn_smoker",
+		"Versus hunter tutorial": "spawn_hunter",
+		"Versus boomer tutorial": "spawn_boomer",
+		"Survival Scoreboard End Of Round": "fullscreen_holdout_scoreboard",
+		"Survival Shutting Down": "holdout_shutting_down",
+		"Versus Scoreboard End Of Round": "multimap_vs_scoreboard"
+	},
+	"L4D2": {
+		"Versus/Scavenge Rematch Hud": "fullscreen_scavenge_scoreboard",
+		"Versus Scoreboard End of Match": "fullscreen_vs_results",
+		"Versus Scoreboard End of Round": "fullscreen_vs_scoreboard",
+		"Versus/Scavenge round start timer": "ready_countdown",
+		"Survival Scoreboard": "fullscreen_survival_scoreboard",
+		"Survival Shut Down": "survival_shutting_down"
+	}
+}

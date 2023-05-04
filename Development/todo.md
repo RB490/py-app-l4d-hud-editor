@@ -1,6 +1,6 @@
 
 
-feature -> create hud editor menu + hotkey
+feature -> finish hud editor menu + hotkey
 	^ apparently this isn't quite possible very conveniently with python
 	looks like i will probably create a gui with a menu bar. and some big buttons for commonly used features
 
@@ -8,6 +8,17 @@ feature -> create hud editor menu + hotkey
 	- menu bar
 	^ have every option in the menubar and certain more useful options also on the gui
 
+feature -> code menu options
+	self.persistent_data["game_mute"]
+	self.persistent_data["game_insecure"]
+	self.persistent_data["game_pos"]
+	self.persistent_data["game_mode"]
+
+feature -> code switch hud menu <- check ahk version for feature parity
+	stored huds
+	temp huds (add functionality)
+
+feature -> make help > hotkeys > ingame & global hotkey menu entries functional
 
 feature -> detect game close to automatically run this function
 

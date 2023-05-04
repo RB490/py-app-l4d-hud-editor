@@ -49,6 +49,22 @@ class Hud:
                 files_dict[filename] = file_desc
         return files_dict
 
+    def start_game_exit_check(self):
+        """Start game exit check"""
+        # Stop any currently running thread
+        if self.timer_game_exit is not None:
+            self.stop_game_exit_check()
+
+        # Schedule the function to be called after 2 seconds
+        self.timer_game_exit = threading.Timer(2, self.wait_for_game_exit_then_finish_editing)
+        self.timer_game_exit.start()
+
+    def stop_game_exit_check(self):
+        """Stop game exit check"""
+        if self.timer_game_exit is not None:
+            self.timer_game_exit.cancel()
+            self.timer_game_exit = None
+
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""
 
@@ -56,8 +72,7 @@ class Hud:
             self.finish_editing()
         else:
             # Schedule the function to be called again
-            self.timer_game_exit = threading.Timer(2, self.wait_for_game_exit_then_finish_editing)
-            self.timer_game_exit.start()
+            self.start_game_exit_check()
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
@@ -75,8 +90,7 @@ class Hud:
         self.syncer.un_sync()
 
         # Stop checking for game exit
-        if self.timer_game_exit is not None:
-            self.timer_game_exit.cancel()
+        self.stop_game_exit_check()
 
         # enable dev mode
         self.game.activate_mode("dev")
@@ -98,8 +112,7 @@ class Hud:
         print("finish_editing")
 
         # Stop checking for game exit
-        if self.timer_game_exit is not None:
-            self.timer_game_exit.cancel()
+        self.stop_game_exit_check()
 
         # unsync hud
         self.syncer.un_sync()

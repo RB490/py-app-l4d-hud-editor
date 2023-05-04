@@ -2,10 +2,11 @@
 import os
 import tkinter as tk
 from tkinter import Menu, PhotoImage
+from tkinter import messagebox
+import webbrowser
 import keyboard
-from modules.utils.constants import IMAGES_DIR
-from modules.utils.functions import load_data
-
+import pyperclip
+from modules.utils.constants import SNIPPETS_DIR, IMAGES_DIR, SCRIPT_DIR, TUTORIALS_DIR
 
 # Dictionary of map codes for each map
 MAP_CODES = {
@@ -122,16 +123,6 @@ L4D2_CAMPAIGNS = [
 ]
 
 
-class EditorMenuMethods:
-    def editor_menu_game_mode(self, selected_option):
-        """Method to handle the selected game mode in the menu."""
-        # Implement the logic to handle the selected game mode here
-        print(f"The selected option is: {selected_option}")
-
-    def editor_menu_change_map(self, map_name, map_code):
-        print(f"The code for {map_name} is {map_code}.")
-
-
 class GuiEditorMenu:
     """
     A class representing a toggle window with hotkey functionality and a menu bar.
@@ -148,7 +139,7 @@ class GuiEditorMenu:
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, persistent_data):
+    def __init__(self, persistent_data, game_instance, hud_instance):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
@@ -157,16 +148,56 @@ class GuiEditorMenu:
         self.root.title("Toggle Window")
         self.is_hidden = False
         self.persistent_data = persistent_data
-        self.setup_hotkey()
+        self.game = game_instance
+        self.hud = hud_instance
+        keyboard.add_hotkey("F5", self.toggle_visibility)
         self.create_menu()
+        # super().__init__(self, persistent_data, game_instance, hud_instance)
         self.root.mainloop()
 
-    def add_map_command(self, campaign_submenu, map_info):
-        map_name = map_info["name"]
-        map_code = map_info["code"]
-        campaign_submenu.add_command(
-            label=map_name, command=lambda: EditorMenuMethods().editor_menu_change_map(map_name, map_code)
-        )
+    def create_lambda_command(self, func, *args):
+        """
+        The `create_lambda_command` method takes in a function `func`
+        and any number of positional arguments `*args`
+        and returns a lambda function that, when called,
+        will execute the given function with the supplied arguments.
+
+        :param self: the instance of the class that the method belongs to.
+        :param func: the function that will be executed by the lambda command returned from this method.
+        :param *args: any number of positional arguments that will be passed to the function when
+            called through the returned lambda command.
+
+        :return: A lambda function that executes the input function `func` with its corresponding arguments `args`.
+
+        #Example:
+            campaign_submenu.add_command(
+                label=map_name, command=self.create_lambda_command(self.editor_menu_game_map, map_name, map_code)
+            )
+            > so when this menu entry is selected self.editor_menu_game_map gets called with map_name and map_code
+
+        This method is useful for creating a function on-the-fly that takes no arguments
+        but still needs to execute some code with certain values or variables.
+        By using a lambda function created by `create_lambda_function`,
+        you can defer binding the arguments until later when needed.
+        This technique is also known as partial evaluation or currying,
+        and it is commonly used in functional programming.
+        """
+        return lambda: func(*args)
+
+    def open_file(self, path):
+        """Open file"""
+        print(path)
+        os.startfile(path)
+
+    def open_url(self, url):
+        """Open url"""
+        webbrowser.open(url)
+
+    def do_nothing(self):
+        """
+        A dummy function that does nothing.
+        """
+        print("Do nothing")
 
     def toggle_visibility(self):
         """
@@ -179,12 +210,6 @@ class GuiEditorMenu:
             self.root.withdraw()
             self.is_hidden = True
 
-    def setup_hotkey(self):
-        """
-        Sets up the F5 key as the hotkey for toggling window visibility.
-        """
-        keyboard.add_hotkey("F5", self.toggle_visibility)
-
     def create_menu(self):
         """
         Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
@@ -194,6 +219,17 @@ class GuiEditorMenu:
         # Create the image object for the Open icon
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
 
+        # ----------------------------------
+        #       Create parent menus
+        # ----------------------------------
+
+        self.game_menu = tk.Menu(menubar, tearoff=0)
+        self.tool_menu = tk.Menu(menubar, tearoff=0)
+
+        # ----------------------------------
+        #       Create file menu
+        # ----------------------------------
+
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=self.do_nothing)
         filemenu.add_command(label="Open", image=self.open_icon, compound=tk.LEFT, command=self.do_nothing)
@@ -201,7 +237,10 @@ class GuiEditorMenu:
         filemenu.add_command(label="Save as...", command=self.do_nothing)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.root.quit)
-        menubar.add_cascade(label="File", menu=filemenu)
+
+        # ----------------------------------
+        #       Create edit menu
+        # ----------------------------------
 
         editmenu = Menu(menubar, tearoff=0)
         editmenu.add_command(label="Undo", command=self.do_nothing)
@@ -211,28 +250,82 @@ class GuiEditorMenu:
         editmenu.add_command(label="Paste", command=self.do_nothing)
         editmenu.add_command(label="Delete", command=self.do_nothing)
         editmenu.add_command(label="Select All", command=self.do_nothing)
-        menubar.add_cascade(label="Edit", menu=editmenu)
-
-        helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Help Index", command=self.do_nothing)
-        helpmenu.add_command(label="About...", command=self.do_nothing)
-        menubar.add_cascade(label="Help", menu=helpmenu)
-
-        # Create the Game menu
-        game_menu = tk.Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="Game", menu=game_menu)
 
         # ----------------------------------
-        #       Create the Game Mode menu
+        #       Create Game Mode menu
         # ----------------------------------
 
-        menubar.add_command(label="Coop", command=lambda: EditorMenuMethods().editor_menu_game_mode("Coop"))
-        menubar.add_command(label="Survival", command=lambda: EditorMenuMethods().editor_menu_game_mode("Survival"))
-        menubar.add_command(label="Versus", command=lambda: EditorMenuMethods().editor_menu_game_mode("Versus"))
-        menubar.add_command(label="Scavenge", command=lambda: EditorMenuMethods().editor_menu_game_mode("Scavenge"))
+        game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
+        self.game_mode_menu = tk.Menu(menubar, tearoff=0)
+        self.game_mode_vars = {}
+        for mode in game_modes:
+            self.game_mode_vars[mode] = tk.BooleanVar()
+            self.game_mode_menu.add_checkbutton(
+                label=mode,
+                variable=self.game_mode_vars[mode],
+                onvalue=True,
+                offvalue=False,
+                command=lambda mode=mode: self.editor_menu_game_mode(mode),
+            )
+        self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
 
         # ----------------------------------
-        #       Create the Change Map menu
+        #       Create Game Resolution menu
+        # ----------------------------------
+
+        game_res_menu = tk.Menu(menubar, tearoff=0)
+        res_4_3_menu = tk.Menu(game_res_menu, tearoff=0)
+        res_16_9_menu = tk.Menu(game_res_menu, tearoff=0)
+        res_16_10_menu = tk.Menu(game_res_menu, tearoff=0)
+
+        res_4_3_list = [
+            "640x480",
+            "720x576",
+            "800x600",
+            "1024x768",
+            "1152x864",
+            "1280x960",
+            "1400x1050",
+            "1600x1200",
+            "2048x1536",
+        ]
+        for res in res_4_3_list:
+            res_4_3_menu.add_command(label=res, command=lambda r=res: self.editor_menu_game_resolution(r))
+
+        res_16_9_list = [
+            "852x480",
+            "1280x720",
+            "1360x768",
+            "1366x768",
+            "1600x900",
+            "1920x1080",
+            "2560x1440",
+            "3840x2160",
+        ]
+        for res in res_16_9_list:
+            res_16_9_menu.add_command(label=res, command=lambda r=res: self.editor_menu_game_resolution(r))
+
+        res_16_10_list = [
+            "720x480",
+            "1280x768",
+            "1280x800",
+            "1440x900",
+            "1600x1024",
+            "1680x1050",
+            "1920x1200",
+            "2560x1600",
+            "3840x2400",
+            "7680x4800",
+        ]
+        for res in res_16_10_list:
+            res_16_10_menu.add_command(label=res, command=lambda r=res: self.editor_menu_game_resolution(r))
+
+        game_res_menu.add_cascade(label="4:3", menu=res_4_3_menu)
+        game_res_menu.add_cascade(label="16:9", menu=res_16_9_menu)
+        game_res_menu.add_cascade(label="16:10", menu=res_16_10_menu)
+
+        # ----------------------------------
+        #       Create Change Map menu
         # ----------------------------------
         self.map_menu_l4d1_icon = PhotoImage(
             file=os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")
@@ -240,27 +333,30 @@ class GuiEditorMenu:
         self.map_menu_l4d2_icon = PhotoImage(
             file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
         ).subsample(1, 1)
-        change_map_menu = tk.Menu(game_menu, tearoff=0)
-        change_map_menu.add_command(
+        game_map_menu = tk.Menu(self.game_menu, tearoff=0)
+        game_map_menu.add_command(
             label="Curling Stadium",
-            command=lambda: EditorMenuMethods().editor_menu_change_map("Curling Stadium", "curling_stadium"),
+            command=lambda: self.editor_menu_game_map("Curling Stadium", "curling_stadium"),
         )
-        change_map_menu.add_command(
+        game_map_menu.add_command(
             label="Tutorial Standards",
-            command=lambda: EditorMenuMethods().editor_menu_change_map("Tutorial Standards", "tutorial_standards"),
+            command=lambda: self.editor_menu_game_map("Tutorial Standards", "tutorial_standards"),
         )
-        game_menu.add_cascade(label="Map", menu=change_map_menu)
+        game_map_menu.add_command(
+            label="Hud Dev Map",
+            command=lambda: self.editor_menu_game_map("Hud Dev Map", "hud_dev_map"),
+        )
 
         # Create the L4D1 and L4D2 submenus
-        map_menu_l4d1 = tk.Menu(change_map_menu, tearoff=0)
-        map_menu_l4d2 = tk.Menu(change_map_menu, tearoff=0)
-        change_map_menu.add_cascade(
+        map_menu_l4d1 = tk.Menu(game_map_menu, tearoff=0)
+        map_menu_l4d2 = tk.Menu(game_map_menu, tearoff=0)
+        game_map_menu.add_cascade(
             label="L4D1",
             menu=map_menu_l4d1,
             image=self.map_menu_l4d1_icon,
             compound=tk.LEFT,
         )
-        change_map_menu.add_cascade(
+        game_map_menu.add_cascade(
             label="L4D2",
             menu=map_menu_l4d2,
             image=self.map_menu_l4d2_icon,
@@ -279,7 +375,204 @@ class GuiEditorMenu:
 
             # Add each map to the campaign submenu
             for map_info in maps:
-                self.add_map_command(campaign_submenu, map_info)
+                map_name = map_info["name"]
+                map_code = map_info["code"]
+                campaign_submenu.add_command(
+                    label=map_name, command=self.create_lambda_command(self.editor_menu_game_map, map_name, map_code)
+                )
+
+        # ----------------------------------
+        #       Create Game Pos menu
+        # ----------------------------------
+
+        positions = [
+            "Custom (Save)",
+            "Center",
+            "Top Left",
+            "Top Right",
+            "Bottom Left",
+            "Bottom Right",
+            "Top",
+            "Bottom",
+            "Left",
+            "Right",
+        ]
+        self.game_pos_menu = tk.Menu(menubar, tearoff=0)
+        self.game_pos_vars = {}
+        for pos in positions:
+            self.game_pos_vars[pos] = tk.BooleanVar()
+            self.game_pos_menu.add_checkbutton(
+                label=pos,
+                variable=self.game_pos_vars[pos],
+                onvalue=True,
+                offvalue=False,
+                command=lambda pos=pos: self.editor_menu_game_pos(pos),
+            )
+        self.game_pos_vars[self.persistent_data["game_pos"]].set(True)
+
+        # ----------------------------------
+        #       Create Hotkeys menu
+        # ----------------------------------
+
+        hotkeys_menu = Menu(menubar)
+        hotkeys_menu.add_command(label="Global")
+        hotkeys_menu.entryconfig("Global", state="disabled")
+        hotkeys_menu.add_separator()
+        hotkeys_menu.add_command(label="Sync Hud", accelerator="Ctrl+S")
+        hotkeys_menu.add_command(label="Show Menu", accelerator="F4")
+        hotkeys_menu.add_command(label="Browse Files", accelerator="F8")
+        hotkeys_menu.add_separator()
+        hotkeys_menu.add_command(label="In-Game")
+        hotkeys_menu.entryconfig("In-Game", state="disabled")
+        hotkeys_menu.add_separator()
+        hotkeys_menu.add_command(label="Load Dead Center finale", accelerator="O")
+        hotkeys_menu.add_command(label="Play credits (On a finale level)", accelerator="P")
+        hotkeys_menu.add_command(label="Noclip", accelerator="G")
+        hotkeys_menu.add_command(label="Pause", accelerator="F8")
+        hotkeys_menu.add_command(label="Admin system menu", accelerator="N")
+        hotkeys_menu.add_command(label="Slow-mo game speed", accelerator="F9")
+        hotkeys_menu.add_command(label="Default game speed", accelerator="F10")
+        hotkeys_menu.add_command(label="Last game cmd", accelerator="F11")
+        # helpmenu.add_cascade(label="Hotkeys", menu=hotkeys_menu)
+
+        # ----------------------------------
+        #       Create help menu
+        # ----------------------------------
+
+        # doodleLink = "http://doodlesstuff.com/?p=tf2hud"
+        doodle_link = "https://web.archive.org/web/20221023012414/https://doodlesstuff.com/?p=tf2hud"
+        flame_path = os.path.join(TUTORIALS_DIR, "Flame's Guide to HUDs - flamehud by StefanB.pdf")
+        doodle_path = os.path.join(TUTORIALS_DIR, "TF2 Hud Editing Guide - DoodlesStuff.mhtml")
+        readme_path = os.path.join(SCRIPT_DIR, "README.MD")
+        if self.game.get_title() is "Left 4 Dead":
+            all_cvars_link = "https://developer.valvesoftware.com/wiki/List_of_L4D_Cvars"
+        else:
+            all_cvars_link = "https://developer.valvesoftware.com/wiki/List_of_L4D2_Cvars"
+
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_cascade(label="Hotkeys", menu=hotkeys_menu)
+        helpmenu.add_command(label="Script Readme", command=lambda: self.open_file(readme_path))
+        helpmenu.add_command(label="All Game Commands", command=lambda: self.open_url(all_cvars_link))
+        helpmenu.add_separator()
+        helpmenu.add_command(label="Tutorials")
+        helpmenu.entryconfig("Tutorials", state="disabled")
+        helpmenu.add_command(
+            label="TF2 Hud Editing Guide - DoodlesStuff (link)", command=lambda: self.open_url(doodle_link)
+        )
+        helpmenu.add_command(
+            label="TF2 Hud Editing Guide - DoodlesStuff (file)", command=lambda: self.open_file(doodle_path)
+        )
+        helpmenu.add_command(
+            label="Flame's Guide to HUDs - flamehud by StefanB", command=lambda: self.open_file(flame_path)
+        )
+
+        # ----------------------------------
+        #       Create Show Panel menu
+        # ----------------------------------
+
+        show_panel_dict = {
+            "general": {
+                "Sacrifice Failed": "info_window",
+                "Tab Scoreboard": "scores",
+                "Spectating Hud": "Specgui",
+                "Versus spawn tutorial": "spawnmode",
+                "MOTD": "info",
+                "Team Switching Panel": "team",
+                "Transition Screen": "transition_stats",
+                "Versus Shut Down": "vs_shutting_down",
+                "Versus TooFar": "debug_zombie_panel -1",
+                "Versus BecomeTank": "debug_zombie_panel 1",
+                "Versus OtherBecomeTank": "debug_zombie_panel 2",
+                "Hide versus TooFar/Tank panel": "debug_zombie_panel 0",
+            },
+            "L4D1": {
+                "Versus smoker tutorial": "spawn_smoker",
+                "Versus hunter tutorial": "spawn_hunter",
+                "Versus boomer tutorial": "spawn_boomer",
+                "Survival Scoreboard End Of Round": "fullscreen_holdout_scoreboard",
+                "Survival Shutting Down": "holdout_shutting_down",
+                "Versus Scoreboard End Of Round": "multimap_vs_scoreboard",
+            },
+            "L4D2": {
+                "Versus/Scavenge Rematch Hud": "fullscreen_scavenge_scoreboard",
+                "Versus Scoreboard End of Match": "fullscreen_vs_results",
+                "Versus Scoreboard End of Round": "fullscreen_vs_scoreboard",
+                "Versus/Scavenge round start timer": "ready_countdown",
+                "Survival Scoreboard": "fullscreen_survival_scoreboard",
+                "Survival Shut Down": "survival_shutting_down",
+            },
+        }
+
+        # Create general menu and add common options
+        show_panel_menu = tk.Menu(menubar, tearoff=0)
+        for key, value in show_panel_dict["general"].items():
+            show_panel_menu.add_command(
+                label=key, command=self.create_lambda_command(self.editor_menu_show_panel, value)
+            )
+
+        # Check GAME_VERSION to determine which L4D-specific options to add
+        if self.game.get_version() == "L4D1":
+            show_panel_game_version_data = show_panel_dict.get("L4D1", {})
+        elif self.game.get_version() == "L4D2":
+            show_panel_game_version_data = show_panel_dict.get("L4D2", {})
+        else:
+            show_panel_game_version_data = {}
+
+        # Add L4D-specific options to general menu
+        for key, value in show_panel_game_version_data.items():
+            show_panel_menu.add_command(
+                label=key, command=self.create_lambda_command(self.editor_menu_show_panel, value)
+            )
+
+        # ----------------------------------
+        #       Create clipboard menu
+        # ----------------------------------
+
+        clipboardmenu = Menu(menubar, tearoff=0)
+
+        for file_name in os.listdir(SNIPPETS_DIR):
+            file_path = os.path.join(SNIPPETS_DIR, file_name)
+            if os.path.isfile(file_path):
+                menu_name = os.path.splitext(file_name)[0]
+                clipboardmenu.add_command(
+                    label=menu_name, command=self.create_lambda_command(self.editor_menu_copy_snippet, file_path)
+                )
+
+        # ----------------------------------
+        #       Parent Main menu
+        # ----------------------------------
+
+        menubar.add_cascade(label="File", menu=filemenu)
+        filemenu.add_cascade(label="Help", menu=helpmenu)
+        menubar.add_cascade(label="Tools", menu=self.tool_menu)
+        self.tool_menu.add_cascade(label="Clipboard", menu=clipboardmenu)
+        self.tool_menu.add_cascade(label="Show panel", menu=show_panel_menu)
+        menubar.add_cascade(label="Edit", menu=editmenu)
+        menubar.add_cascade(label="Game", menu=self.game_menu)
+
+        # ----------------------------------
+        #       Parent Game menu
+        # ----------------------------------
+
+        self.game_menu.add_cascade(label="Position", menu=self.game_pos_menu)
+        self.game_menu.add_cascade(label="Resolution", menu=game_res_menu)
+        self.game_menu.add_cascade(label="Map", menu=game_map_menu)
+        self.game_menu.add_cascade(label="Mode", menu=self.game_mode_menu)
+
+        self.editor_menu_game_insecure_checkmark = tk.BooleanVar()
+        self.game_menu.add_checkbutton(
+            label="Insecure",
+            variable=self.editor_menu_game_insecure_checkmark,
+            command=self.editor_menu_game_toggle_insecure,
+            columnbreak=True,
+        )
+
+        self.editor_menu_game_mute_checkmark = tk.BooleanVar()
+        self.game_menu.add_checkbutton(
+            label="Muted", variable=self.editor_menu_game_mute_checkmark, command=self.editor_menu_game_toggle_mute
+        )
+        self.game_menu.add_command(label="Restart", columnbreak=False, command=self.editor_menu_game_restart)
+        self.game_menu.add_command(label="Close", columnbreak=False, command=self.editor_menu_game_close)
 
         # ----------------------------------
         #       Add the menu to the gui
@@ -287,15 +580,94 @@ class GuiEditorMenu:
 
         self.root.config(menu=menubar)
 
-    def do_nothing(self):
-        """
-        A dummy function that does nothing.
-        """
-        print("Do nothing")
+    def editor_menu_game_mode(self, mode):
+        """Method to handle the selected game mode in the menu."""
+        # Implement the logic to handle the selected game mode here
+        print(f"The selected option is: {mode}")
+
+        for mode_entry, var in self.game_mode_vars.items():
+            if mode_entry == mode:
+                var.set(True)
+            else:
+                var.set(False)
+
+    def editor_menu_game_map(self, map_name, map_code):
+        """Method to handle the selected game map in the menu."""
+        print(f"The code for {map_name} is {map_code}.")
+
+    def editor_menu_game_resolution(self, resolution):
+        """Method to handle the selected game resolution in the menu."""
+        print(f"Selected resolution: {resolution}")
+
+    def editor_menu_game_pos(self, pos):
+        """Method to handle the selected game position in the menu."""
+        print(f"Selected Game Position: {pos}")
+
+        self.persistent_data["game_pos"] = pos
+
+        for pos_entry, var in self.game_pos_vars.items():
+            if pos_entry == pos:
+                var.set(True)
+            else:
+                var.set(False)
+
+    def editor_menu_game_toggle_insecure(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        print("editor_menu_game_security")
+
+        # toggle setting
+        if self.persistent_data["game_insecure"] is True:
+            self.persistent_data["game_insecure"] = False
+            self.editor_menu_game_insecure_checkmark.set(0)
+            # self.game_menu.entryconfig("Unmute", label="Mute")
+        else:
+            self.persistent_data["game_insecure"] = True
+            self.editor_menu_game_insecure_checkmark.set(1)
+            # self.game_menu.entryconfig("Mute", label="Unmute")
+
+        # prompt to restart game
+        message = "Restart needed for changes to take effect.\n\nDo you want to restart now?"
+        if messagebox.askyesno("Restart Game", message):
+            self.editor_menu_game_restart()
+
+    def editor_menu_game_close(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        self.game.close()
+
+    def editor_menu_game_restart(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        self.hud.stop_game_exit_check()
+        self.game.close()
+        self.game.run("dev")
+        self.hud.start_game_exit_check()
+
+    def editor_menu_game_toggle_mute(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        if self.persistent_data["game_mute"] is True:
+            self.persistent_data["game_mute"] = False
+            self.game.command.execute("volume 1")
+            self.editor_menu_game_mute_checkmark.set(0)
+            # self.game_menu.entryconfig("Unmute", label="Mute")
+        else:
+            self.persistent_data["game_mute"] = True
+            self.game.command.execute("volume 0")
+            self.editor_menu_game_mute_checkmark.set(1)
+            # self.game_menu.entryconfig("Mute", label="Unmute")
+
+    def editor_menu_copy_snippet(self, file_path):
+        """Copy snippet to clipboard"""
+        with open(file_path, "r", encoding="utf-8") as file:
+            content = file.read()
+            pyperclip.copy(content)
+            print(content)
+
+    def editor_menu_show_panel(self, panel):
+        """Show selected panel ingame"""
+        # Do something with the panel value (e.g. print it)
+        print(panel)
 
 
-def debug_gui_editor_menu():
+def debug_gui_editor_menu(persistent_data, game_instance, hud_instance):
     """Debug gui class"""
     # pylint: disable=unused-variable
-    persistent_data = load_data()
-    app = GuiEditorMenu(persistent_data)
+    app = GuiEditorMenu(persistent_data, game_instance, hud_instance)

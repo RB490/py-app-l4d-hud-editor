@@ -212,6 +212,18 @@ def load_data():
     if "stored_huds" not in data:
         data["stored_huds"] = []
 
+    if "game_mute" not in data:
+        data["game_mute"] = False
+
+    if "game_insecure" not in data:
+        data["game_insecure"] = False
+
+    if "game_pos" not in data:
+        data["game_pos"] = "Center"
+
+    if "game_mode" not in data:
+        data["game_mode"] = "Coop"
+
     # print(f"load_data: \n{json.dumps(data, sort_keys=True, indent=4)}")
     return data
 

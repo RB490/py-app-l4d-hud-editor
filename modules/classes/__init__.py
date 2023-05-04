@@ -1,8 +1,10 @@
 """This module imports modules that should be available when the package is imported"""
+from .editor_menu import *
 from .game_commands import *
 from .game_manager import *
 from .game import *
 from .gui_editor_menu import *
+from .gui_editor_menu_handler import *
 from .gui_hud_browser import *
 from .gui_hud_select import *
 from .gui_hud_descriptions import *
