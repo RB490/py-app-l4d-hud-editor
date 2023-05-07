@@ -22,6 +22,12 @@ feature -> make help > hotkeys > ingame & global hotkey menu entries functional
 
 feature -> detect game close to automatically run this function
 
+cleanup -> get rid of as many editor commands as posssible. a decent amount of them can just use the execute game command method
+	for example callvotes & map changing
+
+cleanup -> consider removing menu option specific code and just refresh the entire menu everywhere for example
+	for game pos, insecure toggle & game mode
+
 cleanup -> move related hud/.json related functions to a class
 	^ ask gpt about it. should i have a specific settings class that makes these modifications or something
 

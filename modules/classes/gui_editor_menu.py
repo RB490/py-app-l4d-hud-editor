@@ -232,21 +232,9 @@ class GuiEditorMenu:
         # ----------------------------------
 
         self.game_menu = tk.Menu(menubar, tearoff=0)
-        self.tool_menu = tk.Menu(menubar, tearoff=0)
+        self.debug_menu = tk.Menu(menubar, tearoff=0)
         self.file_menu = tk.Menu(menubar, tearoff=0)
-
-        # ----------------------------------
-        #       Create edit menu
-        # ----------------------------------
-
-        editmenu = Menu(menubar, tearoff=0)
-        editmenu.add_command(label="Undo", command=self.do_nothing)
-        editmenu.add_separator()
-        editmenu.add_command(label="Cut", command=self.do_nothing)
-        editmenu.add_command(label="Copy", command=self.do_nothing)
-        editmenu.add_command(label="Paste", command=self.do_nothing)
-        editmenu.add_command(label="Delete", command=self.do_nothing)
-        editmenu.add_command(label="Select All", command=self.do_nothing)
+        self.tools_menu = tk.Menu(menubar, tearoff=0)
 
         # ----------------------------------
         #       Create Game Mode menu
@@ -703,7 +691,7 @@ class GuiEditorMenu:
                 label=hud_name, command=self.create_lambda_command(self.editor_remove_stored_hud, hud_dir)
             )
         # stored huds - submenu - add stored hud
-        stored_huds_submenu.add_command(label="Add", command=self.create_lambda_command(self.editor_add_existing_hud))
+        stored_huds_submenu.add_command(label="Add", command=self.editor_add_existing_hud)
         # stored huds - submenu - remove stored hud
         stored_huds_submenu.add_cascade(label="Remove", menu=remove_stored_hud_menu)
         if not self.persistent_data["stored_huds"]:
@@ -727,7 +715,7 @@ class GuiEditorMenu:
                 label=hud_name, command=self.create_lambda_command(self.editor_remove_temp_hud, hud_dir)
             )
         # stored huds - submenu - add temp hud
-        temp_huds_submenu.add_command(label="Open", command=self.create_lambda_command(self.editor_open_temp_hud))
+        temp_huds_submenu.add_command(label="Open", command=self.editor_open_temp_hud)
         # stored huds - submenu - remove temp hud
         temp_huds_submenu.add_cascade(label="Remove", menu=remove_temp_hud_menu)
         if not self.persistent_data["stored_temp_huds"]:
@@ -736,21 +724,43 @@ class GuiEditorMenu:
         load_hud_menu.add_separator()
 
         # ----------------------------------
+        #       Parent tools menu
+        # ----------------------------------
+
+        self.tools_menu.add_command(label="Inspect", command=self.editor_inspect_hud)
+        self.tools_menu.add_command(label="Chat Debug (WWWW)", command=self.editor_chat_debug_spam_w)
+        self.tools_menu.add_command(label="Hide World", command=self.editor_hide_game_world)
+        self.tools_menu.add_cascade(label="Clipboard", menu=clipboard_menu)
+
+        # ----------------------------------
         #       Parent File menu
         # ----------------------------------
 
-        self.file_menu.add_cascade(label="Load hud", menu=load_hud_menu)
+        self.file_menu.add_command(label="Start", command=self.editor_open_hud_select)
+        self.file_menu.add_command(label="Browser", command=self.editor_open_hud_browser)
+        self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", menu=helpmenu)
+        self.file_menu.add_command(label="Exit", command=self.editor_exit_script)
+        self.file_menu.add_command(label="Open", state="disabled", columnbreak=True)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(
+            label="Game", command=self.create_lambda_command(self.editor_open_folder, self.game.get_dir("dev"))
+        )
+        self.file_menu.add_command(
+            label="Script", command=self.create_lambda_command(self.editor_open_folder, SCRIPT_DIR)
+        )
+        self.file_menu.add_cascade(label="Hud", menu=load_hud_menu)
 
         # ----------------------------------
         #       Parent Tools menu
         # ----------------------------------
 
-        self.tool_menu.add_cascade(label="Clipboard", menu=clipboard_menu)
-        self.tool_menu.add_cascade(label="Show panel", menu=show_panel_menu)
-        self.tool_menu.add_cascade(label="Call vote", menu=voting_menu)
-        self.tool_menu.add_cascade(label="Switch", menu=switch_menu)
-        self.tool_menu.add_cascade(label="Give items", menu=give_items_menu)
+        self.debug_menu.add_command(label="Game cmd", command=self.editor_prompt_game_command)
+        self.debug_menu.add_cascade(label="Show panel", menu=show_panel_menu)
+        self.debug_menu.add_cascade(label="Call vote", menu=voting_menu)
+        self.debug_menu.add_cascade(label="Switch", menu=switch_menu)
+        self.debug_menu.add_cascade(label="Give items", menu=give_items_menu)
+        self.debug_menu.add_cascade(label="Tools", menu=self.tools_menu)
 
         # ----------------------------------
         #       Parent Game menu
@@ -781,8 +791,7 @@ class GuiEditorMenu:
         # ----------------------------------
 
         menubar.add_cascade(label="File", menu=self.file_menu)
-        menubar.add_cascade(label="Edit", menu=editmenu)
-        menubar.add_cascade(label="Tools", menu=self.tool_menu)
+        menubar.add_cascade(label="Debug", menu=self.debug_menu)
         menubar.add_cascade(label="Game", menu=self.game_menu)
         self.root.config(menu=menubar)
 
@@ -889,7 +898,6 @@ class GuiEditorMenu:
 
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
-        print(f"todo: {hud_dir}")
         remove_stored_hud(self.persistent_data, hud_dir)
         self.create_and_refresh_menu()
 
@@ -907,6 +915,38 @@ class GuiEditorMenu:
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
         print(f"todo: {hud_dir}")
+
+    def editor_exit_script(self):
+        """Exit script"""
+        print("editor_exit_script: todo")
+
+    def editor_open_hud_select(self):
+        """Open hud select gui"""
+        print("editor_open_hud_select: todo")
+
+    def editor_open_hud_browser(self):
+        """Open hud browser"""
+        print("editor_open_hud_browser: todo")
+
+    def editor_open_folder(self, input_dir):
+        """Open folder"""
+        print(f"todo: {input_dir}")
+
+    def editor_prompt_game_command(self):
+        """Prompt & execute game command"""
+        print("editor_prompt_game_command")
+
+    def editor_inspect_hud(self):
+        """Show inspect hud gui (vgui_drawtree)"""
+        print("editor_inspect_hud")
+
+    def editor_chat_debug_spam_w(self):
+        """Spam W's to debug chat"""
+        print("editor_chat_debug_spam_w")
+
+    def editor_hide_game_world(self):
+        """Hide game world"""
+        print("Hide game world")
 
 
 def debug_gui_editor_menu(persistent_data, game_instance, hud_instance):
