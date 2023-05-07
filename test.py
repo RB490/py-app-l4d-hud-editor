@@ -39,8 +39,8 @@ if SAVED_SETTINGS.Game_HideGameWorld:
 if EDITORMENU_VGUIDRAWTREE:
     tools_menu.entryconfig("Inspect Hud", state="disabled")
 
-clipboard_menu = tk.Menu(tools_menu, tearoff=0)
-clipboard_menu.add_command(label="Copy Panel", command=ClipboardMenu)
-tools_menu.add_cascade(label="Copy Panel", menu=clipboard_menu)
+self.clipboard_menu = tk.Menu(tools_menu, tearoff=0)
+self.clipboard_menu.add_command(label="Copy Panel", command=ClipboardMenu)
+tools_menu.add_cascade(label="Copy Panel", menu=self.clipboard_menu)
 
 root.mainloop()

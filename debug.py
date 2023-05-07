@@ -1,11 +1,11 @@
 """Module for debugging"""
 # pylint: disable=unused-import
 import os
-from modules.classes.game import Game
-from modules.classes.gui_editor_menu import debug_gui_editor_menu
-from modules.classes.hud import Hud, debug_hud
-from modules.classes.hud_descriptions import debug_hud_descriptions
-from modules.utils.functions import load_data, retrieve_hud_name_for_dir
+from packages.game import Game
+from packages.gui.editor_menu import debug_gui_editor_menu
+from packages.hud.hud import Hud, debug_hud
+from packages.hud.descriptions import debug_hud_descriptions
+from packages.utils.functions import load_data, retrieve_hud_name_for_dir
 
 os.system("cls")  # clear terminal
 persistent_data = load_data()

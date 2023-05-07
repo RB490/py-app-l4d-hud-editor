@@ -8,6 +8,8 @@ feature -> finish hud editor menu + hotkey
 	- menu bar
 	^ have every option in the menubar and certain more useful options also on the gui
 
+	^ could also consider adding a hide window command to every menu entry so that it closes on selecting
+		^ could do both. keep the gui and buttons but also hide it on selecting - i want to do that anyways
 
 feature -> code menu options
 	self.persistent_data["game_mute"]
@@ -36,6 +38,11 @@ feature -> gui icons
 feature -> gui position saving&loading
 feature -> gui button icons
 feature -> gui menu icons
+
+feature -> consider how i want the overall script to behave
+	i could get rid of the main gui
+	when does the dev installer hit
+	etc
 
 feature -> add multi game support
 
