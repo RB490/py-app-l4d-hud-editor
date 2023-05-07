@@ -22,6 +22,9 @@ feature -> make help > hotkeys > ingame & global hotkey menu entries functional
 
 feature -> detect game close to automatically run this function
 
+cleanup -> move related hud/.json related functions to a class
+	^ ask gpt about it. should i have a specific settings class that makes these modifications or something
+
 feature -> gui icons
 feature -> gui position saving&loading
 feature -> gui button icons
@@ -86,6 +89,8 @@ feature -> send alt+f4 to game window (if needed) in GameCommands using this:
 				self.game.get_title()
 			new:
 				self.get_title()
+
+	feature -> Make the main gui optional? By adding the functionality into the hud class and then linking them both to the select gui and editor menu
 
 	cleanup -> aided with gpt's go through the script improving functions, methods and maybe also the overall structure
 

@@ -7,11 +7,85 @@ import time
 import tkinter as tk
 from tkinter import filedialog
 
-# from typing import Dict, List
 import win32gui
 import win32process
 import psutil
-from .constants import PERSISTENT_DATA_PATH
+import vdf
+from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
+
+
+def prompt_for_folder(title):
+    """Prompt user for a folder"""
+    root = tk.Tk()
+    root.withdraw()
+    return filedialog.askdirectory(title=title)
+
+
+def prompt_add_existing_hud(persistent_data):
+    """Prompt user for hud folder to add"""
+    folder_path = prompt_for_folder("Add HUD: Select folder")
+    if folder_path:
+        persistent_data["stored_huds"].append(folder_path)
+        print(f'stored_huds: {persistent_data["stored_huds"]}')
+        return True
+    else:
+        return False
+
+
+def prompt_open_temp_hud(persistent_data):
+    """Prompt user for temp hud folder to add"""
+    folder_path = prompt_for_folder("Add HUD: Select folder")
+    if folder_path:
+        persistent_data["stored_temp_huds"].append(folder_path)
+        print(f'stored_temp_huds: {persistent_data["stored_temp_huds"]}')
+        return True
+    else:
+        return False
+
+
+def prompt_create_new_hud(persistent_data):
+    """Prompt user for hud folder to create a new hud in"""
+    folder_path = prompt_for_folder("New HUD: Select folder")
+    if folder_path:
+        persistent_data["stored_huds"].append(folder_path)
+        copy_directory_contents(NEW_HUD_DIR, folder_path)
+        print(f'stored_huds: {persistent_data["stored_huds"]}')
+        return True
+    else:
+        return False
+
+
+def remove_stored_hud(persistent_data, hud_dir):
+    """Remove stored hud"""
+    if hud_dir in persistent_data["stored_huds"]:
+        persistent_data["stored_huds"].remove(hud_dir)
+        print(f"Removed '{hud_dir}'")
+
+
+def remove_temp_hud(persistent_data, hud_dir):
+    """Remove temp hud"""
+    if hud_dir in persistent_data["stored_temp_huds"]:
+        persistent_data["stored_temp_huds"].remove(hud_dir)
+        print(f"Removed '{hud_dir}'")
+
+
+def retrieve_hud_name_for_dir(hud_dir):
+    """Retrieve hud name for a directory. Either directory name or from addoninfo.txt"""
+    # retrieve hud name (from addoninfo.txt if available)
+    # hud_name = os.path.basename(os.path.dirname(hud_dir))
+    hud_name = os.path.basename(hud_dir)
+    addoninfo_path = os.path.normpath(os.path.join(hud_dir, "addoninfo.txt"))
+
+    if os.path.exists(addoninfo_path):
+        addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
+        if addon_info["AddonInfo"]["addontitle"]:
+            hud_name = addon_info["AddonInfo"]["addontitle"]
+            print(f"Retrieved '{hud_name}' @ '{addoninfo_path}'")
+        else:
+            print(f"Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
+    else:
+        print(f"Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
+    return hud_name
 
 
 def wait_for_process(exe, timeout=None):
@@ -211,6 +285,10 @@ def load_data():
     # if needed set default lists so they can be added to
     if "stored_huds" not in data:
         data["stored_huds"] = []
+
+    # if needed set default lists so they can be added to
+    if "stored_temp_huds" not in data:
+        data["stored_temp_huds"] = []
 
     if "game_mute" not in data:
         data["game_mute"] = False

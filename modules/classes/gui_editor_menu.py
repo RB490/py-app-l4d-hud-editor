@@ -7,6 +7,13 @@ import webbrowser
 import keyboard
 import pyperclip
 from modules.utils.constants import SNIPPETS_DIR, IMAGES_DIR, SCRIPT_DIR, TUTORIALS_DIR
+from modules.utils.functions import (
+    prompt_add_existing_hud,
+    prompt_open_temp_hud,
+    remove_stored_hud,
+    remove_temp_hud,
+    retrieve_hud_name_for_dir,
+)
 
 # Dictionary of map codes for each map
 MAP_CODES = {
@@ -151,7 +158,7 @@ class GuiEditorMenu:
         self.game = game_instance
         self.hud = hud_instance
         keyboard.add_hotkey("F5", self.toggle_visibility)
-        self.create_menu()
+        self.create_and_refresh_menu()
         # super().__init__(self, persistent_data, game_instance, hud_instance)
         self.root.mainloop()
 
@@ -193,11 +200,12 @@ class GuiEditorMenu:
         """Open url"""
         webbrowser.open(url)
 
-    def do_nothing(self):
+    def do_nothing(self, *args):
+        # pylint: disable=unused-argument
         """
         A dummy function that does nothing.
         """
-        print("Do nothing")
+        print("Do nothing with:", args)
 
     def toggle_visibility(self):
         """
@@ -210,7 +218,7 @@ class GuiEditorMenu:
             self.root.withdraw()
             self.is_hidden = True
 
-    def create_menu(self):
+    def create_and_refresh_menu(self):
         """
         Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
         """
@@ -225,18 +233,7 @@ class GuiEditorMenu:
 
         self.game_menu = tk.Menu(menubar, tearoff=0)
         self.tool_menu = tk.Menu(menubar, tearoff=0)
-
-        # ----------------------------------
-        #       Create file menu
-        # ----------------------------------
-
-        filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="New", command=self.do_nothing)
-        filemenu.add_command(label="Open", image=self.open_icon, compound=tk.LEFT, command=self.do_nothing)
-        filemenu.add_command(label="Save", command=self.do_nothing)
-        filemenu.add_command(label="Save as...", command=self.do_nothing)
-        filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.root.quit)
+        self.file_menu = tk.Menu(menubar, tearoff=0)
 
         # ----------------------------------
         #       Create edit menu
@@ -467,6 +464,135 @@ class GuiEditorMenu:
         )
 
         # ----------------------------------
+        #       Create Voting menu
+        # ----------------------------------
+
+        # Define the data dictionary with display names for each option and section
+        voting_data = {
+            "general_commands": {
+                "display_name": "General Votes",
+                "available_votes": [
+                    {"display_name": "Restart game", "vote_command": "RestartGame"},
+                    {"display_name": "Return to lobby", "vote_command": "ReturnToLobby"},
+                    {"display_name": "Change all talk", "vote_command": "ChangeAllTalk"},
+                ],
+            },
+            "change_mission": {
+                "display_name": "Campaign Votes",
+                "available_votes": {
+                    "L4D1": [
+                        {"display_name": "No Mercy", "vote_command": "ChangeMission Hospital"},
+                        {"display_name": "Crash Course", "vote_command": "ChangeMission Garage"},
+                        {"display_name": "Death Toll", "vote_command": "ChangeMission River"},
+                        {"display_name": "Dead Air", "vote_command": "ChangeMission Airport"},
+                        {"display_name": "Blood Harvest", "vote_command": "ChangeMission Farm"},
+                        {"display_name": "The Sacrifice", "vote_command": "ChangeMission River"},
+                    ],
+                    "L4D2": [
+                        {"display_name": "Dead Center", "vote_command": "ChangeMission L4D2C1"},
+                        {"display_name": "Dark Carnival", "vote_command": "ChangeMission L4D2C2"},
+                        {"display_name": "Swamp Fever", "vote_command": "ChangeMission L4D2C3"},
+                        {"display_name": "Hard Rain", "vote_command": "ChangeMission L4D2C4"},
+                        {"display_name": "The Parish", "vote_command": "ChangeMission L4D2C5"},
+                        {"display_name": "The Passing", "vote_command": "ChangeMission L4D2C6"},
+                        {"display_name": "Cold Stream", "vote_command": "ChangeMission L4D2C13"},
+                        {"display_name": "The Sacrifice", "vote_command": "ChangeMission L4D2C7"},
+                        {"display_name": "No Mercy", "vote_command": "ChangeMission L4D2C8"},
+                        {"display_name": "Crash Course", "vote_command": "ChangeMission L4D2C9"},
+                        {"display_name": "Death Toll", "vote_command": "ChangeMission L4D2C10"},
+                        {"display_name": "Dead Air", "vote_command": "ChangeMission L4D2C11"},
+                        {"display_name": "Blood Harvest", "vote_command": "ChangeMission L4D2C12"},
+                        {"display_name": "The Last Stand", "vote_command": "ChangeMission L4D2C13"},
+                    ],
+                },
+            },
+            "kick_votes": {
+                "display_name": "Kick Votes",
+                "available_votes": [
+                    {"display_name": "Kick 1", "vote_command": "Kick 1"},
+                    {"display_name": "Kick 2", "vote_command": "Kick 2"},
+                    {"display_name": "Kick 3", "vote_command": "Kick 3"},
+                    {"display_name": "Kick 4", "vote_command": "Kick 4"},
+                    {"display_name": "Kick 5", "vote_command": "Kick 5"},
+                    {"display_name": "Kick 10", "vote_command": "Kick 10"},
+                    {"display_name": "Kick 15", "vote_command": "Kick 15"},
+                    {"display_name": "Kick 20", "vote_command": "Kick 20"},
+                ],
+            },
+            "difficulty_votes": {
+                "display_name": "Difficulty Votes",
+                "available_votes": [
+                    {"display_name": "Difficulty: Impossible", "vote_command": "ChangeDifficulty Impossible"},
+                    {"display_name": "Difficulty: Expert", "vote_command": "ChangeDifficulty Expert"},
+                    {"display_name": "Difficulty: Hard", "vote_command": "ChangeDifficulty Hard"},
+                    {"display_name": "Difficulty: Normal", "vote_command": "ChangeDifficulty Normal"},
+                ],
+            },
+        }
+
+        # create a 'Voting' menu to hold all the sections
+        voting_menu = tk.Menu(menubar)
+
+        # iterate over the items in the data dictionary
+        for section_name, section in voting_data.items():
+            # get the display name and options list for current section
+            section_display_name = section["display_name"]
+            section_votes = (
+                section["available_votes"][self.game.get_version()]
+                if section_name == "change_mission"
+                else section["available_votes"]
+            )
+
+            # create a submenu for the current section
+            remove_temp_hud_menu = tk.Menu(voting_menu)
+            voting_menu.add_cascade(label=section_display_name, menu=remove_temp_hud_menu)
+
+            # add each option in the current section to the submenu
+            for option in section_votes:
+                vote_command = option["vote_command"]
+                display_name = option["display_name"]
+                remove_temp_hud_menu.add_command(
+                    label=display_name, command=lambda v=vote_command: self.editor_menu_execute_game_command(v)
+                )
+
+        # ----------------------------------
+        #       Create Show Panel menu
+        # ----------------------------------
+
+        switch_team_data = {
+            "Team": {"Spectate": "jointeam 1", "Survivor": "jointeam 2", "Infected": "jointeam 3"},
+            "Left 4 Dead": {
+                "Bill": "sb_takecontrol Bill",
+                "Francis": "sb_takecontrol Francis",
+                "Louis": "sb_takecontrol Louis",
+                "Zoey": "sb_takecontrol Zoey",
+            },
+            "Left 4 Dead 2": {
+                "Coach": "sb_takecontrol Coach",
+                "Nick": "sb_takecontrol Nick",
+                "Ellis": "sb_takecontrol Ellis",
+                "Rochelle": "sb_takecontrol Rochelle",
+            },
+        }
+
+        # Create Switch submenu
+        switch_menu = tk.Menu(menubar)
+
+        # Add divider between each section
+        switch_menu.add_separator()
+
+        # Add Team, Left 4 Dead, and Left 4 Dead 2 options to root menu
+        for game, options in switch_team_data.items():
+            switch_menu.add_command(label=game, state="disabled")
+            switch_menu.add_separator()
+            for character, value in options.items():
+                switch_menu.add_command(
+                    label=character, command=lambda v=value: self.editor_menu_execute_game_command(v)
+                )
+            # Add divider between each section
+            switch_menu.add_separator()
+
+        # ----------------------------------
         #       Create Show Panel menu
         # ----------------------------------
 
@@ -525,30 +651,106 @@ class GuiEditorMenu:
             )
 
         # ----------------------------------
+        #       Create give items menu
+        # ----------------------------------
+
+        give_items_dict = {
+            "Everything": "give_all_items",
+            "Guns": "give_all_guns",
+            "Melee weapons": "give_all_melee_weapons",
+            "Pickups": "give_all_pickups",
+        }
+
+        # Add a "Give Items" menu item with sub-items for each item in the dictionary
+        give_items_menu = tk.Menu(menubar, tearoff=False)
+        for label, action in give_items_dict.items():
+            give_items_menu.add_command(label=label, command=lambda action=action: self.editor_give_items(action))
+
+        # ----------------------------------
         #       Create clipboard menu
         # ----------------------------------
 
-        clipboardmenu = Menu(menubar, tearoff=0)
+        clipboard_menu = Menu(menubar, tearoff=0)
 
         for file_name in os.listdir(SNIPPETS_DIR):
             file_path = os.path.join(SNIPPETS_DIR, file_name)
             if os.path.isfile(file_path):
                 menu_name = os.path.splitext(file_name)[0]
-                clipboardmenu.add_command(
+                clipboard_menu.add_command(
                     label=menu_name, command=self.create_lambda_command(self.editor_menu_copy_snippet, file_path)
                 )
 
         # ----------------------------------
-        #       Parent Main menu
+        #       Create load hud menu
         # ----------------------------------
 
-        menubar.add_cascade(label="File", menu=filemenu)
-        filemenu.add_cascade(label="Help", menu=helpmenu)
-        menubar.add_cascade(label="Tools", menu=self.tool_menu)
-        self.tool_menu.add_cascade(label="Clipboard", menu=clipboardmenu)
+        load_hud_menu = Menu(menubar, tearoff=0)
+
+        # stored huds
+        stored_huds_submenu = tk.Menu(menubar, tearoff=0)
+        remove_stored_hud_menu = tk.Menu(menubar, tearoff=0)
+        load_hud_menu.add_cascade(label="Stored", menu=stored_huds_submenu)
+
+        # stored huds - root
+        load_hud_menu.add_separator()
+        for hud_dir in self.persistent_data["stored_huds"]:
+            hud_name = retrieve_hud_name_for_dir(hud_dir)
+            load_hud_menu.add_command(
+                label=hud_name,
+                command=self.create_lambda_command(self.editor_edit_hud, hud_dir),
+            )
+            remove_stored_hud_menu.add_command(
+                label=hud_name, command=self.create_lambda_command(self.editor_remove_stored_hud, hud_dir)
+            )
+        # stored huds - submenu - add stored hud
+        stored_huds_submenu.add_command(label="Add", command=self.create_lambda_command(self.editor_add_existing_hud))
+        # stored huds - submenu - remove stored hud
+        stored_huds_submenu.add_cascade(label="Remove", menu=remove_stored_hud_menu)
+        if not self.persistent_data["stored_huds"]:
+            stored_huds_submenu.entryconfigure("Remove", state="disabled")
+        load_hud_menu.add_separator()
+
+        # temp huds
+        temp_huds_submenu = tk.Menu(menubar, tearoff=0)
+        remove_temp_hud_menu = tk.Menu(menubar, tearoff=0)
+        load_hud_menu.add_cascade(label="Temporary", menu=temp_huds_submenu)
+
+        # stored huds - root
+        load_hud_menu.add_separator()
+        for hud_dir in self.persistent_data["stored_temp_huds"]:
+            hud_name = retrieve_hud_name_for_dir(hud_dir)
+            load_hud_menu.add_command(
+                label=hud_name,
+                command=self.create_lambda_command(self.editor_edit_hud, hud_dir),
+            )
+            remove_temp_hud_menu.add_command(
+                label=hud_name, command=self.create_lambda_command(self.editor_remove_temp_hud, hud_dir)
+            )
+        # stored huds - submenu - add temp hud
+        temp_huds_submenu.add_command(label="Open", command=self.create_lambda_command(self.editor_open_temp_hud))
+        # stored huds - submenu - remove temp hud
+        temp_huds_submenu.add_cascade(label="Remove", menu=remove_temp_hud_menu)
+        if not self.persistent_data["stored_temp_huds"]:
+            temp_huds_submenu.entryconfigure("Remove", state="disabled")
+
+        load_hud_menu.add_separator()
+
+        # ----------------------------------
+        #       Parent File menu
+        # ----------------------------------
+
+        self.file_menu.add_cascade(label="Load hud", menu=load_hud_menu)
+        self.file_menu.add_cascade(label="Help", menu=helpmenu)
+
+        # ----------------------------------
+        #       Parent Tools menu
+        # ----------------------------------
+
+        self.tool_menu.add_cascade(label="Clipboard", menu=clipboard_menu)
         self.tool_menu.add_cascade(label="Show panel", menu=show_panel_menu)
-        menubar.add_cascade(label="Edit", menu=editmenu)
-        menubar.add_cascade(label="Game", menu=self.game_menu)
+        self.tool_menu.add_cascade(label="Call vote", menu=voting_menu)
+        self.tool_menu.add_cascade(label="Switch", menu=switch_menu)
+        self.tool_menu.add_cascade(label="Give items", menu=give_items_menu)
 
         # ----------------------------------
         #       Parent Game menu
@@ -575,9 +777,13 @@ class GuiEditorMenu:
         self.game_menu.add_command(label="Close", columnbreak=False, command=self.editor_menu_game_close)
 
         # ----------------------------------
-        #       Add the menu to the gui
+        #       Parent menu
         # ----------------------------------
 
+        menubar.add_cascade(label="File", menu=self.file_menu)
+        menubar.add_cascade(label="Edit", menu=editmenu)
+        menubar.add_cascade(label="Tools", menu=self.tool_menu)
+        menubar.add_cascade(label="Game", menu=self.game_menu)
         self.root.config(menu=menubar)
 
     def editor_menu_game_mode(self, mode):
@@ -665,6 +871,42 @@ class GuiEditorMenu:
         """Show selected panel ingame"""
         # Do something with the panel value (e.g. print it)
         print(panel)
+
+    def editor_menu_execute_game_command(self, execute_command):
+        """Execute selected command ingame"""
+        # Do something with the panel value (e.g. print it)
+        print(f"todo: execute {execute_command}")
+
+    def editor_give_items(self, action):
+        """TODO: probably redirect the give items menu to editor_menu_execute_command"""
+        # Define the function to be called when a menu item is selected
+        print(f"Executing action '{action}'")
+
+    def editor_add_existing_hud(self):
+        """Add exiting hud to the menu"""
+        prompt_add_existing_hud(self.persistent_data)
+        self.create_and_refresh_menu()
+
+    def editor_remove_stored_hud(self, hud_dir):
+        """Remove existing hud"""
+        print(f"todo: {hud_dir}")
+        remove_stored_hud(self.persistent_data, hud_dir)
+        self.create_and_refresh_menu()
+
+    def editor_remove_temp_hud(self, hud_dir):
+        """Remove existing hud"""
+        print(f"todo: {hud_dir}")
+        remove_temp_hud(self.persistent_data, hud_dir)
+        self.create_and_refresh_menu()
+
+    def editor_open_temp_hud(self):
+        """Open temporary hud in the menu"""
+        prompt_open_temp_hud(self.persistent_data)
+        self.create_and_refresh_menu()
+
+    def editor_edit_hud(self, hud_dir):
+        """Start editing selected hud"""
+        print(f"todo: {hud_dir}")
 
 
 def debug_gui_editor_menu(persistent_data, game_instance, hud_instance):

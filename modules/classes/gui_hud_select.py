@@ -5,11 +5,10 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog
-import vdf
 from PIL import Image, ImageTk
 from modules.classes.vpk import VPK
-from modules.utils.functions import copy_directory_contents
-from modules.utils.constants import NEW_HUD_DIR, IMAGES_DIR
+from modules.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
+from modules.utils.constants import IMAGES_DIR
 
 
 class GuiHudSelect:
@@ -55,11 +54,11 @@ class GuiHudSelect:
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
 
         # create a button above the picture frame
-        self.add_button = tk.Button(self.frame, text="Add", width=35, height=1, command=self.prompt_add_gui)
+        self.add_button = tk.Button(self.frame, text="Add", width=35, height=1, command=self.prompt_add_hud_btn)
         self.add_button.pack(pady=5, padx=5)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.frame, text="New", width=35, height=1, command=self.prompt_new_gui)
+        self.new_button = tk.Button(self.frame, text="New", width=35, height=1, command=self.prompt_new_hud_btn)
         self.new_button.pack(pady=5, padx=5)
 
         # create a picture frame on the right side
@@ -92,8 +91,8 @@ class GuiHudSelect:
 
         # File menu
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.prompt_new_gui)
-        file_menu.add_command(label="Add", accelerator="Ctrl+O", command=self.prompt_add_gui)
+        file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.prompt_new_hud_btn)
+        file_menu.add_command(label="Add", accelerator="Ctrl+O", command=self.prompt_add_hud_btn)
         file_menu.add_separator()
         file_menu.add_command(label="Edit", accelerator="Enter", command=self.edit_selected_hud)
         file_menu.add_separator()
@@ -258,11 +257,7 @@ class GuiHudSelect:
         # Insert the new items from the list into the Treeview
         for stored_hud_dir in self.persistent_data["stored_huds"]:
             # retrieve hud name (from addoninfo.txt if available)
-            hud_name = os.path.basename(os.path.dirname(stored_hud_dir))
-            addoninfo_path = os.path.join(stored_hud_dir, "addoninfo.txt")
-            if os.path.exists(addoninfo_path):
-                addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
-                hud_name = addon_info["AddonInfo"]["addontitle"]
+            hud_name = retrieve_hud_name_for_dir(stored_hud_dir)
 
             self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
 
@@ -294,28 +289,15 @@ class GuiHudSelect:
 
             self.change_addon_image(image)
 
-    def prompt_for_folder(self, title):
-        """Prompt user for a folder"""
-        root = tk.Tk()
-        root.withdraw()
-        return filedialog.askdirectory(title=title)
-
-    def prompt_add_gui(self):
+    def prompt_add_hud_btn(self):
         """Prompt user for hud folder to add"""
-        folder_path = self.prompt_for_folder("Add HUD: Select folder")
-        if folder_path:
-            self.persistent_data["stored_huds"].append(folder_path)
+        if prompt_add_existing_hud(self.persistent_data):
             self.update_treeview()
-            print(f'stored_huds: {self.persistent_data["stored_huds"]}')
 
-    def prompt_new_gui(self):
+    def prompt_new_hud_btn(self):
         """Prompt user for hud folder to create a new hud in"""
-        folder_path = self.prompt_for_folder("New HUD: Select folder")
-        if folder_path:
-            self.persistent_data["stored_huds"].append(folder_path)
-            copy_directory_contents(NEW_HUD_DIR, folder_path)
+        if prompt_create_new_hud(self.persistent_data):
             self.update_treeview()
-            print(f'stored_huds: {self.persistent_data["stored_huds"]}')
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""

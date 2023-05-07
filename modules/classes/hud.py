@@ -9,7 +9,7 @@ from modules.classes.hud_syncer import HudSyncer
 from modules.classes.gui_hud_browser import GuiHudBrowser
 from modules.classes.game import Game
 from modules.utils.functions import load_data
-from modules.utils.constants import DEVELOPMENT_DIR
+from modules.utils.constants import DEVELOPMENT_DIR, NEW_HUD_DIR
 
 
 class Hud:
