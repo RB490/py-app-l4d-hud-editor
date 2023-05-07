@@ -1,4 +1,5 @@
-"""Module for the """
+# pylint : disable=too-many-lines ####
+"""Module for the editor menu"""
 import os
 import tkinter as tk
 from tkinter import Menu, PhotoImage
@@ -228,29 +229,76 @@ class GuiEditorMenu:
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
 
         # ----------------------------------
-        #       Create parent menus
+        #       Create reload mode menu
         # ----------------------------------
 
-        self.game_menu = tk.Menu(menubar, tearoff=0)
-        self.debug_menu = tk.Menu(menubar, tearoff=0)
-        self.file_menu = tk.Menu(menubar, tearoff=0)
-        self.tools_menu = tk.Menu(menubar, tearoff=0)
+        self.reload_mode_menu = tk.Menu(menubar, tearoff=0)
+        reload_once_menu = tk.Menu(menubar, tearoff=0)
+
+        self.reload_mode_menu.add_command(label="Modes", state="disabled")
+        self.reload_mode_menu.add_separator()
+
+        reload_modes = ["All", "Hud", "Menu", "Materials", "Fonts"]
+        for reload_mode in reload_modes:
+            self.reload_mode_menu.add_command(
+                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_mode.lower()}")
+            )
+
+        self.reload_mode_menu.add_command(label="Options", state="disabled", columnbreak=True)
+        self.reload_mode_menu.add_separator()
+
+        for reload_mode in reload_modes:
+            reload_once_menu.add_command(
+                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_mode.lower()}")
+            )
+
+        self.reload_mode_menu.add_cascade(label="Once", menu=reload_once_menu)
+        self.reload_mode_menu_coord_clicks_checkmark = tk.BooleanVar()
+        self.reload_mode_menu.add_checkbutton(
+            label="Reopen menu on reload",
+            variable=self.reload_mode_menu_coord_clicks_checkmark,
+            command=self.editor_menu_reload_click,
+        )
+        self.reload_mode_menu_coord_clicks_checkmark.set(self.persistent_data["reload_mouse_clicks_enabled"])
+        self.reload_mode_menu.add_command(label="Coord 1", command=self.editor_menu_reload_click_coord1)
+        self.reload_mode_menu.add_command(label="Coord 2", command=self.editor_menu_reload_click_coord2)
+
+        # ----------------------------------
+        #       Create Hud menu
+        # ----------------------------------
+
+        self.hud_menu = tk.Menu(menubar, tearoff=0)
+        self.hud_menu.add_command(label="<hud_name>", state="disabled")
+        if self.hud.get_dir():
+            self.hud_menu.entryconfigure(0, label=retrieve_hud_name_for_dir(self.hud.get_dir()))
+        self.hud_menu.add_command(label="Unsync", command=self.editor_unsync_hud)
+        self.hud_menu.add_command(label="Save", state="disabled")
+        self.hud_menu.add_command(label="VPK", command=self.editor_save_as_vpk)
+        self.hud_menu.add_command(label="Folder", command=self.editor_save_as_folder)
+        self.hud_menu.add_command(label="Open", state="disabled", columnbreak=True)
+        self.hud_menu.add_command(
+            label="Hud", command=self.create_lambda_command(self.editor_open_folder, self.hud.get_dir())
+        )
+        self.hud_menu.add_command(
+            label="Hud (VS)", command=self.create_lambda_command(self.editor_open_folder_in_vscode, self.hud.get_dir())
+        )
 
         # ----------------------------------
         #       Create Game Mode menu
         # ----------------------------------
 
+        self.game_menu = tk.Menu(menubar, tearoff=0)
         game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
         self.game_mode_menu = tk.Menu(menubar, tearoff=0)
         self.game_mode_vars = {}
-        for mode in game_modes:
-            self.game_mode_vars[mode] = tk.BooleanVar()
+        for reload_mode in game_modes:
+            self.game_mode_vars[reload_mode] = tk.BooleanVar()
             self.game_mode_menu.add_checkbutton(
-                label=mode,
-                variable=self.game_mode_vars[mode],
+                label=reload_mode,
+                variable=self.game_mode_vars[reload_mode],
                 onvalue=True,
                 offvalue=False,
-                command=lambda mode=mode: self.editor_menu_game_mode(mode),
+                command=lambda mode=reload_mode: self.editor_menu_game_mode(mode),
             )
         self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
 
@@ -319,18 +367,29 @@ class GuiEditorMenu:
             file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
         ).subsample(1, 1)
         game_map_menu = tk.Menu(self.game_menu, tearoff=0)
+
+        # main menu
         game_map_menu.add_command(
-            label="Curling Stadium",
-            command=lambda: self.editor_menu_game_map("Curling Stadium", "curling_stadium"),
+            label="Main Menu",
+            command=self.create_lambda_command(self.editor_menu_send_keys, "{F11}"),
         )
-        game_map_menu.add_command(
-            label="Tutorial Standards",
-            command=lambda: self.editor_menu_game_map("Tutorial Standards", "tutorial_standards"),
-        )
+        game_map_menu.add_separator()
+
+        # misc maps
         game_map_menu.add_command(
             label="Hud Dev Map",
             command=lambda: self.editor_menu_game_map("Hud Dev Map", "hud_dev_map"),
         )
+        if self.game.get_version() is "L4D2":
+            game_map_menu.add_command(
+                label="Curling Stadium",
+                command=lambda: self.editor_menu_game_map("Curling Stadium", "curling_stadium"),
+            )
+        game_map_menu.add_command(
+            label="Tutorial Standards",
+            command=lambda: self.editor_menu_game_map("Tutorial Standards", "tutorial_standards"),
+        )
+        game_map_menu.add_separator()
 
         # Create the L4D1 and L4D2 submenus
         map_menu_l4d1 = tk.Menu(game_map_menu, tearoff=0)
@@ -727,6 +786,7 @@ class GuiEditorMenu:
         #       Parent tools menu
         # ----------------------------------
 
+        self.tools_menu = tk.Menu(menubar, tearoff=0)
         self.tools_menu.add_command(label="Inspect", command=self.editor_inspect_hud)
         self.tools_menu.add_command(label="Chat Debug (WWWW)", command=self.editor_chat_debug_spam_w)
         self.tools_menu.add_command(label="Hide World", command=self.editor_hide_game_world)
@@ -736,6 +796,7 @@ class GuiEditorMenu:
         #       Parent File menu
         # ----------------------------------
 
+        self.file_menu = tk.Menu(menubar, tearoff=0)
         self.file_menu.add_command(label="Start", command=self.editor_open_hud_select)
         self.file_menu.add_command(label="Browser", command=self.editor_open_hud_browser)
         self.file_menu.add_separator()
@@ -755,6 +816,7 @@ class GuiEditorMenu:
         #       Parent Tools menu
         # ----------------------------------
 
+        self.debug_menu = tk.Menu(menubar, tearoff=0)
         self.debug_menu.add_command(label="Game cmd", command=self.editor_prompt_game_command)
         self.debug_menu.add_cascade(label="Show panel", menu=show_panel_menu)
         self.debug_menu.add_cascade(label="Call vote", menu=voting_menu)
@@ -791,6 +853,8 @@ class GuiEditorMenu:
         # ----------------------------------
 
         menubar.add_cascade(label="File", menu=self.file_menu)
+        menubar.add_cascade(label="Hud", menu=self.hud_menu)
+        menubar.add_cascade(label="Mode", menu=self.reload_mode_menu)
         menubar.add_cascade(label="Debug", menu=self.debug_menu)
         menubar.add_cascade(label="Game", menu=self.game_menu)
         self.root.config(menu=menubar)
@@ -930,7 +994,11 @@ class GuiEditorMenu:
 
     def editor_open_folder(self, input_dir):
         """Open folder"""
-        print(f"todo: {input_dir}")
+        print(f"editor_open_folder todo: {input_dir}")
+
+    def editor_open_folder_in_vscode(self, input_dir):
+        """Open folder"""
+        print(f"editor_open_folder_in_vscode todo: {input_dir}")
 
     def editor_prompt_game_command(self):
         """Prompt & execute game command"""
@@ -947,6 +1015,38 @@ class GuiEditorMenu:
     def editor_hide_game_world(self):
         """Hide game world"""
         print("Hide game world")
+
+    def editor_unsync_hud(self):
+        """Unsync hud"""
+        print("editor_unsync_hud")
+
+    def editor_save_as_vpk(self):
+        """Export hud as vpk"""
+        print("editor_save_as_vpk")
+
+    def editor_save_as_folder(self):
+        """Export hud as folder"""
+        print("editor_save_as_folder")
+
+    def editor_menu_reload_click(self):
+        """Toggle reload click coordinate"""
+        print("editor_save_as_folder")
+        self.persistent_data["reload_mouse_clicks_enabled"] = not self.persistent_data["reload_mouse_clicks_enabled"]
+        self.reload_mode_menu_coord_clicks_checkmark.set(self.persistent_data["reload_mouse_clicks_enabled"])
+        self.create_and_refresh_menu()
+        print(self.persistent_data["reload_mouse_clicks_enabled"])
+
+    def editor_menu_reload_click_coord1(self):
+        """Set reload click coordinate"""
+        print("editor_menu_reload_click_coord1")
+
+    def editor_menu_reload_click_coord2(self):
+        """Set reload click coordinate"""
+        print("editor_menu_reload_click_coord2")
+
+    def editor_menu_send_keys(self, keys):
+        """Send input keys to game"""
+        print(f"editor_menu_send_keys: {keys}")
 
 
 def debug_gui_editor_menu(persistent_data, game_instance, hud_instance):

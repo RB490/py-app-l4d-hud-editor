@@ -45,15 +45,20 @@ class Game:
         return self.game_title
 
     def get_version(self):
+        # pylint: disable=pointless-statement
         """Retrieve information"""
 
         game_title = self.get_title().lower()
         assert game_title in ["left 4 dead", "left 4 dead 2"], "Invalid game title"
 
+        print(f"game title test: {game_title}")
+
         if game_title == "left 4 dead":
             return "L4D1"
         elif game_title == "left 4 dead 2":
             return "L4D2"
+        else:
+            None
 
     def get_exe(self):
         """Retrieve information"""

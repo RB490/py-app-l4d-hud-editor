@@ -71,9 +71,12 @@ def remove_temp_hud(persistent_data, hud_dir):
 
 def retrieve_hud_name_for_dir(hud_dir):
     """Retrieve hud name for a directory. Either directory name or from addoninfo.txt"""
+    # verify input
+    assert os.path.isdir(hud_dir)
+
     # retrieve hud name (from addoninfo.txt if available)
-    # hud_name = os.path.basename(os.path.dirname(hud_dir))
-    hud_name = os.path.basename(hud_dir)
+    # hud_name = os.path.basename(os.path.dirname(hud_dir)) # retrieve name from parent folder
+    hud_name = os.path.basename(hud_dir)  # retrieve name from root folder
     addoninfo_path = os.path.normpath(os.path.join(hud_dir, "addoninfo.txt"))
 
     if os.path.exists(addoninfo_path):
@@ -301,6 +304,9 @@ def load_data():
 
     if "game_mode" not in data:
         data["game_mode"] = "Coop"
+
+    if "reload_mouse_clicks_enabled" not in data:
+        data["reload_mouse_clicks_enabled"] = False
 
     # print(f"load_data: \n{json.dumps(data, sort_keys=True, indent=4)}")
     return data

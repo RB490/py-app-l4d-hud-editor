@@ -8,6 +8,7 @@ feature -> finish hud editor menu + hotkey
 	- menu bar
 	^ have every option in the menubar and certain more useful options also on the gui
 
+
 feature -> code menu options
 	self.persistent_data["game_mute"]
 	self.persistent_data["game_insecure"]
@@ -35,6 +36,8 @@ feature -> gui icons
 feature -> gui position saving&loading
 feature -> gui button icons
 feature -> gui menu icons
+
+feature -> add multi game support
 
 feature -> send alt+f4 to game window (if needed) in GameCommands using this:
         import pydirectinput
