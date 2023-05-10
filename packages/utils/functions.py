@@ -6,7 +6,7 @@ import winreg
 import time
 import tkinter as tk
 from tkinter import filedialog
-
+from typing import Optional
 import win32gui
 import win32process
 import psutil
@@ -110,6 +110,42 @@ def wait_for_process(exe, timeout=None):
         if timeout is not None and time.time() - start_time > timeout:
             return False
         time.sleep(0.1)
+
+
+def wait_for_process_and_get_hwnd(executable_name: str, timeout_seconds: Optional[int] = 60) -> int:
+    # pylint: disable=c-extension-no-member
+    """
+    Waits for a process to start and returns its window handle (HWND).
+
+    :param executable_name: The name of the executable to wait for.
+    :param timeout_seconds: The maximum time to wait for the process to start, in seconds. If None, waits indefinitely.
+    :return: The window handle (HWND) of the process.
+    :raises: RuntimeError if no window handle is found for the process or if not found within the timeout.
+    """
+    start_time = time.time()
+    while True:
+        for proc in psutil.process_iter():
+            if proc.name() == executable_name:
+                pid = proc.pid
+                break
+        else:
+            if timeout_seconds is not None and time.time() - start_time > timeout_seconds:
+                raise RuntimeError(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
+            time.sleep(0.1)
+            continue
+        break
+
+    def callback(hwnd, hwnds):
+        _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
+        if found_pid == pid:
+            hwnds.append(hwnd)
+        return True
+
+    hwnds = []
+    win32gui.EnumWindows(callback, hwnds)
+    if not hwnds:
+        raise RuntimeError(f"No window handle found for process '{executable_name}'")
+    return hwnds[0]
 
 
 def get_hwnd_for_exe(executable_name):
@@ -304,6 +340,9 @@ def load_data():
 
     if "game_mode" not in data:
         data["game_mode"] = "Coop"
+
+    if "game_res" not in data:
+        data["game_res"] = (1600, 900)
 
     if "reload_mouse_clicks_enabled" not in data:
         data["reload_mouse_clicks_enabled"] = False

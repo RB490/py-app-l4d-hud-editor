@@ -1,4 +1,6 @@
 
+feature -> consider making the menu just a popup menu rather than a gui again
+	add a close option
 
 feature -> finish hud editor menu + hotkey
 	^ apparently this isn't quite possible very conveniently with python
@@ -39,12 +41,18 @@ feature -> gui position saving&loading
 feature -> gui button icons
 feature -> gui menu icons
 
+feature -> add game class move method to game resolution method
+
 feature -> consider how i want the overall script to behave
 	i could get rid of the main gui
 	when does the dev installer hit
 	etc
 
 feature -> add multi game support
+
+feature -> load a map after selecting a game mode?
+
+testing -> test all menu options
 
 feature -> send alt+f4 to game window (if needed) in GameCommands using this:
         import pydirectinput

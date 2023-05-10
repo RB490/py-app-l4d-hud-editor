@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import Menu, PhotoImage
 import webbrowser
 from packages.editor_menu.handler import EditorMenuHandler
-from packages.utils.constants import MAP_CODES, SNIPPETS_DIR, IMAGES_DIR, SCRIPT_DIR, TUTORIALS_DIR
+from packages.utils.constants import GAME_POSITIONS, MAP_CODES, SNIPPETS_DIR, IMAGES_DIR, SCRIPT_DIR, TUTORIALS_DIR
 from packages.utils.functions import (
     retrieve_hud_name_for_dir,
 )
@@ -15,21 +15,13 @@ from packages.utils.functions import (
 class EditorMenuClass:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
-    def __init__(self, child_instance, persistent_data, game_instance, hud_instance):
-        # super().__init__()
-
+    def __init__(self, child_instance, root, persistent_data, game_instance, hud_instance):
         self.handler = EditorMenuHandler(self, persistent_data, game_instance, hud_instance)
-
+        self.root = root
         self.child_instance = child_instance
         self.persistent_data = persistent_data
         self.game = game_instance
         self.hud = hud_instance
-
-        # Define any menu items and their associated commands here
-        # self.add_command(label="File", command=self.file_command)
-
-        print("EditorMenuHandler __init__()")
-        print(f"is_hidden: {self.child_instance.is_hidden}")
 
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
 
@@ -79,82 +71,11 @@ class EditorMenuClass:
         """
         return lambda: func(*args)
 
-    def create_game_menu(self, menubar):
-        """Create game menu"""
+    def create_game_map_menu(self, menubar):
+        """Create game map menu"""
 
-        self.game_menu = tk.Menu(menubar, tearoff=0)
-        game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
-        self.game_mode_menu = tk.Menu(menubar, tearoff=0)
-        self.game_mode_vars = {}
-        for reload_mode in game_modes:
-            self.game_mode_vars[reload_mode] = tk.BooleanVar()
-            self.game_mode_menu.add_checkbutton(
-                label=reload_mode,
-                variable=self.game_mode_vars[reload_mode],
-                onvalue=True,
-                offvalue=False,
-                command=lambda mode=reload_mode: self.handler.editor_menu_game_mode(mode),
-            )
-        self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
+        self.game_map_menu = tk.Menu(menubar, tearoff=0)
 
-        # ----------------------------------
-        #       Create Game Resolution menu
-        # ----------------------------------
-
-        self.game_res_menu = tk.Menu(menubar, tearoff=0)
-        res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_9_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_10_menu = tk.Menu(self.game_res_menu, tearoff=0)
-
-        res_4_3_list = [
-            "640x480",
-            "720x576",
-            "800x600",
-            "1024x768",
-            "1152x864",
-            "1280x960",
-            "1400x1050",
-            "1600x1200",
-            "2048x1536",
-        ]
-        for res in res_4_3_list:
-            res_4_3_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
-
-        res_16_9_list = [
-            "852x480",
-            "1280x720",
-            "1360x768",
-            "1366x768",
-            "1600x900",
-            "1920x1080",
-            "2560x1440",
-            "3840x2160",
-        ]
-        for res in res_16_9_list:
-            res_16_9_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
-
-        res_16_10_list = [
-            "720x480",
-            "1280x768",
-            "1280x800",
-            "1440x900",
-            "1600x1024",
-            "1680x1050",
-            "1920x1200",
-            "2560x1600",
-            "3840x2400",
-            "7680x4800",
-        ]
-        for res in res_16_10_list:
-            res_16_10_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
-
-        self.game_res_menu.add_cascade(label="4:3", menu=res_4_3_menu)
-        self.game_res_menu.add_cascade(label="16:9", menu=res_16_9_menu)
-        self.game_res_menu.add_cascade(label="16:10", menu=res_16_10_menu)
-
-        # ----------------------------------
-        #       Create Change Map menu
-        # ----------------------------------
         self.map_menu_l4d1_icon = PhotoImage(
             file=os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")
         ).subsample(1, 1)
@@ -242,25 +163,65 @@ class EditorMenuClass:
                     command=self.create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code),
                 )
 
-        # ----------------------------------
-        #       Create Game Pos menu
-        # ----------------------------------
+    def create_game_res_menu(self, menubar):
+        """Create game resolution menu"""
 
-        positions = [
-            "Custom (Save)",
-            "Center",
-            "Top Left",
-            "Top Right",
-            "Bottom Left",
-            "Bottom Right",
-            "Top",
-            "Bottom",
-            "Left",
-            "Right",
+        self.game_res_menu = tk.Menu(menubar, tearoff=0)
+        res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=0)
+        res_16_9_menu = tk.Menu(self.game_res_menu, tearoff=0)
+        res_16_10_menu = tk.Menu(self.game_res_menu, tearoff=0)
+
+        res_4_3_list = [
+            "640x480",
+            "720x576",
+            "800x600",
+            "1024x768",
+            "1152x864",
+            "1280x960",
+            "1400x1050",
+            "1600x1200",
+            "2048x1536",
         ]
+        for res in res_4_3_list:
+            res_4_3_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
+
+        res_16_9_list = [
+            "852x480",
+            "1280x720",
+            "1360x768",
+            "1366x768",
+            "1600x900",
+            "1920x1080",
+            "2560x1440",
+            "3840x2160",
+        ]
+        for res in res_16_9_list:
+            res_16_9_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
+
+        res_16_10_list = [
+            "720x480",
+            "1280x768",
+            "1280x800",
+            "1440x900",
+            "1600x1024",
+            "1680x1050",
+            "1920x1200",
+            "2560x1600",
+            "3840x2400",
+            "7680x4800",
+        ]
+        for res in res_16_10_list:
+            res_16_10_menu.add_command(label=res, command=lambda r=res: self.handler.editor_menu_game_resolution(r))
+
+        self.game_res_menu.add_cascade(label="4:3", menu=res_4_3_menu)
+        self.game_res_menu.add_cascade(label="16:9", menu=res_16_9_menu)
+        self.game_res_menu.add_cascade(label="16:10", menu=res_16_10_menu)
+
+    def create_game_pos_menu(self, menubar):
+        """Create game position menu"""
         self.game_pos_menu = tk.Menu(menubar, tearoff=0)
         self.game_pos_vars = {}
-        for pos in positions:
+        for pos in GAME_POSITIONS:
             self.game_pos_vars[pos] = tk.BooleanVar()
             self.game_pos_menu.add_checkbutton(
                 label=pos,
@@ -270,6 +231,32 @@ class EditorMenuClass:
                 command=lambda pos=pos: self.handler.editor_menu_game_pos(pos),
             )
         self.game_pos_vars[self.persistent_data["game_pos"]].set(True)
+
+    def create_game_mode_menu(self, menubar):
+        """Create game mode menu"""
+
+        game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
+        self.game_mode_menu = tk.Menu(menubar, tearoff=0)
+        self.game_mode_vars = {}
+        for reload_mode in game_modes:
+            self.game_mode_vars[reload_mode] = tk.BooleanVar()
+            self.game_mode_menu.add_checkbutton(
+                label=reload_mode,
+                variable=self.game_mode_vars[reload_mode],
+                onvalue=True,
+                offvalue=False,
+                command=lambda mode=reload_mode: self.handler.editor_menu_game_mode(mode),
+            )
+        self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
+
+    def create_game_menu(self, menubar):
+        """Create game menu"""
+
+        self.game_menu = tk.Menu(menubar, tearoff=0)
+        self.create_game_mode_menu(menubar)
+        self.create_game_res_menu(menubar)
+        self.create_game_map_menu(menubar)
+        self.create_game_pos_menu(menubar)
 
     def create_hud_menu(self, menubar):
         """Create hud menu"""
@@ -651,29 +638,29 @@ class EditorMenuClass:
                 label=label, command=lambda action=action: self.handler.editor_give_items(action)
             )
 
-    def create_and_refresh_menu(self, root):
+    def create_and_refresh_menu(self):
         """
         Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
         """
-        menubar = Menu(root)
+        self.menu_bar = Menu(self.root, tearoff=False)
 
-        self.create_reload_mode_menu(menubar)
-        self.create_hud_menu(menubar)
-        self.create_game_menu(menubar)
-        self.create_load_hud_menu(menubar)
-        self.create_voting_menu(menubar)
-        self.create_show_panel_menu(menubar)
-        self.create_switch_team_menu(menubar)
-        self.create_hotkeys_menu(menubar)
-        self.create_help_menu(menubar)
-        self.create_give_items_menu(menubar)
-        self.create_clipboard_menu(menubar)
+        self.create_reload_mode_menu(self.menu_bar)
+        self.create_hud_menu(self.menu_bar)
+        self.create_game_menu(self.menu_bar)
+        self.create_load_hud_menu(self.menu_bar)
+        self.create_voting_menu(self.menu_bar)
+        self.create_show_panel_menu(self.menu_bar)
+        self.create_switch_team_menu(self.menu_bar)
+        self.create_hotkeys_menu(self.menu_bar)
+        self.create_help_menu(self.menu_bar)
+        self.create_give_items_menu(self.menu_bar)
+        self.create_clipboard_menu(self.menu_bar)
 
         # ----------------------------------
         #       Parent tools menu
         # ----------------------------------
 
-        self.tools_menu = tk.Menu(menubar, tearoff=0)
+        self.tools_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.tools_menu.add_command(label="Inspect", command=self.handler.editor_inspect_hud)
         self.tools_menu.add_command(label="Chat Debug (WWWW)", command=self.handler.editor_chat_debug_spam_w)
         self.tools_menu.add_command(label="Hide World", command=self.handler.editor_hide_game_world)
@@ -683,7 +670,7 @@ class EditorMenuClass:
         #       Parent File menu
         # ----------------------------------
 
-        self.file_menu = tk.Menu(menubar, tearoff=0)
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label="Start", command=self.handler.editor_open_hud_select)
         self.file_menu.add_command(label="Browser", command=self.handler.editor_open_hud_browser)
         self.file_menu.add_separator()
@@ -703,7 +690,7 @@ class EditorMenuClass:
         #       Parent Tools menu
         # ----------------------------------
 
-        self.debug_menu = tk.Menu(menubar, tearoff=0)
+        self.debug_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.debug_menu.add_command(label="Game cmd", command=self.handler.editor_prompt_game_command)
         self.debug_menu.add_cascade(label="Show panel", menu=self.show_panel_menu)
         self.debug_menu.add_cascade(label="Call vote", menu=self.voting_menu)
@@ -734,6 +721,10 @@ class EditorMenuClass:
             variable=self.handler.editor_menu_game_mute_checkmark,
             command=self.handler.editor_menu_game_toggle_mute,
         )
+        if self.persistent_data["game_mute"]:
+            self.handler.editor_menu_game_mute_checkmark.set(1)
+        else:
+            self.handler.editor_menu_game_mute_checkmark.set(0)
         self.game_menu.add_command(label="Restart", columnbreak=False, command=self.handler.editor_menu_game_restart)
         self.game_menu.add_command(label="Close", columnbreak=False, command=self.handler.editor_menu_game_close)
 
@@ -741,9 +732,10 @@ class EditorMenuClass:
         #       Parent menu
         # ----------------------------------
 
-        menubar.add_cascade(label="File", menu=self.file_menu)
-        menubar.add_cascade(label="Hud", menu=self.hud_menu)
-        menubar.add_cascade(label="Mode", menu=self.reload_mode_menu)
-        menubar.add_cascade(label="Game", menu=self.game_menu)
-        menubar.add_cascade(label="Debug", menu=self.debug_menu)
-        root.config(menu=menubar)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.menu_bar.add_cascade(label="Hud", menu=self.hud_menu)
+        self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
+        self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
+        self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
+        self.menu_bar.add_command(label="Close", command=self.do_nothing)
+        self.root.config(menu=self.menu_bar)

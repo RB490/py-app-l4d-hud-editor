@@ -4,10 +4,18 @@ import os
 import subprocess
 import psutil
 import vdf
+import win32gui
+import win32api
+import win32con
 from packages.game.manager import GameManager
 from packages.game.commands import GameCommands
-from packages.utils.functions import get_steam_info, is_process_running, load_data, get_hwnd_for_exe, wait_for_process
-from packages.utils.constants import EDITOR_AUTOEXEC_PATH
+from packages.utils.functions import (
+    get_steam_info,
+    is_process_running,
+    load_data,
+    wait_for_process_and_get_hwnd,
+)
+from packages.utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
 
 
 class Game:
@@ -34,8 +42,8 @@ class Game:
 
     def set_hwnd(self):
         """Retrieve game hwnd"""
-        # print("Searching game window handle")
-        self.game_hwnd = get_hwnd_for_exe(self.get_exe())
+        # wait until game is running
+        self.game_hwnd = wait_for_process_and_get_hwnd(self.get_exe())
         if not self.game_hwnd:
             raise LookupError("No window handle was found")
         print(f"{self.get_exe()} hwnd '{self.game_hwnd}'")
@@ -77,6 +85,90 @@ class Game:
     def get_main_dir(self, mode):
         """Retrieve information"""
         return self.manager.get_main_dir(mode)
+
+    def get_dev_config_dir(self):
+        """Retrieve information"""
+        return os.path.join(self.get_main_dir("dev"), "cfg")
+
+    # def move(self, position):
+    #     """Move window to position"""
+    #     assert position in GAME_POSITIONS, "Invalid position"
+    #     print(position)
+
+    def move(self, position):
+        # pylint: disable=c-extension-no-member
+        """Move window to position"""
+        assert position in GAME_POSITIONS, "Invalid position"
+        hwnd = self.get_hwnd()
+
+        rect = win32gui.GetWindowRect(hwnd)
+        win_width = rect[2] - rect[0]
+        win_height = rect[3] - rect[1]
+
+        if position == "Center":
+            win32gui.SetWindowPos(
+                hwnd,
+                win32con.HWND_TOPMOST,
+                0,
+                0,
+                0,
+                0,
+                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
+            )
+            win32gui.SetWindowPos(
+                hwnd,
+                win32con.HWND_NOTOPMOST,
+                0,
+                0,
+                0,
+                0,
+                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
+            )
+            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Top Left":
+            win_x = 0
+            win_y = 0
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Top Right":
+            win_x = win32api.GetSystemMetrics(0) - win_width
+            win_y = 0
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Bottom Left":
+            win_x = 0
+            win_y = win32api.GetSystemMetrics(1) - win_height
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Bottom Right":
+            win_x = win32api.GetSystemMetrics(0) - win_width
+            win_y = win32api.GetSystemMetrics(1) - win_height
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Top":
+            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+            win_y = 0
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Bottom":
+            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+            win_y = win32api.GetSystemMetrics(1) - win_height
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Left":
+            win_x = 0
+            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        elif position == "Right":
+            win_x = win32api.GetSystemMetrics(0) - win_width
+            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+        print(f"Moved game to '{position}'")
 
     def is_running(self):
         """Checks if the game is running"""
@@ -123,6 +215,14 @@ class Game:
 
         shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
 
+        # append user settings to autoexec
+        with open(EDITOR_AUTOEXEC_PATH, "a") as file:
+            file.write("\nmap {UNIVERSAL_GAME_MAP}")  # adds the desired text to the file on a new line
+            if self.persistent_data["game_mute"]:
+                file.write("\nvolume 1")  # adds the desired text to the file on a new line
+            else:
+                file.write("\nvolume 1")  # adds the desired text to the file on a new line
+
         # disable fullscreen in video settings
         video_settings_path = os.path.join(config_dir, "video.txt")
         if os.path.exists(video_settings_path):
@@ -149,6 +249,7 @@ class Game:
         # run game
         if self.is_running():
             self.set_hwnd()
+            self.move(self.persistent_data["game_pos"])
             return
 
         # write config
@@ -169,11 +270,11 @@ class Game:
             steam_exe = self.steam_info.get("steam_exe")
             subprocess.Popen('"' + steam_exe + '"' + steam_args + game_args, shell=True)
 
-        # wait until game is running
-        wait_for_process(self.get_exe())
-
         # set hwnd
         self.set_hwnd()
+
+        # set position
+        self.move(self.persistent_data["game_pos"])
 
 
 def debug_game_class():

@@ -14,6 +14,8 @@ hud_instance = Hud(game_instance)
 # debug_hud()
 
 print(f"Game version: {game_instance.get_version()}")
+game_instance.run("dev")
+# game_instance.move("Center")
 debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
 # hud_dir = "D:\\Programming and projects\\l4d-addons-huds\\4. l4d2-2020HUD\\source"
 # hud_name = retrieve_hud_name_for_dir(hud_dir)

@@ -27,7 +27,21 @@ SCRIPT_NAME = "L4D Hud Editor"
 SCRIPT_FILE_NAME = os.path.basename(SCRIPT_DIR)
 PERSISTENT_DATA_PATH = SCRIPT_NAME + ".json"
 HUD_DESCRIPTIONS_PATH = os.path.join(MISC_DIR, "hud_file_descriptions.json")
+UNIVERSAL_GAME_MAP = "hud_dev_map"
 
+# List of preset game positions
+GAME_POSITIONS = [
+    "Custom (Save)",
+    "Center",
+    "Top Left",
+    "Top Right",
+    "Bottom Left",
+    "Bottom Right",
+    "Top",
+    "Bottom",
+    "Left",
+    "Right",
+]
 
 # Dictionary of map codes for each map
 MAP_CODES = {
