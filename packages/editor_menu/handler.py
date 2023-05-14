@@ -3,6 +3,7 @@ import os
 from tkinter import messagebox
 import pyperclip
 import vdf
+from packages.classes.get_user_input import get_user_input
 from packages.utils.constants import UNIVERSAL_GAME_MAP
 from packages.utils.functions import prompt_add_existing_hud, prompt_open_temp_hud, remove_stored_hud, remove_temp_hud
 
@@ -126,19 +127,14 @@ class EditorMenuHandler:
 
     def editor_menu_show_panel(self, panel):
         """Show selected panel ingame"""
-        # Do something with the panel value (e.g. print it)
-        # print(panel)
 
-        # hide previous panel
-
-        # show selected panel
-        # EDITOR_SHOW_PANEL = panel
-        self.game.command.show_ui_panel(panel)
+        # set selected panel
+        self.game.command.set_ui_panel(panel)
+        self.game.command.execute(self.persistent_data["editor_reload_mode"])
 
     def editor_menu_execute_game_command(self, execute_command):
         """Execute selected command ingame"""
-        # Do something with the panel value (e.g. print it)
-        print(f"todo: execute {execute_command}")
+        self.game.command.execute(execute_command)
 
     def editor_give_items(self, action):
         """TODO: probably redirect the give items menu to editor_menu_execute_command"""
@@ -192,7 +188,13 @@ class EditorMenuHandler:
 
     def editor_prompt_game_command(self):
         """Prompt & execute game command"""
-        print("editor_prompt_game_command")
+
+        def handle_user_input(result):
+            print(f"user_command: {result}")
+            if result:
+                self.game.command.execute(result)
+
+        get_user_input("Execute game command", "Enter game command:", handle_user_input)
 
     def editor_inspect_hud(self):
         """Show inspect hud gui (vgui_drawtree)"""
