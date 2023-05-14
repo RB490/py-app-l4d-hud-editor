@@ -4,6 +4,13 @@ import os
 import ctypes
 import vdf
 
+# import pyautogui
+import win32gui
+import win32con
+import win32api
+from pywinauto import Application
+from packages.utils.constants import KEY_MAP, KEY_SCANCODES
+
 # import pydirectinput
 from packages.utils.functions import get_steam_info
 
@@ -19,37 +26,101 @@ class GameCommands:
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
         self.game = game_class
+        self.show_current_ui_panel = None
+        self.show_previous_ui_panel = None
+
+    def show_ui_panel(self, panel):
+        """Set & show ui panel"""
+
+        # set panel to be shown
+        self.show_current_ui_panel = panel
+
+        print(f"show_ui_panel: {panel}")
+
+    def _send_keys_in_foreground(self, keys):
+        # pylint: disable=c-extension-no-member
+        """
+        Send specified keys to game
+
+        Notes:
+            This works in menus, but not ingame. For example:
+            - Alt+F4 is detected great for closing vgui_drawtree
+            - Chat detects these keypresses. Also while in the 'escape' ingame main menu
+            - Normal commands like executing something bound to 'o' don't get detected
+        """
+        game_hwnd = self.game.get_hwnd()
+
+        # Save the handle of the currently focused window
+        focused_hwnd = win32gui.GetForegroundWindow()
+
+        win32gui.SetForegroundWindow(game_hwnd)
+        win32gui.BringWindowToTop(game_hwnd)
+        for key in keys:
+            win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
+            print(f"Holding down key: {KEY_MAP[key.lower()]}")
+        for key in reversed(keys):
+            win32api.keybd_event(KEY_MAP[key.lower()], 0, win32con.KEYEVENTF_KEYUP, 0)
+            print(f"Releasing key: {KEY_MAP[key.lower()]}")
+
+        # Restore focus to the previously focused window
+        if game_hwnd is not focused_hwnd:
+            # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
+            focused_app = Application().connect(handle=focused_hwnd)
+            focused_app.top_window().set_focus()
+
+    def _send_keys_in_background(self, keys):
+        """
+        Sends one or more key presses to the game window using the Windows API.
+
+        Notes:
+            This works ingame, but not in menus. For example:
+            - Sending alt+f4 to close vgui_drawtree 1 doesn't work
+            - Sending 'space' to jump does work
+
+        Sources:
+        - Key scancodes: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+        - Keyup scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
+        - Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+        """
+
+        wm_keydown = 0x100
+        wm_keyup = 0x101
+
+        hwnd = self.game.get_hwnd()
+        for key in keys:
+            scancode = KEY_SCANCODES[key.lower()]
+            keydown_param = scancode << 16 | 1
+            ctypes.windll.user32.SendMessageW(hwnd, wm_keydown, 0, keydown_param)
+        for key in reversed(keys):
+            scancode = KEY_SCANCODES[key.lower()]
+            keyup_param = scancode << 16 | 1 | 0x20000000
+            ctypes.windll.user32.SendMessageW(hwnd, wm_keyup, 0, keyup_param)
 
     def execute(self, input_command):
         """Execute game commands"""
         output_command = self._get_mapped_command(input_command.lower())
+
+        # re-show ui panel if set
+        if self.show_current_ui_panel and "debug_zombie_panel" in self.show_current_ui_panel:
+            output_command += f"; wait; {self.show_current_ui_panel}"
+        else:
+            output_command += f"; wait; showpanel {self.show_current_ui_panel}"
 
         # write command to file
         command_file = os.path.join(self.game.get_main_dir("dev"), "cfg", "hud_editor_command.cfg")
         with open(command_file, "w", encoding="utf-8") as file_handle:
             file_handle.write(output_command)
 
-        self._send_f11_in_background()
+        # close ui panel if needed
+        if self.show_current_ui_panel is "team" or "info":
+            self._send_keys_in_foreground(["alt", "f4"])
 
-        print(f"Executed command '{input_command}'")
+        # execute command
+        self._send_keys_in_background(["f11"])
+        print(f"Executed command: '{output_command}'")
 
-    def _send_f11_in_background(self):
-        """
-        Sends an F11 key press to the game window using the Windows API.
-
-        Key scancodes: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-        Keyup scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
-        Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-        """
-        key_scancode = 0x57
-        wm_keydown = 0x100
-        wm_keyup = 0x101
-        wm_keydown_param = key_scancode << 16 | 1
-        wm_keyup_param = key_scancode << 16 | 1 | 0x20000000
-
-        hwnd = self.game.get_hwnd()
-        ctypes.windll.user32.SendMessageW(hwnd, wm_keydown, 0, wm_keydown_param)
-        ctypes.windll.user32.SendMessageW(hwnd, wm_keyup, 0, wm_keyup_param)
+        # save previous panel to perform actions
+        self.show_previous_ui_panel = self.show_current_ui_panel
 
     def _get_mapped_command(self, input_command):
         give_all_guns = (
@@ -102,6 +173,10 @@ class GameCommands:
         # retrieve current video settings
         if os.path.exists(video_settings_path):
             video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
+
+            has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
+            is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
+
             video_settings["VideoConfig"]["setting.fullscreen"] = 0
             vdf.dump(video_settings, open(video_settings_path, "w", encoding="utf-8"), pretty=True)
 
@@ -111,7 +186,10 @@ class GameCommands:
             is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
             # toggle windowMode to conform to the mat_setvideo command; video.txt file saves windowed mode as 0
             # and fullscreen as 1. so the exact opposite as mat_setvideomode
-            is_fullscreen = not is_fullscreen
+            if is_fullscreen == 0:
+                is_fullscreen = 1
+            elif is_fullscreen == 1:
+                is_fullscreen = 0
         else:
             # use default video settings
             width = 1920
@@ -119,10 +197,10 @@ class GameCommands:
             has_border = 1
             is_fullscreen = 1  # 1=windowed
 
-        # resize the game
+        # resize the game to be really small
         output = f"mat_setvideomode 1 1 {int(is_fullscreen)} {int(has_border)}"
 
-        # restore the original settings
+        # restore the specified settings
         output += f";mat_setvideomode {width} {height} {int(is_fullscreen)} {int(has_border)}"
 
         return output

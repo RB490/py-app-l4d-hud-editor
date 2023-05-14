@@ -1,20 +1,25 @@
-from pynput import keyboard
+# Import the required libraries
+from tkinter import *
+from tkinter import ttk
+
+# Create an instance of tkinter frame or window
+win = Tk()
+
+# Set the size of the window
+win.geometry("700x350")
 
 
-def on_f4():
-    print("F4 pressed")
+# Define a function to make the window above
+def lift_window():
+    win.lift()
+    win.after(1000, lift_window)
+    hwnd = win32gui.FindWindowEx(0,0,0, "Window Title")
+    win32gui.SetForegroundWindow(hwnd)
 
 
-def on_f5():
-    print("F5 pressed")
+# Add A label widget
+Label(win, text="Hey Folks, Welcome to TutorialsPoint✨", font=("Aerial 18 italic")).place(x=130, y=150)
 
+lift_window()
 
-# Register hotkeys using pynput
-listener = keyboard.GlobalHotKeys({"<f1>": on_f4, "<f5>": on_f5})
-listener.start()
-
-# Keep the script running
-input("Press Enter to exit...\n")
-
-# Stop the listener when done
-listener.stop()
+win.mainloop()

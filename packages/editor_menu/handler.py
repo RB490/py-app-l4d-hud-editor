@@ -43,6 +43,8 @@ class EditorMenuHandler:
         if os.path.exists(video_settings_path):
             video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
 
+            print(video_settings)
+
             has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
             is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
             # toggle windowMode to conform to the mat_setvideo command; video.txt file saves windowed mode as 0
@@ -56,7 +58,9 @@ class EditorMenuHandler:
         # set new resolution
         res_w = self.persistent_data["game_res"][0]
         res_h = self.persistent_data["game_res"][1]
-        res_command = f"mat_setvideomode 1 1 1 0; mat_setvideomode {res_w} {res_h} {is_fullscreen} {has_border}"
+        res_command = (
+            f"mat_setvideomode 1 1 1 0; mat_setvideomode {res_w} {res_h} {int(is_fullscreen)} {int(has_border)}"
+        )
         self.game.command.execute(f"{res_command}; mat_savechanges")
 
         # restore game position
@@ -123,7 +127,13 @@ class EditorMenuHandler:
     def editor_menu_show_panel(self, panel):
         """Show selected panel ingame"""
         # Do something with the panel value (e.g. print it)
-        print(panel)
+        # print(panel)
+
+        # hide previous panel
+
+        # show selected panel
+        # EDITOR_SHOW_PANEL = panel
+        self.game.command.show_ui_panel(panel)
 
     def editor_menu_execute_game_command(self, execute_command):
         """Execute selected command ingame"""

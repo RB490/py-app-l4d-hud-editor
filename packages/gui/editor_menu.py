@@ -4,7 +4,6 @@ import tkinter as tk
 
 import keyboard
 
-
 from packages.editor_menu.menu import EditorMenuClass
 
 
@@ -46,8 +45,28 @@ class GuiEditorMenu:
     def toggle_visibility(self):
         """
         Toggles the visibility of the window between visible and hidden.
+
+        If the window is not currently activated and focused, it will get focused before toggling visibility.
+        Otherwise, if the window is currently hidden, it will be shown. If it is visible, it will be hidden.
         """
         print("toggle_visibility")
+
+        # if not self.root.focus_get():
+        # self.root.attributes("-topmost", True)
+        # self.root.attributes("-topmost", False)
+        # self.root.focus_force()
+        # self.my_editor_menu.root.focus_force()
+        # self.root.lift()  # bring the window to the front
+
+        # window_title = self.root.title()
+        # win = gw.getWindowsWithTitle(window_title)[0]
+        # win.activate()
+
+        # window_id = self.root.winfo_id()
+        # hwnd = win32gui.GetParent(window_id)
+        # print(hwnd)
+        # bring_window_to_front(hwnd)
+        # print("Focused Editor Gui")
         if self.is_hidden:
             self.root.deiconify()
             self.is_hidden = False

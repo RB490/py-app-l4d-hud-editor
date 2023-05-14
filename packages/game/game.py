@@ -4,15 +4,13 @@ import os
 import subprocess
 import psutil
 import vdf
-import win32gui
-import win32api
-import win32con
 from packages.game.manager import GameManager
 from packages.game.commands import GameCommands
 from packages.utils.functions import (
     get_steam_info,
     is_process_running,
     load_data,
+    move_hwnd_to_position,
     wait_for_process_and_get_hwnd,
 )
 from packages.utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
@@ -90,85 +88,10 @@ class Game:
         """Retrieve information"""
         return os.path.join(self.get_main_dir("dev"), "cfg")
 
-    # def move(self, position):
-    #     """Move window to position"""
-    #     assert position in GAME_POSITIONS, "Invalid position"
-    #     print(position)
-
     def move(self, position):
-        # pylint: disable=c-extension-no-member
         """Move window to position"""
         assert position in GAME_POSITIONS, "Invalid position"
-        hwnd = self.get_hwnd()
-
-        rect = win32gui.GetWindowRect(hwnd)
-        win_width = rect[2] - rect[0]
-        win_height = rect[3] - rect[1]
-
-        if position == "Center":
-            win32gui.SetWindowPos(
-                hwnd,
-                win32con.HWND_TOPMOST,
-                0,
-                0,
-                0,
-                0,
-                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
-            )
-            win32gui.SetWindowPos(
-                hwnd,
-                win32con.HWND_NOTOPMOST,
-                0,
-                0,
-                0,
-                0,
-                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
-            )
-            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
-            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Top Left":
-            win_x = 0
-            win_y = 0
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Top Right":
-            win_x = win32api.GetSystemMetrics(0) - win_width
-            win_y = 0
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Bottom Left":
-            win_x = 0
-            win_y = win32api.GetSystemMetrics(1) - win_height
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Bottom Right":
-            win_x = win32api.GetSystemMetrics(0) - win_width
-            win_y = win32api.GetSystemMetrics(1) - win_height
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Top":
-            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
-            win_y = 0
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Bottom":
-            win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
-            win_y = win32api.GetSystemMetrics(1) - win_height
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Left":
-            win_x = 0
-            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        elif position == "Right":
-            win_x = win32api.GetSystemMetrics(0) - win_width
-            win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
-            win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
-
-        print(f"Moved game to '{position}'")
+        move_hwnd_to_position(self.get_hwnd(), position)
 
     def is_running(self):
         """Checks if the game is running"""
@@ -216,7 +139,7 @@ class Game:
         shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
 
         # append user settings to autoexec
-        with open(EDITOR_AUTOEXEC_PATH, "a") as file:
+        with open(EDITOR_AUTOEXEC_PATH, "a", encoding="utf-8") as file:
             file.write("\nmap {UNIVERSAL_GAME_MAP}")  # adds the desired text to the file on a new line
             if self.persistent_data["game_mute"]:
                 file.write("\nvolume 1")  # adds the desired text to the file on a new line

@@ -9,9 +9,108 @@ from tkinter import filedialog
 from typing import Optional
 import win32gui
 import win32process
+import win32api
+import win32con
 import psutil
 import vdf
-from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
+from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
+
+
+def move_hwnd_to_position(hwnd, position):
+    # pylint: disable=c-extension-no-member
+    """
+    This function moves a window (specified by its hwnd) to the desired position on the screen.
+    `position` is a string that can take values from GAME_POSITIONS list.
+    """
+
+    # Validate the position argument
+    assert position in GAME_POSITIONS, "Invalid position"
+
+    # Save the handle of the currently focused window
+    focused_hwnd = win32gui.GetForegroundWindow()
+
+    # Get the current dimensions of the window
+    rect = win32gui.GetWindowRect(hwnd)
+    win_width = rect[2] - rect[0]
+    win_height = rect[3] - rect[1]
+
+    # Position the window according to the selected position argument
+    if position == "Center":
+        # Move the window to the topmost position and center it on the screen
+        win32gui.SetWindowPos(
+            hwnd,
+            win32con.HWND_TOPMOST,
+            0,
+            0,
+            0,
+            0,
+            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
+        )
+        # Remove the topmost attribute so that other windows can be on top of this one
+        win32gui.SetWindowPos(
+            hwnd,
+            win32con.HWND_NOTOPMOST,
+            0,
+            0,
+            0,
+            0,
+            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
+        )
+        # Calculate the new coordinates for the window to be centered on the screen
+        win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+        win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+        # Move the window to the calculated coordinates
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    # Repeat the same process for each possible position on the screen
+    elif position == "Top Left":
+        win_x = 0
+        win_y = 0
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Top Right":
+        win_x = win32api.GetSystemMetrics(0) - win_width
+        win_y = 0
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Bottom Left":
+        win_x = 0
+        win_y = win32api.GetSystemMetrics(1) - win_height
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Bottom Right":
+        win_x = win32api.GetSystemMetrics(0) - win_width
+        win_y = win32api.GetSystemMetrics(1) - win_height
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Top":
+        win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+        win_y = 0
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Bottom":
+        win_x = (win32api.GetSystemMetrics(0) - win_width) // 2
+        win_y = win32api.GetSystemMetrics(1) - win_height
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Left":
+        win_x = 0
+        win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    elif position == "Right":
+        win_x = win32api.GetSystemMetrics(0) - win_width
+        win_y = (win32api.GetSystemMetrics(1) - win_height) // 2
+        win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    # Restore focus to the previously focused window
+    win32gui.SetForegroundWindow(focused_hwnd)
+    win32gui.BringWindowToTop(focused_hwnd)
+
+    # Print information
+    _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    window_executable = os.path.basename(psutil.Process(pid).exe())
+    print(f"Moved '{window_executable}' to '{position}'")
 
 
 def prompt_for_folder(title):
@@ -122,6 +221,7 @@ def wait_for_process_and_get_hwnd(executable_name: str, timeout_seconds: Optiona
     :return: The window handle (HWND) of the process.
     :raises: RuntimeError if no window handle is found for the process or if not found within the timeout.
     """
+
     start_time = time.time()
     while True:
         for proc in psutil.process_iter():
@@ -135,17 +235,26 @@ def wait_for_process_and_get_hwnd(executable_name: str, timeout_seconds: Optiona
             continue
         break
 
-    def callback(hwnd, hwnds):
-        _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-        if found_pid == pid:
-            hwnds.append(hwnd)
-        return True
+    start_time = time.time()
+    while True:
 
-    hwnds = []
-    win32gui.EnumWindows(callback, hwnds)
-    if not hwnds:
-        raise RuntimeError(f"No window handle found for process '{executable_name}'")
-    return hwnds[0]
+        def callback(hwnd, hwnds):
+            _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
+            if found_pid == pid:
+                hwnds.append(hwnd)
+            return True
+
+        hwnds = []
+        win32gui.EnumWindows(callback, hwnds)
+        if hwnds:
+            return hwnds[0]
+
+        if timeout_seconds is not None and time.time() - start_time > timeout_seconds:
+            raise RuntimeError(
+                f"No window handle found for process '{executable_name}' within {timeout_seconds} seconds"
+            )
+
+        time.sleep(0.1)
 
 
 def get_hwnd_for_exe(executable_name):

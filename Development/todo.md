@@ -1,4 +1,10 @@
 
+feature -> code editor menu handler class
+
+feature -> code game position -> Custom (Save)
+
+cleanup -> move various video settings video.txt calls into a general function
+
 feature -> consider making the menu just a popup menu rather than a gui again
 	add a close option
 
@@ -36,10 +42,16 @@ cleanup -> consider removing menu option specific code and just refresh the enti
 cleanup -> move related hud/.json related functions to a class
 	^ ask gpt about it. should i have a specific settings class that makes these modifications or something
 
+feature -> code showpanel. it needs to be shown/set in the editor menu and re-shown whenever the game commands
+	class reloads something
+
 feature -> gui icons
 feature -> gui position saving&loading
 feature -> gui button icons
 feature -> gui menu icons
+
+feature -> fix the editor gui activation hotkey
+	or switch back to menu hotkey - look into creating an entire new class instance so that the menu opens and closes properly each time
 
 feature -> add game class move method to game resolution method
 
