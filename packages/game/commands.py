@@ -5,6 +5,7 @@ import ctypes
 import vdf
 
 # import pyautogui
+import time
 import win32gui
 import win32con
 import win32api
@@ -26,16 +27,16 @@ class GameCommands:
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
         self.game = game_class
-        self.show_current_ui_panel = None
-        self.show_previous_ui_panel = None
+        self.show_ui_panel = None
+        self.previous_ui_panel = None
 
-    def show_ui_panel(self, panel):
+    def set_ui_panel(self, panel):
         """Set & show ui panel"""
 
         # set panel to be shown
-        self.show_current_ui_panel = panel
+        self.show_ui_panel = panel
 
-        print(f"show_ui_panel: {panel}")
+        print(f"set_ui_panel: {panel}")
 
     def _send_keys_in_foreground(self, keys):
         # pylint: disable=c-extension-no-member
@@ -57,14 +58,16 @@ class GameCommands:
         win32gui.BringWindowToTop(game_hwnd)
         for key in keys:
             win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
-            print(f"Holding down key: {KEY_MAP[key.lower()]}")
+            # print(f"Holding down key: {KEY_MAP[key.lower()]}")
         for key in reversed(keys):
             win32api.keybd_event(KEY_MAP[key.lower()], 0, win32con.KEYEVENTF_KEYUP, 0)
-            print(f"Releasing key: {KEY_MAP[key.lower()]}")
+            # print(f"Releasing key: {KEY_MAP[key.lower()]}")
 
         # Restore focus to the previously focused window
         if game_hwnd is not focused_hwnd:
             # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
+            # first SetForegroundWindow because pywinauto moves the cursor
+            win32gui.SetForegroundWindow(focused_hwnd)
             focused_app = Application().connect(handle=focused_hwnd)
             focused_app.top_window().set_focus()
 
@@ -101,10 +104,10 @@ class GameCommands:
         output_command = self._get_mapped_command(input_command.lower())
 
         # re-show ui panel if set
-        if self.show_current_ui_panel and "debug_zombie_panel" in self.show_current_ui_panel:
-            output_command += f"; wait; {self.show_current_ui_panel}"
+        if self.show_ui_panel and "debug_zombie_panel" in self.show_ui_panel:
+            output_command += f"; wait; {self.show_ui_panel}"
         else:
-            output_command += f"; wait; showpanel {self.show_current_ui_panel}"
+            output_command += f"; wait; showpanel {self.show_ui_panel}"
 
         # write command to file
         command_file = os.path.join(self.game.get_main_dir("dev"), "cfg", "hud_editor_command.cfg")
@@ -112,7 +115,7 @@ class GameCommands:
             file_handle.write(output_command)
 
         # close ui panel if needed
-        if self.show_current_ui_panel is "team" or "info":
+        if self.previous_ui_panel in ["team", "info"]:
             self._send_keys_in_foreground(["alt", "f4"])
 
         # execute command
@@ -120,7 +123,7 @@ class GameCommands:
         print(f"Executed command: '{output_command}'")
 
         # save previous panel to perform actions
-        self.show_previous_ui_panel = self.show_current_ui_panel
+        self.previous_ui_panel = self.show_ui_panel
 
     def _get_mapped_command(self, input_command):
         give_all_guns = (

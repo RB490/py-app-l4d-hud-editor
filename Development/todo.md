@@ -50,6 +50,10 @@ feature -> gui position saving&loading
 feature -> gui button icons
 feature -> gui menu icons
 
+bug -> sending keys to game in foreground moves the crosshair down to the floor
+	# game_instance.command._send_keys_in_foreground(["escape"])
+	^ this is because Application() uses a python workaround and moves the cursor off-screen
+
 feature -> fix the editor gui activation hotkey
 	or switch back to menu hotkey - look into creating an entire new class instance so that the menu opens and closes properly each time
 
@@ -100,12 +104,16 @@ feature -> send alt+f4 to game window (if needed) in GameCommands using this:
 		how do i want to display this?
 			adding more columns
 			status bar
-			
+		
+	cleanup -> break up game commands execute method by for example making a separate reload_hud method that moves
+		logic into there
 
 	feature -> progress gui for the installer class
 		install
 		update_or_repair
 		remove
+
+	cleanup -> constants.py key_scancodes & key_map same key names & availability
 
 	feature -> multi game support?
 

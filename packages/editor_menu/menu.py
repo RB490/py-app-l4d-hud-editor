@@ -6,7 +6,15 @@ import tkinter as tk
 from tkinter import Menu, PhotoImage
 import webbrowser
 from packages.editor_menu.handler import EditorMenuHandler
-from packages.utils.constants import GAME_POSITIONS, MAP_CODES, SNIPPETS_DIR, IMAGES_DIR, SCRIPT_DIR, TUTORIALS_DIR
+from packages.utils.constants import (
+    EDITOR_HUD_RELOAD_MODES,
+    GAME_POSITIONS,
+    MAP_CODES,
+    SNIPPETS_DIR,
+    IMAGES_DIR,
+    SCRIPT_DIR,
+    TUTORIALS_DIR,
+)
 from packages.utils.functions import (
     retrieve_hud_name_for_dir,
 )
@@ -238,14 +246,14 @@ class EditorMenuClass:
         game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
         self.game_mode_menu = tk.Menu(menubar, tearoff=0)
         self.game_mode_vars = {}
-        for reload_mode in game_modes:
-            self.game_mode_vars[reload_mode] = tk.BooleanVar()
+        for game_mode in game_modes:
+            self.game_mode_vars[game_mode] = tk.BooleanVar()
             self.game_mode_menu.add_checkbutton(
-                label=reload_mode,
-                variable=self.game_mode_vars[reload_mode],
+                label=game_mode,
+                variable=self.game_mode_vars[game_mode],
                 onvalue=True,
                 offvalue=False,
-                command=lambda mode=reload_mode: self.handler.editor_menu_game_mode(mode),
+                command=lambda mode=game_mode: self.handler.editor_menu_game_mode(mode),
             )
         self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
 
@@ -582,20 +590,22 @@ class EditorMenuClass:
         self.reload_mode_menu.add_command(label="Modes", state="disabled")
         self.reload_mode_menu.add_separator()
 
-        reload_modes = ["All", "Hud", "Menu", "Materials", "Fonts"]
-        for reload_mode in reload_modes:
+        # reload mode setting
+        for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             self.reload_mode_menu.add_command(
-                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_mode.lower()}")
+                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
             )
 
         self.reload_mode_menu.add_command(label="Options", state="disabled", columnbreak=True)
         self.reload_mode_menu.add_separator()
 
-        for reload_mode in reload_modes:
+        # reload once menu
+        for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             reload_once_menu.add_command(
-                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_mode.lower()}")
+                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
             )
 
+        # reload options
         self.reload_mode_menu.add_cascade(label="Once", menu=reload_once_menu)
         self.reload_mode_menu_coord_clicks_checkmark = tk.BooleanVar()
         self.reload_mode_menu.add_checkbutton(

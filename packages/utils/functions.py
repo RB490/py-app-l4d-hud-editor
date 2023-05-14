@@ -456,6 +456,9 @@ def load_data():
     if "reload_mouse_clicks_enabled" not in data:
         data["reload_mouse_clicks_enabled"] = False
 
+    if "editor_reload_mode" not in data:
+        data["editor_reload_mode"] = "reload_hud"
+
     # print(f"load_data: \n{json.dumps(data, sort_keys=True, indent=4)}")
     return data
 

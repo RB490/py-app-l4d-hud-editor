@@ -22,14 +22,21 @@ game_instance.run("dev")
 # debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
 
 # game_instance.command._send_keys_in_background(["alt", "f4"])
-# game_instance.command._send_keys_in_foreground(["escape"])
+game_instance.command._send_keys_in_foreground(["escape"])
 
-# game_instance.command.show_ui_panel("team")
+
+# game_instance.command.set_ui_panel("team")
 # game_instance.command.execute("reload_hud")
-# game_instance.command.show_ui_panel("info_window")
+# game_instance.command.set_ui_panel("team")
 # game_instance.command.execute("reload_hud")
-# game_instance.command.show_ui_panel("debug_zombie_panel 1")
+# game_instance.command.set_ui_panel("team")
 # game_instance.command.execute("reload_hud")
+# game_instance.command.set_ui_panel("info_window")
+# game_instance.command.execute("reload_hud")
+# game_instance.command.set_ui_panel("debug_zombie_panel 1")
+# game_instance.command.execute("reload_hud")
+
+# game_instance.command.execute("-jump; +jump")
 
 # hud_dir = "D:\\Programming and projects\\l4d-addons-huds\\4. l4d2-2020HUD\\source"
 # hud_name = retrieve_hud_name_for_dir(hud_dir)
