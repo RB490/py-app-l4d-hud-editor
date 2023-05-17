@@ -4,9 +4,11 @@ import json
 import os
 import winreg
 import time
+import tempfile
 import tkinter as tk
 from tkinter import filedialog
 from typing import Optional
+import pyautogui
 import win32gui
 import win32process
 import win32api
@@ -16,8 +18,64 @@ import vdf
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
 
-def move_hwnd_to_position(hwnd, position):
+def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
+    # pylint: disable=unused-variable
+    """
+    Creates a temporary directory and copies the contents of the input directory to it,
+    excluding any files without a file extension.
+
+    :param input_dir: The path of the input directory.
+    :type input_dir: str
+    :return: The path of the temporary directory.
+    :rtype: str
+    """
+    temp_dir = tempfile.mkdtemp()
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+            if "." in file:
+                file_path = os.path.join(root, file)
+                temp_path = os.path.join(temp_dir, file)
+                shutil.copy2(file_path, temp_path)
+    return temp_dir
+
+
+def focus_hwnd(hwnd):
     # pylint: disable=c-extension-no-member
+    """
+    Function to focus a window.
+
+    Alternate way to do this:
+        # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
+        # note that pywinauto moves the cursor. which has a side effect of
+        # for example moving the camera in source games
+        from pywinauto import Application
+        game_app = Application().connect(handle=game_hwnd)
+        game_app.top_window().set_focus()
+    """
+
+    # Check if the window handle is valid
+    if not win32gui.IsWindow(hwnd):
+        return
+
+    # Set the window to the foreground
+    win32gui.SetForegroundWindow(hwnd)
+
+    # If the window is minimized, restore it
+    if win32gui.IsIconic(hwnd):
+        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+
+    # Bring the window to the top
+    win32gui.BringWindowToTop(hwnd)
+
+    # Set the window's position and size to the foreground
+    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+    # Activate the window
+    win32gui.SetActiveWindow(hwnd)
+
+
+def move_hwnd_to_position(hwnd, position):
+    # pylint: disable=c-extension-no-member, unsubscriptable-object
     """
     This function moves a window (specified by its hwnd) to the desired position on the screen.
     `position` is a string that can take values from GAME_POSITIONS list.
@@ -104,8 +162,7 @@ def move_hwnd_to_position(hwnd, position):
         win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
 
     # Restore focus to the previously focused window
-    win32gui.SetForegroundWindow(focused_hwnd)
-    win32gui.BringWindowToTop(focused_hwnd)
+    focus_hwnd(focused_hwnd)
 
     # Print information
     _, pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -420,6 +477,54 @@ def get_steam_info(persistent_data=None):
     return steam_info
 
 
+def move_cursor_to(coordinates):
+    # pylint: disable=invalid-name
+    """
+    Moves the mouse cursor to the specified (x, y) coordinate on screen.
+
+    Arguments:
+    coordinates -- a tuple with (x, y) values representing the desired cursor position.
+    """
+    x, y = coordinates[0], coordinates[1]
+    pyautogui.moveTo(x, y)
+
+
+def click_at(coordinates):
+    # pylint: disable=invalid-name
+    """
+    Performs a left mouse click at the specified (x, y) coordinate on screen.
+
+    Arguments:
+    coordinates -- a tuple with (x, y) values representing the desired click position.
+    """
+    x, y = coordinates[0], coordinates[1]
+    pyautogui.click(x, y)
+
+
+def get_mouse_position_on_click(callback):
+    """
+    Calls the callback function with the x, y coordinates of where the user clicks the mouse on the screen.
+
+    This function creates a fullscreen window that listens for a mouse click event.
+    When clicked, it destroys the window and calls the callback function with the (x,y) coordinates of the click.
+    If the user cancels the operation or closes the window, the function calls the callback function with (None,None).
+    """
+    root = tk.Tk()
+    root.attributes("-fullscreen", True)  # make window fullscreen
+    root.attributes("-topmost", True)  # keep window on top
+    root.attributes("-alpha", 0.1)  # set transparency to 0.5 (125/255)
+    root.overrideredirect(True)  # remove window decorations
+
+    def on_click(event):
+        pos_x, pos_y = event.x_root, event.y_root
+        print(f"Mouse clicked at ({pos_x}, {pos_y})")
+        root.destroy()  # destroy the window when mouse is clicked
+        callback(pos_x, pos_y)
+
+    root.bind("<ButtonPress>", on_click)
+    root.mainloop()
+
+
 def load_data():
     """Read persistent data from disk"""
     file_path = PERSISTENT_DATA_PATH
@@ -453,8 +558,17 @@ def load_data():
     if "game_res" not in data:
         data["game_res"] = (1600, 900)
 
+    if "reload_reopen_menu_on_reload" not in data:
+        data["reload_reopen_menu_on_reload"] = False
+
     if "reload_mouse_clicks_enabled" not in data:
         data["reload_mouse_clicks_enabled"] = False
+
+    if "reload_mouse_clicks_coord_1" not in data:
+        data["reload_mouse_clicks_coord_1"] = None
+
+    if "reload_mouse_clicks_coord_2" not in data:
+        data["reload_mouse_clicks_coord_2"] = None
 
     if "editor_reload_mode" not in data:
         data["editor_reload_mode"] = "reload_hud"

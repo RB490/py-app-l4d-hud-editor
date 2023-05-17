@@ -16,13 +16,13 @@ game_instance = Game(persistent_data)
 hud_instance = Hud(game_instance)
 # debug_hud()
 
-print(f"Game version: {game_instance.get_version()}")
-game_instance.run("dev")
+# print(f"Game version: {game_instance.get_version()}")
+# game_instance.run("dev")
 # game_instance.move("Center")
-# debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
+debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
 
 # game_instance.command._send_keys_in_background(["alt", "f4"])
-game_instance.command._send_keys_in_foreground(["escape"])
+# game_instance.command.send_keys_in_foreground(["escape"])
 
 
 # game_instance.command.set_ui_panel("team")

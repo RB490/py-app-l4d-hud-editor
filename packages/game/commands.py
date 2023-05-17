@@ -2,18 +2,15 @@
 functions related to the game folder such as switching between user/dev modes"""
 import os
 import ctypes
+import time
+import pyautogui
 import vdf
 
-# import pyautogui
-import time
 import win32gui
 import win32con
 import win32api
-from pywinauto import Application
 from packages.utils.constants import KEY_MAP, KEY_SCANCODES
-
-# import pydirectinput
-from packages.utils.functions import get_steam_info
+from packages.utils.functions import click_at, focus_hwnd, get_steam_info
 
 
 class GameCommands:
@@ -29,16 +26,28 @@ class GameCommands:
         self.game = game_class
         self.show_ui_panel = None
         self.previous_ui_panel = None
+        self.is_inspect_hud_enabled = False
+
+    def set_inspect_hud(self, status: bool) -> None:
+        """Set inspect hud status for usage in the execute method"""
+        assert isinstance(status, bool), "status must be a Boolean value"
+        if status:
+            print("HUD inspection enabled.")
+            self.is_inspect_hud_enabled = True
+        else:
+            print("HUD inspection disabled.")
+            self.is_inspect_hud_enabled = False
+        self.execute("vgui_drawtree 1")
 
     def set_ui_panel(self, panel):
-        """Set & show ui panel"""
+        """Set & show ui panel for usage in the execute method"""
 
         # set panel to be shown
         self.show_ui_panel = panel
 
         print(f"set_ui_panel: {panel}")
 
-    def _send_keys_in_foreground(self, keys):
+    def send_keys_in_foreground(self, keys):
         # pylint: disable=c-extension-no-member
         """
         Send specified keys to game
@@ -49,13 +58,17 @@ class GameCommands:
             - Chat detects these keypresses. Also while in the 'escape' ingame main menu
             - Normal commands like executing something bound to 'o' don't get detected
         """
+        # Get window handle
         game_hwnd = self.game.get_hwnd()
+
+        # Check if the window handle is valid
+        if not win32gui.IsWindow(game_hwnd):
+            return
 
         # Save the handle of the currently focused window
         focused_hwnd = win32gui.GetForegroundWindow()
 
-        win32gui.SetForegroundWindow(game_hwnd)
-        win32gui.BringWindowToTop(game_hwnd)
+        focus_hwnd(game_hwnd)
         for key in keys:
             win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
             # print(f"Holding down key: {KEY_MAP[key.lower()]}")
@@ -65,13 +78,10 @@ class GameCommands:
 
         # Restore focus to the previously focused window
         if game_hwnd is not focused_hwnd:
-            # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
-            # first SetForegroundWindow because pywinauto moves the cursor
-            win32gui.SetForegroundWindow(focused_hwnd)
-            focused_app = Application().connect(handle=focused_hwnd)
-            focused_app.top_window().set_focus()
+            focus_hwnd(focused_hwnd)
 
-    def _send_keys_in_background(self, keys):
+    def send_keys_in_background(self, keys):
+        # pylint: disable=c-extension-no-member
         """
         Sends one or more key presses to the game window using the Windows API.
 
@@ -86,10 +96,16 @@ class GameCommands:
         - Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
         """
 
+        # Get window handle
+        hwnd = self.game.get_hwnd()
+
+        # Check if the window handle is valid
+        if not win32gui.IsWindow(hwnd):
+            return
+
         wm_keydown = 0x100
         wm_keyup = 0x101
 
-        hwnd = self.game.get_hwnd()
         for key in keys:
             scancode = KEY_SCANCODES[key.lower()]
             keydown_param = scancode << 16 | 1
@@ -116,11 +132,28 @@ class GameCommands:
 
         # close ui panel if needed
         if self.previous_ui_panel in ["team", "info"]:
-            self._send_keys_in_foreground(["alt", "f4"])
+            self.send_keys_in_foreground(["alt", "f4"])
+
+        # toggle inspect hud (vgui_drawtree)
+        if self.is_inspect_hud_enabled:
+            self.send_keys_in_foreground(["alt", "f4"])
+            output_command += "; vgui_drawtree 1; wait; "
 
         # execute command
-        self._send_keys_in_background(["f11"])
+        self.send_keys_in_background(["f11"])
         print(f"Executed command: '{output_command}'")
+
+        # perform mouse clicks
+        if self.persistent_data["reload_mouse_clicks_enabled"]:
+            click_at(self.persistent_data["reload_mouse_clicks_coord_1"])
+            click_at(self.persistent_data["reload_mouse_clicks_coord_2"])
+
+        # reopen menu
+        if self.persistent_data["reload_reopen_menu_on_reload"]:
+            time.sleep(0.25)  # wait until completely finished
+            pyautogui.press("esc")
+            time.sleep(0.025)  # ensure the key presses are both detected
+            pyautogui.press("esc")
 
         # save previous panel to perform actions
         self.previous_ui_panel = self.show_ui_panel

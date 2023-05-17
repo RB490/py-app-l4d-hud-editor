@@ -7,7 +7,7 @@ import sys
 from tkinter import filedialog
 from tkinter import messagebox
 import easygui
-from packages.classes.vpk import VPK
+from packages.classes.vpk import VPKClass
 from packages.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
 from packages.utils.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
 
@@ -377,7 +377,7 @@ class GameManager:
             print(f'comparing "{dev_pak[0]}" to "{user_pak[0]}"')
             if not filecmp.cmp(dev_pak[0], user_pak[0]):
                 print(f'pak out of date! extracting "{dev_pak[0]}"')
-                vpk_class = VPK()
+                vpk_class = VPKClass()
                 vpk_class.extract(dev_pak[0], dev_pak[1])
 
             i += 1
@@ -389,7 +389,7 @@ class GameManager:
         dev_dir = self.get_dir("dev")
 
         def extract_callback(filepath, output_dir):
-            vpk_class = VPK()
+            vpk_class = VPKClass()
             vpk_class.extract(filepath, output_dir)
 
         self._find_pak_files(dev_dir, extract_callback)

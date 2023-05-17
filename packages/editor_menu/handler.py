@@ -5,7 +5,13 @@ import pyperclip
 import vdf
 from packages.classes.get_user_input import get_user_input
 from packages.utils.constants import UNIVERSAL_GAME_MAP
-from packages.utils.functions import prompt_add_existing_hud, prompt_open_temp_hud, remove_stored_hud, remove_temp_hud
+from packages.utils.functions import (
+    get_mouse_position_on_click,
+    prompt_add_existing_hud,
+    prompt_open_temp_hud,
+    remove_stored_hud,
+    remove_temp_hud,
+)
 
 
 class EditorMenuHandler:
@@ -139,7 +145,7 @@ class EditorMenuHandler:
     def editor_give_items(self, action):
         """TODO: probably redirect the give items menu to editor_menu_execute_command"""
         # Define the function to be called when a menu item is selected
-        print(f"Executing action '{action}'")
+        self.game.command.execute(action)
 
     def editor_add_existing_hud(self):
         """Add exiting hud to the menu"""
@@ -165,6 +171,7 @@ class EditorMenuHandler:
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
         print(f"todo: {hud_dir}")
+        self.hud.start_editing(hud_dir)
 
     def editor_exit_script(self):
         """Exit script"""
@@ -198,31 +205,44 @@ class EditorMenuHandler:
 
     def editor_inspect_hud(self):
         """Show inspect hud gui (vgui_drawtree)"""
-        print("editor_inspect_hud")
+        self.game.command.set_inspect_hud(self.editor_menu.editor_menu_inspect_hud_checkmark.get())
 
     def editor_chat_debug_spam_w(self):
         """Spam W's to debug chat"""
-        print("editor_chat_debug_spam_w")
+
+        long_string = "W" * 144
+        self.game.command.execute(f"say {long_string}")
 
     def editor_hide_game_world(self):
         """Hide game world"""
-        print("Hide game world")
+        if self.editor_menu.editor_menu_hide_world_checkmark.get() is True:
+            self.game.command.execute("r_drawWorld 0; r_drawEntities 0")
+        else:
+            self.game.command.execute("r_drawWorld 1; r_drawEntities 1")
 
     def editor_unsync_hud(self):
         """Unsync hud"""
-        print("editor_unsync_hud")
+        self.hud.un_sync()
 
     def editor_save_as_vpk(self):
         """Export hud as vpk"""
-        print("editor_save_as_vpk")
+        self.hud.save_vpk_file()
 
     def editor_save_as_folder(self):
         """Export hud as folder"""
-        print("editor_save_as_folder")
+        self.hud.save_as_folder()
+
+    def editor_menu_reload_reopen_menu(self):
+        """Repen menu on reload setting"""
+        self.persistent_data["reload_reopen_menu_on_reload"] = not self.persistent_data["reload_reopen_menu_on_reload"]
+        self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(
+            self.persistent_data["reload_reopen_menu_on_reload"]
+        )
+        self.editor_menu.create_and_refresh_menu()
+        print(self.persistent_data["reload_reopen_menu_on_reload"])
 
     def editor_menu_reload_click(self):
         """Toggle reload click coordinate"""
-        print("editor_save_as_folder")
         self.persistent_data["reload_mouse_clicks_enabled"] = not self.persistent_data["reload_mouse_clicks_enabled"]
         self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(
             self.persistent_data["reload_mouse_clicks_enabled"]
@@ -231,13 +251,35 @@ class EditorMenuHandler:
         print(self.persistent_data["reload_mouse_clicks_enabled"])
 
     def editor_menu_reload_click_coord1(self):
+        # pylint: disable=invalid-name
         """Set reload click coordinate"""
-        print("editor_menu_reload_click_coord1")
+
+        def xy_coord_callback(x, y):
+            if x is not None and y is not None:
+                print(f"The mouse was clicked at ({x}, {y})")
+                self.persistent_data["reload_mouse_clicks_coord_1"] = ((x), (y))
+            else:
+                print("The operation was cancelled or the window was closed")
+
+            print(self.persistent_data["reload_mouse_clicks_coord_1"])
+
+        get_mouse_position_on_click(xy_coord_callback)
 
     def editor_menu_reload_click_coord2(self):
+        # pylint: disable=invalid-name
         """Set reload click coordinate"""
-        print("editor_menu_reload_click_coord2")
 
-    def editor_menu_send_keys(self, keys):
+        def xy_coord_callback(x, y):
+            if x is not None and y is not None:
+                print(f"The mouse was clicked at ({x}, {y})")
+                self.persistent_data["reload_mouse_clicks_coord_2"] = ((x), (y))
+            else:
+                print("The operation was cancelled or the window was closed")
+
+            print(self.persistent_data["reload_mouse_clicks_coord_2"])
+
+        get_mouse_position_on_click(xy_coord_callback)
+
+    def editor_menu_disconnect(self):
         """Send input keys to game"""
-        print(f"editor_menu_send_keys: {keys}")
+        self.game.command.send_keys_in_background("f11")

@@ -1,6 +1,4 @@
 
-feature -> code editor menu handler class
-
 feature -> code game position -> Custom (Save)
 
 cleanup -> move various video settings video.txt calls into a general function

@@ -95,7 +95,7 @@ class EditorMenuClass:
         # main menu
         self.game_map_menu.add_command(
             label="Main Menu",
-            command=self.create_lambda_command(self.handler.editor_menu_send_keys, "{F11}"),
+            command=self.handler.editor_menu_disconnect,
         )
         self.game_map_menu.add_separator()
 
@@ -609,13 +609,21 @@ class EditorMenuClass:
         self.reload_mode_menu.add_cascade(label="Once", menu=reload_once_menu)
         self.reload_mode_menu_coord_clicks_checkmark = tk.BooleanVar()
         self.reload_mode_menu.add_checkbutton(
-            label="Reopen menu on reload",
+            label="Reload clicks",
             variable=self.reload_mode_menu_coord_clicks_checkmark,
             command=self.handler.editor_menu_reload_click,
         )
         self.reload_mode_menu_coord_clicks_checkmark.set(self.persistent_data["reload_mouse_clicks_enabled"])
         self.reload_mode_menu.add_command(label="Coord 1", command=self.handler.editor_menu_reload_click_coord1)
         self.reload_mode_menu.add_command(label="Coord 2", command=self.handler.editor_menu_reload_click_coord2)
+
+        self.reload_mode_menu_reopen_menu_checkmark = tk.BooleanVar()
+        self.reload_mode_menu_reopen_menu_checkmark.set(self.persistent_data["reload_reopen_menu_on_reload"])
+        self.reload_mode_menu.add_checkbutton(
+            label="Reopen menu on reload",
+            variable=self.reload_mode_menu_reopen_menu_checkmark,
+            command=self.handler.editor_menu_reload_reopen_menu,
+        )
 
     def create_clipboard_menu(self, menubar):
         """Create give items menu"""
@@ -671,9 +679,24 @@ class EditorMenuClass:
         # ----------------------------------
 
         self.tools_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.tools_menu.add_command(label="Inspect", command=self.handler.editor_inspect_hud)
+        self.editor_menu_inspect_hud_checkmark = tk.BooleanVar()
+        self.tools_menu.add_checkbutton(
+            label="Inspect",
+            variable=self.editor_menu_inspect_hud_checkmark,
+            command=self.handler.editor_inspect_hud,
+            columnbreak=False,
+        )
         self.tools_menu.add_command(label="Chat Debug (WWWW)", command=self.handler.editor_chat_debug_spam_w)
-        self.tools_menu.add_command(label="Hide World", command=self.handler.editor_hide_game_world)
+
+        # self.tools_menu.add_command(label="Hide World", command=self.handler.editor_hide_game_world)
+        self.editor_menu_hide_world_checkmark = tk.BooleanVar()
+        self.tools_menu.add_checkbutton(
+            label="Hide world",
+            variable=self.editor_menu_hide_world_checkmark,
+            command=self.handler.editor_hide_game_world,
+            columnbreak=False,
+        )
+
         self.tools_menu.add_cascade(label="Clipboard", menu=self.clipboard_menu)
 
         # ----------------------------------
@@ -717,24 +740,24 @@ class EditorMenuClass:
         self.game_menu.add_cascade(label="Map", menu=self.game_map_menu)
         self.game_menu.add_cascade(label="Mode", menu=self.game_mode_menu)
 
-        self.handler.editor_menu_game_insecure_checkmark = tk.BooleanVar()
+        self.editor_menu_game_insecure_checkmark = tk.BooleanVar()
         self.game_menu.add_checkbutton(
             label="Insecure",
-            variable=self.handler.editor_menu_game_insecure_checkmark,
+            variable=self.editor_menu_game_insecure_checkmark,
             command=self.handler.editor_menu_game_toggle_insecure,
             columnbreak=True,
         )
 
-        self.handler.editor_menu_game_mute_checkmark = tk.BooleanVar()
+        self.editor_menu_game_mute_checkmark = tk.BooleanVar()
         self.game_menu.add_checkbutton(
             label="Muted",
-            variable=self.handler.editor_menu_game_mute_checkmark,
+            variable=self.editor_menu_game_mute_checkmark,
             command=self.handler.editor_menu_game_toggle_mute,
         )
         if self.persistent_data["game_mute"]:
-            self.handler.editor_menu_game_mute_checkmark.set(1)
+            self.editor_menu_game_mute_checkmark.set(1)
         else:
-            self.handler.editor_menu_game_mute_checkmark.set(0)
+            self.editor_menu_game_mute_checkmark.set(0)
         self.game_menu.add_command(label="Restart", columnbreak=False, command=self.handler.editor_menu_game_restart)
         self.game_menu.add_command(label="Close", columnbreak=False, command=self.handler.editor_menu_game_close)
 

@@ -6,7 +6,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
-from packages.classes.vpk import VPK
+from packages.classes.vpk import VPKClass
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
 from packages.utils.constants import IMAGES_DIR
 
@@ -222,7 +222,7 @@ class GuiHudStart:
 
         if export_path:
             print(export_path)
-            vpk_class = VPK()
+            vpk_class = VPKClass()
             vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
             # vpk_class.create(self, input_dir, output_dir, output_file_name):
 

@@ -1,9 +1,12 @@
 """Creating & extracting VPK files"""
 import os
+import shutil
 import vpk
 
+from packages.utils.functions import create_temp_dir_from_input_dir_exclude_files_without_extension
 
-class VPK:
+
+class VPKClass:
     """
     A class representing a VPK (Valve Package) file.
 
@@ -63,8 +66,11 @@ class VPK:
         elif not os.path.exists(output_dir):
             raise ValueError(f"output_directory does not exist: {output_dir}")
 
+        # exclude files without extensions as they are not supported
+        vpk_dir = create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir)
+
         # create new VPK
-        new_vpk = vpk.new(input_dir)
+        new_vpk = vpk.new(vpk_dir)
 
         # save the VPK
         output_file_name = os.path.splitext(output_file_name)[0] + ".vpk"
@@ -72,14 +78,17 @@ class VPK:
         new_vpk.save(output_path)
         print(f"Created VPK: {output_path}")
 
+        # clean temporary dir
+        shutil.rmtree(vpk_dir)
+
 
 if __name__ == "__main__":
     # Extracting a file
-    vpk_file_class = VPK()
+    vpk_file_class = VPKClass()
     # vpk_file_class.extract()
 
     # Creating a file
-    vpk_file_class = VPK()
+    vpk_file_class = VPKClass()
     # vpk_file_class.create()
 
     print("finished")

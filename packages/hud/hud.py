@@ -1,6 +1,9 @@
 """Methods related to editing a hud"""
 import os
 import threading
+from tkinter.filedialog import asksaveasfilename
+import easygui
+from packages.classes.vpk import VPKClass
 from packages.gui.descriptions import GuiHudDescriptions
 from packages.hud.descriptions import HudDescriptions
 from packages.hud.syncer import HudSyncer
@@ -8,8 +11,8 @@ from packages.hud.syncer import HudSyncer
 # pylint: disable=unused-import
 from packages.gui.browser import GuiHudBrowser
 from packages.game import Game
-from packages.utils.functions import load_data
-from packages.utils.constants import DEVELOPMENT_DIR, NEW_HUD_DIR
+from packages.utils.functions import copy_directory_contents, load_data
+from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, NEW_HUD_DIR
 
 
 class Hud:
@@ -49,6 +52,54 @@ class Hud:
                 files_dict[filename] = file_desc
         return files_dict
 
+    def save_as_folder(self):
+        """Save hud as folder"""
+
+        source_dir = self.get_dir()
+
+        # verify directory
+        assert os.path.isdir(source_dir)
+
+        target_dir = easygui.diropenbox(
+            msg="Please select the target directory", title="Select Target Directory", default=""
+        )
+
+        # Check if target directory already exists and has any files in it
+        if os.path.exists(target_dir) and len(os.listdir(target_dir)) > 0:
+            # Prompt user whether to overwrite the target directory or not
+            response = easygui.boolbox(
+                msg=f"The directory {target_dir} already exists and is not empty. Do you want to overwrite it?",
+                title="Confirmation",
+                choices=("Yes", "No"),
+            )
+            if not response:
+                return
+
+        # copy the contents of source_dir to target_dir
+        copy_directory_contents(source_dir, target_dir)
+
+    def save_vpk_file(self):
+        """Save hud as vpk file"""
+
+        # verify directory
+        assert os.path.isdir(self.get_dir())
+
+        # Prompt the user to select a file location to save the VPK file
+        file_path = asksaveasfilename(
+            defaultextension=".vpk", filetypes=[("Valve Package Files", "*.vpk"), ("All Files", "*.*")]
+        )
+
+        if file_path:
+            # Perform the VPK file saving logic here
+            # You can use the chosen file_path variable to save the file
+
+            vpk_file_class = VPKClass()
+            vpk_file_class.create(self.get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
+
+            print(f"VPK file saved at: {file_path}")
+        else:
+            print("Saving canceled.")
+
     def start_game_exit_check(self):
         """Start game exit check"""
         # Stop any currently running thread
@@ -76,11 +127,18 @@ class Hud:
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
+
         print(f"start_editing: ({hud_dir})")
 
         # verify parameters
         assert os.path.isdir(hud_dir)
         self.hud_dir = hud_dir
+
+        # debug mode - prompt to start game
+        if DEBUG_MODE:
+            result = easygui.ynbox("Start editing HUD ingame?", "Confirmation", ("Yes", "No"))
+            if not result:
+                return
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:
@@ -107,6 +165,14 @@ class Hud:
         # Start checking for game exit
         self.wait_for_game_exit_then_finish_editing()
 
+    def un_sync(self):
+        """Unsync loaded hud"""
+
+        self.syncer.un_sync()
+
+        # clear variables
+        self.hud_dir = None
+
     def finish_editing(self):
         """Perform all the actions needed to finish hud editing"""
         print("finish_editing")
@@ -116,6 +182,9 @@ class Hud:
 
         # unsync hud
         self.syncer.un_sync()
+
+        # clear variables
+        self.hud_dir = None
 
         # enable user mode
         self.game.activate_mode("user")
