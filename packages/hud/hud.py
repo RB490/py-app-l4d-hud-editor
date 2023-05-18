@@ -42,7 +42,13 @@ class Hud:
     def get_files_dict(self):
         """Retrieve key:value dict for the hud files"""
         # pylint: disable=unused-variable
-        root_folder = self.hud_dir
+
+        # verify variables
+        if not self.get_dir() or not os.path.exists(self.get_dir()):
+            # if hasattr(self, "hud_dir") and not os.path.exists(self.get_dir()):
+            return
+
+        root_folder = self.get_dir()
         files_dict = {}
         for dirpath, dirnames, filenames in os.walk(root_folder):
             for filename in filenames:

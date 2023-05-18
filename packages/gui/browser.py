@@ -2,15 +2,19 @@
 import tkinter as tk
 from tkinter import ttk
 
+from packages.editor_menu.menu import EditorMenuClass
+
 
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
-    def __init__(self, hud_instance):
+    def __init__(self, hud_instance, game_instance, persistent_data):
         print("GuiHudBrowser")
 
         # set variables
         self.hud = hud_instance
+        self.game = game_instance
+        self.persistent_data = persistent_data
         self.root = tk.Tk()
         self.root.title("Browser")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -70,6 +74,10 @@ class GuiHudBrowser:
         # Link the Scrollbar to the Treeview widget
         self.treeview.configure(yscrollcommand=scrollbar.set)
 
+        # editor menu
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, game_instance, hud_instance)
+        self.my_editor_menu.create_and_refresh_menu()
+
         # draw controls
         # self.Add("Text", "section", "Search")
         # self._fileFilterRadio = self.Add("radio", f"xs+{self.width - 90} ys", "All", self.Radio_Handler.Bind(self))
@@ -107,6 +115,10 @@ class GuiHudBrowser:
             data_dict = self.hud.get_all_files_dict()
         else:
             data_dict = self.hud.get_files_dict()
+
+        # check if there is anything to refresh
+        if not data_dict or not len(data_dict):
+            return
 
         # Clear existing items in the Treeview
         treeview.delete(*treeview.get_children())

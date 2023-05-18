@@ -770,5 +770,5 @@ class EditorMenuClass:
         self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
         self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
         self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
-        self.menu_bar.add_command(label="Close", command=self.do_nothing)
+        # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying popup
         self.root.config(menu=self.menu_bar)

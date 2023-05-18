@@ -28,7 +28,7 @@ class GuiEditorMenu:
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
         self.root = tk.Tk()
-        self.root.geometry("300x200")
+        # self.root.geometry("300x200")
         self.root.title("Hud Editor")
         # self.root.withdraw()
         self.is_hidden = False
@@ -37,10 +37,11 @@ class GuiEditorMenu:
         self.hud = hud_instance
         self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, game_instance, hud_instance)
         self.my_editor_menu.create_and_refresh_menu()
-        # keyboard.add_hotkey("F4", self.show_menu, suppress=True)
+        # keyboard.add_hotkey("F4", self.show_menu, suppress=True) # doesn't work nice - stays open when it loses focus
         keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
 
-        self.root.mainloop()
+        self.show_menu()
+        # self.root.mainloop()
 
     def toggle_visibility(self):
         """

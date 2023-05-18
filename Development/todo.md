@@ -1,8 +1,5 @@
 -------------------------------------------------Features
 
-feature -> menu -> gui -> consider making the menu just a popup menu rather than a gui again
-	look into creating an entire new class instance so that the menu opens and closes when it loses focus each time
-
 feature -> menu -> finish remaining menu handlers
 	feature -> menu -> code game position -> Custom (Save)
 	feature -> menu -> make help > hotkeys > ingame & global hotkey menu entries functional
@@ -19,7 +16,7 @@ feature -> menu -> finish remaining menu handlers
 
 
 
-t
+
 
 
 

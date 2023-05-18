@@ -3,7 +3,11 @@
 import os
 import time
 import winsound  # winsound.Beep(1250, 125)
+import pyautogui
+import keyboard
+from packages.editor_menu.menu import EditorMenuClass
 from packages.game import Game
+from packages.gui.browser import GuiHudBrowser
 from packages.gui.editor_menu import debug_gui_editor_menu
 from packages.hud.hud import Hud, debug_hud
 from packages.hud.descriptions import debug_hud_descriptions
@@ -16,10 +20,12 @@ game_instance = Game(persistent_data)
 hud_instance = Hud(game_instance)
 # debug_hud()
 
+
 # print(f"Game version: {game_instance.get_version()}")
 # game_instance.run("dev")
 # game_instance.move("Center")
-debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
+# debug_gui_editor_menu(persistent_data, game_instance, hud_instance)
+browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data)
 
 # game_instance.command._send_keys_in_background(["alt", "f4"])
 # game_instance.command.send_keys_in_foreground(["escape"])
