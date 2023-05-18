@@ -1,6 +1,8 @@
 """Module for the hud browser gui class"""
 import tkinter as tk
 from tkinter import ttk
+import keyboard
+import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
 
@@ -19,6 +21,8 @@ class GuiHudBrowser:
         self.root.title("Browser")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 100)
+        # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
+        self.is_hidden = False
 
         # draw controls
         # create a frame for all widgets
@@ -78,6 +82,12 @@ class GuiHudBrowser:
         self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, game_instance, hud_instance)
         self.my_editor_menu.create_and_refresh_menu()
 
+        # hotkeys
+        keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
+
+        # set hwnd
+        self.hwnd = win32gui.GetParent(self.frame.winfo_id())
+
         # draw controls
         # self.Add("Text", "section", "Search")
         # self._fileFilterRadio = self.Add("radio", f"xs+{self.width - 90} ys", "All", self.Radio_Handler.Bind(self))
@@ -88,6 +98,21 @@ class GuiHudBrowser:
         # )
 
         self.treeview_refresh(self.treeview)
+
+        self.root.mainloop()
+
+    def toggle_visibility(self):
+        """
+        Toggles the visibility of the window between visible and hidden.
+
+        Because python can't focus windows (win32 has a function but it doesn't work, wow.) set it to always on top
+        """
+        if self.is_hidden:
+            self.root.deiconify()
+            self.is_hidden = False
+        else:
+            self.root.withdraw()
+            self.is_hidden = True
 
     def handle_radio_click(self):
         """Handle clicks on radio buttons."""
