@@ -23,8 +23,12 @@ from packages.utils.functions import (
 class EditorMenuClass:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
-    def __init__(self, child_instance, root, persistent_data, game_instance, hud_instance):
-        self.handler = EditorMenuHandler(self, persistent_data, game_instance, hud_instance)
+    def __init__(
+        self, child_instance, root, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+    ):
+        self.handler = EditorMenuHandler(
+            self, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+        )
         self.root = root
         self.child_instance = child_instance
         self.persistent_data = persistent_data
@@ -121,13 +125,13 @@ class EditorMenuClass:
         self.game_map_menu.add_cascade(
             label="L4D1",
             menu=map_menu_l4d1,
-            image=self.map_menu_l4d1_icon,
+            # image=self.map_menu_l4d1_icon,
             compound=tk.LEFT,
         )
         self.game_map_menu.add_cascade(
             label="L4D2",
             menu=map_menu_l4d2,
-            image=self.map_menu_l4d2_icon,
+            # image=self.map_menu_l4d2_icon,
             compound=tk.LEFT,
         )
 

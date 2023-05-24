@@ -1,15 +1,11 @@
 -------------------------------------------------Features
+	
+feature -> enable settings saving before script closes - and/or save settings to disk throughout the script?
 
-feature -> menu -> finish remaining menu handlers
-	feature -> menu -> code game position -> Custom (Save)
-	feature -> menu -> make help > hotkeys > ingame & global hotkey menu entries functional
-	& more
+bug -> fix menu l4d1&l4d2 grayscale icons
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
-
-
-
 
 
 
@@ -117,3 +113,5 @@ restructuring -> move related hud/.json related functions to a class
 restructuring -> constants.py key_scancodes & key_map same key names & availability
 
 restructuring -> aided with gpt's go through the script improving functions, methods and the overall structure
+
+feature -> menu -> make help > hotkeys > ingame & global hotkey menu entries functional

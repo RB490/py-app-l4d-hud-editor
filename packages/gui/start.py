@@ -117,6 +117,8 @@ class GuiHudStart:
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
         self.update_treeview()
+        # self.root.mainloop()
+        self.root.withdraw()  # hide gui
 
     def on_finish_hud_editing(self):
         """Called by hud class with callback"""
@@ -329,4 +331,3 @@ class GuiHudStart:
 def debug_hud_select_gui(persistent_data, installer_instance, hud_instance):
     """Debug the gui"""
     app = GuiHudStart(persistent_data, installer_instance, hud_instance)
-    app.root.mainloop()

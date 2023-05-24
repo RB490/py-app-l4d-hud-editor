@@ -3,6 +3,7 @@ import shutil
 import os
 import subprocess
 import psutil
+import win32gui
 import vdf
 from packages.game.manager import GameManager
 from packages.game.commands import GameCommands
@@ -37,6 +38,12 @@ class Game:
         # input('press enter to force close game')
         # self.close()
         # self.run("dev")
+
+    def save_position(self):
+        # pylint: disable=c-extension-no-member
+        """Save window position"""
+        rect = win32gui.GetWindowRect(self.get_hwnd())
+        self.persistent_data["game_pos_custom_coord"] = (rect[0], rect[1])
 
     def set_hwnd(self):
         """Retrieve game hwnd"""
@@ -89,9 +96,21 @@ class Game:
         return os.path.join(self.get_main_dir("dev"), "cfg")
 
     def move(self, position):
+        # pylint: disable=c-extension-no-member
         """Move window to position"""
         assert position in GAME_POSITIONS, "Invalid position"
-        move_hwnd_to_position(self.get_hwnd(), position)
+
+        if "custom" in position.lower():
+            window_pos = self.persistent_data.get("game_pos_custom_coord")  # using get method to avoid KeyError
+
+            if (
+                isinstance(window_pos, tuple)
+                and len(window_pos) == 2
+                and all(isinstance(i, int) and i >= 0 for i in window_pos)
+            ):
+                win32gui.SetWindowPos(self.get_hwnd(), 0, *window_pos, 0, 0, 0)
+        else:
+            move_hwnd_to_position(self.get_hwnd(), position)
 
     def is_running(self):
         """Checks if the game is running"""

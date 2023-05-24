@@ -211,7 +211,7 @@ class GameCommands:
             video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
 
             has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
-            is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
+            is_fullscreen = 1
 
             video_settings["VideoConfig"]["setting.fullscreen"] = 0
             vdf.dump(video_settings, open(video_settings_path, "w", encoding="utf-8"), pretty=True)
@@ -219,19 +219,13 @@ class GameCommands:
             width = video_settings["VideoConfig"]["setting.defaultres"]
             height = video_settings["VideoConfig"]["setting.defaultresheight"]
             has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
-            is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
-            # toggle windowMode to conform to the mat_setvideo command; video.txt file saves windowed mode as 0
-            # and fullscreen as 1. so the exact opposite as mat_setvideomode
-            if is_fullscreen == 0:
-                is_fullscreen = 1
-            elif is_fullscreen == 1:
-                is_fullscreen = 0
+            is_fullscreen = 1
         else:
             # use default video settings
             width = 1920
             height = 1080
             has_border = 1
-            is_fullscreen = 1  # 1=windowed
+            is_fullscreen = 1
 
         # resize the game to be really small
         output = f"mat_setvideomode 1 1 {int(is_fullscreen)} {int(has_border)}"
