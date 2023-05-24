@@ -1,5 +1,6 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 import os
+import sys
 from tkinter import messagebox
 import pyperclip
 import vdf
@@ -17,7 +18,11 @@ from packages.utils.functions import (
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
-    def __init__(self, editor_menu_instance, persistent_data, game_instance, hud_instance):
+    def __init__(
+        self, editor_menu_instance, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+    ):
+        self.browser_instance = browser_instance
+        self.start_instance = start_instance
         self.editor_menu = editor_menu_instance
         self.persistent_data = persistent_data
         self.game = game_instance
@@ -53,14 +58,11 @@ class EditorMenuHandler:
             print(video_settings)
 
             has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
-            is_fullscreen = video_settings["VideoConfig"]["setting.fullscreen"]
-            # toggle windowMode to conform to the mat_setvideo command; video.txt file saves windowed mode as 0
-            # and fullscreen as 1. so the exact opposite as mat_setvideomode
-            is_fullscreen = not is_fullscreen
+            is_fullscreen = 1
         else:
             # use default video settings
             has_border = 1
-            is_fullscreen = 1  # 1=windowed
+            is_fullscreen = 1
 
         # set new resolution
         res_w = self.persistent_data["game_res"][0]
@@ -78,6 +80,10 @@ class EditorMenuHandler:
         print(f"Selected Game Position: {pos}")
 
         self.persistent_data["game_pos"] = pos
+
+        if "custom" in pos.lower():
+            self.persistent_data["game_pos_custom_coord"] = pos
+
         self.game.move(pos)
         self.editor_menu.create_and_refresh_menu()
 
@@ -173,25 +179,38 @@ class EditorMenuHandler:
         print(f"todo: {hud_dir}")
         self.hud.start_editing(hud_dir)
 
+        # refresh menu (selected hud)
+        self.editor_menu.create_and_refresh_menu()
+
     def editor_exit_script(self):
         """Exit script"""
-        print("editor_exit_script: todo")
+
+        self.hud.finish_editing()
+        sys.exit()
 
     def editor_open_hud_select(self):
         """Open hud select gui"""
         print("editor_open_hud_select: todo")
+        self.start_instance.show()
 
     def editor_open_hud_browser(self):
         """Open hud browser"""
         print("editor_open_hud_browser: todo")
+        self.browser_instance.show()
 
     def editor_open_folder(self, input_dir):
         """Open folder"""
         print(f"editor_open_folder todo: {input_dir}")
+        directory = input_dir
+        if os.path.isdir(directory):
+            os.startfile(directory)
+        else:
+            messagebox.showerror("Error", "Source directory does not exist!")
 
     def editor_open_folder_in_vscode(self, input_dir):
         """Open folder"""
         print(f"editor_open_folder_in_vscode todo: {input_dir}")
+        os.system(f'start /b cmd /c code . "{input_dir}"')
 
     def editor_prompt_game_command(self):
         """Prompt & execute game command"""

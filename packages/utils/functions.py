@@ -57,21 +57,30 @@ def focus_hwnd(hwnd):
     if not win32gui.IsWindow(hwnd):
         return
 
-    # Set the window to the foreground
-    win32gui.SetForegroundWindow(hwnd)
+    try:
+        # Set the window to the foreground
+        win32gui.SetForegroundWindow(hwnd)
 
-    # If the window is minimized, restore it
-    if win32gui.IsIconic(hwnd):
-        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+        # # If the window is minimized, restore it
+        if win32gui.IsIconic(hwnd):
+            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
 
-    # Bring the window to the top
-    win32gui.BringWindowToTop(hwnd)
+        # # Bring the window to the top
+        win32gui.BringWindowToTop(hwnd)
 
-    # Set the window's position and size to the foreground
-    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+        # # Set the window's position and size to the foreground
+        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
 
-    # Activate the window
-    win32gui.SetActiveWindow(hwnd)
+        # Set the window to topmost
+        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+        # Disable topmost
+        win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+        # # Activate the window
+        win32gui.SetActiveWindow(hwnd)  # <- this works for tkinter gui's in combination with topmost
+    except ValueError:
+        print("Could not focus window")
 
 
 def move_hwnd_to_position(hwnd, position):
@@ -551,6 +560,9 @@ def load_data():
 
     if "game_pos" not in data:
         data["game_pos"] = "Center"
+
+    if "game_pos_custom_coord" not in data:
+        data["game_pos_custom_coord"] = None
 
     if "game_mode" not in data:
         data["game_mode"] = "Coop"

@@ -10,7 +10,7 @@ from packages.editor_menu.menu import EditorMenuClass
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
-    def __init__(self, hud_instance, game_instance, persistent_data):
+    def __init__(self, hud_instance, game_instance, persistent_data, start_instance):
         print("GuiHudBrowser")
 
         # set variables
@@ -79,7 +79,9 @@ class GuiHudBrowser:
         self.treeview.configure(yscrollcommand=scrollbar.set)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, game_instance, hud_instance)
+        self.my_editor_menu = EditorMenuClass(
+            self, self.root, persistent_data, game_instance, hud_instance, start_instance, self
+        )
         self.my_editor_menu.create_and_refresh_menu()
 
         # hotkeys
@@ -88,18 +90,18 @@ class GuiHudBrowser:
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
-        # draw controls
-        # self.Add("Text", "section", "Search")
-        # self._fileFilterRadio = self.Add("radio", f"xs+{self.width - 90} ys", "All", self.Radio_Handler.Bind(self))
-        # self._fileFilterRadio = self.Add("radio", "x+5 Checked", "Added", self.Radio_Handler.Bind(self))
-        # self._searchEdit = self.Add("edit", f"xs w{self.width}", "", self.Lv_Refresh.Bind(self))
-        # self.Lv = self.ListView(
-        #     self, f"w{self.width} r20 AltSubmit -LV0x10", "File|Description|Path", self.Lv_Handler.Bind(self)
-        # )
-
         self.treeview_refresh(self.treeview)
 
         self.root.mainloop()
+        # self.hide()
+
+    def show(self):
+        self.root.deiconify()
+        self.is_hidden = False
+
+    def hide(self):
+        self.root.withdraw()
+        self.is_hidden = True
 
     def toggle_visibility(self):
         """
@@ -108,11 +110,9 @@ class GuiHudBrowser:
         Because python can't focus windows (win32 has a function but it doesn't work, wow.) set it to always on top
         """
         if self.is_hidden:
-            self.root.deiconify()
-            self.is_hidden = False
+            self.show()
         else:
-            self.root.withdraw()
-            self.is_hidden = True
+            self.hide()
 
     def handle_radio_click(self):
         """Handle clicks on radio buttons."""
