@@ -2,7 +2,17 @@
 	
 feature -> enable settings saving before script closes - and/or save settings to disk throughout the script?
 
-bug -> fix menu l4d1&l4d2 grayscale icons
+feature -> Make the main gui optional by adding all it's functionality into the menu class
+
+feature -> finish editing options
+	in editor menu
+	(maybe) on browser gui button
+
+refactor -> rename gui browser to something more descriptive as it now displays hud files & editor menu
+
+feature -> test hud editing to figure out how i want the code path to go. for example:
+	1. on script start show start gui
+	2. when the 'browser' gui gets closed close script instead of opening the start gui
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
@@ -26,6 +36,11 @@ bug -> fix menu l4d1&l4d2 grayscale icons
 
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+
+bug -> fix menu l4d1&l4d2 grayscale icons
+	is not just these icons but any icon. tried garbage collection fix
+	^ started being a problem after i moved the menu into the browser class
+
 feature -> gui's icons
 feature -> gui's position saving&loading
 feature -> gui's button icons
@@ -59,8 +74,6 @@ feature -> progress gui for the installer class
 	update_or_repair
 	remove
 
-feature -> Make the main gui optional? By adding all it's functionality into the hud? class and then
-	linking them both to the select gui and editor menu
 
 feature -> multi game support (?)
 

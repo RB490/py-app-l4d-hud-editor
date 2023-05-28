@@ -24,7 +24,7 @@ hud_instance = Hud(game_instance)
 
 
 # print(f"Game version: {game_instance.get_version()}")
-game_instance.run("dev")
+# game_instance.run("dev")
 # game_instance.move("Center")
 start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
 browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)

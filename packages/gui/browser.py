@@ -5,12 +5,14 @@ import keyboard
 import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
+from packages.utils.functions import exit_script
 
 
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
     def __init__(self, hud_instance, game_instance, persistent_data, start_instance):
+        # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
 
         # set variables
@@ -96,10 +98,12 @@ class GuiHudBrowser:
         # self.hide()
 
     def show(self):
+        """Show gui"""
         self.root.deiconify()
         self.is_hidden = False
 
     def hide(self):
+        """Hide gui"""
         self.root.withdraw()
         self.is_hidden = True
 
@@ -142,7 +146,7 @@ class GuiHudBrowser:
             data_dict = self.hud.get_files_dict()
 
         # check if there is anything to refresh
-        if not data_dict or not len(data_dict):
+        if not data_dict:
             return
 
         # Clear existing items in the Treeview
@@ -161,4 +165,4 @@ class GuiHudBrowser:
 
     def on_close(self):
         """Runs on close"""
-        print("on_close")
+        exit_script(self.persistent_data, self.hud)

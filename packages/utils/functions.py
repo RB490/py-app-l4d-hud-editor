@@ -589,13 +589,6 @@ def load_data():
     return data
 
 
-def save_data_on_exit(data):
-    """Save persistent data to disk on exit"""
-    # Save data to a file, database, or other persistent storage
-    print("save_data_on_exit")
-    save_data(data)
-
-
 def save_data(data):
     """Save persistent data to disk"""
     print(f"save_data: {data}")
@@ -606,3 +599,9 @@ def save_data(data):
             file.write(pretty_json)
     except (FileNotFoundError, TypeError):
         print(f"Error saving data to {PERSISTENT_DATA_PATH}")
+
+
+def exit_script(persistent_data, hud_instance):
+    """Exit the script"""
+    hud_instance.finish_editing()
+    save_data(persistent_data)

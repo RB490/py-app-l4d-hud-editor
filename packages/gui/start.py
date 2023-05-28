@@ -329,5 +329,6 @@ class GuiHudStart:
 
 
 def debug_hud_select_gui(persistent_data, installer_instance, hud_instance):
+    # pylint: disable=unused-variable
     """Debug the gui"""
     app = GuiHudStart(persistent_data, installer_instance, hud_instance)

@@ -87,14 +87,22 @@ class EditorMenuClass:
         """Create game map menu"""
 
         self.game_map_menu = tk.Menu(menubar, tearoff=0)
+        # self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
+
+        if os.path.exists(os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")):
+            print("The directory path exists.")
+        else:
+            print("The directory path does not exist or is invalid.")
 
         self.map_menu_l4d1_icon = PhotoImage(
+            # file=os.path.join(IMAGES_DIR, "cross128.png")
             file=os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")
         ).subsample(1, 1)
-        self.map_menu_l4d2_icon = PhotoImage(
-            file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
-        ).subsample(1, 1)
-        self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
+        # self.map_menu_l4d2_icon = PhotoImage(
+        #     file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
+        # ).subsample(1, 1)
+
+        self.map_menu_l4d2_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png"))
 
         # main menu
         self.game_map_menu.add_command(
@@ -132,6 +140,7 @@ class EditorMenuClass:
             label="L4D2",
             menu=map_menu_l4d2,
             # image=self.map_menu_l4d2_icon,
+            # image=test_obj.map_menu_l4d2_icon,
             compound=tk.LEFT,
         )
 
