@@ -2,6 +2,7 @@
 import shutil
 import json
 import os
+import sys
 import winreg
 import time
 import tempfile
@@ -603,5 +604,6 @@ def save_data(data):
 
 def exit_script(persistent_data, hud_instance):
     """Exit the script"""
-    hud_instance.finish_editing()
+    hud_instance.finish_editing(False)  # no callback to start gui
     save_data(persistent_data)
+    sys.exit()

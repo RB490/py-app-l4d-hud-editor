@@ -179,7 +179,7 @@ class Hud:
         # clear variables
         self.hud_dir = None
 
-    def finish_editing(self):
+    def finish_editing(self, callback=True):
         """Perform all the actions needed to finish hud editing"""
         print("finish_editing")
 
@@ -196,7 +196,7 @@ class Hud:
         self.game.activate_mode("user")
 
         # callback to the gui
-        if self.finish_editing_callback:
+        if callback and self.finish_editing_callback:
             self.finish_editing_callback()
 
 

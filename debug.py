@@ -23,6 +23,12 @@ hud_instance = Hud(game_instance)
 # debug_hud()
 
 
+# import atexit
+# def save_data_before_exit():
+#     input("press enter to fully exit the script")
+# atexit.register(save_data_before_exit)
+
+
 # print(f"Game version: {game_instance.get_version()}")
 # game_instance.run("dev")
 # game_instance.move("Center")
