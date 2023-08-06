@@ -12,6 +12,7 @@ from packages.gui.editor_menu import debug_gui_editor_menu
 from packages.gui.start import GuiHudStart
 from packages.hud.hud import Hud, debug_hud
 from packages.hud.descriptions import debug_hud_descriptions
+from packages.hud.syncer import debug_hud_syncer
 from packages.utils.constants import KEY_MAP
 from packages.utils.functions import load_data, retrieve_hud_name_for_dir
 
@@ -22,7 +23,8 @@ os.system("cls")  # clear terminal
 # start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
 # browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
 
-debug_hud()
+debug_hud_syncer()
+# debug_hud()
 
 
 # import atexit

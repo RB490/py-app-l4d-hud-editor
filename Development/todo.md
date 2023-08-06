@@ -1,33 +1,21 @@
-https://pypi.org/project/ahk/
-
 -------------------------------------------------Features
 
-refactor -> rename gui browser to something more descriptive?
-	as it now displays hud files & editor menu
 
-feature -> syncer -> write un_sync()
+feature -> create functioning core functionality: ability to edit a hud
+	feature -> add manual 'finish editing' access options @ editor menu, (maybe) browser gui button
+	feature -> browser -> treeview doubleclick action
+	feature -> test hud editing to figure out how i want the code path to go. for example:
+		1. on script start show start gui
+		2. when the 'browser' gui gets closed close script instead of opening the start gui
 
-feature -> Make the main gui optional by adding all it's functionality into the menu class
 
-feature -> finish editing options
-	in editor menu
-	(maybe) on browser gui button
-
-feature -> test hud editing to figure out how i want the code path to go. for example:
-	1. on script start show start gui
-	2. when the 'browser' gui gets closed close script instead of opening the start gui
-
+feature -> browser -> treeview context menu
+feature -> browser -> also add buttons for the treeview context menu options
+feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
 refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
-
-
-
-
-
-
-
 
 
 
@@ -47,10 +35,8 @@ bug -> fix menu l4d1&l4d2 grayscale icons
 	^ started being a problem after i moved the menu into the browser class
 
 feature -> gui's icons
-feature -> gui's position saving&loading
 feature -> gui's button icons
-feature -> gui's menu icons
-feature -> main gui -> menu icons
+feature -> menu icons
 	import tkinter as tk
 
 	root = tk.Tk()

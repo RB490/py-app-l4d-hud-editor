@@ -35,8 +35,21 @@ def get_all_files_and_dirs(dir_path):
     return file_and_dir_list
 
 
-def get_all_sub_dirs(dir_path):
-    """Returns a list of all the subdirectories in dir_path"""
+def get_subdirectories_names(dir_path):
+    """Returns a list of names of all subdirectories in the given directory_path
+
+    Example:
+        Input:
+            path/to/your/directory/
+            ├── subfolder1/
+            ├── subfolder2/
+            ├── file1.txt
+            ├── subfolder3/
+            └── file2.txt
+        Output:
+            Subdirectories: ['subfolder1', 'subfolder2', 'subfolder3']
+
+    """
     files_and_dirs = os.listdir(dir_path)
     dirs = [f for f in files_and_dirs if os.path.isdir(os.path.join(dir_path, f))]
     return dirs
@@ -47,13 +60,13 @@ class HudSyncer:
 
     def __init__(self):
         self.is_synced = False
-        self.source_dir = None
-        self.target_dir_root = None
-        self.target_dir_main_name = None
-        self.target_sub_dir_names = None
-        self.hud_items_custom = []
-        self.hud_items_previous = []
-        self.hud_items = None
+        self.source_dir = None  # hud folder
+        self.target_dir_root = None  # eg: '..\steamapps\common\Left 4 Dead 2'
+        self.target_dir_main_name = None  # 'left4dead2' as opposed to 'left4dead2_dlc1'
+        self.target_sub_dir_names = None  # eg: 'left4dead2_dlc1'
+        self.hud_items_custom = []  # the custom hud files and directories
+        self.hud_items_previous = []  # the previous hud files and directories. used to compare and find deletes items
+        self.hud_items = None  # the hud files and directories
 
     def get_source_dir(self):
         """Return source directory"""
@@ -68,7 +81,16 @@ class HudSyncer:
         if not self.get_sync_status():
             return
 
-        print("TODO: write un_sync")
+        print(f"un_sync hud items: {self.hud_items}")
+
+        # Explanation: Modifying a list while iterating can cause unexpected behavior.
+        # List length and positions change, disrupting iteration. This leads to skipped items or errors,
+        # e.g., removing items while iterating can miss or access wrong indices.
+        hud_items_copy = self.hud_items.copy()
+
+        for item in hud_items_copy:
+            print(f"un_sync item: {item}")
+            self._unsync_item(item)
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         # pylint: disable=anomalous-backslash-in-string
@@ -100,7 +122,7 @@ class HudSyncer:
         self.source_dir = source_dir
         self.target_dir_root = target_dir
         self.target_dir_main_name = target_dir_main_name
-        self.target_sub_dir_names = get_all_sub_dirs(target_dir)
+        self.target_sub_dir_names = get_subdirectories_names(target_dir)
         self.hud_items = get_all_files_and_dirs(self.source_dir)
 
         # Backup game files
@@ -138,7 +160,7 @@ class HudSyncer:
                     and not os.path.isdir(target_item)
                 ):
                     os.rename(target_item, target_item_backup)
-                    # print(f"{target_item} -> {target_item_backup}")
+                    print(f"{target_item} -> {target_item_backup}")
 
         # print(f"custom items: {self.hud_items_custom}")
 
@@ -207,9 +229,10 @@ class HudSyncer:
                     shutil.move(target_item_backup, target_item)
                     print(f"{target_item_backup} -> {target_item}")
 
-        # remove custom file from list
+        # remove file from lists
         if target_item in self.hud_items_custom:
             self.hud_items_custom.remove(target_item)
+        # self.hud_items.remove(item)
 
 
 def debug_hud_syncer():
@@ -232,9 +255,12 @@ def debug_hud_syncer():
 
     hud_syncer = HudSyncer()
     hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
-    input("enter to sync a second time")
-    hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # input("enter to sync a second time")
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
     # input("enter to sync a third time")
     # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
     # input("enter to sync a fourth time")
     # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+
+    input("enter to unsync")
+    hud_syncer.un_sync()
