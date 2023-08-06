@@ -26,6 +26,13 @@ class GuiHudBrowser:
         # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
         self.is_hidden = False
 
+        # load saved geometry
+        try:
+            geometry = self.persistent_data["BrowserGuiGeometry"]
+            self.root.geometry(geometry)
+        except KeyError:
+            self.root.geometry("1000x1000+100+100")
+
         # draw controls
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
@@ -163,6 +170,14 @@ class GuiHudBrowser:
                 continue
             treeview.insert("", "end", values=(key, value))
 
+    def save_window_geometry(self):
+        """Save size & position"""
+        # Get the current position and size of the window
+        geometry = self.root.geometry()
+        print(f"geometry: {geometry}")
+        self.persistent_data["BrowserGuiGeometry"] = geometry
+
     def on_close(self):
         """Runs on close"""
+        self.save_window_geometry()
         exit_script(self.persistent_data, self.hud)

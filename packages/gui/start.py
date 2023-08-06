@@ -118,7 +118,7 @@ class GuiHudStart:
         self.root.config(menu=menu_bar)
         self.update_treeview()
         # self.root.mainloop()
-        self.root.withdraw()  # hide gui
+        # self.root.withdraw()  # hide gui
 
     def on_finish_hud_editing(self):
         """Called by hud class with callback"""
@@ -303,7 +303,6 @@ class GuiHudStart:
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
-        print("todo: start_hud_editing")  # self.selected_hud_dir
 
         # hide gui
         self.on_hide()

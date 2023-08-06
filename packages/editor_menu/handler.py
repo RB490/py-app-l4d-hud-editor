@@ -149,7 +149,6 @@ class EditorMenuHandler:
         self.game.command.execute(execute_command)
 
     def editor_give_items(self, action):
-        """TODO: probably redirect the give items menu to editor_menu_execute_command"""
         # Define the function to be called when a menu item is selected
         self.game.command.execute(action)
 
@@ -165,7 +164,7 @@ class EditorMenuHandler:
 
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
-        print(f"todo: {hud_dir}")
+        print(f"editor_remove_temp_hud: {hud_dir}")
         remove_temp_hud(self.persistent_data, hud_dir)
         self.editor_menu.create_and_refresh_menu()
 
@@ -176,7 +175,6 @@ class EditorMenuHandler:
 
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
-        print(f"todo: {hud_dir}")
         self.hud.start_editing(hud_dir)
 
         # refresh menu (selected hud)
@@ -190,17 +188,17 @@ class EditorMenuHandler:
 
     def editor_open_hud_select(self):
         """Open hud select gui"""
-        print("editor_open_hud_select: todo")
+        print("editor_open_hud_select")
         self.start_instance.show()
 
     def editor_open_hud_browser(self):
         """Open hud browser"""
-        print("editor_open_hud_browser: todo")
+        print("editor_open_hud_browser")
         self.browser_instance.show()
 
     def editor_open_folder(self, input_dir):
         """Open folder"""
-        print(f"editor_open_folder todo: {input_dir}")
+        print(f"editor_open_folder: {input_dir}")
         directory = input_dir
         if os.path.isdir(directory):
             os.startfile(directory)
@@ -209,7 +207,7 @@ class EditorMenuHandler:
 
     def editor_open_folder_in_vscode(self, input_dir):
         """Open folder"""
-        print(f"editor_open_folder_in_vscode todo: {input_dir}")
+        print(f"editor_open_folder_in_vscode: {input_dir}")
         os.system(f'start /b cmd /c code . "{input_dir}"')
 
     def editor_prompt_game_command(self):

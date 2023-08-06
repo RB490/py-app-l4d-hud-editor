@@ -1,8 +1,11 @@
 https://pypi.org/project/ahk/
 
 -------------------------------------------------Features
-	
-feature -> enable settings saving before script closes - and/or save settings to disk throughout the script?
+
+refactor -> rename gui browser to something more descriptive?
+	as it now displays hud files & editor menu
+
+feature -> syncer -> write un_sync()
 
 feature -> Make the main gui optional by adding all it's functionality into the menu class
 
@@ -10,11 +13,11 @@ feature -> finish editing options
 	in editor menu
 	(maybe) on browser gui button
 
-refactor -> rename gui browser to something more descriptive as it now displays hud files & editor menu
-
 feature -> test hud editing to figure out how i want the code path to go. for example:
 	1. on script start show start gui
 	2. when the 'browser' gui gets closed close script instead of opening the start gui
+
+refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc

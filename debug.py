@@ -16,11 +16,13 @@ from packages.utils.constants import KEY_MAP
 from packages.utils.functions import load_data, retrieve_hud_name_for_dir
 
 os.system("cls")  # clear terminal
-persistent_data = load_data()
-game_instance = Game(persistent_data)
-hud_instance = Hud(game_instance)
+# persistent_data = load_data()
+# game_instance = Game(persistent_data)
+# hud_instance = Hud(game_instance)
+# start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
+# browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
 
-# debug_hud()
+debug_hud()
 
 
 # import atexit
@@ -32,8 +34,6 @@ hud_instance = Hud(game_instance)
 # print(f"Game version: {game_instance.get_version()}")
 # game_instance.run("dev")
 # game_instance.move("Center")
-start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
-browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
 # debug_gui_editor_menu(persistent_data, game_instance, hud_instance, start_instance, browser_instance)
 
 # game_instance.command._send_keys_in_background(["alt", "f4"])

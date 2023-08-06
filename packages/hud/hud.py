@@ -5,6 +5,7 @@ from tkinter.filedialog import asksaveasfilename
 import easygui
 from packages.classes.vpk import VPKClass
 from packages.gui.descriptions import GuiHudDescriptions
+from packages.gui.start import GuiHudStart
 from packages.hud.descriptions import HudDescriptions
 from packages.hud.syncer import HudSyncer
 
@@ -212,8 +213,11 @@ def debug_hud():
     hud_edit = Hud(game_instance)
     hud_edit.hud_dir = hud_debug_dir
 
-    hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
-    hud_desc_gui.root.mainloop()
+    # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
+    # hud_desc_gui.root.mainloop()
+
+    start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
+    browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
 
     # hud_edit.start_editing(hud_debug_dir)
     # gui_browser = GuiHudBrowser(hud_edit)
