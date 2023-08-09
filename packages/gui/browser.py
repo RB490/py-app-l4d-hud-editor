@@ -20,8 +20,8 @@ class GuiHudBrowser:
         # set variables
         self.hud = hud_instance
         self.game = game_instance
-        self.persistent_data = persistent_data
         self.root = tk.Tk()
+        self.persistent_data = persistent_data
         self.root.title("Browser")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 100)
@@ -49,7 +49,7 @@ class GuiHudBrowser:
 
         self.search_box = tk.Text(self.search_frame, height=1, wrap=None, width=10)
         self.search_box.pack(side="left", fill="x", expand=True, padx=5, pady=0)
-        self.search_box.bind("<KeyRelease>", self.search_treeview)
+        self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # create Radiobuttons
         self.display_choice = tk.StringVar(value="Added")
@@ -87,9 +87,22 @@ class GuiHudBrowser:
         # Create a Scrollbar widget
         scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=self.treeview.yview)
         scrollbar.pack(side="right", fill="y")
-
         # Link the Scrollbar to the Treeview widget
         self.treeview.configure(yscrollcommand=scrollbar.set)
+
+        # Create a context menu
+        self.context_menu = tk.Menu(self.treeview, tearoff=False)
+
+        # Add options to the context menu
+        self.context_menu.add_command(label="Compile", command=self.dummy_handler)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="Open File", command=self.dummy_handler)
+        self.context_menu.add_command(label="Open Folder", command=self.dummy_handler)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="Refresh", command=self.treeview_refresh)
+
+        # Bind the context menu to the right-click event on the treeview
+        self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
         self.my_editor_menu = EditorMenuClass(
@@ -105,8 +118,12 @@ class GuiHudBrowser:
 
         self.treeview_refresh(self.treeview)
 
+        self.hide()
         self.root.mainloop()
-        # self.hide()
+
+    def dummy_handler(self):
+        "Dummy method"
+        print('dummy')
 
     def show(self):
         """Show gui"""
@@ -136,7 +153,7 @@ class GuiHudBrowser:
         print(f"Radio button clicked: {display_choice}")
         self.treeview_refresh(self.treeview)
 
-    def search_treeview(self, event):
+    def treeview_search(self, event):
         """Search treeview"""
         # pylint: disable=unused-argument
 
@@ -145,6 +162,19 @@ class GuiHudBrowser:
 
         # Refresh the Treeview with the search term
         self.treeview_refresh(self.treeview, search_term=search_term if search_term else None)
+
+    def treeview_show_context_menu(self, event):
+        """Treeview context menu"""
+
+        # Identify the item clicked using event's coordinates
+        item = self.treeview.identify_row(event.y)
+
+        # Select the item (optional, but it visually indicates the clicked item)
+        if item:
+            self.treeview.selection_set(item)
+
+        # Show the context menu at the event's coordinates
+        self.context_menu.post(event.x_root, event.y_root)
 
     def treeview_get_selected_values(self):
         """Get a list of the values of the selected treeview row"""

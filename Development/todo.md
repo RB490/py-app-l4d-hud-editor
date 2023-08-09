@@ -1,33 +1,15 @@
 -------------------------------------------------Features
 
-
 feature -> create functioning core functionality: ability to edit a hud
-	testing -> create test class for hud syncer
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
 		2. when the 'browser' gui gets closed close script instead of opening the start gui
 
 feature -> browser -> treeview context menu
 feature -> browser -> also add buttons for the treeview context menu options
+
 feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
-refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
-refactor -> improve class instance names
-	start_instance -> start_gui
-	browsing_instance -> browser_gui
 
-testing -> create test class for hud descriptions
-
-refactoring -> replace easygui
-	refactoring -> replace easygui.diropenbox with tkinter filedialog
-	refactoring -> replace easygui.boolbox with show_message
-	refactoring -> replace easygui.buttonboxes with show_message
-			# Example usage
-			response = show_message("This is a message.", "okcancel")
-			if response is not None:
-				if response:
-					print("User clicked OK")
-				else:
-					print("User clicked Cancel")
 
 
 -------------------------------------------------Restructuring
@@ -92,6 +74,28 @@ idea -> instead of using a gui for the main control use the default console inte
 	possibly with a package that has a few more options
 
 -------------------------------------------------Do-Last Restructuring
+refactor -> shared_utils base tkinter gui class which gets used by (all) my other guis. should contain all the basics
+
+refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
+refactor -> improve class instance names
+	start_instance -> start_gui
+	browsing_instance -> browser_gui
+
+unit testing -> create test class for hud descriptions
+unit testing -> create test class for hud syncer
+
+refactoring -> replace easygui
+	refactoring -> replace easygui.diropenbox with tkinter filedialog
+	refactoring -> replace easygui.boolbox with show_message
+	refactoring -> replace easygui.buttonboxes with show_message
+			# Example usage
+			response = show_message("This is a message.", "okcancel")
+			if response is not None:
+				if response:
+					print("User clicked OK")
+				else:
+					print("User clicked Cancel")
+
 cleanup -> move various video settings video.txt calls into a general function
 
 restructuring -> break up game commands execute method by for example making a separate reload_hud method that moves
