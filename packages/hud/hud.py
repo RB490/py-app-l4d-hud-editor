@@ -127,7 +127,7 @@ class Hud:
         """Used to finish editing when game closes"""
 
         if not self.game.is_running():
-            self.finish_editing(True)
+            self.finish_editing(use_gui_callback=True)
         else:
             # Schedule the function to be called again
             self.start_game_exit_check()
@@ -211,24 +211,28 @@ class Hud:
         if use_gui_callback and self.finish_editing_gui_callback:
             self.finish_editing_gui_callback()
 
-
-def debug_hud():
-    # pylint: disable=unused-variable
-    """Debug the hud class"""
-    print("debug_hud")
-
+def get_hud_debug_instance():
     persistent_data = load_data()
     game_instance = Game(persistent_data)
     huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
     hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
     hud_edit = Hud(game_instance)
     hud_edit.hud_dir = hud_debug_dir
+    return hud_edit
 
+def debug_hud():
+    # pylint: disable=unused-variable
+    """Debug the hud class"""
+    print("debug_hud")
+
+
+    hud_instance = get_hud_debug_instance()
+        
     # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
     # hud_desc_gui.root.mainloop()
 
-    start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
-    start_instance.show()
+    # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
+    # start_instance.show()
     # browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
     # browser_instance.show()
 

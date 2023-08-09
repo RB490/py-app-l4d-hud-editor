@@ -247,3 +247,9 @@ class GuiHudBrowser:
         """Runs on close"""
         self.save_window_geometry()
         save_and_exit_script(self.persistent_data, self.hud)
+
+
+def debug_browser(hud_instance, game_instance, persistent_data, start_instance):
+    print("debug_browser")
+    browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
+    browser_instance.show()

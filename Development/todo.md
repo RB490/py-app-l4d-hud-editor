@@ -1,5 +1,6 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
+
 feature -> create browser instance in/ before the start gui so that the open/close hotkey works & make it only work
 while:
 	- the game is running
