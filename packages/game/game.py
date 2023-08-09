@@ -10,6 +10,7 @@ from packages.game.manager import GameManager
 from packages.utils.functions import (
     get_steam_info,
     is_process_running,
+    is_valid_window,
     load_data,
     move_hwnd_to_position,
     wait_for_process_and_get_hwnd,
@@ -96,6 +97,10 @@ class Game:
 
     def get_hwnd(self):
         """Retrieve information"""
+
+        if self.game_hwnd is None or not is_valid_window(self.game_hwnd):
+            self.set_hwnd()
+
         return self.game_hwnd
 
     def get_main_dir(self, mode):

@@ -1,4 +1,5 @@
 """Functions used throughout the program"""
+import ctypes
 import shutil
 import json
 import os
@@ -84,6 +85,8 @@ def focus_hwnd(hwnd):
     except ValueError:
         print("Could not focus window")
 
+def is_valid_window(hwnd):
+    return ctypes.windll.user32.IsWindow(hwnd)
 
 def move_hwnd_to_position(hwnd, position):
     # pylint: disable=c-extension-no-member, unsubscriptable-object
@@ -92,8 +95,14 @@ def move_hwnd_to_position(hwnd, position):
     `position` is a string that can take values from GAME_POSITIONS list.
     """
 
+    print(f'move_hwnd_to_position: hwnd: {hwnd} position: {position}')
+
+    # Validate the hwnd argument
+    if hwnd is None or not is_valid_window(hwnd):
+        raise ValueError(f"Invalid hwnd: {hwnd}")
     # Validate the position argument
-    assert position in GAME_POSITIONS, "Invalid position"
+    if position not in GAME_POSITIONS:
+        raise ValueError(f"Invalid position: {position}")
 
     # Save the handle of the currently focused window
     focused_hwnd = win32gui.GetForegroundWindow()
