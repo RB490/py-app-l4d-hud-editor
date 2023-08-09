@@ -60,10 +60,10 @@ def show_message(msg, msgbox_type="info"):
         if msgbox_type in valid_msgbox_types:
             root = tk.Tk()
             root.withdraw()  # Hide the main window
-            
+
             # Capture the response of the messagebox
             response = valid_msgbox_types[msgbox_type]("Message Box Title", msg)
-            
+
             # Return the response to the caller
             return response
         else:

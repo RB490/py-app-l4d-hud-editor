@@ -7,9 +7,11 @@ import pyautogui
 import keyboard
 from packages.editor_menu.menu import EditorMenuClass
 from packages.game import Game
+from packages.game.game import debug_game_class
+from packages.game.manager import GameManager
 from packages.gui.browser import GuiHudBrowser
 from packages.gui.editor_menu import debug_gui_editor_menu
-from packages.gui.start import GuiHudStart
+from packages.gui.start import GuiHudStart, debug_gui_start
 from packages.hud.hud import Hud, debug_hud
 from packages.hud.descriptions import debug_hud_descriptions
 from packages.hud.syncer import debug_hud_syncer
@@ -20,23 +22,16 @@ os.system("cls")  # clear terminal
 # persistent_data = load_data()
 # game_instance = Game(persistent_data)
 # hud_instance = Hud(game_instance)
+# installer_instance = GameManager(persistent_data, game_instance)
 # start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
 # browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
 
+# debug_game_class()
 # debug_hud_syncer()
 debug_hud()
 
 
-# import atexit
-# def save_data_before_exit():
-#     input("press enter to fully exit the script")
-# atexit.register(save_data_before_exit)
-
-
-# print(f"Game version: {game_instance.get_version()}")
-# game_instance.run("dev")
-# game_instance.move("Center")
-# debug_gui_editor_menu(persistent_data, game_instance, hud_instance, start_instance, browser_instance)
+# debug_gui_start(persistent_data, installer_instance, hud_instance)
 
 
 input("Finished! Press enter to continue..")

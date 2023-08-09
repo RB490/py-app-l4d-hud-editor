@@ -164,7 +164,7 @@ class Hud:
         self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
 
         # hotkeys
-        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync(), suppress=True)
+        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
 
         # run the game
         self.game.run("dev")
@@ -177,7 +177,7 @@ class Hud:
 
     def sync(self):
         """Sync hud"""
-        
+
         self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
 
     def un_sync(self):
@@ -228,8 +228,9 @@ def debug_hud():
     # hud_desc_gui.root.mainloop()
 
     start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
-    browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
-    browser_instance.show()
+    start_instance.show()
+    # browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
+    # browser_instance.show()
 
     # hud_edit.start_editing(hud_debug_dir)
     # gui_browser = GuiHudBrowser(hud_edit)

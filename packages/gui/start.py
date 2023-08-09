@@ -7,6 +7,7 @@ from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from packages.classes.vpk import VPKClass
+from packages.gui.browser import GuiHudBrowser
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
 from packages.utils.constants import IMAGES_DIR
 
@@ -17,6 +18,7 @@ class GuiHudStart:
     def __init__(self, persistent_data, game_instance, hud_instance):
         self.persistent_data = persistent_data
         self.game = game_instance
+        # self.browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, self)
         self.hud = hud_instance
         self.hud.set_finish_editing_gui_callback(self.on_finish_hud_editing)
         self.root = tk.Tk()
@@ -328,7 +330,17 @@ class GuiHudStart:
         self.on_hide()
 
 
-def debug_hud_select_gui(persistent_data, installer_instance, hud_instance):
+def debug_gui_start(persistent_data, installer_instance, hud_instance):
     # pylint: disable=unused-variable
     """Debug the gui"""
+
+    # persistent_data = load_data()
+    # game_instance = Game(persistent_data)
+    # hud_edit = Hud(game_instance)
+    # hud_edit.hud_dir = hud_debug_dir
+
+    # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
+    # start_instance.show()
+
     app = GuiHudStart(persistent_data, installer_instance, hud_instance)
+    app.show()

@@ -1,39 +1,59 @@
 goal -> create core functionality ASAP: ability to edit a hud
-	feature -> test hud editing to figure out how i want the code path to go. for example:
-		1. on script start show start gui
-		2. when the 'browser' gui gets closed close script instead of opening the start gui
+-------------------------------------------------Current
+feature -> create browser instance in/ before the start gui so that the open/close hotkey works & make it only work
+while:
+	- the game is running
+	- test it when unsyncing a hud. possibly update the treeview with 'no hud loaded'
+	bug -> when creating an instance of the browser inside start, there is a reference loop because browser contains
+	the menu class which contains the start class
+
+
+bug -> vscode error when pressing hud sync hotkeys -- fixed by removing () from command binding
+bug -> hud dev folder has functioning pak01.vpk's what happened there?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -------------------------------------------------Features
-
-feature -> browser -> treeview context menu funtionality
- 
-feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
-
-
-
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
-
-
-
-
-
-
-
-
-
-
-
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+refactor -> replace assert's with prop error handling. try/catch, show_message boxes and suchs
+
+refactor -> test hud editing to figure out how i want the code path to go. for example:
+	1. on script start show start gui
+	2. when the 'browser' gui gets closed close script instead of opening the start gui
+
+feature -> browser -> treeview context menu funtionality
+
 feature -> browser -> treeview context menu icons
+
+idea -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
 
 bug -> fix menu l4d1&l4d2 grayscale icons
 	is not just these icons but any icon. tried garbage collection fix
 	^ started being a problem after i moved the menu into the browser class
 
-feature -> gui's icons
-feature -> gui's button icons
+feature -> browser -> treeview phsyical context menu buttons (?)
+
+feature -> gui icons
+feature -> gui buttons icons
 feature -> menu icons
 	import tkinter as tk
 
@@ -66,6 +86,10 @@ feature -> progress gui for the installer class
 
 feature -> multi game support (?)
 
+
+bug -> start gui -> all the dev options are broken
+	AttributeError: 'GameManager' object has no attribute 'manager'
+	^ uh, fixed itself.. can i reproduce this?
 
 -------------------------------------------------Do-Last Misc
 testing -> test all menu options

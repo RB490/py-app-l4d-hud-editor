@@ -225,10 +225,11 @@ def debug_game_class():
 
     saved_data = load_data()
     game_debug_instance = Game(saved_data)
-    game_debug_instance = Game(saved_data)
     result = game_debug_instance.get_title()
     print(result)
 
+    result = game_debug_instance.manager.get_active_dir()
+    print(f"result: {result}")
     input("end of class_game autoexecute")
 
     # game_instance = Game(PERSISTENT_DATA)
