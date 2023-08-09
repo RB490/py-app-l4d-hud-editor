@@ -14,10 +14,12 @@ from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_
 class GuiHudStart:
     """Class for the hud select gui"""
 
-    def __init__(self, persistent_data, hud_instance):
+    def __init__(self, persistent_data):
         self.persistent_data = persistent_data
         self.game = Game()
-        self.hud = hud_instance
+        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
+        from packages.hud.hud import Hud
+        self.hud = Hud()
         self.root = tk.Tk()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -359,7 +361,7 @@ class GuiHudStart:
         self.on_hide()
 
 
-def get_gui_start_debug_instance(persistent_data, hud_instance):
+def get_gui_start_debug_instance(persistent_data):
     # pylint: disable=unused-variable
     """Debug the gui"""
 
@@ -370,4 +372,4 @@ def get_gui_start_debug_instance(persistent_data, hud_instance):
     # start_instance = GuiHudStart(persistent_data, hud_edit)
     # start_instance.show()
 
-    return GuiHudStart(persistent_data, hud_instance)
+    return GuiHudStart(persistent_data)

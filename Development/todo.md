@@ -1,8 +1,6 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
-refactor -> make the hud class into singleton
-
 refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
 
 refactor -> improve class instance names

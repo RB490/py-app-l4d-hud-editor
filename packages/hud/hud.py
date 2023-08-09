@@ -19,7 +19,19 @@ from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HU
 class Hud:
     """Class to manage hud editing"""
 
-    def __init__(self, persistent_data) -> None:
+    _instance = None
+
+    def __new__(cls, persistent_data=None):
+        if cls._instance is None:
+            cls._instance = super(Hud, cls).__new__(cls)
+            cls._instance.data = None
+            cls.persistent_data = persistent_data
+
+        return cls._instance
+
+    def __init__(self, persistent_data=None) -> None:
+        if self.persistent_data is None:
+            raise ValueError("Persistent data object needs to be passed on creation!")
         self.game = Game()
         self.persistent_data = persistent_data
         self.syncer = HudSyncer()
@@ -174,7 +186,7 @@ class Hud:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        self.browser = GuiHudBrowser(self, self.persistent_data)
+        self.browser = GuiHudBrowser(self.persistent_data)
         self.browser.run()
 
     def sync(self):
@@ -214,7 +226,7 @@ class Hud:
 
         # callback to the gui
         if open_start_gui:
-            start_instance = GuiHudStart(self.persistent_data, self)
+            start_instance = GuiHudStart(self.persistent_data)
             start_instance.run()
 
 
@@ -233,7 +245,7 @@ def debug_hud():
     """Debug the hud class"""
     print("debug_hud")
 
-    hud_instance = get_hud_debug_instance()
+    my_hud_instanc = get_hud_debug_instance()
 
     # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
     # hud_desc_gui.root.mainloop()

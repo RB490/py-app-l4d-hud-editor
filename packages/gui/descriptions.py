@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 import tkinter.messagebox as messagebox
 from tkinter import simpledialog
+from packages.hud.hud import Hud
 
 from packages.utils.constants import IMAGES_DIR
 
@@ -10,11 +11,11 @@ from packages.utils.constants import IMAGES_DIR
 class GuiHudDescriptions:
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, hud_instance, relative_path):
+    def __init__(self, relative_path):
         self.root = tk.Tk()
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.hud = hud_instance
+        self.hud = Hud()
         self.relative_path = relative_path
 
         # self.root.minsize(450, 400)

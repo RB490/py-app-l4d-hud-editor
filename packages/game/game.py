@@ -5,8 +5,8 @@ import subprocess
 import psutil
 import win32gui
 import vdf
-from packages.game.manager import GameManager
 from packages.game.commands import GameCommands
+from packages.game.manager import GameManager
 from packages.utils.functions import (
     get_steam_info,
     is_process_running,
@@ -34,7 +34,6 @@ class Game:
     def __init__(self, persistent_data=None):
         if self.persistent_data is None:
             raise ValueError("Persistent data object needs to be passed on creation!")
-        print(self.persistent_data)
         self.steam_info = get_steam_info(self.persistent_data)
         self.manager = GameManager(self.persistent_data, self)
         self.command = GameCommands(self.persistent_data, self)

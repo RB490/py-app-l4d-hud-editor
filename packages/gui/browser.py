@@ -14,12 +14,15 @@ from packages.utils.shared_utils import open_file_or_directory
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
-    def __init__(self, hud_instance, persistent_data):
+    def __init__(self, persistent_data):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
 
         # set variables
-        self.hud = hud_instance
+        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
+        from packages.hud.hud import Hud
+
+        self.hud = Hud()
         self.game = Game()
         self.root = tk.Tk()
         self.persistent_data = persistent_data
@@ -110,7 +113,7 @@ class GuiHudBrowser:
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, hud_instance, self)
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, self)
         self.my_editor_menu.create_and_refresh_menu()
 
         # hotkeys
@@ -255,10 +258,10 @@ class GuiHudBrowser:
     def on_close(self):
         """Runs on close"""
         self.save_window_geometry()
-        save_and_exit_script(self.persistent_data, self.hud)
+        save_and_exit_script(self.persistent_data)
 
 
-def get_debug_gui_browser_instance(hud_instance, persistent_data):
+def get_debug_gui_browser_instance(persistent_data):
     "debug_gui_browser"
     print("debug_browser")
-    return GuiHudBrowser(hud_instance, persistent_data)
+    return GuiHudBrowser(persistent_data)

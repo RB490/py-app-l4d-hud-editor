@@ -16,6 +16,7 @@ import win32api
 import win32con
 import psutil
 import vdf
+
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
 
@@ -602,8 +603,10 @@ def save_data(data):
         print(f"Error saving data to {PERSISTENT_DATA_PATH}")
 
 
-def save_and_exit_script(persistent_data, hud_instance):
+def save_and_exit_script(persistent_data):
     """Exit the script"""
-    hud_instance.finish_editing(open_start_gui=False)
+    # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
+    from packages.hud.hud import Hud
+    Hud().finish_editing(open_start_gui=False)
     save_data(persistent_data)
     sys.exit()
