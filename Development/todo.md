@@ -1,13 +1,12 @@
--------------------------------------------------Features
-
-feature -> create functioning core functionality: ability to edit a hud
+goal -> create core functionality ASAP: ability to edit a hud
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
 		2. when the 'browser' gui gets closed close script instead of opening the start gui
 
-feature -> browser -> treeview context menu
-feature -> browser -> also add buttons for the treeview context menu options
+-------------------------------------------------Features
 
+feature -> browser -> treeview context menu funtionality
+ 
 feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
 
 
@@ -27,6 +26,7 @@ feature -> refactor -> Make the main gui optional by adding all it's functionali
 
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+feature -> browser -> treeview context menu icons
 
 bug -> fix menu l4d1&l4d2 grayscale icons
 	is not just these icons but any icon. tried garbage collection fix

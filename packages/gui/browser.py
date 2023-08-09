@@ -94,12 +94,16 @@ class GuiHudBrowser:
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
 
         # Add options to the context menu
-        self.context_menu.add_command(label="Compile", command=self.dummy_handler)
-        self.context_menu.add_separator()
         self.context_menu.add_command(label="Open File", command=self.dummy_handler)
+        self.context_menu.add_command(label="Open Default File", command=self.dummy_handler)
         self.context_menu.add_command(label="Open Folder", command=self.dummy_handler)
+        self.context_menu.add_command(label="Open Game Folder", command=self.dummy_handler)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Refresh", command=self.treeview_refresh)
+        self.context_menu.add_command(label="Description", command=self.dummy_handler)
+        self.context_menu.add_command(label="Integers", command=self.dummy_handler)
+        self.context_menu.add_command(label="Describe", command=self.dummy_handler)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="Recycle", command=self.dummy_handler)
 
         # Bind the context menu to the right-click event on the treeview
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
@@ -118,12 +122,12 @@ class GuiHudBrowser:
 
         self.treeview_refresh(self.treeview)
 
-        self.hide()
-        self.root.mainloop()
+        # self.hide()
+        # self.root.mainloop() # absolutely neccessary according to gpt, though seemingly not
 
     def dummy_handler(self):
         "Dummy method"
-        print('dummy')
+        print("dummy")
 
     def show(self):
         """Show gui"""

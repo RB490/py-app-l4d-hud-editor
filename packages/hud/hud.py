@@ -229,6 +229,7 @@ def debug_hud():
 
     start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
     browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
+    browser_instance.show()
 
     # hud_edit.start_editing(hud_debug_dir)
     # gui_browser = GuiHudBrowser(hud_edit)

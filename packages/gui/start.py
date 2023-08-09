@@ -119,7 +119,7 @@ class GuiHudStart:
         self.update_treeview()
         # self.root.on_hide()
         self.root.withdraw()  # hide gui
-        # self.root.mainloop()
+        # self.root.mainloop() # absolutely neccessary according to gpt, though seemingly not
 
     def on_finish_hud_editing(self):
         """Called by hud class with callback"""
