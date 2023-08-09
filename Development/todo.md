@@ -2,10 +2,10 @@
 
 
 feature -> create functioning core functionality: ability to edit a hud
+	testing -> create test class for hud syncer
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
 		2. when the 'browser' gui gets closed close script instead of opening the start gui
-	testing -> create test class for hud syncer
 
 feature -> browser -> treeview context menu
 feature -> browser -> also add buttons for the treeview context menu options
@@ -16,6 +16,19 @@ refactor -> improve class instance names
 	browsing_instance -> browser_gui
 
 testing -> create test class for hud descriptions
+
+refactoring -> replace easygui
+	refactoring -> replace easygui.diropenbox with tkinter filedialog
+	refactoring -> replace easygui.boolbox with show_message
+	refactoring -> replace easygui.buttonboxes with show_message
+			# Example usage
+			response = show_message("This is a message.", "okcancel")
+			if response is not None:
+				if response:
+					print("User clicked OK")
+				else:
+					print("User clicked Cancel")
+
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc

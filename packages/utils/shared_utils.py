@@ -1,4 +1,4 @@
-"""Show message module. Print & messagebox"""
+"""Shared utility functions"""
 import os
 import subprocess
 import sys
@@ -22,7 +22,27 @@ def open_file_or_directory(file_path):
     print(f"Opened {file_path}.")
 
 def show_message(msg, msgbox_type="info"):
-    """Show message by prnting it and showing in a messagebox if running as .pyw"""
+    """
+    Show message by printing it and showing in a messagebox if running as .pyw
+    
+    Args:
+        msg (str): The message to be displayed.
+        msgbox_type (str, optional): The type of messagebox to show ("info", "warning", "error",
+            "question", "yesno", "okcancel"). Default is "info".
+    
+    Returns:
+        bool or None: For "yesno" and "okcancel" types, returns True if "Yes" or "OK" is clicked,
+        and False if "No" or "Cancel" is clicked. For other types, returns None.
+    
+    Example:
+        # Example usage
+        response = show_message("This is a message.", "okcancel")
+        if response is not None:
+            if response:
+                print("User clicked OK")
+            else:
+                print("User clicked Cancel")
+    """
     # Always print the message
     print(msg)
 
@@ -40,6 +60,11 @@ def show_message(msg, msgbox_type="info"):
         if msgbox_type in valid_msgbox_types:
             root = tk.Tk()
             root.withdraw()  # Hide the main window
-            valid_msgbox_types[msgbox_type]("Message Box Title", msg)
+            
+            # Capture the response of the messagebox
+            response = valid_msgbox_types[msgbox_type]("Message Box Title", msg)
+            
+            # Return the response to the caller
+            return response
         else:
             print("Invalid message box type. Available options: info, warning, error, question, yesno, okcancel")

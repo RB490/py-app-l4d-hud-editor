@@ -28,6 +28,7 @@ SCRIPT_FILE_NAME = os.path.basename(SCRIPT_DIR)
 PERSISTENT_DATA_PATH = SCRIPT_NAME + ".json"
 HUD_DESCRIPTIONS_PATH = os.path.join(MISC_DIR, "hud_file_descriptions.json")
 UNIVERSAL_GAME_MAP = "hud_dev_map"
+HOTKEY_SYNC_HUD = "ctrl+s"
 
 EDITOR_HUD_RELOAD_MODES = {
     "All": "reload_all",

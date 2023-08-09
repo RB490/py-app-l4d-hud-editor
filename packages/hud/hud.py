@@ -3,6 +3,7 @@ import os
 import threading
 from tkinter.filedialog import asksaveasfilename
 import easygui
+import keyboard
 from packages.classes.vpk import VPKClass
 from packages.gui.start import GuiHudStart
 from packages.hud.descriptions import HudDescriptions
@@ -12,7 +13,7 @@ from packages.hud.syncer import HudSyncer
 from packages.gui.browser import GuiHudBrowser
 from packages.game import Game
 from packages.utils.functions import copy_directory_contents, load_data
-from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, NEW_HUD_DIR
+from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
 
 
 class Hud:
@@ -162,6 +163,9 @@ class Hud:
         # sync the hud to the game folder
         self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
 
+        # hotkeys
+        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync(), suppress=True)
+
         # run the game
         self.game.run("dev")
 
@@ -171,8 +175,13 @@ class Hud:
         # Start checking for game exit
         self.wait_for_game_exit_then_finish_editing()
 
+    def sync(self):
+        """Sync hud"""
+        
+        self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
+
     def un_sync(self):
-        """Unsync loaded hud"""
+        """Unsync hud"""
 
         self.syncer.un_sync()
 
@@ -188,6 +197,9 @@ class Hud:
 
         # unsync hud
         self.syncer.un_sync()
+
+        # remove hotkey
+        keyboard.remove_hotkey(self.sync)
 
         # clear variables
         self.hud_dir = None
