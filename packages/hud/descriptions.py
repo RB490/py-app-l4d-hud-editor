@@ -30,12 +30,12 @@ class HudDescriptions:
         Returns:
         --------
         dict
-            A dictionary with file names as keys and descriptions as values.
+            A dictionary with file names as keys and tuples with descriptions and relative path as values.
         """
 
         # Create a new dictionary called all_descriptions using a dictionary comprehension that
         #  extracts the file names and descriptions from the existing dictionary (self.data)
-        all_descriptions = {values["file_name"]: values["file_description"] for rel_path, values in self.data.items()}
+        all_descriptions = {values["file_name"]: (values["file_description"], values["file_relative_path"]) for rel_path, values in self.data.items()}
 
         # Return the newly created dictionary
         return all_descriptions

@@ -2,7 +2,6 @@
 
 
 feature -> create functioning core functionality: ability to edit a hud
-	feature -> browser -> treeview doubleclick action
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
 		2. when the 'browser' gui gets closed close script instead of opening the start gui

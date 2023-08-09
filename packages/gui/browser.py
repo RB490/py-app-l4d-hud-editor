@@ -1,4 +1,5 @@
 """Module for the hud browser gui class"""
+import os
 import tkinter as tk
 from tkinter import ttk
 import keyboard
@@ -6,6 +7,7 @@ import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
 from packages.utils.functions import save_and_exit_script
+from packages.utils.shared_utils import open_file_or_directory
 
 
 class GuiHudBrowser:
@@ -45,8 +47,9 @@ class GuiHudBrowser:
         self.search_label = tk.Label(self.search_frame, text="Search")
         self.search_label.pack(side="left", padx=5, pady=5)
 
-        self.search_box = tk.Text(self.search_frame, height=1, wrap=None, width=110)
+        self.search_box = tk.Text(self.search_frame, height=1, wrap=None, width=10)
         self.search_box.pack(side="left", fill="x", expand=True, padx=5, pady=0)
+        self.search_box.bind("<KeyRelease>", self.search_treeview)
 
         # create Radiobuttons
         self.display_choice = tk.StringVar(value="Added")
@@ -65,20 +68,21 @@ class GuiHudBrowser:
         )
         self.radio_2.pack(side="right", padx=5)
 
-        # Bind the search box to the search function
-        self.search_box.bind("<KeyRelease>", self.search_treeview)
-
         # create a treeview with three columns
-        self.treeview = ttk.Treeview(self.frame, columns=("file", "description", "custom"), height=15)
+        self.treeview = ttk.Treeview(self.frame, columns=("file", "description", "custom", "path"), height=15)
         self.treeview.heading("#0", text="")
         self.treeview.heading("file", text="File", anchor="w")
         self.treeview.heading("description", text="Description", anchor="w")
         self.treeview.heading("custom", text="Custom", anchor="w")
+        self.treeview.heading("path", text="Path", anchor="w")
         self.treeview.column("#0", width=10, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
         self.treeview.column("description", width=50)
-        self.treeview.column("custom", width=50)
+        self.treeview.column("custom", width=1)
+        self.treeview.column("path", width=50)
         self.treeview.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+        # self.treeview.bind("<<TreeviewSelect>>", self.treeview_on_click)
+        self.treeview.bind("<Double-1>", self.treeview_on_double_click)
 
         # Create a Scrollbar widget
         scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=self.treeview.yview)
@@ -142,6 +146,31 @@ class GuiHudBrowser:
         # Refresh the Treeview with the search term
         self.treeview_refresh(self.treeview, search_term=search_term if search_term else None)
 
+    def treeview_get_selected_values(self):
+        """Get a list of the values of the selected treeview row"""
+
+        selection = self.treeview.selection()
+        if not selection:
+            return "No item selected"
+
+        item = self.treeview.selection()[0]
+        values = self.treeview.item(item)["values"]
+
+        return values
+
+    def treeview_get_selected_full_path(self):
+        """Retrieve selected treeview row path"""
+        relative_path = self.treeview_get_selected_values()[3]
+        full_path = os.path.join(self.hud.get_dir(), relative_path)
+        return full_path if full_path else "No item selected"
+
+    def treeview_on_double_click(self, event):
+        """Handle user clicks"""
+        # pylint: disable=unused-argument
+
+        file_path = self.treeview_get_selected_full_path()
+        open_file_or_directory(file_path)
+
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""
 
@@ -160,15 +189,18 @@ class GuiHudBrowser:
         treeview.delete(*treeview.get_children())
 
         # Add items from the data_dict to the Treeview
-        for key, value in data_dict.items():
+        for file_name, desc_relpath_tuple in data_dict.items():
+            file_desc = desc_relpath_tuple[0]
+            file_relative_path = desc_relpath_tuple[1]
             if (
                 search_term
-                and search_term.lower() not in str(key).lower()
-                and search_term.lower() not in str(value).lower()
+                and search_term.lower() not in str(file_name).lower()
+                and search_term.lower() not in str(file_desc).lower()
+                and search_term.lower() not in str(file_relative_path).lower()
             ):
                 # Skip this item if search term is provided and not found in key or value
                 continue
-            treeview.insert("", "end", values=(key, value))
+            treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path))
 
     def save_window_geometry(self):
         """Save size & position"""

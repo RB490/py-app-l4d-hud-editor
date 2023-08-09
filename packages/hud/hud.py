@@ -55,7 +55,7 @@ class Hud:
                 full_path = os.path.join(dirpath, filename)
                 relative_path = os.path.relpath(full_path, root_folder)
                 file_desc = self.desc.get_description(relative_path)
-                files_dict[filename] = file_desc
+                files_dict[filename] = (file_desc, relative_path)
         return files_dict
 
     def save_as_folder(self):
