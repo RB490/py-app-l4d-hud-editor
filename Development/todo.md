@@ -1,8 +1,15 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
+refactor -> make the hud class into singleton
 
-bug -> vscode error when pressing hud sync hotkeys -- fixed by removing () from command binding
+refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
+
+refactor -> improve class instance names
+	start_instance -> start_gui
+	browsing_instance -> browser_gui
+
+
 bug -> hud dev folder has functioning pak01.vpk's what happened there?
 
 
@@ -93,11 +100,6 @@ idea -> instead of using a gui for the main control use the default console inte
 
 -------------------------------------------------Do-Last Restructuring
 refactor -> shared_utils base tkinter gui class which gets used by (all) my other guis. should contain all the basics
-
-refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
-refactor -> improve class instance names
-	start_instance -> start_gui
-	browsing_instance -> browser_gui
 
 unit testing -> create test class for hud descriptions
 unit testing -> create test class for hud syncer

@@ -18,10 +18,23 @@ from packages.utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
 
 
 class Game:
-    """Class with functions related to the game. such as running and installation the dev/user versions"""
+    """Singleton with functions related to the game. such as running and installation the dev/user versions"""
 
-    def __init__(self, persistent_data):
-        self.persistent_data = persistent_data
+    _instance = None
+
+    def __new__(cls, persistent_data=None):
+        if cls._instance is None:
+            cls._instance = super(Game, cls).__new__(cls)
+            cls._instance.data = None
+            cls.persistent_data = persistent_data
+
+        return cls._instance
+
+    # pylint: disable=unused-argument
+    def __init__(self, persistent_data=None):
+        if self.persistent_data is None:
+            raise ValueError("Persistent data object needs to be passed on creation!")
+        print(self.persistent_data)
         self.steam_info = get_steam_info(self.persistent_data)
         self.manager = GameManager(self.persistent_data, self)
         self.command = GameCommands(self.persistent_data, self)

@@ -6,6 +6,7 @@ import keyboard
 import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
+from packages.game.game import Game
 from packages.utils.functions import save_and_exit_script
 from packages.utils.shared_utils import open_file_or_directory
 
@@ -13,13 +14,13 @@ from packages.utils.shared_utils import open_file_or_directory
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
-    def __init__(self, hud_instance, game_instance, persistent_data):
+    def __init__(self, hud_instance, persistent_data):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
 
         # set variables
         self.hud = hud_instance
-        self.game = game_instance
+        self.game = Game()
         self.root = tk.Tk()
         self.persistent_data = persistent_data
         self.root.title("Browser")
@@ -109,10 +110,8 @@ class GuiHudBrowser:
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
-        # self.my_editor_menu = EditorMenuClass(
-        #     self, self.root, persistent_data, game_instance, hud_instance, start_instance, self
-        # )
-        # self.my_editor_menu.create_and_refresh_menu()
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, hud_instance, self)
+        self.my_editor_menu.create_and_refresh_menu()
 
         # hotkeys
         keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
@@ -124,11 +123,8 @@ class GuiHudBrowser:
 
         self.hide()
 
-    def stop_browser(self):
-        keyboard.remove_hotkey("F5")
-        self.root.destroy()
-
     def run(self):
+        "Show & start main loop"
         self.show()
         self.root.mainloop()
 
@@ -250,13 +246,19 @@ class GuiHudBrowser:
         print(f"geometry: {geometry}")
         self.persistent_data["BrowserGuiGeometry"] = geometry
 
+    def destroy_gui(self):
+        "Close & stop main loop"
+        keyboard.remove_hotkey("F5")
+        self.save_window_geometry()
+        self.root.destroy()
+
     def on_close(self):
         """Runs on close"""
         self.save_window_geometry()
         save_and_exit_script(self.persistent_data, self.hud)
 
 
-def get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data, start_instance):
+def get_debug_gui_browser_instance(hud_instance, persistent_data):
     "debug_gui_browser"
     print("debug_browser")
-    return GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
+    return GuiHudBrowser(hud_instance, persistent_data)

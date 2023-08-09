@@ -7,15 +7,16 @@ from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from packages.classes.vpk import VPKClass
+from packages.game.game import Game
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
 
 
 class GuiHudStart:
     """Class for the hud select gui"""
 
-    def __init__(self, persistent_data, game_instance, hud_instance):
+    def __init__(self, persistent_data, hud_instance):
         self.persistent_data = persistent_data
-        self.game = game_instance
+        self.game = Game()
         self.hud = hud_instance
         self.root = tk.Tk()
         self.root.title("Select")
@@ -124,6 +125,7 @@ class GuiHudStart:
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
     def run(self):
+        "Show & start main loop"
         print("start: run")
         self.show()
         self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
@@ -188,7 +190,7 @@ class GuiHudStart:
         This method removes dev mode.
         """
         print("Remove dev mode")
-        self.game.manager.run_installer_remove()
+        self.game.manager.run_uninstaller()
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -325,14 +327,11 @@ class GuiHudStart:
         if prompt_create_new_hud(self.persistent_data):
             self.update_treeview()
 
-    def stop_start(self):
-        self.root.destroy()
-
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
 
         # hide gui
-        self.stop_start()
+        self.destroy_gui()
         # self.on_hide()
 
         # edit hud
@@ -348,6 +347,11 @@ class GuiHudStart:
         # Show the window again
         self.root.deiconify()
 
+    def destroy_gui(self):
+        "Close & start main loop"
+        self.save_window_geometry()
+        self.root.destroy()
+
     def on_close(self):
         """Exit script"""
         self.save_window_geometry()
@@ -355,16 +359,15 @@ class GuiHudStart:
         self.on_hide()
 
 
-def get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance):
+def get_gui_start_debug_instance(persistent_data, hud_instance):
     # pylint: disable=unused-variable
     """Debug the gui"""
 
     # persistent_data = load_data()
-    # game_instance = Game(persistent_data)
-    # hud_edit = Hud(game_instance, persistent_data)
+    # hud_edit = Hud(persistent_data)
     # hud_edit.hud_dir = hud_debug_dir
 
-    # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
+    # start_instance = GuiHudStart(persistent_data, hud_edit)
     # start_instance.show()
 
-    return GuiHudStart(persistent_data, installer_instance, hud_instance)
+    return GuiHudStart(persistent_data, hud_instance)

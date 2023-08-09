@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import Menu, PhotoImage
 import webbrowser
 from packages.editor_menu.handler import EditorMenuHandler
+from packages.game.game import Game
 from packages.utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
@@ -26,15 +27,15 @@ class EditorMenuClass:
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
     def __init__(
-        self, child_instance, root, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+        self, child_instance, root, persistent_data, hud_instance, browser_instance
     ):
         self.handler = EditorMenuHandler(
-            self, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+            self, persistent_data, hud_instance, browser_instance
         )
         self.root = root
         self.child_instance = child_instance
         self.persistent_data = persistent_data
-        self.game = game_instance
+        self.game = Game()
         self.hud = hud_instance
 
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)

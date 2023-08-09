@@ -3,6 +3,7 @@
 import tkinter as tk
 
 from packages.editor_menu.menu import EditorMenuClass
+from packages.game.game import Game
 
 
 class GuiEditorMenu:
@@ -21,7 +22,7 @@ class GuiEditorMenu:
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, persistent_data, game_instance, hud_instance, start_instance, browser_instance):
+    def __init__(self, persistent_data, hud_instance, browser_instance):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
@@ -31,10 +32,10 @@ class GuiEditorMenu:
         # self.root.withdraw()
         self.is_hidden = False
         self.persistent_data = persistent_data
-        self.game = game_instance
+        self.game = Game()
         self.hud = hud_instance
         self.my_editor_menu = EditorMenuClass(
-            self, self.root, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+            self, self.root, persistent_data, hud_instance, browser_instance
         )
         self.my_editor_menu.create_and_refresh_menu()
         # keyboard.add_hotkey("F4", self.show_menu, suppress=True) # doesn't work nice - stays open when it loses focus
@@ -81,7 +82,7 @@ class GuiEditorMenu:
         self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
 
-def debug_gui_editor_menu(persistent_data, game_instance, hud_instance, start_instance, browser_instance):
+def debug_gui_editor_menu(persistent_data, hud_instance, browser_instance):
     """Debug gui class"""
     # pylint: disable=unused-variable
-    app = GuiEditorMenu(persistent_data, game_instance, hud_instance, start_instance, browser_instance)
+    app = GuiEditorMenu(persistent_data, hud_instance, browser_instance)

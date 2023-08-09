@@ -8,6 +8,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 import easygui
 from packages.classes.vpk import VPKClass
+from packages.game.game import Game
 from packages.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
 from packages.utils.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
 
@@ -19,10 +20,10 @@ class GameManager:
         - installing, updating and repairing dev mode and switching between user & dev modes
         - retrieving game folder paths"""
 
-    def __init__(self, persistent_data, game_class):
+    def __init__(self, persistent_data):
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
-        self.game = game_class
+        self.game = Game()
 
         self.user_dir_id_file = "user_folder.DoNotDelete"
         self.dev_dir_id_file = "hud_dev_folder.DoNotDelete"
@@ -440,12 +441,12 @@ class GameManager:
         # Run, % STEAM_INFO.exePath A_Space "-applaunch " this.game.obj.appid " -novid -w 1 -h 1 -x 0 -y 0 -windowed"
 
 
-def debug_installer_class(game_instance):
+def debug_installer_class():
     """Debug installer class"""
     os.system("cls")  # clear terminal
 
     saved_data = load_data()
-    game_manager_instance = GameManager(saved_data, game_instance)
+    game_manager_instance = GameManager(saved_data)
     game_manager_instance.run_installer()
 
     input("end of class_installer autoexecute")

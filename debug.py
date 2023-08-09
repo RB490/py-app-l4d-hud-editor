@@ -22,52 +22,29 @@ from packages.utils.functions import load_data, retrieve_hud_name_for_dir
 os.system("cls")  # clear terminal
 
 
-def create_first_gui():
-    get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance)
-
-
-def create_second_gui():
-    get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data, start_instance)
-
-
-def run_gui_in_thread(gui_instance):
-    gui_instance.run()
-
-
 # setup classes
 persistent_data = load_data()
+# create initial singleton game class
 game_instance = Game(persistent_data)
-hud_instance = get_hud_debug_instance()
-installer_instance = GameManager(persistent_data, game_instance)
-# start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
-# start_instance.run()
 
-# debug_game_class()
-# debug_hud_syncer()
-# debug_hud()
+game_instance2 = Game()
+# hud_instance = get_hud_debug_instance()
+# installer_instance = GameManager(persistent_data, game_instance)
+# my_start = get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance)
+# my_browser = get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data)
+# my_start.run()
+
+print(game_instance2.game_exe)
+
+# Create instances
+# this_is_a_func()
+# game_instance_2 = GameSingleton()
+
+# Set a value using game_instance_1
 
 
-# Create threads for each GUI
-# my_browser = get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data, start_instance)
-my_start = get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance)
-my_start.run()
-# my_start.root.after(22, my_start.change_addon_image, os.path.join(IMAGES_DIR, "cross128.png"))
-# time.sleep(1)
-# my_start.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
-# # thread1 = threading.Thread(target=my_start.run)
-
-# thread1 = threading.Thread(target=run_gui_in_thread, args=(my_start))
-# thread1.start()
-
-# print("why does this code not run?")
-# my_start.root.after(0, my_start.change_addon_image, os.path.join(IMAGES_DIR, "cross128.png"))
-# thread2 = threading.Thread(target=my_browser.run())
-
-# Start both threads
-# thread1.start()
-# thread2.start()
-
-# debug_gui_start(persistent_data, installer_instance, hud_instance)
+# Access the value using game_instance_2
+# print(game_instance_2.data)  # Outputs: Hello, world!
 
 
 input("Finished! Press enter to continue..")

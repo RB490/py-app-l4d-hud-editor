@@ -5,6 +5,8 @@ from tkinter import messagebox
 import pyperclip
 import vdf
 from packages.classes.get_user_input import get_user_input
+from packages.game.game import Game
+from packages.gui.start import GuiHudStart
 from packages.utils.constants import UNIVERSAL_GAME_MAP
 from packages.utils.functions import (
     get_mouse_position_on_click,
@@ -19,13 +21,12 @@ class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
     def __init__(
-        self, editor_menu_instance, persistent_data, game_instance, hud_instance, start_instance, browser_instance
+        self, editor_menu_instance, persistent_data, hud_instance, browser_instance
     ):
         self.browser_instance = browser_instance
-        self.start_instance = start_instance
         self.editor_menu = editor_menu_instance
         self.persistent_data = persistent_data
-        self.game = game_instance
+        self.game = Game()
         self.hud = hud_instance
 
     def editor_menu_game_mode(self, mode):
@@ -190,7 +191,8 @@ class EditorMenuHandler:
     def editor_open_hud_select(self):
         """Open hud select gui"""
         print("editor_open_hud_select")
-        self.start_instance.show()
+        gui_start = GuiHudStart(self.persistent_data, self.hud)
+        gui_start.run()
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""

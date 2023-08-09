@@ -19,9 +19,8 @@ from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HU
 class Hud:
     """Class to manage hud editing"""
 
-    def __init__(self, game_instance, persistent_data) -> None:
-        assert isinstance(game_instance, Game)
-        self.game = game_instance
+    def __init__(self, persistent_data) -> None:
+        self.game = Game()
         self.persistent_data = persistent_data
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
@@ -175,7 +174,7 @@ class Hud:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        self.browser = GuiHudBrowser(self, self.game, self.persistent_data)
+        self.browser = GuiHudBrowser(self, self.persistent_data)
         self.browser.run()
 
     def sync(self):
@@ -199,7 +198,7 @@ class Hud:
         self.stop_game_exit_check()
 
         # close browser
-        self.browser.stop_browser()
+        self.browser.destroy_gui()
 
         # unsync hud
         self.syncer.un_sync()
@@ -215,17 +214,16 @@ class Hud:
 
         # callback to the gui
         if open_start_gui:
-            start_instance = GuiHudStart(self.persistent_data, self.game, self)
+            start_instance = GuiHudStart(self.persistent_data, self)
             start_instance.run()
 
 
 def get_hud_debug_instance():
     "get_hud_debug_instance"
     persistent_data = load_data()
-    game_instance = Game(persistent_data)
     huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
     hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
-    hud_edit = Hud(game_instance, persistent_data)
+    hud_edit = Hud(persistent_data)
     hud_edit.hud_dir = hud_debug_dir
     return hud_edit
 
@@ -240,9 +238,9 @@ def debug_hud():
     # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
     # hud_desc_gui.root.mainloop()
 
-    # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
+    # start_instance = GuiHudStart(persistent_data, hud_edit)
     # start_instance.show()
-    # browser_instance = GuiHudBrowser(hud_edit, game_instance, persistent_data, start_instance)
+    # browser_instance = GuiHudBrowser(hud_edit, persistent_data, start_instance)
     # browser_instance.show()
 
     # hud_edit.start_editing(hud_debug_dir)
