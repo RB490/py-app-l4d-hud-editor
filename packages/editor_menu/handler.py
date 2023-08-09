@@ -24,11 +24,11 @@ class EditorMenuHandler:
         self.browser_instance = browser_instance
         self.editor_menu = editor_menu_instance
         self.persistent_data = persistent_data
-        self.game = Game()
+        self.game = Game(persistent_data)
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from packages.hud.hud import Hud
 
-        self.hud = Hud()
+        self.hud = Hud(persistent_data)
 
     def editor_menu_game_mode(self, mode):
         """Method to handle the selected game mode in the menu."""

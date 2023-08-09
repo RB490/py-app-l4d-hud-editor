@@ -33,11 +33,9 @@ class GuiEditorMenu:
         # self.root.withdraw()
         self.is_hidden = False
         self.persistent_data = persistent_data
-        self.game = Game()
-        self.hud = Hud()
-        self.my_editor_menu = EditorMenuClass(
-            self, self.root, persistent_data, browser_instance
-        )
+        self.game = Game(persistent_data)
+        self.hud = Hud(persistent_data)
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, browser_instance)
         self.my_editor_menu.create_and_refresh_menu()
         # keyboard.add_hotkey("F4", self.show_menu, suppress=True) # doesn't work nice - stays open when it loses focus
         # keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)

@@ -18,12 +18,12 @@ class GuiHudBrowser:
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
 
-        # set variables
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from packages.hud.hud import Hud
 
-        self.hud = Hud()
-        self.game = Game()
+        # set variables
+        self.hud = Hud(persistent_data)
+        self.game = Game(persistent_data)
         self.root = tk.Tk()
         self.persistent_data = persistent_data
         self.root.title("Browser")

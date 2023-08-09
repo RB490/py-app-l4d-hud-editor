@@ -607,6 +607,6 @@ def save_and_exit_script(persistent_data):
     """Exit the script"""
     # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
     from packages.hud.hud import Hud
-    Hud().finish_editing(open_start_gui=False)
+    Hud(persistent_data).finish_editing(open_start_gui=False)
     save_data(persistent_data)
     sys.exit()

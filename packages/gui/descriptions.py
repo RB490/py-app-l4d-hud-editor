@@ -15,7 +15,7 @@ class GuiHudDescriptions:
         self.root = tk.Tk()
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.hud = Hud()
+        self.hud = Hud(persistent_data)
         self.relative_path = relative_path
 
         # self.root.minsize(450, 400)

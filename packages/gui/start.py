@@ -16,10 +16,11 @@ class GuiHudStart:
 
     def __init__(self, persistent_data):
         self.persistent_data = persistent_data
-        self.game = Game()
+        self.game = Game(persistent_data)
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from packages.hud.hud import Hud
-        self.hud = Hud()
+
+        self.hud = Hud(persistent_data)
         self.root = tk.Tk()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)

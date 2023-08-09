@@ -21,7 +21,7 @@ class Hud:
 
     _instance = None
 
-    def __new__(cls, persistent_data=None):
+    def __new__(cls, persistent_data):
         if cls._instance is None:
             cls._instance = super(Hud, cls).__new__(cls)
             cls._instance.data = None
@@ -29,10 +29,8 @@ class Hud:
 
         return cls._instance
 
-    def __init__(self, persistent_data=None) -> None:
-        if self.persistent_data is None:
-            raise ValueError("Persistent data object needs to be passed on creation!")
-        self.game = Game()
+    def __init__(self, persistent_data) -> None:
+        self.game = Game(persistent_data)
         self.persistent_data = persistent_data
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()

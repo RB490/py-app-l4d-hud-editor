@@ -26,19 +26,16 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(
-        self, child_instance, root, persistent_data, browser_instance
-    ):
-        self.handler = EditorMenuHandler(
-            self, persistent_data, browser_instance
-        )
+    def __init__(self, child_instance, root, persistent_data, browser_instance):
+        self.handler = EditorMenuHandler(self, persistent_data, browser_instance)
         self.root = root
         self.child_instance = child_instance
         self.persistent_data = persistent_data
-        self.game = Game()
+        self.game = Game(persistent_data)
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from packages.hud.hud import Hud
-        self.hud = Hud()
+
+        self.hud = Hud(persistent_data)
 
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
 

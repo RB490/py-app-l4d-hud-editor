@@ -22,6 +22,7 @@ class GameManager:
     def __init__(self, persistent_data, game_instance):
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
+        # avoiding circular import by passing the game instance as a param here
         self.game = game_instance
 
         self.user_dir_id_file = "user_folder.DoNotDelete"
