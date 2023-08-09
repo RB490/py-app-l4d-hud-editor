@@ -5,7 +5,6 @@ from tkinter.filedialog import asksaveasfilename
 import easygui
 import keyboard
 from packages.classes.vpk import VPKClass
-from packages.gui.start import GuiHudStart
 from packages.hud.descriptions import HudDescriptions
 from packages.hud.syncer import HudSyncer
 
@@ -211,7 +210,9 @@ class Hud:
         if use_gui_callback and self.finish_editing_gui_callback:
             self.finish_editing_gui_callback()
 
+
 def get_hud_debug_instance():
+    "get_hud_debug_instance"
     persistent_data = load_data()
     game_instance = Game(persistent_data)
     huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
@@ -220,14 +221,14 @@ def get_hud_debug_instance():
     hud_edit.hud_dir = hud_debug_dir
     return hud_edit
 
+
 def debug_hud():
     # pylint: disable=unused-variable
     """Debug the hud class"""
     print("debug_hud")
 
-
     hud_instance = get_hud_debug_instance()
-        
+
     # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
     # hud_desc_gui.root.mainloop()
 

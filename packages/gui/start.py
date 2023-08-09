@@ -7,7 +7,6 @@ from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from packages.classes.vpk import VPKClass
-from packages.gui.browser import GuiHudBrowser
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
 from packages.utils.constants import IMAGES_DIR
 
@@ -18,7 +17,6 @@ class GuiHudStart:
     def __init__(self, persistent_data, game_instance, hud_instance):
         self.persistent_data = persistent_data
         self.game = game_instance
-        # self.browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, self)
         self.hud = hud_instance
         self.hud.set_finish_editing_gui_callback(self.on_finish_hud_editing)
         self.root = tk.Tk()
@@ -35,6 +33,7 @@ class GuiHudStart:
             self.root.geometry("1000x1000+100+100")
 
         # initialize variables
+        self.picture_canvas_photo = None
         self.selected_hud_name = ""
         self.selected_hud_dir = ""
 
@@ -64,13 +63,15 @@ class GuiHudStart:
         self.new_button.pack(pady=5, padx=5)
 
         # create a picture frame on the right side
-        self.picture_frame = tk.Frame(self.frame, width=250, height=250, bg="white")
+        self.picture_frame = tk.Frame(self.frame, bg="black")
         self.picture_frame.pack(padx=5, pady=5)
 
         # Add the image viewport, display it in the picture frame and set the initial image
-        self.picture_viewport = tk.Label(self.picture_frame)
-        self.picture_viewport.pack()
-        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+        self.picture_canvas = tk.Canvas(self.picture_frame, relief="ridge", bd=4)
+        self.picture_canvas.pack()
+        self.picture_canvas.config(width=250, height=200)
+        # setting the image isn't possible before calling mainloop()
+        # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
         # create a button above the picture frame
         self.edit_button = tk.Button(self.frame, text="Edit", width=35, height=1, command=self.edit_selected_hud)
@@ -120,8 +121,14 @@ class GuiHudStart:
         self.root.config(menu=menu_bar)
         self.update_treeview()
         # self.root.on_hide()
-        self.root.withdraw()  # hide gui
-        # self.root.mainloop() # absolutely neccessary according to gpt, though seemingly not
+        # self.root.withdraw()  # hide gui
+
+        # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+
+    def run(self):
+        print("start: run")
+        # self.show()
+        self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
 
     def on_finish_hud_editing(self):
         """Called by hud class with callback"""
@@ -268,16 +275,37 @@ class GuiHudStart:
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""
-        # Load the second image
-        image2 = Image.open(path)
-        photo2 = ImageTk.PhotoImage(image2)
+        # if not os.path.isfile(path):
+        #     print(f"change_addon_image: File does not exist: {path}")
+        #     return
 
-        # Change the image displayed in the label
-        print(path)
-        self.picture_viewport.configure(image=photo2)
-        self.picture_viewport.image = (
-            photo2  # Keep a reference to the new image to prevent it from being garbage collected
-        )
+        # # Load the second image
+        # raw_img_handle = Image.open(path)
+        # img_handle = ImageTk.PhotoImage(raw_img_handle)
+        # # Keep a reference to the new image to prevent it from being garbage collected
+        # self.picture_canvas.image = img_handle
+
+        # # Change the image displayed in the label
+        # print(path)
+        # # self.picture_viewport.configure(image=img_handle)
+        # # self.picture_viewport.configure(image=self.picture_viewport.image)
+        # self.picture_canvas.create_image(0, 0, anchor="nw", image=self.picture_canvas.image)
+
+        image = Image.open(path)  # Replace with your image file path
+        self.picture_canvas_photo = ImageTk.PhotoImage(image)
+
+        # Calculate the center coordinates to place the image
+        center_x = self.picture_canvas.winfo_reqwidth() // 2
+        center_y = self.picture_canvas.winfo_reqheight() // 2
+
+        # Configure the canvas to display the image
+        self.picture_canvas.create_image(center_x, center_y, anchor="center", image=self.picture_canvas_photo)
+
+        # Adjust the canvas size to match the image size
+        # self.picture_canvas.config(width=self.photo.width(), height=self.photo.height())
+
+        # Adjust the canvas's scrollable region to fit the image
+        self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all"))
 
     # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
@@ -330,7 +358,7 @@ class GuiHudStart:
         self.on_hide()
 
 
-def debug_gui_start(persistent_data, installer_instance, hud_instance):
+def get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance):
     # pylint: disable=unused-variable
     """Debug the gui"""
 
@@ -342,5 +370,4 @@ def debug_gui_start(persistent_data, installer_instance, hud_instance):
     # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
     # start_instance.show()
 
-    app = GuiHudStart(persistent_data, installer_instance, hud_instance)
-    app.show()
+    return GuiHudStart(persistent_data, installer_instance, hud_instance)

@@ -109,10 +109,10 @@ class GuiHudBrowser:
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(
-            self, self.root, persistent_data, game_instance, hud_instance, start_instance, self
-        )
-        self.my_editor_menu.create_and_refresh_menu()
+        # self.my_editor_menu = EditorMenuClass(
+        #     self, self.root, persistent_data, game_instance, hud_instance, start_instance, self
+        # )
+        # self.my_editor_menu.create_and_refresh_menu()
 
         # hotkeys
         keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
@@ -123,7 +123,9 @@ class GuiHudBrowser:
         self.treeview_refresh(self.treeview)
 
         # self.hide()
-        # self.root.mainloop() # absolutely neccessary according to gpt, though seemingly not
+
+    def run(self):
+        self.root.mainloop()
 
     def dummy_handler(self):
         "Dummy method"
@@ -249,7 +251,7 @@ class GuiHudBrowser:
         save_and_exit_script(self.persistent_data, self.hud)
 
 
-def debug_browser(hud_instance, game_instance, persistent_data, start_instance):
+def get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data, start_instance):
+    "debug_gui_browser"
     print("debug_browser")
-    browser_instance = GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
-    browser_instance.show()
+    return GuiHudBrowser(hud_instance, game_instance, persistent_data, start_instance)
