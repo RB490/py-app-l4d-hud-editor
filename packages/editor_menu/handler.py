@@ -184,7 +184,7 @@ class EditorMenuHandler:
     def editor_exit_script(self):
         """Exit script"""
 
-        self.hud.finish_editing(use_gui_callback=False)
+        self.hud.finish_editing(open_start_gui=False)
         sys.exit()
 
     def editor_open_hud_select(self):
@@ -195,7 +195,7 @@ class EditorMenuHandler:
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
         print("editor_finish_editing")
-        self.hud.finish_editing(use_gui_callback=True)
+        self.hud.finish_editing(open_start_gui=True)
 
     def editor_open_hud_browser(self):
         """Open hud browser"""

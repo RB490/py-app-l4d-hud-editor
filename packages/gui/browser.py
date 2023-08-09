@@ -13,7 +13,7 @@ from packages.utils.shared_utils import open_file_or_directory
 class GuiHudBrowser:
     """Class for the hud browser gui"""
 
-    def __init__(self, hud_instance, game_instance, persistent_data, start_instance):
+    def __init__(self, hud_instance, game_instance, persistent_data):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
 
@@ -122,9 +122,14 @@ class GuiHudBrowser:
 
         self.treeview_refresh(self.treeview)
 
-        # self.hide()
+        self.hide()
+
+    def stop_browser(self):
+        keyboard.remove_hotkey("F5")
+        self.root.destroy()
 
     def run(self):
+        self.show()
         self.root.mainloop()
 
     def dummy_handler(self):

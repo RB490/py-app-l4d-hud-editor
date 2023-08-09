@@ -1,13 +1,6 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
-feature -> create browser instance in/ before the start gui so that the open/close hotkey works & make it only work
-while:
-	- the game is running
-	- test it when unsyncing a hud. possibly update the treeview with 'no hud loaded'
-	bug -> when creating an instance of the browser inside start, there is a reference loop because browser contains
-	the menu class which contains the start class
-
 
 bug -> vscode error when pressing hud sync hotkeys -- fixed by removing () from command binding
 bug -> hud dev folder has functioning pak01.vpk's what happened there?

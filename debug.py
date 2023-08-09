@@ -39,18 +39,20 @@ persistent_data = load_data()
 game_instance = Game(persistent_data)
 hud_instance = get_hud_debug_instance()
 installer_instance = GameManager(persistent_data, game_instance)
-start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
+# start_instance = GuiHudStart(persistent_data, game_instance, hud_instance)
+# start_instance.run()
 
 # debug_game_class()
 # debug_hud_syncer()
 # debug_hud()
 
+
 # Create threads for each GUI
 # my_browser = get_debug_gui_browser_instance(hud_instance, game_instance, persistent_data, start_instance)
 my_start = get_gui_start_debug_instance(persistent_data, installer_instance, hud_instance)
+my_start.run()
 # my_start.root.after(22, my_start.change_addon_image, os.path.join(IMAGES_DIR, "cross128.png"))
 # time.sleep(1)
-my_start.run()
 # my_start.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 # # thread1 = threading.Thread(target=my_start.run)
 

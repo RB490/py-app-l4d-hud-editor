@@ -604,6 +604,6 @@ def save_data(data):
 
 def save_and_exit_script(persistent_data, hud_instance):
     """Exit the script"""
-    hud_instance.finish_editing(use_gui_callback=False)
+    hud_instance.finish_editing(open_start_gui=False)
     save_data(persistent_data)
     sys.exit()

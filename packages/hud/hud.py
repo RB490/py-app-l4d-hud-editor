@@ -5,6 +5,7 @@ from tkinter.filedialog import asksaveasfilename
 import easygui
 import keyboard
 from packages.classes.vpk import VPKClass
+from packages.gui.start import GuiHudStart
 from packages.hud.descriptions import HudDescriptions
 from packages.hud.syncer import HudSyncer
 
@@ -18,18 +19,15 @@ from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HU
 class Hud:
     """Class to manage hud editing"""
 
-    def __init__(self, game_instance) -> None:
+    def __init__(self, game_instance, persistent_data) -> None:
         assert isinstance(game_instance, Game)
         self.game = game_instance
+        self.persistent_data = persistent_data
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
         self.hud_dir = None
-        self.timer_game_exit = None
-        self.finish_editing_gui_callback = None
-
-    def set_finish_editing_gui_callback(self, callback):
-        """Callback to the hud select gui"""
-        self.finish_editing_gui_callback = callback
+        self.threaded_timer_game_exit = None
+        self.browser = None
 
     def get_dir(self):
         """Get information"""
@@ -109,29 +107,29 @@ class Hud:
     def start_game_exit_check(self):
         """Start game exit check"""
         # Stop any currently running thread
-        if self.timer_game_exit is not None:
+        if self.threaded_timer_game_exit is not None:
             self.stop_game_exit_check()
 
         # Schedule the function to be called after 2 seconds
-        self.timer_game_exit = threading.Timer(2, self.wait_for_game_exit_then_finish_editing)
-        self.timer_game_exit.start()
+        self.threaded_timer_game_exit = threading.Timer(2, self.wait_for_game_exit_then_finish_editing)
+        self.threaded_timer_game_exit.start()
 
     def stop_game_exit_check(self):
         """Stop game exit check"""
-        if self.timer_game_exit is not None:
-            self.timer_game_exit.cancel()
-            self.timer_game_exit = None
+        if self.threaded_timer_game_exit is not None:
+            self.threaded_timer_game_exit.cancel()
+            self.threaded_timer_game_exit = None
 
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""
 
         if not self.game.is_running():
-            self.finish_editing(use_gui_callback=True)
+            self.finish_editing(open_start_gui=True)
         else:
             # Schedule the function to be called again
             self.start_game_exit_check()
 
-    def start_editing(self, hud_dir):
+    def start_editing(self, hud_dir, sync_hud=False):
         """Perform all the actions needed to start hud editing"""
 
         print(f"start_editing: ({hud_dir})")
@@ -147,11 +145,12 @@ class Hud:
                 return
 
         # cancel if this hud is already being edited
-        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:
+        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
             return
 
         # unsync previous hud
-        self.syncer.un_sync()
+        if sync_hud:
+            self.syncer.un_sync()
 
         # Stop checking for game exit
         self.stop_game_exit_check()
@@ -160,7 +159,8 @@ class Hud:
         self.game.activate_mode("dev")
 
         # sync the hud to the game folder
-        self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
+        if sync_hud:
+            self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
 
         # hotkeys
         keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
@@ -173,6 +173,10 @@ class Hud:
 
         # Start checking for game exit
         self.wait_for_game_exit_then_finish_editing()
+
+        # Open browser
+        self.browser = GuiHudBrowser(self, self.game, self.persistent_data)
+        self.browser.run()
 
     def sync(self):
         """Sync hud"""
@@ -187,12 +191,15 @@ class Hud:
         # clear variables
         self.hud_dir = None
 
-    def finish_editing(self, use_gui_callback=True):
+    def finish_editing(self, open_start_gui=True):
         """Perform all the actions needed to finish hud editing"""
         print("finish_editing")
 
         # Stop checking for game exit
         self.stop_game_exit_check()
+
+        # close browser
+        self.browser.stop_browser()
 
         # unsync hud
         self.syncer.un_sync()
@@ -207,8 +214,9 @@ class Hud:
         self.game.activate_mode("user")
 
         # callback to the gui
-        if use_gui_callback and self.finish_editing_gui_callback:
-            self.finish_editing_gui_callback()
+        if open_start_gui:
+            start_instance = GuiHudStart(self.persistent_data, self.game, self)
+            start_instance.run()
 
 
 def get_hud_debug_instance():
@@ -217,7 +225,7 @@ def get_hud_debug_instance():
     game_instance = Game(persistent_data)
     huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
     hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
-    hud_edit = Hud(game_instance)
+    hud_edit = Hud(game_instance, persistent_data)
     hud_edit.hud_dir = hud_debug_dir
     return hud_edit
 

@@ -8,7 +8,6 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 from packages.classes.vpk import VPKClass
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
-from packages.utils.constants import IMAGES_DIR
 
 
 class GuiHudStart:
@@ -18,7 +17,6 @@ class GuiHudStart:
         self.persistent_data = persistent_data
         self.game = game_instance
         self.hud = hud_instance
-        self.hud.set_finish_editing_gui_callback(self.on_finish_hud_editing)
         self.root = tk.Tk()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -121,19 +119,14 @@ class GuiHudStart:
         self.root.config(menu=menu_bar)
         self.update_treeview()
         # self.root.on_hide()
-        # self.root.withdraw()  # hide gui
+        self.root.withdraw()  # hide gui
 
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
     def run(self):
         print("start: run")
-        # self.show()
-        self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
-
-    def on_finish_hud_editing(self):
-        """Called by hud class with callback"""
-        # reopen the GUI
         self.show()
+        self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
 
     def installer_user_dir(self):
         """This method returns the user directory."""
@@ -332,11 +325,15 @@ class GuiHudStart:
         if prompt_create_new_hud(self.persistent_data):
             self.update_treeview()
 
+    def stop_start(self):
+        self.root.destroy()
+
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
 
         # hide gui
-        self.on_hide()
+        self.stop_start()
+        # self.on_hide()
 
         # edit hud
         self.hud.start_editing(self.selected_hud_dir)
@@ -364,7 +361,7 @@ def get_gui_start_debug_instance(persistent_data, installer_instance, hud_instan
 
     # persistent_data = load_data()
     # game_instance = Game(persistent_data)
-    # hud_edit = Hud(game_instance)
+    # hud_edit = Hud(game_instance, persistent_data)
     # hud_edit.hud_dir = hud_debug_dir
 
     # start_instance = GuiHudStart(persistent_data, game_instance, hud_edit)
