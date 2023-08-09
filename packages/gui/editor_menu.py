@@ -2,8 +2,6 @@
 
 import tkinter as tk
 
-import keyboard
-
 from packages.editor_menu.menu import EditorMenuClass
 
 

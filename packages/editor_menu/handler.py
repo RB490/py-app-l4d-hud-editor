@@ -149,6 +149,7 @@ class EditorMenuHandler:
         self.game.command.execute(execute_command)
 
     def editor_give_items(self, action):
+        """Method to handle giving items from the menu"""
         # Define the function to be called when a menu item is selected
         self.game.command.execute(action)
 
@@ -183,7 +184,7 @@ class EditorMenuHandler:
     def editor_exit_script(self):
         """Exit script"""
 
-        self.hud.finish_editing()
+        self.hud.finish_editing(use_gui_callback=False)
         sys.exit()
 
     def editor_open_hud_select(self):

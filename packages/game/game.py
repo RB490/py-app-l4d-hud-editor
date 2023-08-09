@@ -239,7 +239,7 @@ def debug_game_class():
     # game_manager_instance.run_update_or_repair()
     # game_manager_instance.run_update_or_repair("repair")
 
-    # hud_edit.finish_editing()
+    # hud_edit.finish_editing(use_gui_callback=False)
     # game_instance.run("dev")
     # game_instance.command.execute("map c12m2_traintunnel")
     # game_instance.command.execute("give_all_items")

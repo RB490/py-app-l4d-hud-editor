@@ -7,12 +7,14 @@ feature -> create functioning core functionality: ability to edit a hud
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
 		2. when the 'browser' gui gets closed close script instead of opening the start gui
-
+	testing -> create test class for hud syncer
 
 feature -> browser -> treeview context menu
 feature -> browser -> also add buttons for the treeview context menu options
 feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
 refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
+
+testing -> create test class for hud descriptions
 
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc

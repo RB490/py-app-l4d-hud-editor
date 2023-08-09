@@ -21,7 +21,9 @@ from packages.utils.functions import (
 
 
 class EditorMenuClass:
-    """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
+    """Class containing editor menu methods for GuiEditorMenu to keep things organized
+
+    using this in the main gui because a context menu hotkey doesn't work right in python"""
 
     def __init__(
         self, child_instance, root, persistent_data, game_instance, hud_instance, start_instance, browser_instance
@@ -718,6 +720,7 @@ class EditorMenuClass:
 
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label="Start", command=self.handler.editor_open_hud_select)
+        # self.file_menu.add_command(label="Save", command=self.handler.editor_save)
         self.file_menu.add_command(label="Browser", command=self.handler.editor_open_hud_browser)
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", menu=self.help_menu)

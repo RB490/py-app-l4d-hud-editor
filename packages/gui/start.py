@@ -18,7 +18,7 @@ class GuiHudStart:
         self.persistent_data = persistent_data
         self.game = game_instance
         self.hud = hud_instance
-        self.hud.set_finish_editing_callback(self.on_finish_hud_editing)
+        self.hud.set_finish_editing_gui_callback(self.on_finish_hud_editing)
         self.root = tk.Tk()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)

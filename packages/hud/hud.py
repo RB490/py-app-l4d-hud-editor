@@ -4,7 +4,6 @@ import threading
 from tkinter.filedialog import asksaveasfilename
 import easygui
 from packages.classes.vpk import VPKClass
-from packages.gui.descriptions import GuiHudDescriptions
 from packages.gui.start import GuiHudStart
 from packages.hud.descriptions import HudDescriptions
 from packages.hud.syncer import HudSyncer
@@ -26,11 +25,11 @@ class Hud:
         self.desc = HudDescriptions()
         self.hud_dir = None
         self.timer_game_exit = None
-        self.finish_editing_callback = None
+        self.finish_editing_gui_callback = None
 
-    def set_finish_editing_callback(self, callback):
+    def set_finish_editing_gui_callback(self, callback):
         """Callback to the hud select gui"""
-        self.finish_editing_callback = callback
+        self.finish_editing_gui_callback = callback
 
     def get_dir(self):
         """Get information"""
@@ -127,7 +126,7 @@ class Hud:
         """Used to finish editing when game closes"""
 
         if not self.game.is_running():
-            self.finish_editing()
+            self.finish_editing(True)
         else:
             # Schedule the function to be called again
             self.start_game_exit_check()
@@ -180,7 +179,7 @@ class Hud:
         # clear variables
         self.hud_dir = None
 
-    def finish_editing(self, callback=True):
+    def finish_editing(self, use_gui_callback=True):
         """Perform all the actions needed to finish hud editing"""
         print("finish_editing")
 
@@ -197,8 +196,8 @@ class Hud:
         self.game.activate_mode("user")
 
         # callback to the gui
-        if callback and self.finish_editing_callback:
-            self.finish_editing_callback()
+        if use_gui_callback and self.finish_editing_gui_callback:
+            self.finish_editing_gui_callback()
 
 
 def debug_hud():
