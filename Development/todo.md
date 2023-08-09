@@ -2,22 +2,30 @@ goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
 
-testing -> ability to edit a hud
-
-bug -> game -> no game command works at all
 bug -> edit hud -> unsync hud -> unsync hud again -> second time it still tries to unsync according to terminal
 	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
 	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
 	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
 	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
 
+bug -> move game window position
+	Traceback (most recent call last):
+	File "C:\Users\willi\AppData\Local\Programs\Python\Python311\Lib\tkinter\__init__.py", line 1948, in __call__
+		return self.func(*args)
+			^^^^^^^^^^^^^^^^
+	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\editor_menu\menu.py", line 256, in <lambda>
+		command=lambda pos=pos: self.handler.editor_menu_game_pos(pos),
+								^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\editor_menu\handler.py", line 88, in editor_menu_game_pos
+		self.game.move(pos)
+	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\game\game.py", line 124, in move
+		move_hwnd_to_position(self.get_hwnd(), position)
+	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\utils\functions.py", line 102, in move_hwnd_to_position
+		rect = win32gui.GetWindowRect(hwnd)
+			^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	pywintypes.error: (1400, 'GetWindowRect', 'Invalid window handle.')
 
-
-
-
-
-
-
+testing -> ability to edit a hud
 
 
 
@@ -54,6 +62,10 @@ bug -> dev -> update install -> rebuild audio -> manually closed game during pro
 	RuntimeError: Process 'left4dead2.exe' not found within 60 seconds
 
 feature -> browser -> treeview phsyical context menu buttons (?)
+
+refactor -> xonsider and test how i want to do error handling in the sync class. possibly after or during creating unit test
+	eg: sync() raises exceptions currently. which caused an error then pressing the sync hotkey
+	& target_dir_main_name is not checked for validty in sync()
 
 feature -> gui icons
 feature -> gui buttons icons

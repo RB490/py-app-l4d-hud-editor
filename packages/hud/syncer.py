@@ -113,9 +113,9 @@ class HudSyncer:
             self.un_sync()
 
         # Validate input
-        if not os.path.isdir(source_dir):
+        if source_dir is None or not os.path.isdir(source_dir):
             raise ValueError(f"Invalid source directory! '{source_dir}'")
-        if not os.path.isdir(target_dir):
+        if target_dir is None or not os.path.isdir(target_dir):
             raise ValueError(f"Invalid target directory! '{target_dir}'")
 
         # Save input

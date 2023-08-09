@@ -193,7 +193,19 @@ class Hud:
     def sync(self):
         """Sync hud"""
 
-        self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
+        hud_dir = self.hud_dir
+        dev_game_dir = self.game.get_dir("dev")
+        main_dev_dir_basename = os.path.basename(self.game.get_main_dir("dev"))
+
+        print("hud_dir:", hud_dir)
+        print("dev_game_dir:", dev_game_dir)
+        print("main_dev_dir_basename:", main_dev_dir_basename)
+
+        # pylint: disable=broad-exception-caught
+        try:
+            self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
+        except Exception as err_info:
+            print(f"Could not sync: {err_info}")
 
     def un_sync(self):
         """Unsync hud"""
