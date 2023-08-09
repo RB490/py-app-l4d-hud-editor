@@ -23,7 +23,7 @@ class GuiEditorMenu:
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, persistent_data, browser_instance):
+    def __init__(self, persistent_data):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
@@ -35,7 +35,7 @@ class GuiEditorMenu:
         self.persistent_data = persistent_data
         self.game = Game(persistent_data)
         self.hud = Hud(persistent_data)
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, browser_instance)
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
         self.my_editor_menu.create_and_refresh_menu()
         # keyboard.add_hotkey("F4", self.show_menu, suppress=True) # doesn't work nice - stays open when it loses focus
         # keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
@@ -81,7 +81,7 @@ class GuiEditorMenu:
         self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
 
-def debug_gui_editor_menu(persistent_data, browser_instance):
+def debug_gui_editor_menu(persistent_data):
     """Debug gui class"""
     # pylint: disable=unused-variable
-    app = GuiEditorMenu(persistent_data, browser_instance)
+    app = GuiEditorMenu(persistent_data)

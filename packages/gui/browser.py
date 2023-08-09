@@ -113,7 +113,7 @@ class GuiHudBrowser:
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data, self)
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
         self.my_editor_menu.create_and_refresh_menu()
 
         # hotkeys

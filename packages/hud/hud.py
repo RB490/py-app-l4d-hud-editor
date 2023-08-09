@@ -38,6 +38,9 @@ class Hud:
         self.threaded_timer_game_exit = None
         self.browser = None
 
+        if DEBUG_MODE:
+            self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
+
     def get_dir(self):
         """Get information"""
         return self.hud_dir
@@ -228,31 +231,10 @@ class Hud:
             start_instance.run()
 
 
-def get_hud_debug_instance():
-    "get_hud_debug_instance"
-    persistent_data = load_data()
-    huds_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug")
-    hud_debug_dir = os.path.join(huds_debug_dir, "Workspace", "2020HUD")
-    hud_edit = Hud(persistent_data)
-    hud_edit.hud_dir = hud_debug_dir
-    return hud_edit
-
-
 def debug_hud():
     # pylint: disable=unused-variable
     """Debug the hud class"""
     print("debug_hud")
 
-    my_hud_instanc = get_hud_debug_instance()
-
-    # hud_desc_gui = GuiHudDescriptions(hud_edit, "scripts\\hudlayout.res")
-    # hud_desc_gui.root.mainloop()
-
-    # start_instance = GuiHudStart(persistent_data, hud_edit)
-    # start_instance.show()
-    # browser_instance = GuiHudBrowser(hud_edit, persistent_data, start_instance)
-    # browser_instance.show()
-
-    # hud_edit.start_editing(hud_debug_dir)
-    # gui_browser = GuiHudBrowser(hud_edit)
-    # gui_browser.root.mainloop()
+    persistent_data = load_data()
+    my_hud_instanc = Hud(persistent_data)

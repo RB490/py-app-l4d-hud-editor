@@ -26,8 +26,8 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(self, child_instance, root, persistent_data, browser_instance):
-        self.handler = EditorMenuHandler(self, persistent_data, browser_instance)
+    def __init__(self, child_instance, root, persistent_data):
+        self.handler = EditorMenuHandler(self, persistent_data)
         self.root = root
         self.child_instance = child_instance
         self.persistent_data = persistent_data
@@ -720,7 +720,6 @@ class EditorMenuClass:
 
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label="Start", command=self.handler.editor_open_hud_select)
-        self.file_menu.add_command(label="Browser", command=self.handler.editor_open_hud_browser)
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", menu=self.help_menu)
         self.file_menu.add_command(label="Close", command=self.handler.editor_finish_editing)

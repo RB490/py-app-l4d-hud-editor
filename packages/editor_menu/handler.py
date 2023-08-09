@@ -20,8 +20,7 @@ from packages.utils.functions import (
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
-    def __init__(self, editor_menu_instance, persistent_data, browser_instance):
-        self.browser_instance = browser_instance
+    def __init__(self, editor_menu_instance, persistent_data):
         self.editor_menu = editor_menu_instance
         self.persistent_data = persistent_data
         self.game = Game(persistent_data)
@@ -199,11 +198,6 @@ class EditorMenuHandler:
         """Finish editing and sync changes"""
         print("editor_finish_editing")
         self.hud.finish_editing(open_start_gui=True)
-
-    def editor_open_hud_browser(self):
-        """Open hud browser"""
-        print("editor_open_hud_browser")
-        self.browser_instance.show()
 
     def editor_open_folder(self, input_dir):
         """Open folder"""

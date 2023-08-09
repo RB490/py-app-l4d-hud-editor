@@ -1,12 +1,6 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
-refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
-
-refactor -> improve class instance names
-	start_instance -> start_gui
-	browsing_instance -> browser_gui
-
 
 bug -> hud dev folder has functioning pak01.vpk's what happened there?
 
