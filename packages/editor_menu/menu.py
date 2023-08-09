@@ -720,8 +720,8 @@ class EditorMenuClass:
 
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label="Start", command=self.handler.editor_open_hud_select)
-        # self.file_menu.add_command(label="Save", command=self.handler.editor_save)
         self.file_menu.add_command(label="Browser", command=self.handler.editor_open_hud_browser)
+        self.file_menu.add_command(label="Finish", command=self.handler.editor_finish_editing)
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", menu=self.help_menu)
         self.file_menu.add_command(label="Exit", command=self.handler.editor_exit_script)

@@ -192,6 +192,11 @@ class EditorMenuHandler:
         print("editor_open_hud_select")
         self.start_instance.show()
 
+    def editor_finish_editing(self):
+        """Finish editing and sync changes"""
+        print("editor_finish_editing")
+        self.hud.finish_editing(use_gui_callback=True)
+
     def editor_open_hud_browser(self):
         """Open hud browser"""
         print("editor_open_hud_browser")

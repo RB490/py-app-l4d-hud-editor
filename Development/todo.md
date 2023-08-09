@@ -2,7 +2,6 @@
 
 
 feature -> create functioning core functionality: ability to edit a hud
-	feature -> add manual 'finish editing' access options @ editor menu, (maybe) browser gui button
 	feature -> browser -> treeview doubleclick action
 	feature -> test hud editing to figure out how i want the code path to go. for example:
 		1. on script start show start gui
@@ -13,6 +12,9 @@ feature -> browser -> treeview context menu
 feature -> browser -> also add buttons for the treeview context menu options
 feature -> refactor -> Make the main gui optional by adding all it's functionality into the menu class
 refactor -> Where possible create required class instances inside the class itself instead of passing them as parameters
+refactor -> improve class instance names
+	start_instance -> start_gui
+	browsing_instance -> browser_gui
 
 testing -> create test class for hud descriptions
 

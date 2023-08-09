@@ -5,7 +5,7 @@ import keyboard
 import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
-from packages.utils.functions import exit_script
+from packages.utils.functions import save_and_exit_script
 
 
 class GuiHudBrowser:
@@ -180,4 +180,4 @@ class GuiHudBrowser:
     def on_close(self):
         """Runs on close"""
         self.save_window_geometry()
-        exit_script(self.persistent_data, self.hud)
+        save_and_exit_script(self.persistent_data, self.hud)

@@ -602,7 +602,7 @@ def save_data(data):
         print(f"Error saving data to {PERSISTENT_DATA_PATH}")
 
 
-def exit_script(persistent_data, hud_instance):
+def save_and_exit_script(persistent_data, hud_instance):
     """Exit the script"""
     hud_instance.finish_editing(use_gui_callback=False)
     save_data(persistent_data)
