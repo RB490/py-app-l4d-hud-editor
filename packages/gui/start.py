@@ -362,15 +362,9 @@ class GuiHudStart:
         self.on_hide()
 
 
-def get_gui_start_debug_instance(persistent_data):
+def debug_gui_start(persistent_data):
     # pylint: disable=unused-variable
     """Debug the gui"""
 
-    # persistent_data = load_data()
-    # hud_edit = Hud(persistent_data)
-    # hud_edit.hud_dir = hud_debug_dir
-
-    # start_instance = GuiHudStart(persistent_data, hud_edit)
-    # start_instance.show()
-
-    return GuiHudStart(persistent_data)
+    ds = GuiHudStart(persistent_data)
+    ds.run()

@@ -427,7 +427,7 @@ class GameManager:
         copy_directory_contents(mods_sourcemod_dir, main_dir)
 
     def _rebuild_audio(self):
-        print("rebuild audio")
+        print("rebuilding audio")
 
         cfg_dir = self.get_cfg_dir("dev")
         valverc_path = os.path.join(cfg_dir, "valve.rc")

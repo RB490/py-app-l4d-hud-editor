@@ -2,9 +2,6 @@ goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
 
-bug -> hud dev folder has functioning pak01.vpk's what happened there?
-
-
 
 
 
@@ -27,6 +24,9 @@ bug -> hud dev folder has functioning pak01.vpk's what happened there?
 -------------------------------------------------Misc
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+refactor -> self.game.run("dev", "wait on close")
+	should be wait_on_close=True, or false
+
 refactor -> replace assert's with prop error handling. try/catch, show_message boxes and suchs
 
 refactor -> test hud editing to figure out how i want the code path to go. for example:
@@ -42,6 +42,12 @@ idea -> refactor -> Make the main gui optional by adding all it's functionality 
 bug -> fix menu l4d1&l4d2 grayscale icons
 	is not just these icons but any icon. tried garbage collection fix
 	^ started being a problem after i moved the menu into the browser class
+
+bug -> dev -> update install -> game starts to rebuild audio but nothing happens
+bug -> dev -> update install -> rebuild audio -> manually closed game during process causing the script to hang
+	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\utils\functions.py", line 301, in wait_for_process_and_get_hwnd
+		raise RuntimeError(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
+	RuntimeError: Process 'left4dead2.exe' not found within 60 seconds
 
 feature -> browser -> treeview phsyical context menu buttons (?)
 
