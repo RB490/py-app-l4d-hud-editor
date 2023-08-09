@@ -2,10 +2,14 @@ goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
 
+testing -> ability to edit a hud
 
-
-
-
+bug -> game -> no game command works at all
+bug -> edit hud -> unsync hud -> unsync hud again -> second time it still tries to unsync according to terminal
+	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
+	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
+	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
+	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
 
 
 
@@ -85,6 +89,10 @@ feature -> progress gui for the installer class
 
 feature -> multi game support (?)
 
+In the context of Tkinter GUIs, whether you choose to use the singleton pattern depends on factors such as the complexity of your application, your team's coding practices, and your familiarity with the design pattern. If your application is relatively small and doesn't require extensive management of GUI instances, using a singleton might be overengineering. On the other hand, if your application has complex interactions between different parts of the code and you want to ensure a single point of GUI access, a singleton could be beneficial
+	refactor -> Make the browser gui into a simpleton?
+	refactor -> Make the start gui into a simpleton?
+	^ doesn't really make much of a difference either way i suppose
 
 bug -> start gui -> all the dev options are broken
 	AttributeError: 'GameManager' object has no attribute 'manager'

@@ -7,6 +7,7 @@ import win32gui
 
 from packages.editor_menu.menu import EditorMenuClass
 from packages.game.game import Game
+from packages.utils.constants import HOTKEY_TOGGLE_BROWSER
 from packages.utils.functions import save_and_exit_script
 from packages.utils.shared_utils import open_file_or_directory
 
@@ -116,9 +117,6 @@ class GuiHudBrowser:
         self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
         self.my_editor_menu.create_and_refresh_menu()
 
-        # hotkeys
-        keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
-
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
@@ -128,6 +126,9 @@ class GuiHudBrowser:
 
     def run(self):
         "Show & start main loop"
+        # hotkeys
+        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
+
         self.show()
         self.root.mainloop()
 
@@ -251,7 +252,7 @@ class GuiHudBrowser:
 
     def destroy_gui(self):
         "Close & stop main loop"
-        keyboard.remove_hotkey("F5")
+        keyboard.remove_hotkey(HOTKEY_TOGGLE_BROWSER)
         self.save_window_geometry()
         self.root.destroy()
 

@@ -141,7 +141,7 @@ class Hud:
             # Schedule the function to be called again
             self.start_game_exit_check()
 
-    def start_editing(self, hud_dir, sync_hud=False):
+    def start_editing(self, hud_dir, sync_hud=True):
         """Perform all the actions needed to start hud editing"""
 
         print(f"start_editing: ({hud_dir})")
@@ -151,10 +151,10 @@ class Hud:
         self.hud_dir = hud_dir
 
         # debug mode - prompt to start game
-        if DEBUG_MODE:
-            result = easygui.ynbox("Start editing HUD ingame?", "Confirmation", ("Yes", "No"))
-            if not result:
-                return
+        # if DEBUG_MODE:
+        #     result = easygui.ynbox("Start editing HUD ingame?", "Confirmation", ("Yes", "No"))
+        #     if not result:
+        #         return
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
@@ -238,3 +238,4 @@ def debug_hud():
 
     persistent_data = load_data()
     my_hud_instanc = Hud(persistent_data)
+    my_hud_instanc.start_editing(my_hud_instanc.get_dir())

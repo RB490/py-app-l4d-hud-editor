@@ -14,6 +14,7 @@ from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_
 class GuiHudStart:
     """Class for the hud select gui"""
 
+
     def __init__(self, persistent_data):
         self.persistent_data = persistent_data
         self.game = Game(persistent_data)
@@ -366,5 +367,5 @@ def debug_gui_start(persistent_data):
     # pylint: disable=unused-variable
     """Debug the gui"""
 
-    ds = GuiHudStart(persistent_data)
-    ds.run()
+    d_s = GuiHudStart(persistent_data)
+    d_s.run()

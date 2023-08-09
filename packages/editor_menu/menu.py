@@ -10,6 +10,8 @@ from packages.game.game import Game
 from packages.utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
+    HOTKEY_SYNC_HUD,
+    HOTKEY_TOGGLE_BROWSER,
     MAP_CODES,
     SNIPPETS_DIR,
     IMAGES_DIR,
@@ -550,9 +552,9 @@ class EditorMenuClass:
         self.hotkeys_menu.add_command(label="Global")
         self.hotkeys_menu.entryconfig("Global", state="disabled")
         self.hotkeys_menu.add_separator()
-        self.hotkeys_menu.add_command(label="Sync Hud", accelerator="Ctrl+S")
+        self.hotkeys_menu.add_command(label="Sync Hud", accelerator=HOTKEY_SYNC_HUD)
         self.hotkeys_menu.add_command(label="Show Menu", accelerator="F4")
-        self.hotkeys_menu.add_command(label="Browse Files", accelerator="F8")
+        self.hotkeys_menu.add_command(label="Browse Files", accelerator=HOTKEY_TOGGLE_BROWSER)
         self.hotkeys_menu.add_separator()
         self.hotkeys_menu.add_command(label="In-Game")
         self.hotkeys_menu.entryconfig("In-Game", state="disabled")
