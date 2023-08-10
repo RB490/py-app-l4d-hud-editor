@@ -303,6 +303,11 @@ class EditorMenuClass:
             command=self.create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.get_dir()),
         )
 
+        # disable items when no hud is loaded
+        if not self.hud.get_dir():
+            for i in range(self.hud_menu.index("end") + 1):
+                self.hud_menu.entryconfigure(i, state="disabled")
+
     def create_load_hud_menu(self, menubar):
         """Create load hud menu"""
 
@@ -787,5 +792,9 @@ class EditorMenuClass:
         self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
         self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
         self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
-        # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying popup
+        # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying menu as popup
+        
+        if not self.hud.get_dir():
+            self.menu_bar.entryconfig("Hud", state="disabled")
+        
         self.root.config(menu=self.menu_bar)

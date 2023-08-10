@@ -9,9 +9,6 @@ bug -> gui browser -> close -> AttributeError: 'NoneType' object has no attribut
 
 testing -> ability to edit a hud
 
-bug -> sync hud -> unsync -> 'hud' menu items are still working and don't have error checking
-	either disable them or, maybe the entire menu rather than 1 by 1
-
 -------------------------------------------------Features
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
