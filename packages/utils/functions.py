@@ -85,8 +85,11 @@ def focus_hwnd(hwnd):
     except ValueError:
         print("Could not focus window")
 
+
 def is_valid_window(hwnd):
+    "Verify window"
     return ctypes.windll.user32.IsWindow(hwnd)
+
 
 def move_hwnd_to_position(hwnd, position):
     # pylint: disable=c-extension-no-member, unsubscriptable-object
@@ -95,7 +98,7 @@ def move_hwnd_to_position(hwnd, position):
     `position` is a string that can take values from GAME_POSITIONS list.
     """
 
-    print(f'move_hwnd_to_position: hwnd: {hwnd} position: {position}')
+    print(f"move_hwnd_to_position: hwnd: {hwnd} position: {position}")
 
     # Validate the hwnd argument
     if hwnd is None or not is_valid_window(hwnd):
@@ -224,7 +227,7 @@ def prompt_create_new_hud(persistent_data):
     folder_path = prompt_for_folder("New HUD: Select folder")
     if folder_path:
         persistent_data["stored_huds"].append(folder_path)
-        copy_directory_contents(NEW_HUD_DIR, folder_path)
+        copy_files_in_directory(NEW_HUD_DIR, folder_path)
         print(f'stored_huds: {persistent_data["stored_huds"]}')
         return True
     else:
@@ -408,31 +411,57 @@ def is_process_running_from_hwnd(hwnd: int) -> bool:
         return False
 
 
-def copy_directory_contents(src_dir, dest_dir, ignore_file=None):
-    """Copy the contents of src_dir into dest_dir overwriting if needed"""
-    # Create the destination directory if it doesn't already exist
-    if not os.path.exists(dest_dir):
-        os.makedirs(dest_dir)
+def copy_files_in_directory(src_dir, dest_dir, ignore_file=None):
+    "Copy the files in asource directory to a destination directory, overwriting if necessary."
+    # pylint: disable=broad-exception-raised
+    # pylint: disable=broad-exception-caught
 
-    # Traverse the source directory using os.walk and create a list of all files to be copied
-    src_files = []
-    for root, _, files in os.walk(src_dir):
-        for filename in files:
-            if filename != ignore_file:
-                src_files.append(os.path.join(root, filename))
+    try:
+        # Normalize paths
+        src_dir = os.path.normpath(src_dir)
+        dest_dir = os.path.normpath(dest_dir)
 
-    # Iterate over the list of source files and copy each file to the destination directory
-    for src_path in src_files:
-        relative_path = os.path.relpath(src_path, src_dir)  # Calculate the relative path of the source file
-        dest_path = os.path.join(dest_dir, relative_path)
+        # Verify and create destination directory if needed
+        if not os.path.exists(dest_dir):
+            os.makedirs(dest_dir)
+        elif not os.path.isdir(dest_dir):
+            raise NotADirectoryError(f"The destination directory {dest_dir} is not valid.")
 
-        # Create the destination directory if it doesn't already exist
-        relative_dir = os.path.dirname(dest_path)
-        if not os.path.exists(relative_dir):
-            os.makedirs(relative_dir)
+        # Build a list of source files to be copied
+        src_files = [
+            os.path.join(root, filename)
+            for root, _, files in os.walk(src_dir)
+            for filename in files
+            if filename != ignore_file
+        ]
 
-        # Overwrites file in destination
-        shutil.copy2(src_path, dest_path)
+        # Raise exception if no source files found
+        if not src_files:
+            raise Exception(f"No files in the source directory: {src_dir}")
+
+        # Copy each source file to the destination
+        for src_path in src_files:
+            relative_path = os.path.relpath(src_path, src_dir)
+            dest_path = os.path.join(dest_dir, relative_path)
+
+            # Create the destination directory if it doesn't exist
+            relative_dir = os.path.dirname(dest_path)
+            if not os.path.exists(relative_dir):
+                os.makedirs(relative_dir)
+
+            # Attempt to copy the file, handle errors
+            try:
+                shutil.copy2(src_path, dest_path)
+                print(f"Copied {src_path} -> {dest_path}")
+            except shutil.Error as copy_error:
+                print(f"Copy error: {copy_error}")
+            except Exception as general_error:
+                print(f"An error occurred: {general_error}")
+
+    except Exception as err_info:
+        print(f"An error occurred during copy files in directory: {err_info}")
+
+    print(f"Copied files '{src_dir}' -> '{dest_dir}'")
 
 
 def get_dir_size(path):
@@ -616,6 +645,7 @@ def save_and_exit_script(persistent_data):
     """Exit the script"""
     # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
     from packages.hud.hud import Hud
+
     Hud(persistent_data).finish_editing(open_start_gui=False)
     save_data(persistent_data)
     sys.exit()

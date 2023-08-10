@@ -1,8 +1,8 @@
 """Methods related to editing a hud"""
 import os
 import threading
+from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
-import easygui
 import keyboard
 from packages.classes.vpk import VPKClass
 from packages.gui.start import GuiHudStart
@@ -12,8 +12,9 @@ from packages.hud.syncer import HudSyncer
 # pylint: disable=unused-import
 from packages.gui.browser import GuiHudBrowser
 from packages.game.game import Game
-from packages.utils.functions import copy_directory_contents, load_data
+from packages.utils.functions import copy_files_in_directory, load_data
 from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
+from packages.utils.shared_utils import show_message
 
 
 class Hud:
@@ -73,26 +74,36 @@ class Hud:
 
         source_dir = self.get_dir()
 
-        # verify directory
-        assert os.path.isdir(source_dir)
+        # Validate source directory
+        if not os.path.isdir(source_dir):
+            raise NotADirectoryError(f"The source directory {source_dir} is not valid.")
 
-        target_dir = easygui.diropenbox(
-            msg="Please select the target directory", title="Select Target Directory", default=""
-        )
+        # Ask the user to select the target directory
+        target_dir = filedialog.askdirectory(title="Select Target Directory")
+        if not target_dir:
+            return
 
-        # Check if target directory already exists and has any files in it
-        if os.path.exists(target_dir) and len(os.listdir(target_dir)) > 0:
+        # Validate target directory
+        if not os.path.isdir(target_dir):
+            raise NotADirectoryError(f"The target directory {target_dir} is not valid.")
+
+        # Check if target directory already exists and has any contents
+        if os.path.exists(target_dir) and os.path.isdir(target_dir) and os.listdir(target_dir):
             # Prompt user whether to overwrite the target directory or not
-            response = easygui.boolbox(
-                msg=f"The directory {target_dir} already exists and is not empty. Do you want to overwrite it?",
-                title="Confirmation",
-                choices=("Yes", "No"),
+            response = show_message(
+                f"The directory {target_dir} already exists and is not empty. Do you want to overwrite it?",
+                "yesno",
+                "Confirmation",
             )
             if not response:
                 return
 
-        # copy the contents of source_dir to target_dir
-        copy_directory_contents(source_dir, target_dir)
+        # pylint: disable=broad-exception-caught
+        try:
+            # Copy the contents of source_dir to target_dir
+            copy_files_in_directory(source_dir, target_dir)
+        except Exception as general_error:
+            print(f"An error occurred: {general_error}")
 
     def save_vpk_file(self):
         """Save hud as vpk file"""
@@ -147,14 +158,15 @@ class Hud:
         print(f"start_editing: ({hud_dir})")
 
         # verify parameters
-        assert os.path.isdir(hud_dir)
+        if not os.path.isdir(hud_dir):
+            raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
         self.hud_dir = hud_dir
 
         # debug mode - prompt to start game
-        # if DEBUG_MODE:
-        #     result = easygui.ynbox("Start editing HUD ingame?", "Confirmation", ("Yes", "No"))
-        #     if not result:
-        #         return
+        if DEBUG_MODE:
+            result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
+            if not result:
+                return
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
@@ -256,5 +268,5 @@ def debug_hud():
 
     persistent_data = load_data()
     my_hud_instanc = Hud(persistent_data)
-
+    # my_hud_instanc.save_as_folder()
     my_hud_instanc.start_editing(my_hud_instanc.get_dir())

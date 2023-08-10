@@ -7,6 +7,7 @@ from packages.gui.start import debug_gui_start
 from packages.hud.hud import debug_hud
 
 from packages.utils.functions import load_data
+from packages.utils.shared_utils import show_message
 
 os.system("cls")  # clear terminal
 
@@ -14,9 +15,17 @@ os.system("cls")  # clear terminal
 # setup classes
 persistent_data = load_data()
 # create initial singleton game class
-# debug_hud()
-game_instance = Game(persistent_data)
-game_instance.manager.run_installer()
+debug_hud()
+# game_instance = Game(persistent_data)
+# game_instance.manager.run_installer()
+# result = game_instance.manager._prompt_start("install")
+# result = game_instance.manager.get_dir("dev")
+
+# result = game_instance.manager._prompt_game_verified()
+# print(result)
+
+# show_message("some message", "info", "mytitle")
+
 # game_instance2 = Game(persistent_data)
 # installer_instance = GameManager(persistent_data, game_instance)
 # debug_gui_start(persistent_data)

@@ -6,10 +6,10 @@ import shutil
 import sys
 from tkinter import filedialog
 from tkinter import messagebox
-import easygui
 from packages.classes.vpk import VPKClass
 from packages.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
-from packages.utils.functions import copy_directory_contents, get_dir_size_in_gb, get_steam_info, load_data
+from packages.utils.functions import copy_files_in_directory, get_dir_size_in_gb, get_steam_info, load_data
+from packages.utils.shared_utils import show_message
 
 
 class GameManager:
@@ -62,43 +62,51 @@ class GameManager:
         return os.path.join(self.steam_info["game_dir"], self.game.get_title())
 
     def get_dir(self, mode):
-        """Get the full path to the specified mode's directory. If not found prompts to manually select"""
-        match mode:
-            case "user":
-                installation_id_file = self.user_dir_id_file
-            case "dev":
-                installation_id_file = self.dev_dir_id_file
-            case _:
-                raise ValueError("Invalid mode parameter")
+        "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
+
+        # Map modes to their corresponding installation ID files
+        installation_id_file = {"user": self.user_dir_id_file, "dev": self.dev_dir_id_file}.get(mode, None)
+
+        if installation_id_file is None:
+            raise ValueError("Invalid mode parameter")
 
         steam_games_dir = self.steam_info["game_dir"]
+
+        # Iterate through folders in the Steam games directory
         for folder_name in os.listdir(steam_games_dir):
             folder_path = os.path.join(steam_games_dir, folder_name)
             if os.path.isdir(folder_path):
                 installation_id_file_path = os.path.join(folder_path, installation_id_file)
+
+                # Check if the installation ID file exists in the folder
                 if os.path.isfile(installation_id_file_path):
                     return folder_path
 
-        # could not find the id file for specified mode - prompt to manually select
+        # If the ID file is not found, prompt the user to manually select the directory
         message = (
-            f"Could not find id file for the {mode} installation directory.\n\n\n\n"
-            "Manually select it? If so - Be sure to select the correct directory!"
+            f"Could not find ID file for the {mode} installation directory.\n\n"
+            "Manually select it?\n"
+            "If so - Be sure to select the correct directory!"
         )
-        choices = ["Yes", "No"]
-        response = easygui.buttonbox(message, title=SCRIPT_NAME, choices=choices)
-        if response == "No":
-            return False
-        folder_path = filedialog.askdirectory(
-            mustexist=True, title=f"Select the {mode} directory", initialdir=self.steam_info.get("game_dir")
-        )
-        if not os.path.isdir(folder_path):
-            raise NotADirectoryError(
-                f"Could not find game installation directory for specified installation mode ({mode})"
+        response = show_message(message, "yesno", SCRIPT_NAME)
+
+        if response:
+            # Prompt the user to select the directory
+            folder_path = filedialog.askdirectory(
+                mustexist=True, title=f"Select the {mode} directory", initialdir=self.steam_info.get("game_dir")
             )
-        id_file_path = os.path.join(folder_path, installation_id_file)
-        with open(id_file_path, "w", encoding="utf-8") as file_handle:
-            file_handle.write(id_file_path)
-        return folder_path
+            if not os.path.isdir(folder_path):
+                raise NotADirectoryError(
+                    f"Could not find game installation directory for specified installation mode ({mode})"
+                )
+
+            # Create the installation ID file in the selected directory
+            id_file_path = os.path.join(folder_path, installation_id_file)
+            with open(id_file_path, "w", encoding="utf-8") as file_handle:
+                file_handle.write(id_file_path)
+            return folder_path
+        else:
+            return False
 
     def activate_mode(self, mode):
         """Activate user/dev mode by switching folder names eg. Left 4 Dead 2 & Left 4 Dead 2 User"""
@@ -147,28 +155,31 @@ class GameManager:
             raise RuntimeError(f"Game executable for {mode} mode not found in directory: '{install_dir}'")
 
     def _prompt_start(self, install_type, message_extra=""):
-        install_type = install_type.lower()  # lower case
-        assert install_type in ["install", "update", "repair"], "Invalid mode parameter"
+        install_type = install_type.lower()  # Convert to lowercase
 
-        title = f"{install_type} hud editing for {self.game.get_title()}?".capitalize()
+        # verify install type
+        valid_modes = ["install", "update", "repair"]
+        if install_type not in valid_modes:
+            raise ValueError("Invalid mode parameter")
+
+        # create message
+        install_type_capitalized = install_type.capitalize()
+        title = f"{install_type_capitalized} hud editing for {self.game.get_title()}?"
         disk_space = get_dir_size_in_gb(self.get_dir("user"))
-        message = (
-            f"{title}\n\n"
-            f"- {message_extra}\n"
+        message = f"{title}\n\n"
+        if message_extra:  # Check if the variable is not empty
+            message += f"- {message_extra}\n"  # Add the extra line
+        message += (
             "- This can take up to ~30 minutes depending on drive and processor speed\n"
             f"- This will use around {disk_space} of disk space (copy of the game folder)\n"
             "- Keep any L4D games closed during this process\n\n"
             "It is possible to cancel the setup at any time by closing the progress window"
         )
 
-        choices = ["Yes", "No"]
-        response = easygui.buttonbox(message, title=title, choices=choices)
-        if response == "Yes":
-            return True
-        elif response == "No":
-            return False
-        else:
-            return False
+        # prompt message
+        response = show_message(message, "yesno", title)  # Using "yesno" type for this confirmation
+
+        return response
 
     def run_update_or_repair(self, update_or_repair):
         """Update or repair dev mode"""
@@ -312,36 +323,33 @@ class GameManager:
 
     def _copy_game_files(self):
         print("Copying game files into developer directory")
-        copy_directory_contents(self.get_dir("user"), self.get_dir("dev"), self.user_dir_id_file)
+        copy_files_in_directory(self.get_dir("user"), self.get_dir("dev"), self.user_dir_id_file)
 
     def _prompt_game_verified(self):
         print("Prompting user to verify game")
-        title = f"Verify integrity of games files for {self.game.get_title()} in steam"
+        game_title = self.game.get_title()
+        title = "Verify game files"
+
         message = (
-            f"Verify integrity of games files for {self.game.get_title()} in steam\n\n"
-            f"Right-Click {self.game.get_title()} -> Properties -> Local Files -> 'Verify integrity of games files'\n"
+            f"Verify game files for {game_title}\n\n"
+            f"Steam -> Right-Click {game_title} -> Properties -> Local Files -> 'Verify integrity of game files'\n\n"
             "This will not affect your game installation. Only the copy that was just made\n\n"
-            "Are you sure Steam has finished verifying AND downloaded any missing files?"
+            "Are you sure steam has finished verifying AND downloaded any missing files?"
         )
 
-        choices = ["Yes", "No"]
-        response = easygui.buttonbox(message, title=title, choices=choices)
-        if response == "Yes":
-            pass
-        elif response == "No":
-            return False
+        response = show_message(message, "yesno", title)  # Using "yesno" type for this confirmation
+
+        if response:
+            # Ask a second time - are you really sure?
+            confirm_message = (
+                f"Are you REALLY sure steam has finished verifying AND"
+                f" downloaded any missing files for {game_title}?"
+            )
+            response = show_message(confirm_message, "yesno", title)  # Using "yesno" type for this confirmation
+
+            return response  # Response is already a boolean value
         else:
             return False
-
-        # ask a second time - are you really sure?
-        message = (
-            f"Are you REALLY sure Steam has finished verifying AND"
-            f"downloaded any missing files for {self.game.get_title()}?"
-        )
-        response = easygui.buttonbox(message, title=title, choices=choices)
-        if response == "Yes":
-            return True
-        return False
 
     def _find_pak_files(self, game_dir, callback):
         for subdir_name in os.listdir(game_dir):
@@ -434,9 +442,9 @@ class GameManager:
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
         main_dir = self.get_main_dir("dev")
 
-        copy_directory_contents(mods_dev_map_dir, main_dir)
-        copy_directory_contents(mods_addons_dir, main_dir)
-        copy_directory_contents(mods_sourcemod_dir, main_dir)
+        copy_files_in_directory(mods_dev_map_dir, main_dir)
+        copy_files_in_directory(mods_addons_dir, main_dir)
+        copy_files_in_directory(mods_sourcemod_dir, main_dir)
 
     def _rebuild_audio(self):
         print("Rebuilding audio")

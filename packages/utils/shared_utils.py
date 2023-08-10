@@ -5,6 +5,7 @@ import sys
 from tkinter import messagebox
 import tkinter as tk
 
+
 def open_file_or_directory(file_path):
     """Run specified path. Either opening a file or directory correctly"""
     # Check if file path exists
@@ -21,33 +22,46 @@ def open_file_or_directory(file_path):
         subprocess.run(file_path, shell=True, check=False)
     print(f"Opened {file_path}.")
 
-def show_message(msg, msgbox_type="info"):
+
+def show_message(msg, msgbox_type="info", title=None):
     """
     Show message by printing it and showing in a messagebox if running as .pyw
-    
+
     Args:
         msg (str): The message to be displayed.
         msgbox_type (str, optional): The type of messagebox to show ("info", "warning", "error",
             "question", "yesno", "okcancel"). Default is "info".
-    
+        title (str, optional): The title for the message box. Default is "Message Box".
+
     Returns:
         bool or None: For "yesno" and "okcancel" types, returns True if "Yes" or "OK" is clicked,
         and False if "No" or "Cancel" is clicked. For other types, returns None.
-    
+
     Example:
         # Example usage
-        response = show_message("This is a message.", "okcancel")
+        response = show_message("This is a message.", "okcancel", "Confirmation")
         if response is not None:
             if response:
                 print("User clicked OK")
             else:
                 print("User clicked Cancel")
     """
+
+    # Retrieve variables
+    script_extension = os.path.splitext(sys.argv[0])[1].lower()
+    script_name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    script_name_long = script_name + script_extension
+
     # Always print the message
     print(msg)
 
     # If running in windowed mode (.pyw) and a valid msgbox_type is provided, show the messagebox
-    if msgbox_type and os.path.splitext(sys.argv[0])[1].lower() == ".pyw":
+    if not title:
+        title = script_name_long
+    else:
+        title = script_name_long + " - " + title
+    # if msgbox_type and script_extension == ".pyw":
+    if msgbox_type:
         valid_msgbox_types = {
             "info": messagebox.showinfo,
             "warning": messagebox.showwarning,
@@ -62,9 +76,11 @@ def show_message(msg, msgbox_type="info"):
             root.withdraw()  # Hide the main window
 
             # Capture the response of the messagebox
-            response = valid_msgbox_types[msgbox_type]("Message Box Title", msg)
+            response = valid_msgbox_types[msgbox_type](title, msg)
 
             # Return the response to the caller
             return response
         else:
-            print("Invalid message box type. Available options: info, warning, error, question, yesno, okcancel")
+            raise ValueError(
+                "Invalid message box type. Available options: info, warning, error, question, yesno, okcancel"
+            )

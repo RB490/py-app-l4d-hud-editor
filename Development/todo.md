@@ -4,7 +4,6 @@ goal -> create core functionality ASAP: ability to edit a hud
 testing -> ability to edit a hud
 
 
-
 bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
 	run_installer -> _perform_installation -> is_installed("dev") -> get_dir(mode) -> the id file prompt in question
 
@@ -20,7 +19,10 @@ bug -> dev mode is not installed -> remove -> asks to manually select id file ->
 
 
 
-refactor -> manager class. for example: get_dir
+refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
+
+refactor -> currently the menu uses hud.get_dir() to check if a hud is loaded. i should probably improve this
+	a hud.is_loaded() function or some such
 
 
 
@@ -160,17 +162,6 @@ refactor -> shared_utils base tkinter gui class which gets used by (all) my othe
 unit testing -> create test class for hud descriptions
 unit testing -> create test class for hud syncer
 
-refactoring -> replace easygui
-	refactoring -> replace easygui.diropenbox with tkinter filedialog
-	refactoring -> replace easygui.boolbox with show_message
-	refactoring -> replace easygui.buttonboxes with show_message
-			# Example usage
-			response = show_message("This is a message.", "okcancel")
-			if response is not None:
-				if response:
-					print("User clicked OK")
-				else:
-					print("User clicked Cancel")
 
 cleanup -> move various video settings video.txt calls into a general function
 
