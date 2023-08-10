@@ -2,32 +2,33 @@ goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
 testing -> ability to edit a hud
-	currently the 
-
-
-
-
-
-
-
-bug -> it's possible for the script to close without unsyncing. maybe crashing or whatever. this is currently not handled
-	and leaves synced changes in the dev directory
-	
-	solution -> make changes so that the script will always unsync even when it fails
-		first draft ideas:
-			keep an always up to date sync file with changes made
-			on script startup, if this file exists, unsync
-
-			the file could/should maybe keep track of various additional changes such as whether to restore user/dev folder
-				but maybe just the synced items (files/folders)
-
-
 
 
 
 bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
+	run_installer -> _perform_installation -> is_installed("dev") -> get_dir(mode) -> the id file prompt in question
+
 bug -> dev mode is not installed -> remove -> asks to manually select id file -> cancel -> error
 	same for disable, enable options. and opening dev dir also but that does have a messagebox saying dir nonexistent
+
+
+
+
+
+
+
+
+
+
+refactor -> manager class. for example: get_dir
+
+
+
+
+
+
+
+
 
 
 
@@ -57,6 +58,17 @@ bug -> ingame console bugs -> modify hud editor autoexec to clear the console? o
 		CModelLoader::Map_IsValid:  No such map 'maps/{.bsp'
 		map load failed: { not found or invalid
 		etc
+
+feature -> it's possible for the script to close without unsyncing. maybe crashing or whatever. this is currently not handled
+	and leaves synced changes in the dev directory
+	
+	solution -> make changes so that the script will always unsync even when it fails
+		first draft ideas:
+			keep an always up to date sync file with changes made
+			on script startup, if this file exists, unsync
+
+			the file could/should maybe keep track of various additional changes such as whether to restore user/dev folder
+				but maybe just the synced items (files/folders)
 
 refactor -> self.game.run("dev", "wait on close")
 	should be wait_on_close=True, or false

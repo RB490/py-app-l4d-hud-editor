@@ -11,7 +11,7 @@ from packages.hud.syncer import HudSyncer
 
 # pylint: disable=unused-import
 from packages.gui.browser import GuiHudBrowser
-from packages.game import Game
+from packages.game.game import Game
 from packages.utils.functions import copy_directory_contents, load_data
 from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
 

@@ -2,7 +2,7 @@
 import os
 import shutil
 import hashlib
-from packages.game import Game
+from packages.game.game import Game
 from packages.utils.functions import load_data
 from packages.utils.constants import DEVELOPMENT_DIR
 
