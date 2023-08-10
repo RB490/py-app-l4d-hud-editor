@@ -9,10 +9,10 @@ from packages.editor_menu.menu import EditorMenuClass
 from packages.game.game import Game
 from packages.utils.constants import HOTKEY_TOGGLE_BROWSER
 from packages.utils.functions import save_and_exit_script
-from packages.utils.shared_utils import open_file_or_directory
+from packages.utils.shared_utils import Singleton, open_file_or_directory
 
 
-class GuiHudBrowser:
+class GuiHudBrowser(metaclass=Singleton):
     """Class for the hud browser gui"""
 
     def __init__(self, persistent_data):

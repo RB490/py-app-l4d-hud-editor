@@ -14,21 +14,11 @@ from packages.gui.browser import GuiHudBrowser
 from packages.game.game import Game
 from packages.utils.functions import copy_files_in_directory, load_data
 from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
-from packages.utils.shared_utils import show_message
+from packages.utils.shared_utils import Singleton, show_message
 
 
-class Hud:
+class Hud(metaclass=Singleton):
     """Class to manage hud editing"""
-
-    _instance = None
-
-    def __new__(cls, persistent_data):
-        if cls._instance is None:
-            cls._instance = super(Hud, cls).__new__(cls)
-            cls._instance.data = None
-            cls.persistent_data = persistent_data
-
-        return cls._instance
 
     def __init__(self, persistent_data) -> None:
         self.game = Game(persistent_data)
@@ -166,6 +156,8 @@ class Hud:
         if DEBUG_MODE:
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
             if not result:
+                start_instance = GuiHudStart(self.persistent_data)
+                start_instance.show()
                 return
 
         # cancel if this hud is already being edited
@@ -182,7 +174,9 @@ class Hud:
         # enable dev mode
         result = self.game.activate_mode("dev")
         if not result:
-            print('Could not activate developer mode')
+            print("Could not activate developer mode")
+            start_instance = GuiHudStart(self.persistent_data)
+            start_instance.show()
             return
 
         # sync the hud to the game folder
@@ -202,10 +196,11 @@ class Hud:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        if isinstance(self.browser, GuiHudBrowser):
-            self.browser.destroy_gui()
-        self.browser = GuiHudBrowser(self.persistent_data)
-        self.browser.run()
+        if not isinstance(self.browser, GuiHudBrowser):
+            self.browser = GuiHudBrowser(self.persistent_data)
+            self.browser.run()
+        else:
+            self.browser.show()
 
     def sync(self):
         """Sync hud"""
@@ -241,7 +236,7 @@ class Hud:
 
         # close browser
         if isinstance(self.browser, GuiHudBrowser):
-            self.browser.destroy_gui()
+            self.browser.hide()
 
         # unsync hud
         self.syncer.un_sync()
@@ -261,7 +256,7 @@ class Hud:
         # callback to the gui
         if open_start_gui:
             start_instance = GuiHudStart(self.persistent_data)
-            start_instance.run()
+            start_instance.show()
 
 
 def debug_hud():

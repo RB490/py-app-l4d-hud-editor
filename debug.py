@@ -3,7 +3,7 @@
 import os
 from packages.game.game import Game
 from packages.gui.browser import get_debug_gui_browser_instance
-from packages.gui.start import debug_gui_start
+from packages.gui.start import GuiHudStart, debug_gui_start
 from packages.hud.hud import debug_hud
 
 from packages.utils.functions import load_data
@@ -28,10 +28,15 @@ persistent_data = load_data()
 
 # game_instance2 = Game(persistent_data)
 # installer_instance = GameManager(persistent_data, game_instance)
-debug_gui_start(persistent_data)
+# debug_gui_start(persistent_data)
 # debug_gui_start(persistent_data)
 # my_browser = get_debug_gui_browser_instance(persistent_data)
 # my_browser.run()
+
+# start_instance = GuiHudStart(persistent_data)
+# start_instance.destroy_gui()
+start_instance = GuiHudStart(persistent_data)
+start_instance.run()
 
 
 input("Finished! Press enter to continue..")

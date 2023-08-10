@@ -20,7 +20,6 @@ import vdf
 
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
-
 def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
     # pylint: disable=unused-variable
     """

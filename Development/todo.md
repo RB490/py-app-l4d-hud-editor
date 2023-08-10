@@ -7,6 +7,11 @@ testing -> ability to edit a hud
 refactor -> create function in manager to verify mode param
 
 # Active
+bug -> start editing hud -> dev is not installed -> don't install -> start gui re-opens but now the image don't load. probably gui needs to be destroyed
+
+refactor -> make tkinter gui's into singletons. note down that this is needed as gpt says otherwise issues can arise with mainloop
+refactor -> use the Singleton class for each class
+
 bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
 	run_installer -> _perform_installation -> is_installed("dev") -> get_dir(mode) -> the id file prompt in question
 
@@ -39,6 +44,16 @@ refactor -> currently the menu uses hud.get_dir() to check if a hud is loaded. i
 -------------------------------------------------Misc
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+refactor -> remove duplicate code -> automatically detect? &
+	hud.py
+	start_instance = GuiHudStart(self.persistent_data)
+	start_instance.run()
+
+refactor -> utilize the ability to raise and catch different kinds of eceptions? surely useful somewhere?
+	AssertionError
+	ValueError
+	etc
+
 bug -> running longer tasks such as uninstalling the dev folder hangs the main tkinter gui until finished
 
 bug -> treeview -> 'added' files option doesn't work. no data retrieved

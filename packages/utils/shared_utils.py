@@ -6,6 +6,13 @@ from tkinter import messagebox
 import tkinter as tk
 
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
 def open_file_or_directory(file_path):
     """Run specified path. Either opening a file or directory correctly"""
     # Check if file path exists

@@ -9,11 +9,10 @@ from PIL import Image, ImageTk
 from packages.classes.vpk import VPKClass
 from packages.game.game import Game
 from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
+from packages.utils.shared_utils import Singleton
 
-
-class GuiHudStart:
+class GuiHudStart(metaclass=Singleton):
     """Class for the hud select gui"""
-
 
     def __init__(self, persistent_data):
         self.persistent_data = persistent_data
@@ -250,7 +249,7 @@ class GuiHudStart:
     def start_editing_hud(self):
         """Start editing hud"""
         self.save_window_geometry()
-        self.on_hide()
+        self.hide()
 
     def save_window_geometry(self):
         """Save size & position"""
@@ -335,13 +334,14 @@ class GuiHudStart:
         """Start hud editing for selected hud"""
 
         # hide gui
-        self.destroy_gui()
-        # self.on_hide()
+        self.hide()
+        self.save_window_geometry()
+        # self.destroy_gui()
 
         # edit hud
         self.hud.start_editing(self.selected_hud_dir)
 
-    def on_hide(self):
+    def hide(self):
         """Hide gui"""
         # Hide the root window instead of closing it
         self.root.withdraw()
@@ -360,7 +360,7 @@ class GuiHudStart:
         """Exit script"""
         self.save_window_geometry()
         # self.root.destroy()
-        self.on_hide()
+        self.hide()
 
 
 def debug_gui_start(persistent_data):

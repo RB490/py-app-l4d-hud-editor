@@ -261,25 +261,13 @@ class GameManager:
         """Runs the installer and throws errors on failure"""
         print("Running installer...")
 
-        if not self._perform_installation():
-            print("Install cancelled")
-            return False
-        else:
+        try:
+            self._perform_installation()
             print("Installed!")
             return True
-
-        # if DEBUG_MODE:
-        #     if not self._perform_installation():
-        #         raise RuntimeError("Installation cancelled!")
-        # else:
-        #     try:
-        #         self._perform_installation()
-        #     except RuntimeError as err_info:
-        #         messagebox.showerror(
-        #             "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
-        #         )
-        #         sys.exit()
-        # print("Installed!")
+        except Exception as err_info:
+            print(f"Install cancelled: {err_info}")
+            return False
 
     def _perform_installation(self):
         # verify the user installation is available
