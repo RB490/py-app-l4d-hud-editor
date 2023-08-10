@@ -1,13 +1,24 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
-bug -> move window in top left position -> open a hud through menu
-	1. window position is reset to what it was previous
-	2. another browser instance is opened on top of the previous one
-
-bug -> gui browser -> close -> AttributeError: 'NoneType' object has no attribute 'destroy_gui'
-
 testing -> ability to edit a hud
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -------------------------------------------------Features
 -------------------------------------------------Restructuring
@@ -174,3 +185,23 @@ restructuring -> constants.py key_scancodes & key_map same key names & availabil
 restructuring -> aided with gpt's go through the script improving functions, methods and the overall structure
 
 feature -> menu -> make help > hotkeys > ingame & global hotkey menu entries functional
+
+restructuring -> consider using a global singleton hotkey manager? i got the idea from a gpt response
+	import keyboard
+
+	class MyHotkeyManager:
+		def __init__(self):
+			self.hotkey_instance = keyboard.add_hotkey("ctrl+alt+p", self.my_function, suppress=True)
+			
+		def my_function(self):
+			print("Hotkey pressed")
+
+		def hotkey_exists(self):
+			return self.hotkey_instance in keyboard._hotkeys
+
+	hotkey_manager = MyHotkeyManager()
+
+	if hotkey_manager.hotkey_exists():
+		print("Hotkey exists")
+	else:
+		print("Hotkey does not exist")

@@ -225,13 +225,17 @@ class Hud:
         self.stop_game_exit_check()
 
         # close browser
-        self.browser.destroy_gui()
+        if isinstance(self.browser, GuiHudBrowser):
+            self.browser.destroy_gui()
 
         # unsync hud
         self.syncer.un_sync()
 
         # remove hotkey
-        keyboard.remove_hotkey(self.sync)
+        hotkeys = keyboard.get_hotkey_name()
+        if HOTKEY_SYNC_HUD in hotkeys:
+            print("Hotkey exists")
+            keyboard.remove_hotkey(self.sync)
 
         # clear variables
         self.hud_dir = None
@@ -252,5 +256,5 @@ def debug_hud():
 
     persistent_data = load_data()
     my_hud_instanc = Hud(persistent_data)
-    
+
     my_hud_instanc.start_editing(my_hud_instanc.get_dir())
