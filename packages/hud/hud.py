@@ -180,7 +180,10 @@ class Hud:
         self.stop_game_exit_check()
 
         # enable dev mode
-        self.game.activate_mode("dev")
+        result = self.game.activate_mode("dev")
+        if not result:
+            print('Could not activate developer mode')
+            return
 
         # sync the hud to the game folder
         if sync_hud:

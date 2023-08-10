@@ -3,20 +3,15 @@ goal -> create core functionality ASAP: ability to edit a hud
 
 testing -> ability to edit a hud
 
-refactor -> some weird code going on in is_installed? should it call the installer?
-	^ look at this
+# Finished
+refactor -> create function in manager to verify mode param
 
-refactor -> (?) install dev mode -> yes manually select dev mode -> cancel filedialog -> install continues, but probably should cancel
-
+# Active
 bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
 	run_installer -> _perform_installation -> is_installed("dev") -> get_dir(mode) -> the id file prompt in question
 
 bug -> dev mode is not installed -> remove -> asks to manually select id file -> cancel -> error
 	same for disable, enable options. and opening dev dir also but that does have a messagebox saying dir nonexistent
-
-
-
-refactor -> remove manually_select param from installer as it might not be needed
 
 
 

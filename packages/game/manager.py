@@ -22,11 +22,18 @@ class GameManager:
     def __init__(self, persistent_data, game_instance):
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
+        self.valid_modes = ["user", "dev"]
         # avoiding circular import by passing the game instance as a param here
         self.game = game_instance
 
         self.user_dir_id_file = "user_folder.DoNotDelete"
         self.dev_dir_id_file = "hud_dev_folder.DoNotDelete"
+
+    def validate_mode_parameter(self, mode):
+        if mode not in self.valid_modes:
+            raise ValueError("Invalid mode parameter. Mode must be one of: user, dev")
+        else:
+            return False
 
     def get_active_mode(self):
         """Check active game mode. User/Dev"""
@@ -47,11 +54,14 @@ class GameManager:
 
     def get_cfg_dir(self, mode):
         """Get the full path to the 'cfg' dir"""
+        self.validate_mode_parameter(mode)
+
         main_dir = self.get_main_dir(mode)
         return os.path.join(main_dir, "cfg")
 
     def get_main_dir(self, mode):
         """Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2"""
+        self.validate_mode_parameter(mode)
         root_dir = self.get_dir(mode)
         main_dir_name = self.game.get_title().replace(" ", "")
         main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
@@ -61,8 +71,9 @@ class GameManager:
         """Returns the active game directory regardless of mode"""
         return os.path.join(self.steam_info["game_dir"], self.game.get_title())
 
-    def get_dir(self, mode, manually_select=True):
+    def get_dir(self, mode):
         "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
+        self.validate_mode_parameter(mode)
 
         # Map modes to their corresponding installation ID files
         installation_id_file = {"user": self.user_dir_id_file, "dev": self.dev_dir_id_file}.get(mode, None)
@@ -81,9 +92,6 @@ class GameManager:
                 # Check if the installation ID file exists in the folder & return it if found
                 if os.path.isfile(installation_id_file_path):
                     return folder_path
-
-        if not manually_select:
-            return False
 
         # If the ID file is not found, prompt the user to manually select the directory
         message = (
@@ -113,7 +121,12 @@ class GameManager:
 
     def activate_mode(self, mode):
         """Activate user/dev mode by switching folder names eg. Left 4 Dead 2 & Left 4 Dead 2 User"""
-        assert self.is_installed(mode), f"Called activate_mode to activate {mode} mode without it being installed"
+        self.validate_mode_parameter(mode)
+
+        if not self.is_installed(mode):
+            result = self.run_installer()
+            if not result:
+                return False
 
         # check if mode is already active
         if self.get_active_mode() == mode:
@@ -141,38 +154,17 @@ class GameManager:
         except RuntimeError as err_info:
             print(f"An error occurred during directory renaming: {err_info}")
 
-    def is_installed(self, mode, manually_select=True):
+    def is_installed(self, mode):
         """Check if mode is installed"""
-        assert mode in ["user", "dev"], "Invalid mode parameter"
+        self.validate_mode_parameter(mode)
 
-        try:
-            # Step 1: Get the installation directory for the specified mode
-            install_dir = self.get_dir(mode, manually_select)
-            
-            # Check if the install directory is empty
-            if not install_dir:
-                print("Install directory is empty")
-                return False
-        except Exception as err_info:
-            # Handle any exceptions that occur during the installation directory retrieval
-            print(f"Error getting install directory: {err_info}")
+        # Get the installation directory for the specified mode
+        install_dir = self.get_dir(mode)
+
+        # Check if the install directory is empty
+        if not install_dir:
+            print("Install directory is empty")
             return False
-
-        try:
-            # Step 2: Check if the game's executable file exists in the install directory
-            if os.path.isfile(os.path.join(install_dir, self.game.get_exe())):
-                return True
-            elif mode == "dev":
-                # Step 3: If in "dev" mode and executable is not found, try running the installer
-                if self.run_installer() is False:
-                    raise RuntimeError("Can't continue without dev mode installed!")
-                return True
-            else:
-                # Step 4: If executable not found in any mode, raise an error
-                raise RuntimeError(f"Game executable for {mode} mode not found in directory: '{install_dir}'")
-        except Exception as err_info:
-            # Handle any exceptions that occur during the installation checking process
-            raise RuntimeError(f"Error checking installation: {err_info}")
 
     def _prompt_start(self, install_type, message_extra=""):
         install_type = install_type.lower()  # Convert to lowercase
@@ -268,18 +260,26 @@ class GameManager:
     def run_installer(self):
         """Runs the installer and throws errors on failure"""
         print("Running installer...")
-        if DEBUG_MODE:
-            if not self._perform_installation():
-                raise RuntimeError("Installation cancelled!")
+
+        if not self._perform_installation():
+            print("Install cancelled")
+            return False
         else:
-            try:
-                self._perform_installation()
-            except RuntimeError as err_info:
-                messagebox.showerror(
-                    "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
-                )
-                sys.exit()
-        print("Installed!")
+            print("Installed!")
+            return True
+
+        # if DEBUG_MODE:
+        #     if not self._perform_installation():
+        #         raise RuntimeError("Installation cancelled!")
+        # else:
+        #     try:
+        #         self._perform_installation()
+        #     except RuntimeError as err_info:
+        #         messagebox.showerror(
+        #             "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
+        #         )
+        #         sys.exit()
+        # print("Installed!")
 
     def _perform_installation(self):
         # verify the user installation is available
