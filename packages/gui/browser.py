@@ -215,7 +215,9 @@ class GuiHudBrowser:
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""
 
-        print(f"display choice: {self.display_choice.get()}")
+        print(f"Treeview: Refreshing directory: '{self.hud.get_dir()}'")
+
+        print(f"display choice: '{self.display_choice.get()}'")
         display_choice = self.display_choice.get().lower()
         if display_choice == "all":
             data_dict = self.hud.get_all_files_dict()
@@ -224,6 +226,7 @@ class GuiHudBrowser:
 
         # check if there is anything to refresh
         if not data_dict:
+            print("Treeview: No data to display")
             return
 
         # Clear existing items in the Treeview
@@ -242,6 +245,8 @@ class GuiHudBrowser:
                 # Skip this item if search term is provided and not found in key or value
                 continue
             treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path))
+            
+        print('Treeview: Refreshed')
 
     def save_window_geometry(self):
         """Save size & position"""

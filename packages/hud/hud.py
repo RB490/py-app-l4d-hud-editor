@@ -187,6 +187,8 @@ class Hud:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
+        if isinstance(self.browser, GuiHudBrowser):
+            self.browser.destroy_gui()
         self.browser = GuiHudBrowser(self.persistent_data)
         self.browser.run()
 
@@ -250,4 +252,5 @@ def debug_hud():
 
     persistent_data = load_data()
     my_hud_instanc = Hud(persistent_data)
+    
     my_hud_instanc.start_editing(my_hud_instanc.get_dir())

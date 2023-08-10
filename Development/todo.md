@@ -7,22 +7,17 @@ bug -> move window in top left position -> open a hud through menu
 
 bug -> gui browser -> close -> AttributeError: 'NoneType' object has no attribute 'destroy_gui'
 
-bug -> edit hud -> unsync hud -> unsync hud again -> second time it still tries to unsync according to terminal
-	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
-	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
-	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
-	_unsync_item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\stats_crawl.txt
-
 testing -> ability to edit a hud
 
-
-
+bug -> sync hud -> unsync -> 'hud' menu items are still working and don't have error checking
+	either disable them or, maybe the entire menu rather than 1 by 1
 
 -------------------------------------------------Features
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+bug -> treeview -> 'added' files option doesn't work. no data retrieved
 
 bug -> ingame console bugs -> modify hud editor autoexec to clear the console? or do these errors happen after that
 	bug -> ingame console -> failed to load malformed vpk addon's -> potential fixes:
