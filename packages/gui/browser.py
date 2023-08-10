@@ -245,8 +245,8 @@ class GuiHudBrowser:
                 # Skip this item if search term is provided and not found in key or value
                 continue
             treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path))
-            
-        print('Treeview: Refreshed')
+
+        print("Treeview: Refreshed")
 
     def save_window_geometry(self):
         """Save size & position"""

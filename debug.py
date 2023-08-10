@@ -19,9 +19,9 @@ persistent_data = load_data()
 # game_instance2 = Game(persistent_data)
 # installer_instance = GameManager(persistent_data, game_instance)
 # debug_gui_start(persistent_data)
-# debug_gui_start(persistent_data)
-my_browser = get_debug_gui_browser_instance(persistent_data)
-my_browser.run()
+debug_gui_start(persistent_data)
+# my_browser = get_debug_gui_browser_instance(persistent_data)
+# my_browser.run()
 
 
 input("Finished! Press enter to continue..")

@@ -172,7 +172,7 @@ class GameManager:
 
     def run_update_or_repair(self, update_or_repair):
         """Update or repair dev mode"""
-        print("run_update_or_repair")
+        print(f"Running {update_or_repair}...")
         update_or_repair = update_or_repair.lower()  # lower case
         assert update_or_repair in ["update", "repair"], "Invalid mode parameter"
 
@@ -214,10 +214,12 @@ class GameManager:
 
         # rebuild audio cache
         self._rebuild_audio()
+        
+        print(f'Finished {update_or_repair}!')
 
     def run_uninstaller(self):
         """Remove dev mode"""
-        print("run_uninstaller")
+        print("Running uninstaller...")
 
         # verify dev mode is already installed
         if not self.is_installed("dev"):
@@ -229,9 +231,12 @@ class GameManager:
 
         # remove dev mode
         shutil.rmtree(self.get_dir("dev"))
+        
+        print('Uninstalled!')
 
     def run_installer(self):
         """Runs the installer and throws errors on failure"""
+        print("Running installer...")
         if DEBUG_MODE:
             if not self._perform_installation():
                 raise RuntimeError("Installation cancelled!")
@@ -243,6 +248,7 @@ class GameManager:
                     "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
                 )
                 sys.exit()
+        print('Installed!')
 
     def _perform_installation(self):
         # verify the user installation is available

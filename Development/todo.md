@@ -2,14 +2,23 @@ goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
 testing -> ability to edit a hud
+	currently the 
 
 
 
 
 
 
+bug -> it's possible for the script to close without unsyncing. maybe crashing or whatever. this is currently not handled
+	and leaves synced changes in the dev directory
+	
+	solution -> make changes so that the script will always unsync even when it fails
+		first draft ideas:
+			keep an always up to date sync file with changes made
+			on script startup, if this file exists, unsync
 
-
+			the file could/should maybe keep track of various additional changes such as whether to restore user/dev folder
+				but maybe just the synced items (files/folders)
 
 
 
@@ -25,6 +34,8 @@ testing -> ability to edit a hud
 -------------------------------------------------Misc
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+bug -> running longer tasks such as uninstalling the dev folder hangs the main tkinter gui until finished
+
 bug -> treeview -> 'added' files option doesn't work. no data retrieved
 
 bug -> ingame console bugs -> modify hud editor autoexec to clear the console? or do these errors happen after that
@@ -64,7 +75,11 @@ bug -> fix menu l4d1&l4d2 grayscale icons
 	^ started being a problem after i moved the menu into the browser class
 
 bug -> dev -> update install -> game starts to rebuild audio but nothing happens
+
 bug -> dev -> update install -> rebuild audio -> manually closed game during process causing the script to hang
+	++ when the game crashes for whatever reason really fast the script won't detect it as being closed either as it will still be looking
+	it should maybe first check if the game is still running before waiting for close event
+	
 	File "D:\Programming and projects\py-app-l4d-hud-editor\packages\utils\functions.py", line 301, in wait_for_process_and_get_hwnd
 		raise RuntimeError(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
 	RuntimeError: Process 'left4dead2.exe' not found within 60 seconds
