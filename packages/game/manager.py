@@ -214,8 +214,8 @@ class GameManager:
 
         # rebuild audio cache
         self._rebuild_audio()
-        
-        print(f'Finished {update_or_repair}!')
+
+        print(f"Finished {update_or_repair}!")
 
     def run_uninstaller(self):
         """Remove dev mode"""
@@ -231,8 +231,8 @@ class GameManager:
 
         # remove dev mode
         shutil.rmtree(self.get_dir("dev"))
-        
-        print('Uninstalled!')
+
+        print("Uninstalled!")
 
     def run_installer(self):
         """Runs the installer and throws errors on failure"""
@@ -248,7 +248,7 @@ class GameManager:
                     "Error", str(err_info) + "\n\nInstallation cancelled! Currently unhandled. Closing."
                 )
                 sys.exit()
-        print('Installed!')
+        print("Installed!")
 
     def _perform_installation(self):
         # verify the user installation is available
@@ -299,6 +299,7 @@ class GameManager:
         return True
 
     def _create_dev_dir(self):
+        print("Creating developer directory")
         game_user_dir = self.get_dir("user")
         game_dev_dir = os.path.join(self.steam_info.get("game_dir"), "backup_hud_dev." + self.game.get_title())
         game_exe_path = os.path.join(game_user_dir, self.game.get_exe())
@@ -310,9 +311,11 @@ class GameManager:
             file_handle.write(dev_id_file_path)
 
     def _copy_game_files(self):
+        print("Copying game files into developer directory")
         copy_directory_contents(self.get_dir("user"), self.get_dir("dev"), self.user_dir_id_file)
 
     def _prompt_game_verified(self):
+        print("Prompting user to verify game")
         title = f"Verify integrity of games files for {self.game.get_title()} in steam"
         message = (
             f"Verify integrity of games files for {self.game.get_title()} in steam\n\n"
@@ -352,7 +355,7 @@ class GameManager:
     def _extract_outdated_paks(self):
         """1. Confirm which pak01_dir.vpk files are outdated by checking for differences between the user & dev modes
         2. Extract all files from the outdated pak01_dir.vpk files to their respective root directories"""
-        print("extract outdated paks")
+        print("Extracting outdated pak01.vpk's")
 
         # retrieve pak files for user & dev modes
         dev_dir = self.get_dir("dev")
@@ -392,7 +395,7 @@ class GameManager:
     def _extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
-        print("extract paks")
+        print("Extracting pak01.vpk's")
         dev_dir = self.get_dir("dev")
 
         def extract_callback(filepath, output_dir):
@@ -402,6 +405,7 @@ class GameManager:
         self._find_pak_files(dev_dir, extract_callback)
 
     def _disable_paks(self):
+        print("Disabling pak01.vpk's")
         dev_dir = self.get_dir("dev")
 
         def disable_callback(filepath, subdir_path):
@@ -412,6 +416,7 @@ class GameManager:
         self._find_pak_files(dev_dir, disable_callback)
 
     def _enable_paks(self):
+        print("Enabling pak01.vpk's")
         dev_dir = self.get_dir("dev")
 
         def enable_callback(filepath, subdir_path):
@@ -423,6 +428,7 @@ class GameManager:
         self._find_pak_files(dev_dir, enable_callback)
 
     def _install_mods(self):
+        print("Installing mods")
         mods_dev_map_dir = os.path.join(MODS_DIR, self.game.get_title(), "export")
         mods_addons_dir = os.path.join(MODS_DIR, "Addons", "Export")
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
@@ -433,7 +439,7 @@ class GameManager:
         copy_directory_contents(mods_sourcemod_dir, main_dir)
 
     def _rebuild_audio(self):
-        print("rebuilding audio")
+        print("Rebuilding audio")
 
         cfg_dir = self.get_cfg_dir("dev")
         valverc_path = os.path.join(cfg_dir, "valve.rc")
@@ -443,7 +449,7 @@ class GameManager:
 
         self.game.close()
         self.game.run("dev", "wait on close")
-        print("finished rebuilding audio")
+        print("Finished rebuilding audio")
         # Run, % STEAM_INFO.exePath A_Space "-applaunch " this.game.obj.appid " -novid -w 1 -h 1 -x 0 -y 0 -windowed"
 
 
@@ -453,7 +459,7 @@ def debug_installer_class():
     os.system("cls")  # clear terminal
 
     saved_data = load_data()
-    
+
     # game_manager_instance = Game(saved_data)
     # game_manager_instance.run_installer()
 

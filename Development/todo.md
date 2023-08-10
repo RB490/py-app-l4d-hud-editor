@@ -9,6 +9,7 @@ testing -> ability to edit a hud
 
 
 
+
 bug -> it's possible for the script to close without unsyncing. maybe crashing or whatever. this is currently not handled
 	and leaves synced changes in the dev directory
 	
@@ -24,7 +25,9 @@ bug -> it's possible for the script to close without unsyncing. maybe crashing o
 
 
 
-
+bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
+bug -> dev mode is not installed -> remove -> asks to manually select id file -> cancel -> error
+	same for disable, enable options. and opening dev dir also but that does have a messagebox saying dir nonexistent
 
 
 
