@@ -61,7 +61,7 @@ class GameManager:
         """Returns the active game directory regardless of mode"""
         return os.path.join(self.steam_info["game_dir"], self.game.get_title())
 
-    def get_dir(self, mode):
+    def get_dir(self, mode, manually_select=True):
         "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
 
         # Map modes to their corresponding installation ID files
@@ -78,9 +78,12 @@ class GameManager:
             if os.path.isdir(folder_path):
                 installation_id_file_path = os.path.join(folder_path, installation_id_file)
 
-                # Check if the installation ID file exists in the folder
+                # Check if the installation ID file exists in the folder & return it if found
                 if os.path.isfile(installation_id_file_path):
                     return folder_path
+
+        if not manually_select:
+            return False
 
         # If the ID file is not found, prompt the user to manually select the directory
         message = (
@@ -138,21 +141,38 @@ class GameManager:
         except RuntimeError as err_info:
             print(f"An error occurred during directory renaming: {err_info}")
 
-    def is_installed(self, mode):
+    def is_installed(self, mode, manually_select=True):
         """Check if mode is installed"""
         assert mode in ["user", "dev"], "Invalid mode parameter"
 
-        # confirm this is the correct directory by checking the game's executable
-        install_dir = self.get_dir(mode)
-        if os.path.isfile(os.path.join(install_dir, self.game.get_exe())):
-            return True
-        elif mode == "dev":
-            # install dev mode if needed
-            if self.run_installer() is False:
-                raise RuntimeError("Can't continue without dev mode installed!'")
-            return True
-        else:
-            raise RuntimeError(f"Game executable for {mode} mode not found in directory: '{install_dir}'")
+        try:
+            # Step 1: Get the installation directory for the specified mode
+            install_dir = self.get_dir(mode, manually_select)
+            
+            # Check if the install directory is empty
+            if not install_dir:
+                print("Install directory is empty")
+                return False
+        except Exception as err_info:
+            # Handle any exceptions that occur during the installation directory retrieval
+            print(f"Error getting install directory: {err_info}")
+            return False
+
+        try:
+            # Step 2: Check if the game's executable file exists in the install directory
+            if os.path.isfile(os.path.join(install_dir, self.game.get_exe())):
+                return True
+            elif mode == "dev":
+                # Step 3: If in "dev" mode and executable is not found, try running the installer
+                if self.run_installer() is False:
+                    raise RuntimeError("Can't continue without dev mode installed!")
+                return True
+            else:
+                # Step 4: If executable not found in any mode, raise an error
+                raise RuntimeError(f"Game executable for {mode} mode not found in directory: '{install_dir}'")
+        except Exception as err_info:
+            # Handle any exceptions that occur during the installation checking process
+            raise RuntimeError(f"Error checking installation: {err_info}")
 
     def _prompt_start(self, install_type, message_extra=""):
         install_type = install_type.lower()  # Convert to lowercase
