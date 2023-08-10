@@ -288,7 +288,7 @@ class EditorMenuClass:
 
         self.hud_menu = tk.Menu(menubar, tearoff=0)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
-        if self.hud.get_dir():
+        if self.hud.is_loaded():
             self.hud_menu.entryconfigure(0, label=retrieve_hud_name_for_dir(self.hud.get_dir()))
         self.hud_menu.add_command(label="Unsync", command=self.handler.editor_unsync_hud)
         self.hud_menu.add_command(label="Save", state="disabled")
@@ -304,7 +304,7 @@ class EditorMenuClass:
         )
 
         # disable items when no hud is loaded
-        if not self.hud.get_dir():
+        if not self.hud.is_loaded():
             for i in range(self.hud_menu.index("end") + 1):
                 self.hud_menu.entryconfigure(i, state="disabled")
 

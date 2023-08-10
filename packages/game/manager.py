@@ -1,13 +1,13 @@
 """This module is a sub class of the game class.
 functions related to the game folder such as switching between user/dev modes"""
+# pylint: disable=broad-exception-caught
 import filecmp
 import os
 import shutil
-import sys
 from tkinter import filedialog
 from tkinter import messagebox
 from packages.classes.vpk import VPKClass
-from packages.utils.constants import DEBUG_MODE, MODS_DIR, SCRIPT_NAME
+from packages.utils.constants import MODS_DIR, SCRIPT_NAME
 from packages.utils.functions import copy_files_in_directory, get_dir_size_in_gb, get_steam_info, load_data
 from packages.utils.shared_utils import show_message
 
@@ -30,6 +30,7 @@ class GameManager:
         self.dev_dir_id_file = "hud_dev_folder.DoNotDelete"
 
     def validate_mode_parameter(self, mode):
+        "Validate mode parameter"
         if mode not in self.valid_modes:
             raise ValueError("Invalid mode parameter. Mode must be one of: user, dev")
         else:

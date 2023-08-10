@@ -32,6 +32,13 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
+    def is_loaded(self):
+        "Verify if hud is loaded"
+        if self.hud_dir:
+            return True
+        else:
+            return False
+
     def get_dir(self):
         """Get information"""
         return self.hud_dir
@@ -47,7 +54,7 @@ class Hud(metaclass=Singleton):
         # verify variables
         if not self.get_dir() or not os.path.exists(self.get_dir()):
             # if hasattr(self, "hud_dir") and not os.path.exists(self.get_dir()):
-            return
+            return None
 
         root_folder = self.get_dir()
         files_dict = {}

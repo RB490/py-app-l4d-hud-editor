@@ -8,8 +8,7 @@ testing -> ability to edit a hud
 #### Active
 refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
 
-refactor -> currently the menu uses hud.get_dir() to check if a hud is loaded. i should probably improve this
-	a hud.is_loaded() function or some such
+
 
 
 

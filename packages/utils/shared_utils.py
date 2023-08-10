@@ -7,11 +7,30 @@ import tkinter as tk
 
 
 class Singleton(type):
+    """Metaclass for creating singleton classes.
+
+    Example:
+        class MySingleton(metaclass=Singleton):
+            def __init__(self, value):
+                self.value = value
+
+            # Creating instances
+            instance1 = MySingleton(42)
+            instance2 = MySingleton(99)
+
+            # Both instances are the same
+            print(instance1 is instance2)  # Output: True
+            print(instance1.value)         # Output: 99
+            print(instance2.value)         # Output: 99
+    """
+
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
 
 def open_file_or_directory(file_path):
     """Run specified path. Either opening a file or directory correctly"""
