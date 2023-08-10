@@ -1,12 +1,6 @@
-# Finished
+###### Todo
 
-
-# Current
-goal -> create core functionality ASAP: ability to edit a hud
-testing -> ability to edit a hud
-
-#### Active
-refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
+testing -> edit a hud
 
 
 
@@ -19,13 +13,8 @@ refactor -> manager class. for example: get_dir function is very cluttered. and 
 
 
 
+###### Backlog
 
-
--------------------------------------------------Features
--------------------------------------------------Restructuring
--------------------------------------------------Misc
--------------------------------------------------Do-Last---------------------------------------------------------------
--------------------------------------------------Do-Last Features
 refactor -> remove duplicate code -> automatically detect? &
 	hud.py
 	start_instance = GuiHudStart(self.persistent_data)
@@ -39,6 +28,8 @@ refactor -> utilize the ability to raise and catch different kinds of eceptions?
 bug -> running longer tasks such as uninstalling the dev folder hangs the main tkinter gui until finished
 
 bug -> treeview -> 'added' files option doesn't work. no data retrieved
+
+refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
 
 bug -> ingame console bugs -> modify hud editor autoexec to clear the console? or do these errors happen after that
 	bug -> ingame console -> failed to load malformed vpk addon's -> potential fixes:
@@ -146,13 +137,11 @@ bug -> start gui -> all the dev options are broken
 	AttributeError: 'GameManager' object has no attribute 'manager'
 	^ uh, fixed itself.. can i reproduce this?
 
--------------------------------------------------Do-Last Misc
 testing -> test all menu options
 
 idea -> instead of using a gui for the main control use the default console interface instead
 	possibly with a package that has a few more options
 
--------------------------------------------------Do-Last Restructuring
 refactor -> shared_utils base tkinter gui class which gets used by (all) my other guis. should contain all the basics
 
 unit testing -> create test class for hud descriptions
