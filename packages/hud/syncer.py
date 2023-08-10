@@ -78,7 +78,9 @@ class HudSyncer:
 
     def un_sync(self):
         """Unsync the hud"""
+        print('Unsyncing...')
         if not self.get_sync_status():
+            print("Unsync: No hud to unsync!")
             return
 
         print(f"un_sync hud items: {self.hud_items}")
@@ -91,6 +93,8 @@ class HudSyncer:
         for item in hud_items_copy:
             print(f"un_sync item: {item}")
             self._unsync_item(item)
+            
+        print('Unsynced!')
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         # pylint: disable=anomalous-backslash-in-string
@@ -104,8 +108,9 @@ class HudSyncer:
             certain actions on the main directory. EG: 'Left 4 Dead 2'
         """
 
-        print(f"source_dir: {source_dir}")
-        print(f"target_dir: {target_dir}")
+        print("Synching...")
+        print(f"Source: {source_dir}")
+        print(f"Target: {target_dir}")
         # print(f"target_dir_main_name: {target_dir_main_name}")
 
         # Unsync the previous hud (if syncing different hud)
@@ -114,9 +119,9 @@ class HudSyncer:
 
         # Validate input
         if source_dir is None or not os.path.isdir(source_dir):
-            raise ValueError(f"Invalid source directory! '{source_dir}'")
+            raise ValueError(f"Invalid source directory: '{source_dir}'")
         if target_dir is None or not os.path.isdir(target_dir):
-            raise ValueError(f"Invalid target directory! '{target_dir}'")
+            raise ValueError(f"Invalid target directory: '{target_dir}'")
 
         # Save input
         self.source_dir = source_dir
@@ -135,6 +140,8 @@ class HudSyncer:
         self._remove_deleted_items()
 
         self.is_synced = True
+
+        print("Synced!")
         # input("end of sync()")
 
     def _backup_target(self):
@@ -196,8 +203,6 @@ class HudSyncer:
                 if overwrite_target:
                     shutil.copy(item, target_item)
                     print(f"{item} -> {target_item}")
-
-        print("overwrite target()")
 
     def _remove_deleted_items(self):
         for item in self.hud_items_previous:

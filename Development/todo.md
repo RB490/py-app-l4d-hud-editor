@@ -1,6 +1,11 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
+bug -> move window in top left position -> sync a hud through menu
+	1. window position is reset to what it was previous
+	2. another browser instance is opened on top of the previous one
+
+bug -> gui browser -> close -> AttributeError: 'NoneType' object has no attribute 'destroy_gui'
 
 bug -> edit hud -> unsync hud -> unsync hud again -> second time it still tries to unsync according to terminal
 	un_sync item: D:\Programming and projects\py-app-l4d-hud-editor\development\debug\hud_debug\Workspace\2020HUD\scripts\mod_textures.txt
@@ -13,12 +18,29 @@ testing -> ability to edit a hud
 
 
 
-
 -------------------------------------------------Features
 -------------------------------------------------Restructuring
 -------------------------------------------------Misc
 -------------------------------------------------Do-Last---------------------------------------------------------------
 -------------------------------------------------Do-Last Features
+
+bug -> ingame console bugs -> modify hud editor autoexec to clear the console? or do these errors happen after that
+	bug -> ingame console -> failed to load malformed vpk addon's -> potential fixes:
+		instead of overwriting the vpk's with empty files create a tiny vpk to overwrite it
+		
+		Can't load malformed vpk "e:\games\steam\steamapps\common\left 4 dead 2\left4dead2\addons\2020HUD cyan-thick-gap.vpk"
+		Can't load malformed vpk "e:\games\steam\steamapps\common\left 4 dead 2\left4dead2\addons\2020HUD.vpk"
+		Can't load malformed vpk "e:\games\steam\steamapps\common\left 4 dead 2\left4dead2\addons\workshop\1229957234.vpk"
+		Can't load malformed vpk "e:\games\steam\steamapps\common\left 4 dead 2\left4dead2\addons\workshop\655424673.vpk"
+		etc.
+
+	bug -> ingame console -> not sure why it's failing to load the maps
+		CModelLoader::Map_IsValid:  No such map 'maps/{.bsp'
+		map load failed: { not found or invalid
+		CModelLoader::Map_IsValid:  No such map 'maps/{.bsp'
+		map load failed: { not found or invalid
+		etc
+
 refactor -> self.game.run("dev", "wait on close")
 	should be wait_on_close=True, or false
 
