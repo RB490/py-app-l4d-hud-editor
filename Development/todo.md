@@ -1,7 +1,7 @@
 goal -> create core functionality ASAP: ability to edit a hud
 -------------------------------------------------Current
 
-bug -> move window in top left position -> sync a hud through menu
+bug -> move window in top left position -> open a hud through menu
 	1. window position is reset to what it was previous
 	2. another browser instance is opened on top of the previous one
 

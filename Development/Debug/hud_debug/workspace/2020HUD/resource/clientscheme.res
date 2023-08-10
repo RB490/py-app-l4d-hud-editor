@@ -1,7 +1,0 @@
-#base "scheme/clientscheme_borders.res"
-#base "scheme/clientscheme_borders_stock.res"
-#base "scheme/clientscheme_colors.res"
-#base "scheme/clientscheme_fonts_stock.res"
-#base "scheme/clientscheme_fonts_cerbetica.res"
-#base "scheme/clientscheme_fonts_firacode.res"
-#base "scheme/clientscheme_settings.res"
