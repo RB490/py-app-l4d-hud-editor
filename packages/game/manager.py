@@ -33,6 +33,7 @@ class GameManager:
         if mode not in self.valid_modes:
             raise ValueError("Invalid mode parameter. Mode must be one of: user, dev")
         else:
+            # print(f"Valid mode param: {mode}")
             return False
 
     def get_active_mode(self):
@@ -71,7 +72,7 @@ class GameManager:
         """Returns the active game directory regardless of mode"""
         return os.path.join(self.steam_info["game_dir"], self.game.get_title())
 
-    def get_dir(self, mode):
+    def get_dir(self, mode, manually_select_dir=True):
         "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
         self.validate_mode_parameter(mode)
 
@@ -79,7 +80,7 @@ class GameManager:
         installation_id_file = {"user": self.user_dir_id_file, "dev": self.dev_dir_id_file}.get(mode, None)
 
         if installation_id_file is None:
-            raise ValueError("Invalid mode parameter")
+            raise ValueError("Invalid id file!")
 
         steam_games_dir = self.steam_info["game_dir"]
 
@@ -92,6 +93,10 @@ class GameManager:
                 # Check if the installation ID file exists in the folder & return it if found
                 if os.path.isfile(installation_id_file_path):
                     return folder_path
+
+        if not manually_select_dir:
+            print(f"Not prompting to manually select {mode} directory")
+            return
 
         # If the ID file is not found, prompt the user to manually select the directory
         message = (
@@ -124,7 +129,7 @@ class GameManager:
         self.validate_mode_parameter(mode)
 
         if not self.is_installed(mode):
-            result = self.run_installer()
+            result = self.run_installer(manually_select_dir=False)
             if not result:
                 return False
 
@@ -154,16 +159,20 @@ class GameManager:
         except RuntimeError as err_info:
             print(f"An error occurred during directory renaming: {err_info}")
 
-    def is_installed(self, mode):
+    def is_installed(self, mode, manually_select_dir=True):
         """Check if mode is installed"""
         self.validate_mode_parameter(mode)
 
         # Get the installation directory for the specified mode
-        install_dir = self.get_dir(mode)
+        install_dir = self.get_dir(mode, manually_select_dir)
 
         # Check if the install directory is empty
-        if not install_dir:
-            print("Install directory is empty")
+        mode_capitalized = mode.capitalize()
+        if install_dir:
+            print(f"{mode_capitalized} mode is installed!")
+            return True
+        else:
+            print(f"{mode_capitalized} mode is not installed!")
             return False
 
     def _prompt_start(self, install_type, message_extra=""):
@@ -257,25 +266,38 @@ class GameManager:
 
         print("Uninstalled!")
 
-    def run_installer(self):
+    # manually_select_dir toggles manually selecting the folders. this prevents that prompt showing multiple times
+    #   for example in this instance it would prompt during is_installed and is_installed is also called in
+    #   run_installer
+    #
+    #       if not self.is_installed(mode):
+    #           result = self.run_installer(manually_select_dir=False)
+    #           if not result:
+    #               return False
+    def run_installer(self, manually_select_dir=True):
         """Runs the installer and throws errors on failure"""
         print("Running installer...")
 
         try:
-            self._perform_installation()
-            print("Installed!")
-            return True
+            result = self._perform_installation(manually_select_dir)
+
+            if result:
+                print("Installed!")
+                return True
+            else:
+                print("Not installed!")
+                return False
         except Exception as err_info:
             print(f"Install cancelled: {err_info}")
             return False
 
-    def _perform_installation(self):
+    def _perform_installation(self, manually_select_dir=True):
         # verify the user installation is available
         if not self.is_installed("user"):
             raise AssertionError("User installation not found. Unable to install")
 
         # verify dev mode isn't already installed
-        if self.is_installed("dev"):
+        if self.is_installed("dev", manually_select_dir):
             messagebox.showinfo("Error", "Already installed!")
             return True
 

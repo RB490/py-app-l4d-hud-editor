@@ -1,28 +1,11 @@
-goal -> create core functionality ASAP: ability to edit a hud
--------------------------------------------------Current
+# Finished
 
+
+# Current
+goal -> create core functionality ASAP: ability to edit a hud
 testing -> ability to edit a hud
 
-# Finished
-refactor -> create function in manager to verify mode param
-
-# Active
-bug -> start editing hud -> dev is not installed -> don't install -> start gui re-opens but now the image don't load. probably gui needs to be destroyed
-
-refactor -> make tkinter gui's into singletons. note down that this is needed as gpt says otherwise issues can arise with mainloop
-refactor -> use the Singleton class for each class
-
-bug -> uninstall dev mode -> install dev mode -> script ask for an id file rather than installing
-	run_installer -> _perform_installation -> is_installed("dev") -> get_dir(mode) -> the id file prompt in question
-
-bug -> dev mode is not installed -> remove -> asks to manually select id file -> cancel -> error
-	same for disable, enable options. and opening dev dir also but that does have a messagebox saying dir nonexistent
-
-
-
-
-
-
+#### Active
 refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
 
 refactor -> currently the menu uses hud.get_dir() to check if a hud is loaded. i should probably improve this
