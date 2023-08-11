@@ -6,6 +6,7 @@ Refactoring:
 	☐ Utilize exception handling for specific cases like AssertionError and ValueError
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Replace assert statements with proper error handling using try/catch
+	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder
@@ -21,13 +22,15 @@ Features:
 	☐ Add icons to enhance GUI aesthetics
 	☐ Incorporate progress GUI for the installer class
 		☐ Implement for install, update_or_repair, and remove operations
+	☐ Menu: Add icons
 
 Sync Class Improvements:
 	☐ Refine error handling strategy in sync class, possibly during unit testing
 	☐ Review and enhance target directory validation in sync()
 
 GUI and Interface:
-	☐ Improve icons and buttons in GUI components
+	☐ Add GUI icons
+	☐ Add GUI button icons
 	☐ Display custom and added-to-hud status for files in the browser
 		☐ Consider adding columns or a status bar
 	☐ Enhance context menu icons in the treeview
