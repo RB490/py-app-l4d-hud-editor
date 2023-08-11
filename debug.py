@@ -7,6 +7,7 @@ from packages.game.game import Game
 from packages.gui.browser import get_debug_gui_browser_instance
 from packages.gui.start import GuiHudStart, debug_gui_start
 from packages.hud.hud import debug_hud
+from packages.utils.constants import EDITOR_AUTOEXEC_PATH, SCRIPT_DIR
 from packages.utils.functions import load_data
 from packages.utils.shared_utils import show_message
 
@@ -20,6 +21,16 @@ persistent_data = load_data()
 game_instance = Game(persistent_data)
 # result = game_instance.manager.run_installer()
 # game_instance.activate_mode("dev")
+
+# Replace these paths with actual file and directory paths on your system
+file_path = EDITOR_AUTOEXEC_PATH
+directory_path = SCRIPT_DIR
+
+# Open a file with its default application
+os.startfile(file_path)
+
+# Open a directory with the default file explorer
+os.startfile(directory_path)
 
 # game_instance.activate_mode("dev")
 # print(f'debug: result: {result}')

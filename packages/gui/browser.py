@@ -10,7 +10,7 @@ from packages.editor_menu.menu import EditorMenuClass
 from packages.game.game import Game
 from packages.utils.constants import HOTKEY_TOGGLE_BROWSER
 from packages.utils.functions import save_and_exit_script
-from packages.utils.shared_utils import Singleton, open_file_or_directory
+from packages.utils.shared_utils import Singleton
 
 
 class GuiHudBrowser(metaclass=Singleton):
@@ -211,7 +211,7 @@ class GuiHudBrowser(metaclass=Singleton):
         # pylint: disable=unused-argument
 
         file_path = self.treeview_get_selected_full_path()
-        open_file_or_directory(file_path)
+        os.startfile(file_path)
 
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""

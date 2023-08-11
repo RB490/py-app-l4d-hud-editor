@@ -11,7 +11,6 @@ testing -> edit a hud
 
 
 
-
 ###### Backlog
 
 refactor -> when the vpk class fails to extract a certain file such as Extract error for file 'materials/ads/ad01.vmt': 'utf-8' codec can't decode byte 0xe9 in position 11: unexpected end of data. do something? this specificly happened during extracting pak01.vpk's in installation
