@@ -1,15 +1,20 @@
 """Module for the hud select gui class"""
-import subprocess
 import os
+import subprocess
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox, ttk
+
 from PIL import Image, ImageTk
+
 from packages.classes.vpk import VPKClass
 from packages.game.game import Game
-from packages.utils.functions import prompt_add_existing_hud, prompt_create_new_hud, retrieve_hud_name_for_dir
+from packages.utils.functions import (
+    prompt_add_existing_hud,
+    prompt_create_new_hud,
+    retrieve_hud_name_for_dir,
+)
 from packages.utils.shared_utils import Singleton
+
 
 class GuiHudStart(metaclass=Singleton):
     """Class for the hud select gui"""

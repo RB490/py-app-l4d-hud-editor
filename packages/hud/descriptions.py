@@ -1,5 +1,6 @@
 """Submodule of the hud module. Manages everything related to hud file descriptions"""
 import json
+
 from packages.utils.constants import HUD_DESCRIPTIONS_PATH
 
 
@@ -35,7 +36,10 @@ class HudDescriptions:
 
         # Create a new dictionary called all_descriptions using a dictionary comprehension that
         #  extracts the file names and descriptions from the existing dictionary (self.data)
-        all_descriptions = {values["file_name"]: (values["file_description"], values["file_relative_path"]) for rel_path, values in self.data.items()}
+        all_descriptions = {
+            values["file_name"]: (values["file_description"], values["file_relative_path"])
+            for rel_path, values in self.data.items()
+        }
 
         # Return the newly created dictionary
         return all_descriptions

@@ -1,10 +1,11 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
+import hashlib
 import os
 import shutil
-import hashlib
+
 from packages.game.game import Game
-from packages.utils.functions import load_data
 from packages.utils.constants import DEVELOPMENT_DIR
+from packages.utils.functions import load_data
 
 
 def files_differ(in_file1, in_file2):
@@ -78,7 +79,7 @@ class HudSyncer:
 
     def un_sync(self):
         """Unsync the hud"""
-        print('Unsyncing...')
+        print("Unsyncing...")
         if not self.get_sync_status():
             print("Unsync: No hud to unsync!")
             return
@@ -93,16 +94,16 @@ class HudSyncer:
         for item in hud_items_copy:
             print(f"un_sync item: {item}")
             self._unsync_item(item)
-            
-        print('Unsynced!')
+
+        print("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         # pylint: disable=anomalous-backslash-in-string
         """Syncs the contents of the source directory to the target directory.
 
         Parameters:
-        source_dir (str): The path of the source directory to sync from. EG: ..\l4d-addons-huds\4. l4d2-2020HUD\source
-        target_dir (str): The path of the target directory to sync to. EG: ..\steamapps\common\Left 4 Dead 2
+        source_dir (str): The path of the source directory to sync from. EG: ..\\l4d-addons-huds\\2020HUD\\source
+        target_dir (str): The path of the target directory to sync to. EG: ..\\steamapps\\common\\Left 4 Dead 2
         target_dir_main_name (str): The main name of the target directory,
             used to differentiate from dlc folders and only perform
             certain actions on the main directory. EG: 'Left 4 Dead 2'

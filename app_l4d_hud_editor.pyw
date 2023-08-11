@@ -9,8 +9,8 @@
 # ====================================================================================================
 
 import os
-from packages.game.game import Game
 
+from packages.game.game import Game
 from packages.utils.functions import load_data
 
 os.system("cls")  # clear terminal

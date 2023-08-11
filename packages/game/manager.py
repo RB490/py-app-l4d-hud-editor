@@ -4,11 +4,16 @@ functions related to the game folder such as switching between user/dev modes"""
 import filecmp
 import os
 import shutil
-from tkinter import filedialog
-from tkinter import messagebox
+from tkinter import filedialog, messagebox
+
 from packages.classes.vpk import VPKClass
 from packages.utils.constants import MODS_DIR, SCRIPT_NAME
-from packages.utils.functions import copy_files_in_directory, get_dir_size_in_gb, get_steam_info, load_data
+from packages.utils.functions import (
+    copy_files_in_directory,
+    get_dir_size_in_gb,
+    get_steam_info,
+    load_data,
+)
 from packages.utils.shared_utils import show_message
 
 

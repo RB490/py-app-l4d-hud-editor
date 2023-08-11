@@ -1,14 +1,15 @@
 """This module is a sub class of the game class.
 functions related to the game folder such as switching between user/dev modes"""
-import os
 import ctypes
+import os
 import time
+
 import pyautogui
 import vdf
-
-import win32gui
-import win32con
 import win32api
+import win32con
+import win32gui
+
 from packages.utils.constants import KEY_MAP, KEY_SCANCODES
 from packages.utils.functions import click_at, focus_hwnd, get_steam_info
 

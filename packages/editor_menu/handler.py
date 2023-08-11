@@ -2,8 +2,10 @@
 import os
 import sys
 from tkinter import messagebox
+
 import pyperclip
 import vdf
+
 from packages.classes.get_user_input import get_user_input
 from packages.game.game import Game
 from packages.gui.start import GuiHudStart

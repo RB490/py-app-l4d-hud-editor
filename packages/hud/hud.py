@@ -3,17 +3,24 @@ import os
 import threading
 from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
+
 import keyboard
+
 from packages.classes.vpk import VPKClass
-from packages.gui.start import GuiHudStart
-from packages.hud.descriptions import HudDescriptions
-from packages.hud.syncer import HudSyncer
+from packages.game.game import Game
 
 # pylint: disable=unused-import
 from packages.gui.browser import GuiHudBrowser
-from packages.game.game import Game
+from packages.gui.start import GuiHudStart
+from packages.hud.descriptions import HudDescriptions
+from packages.hud.syncer import HudSyncer
+from packages.utils.constants import (
+    DEBUG_MODE,
+    DEVELOPMENT_DIR,
+    HOTKEY_SYNC_HUD,
+    NEW_HUD_DIR,
+)
 from packages.utils.functions import copy_files_in_directory, load_data
-from packages.utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
 from packages.utils.shared_utils import Singleton, show_message
 
 

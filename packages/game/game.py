@@ -1,12 +1,15 @@
 """Module providing functions related to the game. such as running and installation the dev/user versions"""
-import shutil
 import os
+import shutil
 import subprocess
+
 import psutil
-import win32gui
 import vdf
+import win32gui
+
 from packages.game.commands import GameCommands
 from packages.game.manager import GameManager
+from packages.utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
 from packages.utils.functions import (
     get_steam_info,
     is_process_running,
@@ -15,7 +18,6 @@ from packages.utils.functions import (
     move_hwnd_to_position,
     wait_for_process_and_get_hwnd,
 )
-from packages.utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
 from packages.utils.shared_utils import Singleton
 
 

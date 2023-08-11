@@ -1,24 +1,26 @@
 """Functions used throughout the program"""
 import ctypes
-import shutil
 import json
 import os
+import shutil
 import sys
-import winreg
-import time
 import tempfile
+import time
 import tkinter as tk
+import winreg
 from tkinter import filedialog
 from typing import Optional
+
+import psutil
 import pyautogui
-import win32gui
-import win32process
+import vdf
 import win32api
 import win32con
-import psutil
-import vdf
+import win32gui
+import win32process
 
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
+
 
 def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
     # pylint: disable=unused-variable

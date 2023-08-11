@@ -3,8 +3,9 @@
 
 import os
 import tkinter as tk
-from tkinter import Menu, PhotoImage
 import webbrowser
+from tkinter import Menu, PhotoImage
+
 from packages.editor_menu.handler import EditorMenuHandler
 from packages.game.game import Game
 from packages.utils.constants import (
@@ -12,15 +13,13 @@ from packages.utils.constants import (
     GAME_POSITIONS,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
-    MAP_CODES,
-    SNIPPETS_DIR,
     IMAGES_DIR,
+    MAP_CODES,
     SCRIPT_DIR,
+    SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
-from packages.utils.functions import (
-    retrieve_hud_name_for_dir,
-)
+from packages.utils.functions import retrieve_hud_name_for_dir
 
 
 class EditorMenuClass:
@@ -74,9 +73,9 @@ class EditorMenuClass:
 
         #Example:
             campaign_submenu.add_command(
-                label=map_name, command=self.create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code)
+                label=map_name, command=self.create_lambda_command(self.handler.load_map, map_name, map_code)
             )
-            > so when this menu entry is selected self.handler.editor_menu_game_map gets called with map_name and map_code
+            > so when this menu entry is selected self.handler.load_map gets called with map_name and map_code
 
         This method is useful for creating a function on-the-fly that takes no arguments
         but still needs to execute some code with certain values or variables.
@@ -120,7 +119,7 @@ class EditorMenuClass:
             label="Hud Dev Map",
             command=lambda: self.handler.editor_menu_game_map("Hud Dev Map", "hud_dev_map"),
         )
-        if self.game.get_version() is "L4D2":
+        if self.game.get_version() == "L4D2":
             self.game_map_menu.add_command(
                 label="Curling Stadium",
                 command=lambda: self.handler.editor_menu_game_map("Curling Stadium", "curling_stadium"),
@@ -582,7 +581,7 @@ class EditorMenuClass:
         flame_path = os.path.join(TUTORIALS_DIR, "Flame's Guide to HUDs - flamehud by StefanB.pdf")
         doodle_path = os.path.join(TUTORIALS_DIR, "TF2 Hud Editing Guide - DoodlesStuff.mhtml")
         readme_path = os.path.join(SCRIPT_DIR, "README.MD")
-        if self.game.get_title() is "Left 4 Dead":
+        if self.game.get_title() == "Left 4 Dead":
             all_cvars_link = "https://developer.valvesoftware.com/wiki/List_of_L4D_Cvars"
         else:
             all_cvars_link = "https://developer.valvesoftware.com/wiki/List_of_L4D2_Cvars"
@@ -793,8 +792,8 @@ class EditorMenuClass:
         self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
         self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
         # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying menu as popup
-        
+
         if not self.hud.get_dir():
             self.menu_bar.entryconfig("Hud", state="disabled")
-        
+
         self.root.config(menu=self.menu_bar)

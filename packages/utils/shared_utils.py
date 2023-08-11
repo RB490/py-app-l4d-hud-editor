@@ -2,8 +2,8 @@
 import os
 import subprocess
 import sys
-from tkinter import messagebox
 import tkinter as tk
+from tkinter import messagebox
 
 
 class Singleton(type):
