@@ -3,8 +3,8 @@ import os
 import sys
 from tkinter import messagebox
 
-import pyperclip
-import vdf
+import pyperclip  # type: ignore
+import vdf  # type: ignore
 
 from packages.classes.get_user_input import get_user_input
 from packages.game.game import Game

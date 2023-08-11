@@ -9,11 +9,11 @@ import time
 import tkinter as tk
 import winreg
 from tkinter import filedialog
-from typing import Optional
+from typing import Optional, List
 
 import psutil
 import pyautogui
-import vdf
+import vdf  # type: ignore
 import win32api
 import win32con
 import win32gui
@@ -325,7 +325,7 @@ def wait_for_process_and_get_hwnd(executable_name: str, timeout_seconds: Optiona
                 hwnds.append(hwnd)
             return True
 
-        hwnds = []
+        hwnds: List[int] = []
         win32gui.EnumWindows(callback, hwnds)
         if hwnds:
             return hwnds[0]

@@ -2,7 +2,7 @@
 import os
 import shutil
 
-import vpk
+import vpk  # type: ignore
 
 from packages.utils.functions import (
     create_temp_dir_from_input_dir_exclude_files_without_extension,

@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tkinter as tk
 from tkinter import messagebox
+from typing import Dict, Type
 
 
 class Singleton(type):
@@ -24,7 +25,7 @@ class Singleton(type):
             print(instance2.value)         # Output: 99
     """
 
-    _instances = {}
+    _instances: Dict[Type["Singleton"], "Singleton"] = {}
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:

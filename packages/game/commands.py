@@ -5,7 +5,7 @@ import os
 import time
 
 import pyautogui
-import vdf
+import vdf  # type: ignore
 import win32api
 import win32con
 import win32gui

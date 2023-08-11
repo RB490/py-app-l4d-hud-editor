@@ -25,7 +25,7 @@ class UserInputWindow:
         self.root = tk.Toplevel()
         self.root.title(title)
         self.prompt = prompt
-        self.input_box = None
+        # self.input_box = None
         self.callback = None
 
         self.create_widgets()

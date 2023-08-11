@@ -4,7 +4,7 @@ import shutil
 import subprocess
 
 import psutil
-import vdf
+import vdf  # type: ignore
 import win32gui
 
 from packages.game.commands import GameCommands
