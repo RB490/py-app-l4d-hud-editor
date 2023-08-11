@@ -10,5 +10,8 @@
 	"python.linting.pydocstyleEnabled": false,
 	"python.linting.banditEnabled": false,
 	"python.linting.pylintEnabled": true,
-	"python.linting.prospectorEnabled": false
+	"python.linting.prospectorEnabled": false,
+	"todo-tree.tree.showBadges": true,
+	"todo-tree.tree.showCountsInTree": true,
+	"todo-tree.tree.disableCompactFolders": false
 }

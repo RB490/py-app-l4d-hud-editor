@@ -3,11 +3,8 @@
 
 import os
 import sys
+
 from game.game import Game
-
-from utils.functions import load_data
-# from src.game.game import Game
-
 from gui.browser import get_debug_gui_browser_instance
 from gui.start import GuiHudStart, debug_gui_start
 from hud.hud import debug_hud
@@ -15,10 +12,30 @@ from utils.constants import EDITOR_AUTOEXEC_PATH, PROJECT_ROOT, SCRIPT_DIR
 from utils.functions import load_data
 from utils.shared_utils import show_message
 
-os.system("cls")  # clear terminal
+# from src.game.game import Game
 
-print(PROJECT_ROOT)
-print(SCRIPT_DIR)
+# TODO
+
+# FIXME
+
+# BUG
+# HACK
+# FIXME
+# TODO
+# XXX
+# [ ]
+# [x]
+
+# REVIEW:
+# REVIEW:
+# REVIEW:
+# REVIEW:
+
+# DEBUG
+
+# NOTE:
+
+os.system("cls")  # clear terminal
 
 # setup classes
 persistent_data = load_data()
@@ -27,6 +44,7 @@ persistent_data = load_data()
 game_instance = Game(persistent_data)
 # result = game_instance.manager.run_installer()
 # game_instance.activate_mode("dev")
+
 
 # game_instance.activate_mode("dev")
 # print(f'debug: result: {result}')

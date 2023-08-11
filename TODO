@@ -1,0 +1,59 @@
+Refactoring:
+	☐ Handle 'utf-8' codec error when VPK class fails to extract specific files
+	☐ Make internal class methods protected by adding underscores
+	☐ Remove duplicate code in hud.py related to GuiHudStart instance creation
+		☐ Automatically detect and refactor
+	☐ Utilize exception handling for specific cases like AssertionError and ValueError
+	☐ Simplify manager class, improve 'get_dir' function and other enhancements
+	☐ Replace assert statements with proper error handling using try/catch
+
+Bugs:
+	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder
+	☐ Fix 'added' files option not working in treeview, no data retrieved
+	☐ Address in-game console bugs related to malformed VPK addons loading
+		☐ Explore potential fixes, e.g., creating small VPK to overwrite malformed ones
+	☐ Investigate console errors for failing to load maps
+
+Features:
+	☐ Implement cleanup of dev directory when install gets cancelled
+	☐ Handle script closure to ensure unsyncing even during crashes or failures
+	☐ Add context menu functionality for treeview in browser
+	☐ Add icons to enhance GUI aesthetics
+	☐ Incorporate progress GUI for the installer class
+		☐ Implement for install, update_or_repair, and remove operations
+
+Sync Class Improvements:
+	☐ Refine error handling strategy in sync class, possibly during unit testing
+	☐ Review and enhance target directory validation in sync()
+
+GUI and Interface:
+	☐ Improve icons and buttons in GUI components
+	☐ Display custom and added-to-hud status for files in the browser
+		☐ Consider adding columns or a status bar
+	☐ Enhance context menu icons in the treeview
+
+General Refactoring:
+	☐ Streamline and test HUD editing process for improved code path
+	☐ Consider simplifying main GUI by integrating its functionality into menu class
+	☐ Explore restructuring options for more efficient code flow
+	☐ Evaluate the use of singleton patterns in GUI management
+
+Unit Testing and Test Classes:
+	☐ Create test classes for HUD descriptions and HUD syncer
+	☐ Test all menu options for robustness
+
+Cleanup and Miscellaneous:
+	☐ Centralize video settings calls into a general function
+	☐ Break up the game commands execute method for better organization
+	☐ Consider alternatives for using subclasses and direct referencing
+	☐ Reevaluate the use of persistent_data in classes, possibly with a dedicated class or alternative approach
+	☐ Optimize and improve functions, methods, and overall structure based on GPT suggestions
+
+Global Hotkey Management:
+	☐ Explore using a global singleton hotkey manager to streamline hotkey handling
+
+Additional Ideas and Considerations:
+	☐ Explore multi-game support feasibility
+	☐ Evaluate potential of using default console interface instead of GUI
+	☐ Reflect on GUI design choices and their impacts
+
