@@ -12,9 +12,13 @@ testing -> edit a hud
 
 
 
-
-
 ###### Backlog
+
+refactor -> when the vpk class fails to extract a certain file such as Extract error for file 'materials/ads/ad01.vmt': 'utf-8' codec can't decode byte 0xe9 in position 11: unexpected end of data. do something? this specificly happened during extracting pak01.vpk's in installation
+
+refactor -> best practice project layout. ask gpt for an example
+
+refactor -> make internal class method protected by adding an underscore
 
 refactor -> remove duplicate code -> automatically detect? &
 	hud.py
@@ -29,8 +33,11 @@ refactor -> utilize the ability to raise and catch different kinds of eceptions?
 bug -> running longer tasks such as uninstalling the dev folder hangs the main tkinter gui until finished
 
 bug -> treeview -> 'added' files option doesn't work. no data retrieved
+feature -> cleanup dev dir when install gets cancelled (maybe i did this before that refactor, look at the code)
 
 refactor -> manager class. for example: get_dir function is very cluttered. and throughout there are a lot of improvements to be made
+
+feature -> uninstall dev mode -> folders should be switched to user. probably switch them to sure mode first, then uninstall
 
 bug -> ingame console bugs -> modify hud editor autoexec to clear the console? or do these errors happen after that
 	bug -> ingame console -> failed to load malformed vpk addon's -> potential fixes:

@@ -13,7 +13,7 @@ import os
 # print(grandparent_dir)
 
 DEBUG_MODE = True
-SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEVELOPMENT_DIR = os.path.join(SCRIPT_DIR, "development")
 ASSETS_DIR = os.path.join(SCRIPT_DIR, "assets")
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")

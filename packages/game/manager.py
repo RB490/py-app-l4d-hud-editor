@@ -107,7 +107,7 @@ class GameManager:
         # If the ID file is not found, prompt the user to manually select the directory
         message = (
             f"Could not find ID file for the {mode} installation directory.\n\n"
-            "Manually select it?\n"
+            "Is it installed and do you want to manually select it?\n"
             "If so - Be sure to select the correct directory!"
         )
         response = show_message(message, "yesno", SCRIPT_NAME)

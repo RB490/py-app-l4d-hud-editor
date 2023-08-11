@@ -17,9 +17,10 @@ os.system("cls")  # clear terminal
 persistent_data = load_data()
 # create initial singleton game class
 # debug_hud()
-# game_instance = Game(persistent_data)
+game_instance = Game(persistent_data)
 # result = game_instance.manager.run_installer()
 # game_instance.activate_mode("dev")
+
 # game_instance.activate_mode("dev")
 # print(f'debug: result: {result}')
 # result = game_instance.manager._prompt_start("install")
@@ -38,8 +39,8 @@ persistent_data = load_data()
 
 # start_instance = GuiHudStart(persistent_data)
 # start_instance.destroy_gui()
-start_instance = GuiHudStart(persistent_data)
-start_instance.run()
+# start_instance = GuiHudStart(persistent_data)
+# start_instance.run()
 
 
 input("Finished! Press enter to continue..")

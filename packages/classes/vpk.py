@@ -42,18 +42,18 @@ class VPKClass:
         with vpk.open(input_file) as vpk_file:
             # iterate over all files in the VPK
             try:
-                for filepath in vpk_file:
+                for file_path in vpk_file:
                     # create directories if necessary
-                    full_path = os.path.join(output_dir, filepath)
+                    full_path = os.path.join(output_dir, file_path)
                     os.makedirs(os.path.dirname(full_path), exist_ok=True)
 
                     # extract the file
                     with open(full_path, "wb") as output_file:
                         # print(f'writing file: {full_path} -> output_file: {output_file}')
-                        output_file.write(vpk_file[filepath].read())
-            except NotImplementedError as err_info:
+                        output_file.write(vpk_file[file_path].read())
+            except Exception as err_info:
                 # tk.messagebox.showerror("Error", str(e))
-                print(f"Extract error: {str(err_info)}")
+                print(f"Extract error for file '{file_path}': {str(err_info)}")
 
     def create(self, input_dir, output_dir, output_file_name):
         """

@@ -10,8 +10,8 @@
 
 import os
 
-from packages.game.game import Game
-from packages.utils.functions import load_data
+# from packages.game.game import Game
+# from packages.utils.functions import load_data
 
 os.system("cls")  # clear terminal
 
@@ -23,14 +23,14 @@ os.system("cls")  # clear terminal
 #     Load persistent data
 # ----------------------------------
 
-persistent_data = load_data()
+# persistent_data = load_data()
 
 # ----------------------------------
 #     Do stuff
 # ----------------------------------
 
 # create initial singleton game class
-game_instance = Game(persistent_data)
+# game_instance = Game(persistent_data)
 # hud_instance = Hud(game_instance)
 # hud_select = GuiHudSelect(persistent_data, game_instance, hud_instance)
 
@@ -38,4 +38,4 @@ game_instance = Game(persistent_data)
 #     Finish
 # ----------------------------------
 
-input("End of auto-execute (Press enter to exit)")
+input("End of auto-execute (Press enter to exit)...")

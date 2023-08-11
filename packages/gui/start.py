@@ -1,8 +1,9 @@
 """Module for the hud select gui class"""
+# pylint: disable=broad-exception-caught
 import os
 import subprocess
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, ttk
 
 from PIL import Image, ImageTk
 
@@ -13,7 +14,7 @@ from packages.utils.functions import (
     prompt_create_new_hud,
     retrieve_hud_name_for_dir,
 )
-from packages.utils.shared_utils import Singleton
+from packages.utils.shared_utils import Singleton, show_message
 
 
 class GuiHudStart(metaclass=Singleton):
@@ -140,64 +141,66 @@ class GuiHudStart(metaclass=Singleton):
 
     def installer_user_dir(self):
         """This method returns the user directory."""
-        print("Opened User Dir")
-        directory = self.game.manager.get_dir("user")
-        if os.path.isdir(directory):
+        print("Opening user directory")
+        try:
+            directory = self.game.manager.get_dir("dev")
             os.startfile(directory)
-        else:
-            messagebox.showerror("Error", "Directory does not exist!")
+        except Exception as err_info:
+            print(f"Could not open user directory: {err_info}")
+            show_message("Directory does not exist!", "error")
 
     def installer_dev_dir(self):
         """
-        This method returns the dev directory.
+        This method returns the developer directory.
         """
-        print("Opened Dev Dir")
-        directory = self.game.manager.get_dir("dev")
-        if os.path.isdir(directory):
+        print("Opening developer directory")
+        try:
+            directory = self.game.manager.get_dir("dev")
             os.startfile(directory)
-        else:
-            messagebox.showerror("Error", "Directory does not exist!")
+        except Exception as err_info:
+            print(f"Could not open developer directory: {err_info}")
+            show_message("Directory does not exist!", "error")
 
     def installer_enable(self):
         """
-        This method enables dev mode.
+        This method enables developer mode.
         """
-        print("Enable dev mode")
+        print("Enabling developer mode")
         self.game.manager.activate_mode("dev")
 
     def installer_disable(self):
         """
-        This method disables dev mode.
+        This method disables developer mode.
         """
-        print("Disable dev mode")
+        print("Disabling developer mode")
         self.game.manager.activate_mode("user")
 
     def installer_install(self):
         """
-        This method installs dev mode.
+        This method installs developer mode.
         """
-        print("Install dev mode")
+        print("Install developer mode")
         self.game.manager.run_installer()
 
     def installer_update(self):
         """
-        This method updates dev mode.
+        This method updates developer mode.
         """
-        print("Update dev mode")
+        print("Updating developer mode")
         self.game.manager.run_update_or_repair("update")
 
     def installer_repair(self):
         """
-        This method repairs dev mode.
+        This method repairs developer mode.
         """
-        print("Repair dev mode")
+        print("Repairing developer mode")
         self.game.manager.run_update_or_repair("repair")
 
     def installer_remove(self):
         """
-        This method removes dev mode.
+        This method removes developer mode.
         """
-        print("Remove dev mode")
+        print("Removing developer mode")
         self.game.manager.run_uninstaller()
 
     def show_tree_context_menu(self, event):
@@ -217,7 +220,7 @@ class GuiHudStart(metaclass=Singleton):
 
     def tree_open_dir(self):
         """Open the directory of the selected hud."""
-        print("Open tree directory")
+        print("Opening selected tree item directory")
 
         # Check if the source directory exists
         if os.path.exists(self.selected_hud_dir):
@@ -229,7 +232,7 @@ class GuiHudStart(metaclass=Singleton):
 
     def tree_export_vpk(self):
         """Export the selected hud as a vpk file."""
-        print("Export tree as vpk")
+        print("Exporting selected tree item as vpk")
 
         export_path = filedialog.asksaveasfilename(
             initialdir="/", title="Export HUD as VPK", filetypes=(("package files", "*.vpk"), ("all files", "*.*"))
