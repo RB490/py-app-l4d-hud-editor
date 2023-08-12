@@ -7,6 +7,7 @@ Refactoring:
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Replace assert statements with proper error handling using try/catch
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
+	☐ Make the function to create lambda commands a shared utility, and use it in the project
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder

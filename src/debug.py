@@ -12,29 +12,6 @@ from utils.constants import EDITOR_AUTOEXEC_PATH, PROJECT_ROOT, SCRIPT_DIR
 from utils.functions import load_data
 from utils.shared_utils import show_message
 
-# from src.game.game import Game
-
-# TODO
-
-# FIXME
-
-# BUG
-# HACK
-# FIXME
-# TODO
-# XXX
-# [ ]
-# [x]
-
-# REVIEW:
-# REVIEW:
-# REVIEW:
-# REVIEW:
-
-# DEBUG
-
-# NOTE:
-
 os.system("cls")  # clear terminal
 
 # setup classes
