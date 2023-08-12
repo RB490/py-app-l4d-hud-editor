@@ -1,9 +1,16 @@
+Current:
 Features:
+	☐ Installer: Use stored installation status to perform actions. UNKNOWN = delete, in_progress_extracting
+	☐ Installer: Dev mode not installer -> install -> a bunch of prompts to select it
+		☐ Consider setting manually selecting directory to disabled by default
 	
-	✔ Use InvalidIDError @done(23-08-12 15:55)
-	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
+	☐ Installer: Handle CANCELLED installation state by handling any unknown installation state - deleting and restarting
+	☐ Installer: Split installation into separate class
+
+	
+	☐ Installer: Raise and handle exceptions. For example failing to rebuild audio cache
+	
 	☐ Implement cleanup of dev directory when install gets cancelled
-		☐ Keep track of installation status inside the id file. Use this to cancel or resume installation
 
 	☐ Installer: Handle cancelling of manual directory selection. should abort whatever task was being performed
 	☐ Handle script closure to ensure unsyncing even during crashes or failures
@@ -62,6 +69,10 @@ Additional Ideas and Considerations:
 	☐ Multi-game support: Explore multi-game support feasibility
 	☐ Command line: Evaluate potential of using command line interface instead of GUI
 
-
-Notes
+	Notes
 	- https://github.com/RB490/py-app-l4d-hud-editor/blob/580ad38869ce6babdd931836555ee3187984c99c/todo_legacy.md
+	
+Archive:
+	✔ Installer: Keep track of installation status @done(23-08-12 17:17)
+	✔ Use InvalidIDError @done(23-08-12 15:55)
+	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)

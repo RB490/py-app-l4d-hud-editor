@@ -39,7 +39,12 @@ class InstallationState(Enum):
 
     UNKNOWN = auto()  # currently used by setting directory manually
     NOT_STARTED = auto()
-    IN_PROGRESS = auto()
+    CREATE_DEV_DIR = auto()
+    COPYING_FILES = auto()
+    VERIFYING_GAME = auto()
+    EXTRACTING_PAKS = auto()
+    INSTALLING_MODS = auto()
+    REBUILDING_AUDIO = auto()
     PAUSED = auto()
     COMPLETED = auto()
     CANCELLED = auto()
@@ -55,21 +60,12 @@ class GameManager:
     def __init__(self, persistent_data, game_instance):
         self.persistent_data = persistent_data
         self.steam_info = get_steam_info(self.persistent_data)
-        self.valid_modes = ["user", "dev"]
         # avoiding circular import by passing the game instance as a param here
         self.game = game_instance
+        self.current_state = None  # current installation state
 
         self.user_dir_id_file = "user_folder.DoNotDelete"
         self.dev_dir_id_file = "hud_dev_folder.DoNotDelete"
-
-    def validate_mode_parameter(self, mode):
-        "Validate mode parameter"
-        print("Validating mode parameter (legacy TODO: replace with enum)...")
-        if mode not in self.valid_modes:
-            raise ValueError("Invalid mode parameter. Mode must be one of: user, dev")
-        else:
-            # print(f"Valid mode param: {mode}")
-            return False
 
     def get_active_mode(self):
         """Check active game mode. User/Dev"""
@@ -142,6 +138,22 @@ class GameManager:
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
+    def get_installation_state(self, dir_mode):
+        id_file = self.get_id_file_name(dir_mode)
+        if id_file is not None:
+            id_file_path = os.path.join(self.get_dir(dir_mode), id_file)
+            if os.path.exists(id_file_path):
+                try:
+                    with open(id_file_path, "r", encoding="utf-8") as file_handle:
+                        state_data = json.load(file_handle)
+                        installation_state_str = state_data.get("installation_state")
+                        if installation_state_str:
+                            return InstallationState[installation_state_str]
+                except (json.JSONDecodeError, KeyError):
+                    pass
+        print(f"Invalid installation state data format! Defaulting to {InstallationState.UNKNOWN.name}")
+        return InstallationState.UNKNOWN
+
     def get_id_file_name(self, dir_mode):
         "Retrieve ID file name"
 
@@ -203,6 +215,8 @@ class GameManager:
     def get_dir(self, dir_mode, manually_select_dir=True):
         "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
 
+        print(f"FIXME manually_select_dir = {manually_select_dir}")
+
         try:
             self.validate_mode_parameter_enum(dir_mode)
 
@@ -226,10 +240,18 @@ class GameManager:
                 print(f"Not prompting to manually select {dir_mode} directory")
                 return
 
+            print(
+                f"FIXME somehow directly is being manually set even with var set to false or something?: {manually_select_dir}"
+            )
+
             # If the ID file is not found, prompt the user to manually select the directory
             try:
                 result = self.set_directory_manually(dir_mode)
-                print(f"Game directory for {dir_mode}: '{result}'")
+                if result is None:
+                    print(f"Failed to retrieve game directory for {dir_mode}. The function returned None.")
+                    return None
+                else:
+                    print(f"Game directory for {dir_mode}: '{result}'")
                 return result
             except Exception as err_info:
                 print(f"Failed to retrieve game directory for {dir_mode}. Information: {err_info}")
@@ -364,7 +386,7 @@ class GameManager:
         # create message
         install_type_capitalized = install_type.capitalize()
         title = f"{install_type_capitalized} hud editing for {self.game.get_title()}?"
-        disk_space = get_dir_size_in_gb(self.get_dir("user"))
+        disk_space = get_dir_size_in_gb(self.get_dir(DirectoryMode.USER))
         message = f"{title}\n\n"
         if message_extra:  # Check if the variable is not empty
             message += f"- {message_extra}\n"  # Add the extra line
@@ -387,7 +409,7 @@ class GameManager:
         assert update_or_repair in ["update", "repair"], "Invalid mode parameter"
 
         # verify dev mode is already installed
-        if not self.is_installed("dev"):
+        if not self.is_installed(DirectoryMode.DEVELOPER):
             messagebox.showinfo("Error", "Dev mode not installed!")
             return False
 
@@ -403,7 +425,7 @@ class GameManager:
         self.game.close()
 
         # activate dev mode
-        self.activate_mode("dev")
+        self.activate_mode(DirectoryMode.DEVELOPER)
 
         # re-enable paks
         self._enable_paks()
@@ -432,7 +454,7 @@ class GameManager:
         print("Running uninstaller...")
 
         # verify dev mode is already installed
-        if not self.is_installed("dev"):
+        if not self.is_installed(DirectoryMode.DEVELOPER):
             messagebox.showinfo("Error", "Dev mode not installed!")
             return False
 
@@ -440,7 +462,8 @@ class GameManager:
         self.game.close()
 
         # remove dev mode
-        shutil.rmtree(self.get_dir("dev"))
+        print("Deleting game directory...")
+        shutil.rmtree(self.get_dir(DirectoryMode.DEVELOPER))
 
         print("Uninstalled!")
 
@@ -466,24 +489,26 @@ class GameManager:
                 print("Not installed!")
                 return False
         except Exception as err_info:
+            self.write_id_file(
+                DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.CANCELLED
+            )
             print(f"Install cancelled: {err_info}")
             return False
 
     def _perform_installation(self, manually_select_dir=True):
         # verify the user installation is available
-        if not self.is_installed("user"):
+        if not self.is_installed(DirectoryMode.USER):
             raise AssertionError("User installation not found. Unable to install")
 
         # verify dev mode isn't already installed
-        if self.is_installed("dev", manually_select_dir):
+        if self.is_installed(DirectoryMode.DEVELOPER, manually_select_dir):
             messagebox.showinfo("Error", "Already installed!")
             return True
 
-        # delete the dev folder for debugging purposes only
-        # if DEBUG_MODE and os.path.isdir(self.get_dir("dev")):
-        #     self.activate_mode("user")
-        #     shutil.rmtree(self.get_dir("dev"))
-        #     print('debug mode: successfully deleted the dev folder')
+        # retrieve current installation state
+        self.current_state = self.get_installation_state(DirectoryMode.DEVELOPER)
+        if self.current_state is InstallationState.UNKNOWN:
+            self.current_state = InstallationState.CREATE_DEV_DIR
 
         # close the game
         self.game.close()
@@ -492,47 +517,88 @@ class GameManager:
         if not self._prompt_start("install"):
             return False
 
-        # 1. create dev folder template (folder & .exe) for detection incase of cancellation for cleanup
-        self._create_dev_dir()
-
-        # 2. copy the game files into and activate the dev folder
-        self._copy_game_files()
-        print("finished copying files")
-        self.activate_mode("dev")
-
-        # 3. steam verify = prompt to verify game install through steam to update and restore all game files
-        self._prompt_game_verified()
-
-        # 4. extract paks
-        self._extract_paks()
-        self._disable_paks()
-
-        # 5. install mods
-        self._install_mods()
-
-        # 6. rebuild audio cache
-        self._rebuild_audio()
+        # install
+        self.resume_installation(self.current_state)
 
         # finish installation
         input("press enter to successfully finish installation")
         return True
 
+    def resume_installation(self, state):
+        states_to_resume = [
+            # 1. create dev folder template (folder & .exe) for detection incase of cancellation for cleanup
+            InstallationState.CREATE_DEV_DIR,
+            # 2. copy the game files into and activate the dev folder
+            InstallationState.COPYING_FILES,
+            # 3. steam verify = prompt to verify game install through steam to update and restore all game files
+            InstallationState.VERIFYING_GAME,
+            # 4. extract paks
+            InstallationState.EXTRACTING_PAKS,
+            # 5. install mods
+            InstallationState.INSTALLING_MODS,
+            # 6. rebuild audio cache
+            InstallationState.REBUILDING_AUDIO,
+        ]
+
+        # perform installation steps
+        if state in states_to_resume:
+            start_resume = False
+            for resume_state in states_to_resume:
+                if resume_state == state:
+                    start_resume = True
+                if start_resume:
+                    self.perform_installation_step(resume_state)
+
+        # finish installation
+        self.current_state = InstallationState.COMPLETED
+        self.write_id_file(DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.COMPLETED)
+
+    def perform_installation_step(self, state):
+        if state == InstallationState.CREATE_DEV_DIR:
+            self._create_dev_dir()
+        elif state == InstallationState.COPYING_FILES:
+            self._copy_game_files()
+            self.activate_mode(DirectoryMode.DEVELOPER)
+        elif state == InstallationState.VERIFYING_GAME:
+            self._prompt_game_verified()
+        elif state == InstallationState.EXTRACTING_PAKS:
+            self._extract_paks()
+            self._disable_paks()
+        elif state == InstallationState.INSTALLING_MODS:
+            self._install_mods()
+        elif state == InstallationState.REBUILDING_AUDIO:
+            self._rebuild_audio()
+
+        # Update the current state to the completed state
+        self.current_state = state
+
     def _create_dev_dir(self):
         print("Creating developer directory")
-        game_user_dir = self.get_dir("user")
+        self.write_id_file(DirectoryMode.DEVELOPER, game_dev_dir, InstallationState.CREATE_DEV_DIR)
+
+        game_user_dir = self.get_dir(DirectoryMode.USER)
         game_dev_dir = os.path.join(self.steam_info.get("game_dir"), "backup_hud_dev." + self.game.get_title())
         game_exe_path = os.path.join(game_user_dir, self.game.get_exe())
 
         os.mkdir(game_dev_dir)
         shutil.copy(game_exe_path, game_dev_dir)
-        self.write_id_file("dev", game_dev_dir, InstallationState.NOT_STARTED)
+
+        return
 
     def _copy_game_files(self):
         print("Copying game files into developer directory")
-        copy_files_in_directory(self.get_dir("user"), self.get_dir("dev"), self.user_dir_id_file)
+        self.write_id_file(
+            DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.COPYING_FILES
+        )
+        copy_files_in_directory(
+            self.get_dir(DirectoryMode.USER), self.get_dir(DirectoryMode.DEVELOPER), self.user_dir_id_file
+        )
 
     def _prompt_game_verified(self):
         print("Prompting user to verify game")
+        self.write_id_file(
+            DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.VERIFYING_GAME
+        )
         game_title = self.game.get_title()
         title = "Verify game files"
 
@@ -572,8 +638,8 @@ class GameManager:
         print("Extracting outdated pak01.vpk's")
 
         # retrieve pak files for user & dev modes
-        dev_dir = self.get_dir("dev")
-        user_dir = self.get_dir("user")
+        dev_dir = self.get_dir(DirectoryMode.DEVELOPER)
+        user_dir = self.get_dir(DirectoryMode.USER)
 
         user_paks = []
         dev_paks = []
@@ -610,7 +676,11 @@ class GameManager:
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
         print("Extracting pak01.vpk's")
-        dev_dir = self.get_dir("dev")
+        self.write_id_file(
+            DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.EXTRACTING_PAKS
+        )
+
+        dev_dir = self.get_dir(DirectoryMode.DEVELOPER)
 
         def extract_callback(filepath, output_dir):
             vpk_class = VPKClass()
@@ -620,7 +690,7 @@ class GameManager:
 
     def _disable_paks(self):
         print("Disabling pak01.vpk's")
-        dev_dir = self.get_dir("dev")
+        dev_dir = self.get_dir(DirectoryMode.DEVELOPER)
 
         def disable_callback(filepath, subdir_path):
             source_filepath = filepath
@@ -631,7 +701,7 @@ class GameManager:
 
     def _enable_paks(self):
         print("Enabling pak01.vpk's")
-        dev_dir = self.get_dir("dev")
+        dev_dir = self.get_dir(DirectoryMode.DEVELOPER)
 
         def enable_callback(filepath, subdir_path):
             source_filepath = filepath
@@ -643,10 +713,14 @@ class GameManager:
 
     def _install_mods(self):
         print("Installing mods")
+        self.write_id_file(
+            DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.INSTALLING_MODS
+        )
+
         mods_dev_map_dir = os.path.join(MODS_DIR, self.game.get_title(), "export")
         mods_addons_dir = os.path.join(MODS_DIR, "Addons", "Export")
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
-        main_dir = self.get_main_dir("dev")
+        main_dir = self.get_main_dir(DirectoryMode.DEVELOPER)
 
         copy_files_in_directory(mods_dev_map_dir, main_dir)
         copy_files_in_directory(mods_addons_dir, main_dir)
@@ -654,15 +728,18 @@ class GameManager:
 
     def _rebuild_audio(self):
         print("Rebuilding audio")
+        self.write_id_file(
+            DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.REBUILDING_AUDIO
+        )
 
-        cfg_dir = self.get_cfg_dir("dev")
+        cfg_dir = self.get_cfg_dir(DirectoryMode.DEVELOPER)
         valverc_path = os.path.join(cfg_dir, "valve.rc")
 
         with open(valverc_path, "w", encoding="utf-8") as file_handle:
             file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
 
         self.game.close()
-        self.game.run("dev", "wait on close")
+        self.game.run(DirectoryMode.DEVELOPER, "wait on close")
         print("Finished rebuilding audio")
         # Run, % STEAM_INFO.exePath A_Space "-applaunch " this.game.obj.appid " -novid -w 1 -h 1 -x 0 -y 0 -windowed"
 
