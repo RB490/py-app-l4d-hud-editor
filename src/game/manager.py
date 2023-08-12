@@ -497,7 +497,7 @@ class GameManager:
 
     def _perform_installation(self, manually_select_dir=True):
         # verify the user installation is available
-        if not self.is_installed(DirectoryMode.USER):
+        if not self.is_installed(DirectoryMode.USER, manually_select_dir=False):
             raise AssertionError("User installation not found. Unable to install")
 
         # verify dev mode isn't already installed
@@ -574,7 +574,6 @@ class GameManager:
 
     def _create_dev_dir(self):
         print("Creating developer directory")
-        self.write_id_file(DirectoryMode.DEVELOPER, game_dev_dir, InstallationState.CREATE_DEV_DIR)
 
         game_user_dir = self.get_dir(DirectoryMode.USER)
         game_dev_dir = os.path.join(self.steam_info.get("game_dir"), "backup_hud_dev." + self.game.get_title())
@@ -583,6 +582,7 @@ class GameManager:
         os.mkdir(game_dev_dir)
         shutil.copy(game_exe_path, game_dev_dir)
 
+        self.write_id_file(DirectoryMode.DEVELOPER, game_dev_dir, InstallationState.CREATE_DEV_DIR)
         return
 
     def _copy_game_files(self):
