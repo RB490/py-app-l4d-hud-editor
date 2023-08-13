@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 
 from classes.vpk import VPKClass
 from game.game import Game
+from game.manager import DirectoryMode
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,
@@ -123,7 +124,7 @@ class GuiHudStart(metaclass=Singleton):
         dev_menu.add_command(label="Repair", command=self.installer_repair)
         dev_menu.add_separator()
         dev_menu.add_command(label="Remove", command=self.installer_remove)
-        menu_bar.add_cascade(label="Dev", menu=dev_menu)
+        menu_bar.add_cascade(label="Develop", menu=dev_menu)
 
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
@@ -143,7 +144,7 @@ class GuiHudStart(metaclass=Singleton):
         """This method returns the user directory."""
         print("Opening user directory")
         try:
-            directory = self.game.manager.get_dir("dev")
+            directory = self.game.manager.get_dir(DirectoryMode.USER)
             os.startfile(directory)
         except Exception as err_info:
             print(f"Could not open user directory: {err_info}")
@@ -155,7 +156,7 @@ class GuiHudStart(metaclass=Singleton):
         """
         print("Opening developer directory")
         try:
-            directory = self.game.manager.get_dir("dev")
+            directory = self.game.manager.get_dir(DirectoryMode.DEVELOPER)
             os.startfile(directory)
         except Exception as err_info:
             print(f"Could not open developer directory: {err_info}")
@@ -166,14 +167,14 @@ class GuiHudStart(metaclass=Singleton):
         This method enables developer mode.
         """
         print("Enabling developer mode")
-        self.game.manager.activate_mode("dev")
+        self.game.manager.activate_mode(DirectoryMode.DEVELOPER)
 
     def installer_disable(self):
         """
         This method disables developer mode.
         """
         print("Disabling developer mode")
-        self.game.manager.activate_mode("user")
+        self.game.manager.activate_mode(DirectoryMode.USER)
 
     def installer_install(self):
         """
@@ -260,11 +261,14 @@ class GuiHudStart(metaclass=Singleton):
         self.hide()
 
     def save_window_geometry(self):
-        """Save size & position"""
-        # Get the current position and size of the window
-        geometry = self.root.geometry()
-        print(f"geometry: {geometry}")
-        self.persistent_data["HudSelectGuiGeometry"] = geometry
+        """Save size & position if GUI is loaded and visible"""
+        if self.root and self.root.winfo_viewable():
+            # Get the current position and size of the window
+            geometry = self.root.geometry()
+            print(f"geometry: {geometry}")
+            self.persistent_data["HudSelectGuiGeometry"] = geometry
+        else:
+            print("GUI is not loaded or visible. Skipping window geometry save.")
 
     def update_treeview(self):
         """Clear treeview & load up-to-date content"""

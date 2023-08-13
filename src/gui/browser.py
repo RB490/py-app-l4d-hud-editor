@@ -250,11 +250,14 @@ class GuiHudBrowser(metaclass=Singleton):
         print("Treeview: Refreshed")
 
     def save_window_geometry(self):
-        """Save size & position"""
-        # Get the current position and size of the window
-        geometry = self.root.geometry()
-        print(f"geometry: {geometry}")
-        self.persistent_data["BrowserGuiGeometry"] = geometry
+        """Save size & position if GUI is loaded and visible"""
+        if self.root and self.root.winfo_viewable():
+            # Get the current position and size of the window
+            geometry = self.root.geometry()
+            print(f"geometry: {geometry}")
+            self.persistent_data["BrowserGuiGeometry"] = geometry
+        else:
+            print("GUI is not loaded or visible. Skipping window geometry save.")
 
     def destroy_gui(self):
         "Close & stop main loop"

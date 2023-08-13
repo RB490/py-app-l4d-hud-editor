@@ -84,9 +84,9 @@ class Game(metaclass=Singleton):
         """Retrieve information"""
         return self.game_appid
 
-    def get_dir(self, mode):
+    def get_dir(self, dir_mode):
         """Retrieve information"""
-        return self.manager.get_dir(mode)
+        return self.manager.get_dir(dir_mode)
 
     def get_hwnd(self):
         """Retrieve information"""
@@ -96,9 +96,9 @@ class Game(metaclass=Singleton):
 
         return self.game_hwnd
 
-    def get_main_dir(self, mode):
+    def get_main_dir(self, dir_mode):
         """Retrieve information"""
-        return self.manager.get_main_dir(mode)
+        return self.manager.get_main_dir(dir_mode)
 
     def get_dev_config_dir(self):
         """Retrieve information"""
@@ -125,9 +125,9 @@ class Game(metaclass=Singleton):
         """Checks if the game is running"""
         return is_process_running(self.get_exe())
 
-    def activate_mode(self, mode):
+    def activate_mode(self, dir_mode):
         """Switch between user/dev modes"""
-        return self.manager.activate_mode(mode)
+        return self.manager.activate_mode(dir_mode)
 
     def _write_config(self):
         # don't alter user installation
@@ -190,12 +190,13 @@ class Game(metaclass=Singleton):
                 break
         # print('close(): game force closed')
 
-    def run(self, mode, wait_on_close=False):
+    def run(self, dir_mode, wait_on_close=False):
         """Start game"""
-        assert mode in ["user", "dev"], "Invalid mode parameter"
 
-        # activate selected mode
-        self.activate_mode(mode)
+        # activate selected dir_mode
+        result = self.activate_mode(dir_mode)
+        if not result:
+            return False
 
         # run game
         if self.is_running():

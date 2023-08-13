@@ -29,10 +29,13 @@ DIR_MODE = "dev"
 # result = game_instance.manager.get_main_dir(DirectoryMode.USER)
 # result = game_instance.manager.get_cfg_dir(DirectoryMode.DEVELOPER)
 # result = game_instance.manager.activate_mode(DirectoryMode.DEVELOPER)
+# result = game_instance.manager.is_installed(DirectoryMode.DEVELOPER)
 # result = game_instance.manager.activate_mode(DirectoryMode.USER)
 # result = game_instance.manager.get_installation_state(DirectoryMode.DEVELOPER)
-result = game_instance.manager.run_installer(manually_select_dir=False)
-print(f"result={result}")
+# result = game_instance.manager.run_installer(manually_select_dir=False)
+# result = game_instance.manager.get_dir(DirectoryMode.DEVELOPER)
+# result = game_instance.close()
+# print(f"result: {result}")
 
 
 # game_instance.activate_mode("dev")
@@ -54,8 +57,6 @@ print(f"result={result}")
 # my_browser = get_debug_gui_browser_instance(persistent_data)
 # my_browser.run()
 
-# start_instance = GuiHudStart(persistent_data)
-# start_instance.destroy_gui()
 start_instance = GuiHudStart(persistent_data)
 start_instance.run()
 

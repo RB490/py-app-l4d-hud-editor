@@ -23,6 +23,10 @@ class InvalidIDError(Exception):
     "Custom exception for invalid ID file"
 
 
+class InstallationError(Exception):
+    """Custom exception for indicating installation errors."""
+
+
 class DirModeError(Exception):
     "Custom exception for invalid DirectoryMode parameter"
 
@@ -69,17 +73,24 @@ class GameManager:
 
     def get_active_mode(self):
         """Check active game mode. User/Dev"""
-        user_id_file_path = os.path.join(self.get_active_dir(), self.get_id_file_name(DirectoryMode.USER))
-        dev_id_file_path = os.path.join(self.get_active_dir(), self.get_id_file_name(DirectoryMode.DEVELOPER))
+        try:
+            if not self.is_installed(DirectoryMode.USER) and not self.is_installed(DirectoryMode.DEVELOPER):
+                raise InstallationError("Application is not installed in any valid mode.")
 
-        if os.path.isfile(user_id_file_path):
-            print(f"{self.game.get_title()} is in user mode")
-            return DirectoryMode.USER
-        elif os.path.isfile(dev_id_file_path):
-            print(f"{self.game.get_title()} is in dev mode")
-            return DirectoryMode.DEVELOPER
-        else:
-            print(f"Default game folder not found! ({self.get_active_dir()})")
+            user_id_file_path = os.path.join(self.get_active_dir(), self.get_id_file_name(DirectoryMode.USER))
+            dev_id_file_path = os.path.join(self.get_active_dir(), self.get_id_file_name(DirectoryMode.DEVELOPER))
+
+            if os.path.isfile(user_id_file_path):
+                print(f"{self.game.get_title()} is in user mode")
+                return DirectoryMode.USER
+            elif os.path.isfile(dev_id_file_path):
+                print(f"{self.game.get_title()} is in dev mode")
+                return DirectoryMode.DEVELOPER
+            else:
+                print(f"Default game folder not found! ({self.get_active_dir()})")
+                return None
+        except InstallationError as err:
+            print(f"Failed to determine active game mode: {err}")
             return None
 
     def get_cfg_dir(self, dir_mode):
@@ -87,7 +98,10 @@ class GameManager:
         print("Retrieving config directory...")
 
         try:
-            self.validate_mode_parameter_enum(dir_mode)
+            if not self.is_installed(dir_mode):
+                raise InstallationError("Application is not installed in the specified mode.")
+
+            self.validate_dir_mode(dir_mode)
 
             main_dir = self.get_main_dir(dir_mode)
             config_dir = os.path.join(main_dir, "cfg")
@@ -99,27 +113,38 @@ class GameManager:
 
             print(f"Config directory: '{config_dir}'")
             return config_dir
-        except (DirModeError, FileNotFoundError, NotADirectoryError) as err:
+        except (InstallationError, DirModeError, FileNotFoundError, NotADirectoryError) as err:
             print(f"Failed to retrieve config directory: {err}")
             return None
 
     def get_main_dir(self, dir_mode):
-        """Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2"""
+        """
+        Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'
 
-        print("Retrieving main directory...")
+        Parameters:
+            dir_mode (DirectoryMode): The directory mode to retrieve the main dir for.
 
+        Returns:
+            str or None: The full path to the main dir or None if an error occurs.
+        """
         try:
-            self.validate_mode_parameter_enum(dir_mode)
+            self.validate_dir_mode(dir_mode)
 
+            # Get the installation directory path using get_dir
             root_dir = self.get_dir(dir_mode)
+            if root_dir is None:
+                print(f"Failed to retrieve installation directory for mode '{dir_mode}'.")
+                return None
             main_dir_name = self.game.get_title().replace(" ", "")
             main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
             main_dir = os.path.join(root_dir, main_dir_name)
 
             if not os.path.exists(main_dir):
-                raise FileNotFoundError(f"Main directory '{main_dir}' does not exist.")
+                print(f"Main directory '{main_dir}' does not exist.")
+                return None
             if not os.path.isdir(main_dir):
-                raise NotADirectoryError(f"'{main_dir}' is not a directory.")
+                print(f"'{main_dir}' is not a directory.")
+                return None
 
             print(f"Main directory: '{main_dir}'")
             return main_dir
@@ -129,36 +154,77 @@ class GameManager:
 
     def get_active_dir(self):
         """Returns the active game directory regardless of mode"""
-        active_dir = os.path.join(self.steam_info["game_dir"], self.game.get_title())
-        print(f"Active directory: '{active_dir}'")
-        return active_dir
+        try:
+            if not self.is_installed(DirectoryMode.USER) and not self.is_installed(DirectoryMode.DEVELOPER):
+                raise InstallationError("Application is not installed in any valid mode.")
 
-    def validate_mode_parameter_enum(self, dir_mode):
+            active_dir = os.path.join(self.steam_info["game_dir"], self.game.get_title())
+
+            if not os.path.exists(active_dir):
+                raise FileNotFoundError(f"Active directory '{active_dir}' does not exist.")
+            if not os.path.isdir(active_dir):
+                raise NotADirectoryError(f"'{active_dir}' is not a directory.")
+
+            print(f"Active directory: '{active_dir}'")
+            return active_dir
+        except (InstallationError, FileNotFoundError, NotADirectoryError) as err:
+            print(f"Failed to retrieve active directory: {err}")
+            return None
+
+    def validate_dir_mode(self, dir_mode):
         "Validate the dir_mode parameter"
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
     def get_installation_state(self, dir_mode):
-        id_file = self.get_id_file_name(dir_mode)
-        if id_file is not None:
-            id_file_path = os.path.join(self.get_dir(dir_mode), id_file)
-            if os.path.exists(id_file_path):
-                try:
-                    with open(id_file_path, "r", encoding="utf-8") as file_handle:
-                        state_data = json.load(file_handle)
-                        installation_state_str = state_data.get("installation_state")
-                        if installation_state_str:
-                            return InstallationState[installation_state_str]
-                except (json.JSONDecodeError, KeyError):
-                    pass
-        print(f"Invalid installation state data format! Defaulting to {InstallationState.UNKNOWN.name}")
-        return InstallationState.UNKNOWN
+        """
+        Get the installation state of the application for the given directory mode.
+
+        Parameters:
+            dir_mode (DirectoryMode): The directory mode to retrieve the installation state for.
+
+        Returns:
+            InstallationState or None: The installation state or None if an error occurs.
+        """
+        try:
+            # Check if the application is installed in the specified mode
+            if not self.is_installed(dir_mode):
+                raise InstallationError("Application is not installed in the specified mode.")
+
+            # Get the name of the installation state file
+            id_file = self.get_id_file_name(dir_mode)
+
+            if id_file is not None:
+                # Construct the path to the installation state file
+                id_file_path = os.path.join(self.get_dir(dir_mode), id_file)
+
+                if os.path.exists(id_file_path):
+                    try:
+                        # Read JSON data from the installation state file
+                        with open(id_file_path, "r", encoding="utf-8") as file_handle:
+                            state_data = json.load(file_handle)
+                            installation_state_str = state_data.get("installation_state")
+
+                            if installation_state_str:
+                                # Convert string to InstallationState enum value
+                                print(f"Installation state: {installation_state_str}")
+                                return InstallationState[installation_state_str]
+                    except (json.JSONDecodeError, KeyError):
+                        pass
+
+            # Default to UNKNOWN if installation state data is invalid or missing
+            print(f"Invalid installation state data format! Defaulting to {InstallationState.UNKNOWN.name}")
+            return InstallationState.UNKNOWN
+        except (InstallationError, DirModeError) as err:
+            # Handle installation and directory mode errors
+            print(f"Failed to retrieve installation state: {err}")
+            return None
 
     def get_id_file_name(self, dir_mode):
         "Retrieve ID file name"
 
         try:
-            self.validate_mode_parameter_enum(dir_mode)
+            self.validate_dir_mode(dir_mode)
 
             # Map modes to their corresponding ID files using a dictionary
             id_files = {DirectoryMode.USER: self.user_dir_id_file, DirectoryMode.DEVELOPER: self.dev_dir_id_file}
@@ -166,8 +232,8 @@ class GameManager:
 
             if id_file_name is None:
                 print(f"No ID file found for {dir_mode.name} mode.")
-            else:
-                print(f"Retrieved {dir_mode.name} ID file name: {id_file_name}")
+            # else:
+            #     print(f"Retrieved {dir_mode.name} ID file name: {id_file_name}")
 
             return id_file_name
         except DirModeError as err_info:
@@ -175,89 +241,103 @@ class GameManager:
             return None
 
     def write_id_file(self, dir_mode, directory, installation_state=None):
-        "Write installation state to ID file"
+        """
+        Write installation state to ID file.
 
-        # Validate dir_mode
-        if not isinstance(dir_mode, DirectoryMode):
-            print("Invalid directory mode provided.")
-            return False
+        Parameters:
+            dir_mode (DirectoryMode): The directory mode to write the ID file for.
+            directory (str): The directory where the ID file will be written.
+            installation_state (InstallationState, optional): The installation state to be written.
 
-        # Validate installation_state for DEVELOPER mode
-        if dir_mode == DirectoryMode.DEVELOPER and installation_state is None:
-            print("For DEVELOPER mode, installation state must be specified.")
-            return False
-
-        # Validate installation_state if provided
-        if installation_state is not None and not isinstance(installation_state, InstallationState):
-            print("Invalid installation state provided.")
-            return False
-
-        # Retrieve ID file
-        id_file = self.get_id_file_name(dir_mode)  # Use dir_mode.name as part of ID
-        if id_file is None:
-            print("Cancelled writing ID file. Could not retrieve ID file name")
-            return False
-        else:
-            # Construct installation state data
-            state_data = {
-                "directory_mode": dir_mode.name,
-                "installation_state": installation_state.name if installation_state is not None else None,
-                "game_directory": directory,
-            }
-
-            # Write to disk
-            id_file_path = os.path.join(directory, id_file)
-            with open(id_file_path, "w", encoding="utf-8") as file_handle:
-                json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
-            print(f"Wrote installation state to disk: '{id_file_path}'")
-            return True
-
-    def get_dir(self, dir_mode, manually_select_dir=True):
-        "Retrieve the installation directory path for the specified mode, prompting manual selection if necessary."
-
-        print(f"FIXME manually_select_dir = {manually_select_dir}")
+        Returns:
+            bool: True if writing was successful, False otherwise.
+        """
 
         try:
-            self.validate_mode_parameter_enum(dir_mode)
+            # Validate dir_mode
+            if not isinstance(dir_mode, DirectoryMode):
+                print("Invalid directory mode provided.")
+                return False
 
+            # Validate installation_state for DEVELOPER mode
+            if dir_mode == DirectoryMode.DEVELOPER and installation_state is None:
+                print("For DEVELOPER mode, installation state must be specified.")
+                return False
+
+            # Validate installation_state if provided
+            if installation_state is not None and not isinstance(installation_state, InstallationState):
+                print("Invalid installation state provided.")
+                return False
+
+            # Handle directory being None
+            if directory is None:
+                print("Directory is None. Cannot write ID file.")
+                return False
+
+            # Create directory if it doesn't exist
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+                print(f"Directory '{directory}' was created.")
+
+            # Retrieve ID file
+            id_file = self.get_id_file_name(dir_mode)  # Use dir_mode.name as part of ID
+            if id_file is None:
+                print("Cancelled writing ID file. Could not retrieve ID file name.")
+                return False
+            else:
+                # Construct installation state data
+                state_data = {
+                    "directory_mode": dir_mode.name,
+                    "installation_state": installation_state.name if installation_state is not None else None,
+                    "game_directory": directory,
+                }
+
+                # Write to disk
+                id_file_path = os.path.join(directory, id_file)
+                with open(id_file_path, "w", encoding="utf-8") as file_handle:
+                    json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
+                print(f"Wrote installation state ({installation_state.name}) to disk: '{id_file_path}'")
+                return True
+        except (InstallationError, DirModeError) as err:
+            # Handle installation and directory mode errors
+            print(f"Failed to write ID file: {err}")
+            return False
+
+    def get_dir(self, dir_mode):
+        """
+        Retrieve the installation directory path for the specified mode.
+
+        Args:
+            dir_mode (str): The mode for which the installation directory is being retrieved.
+
+        Returns:
+            str or None: The installation directory path if found, or None if not found.
+        """
+        try:
+            # Validate the mode parameter
+            self.validate_dir_mode(dir_mode)
+
+            # Get the ID file name associated with the mode
             id_file = self.get_id_file_name(dir_mode)
             if id_file is None:
                 raise InvalidIDError("Invalid ID file!")
 
+            # Get the Steam games directory
             steam_games_dir = self.steam_info["game_dir"]
 
-            # Iterate through folders in the Steam games directory
+            # Search through folders in the Steam games directory
             for folder_name in os.listdir(steam_games_dir):
                 folder_path = os.path.join(steam_games_dir, folder_name)
                 if os.path.isdir(folder_path):
                     id_path = os.path.join(folder_path, id_file)
-
-                    # Check if the ID file exists in the folder & return it if found
                     if os.path.isfile(id_path):
+                        print(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
                         return folder_path
 
-            if not manually_select_dir:
-                print(f"Not prompting to manually select {dir_mode} directory")
-                return
-
-            print(
-                f"FIXME somehow directly is being manually set even with var set to false or something?: {manually_select_dir}"
-            )
-
-            # If the ID file is not found, prompt the user to manually select the directory
-            try:
-                result = self.set_directory_manually(dir_mode)
-                if result is None:
-                    print(f"Failed to retrieve game directory for {dir_mode}. The function returned None.")
-                    return None
-                else:
-                    print(f"Game directory for {dir_mode}: '{result}'")
-                return result
-            except Exception as err_info:
-                print(f"Failed to retrieve game directory for {dir_mode}. Information: {err_info}")
-                return None
-        except (DirModeError, InvalidIDError, FileNotFoundError, NotADirectoryError) as err:
-            print(f"Failed to retrieve game directory for {dir_mode}: {err}")
+            print(f"No installation directory found for mode '{dir_mode}'.")
+            return None
+        except (DirModeError, InvalidIDError, FileNotFoundError, NotADirectoryError) as err_info:
+            print(f"An error occurred while retrieving installation directory for mode '{dir_mode}': {err_info}")
             return None
 
     def set_directory_manually(self, dir_mode) -> str | None:
@@ -306,11 +386,26 @@ class GameManager:
         return selected_dir
 
     def swap_mode_folders(self, source_dir_mode, target_dir_mode):
-        """Swap folders for mode activation"""
-        try:
-            self.validate_mode_parameter_enum(source_dir_mode)
-            self.validate_mode_parameter_enum(target_dir_mode)
+        """
+        Swap folders for mode activation.
 
+        Parameters:
+            source_dir_mode (DirectoryMode): The directory mode to swap from.
+            target_dir_mode (DirectoryMode): The directory mode to swap to.
+
+        Returns:
+            bool: True if swapping was successful, False otherwise.
+        """
+        try:
+            # Validate dir modes
+            self.validate_dir_mode(source_dir_mode)
+            self.validate_dir_mode(target_dir_mode)
+
+            # Check if the application is installed in the specified modes
+            if not self.is_installed(source_dir_mode) or not self.is_installed(target_dir_mode):
+                raise InstallationError("Application is not installed in the specified modes.")
+
+            # Rename folders to perform the swap
             os.rename(
                 self.get_dir(source_dir_mode),
                 os.path.join(
@@ -321,53 +416,76 @@ class GameManager:
                 self.get_dir(target_dir_mode),
                 os.path.join(self.steam_info.get("game_dir"), self.game.get_title()),
             )
-        except DirModeError as err:
-            print(f"Invalid mode parameter: {err}")
+            return True
+        except (InstallationError, DirModeError) as err:
+            # Handle installation and directory mode errors
+            print(f"Failed to swap mode folders: {err}")
+            return False
         except Exception as err_info:
+            # Handle other exceptions that might occur during renaming
             print(f"An error occurred during directory renaming: {err_info}")
+            return False
 
     def activate_mode(self, dir_mode):
-        """Activate user/dev mode by switching folder names eg. Left 4 Dead 2 & Left 4 Dead 2 User"""
+        """
+        Activate user/dev mode by switching folder names eg. Left 4 Dead 2 & Left 4 Dead 2 User.
 
+        Parameters:
+            dir_mode (DirectoryMode): The directory mode to activate.
+
+        Returns:
+            bool: True if activation was successful, False otherwise.
+        """
         try:
-            self.validate_mode_parameter_enum(dir_mode)
-
+            # Check if the application is installed in the specified mode
             if not self.is_installed(dir_mode):
-                result = self.run_installer(manually_select_dir=False)
-                if not result:
-                    return False
+                raise InstallationError("Application is not installed in the specified mode.")
 
-            # check if mode is already active
+            # Validate dir mode
+            self.validate_dir_mode(dir_mode)
+
+            # Check if the mode is already active
             if self.get_active_mode() == dir_mode:
                 return True
 
-            # close game
+            # Close the game before activation
             self.game.close()
 
-            # activate mode
+            # Activate the mode by swapping folders
             if dir_mode == DirectoryMode.USER:
                 self.swap_mode_folders(DirectoryMode.DEVELOPER, DirectoryMode.USER)
             else:
                 self.swap_mode_folders(DirectoryMode.USER, DirectoryMode.DEVELOPER)
             return True
-        except DirModeError as dir_err:
-            print(f"Invalid mode parameter: {dir_err}")
-        except Exception as err:
-            print(f"An error occurred during mode activation: {err}")
+        except (InstallationError, DirModeError) as err:
+            # Handle installation and directory mode errors
+            print(f"Failed to activate mode: {err}")
+            return False
+        except Exception as err_info:
+            # Handle other exceptions that might occur during activation
+            print(f"An error occurred during mode activation: {err_info}")
+            return False
 
-    def is_installed(self, dir_mode, manually_select_dir=True):
+    def is_installed(self, dir_mode):
         """Check if mode is installed"""
 
         try:
-            self.validate_mode_parameter_enum(dir_mode)
+            self.validate_dir_mode(dir_mode)
 
             # Get the installation directory for the specified mode
-            install_dir = self.get_dir(dir_mode, manually_select_dir)
+            install_dir = self.get_dir(dir_mode)
 
-            # Check if the install directory is empty
+            # Only check main_dir if install_dir was successfully retrieved
             if install_dir:
-                print(f"{dir_mode.name} mode is installed!")
-                return True
+                self.get_main_dir(dir_mode)  # in case it's the wrong game folder
+
+                # Check if the install directory is empty
+                if install_dir:
+                    print(f"{dir_mode.name} mode is installed!")
+                    return True
+                else:
+                    print(f"{dir_mode.name} mode is not installed!")
+                    return False
             else:
                 print(f"{dir_mode.name} mode is not installed!")
                 return False
@@ -467,20 +585,12 @@ class GameManager:
 
         print("Uninstalled!")
 
-    # manually_select_dir toggles manually selecting the folders. this prevents that prompt showing multiple times
-    #   for example in this instance it would prompt during is_installed and is_installed is also called in
-    #   run_installer
-    #
-    #       if not self.is_installed(mode):
-    #           result = self.run_installer(manually_select_dir=False)
-    #           if not result:
-    #               return False
-    def run_installer(self, manually_select_dir=True):
+    def run_installer(self):
         """Runs the installer and throws errors on failure"""
         print("Running installer...")
 
         try:
-            result = self._perform_installation(manually_select_dir)
+            result = self._perform_installation()
 
             if result:
                 print("Installed!")
@@ -495,65 +605,47 @@ class GameManager:
             print(f"Install cancelled: {err_info}")
             return False
 
-    def _perform_installation(self, manually_select_dir=True):
-        # verify the user installation is available
-        if not self.is_installed(DirectoryMode.USER, manually_select_dir=False):
+    def _perform_installation(self):
+        self.current_state = self.get_installation_state(DirectoryMode.DEVELOPER)
+
+        if not self.is_installed(DirectoryMode.USER):
             raise AssertionError("User installation not found. Unable to install")
 
-        # verify dev mode isn't already installed
-        if self.is_installed(DirectoryMode.DEVELOPER, manually_select_dir):
-            messagebox.showinfo("Error", "Already installed!")
-            return True
+        if self.is_installed(DirectoryMode.DEVELOPER):
+            raise AssertionError("Developer installation already installed!")
 
-        # retrieve current installation state
-        self.current_state = self.get_installation_state(DirectoryMode.DEVELOPER)
-        if self.current_state is InstallationState.UNKNOWN:
-            self.current_state = InstallationState.CREATE_DEV_DIR
-
-        # close the game
         self.game.close()
-
-        # confirm install start
         if not self._prompt_start("install"):
             return False
 
-        # install
         self.resume_installation(self.current_state)
-
-        # finish installation
-        input("press enter to successfully finish installation")
         return True
 
-    def resume_installation(self, state):
-        states_to_resume = [
-            # 1. create dev folder template (folder & .exe) for detection incase of cancellation for cleanup
+    def resume_installation(self, resume_state):
+        installation_steps = [
             InstallationState.CREATE_DEV_DIR,
-            # 2. copy the game files into and activate the dev folder
             InstallationState.COPYING_FILES,
-            # 3. steam verify = prompt to verify game install through steam to update and restore all game files
             InstallationState.VERIFYING_GAME,
-            # 4. extract paks
             InstallationState.EXTRACTING_PAKS,
-            # 5. install mods
             InstallationState.INSTALLING_MODS,
-            # 6. rebuild audio cache
             InstallationState.REBUILDING_AUDIO,
         ]
 
-        # perform installation steps
-        if state in states_to_resume:
-            start_resume = False
-            for resume_state in states_to_resume:
-                if resume_state == state:
-                    start_resume = True
-                if start_resume:
-                    self.perform_installation_step(resume_state)
+        start_resume = False
 
-        # finish installation
+        print(f"Resuming installation with state: {resume_state}")
+
+        for state in installation_steps:
+            if start_resume or state == resume_state:
+                self.perform_installation_step(state)
+                start_resume = True
+
         self.current_state = InstallationState.COMPLETED
         self.write_id_file(DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.COMPLETED)
 
     def perform_installation_step(self, state):
+        print(f"Performing installation step with state: {state}")
+
         if state == InstallationState.CREATE_DEV_DIR:
             self._create_dev_dir()
         elif state == InstallationState.COPYING_FILES:
