@@ -3,8 +3,10 @@ import tkinter as tk
 import winreg
 from tkinter import filedialog
 
+from utils.shared_utils import Singleton
 
-class SteamInfoRetriever:
+
+class SteamInfoRetriever(metaclass=Singleton):
     """
     A utility class to retrieve Steam directory information.
     """
@@ -170,6 +172,7 @@ class SteamInfoRetriever:
 
         # If not saved or saved directory is invalid, proceed to find it
         root_dir = self.get_info("root_dir", self.find_steam_directory)
+        root_dir = os.path.normpath(root_dir)  # Normalize the root_dir path
         print(f"Steam root directory: {root_dir}")
 
         # Save the root directory if found
@@ -187,6 +190,7 @@ class SteamInfoRetriever:
         """
         print("Getting Steam games directory...")
         games_dir = os.path.join(self.get_root_dir(), "steamapps", "common")
+        games_dir = os.path.normpath(games_dir)  # Normalize the games_dir path
         print(f"Steam games directory: {games_dir}")
         return games_dir
 
@@ -199,6 +203,7 @@ class SteamInfoRetriever:
         """
         print("Getting Steam executable path...")
         exe_path = os.path.join(self.get_root_dir(), self.STEAM_EXECUTABLE)
+        exe_path = os.path.normpath(exe_path)  # Normalize the exe_path path
         print(f"Steam executable path: {exe_path}")
         return exe_path
 

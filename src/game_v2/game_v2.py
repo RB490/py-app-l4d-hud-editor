@@ -1,5 +1,7 @@
 from enum import Enum, auto
 
+from utils.steam_info_retriever import SteamInfoRetriever
+
 
 class TitleRetrievalError(Exception):
     pass
@@ -35,6 +37,7 @@ class GameV2(metaclass=Singleton):
         self.window = GameV2Window(self)
         self.dir = GameV2Dir(self)
         self.installer = GameV2Installer(self)
+        self.steam = SteamInfoRetriever(persistent_data)
 
         self.title = "Left 4 Dead 2"
 

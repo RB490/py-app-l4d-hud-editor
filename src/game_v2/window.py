@@ -46,18 +46,18 @@ class GameV2Window:
         print(f"directory mode: {dir_mode.name}")
 
         # activate selected dir_mode
-        # result = self.activate_mode(dir_mode) # TODO activate_mode
+        # result = self.activate_mode(dir_mode) # TODO run(): activate_mode
         # if not result:
         #     return False
 
         # run game
-        # if self.is_running(): # TODO is_running
+        # if self.is_running(): # TODO run(): is_running
         #     self.set_hwnd()
         #     self.move(self.persistent_data["game_pos"])
         #     return
 
         # write config
-        # self._write_config() # TODO _write_config
+        # self._write_config() # TODO run(): _write_config
 
         # build game argument params
         game_args = " -novid"  # skip intro videos
@@ -66,16 +66,16 @@ class GameV2Window:
         # # run game
         # if wait_on_close:
         #     # Run without waiting (opening through steam means code would not connect to left4dead2.exe)
-        #     exe_path = os.path.join(self.get_dir("dev"), self.game_exe) # TODO get_dir
+        #     exe_path = os.path.join(self.get_dir("dev"), self.game_exe) # TODO run(): get_dir
         #     subprocess.run('"' + exe_path + '"' + game_args, shell=True, check=False)
         # else:
         #     # run the game through steam to prevent steam issues
         #     steam_args = f" -applaunch {str(self.get_appid())}"
-        #     steam_exe = self.steam_info.get("steam_exe") # TODO steam_info.get("steam_exe")
+        #     steam_exe = self.steam_info.get("steam_exe") # TODO run(): steam_info.get("steam_exe")
         #     subprocess.Popen('"' + steam_exe + '"' + steam_args + game_args, shell=True)
 
         # set hwnd
         self.set_hwnd()
 
         # set position
-        # self.move(self.persistent_data["game_pos"]) # TODO move(self.persistent_data["game_pos"])
+        # self.move(self.persistent_data["game_pos"]) # TODO run(): move(self.persistent_data["game_pos"])

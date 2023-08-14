@@ -2,10 +2,7 @@
 # pylint: disable=unused-import
 
 import os
-import sys
-from msilib import Directory
 
-from utils.steam_info_retriever import SteamInfoRetriever
 from game.game import Game
 from game_v2.game_v2 import DirectoryMode, GameV2
 from gui.browser import get_debug_gui_browser_instance
@@ -14,6 +11,7 @@ from hud.hud import debug_hud
 from utils.constants import EDITOR_AUTOEXEC_PATH, PROJECT_ROOT, SCRIPT_DIR
 from utils.functions import get_steam_info, load_data
 from utils.shared_utils import show_message
+from utils.steam_info_retriever import SteamInfoRetriever
 
 os.system("cls")  # clear terminal
 
@@ -23,16 +21,16 @@ os.system("cls")  # clear terminal
 ############################
 persistent_data = load_data()
 # steam_info = get_steam_info(persistent_data)
-# game_v2 = GameV2(persistent_data)
-# game_v2.dir.get(DirectoryMode.USER)
+game_v2 = GameV2(persistent_data)
+game_v2.dir.get(DirectoryMode.USER)
 # gamev2_instance.my_method()
 
 
 # Create an instance of the class
-steam_info_retriever = SteamInfoRetriever(persistent_data)
+# global_steam_info_retriever = SteamInfoRetriever(persistent_data)
 
 # Retrieve Steam root directory
-root_dir = steam_info_retriever.get_root_dir()
+# root_dir = global_steam_info_retriever.get_root_dir()
 # print(f"Steam Root Directory: {root_dir}")
 
 # Retrieve Steam games directory

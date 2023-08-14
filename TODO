@@ -2,6 +2,7 @@ Features:
 
 	Game class:
 		☐ Redo the game class from first principles @started(23-08-14 12:31)
+			☐ game.dir.get()
 			☐ dir.set(dev) -> dir.get(dev) -> dir.get_current() 
 	
 		☐ run_installer
@@ -50,7 +51,11 @@ Unit Testing:
 	☐ Test all menu options for robustness
 
 Refactoring:
-	☐ Am I using too many exceptions? When should i return a (None) value instead
+	Exceptions and Returns:
+		☐ Am I using too many exceptions? When should i return a (None) value instead
+			Consider code paths. For example retrieving the steam game dir is vital,
+			if that fails. the program should raise an exception, then maybe catch it
+			and display it in a messagebox. or display the message box inside the class?
 	☐ Handle 'utf-8' codec error when VPK class fails to extract specific files
 	☐ Make internal class methods protected by adding underscores
 	☐ Add dir_mode enum checks to game class?
@@ -60,6 +65,7 @@ Refactoring:
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Enums. For example for steam_info object (?) or make it into a class
 	☐ Replace assert statements with proper error handling using try/catch
+	☐ Use Super(). This can elimiate the need to for example define self.persistent_data again in subclasses
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 	☐ Make the function to create lambda commands a shared utility, and use it in the project
 	☐ Streamline and test HUD editing process for improved code path
