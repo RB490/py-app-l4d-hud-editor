@@ -2,24 +2,30 @@ Features:
 
 	Game class:
 		☐ Redo the game class from first principles @started(23-08-14 12:31)
-			☐ game.dir.get()
-			☐ dir.set(dev) -> dir.get(dev) -> dir.get_current() 
+			☐ Test game.dir.set()
+			☐ Create installer class
+			☐ Test installer class
+
+			Extra:
+				☐ Can and should i modify __set_active to only take target dir mode as param?
+				☐ Error handling for game.dir.set() aka swap folders?
+				☐ Error handling in general?
 	
-		☐ run_installer
-		☐ set_directory_manually
-		☐ Installer: Use stored installation status to perform actions. UNKNOWN = delete, in_progress_extracting
-		☐ Installer: Dev mode not installer -> install -> a bunch of prompts to select it
-			☐ Consider setting manually selecting directory to disabled by default
-			☐ Refactor & reduce the cluttered logic @today
-				(because even with pretty intense debugging i don't understand what's going on)
-				*   Get_dir should not manually set dir that should be done elsewhere
-				*   Manually select dir shouldnt be passed around so much or at all
-		
-		☐ Installer: Handle CANCELLED installation state by handling any unknown installation state - deleting and restarting
-		☐ Installer: Split installation into separate class
-		☐ Installer: Raise and handle exceptions. For example failing to rebuild audio cache
-		☐ Installer: Still allow enabling of user mode or dev mode when the other isn't available
-		☐ Installer: Handle cancelling of manual directory selection. should abort whatever task was being performed
+		Installer:
+			☐ run_installer
+			☐ Installer: Use stored installation status to perform actions. UNKNOWN = delete, in_progress_extracting
+			☐ Installer: Dev mode not installer -> install -> a bunch of prompts to select it
+				☐ Consider setting manually selecting directory to disabled by default
+				☐ Refactor & reduce the cluttered logic @today
+					(because even with pretty intense debugging i don't understand what's going on)
+					*   Get_dir should not manually set dir that should be done elsewhere
+					*   Manually select dir shouldnt be passed around so much or at all
+			
+			☐ Installer: Handle CANCELLED installation state by handling any unknown installation state - deleting and restarting
+			☐ Installer: Split installation into separate class
+			☐ Installer: Raise and handle exceptions. For example failing to rebuild audio cache
+			☐ Installer: Still allow enabling of user mode or dev mode when the other isn't available
+			☐ Installer: Handle cancelling of manual directory selection. should abort whatever task was being performed
 
 	General:
 		☐ Implement cleanup of dev directory when install gets cancelled

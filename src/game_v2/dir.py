@@ -24,7 +24,7 @@ class GameV2Dir:
             return None
         return mode_dir
 
-    def set(self, dir_mode):
+    def set(self, dir_mode):  # TODO: Test this method
         # verify mode is installed
         if not self.__get_mode_dir(dir_mode):
             print("Application is not installed in the specified mode.")
@@ -35,12 +35,33 @@ class GameV2Dir:
 
         # activate mode by swapping folders if needed
         if dir_mode == DirectoryMode.USER:
-            self.__swap_mode_folders(DirectoryMode.DEVELOPER, DirectoryMode.USER)
+            self.__set_active(DirectoryMode.DEVELOPER, DirectoryMode.USER)
         else:
-            self.__swap_mode_folders(DirectoryMode.USER, DirectoryMode.DEVELOPER)
+            self.__set_active(DirectoryMode.USER, DirectoryMode.DEVELOPER)
         return True
 
-    def __swap_mode_folders(self, source_dir_mode, target_dir_mode):
+    # def __set_active_new(self, dir_mode):
+    #     vanilla_dir = self.__get_vanilla()
+    #     source_dir = self.get(dir_mode)
+
+    #     # do we need to swap?
+    #     if source_dir is vanilla_dir:
+    #         print(f"{dir_mode.name} already active!")
+    #         return
+
+    #     # swap folders
+    #     os.rename(
+    #         self.get(source_dir_mode),
+    #         os.path.join(
+    #             self.game.steam.get_games_dir(), f"backup_hud_{source_dir_mode.name}." + self.game.get_title()
+    #         ),
+    #     )
+    #     os.rename(
+    #         self.get(target_dir_mode),
+    #         os.path.join(target_dir),
+    #     )
+
+    def __set_active(self, source_dir_mode, target_dir_mode):
         # set variables
         target_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())
         old_target_dir = self.get(target_dir_mode)
@@ -61,6 +82,10 @@ class GameV2Dir:
             self.get(target_dir_mode),
             os.path.join(target_dir),
         )
+
+    def __get_vanilla(self):
+        official_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())
+        return official_dir
 
     def __get_active(self):
         active_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())

@@ -1,5 +1,4 @@
 """Module providing functions related to the game. such as running and installation the dev/user versions"""
-from enum import Enum
 import os
 import shutil
 import subprocess
@@ -20,6 +19,7 @@ from utils.functions import (
     wait_for_process_and_get_hwnd,
 )
 from utils.shared_utils import Singleton
+
 
 class Game(metaclass=Singleton):
     """Singleton with functions related to the game. such as running and installation the dev/user versions"""
