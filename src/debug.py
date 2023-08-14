@@ -4,7 +4,7 @@
 import os
 
 from game.game import Game
-from game_v2.game_v2 import DirectoryMode, GameV2
+from game_v2.game_v2 import DirectoryMode, GameV2, InstallationState
 from gui.browser import get_debug_gui_browser_instance
 from gui.start import GuiHudStart, debug_gui_start
 from hud.hud import debug_hud
@@ -22,7 +22,10 @@ os.system("cls")  # clear terminal
 persistent_data = load_data()
 # steam_info = get_steam_info(persistent_data)
 game_v2 = GameV2(persistent_data)
-game_v2.dir.get(DirectoryMode.USER)
+# game_v2.dir.get(DirectoryMode.USER)
+# game_v2.dir.get_id_path(DirectoryMode.USER)
+# game_v2.dir.set_id_content(DirectoryMode.DEVELOPER, InstallationState.UNKNOWN)
+game_v2.dir.set(DirectoryMode.USER)
 # gamev2_instance.my_method()
 
 

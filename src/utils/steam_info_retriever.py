@@ -164,6 +164,7 @@ class SteamInfoRetriever(metaclass=Singleton):
         # Check if the root directory is already saved in persistent_data
         if "steam_root_dir" in self.persistent_data:
             saved_root_dir = self.persistent_data["steam_root_dir"]
+            saved_root_dir = os.path.normpath(saved_root_dir)
             if self._check_path(saved_root_dir, self.STEAM_EXECUTABLE):
                 print(f"Using saved Steam root directory: {saved_root_dir}")
                 return saved_root_dir

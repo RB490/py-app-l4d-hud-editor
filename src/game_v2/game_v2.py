@@ -11,6 +11,22 @@ class DirModeError(Exception):
     "Custom exception for invalid DirectoryMode parameter"
 
 
+class InstallationState(Enum):
+    """Enumeration representing installation states"""
+
+    UNKNOWN = auto()  # currently used by setting directory manually
+    NOT_STARTED = auto()
+    CREATE_DEV_DIR = auto()
+    COPYING_FILES = auto()
+    VERIFYING_GAME = auto()
+    EXTRACTING_PAKS = auto()
+    INSTALLING_MODS = auto()
+    REBUILDING_AUDIO = auto()
+    PAUSED = auto()
+    COMPLETED = auto()
+    CANCELLED = auto()
+
+
 class DirectoryMode(Enum):
     """Enumeration representing directory modes"""
 
@@ -60,7 +76,10 @@ class GameV2(metaclass=Singleton):
         valid_titles = {"left 4 dead": "L4D1", "left 4 dead 2": "L4D2"}
         return valid_titles.get(title, None)
 
-    def validate_dir_mode(self, dir_mode):
+    def _validate_dir_mode(self, dir_mode):
         "Validate the dir_mode parameter"
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
+
+    def close(self):
+        print("TODO close game")
