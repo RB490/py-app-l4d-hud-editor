@@ -5,7 +5,7 @@ import os
 import sys
 from msilib import Directory
 
-from classes.steam_info_retriever import SteamInfoRetriever
+from utils.steam_info_retriever import SteamInfoRetriever
 from game.game import Game
 from game_v2.game_v2 import DirectoryMode, GameV2
 from gui.browser import get_debug_gui_browser_instance

@@ -8,7 +8,7 @@ import shutil
 from enum import Enum, auto
 from tkinter import filedialog, messagebox
 
-from classes.vpk import VPKClass
+from utils.vpk import VPKClass
 from utils.constants import MODS_DIR, SCRIPT_NAME
 from utils.functions import (
     copy_files_in_directory,

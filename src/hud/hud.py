@@ -6,7 +6,7 @@ from tkinter.filedialog import asksaveasfilename
 
 import keyboard
 
-from classes.vpk import VPKClass
+from utils.vpk import VPKClass
 from game.game import Game
 
 # pylint: disable=unused-import

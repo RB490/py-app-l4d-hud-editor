@@ -6,7 +6,7 @@ from tkinter import messagebox
 import pyperclip  # type: ignore
 import vdf  # type: ignore
 
-from classes.get_user_input import get_user_input
+from utils.get_user_input import get_user_input
 from game.game import Game
 from gui.start import GuiHudStart
 from utils.constants import UNIVERSAL_GAME_MAP

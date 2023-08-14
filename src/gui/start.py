@@ -7,7 +7,7 @@ from tkinter import filedialog, ttk
 
 from PIL import Image, ImageTk
 
-from classes.vpk import VPKClass
+from utils.vpk import VPKClass
 from game.game import Game
 from game.manager import DirectoryMode
 from utils.functions import (
