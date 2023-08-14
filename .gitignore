@@ -2,6 +2,12 @@
 development/debug/hud_syncer/workspace/
 development/debug/hud_debug/workspace/
 
+# General
+__pycache__/
+.vscode
+.mypy_cache
+.idea
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
