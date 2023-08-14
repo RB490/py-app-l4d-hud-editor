@@ -31,23 +31,21 @@ persistent_data = load_data()
 # Create an instance of the class
 steam_info_retriever = SteamInfoRetriever(persistent_data)
 
-# Using the methods of the class
-
-# Get the root directory where Steam is installed
+# Retrieve Steam root directory
 root_dir = steam_info_retriever.get_root_dir()
-print("Root Directory:", root_dir)
+# print(f"Steam Root Directory: {root_dir}")
 
-# Get the directory where games are installed
-games_dir = steam_info_retriever.get_games_dir()
-print("Games Directory:", games_dir)
+# Retrieve Steam games directory
+# games_dir = steam_info_retriever.get_games_dir()
+# print(f"Steam Games Directory: {games_dir}")
 
-# Get the path to the Steam executable
-steam_exe = steam_info_retriever.get_exe_path()
-print("Steam Executable Path:", steam_exe)
+# Retrieve Steam executable path
+# exe_path = steam_info_retriever.get_exe_path()
+# print(f"Steam Executable Path: {exe_path}")
 
-# Save the root directory to persistent data
-persistent_data = {}
-steam_info_retriever.save_root_directory()
+# Save Steam root directory to persistent data
+# steam_info_retriever.save_root_directory()
+print("Steam root directory saved to persistent data:", persistent_data)
 
 # result = game_v2.window.get_hwnd()
 # result = game_v2.window.run("dev")
