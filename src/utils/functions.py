@@ -9,7 +9,6 @@ import time
 import tkinter as tk
 import winreg
 from tkinter import filedialog
-from typing import List, Optional
 
 import psutil
 import pyautogui
@@ -50,7 +49,7 @@ def focus_hwnd(hwnd):
 
     Alternate way to do this:
         # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
-        # note that pywinauto moves the cursor. which has a side effect of
+        # be aware that pywinauto moves the cursor. which has a side effect of
         # for example moving the camera in source games
         from pywinauto import Application
         game_app = Application().connect(handle=game_hwnd)
@@ -292,50 +291,59 @@ def wait_for_process(exe, timeout=None):
         time.sleep(0.1)
 
 
-def wait_for_process_and_get_hwnd(executable_name: str, timeout_seconds: Optional[int] = 60) -> int:
+def wait_for_process_and_get_hwnd(executable_name, timeout_seconds=60):
     # pylint: disable=c-extension-no-member
     """
     Waits for a process to start and returns its window handle (HWND).
 
     :param executable_name: The name of the executable to wait for.
     :param timeout_seconds: The maximum time to wait for the process to start, in seconds. If None, waits indefinitely.
-    :return: The window handle (HWND) of the process.
-    :raises: RuntimeError if no window handle is found for the process or if not found within the timeout.
+    :return: The window handle (HWND) of the process, or None if not found.
     """
 
     start_time = time.time()
-    while True:
-        for proc in psutil.process_iter():
-            if proc.name() == executable_name:
-                pid = proc.pid
+
+    while timeout_seconds is None or time.time() - start_time <= timeout_seconds:
+        # Check if the process with the given executable name is running
+        for proc in psutil.process_iter(attrs=["pid", "name"]):
+            if proc.info["name"] == executable_name:
+                pid = proc.info["pid"]
                 break
         else:
-            if timeout_seconds is not None and time.time() - start_time > timeout_seconds:
-                raise RuntimeError(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
-            time.sleep(0.1)
-            continue
-        break
+            if timeout_seconds is not None:
+                time.sleep(0.1)  # Wait and retry if the process is not found
+                continue
+            else:
+                print(f"Process '{executable_name}' not found")
+                return None
 
-    start_time = time.time()
-    while True:
+        start_time_hwnd = time.time()
+        while timeout_seconds is None or time.time() - start_time_hwnd <= timeout_seconds:
+            hwnds = []
 
-        def callback(hwnd, hwnds):
-            _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-            if found_pid == pid:
-                hwnds.append(hwnd)
-            return True
+            # Callback to find window handles associated with the process
+            def callback(hwnd, hwnds):
+                _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
+                if found_pid == pid:
+                    hwnds.append(hwnd)
+                return True
 
-        hwnds: List[int] = []
-        win32gui.EnumWindows(callback, hwnds)
-        if hwnds:
-            return hwnds[0]
+            # Enumerate all windows and find those associated with the process
+            win32gui.EnumWindows(callback, hwnds)
+            if hwnds:
+                print(f"Window handle found for process '{executable_name}': {hwnds[0]}")
+                return hwnds[0]
 
-        if timeout_seconds is not None and time.time() - start_time > timeout_seconds:
-            raise RuntimeError(
-                f"No window handle found for process '{executable_name}' within {timeout_seconds} seconds"
-            )
+            time.sleep(0.1)  # Wait and retry if window handle is not found
 
-        time.sleep(0.1)
+        if timeout_seconds is not None:
+            print(f"No window handle found for process '{executable_name}'")
+            return None
+        else:
+            return None
+
+    print(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
+    return None
 
 
 def get_hwnd_for_exe(executable_name):

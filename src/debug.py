@@ -3,9 +3,11 @@
 
 import os
 import sys
+from msilib import Directory
 
+from classes.steam_info_retriever import SteamInfoRetriever
 from game.game import Game
-from game.manager import DirectoryMode
+from game_v2.game_v2 import DirectoryMode, GameV2
 from gui.browser import get_debug_gui_browser_instance
 from gui.start import GuiHudStart, debug_gui_start
 from hud.hud import debug_hud
@@ -16,49 +18,55 @@ from utils.shared_utils import show_message
 os.system("cls")  # clear terminal
 
 
-# setup classes
+############################
+# Classes
+############################
 persistent_data = load_data()
-# create initial singleton game class
-# debug_hud()
-game_instance = Game(persistent_data)
-steam_info = get_steam_info(persistent_data)
-DIR_MODE = "dev"
-# installation_id_file = game_instance.manager.get_id_file_name(DIR_MODE)
-# result = game_instance.manager.set_directory_manually(DirectoryMode.DEVELOPER)
+# steam_info = get_steam_info(persistent_data)
+# game_v2 = GameV2(persistent_data)
+# game_v2.dir.get(DirectoryMode.USER)
+# gamev2_instance.my_method()
 
-# result = game_instance.manager.get_main_dir(DirectoryMode.USER)
-# result = game_instance.manager.get_cfg_dir(DirectoryMode.DEVELOPER)
-# result = game_instance.manager.activate_mode(DirectoryMode.DEVELOPER)
-# result = game_instance.manager.is_installed(DirectoryMode.DEVELOPER)
-# result = game_instance.manager.activate_mode(DirectoryMode.USER)
-# result = game_instance.manager.get_installation_state(DirectoryMode.DEVELOPER)
-# result = game_instance.manager.run_installer(manually_select_dir=False)
-# result = game_instance.manager.get_dir(DirectoryMode.DEVELOPER)
-# result = game_instance.close()
+
+# Create an instance of the class
+steam_info_retriever = SteamInfoRetriever(persistent_data)
+
+# Using the methods of the class
+
+# Get the root directory where Steam is installed
+root_dir = steam_info_retriever.get_root_dir()
+print("Root Directory:", root_dir)
+
+# Get the directory where games are installed
+games_dir = steam_info_retriever.get_games_dir()
+print("Games Directory:", games_dir)
+
+# Get the path to the Steam executable
+steam_exe = steam_info_retriever.get_exe_path()
+print("Steam Executable Path:", steam_exe)
+
+# Save the root directory to persistent data
+persistent_data = {}
+steam_info_retriever.save_root_directory()
+
+# result = game_v2.window.get_hwnd()
+# result = game_v2.window.run("dev")
 # print(f"result: {result}")
 
 
-# game_instance.activate_mode("dev")
+# game.dir.set(DirectoryMode.USER)
+# game.dir.get(DirectoryMode.USER)
+# game.installer.run(DirectoryMode.USER)
+# game.installer.
 
 
-# game_instance.activate_mode("dev")
-# print(f'debug: result: {result}')
-# result = game_instance.manager._prompt_start("install")
-# result = game_instance.manager.get_dir("dev")
-
-# result = game_instance.manager.is_installed("user")
-
-# show_message("some message", "info", "mytitle")
-
-# game_instance2 = Game(persistent_data)
-# installer_instance = GameManager(persistent_data, game_instance)
-# debug_gui_start(persistent_data)
-# debug_gui_start(persistent_data)
+############################
+# GUI
+############################
 # my_browser = get_debug_gui_browser_instance(persistent_data)
 # my_browser.run()
-
-start_instance = GuiHudStart(persistent_data)
-start_instance.run()
+# start_instance = GuiHudStart(persistent_data)
+# start_instance.run()
 
 
 input("Finished! Press enter to continue..")

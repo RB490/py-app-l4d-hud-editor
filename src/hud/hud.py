@@ -161,7 +161,7 @@ class Hud(metaclass=Singleton):
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
         self.hud_dir = hud_dir
 
-        # debug mode - prompt to start game
+        # prompt to start game during debug mode
         if DEBUG_MODE:
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
             if not result:
