@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught
 """Functions used throughout the program"""
 import ctypes
 import json
@@ -22,9 +23,25 @@ import win32process
 
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
+
 def generate_random_string(length=8):
+    "Generate random string"
     characters = string.ascii_letters + string.digits
     return "".join(random.choice(characters) for _ in range(length))
+
+
+def rename_with_timeout(src, dst, timeout=5):
+    "Try to rename src to dst within timeout seconds"
+    start = time.time()
+    while True:
+        try:
+            os.rename(src, dst)
+            return True
+        except Exception:
+            if time.time() - start > timeout:
+                return False
+            else:
+                time.sleep(0.1)
 
 
 def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):

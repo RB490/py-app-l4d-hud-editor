@@ -3,21 +3,14 @@ Features:
 	☐ Cleanup todo
 
 	Game class:
-		☐ Update GPT prompt to organize methods alphabetically
+		☐ Rewrite the game class from first principles
+			Goal: Extremely proper game class with no ambiguity so rewrites don't have to happen
+			Keep error handling to a minimum to none. Just functions that return True/None. Do later as needed
+		✔ Test & finish game.dir.set() @done(23-08-15 20:10)
+		✔ Create installer class @done(23-08-15 20:17)
+		☐ Write installer class
+		☐ Test installer class
 
-		☐ Redo the game class from first principles @started(23-08-14 12:31)
-		Goal: Extremely proper game class with no ambiguity so rewrites don't have to happen
-		Keep error handling to a minimum to none. Just functions that return True/None. Do later as needed
-			☐ Test & finish game.dir.set()
-			☐ Prompt to manually set the dev directory somewhere. probably hud_editing.start
-			☐ Create installer class
-			☐ Test installer class
-
-			Extra:
-				☐ Can and should i modify __set_active to only take target dir mode as param?
-				☐ Error handling for game.dir.set() aka swap folders?
-				☐ Error handling in general?
-	
 		Installer:
 			☐ run_installer
 			☐ Installer: Use stored installation status to perform actions. UNKNOWN = delete, in_progress_extracting
@@ -33,6 +26,14 @@ Features:
 			☐ Installer: Raise and handle exceptions. For example failing to rebuild audio cache
 			☐ Installer: Still allow enabling of user mode or dev mode when the other isn't available
 			☐ Installer: Handle cancelling of manual directory selection. should abort whatever task was being performed
+
+		Extra:
+			✔ Error catching for game.dir.set() aka swap folders @done(23-08-15 20:37)
+				Could do this in various ways. a loop to try it for x amount of seconds
+				At the very least i should catch exceptions from os.rename
+
+		Implementation:
+			☐ Prompt to manually set the dev directory in hud_editing.start
 
 	General:
 		☐ Implement cleanup of dev directory when install gets cancelled
@@ -108,3 +109,24 @@ Archive:
 	✔ Installer: Keep track of installation status @done(23-08-12 17:17)
 	✔ Use InvalidIDError @done(23-08-12 15:55)
 	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
+
+
+Todos shortcuts:
+	You can write plain text notes/descriptions wherever you want
+	New:
+		✔ Press Cmd/Ctrl+Enter to add a new todo @done(23-08-12 00:05)
+	Done:
+		✔ Press Alt+D to mark a todo as done @done(23-08-12 00:12)
+		✔ Press it again to undo the action
+	Cancelled:
+		✘ Press Alt+C to mark a todo as cancelled
+		☐ Press it again to undo the action
+	Tagging:
+		☐ You can add tags using the @ symbol, like this @tag
+		☐ There are some special, customizable tags: @critical @high @low @today
+	Timekeeping:
+		✔ Completed todos can show a timestamp @done(17-11-03 10:42)
+		☐ Press Alt+S to mark a todo as started @started(23-08-15 20:13)
+		✔ Now it will show the elapsed time @started(17-11-03 10:42) @done(17-11-03 20:11) @lasted(9h29m)
+		☐ You can provide time estimates for your todos @1h30m
+		☐ We are even doing some natural language processing @est(1 day and 20 minutes)

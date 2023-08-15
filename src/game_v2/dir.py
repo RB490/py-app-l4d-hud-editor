@@ -6,7 +6,7 @@ from tkinter import filedialog
 
 from game_v2.game_v2 import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
-from utils.functions import generate_random_string
+from utils.functions import generate_random_string, rename_with_timeout
 from utils.shared_utils import show_message
 
 
@@ -25,6 +25,7 @@ class GameV2Dir:
         print(f"Setting mode: {dir_mode.name}")
 
         # note: retrieving source & target dir with self.get also already checks whether they are installed
+        rename_timeout = 3
         # variables - source
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
         source_dir = self.get(source_mode)
@@ -38,7 +39,7 @@ class GameV2Dir:
         vanilla_dir = self.__get_vanilla()
 
         # do we need to swap?
-        if target_dir == vanilla_dir:
+        if os.path.samefile(target_dir, vanilla_dir):
             print(f"{target_mode.name} already active!")
             return True
 
@@ -47,11 +48,15 @@ class GameV2Dir:
 
         # backup source mode
         print(f"Renaming {source_dir} -> {source_dir_backup}")
-        os.rename(source_dir, source_dir_backup)
+        if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
+            print(f"Failed to rename {source_dir} -> {source_dir_backup}")
+            return False
 
         # activate target mode
         print(f"Renaming {target_dir} -> {vanilla_dir}")
-        os.rename(target_dir, vanilla_dir)
+        if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
+            print(f"Failed to rename {target_dir} -> {vanilla_dir}")
+            return False
 
         print(f"Set mode: {dir_mode.name} successfully!")
         return True
