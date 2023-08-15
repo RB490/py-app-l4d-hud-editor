@@ -8,7 +8,6 @@ import shutil
 from enum import Enum, auto
 from tkinter import filedialog, messagebox
 
-from utils.vpk import VPKClass
 from utils.constants import MODS_DIR, SCRIPT_NAME
 from utils.functions import (
     copy_files_in_directory,
@@ -17,6 +16,7 @@ from utils.functions import (
     load_data,
 )
 from utils.shared_utils import show_message
+from utils.vpk import VPKClass
 
 
 class InvalidIDError(Exception):
@@ -622,6 +622,7 @@ class GameManager:
         return True
 
     def resume_installation(self, resume_state):
+        "resume"
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
             InstallationState.COPYING_FILES,
@@ -644,6 +645,7 @@ class GameManager:
         self.write_id_file(DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.COMPLETED)
 
     def perform_installation_step(self, state):
+        "perform"
         print(f"Performing installation step with state: {state}")
 
         if state == InstallationState.CREATE_DEV_DIR:

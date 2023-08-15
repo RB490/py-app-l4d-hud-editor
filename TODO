@@ -6,10 +6,15 @@ Features:
 		☐ Rewrite the game class from first principles
 			Goal: Extremely proper game class with no ambiguity so rewrites don't have to happen
 			Keep error handling to a minimum to none. Just functions that return True/None. Do later as needed
-		✔ Test & finish game.dir.set() @done(23-08-15 20:10)
-		✔ Create installer class @done(23-08-15 20:17)
-		☐ Write installer class
+		✔ Write dir class @done(23-08-15 20:10)
+		✔ Test dir class @done(23-08-15 20:10)
+		✔ Write installer class @done(23-08-15 23:43)
+			☐ Implement cleanup of dev directory when install gets cancelled
 		☐ Test installer class
+		☐ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True)
+		☐ Write commands class
+		☐ Test commands class
+
 
 		Installer:
 			☐ run_installer
@@ -26,17 +31,13 @@ Features:
 			☐ Installer: Raise and handle exceptions. For example failing to rebuild audio cache
 			☐ Installer: Still allow enabling of user mode or dev mode when the other isn't available
 			☐ Installer: Handle cancelling of manual directory selection. should abort whatever task was being performed
-
-		Extra:
-			✔ Error catching for game.dir.set() aka swap folders @done(23-08-15 20:37)
-				Could do this in various ways. a loop to try it for x amount of seconds
-				At the very least i should catch exceptions from os.rename
+			☐ Installer: Re-enable prompts & checks in install()
 
 		Implementation:
 			☐ Prompt to manually set the dev directory in hud_editing.start
 
 	General:
-		☐ Implement cleanup of dev directory when install gets cancelled
+		
 		☐ Handle script closure to ensure unsyncing even during crashes or failures
 		☐ Refine error handling strategy in sync class, possibly during unit testing
 		☐ Review and enhance target directory validation in sync()
@@ -71,7 +72,7 @@ Refactoring:
 			if that fails. the program should raise an exception, then maybe catch it
 			and display it in a messagebox. or display the message box inside the class?
 	☐ Private and internal classes dont need param checking, only public
-	☐ Handle 'utf-8' codec error when VPK class fails to extract specific files
+	☐ Handle VPK class failing to extract specific files during installation
 	☐ Make internal class methods protected by adding underscores. And internal with double __
 	☐ Add dir_mode enum checks to game class?
 	☐ Remove duplicate code in hud.py related to GuiHudStart instance creation

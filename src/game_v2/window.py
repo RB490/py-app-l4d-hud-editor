@@ -41,7 +41,7 @@ class GameV2Window:
     def run(self, dir_mode, wait_on_close=False):
         """Start game"""
 
-        self.game.validate_dir_mode(dir_mode)
+        self.game._validate_dir_mode(dir_mode)
 
         print(f"directory mode: {dir_mode.name}")
 

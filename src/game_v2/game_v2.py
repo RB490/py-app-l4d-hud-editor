@@ -1,7 +1,8 @@
 "Game class"
-# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position, ungrouped-imports, protected-access
 from enum import Enum, auto
 
+from game_v2.commands import GameV2Commands
 from utils.shared_utils import Singleton
 from utils.steam_info_retriever import SteamInfoRetriever
 
@@ -9,6 +10,8 @@ from utils.steam_info_retriever import SteamInfoRetriever
 class TitleRetrievalError(Exception):
     "Custom exception for invalid TitleRetrievalError parameter"
 
+class InstallationError(Exception):
+    "Custom exception for installation errors"
 
 class DirModeError(Exception):
     "Custom exception for invalid DirectoryMode parameter"
@@ -17,17 +20,18 @@ class DirModeError(Exception):
 class InstallationState(Enum):
     """Enumeration representing installation states"""
 
-    UNKNOWN = auto()  # currently used by setting directory manually
-    NOT_STARTED = auto()
+    UNKNOWN = auto()  # for example if the id file json was damaged
+    COMPLETED = auto()
+    # NOT_STARTED = auto()  # hud dev folder created
+    # PAUSED = auto()
+    # CANCELLED = auto()
+
     CREATE_DEV_DIR = auto()
     COPYING_FILES = auto()
     VERIFYING_GAME = auto()
     EXTRACTING_PAKS = auto()
     INSTALLING_MODS = auto()
     REBUILDING_AUDIO = auto()
-    PAUSED = auto()
-    COMPLETED = auto()
-    CANCELLED = auto()
 
 
 class DirectoryMode(Enum):
@@ -55,14 +59,20 @@ class GameV2(metaclass=Singleton):
         self.persistent_data = persistent_data
         self.window = GameV2Window(self)
         self.installer = GameV2Installer(self)
+        self.command = GameV2Commands(self)
         self.steam = SteamInfoRetriever(persistent_data)
         self.dir = GameV2Dir(self)
 
         self.title = "Left 4 Dead 2"
+        self.exe = "left4dead2.exe"
 
     def get_title(self):
         """Retrieve information"""
         return self.title
+
+    def get_exe(self):
+        """Retrieve information"""
+        return self.exe
 
     def get_version(self):
         """
@@ -94,5 +104,15 @@ def debug_gamev2_class(persistent_data):
     print("this is a test")
 
     g_i = GameV2(persistent_data)
+
+    ###########################
+    # Installer
+    ###########################
+    result = g_i.installer._install()
+    print(f"install result = {result}")
+
+    ###########################
+    # Directory
+    ###########################
     # g_i.dir.set(DirectoryMode.USER)
-    g_i.dir.set(DirectoryMode.USER)
+    # g_i.dir.set(DirectoryMode.USER)

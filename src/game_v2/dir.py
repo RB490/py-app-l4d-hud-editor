@@ -19,6 +19,13 @@ class GameV2Dir:
 
         print(self.__class__.__name__)
 
+    def _get_dir_backup_name(self, dir_mode):
+        random_string = generate_random_string()
+        output = os.path.join(
+            self.game.steam.get_games_dir(), f"_backup_hud_{dir_mode.name}.{self.game.get_title()}_{random_string}"
+        )
+        return output
+
     def set(self, dir_mode):
         "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
@@ -29,10 +36,7 @@ class GameV2Dir:
         # variables - source
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
         source_dir = self.get(source_mode)
-        random_string = generate_random_string()
-        source_dir_backup = os.path.join(
-            self.game.steam.get_games_dir(), f"_backup_hud_{source_mode.name}.{self.game.get_title()}_{random_string}"
-        )
+        source_dir_backup = self._get_dir_backup_name(source_mode)
         # variables - target
         target_mode = dir_mode
         target_dir = self.get(target_mode)
@@ -95,7 +99,7 @@ class GameV2Dir:
             else:
                 install_state = InstallationState.UNKNOWN
         else:
-            install_state = InstallationState.UNKNOWN
+            install_state = InstallationState.COMPLETED  # user mode
 
         # write selection
         self.__write_id_content(dir_mode, target_dir, install_state)
@@ -105,7 +109,7 @@ class GameV2Dir:
         "Get directory"
         # set variables
         self.game._validate_dir_mode(dir_mode)
-        id_filename = self.get_id_filename(dir_mode)
+        id_filename = self._get_id_filename(dir_mode)
         steam_games_dir = self.game.steam.get_games_dir()
 
         # Search through folders in the Steam games directory
@@ -120,7 +124,27 @@ class GameV2Dir:
         print(f"No installation directory found for mode '{dir_mode}'.")
         return None
 
-    def get_id_filename(self, dir_mode):
+    def _get_main_dir(self, dir_mode):
+        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        
+        root_dir = self.get(dir_mode)
+        main_dir_name = self.game.get_title().replace(" ", "")
+        main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
+        main_dir = os.path.join(root_dir, main_dir_name)
+
+        print(f"Get {dir_mode.name} main dir: {main_dir}")
+        return main_dir
+
+    def _get_cfg_dir(self, dir_mode):
+        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        
+        main_dir = self._get_main_dir(dir_mode)
+        config_dir = os.path.join(main_dir, "cfg")
+
+        print(f"Get {dir_mode.name} config dir: {config_dir}")
+        return config_dir
+
+    def _get_id_filename(self, dir_mode):
         "Get id filename"
         self.game._validate_dir_mode(dir_mode)
         return ID_FILE_NAMES[dir_mode]
@@ -145,7 +169,7 @@ class GameV2Dir:
         if mode_dir is None:
             print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
         else:
-            id_path = os.path.join(mode_dir, self.get_id_filename(dir_mode))
+            id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
 
         print("ID Path:", id_path)
         return id_path
@@ -166,7 +190,8 @@ class GameV2Dir:
     def __write_id_content(self, dir_mode, directory, installation_state=None):
         """Write id file content.
 
-        This method is needed because it us used by set id location & set id content
+        This method is needed because it us used by 'set id location' & 'set id content' &
+        in the installer class to create the first id file
         'directory' param is needed because the dir_mode wouldn't be able to be retrieved yet
         when setting id location"""
         state_data = {
@@ -175,8 +200,30 @@ class GameV2Dir:
             "game_directory": directory,
         }
 
-        id_file_name = self.get_id_filename(dir_mode)
+        id_file_name = self._get_id_filename(dir_mode)
         id_file_path = os.path.join(directory, id_file_name)
         with open(id_file_path, "w", encoding="utf-8") as file_handle:
             json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
         print(f"Written ID content to: {id_file_path}")
+
+    def _get_installation_state(self, dir_mode):
+        "Retrieve installation state from json in id file"
+        self.game._validate_dir_mode(dir_mode)
+
+        # get state from id file
+        if self.game.dir.get(dir_mode):
+            # set path
+            id_path = self.__get_id_path(dir_mode)
+
+            # read data from path
+            with open(id_path, "r", encoding="utf-8") as file_handle:
+                json_data = json.load(file_handle)
+                installation_state_str = json_data.get("installation_state")
+
+                if installation_state_str:
+                    # Convert string to InstallationState enum value
+                    print(f"Installation state: {installation_state_str}")
+                    return InstallationState[installation_state_str]
+
+        # fallback
+        return InstallationState.UNKNOWN
