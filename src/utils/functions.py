@@ -2,7 +2,9 @@
 import ctypes
 import json
 import os
+import random
 import shutil
+import string
 import sys
 import tempfile
 import time
@@ -19,6 +21,10 @@ import win32gui
 import win32process
 
 from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
+
+def generate_random_string(length=8):
+    characters = string.ascii_letters + string.digits
+    return "".join(random.choice(characters) for _ in range(length))
 
 
 def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):

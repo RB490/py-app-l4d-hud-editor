@@ -1,3 +1,4 @@
+"Game class directory methods"
 # pylint: disable=protected-access
 import json
 import os
@@ -5,160 +6,58 @@ from tkinter import filedialog
 
 from game_v2.game_v2 import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
+from utils.functions import generate_random_string
 from utils.shared_utils import show_message
 
 
 class GameV2Dir:
+    "Game class directory methods"
+
     def __init__(self, game_class):
         self.game = game_class
         self.persistent_data = self.game.persistent_data
 
         print(self.__class__.__name__)
 
-    def __get_mode_dir(self, dir_mode):
+    def set(self, dir_mode):
+        "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
-        mode_dir = self.get(dir_mode)
+        print(f"Setting mode: {dir_mode.name}")
 
-        if mode_dir is None or not os.path.exists(mode_dir):
-            print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct path.")
-            return None
-        return mode_dir
+        # note: retrieving source & target dir with self.get also already checks whether they are installed
+        # variables - source
+        source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
+        source_dir = self.get(source_mode)
+        random_string = generate_random_string()
+        source_dir_backup = os.path.join(
+            self.game.steam.get_games_dir(), f"_backup_hud_{source_mode.name}.{self.game.get_title()}_{random_string}"
+        )
+        # variables - target
+        target_mode = dir_mode
+        target_dir = self.get(target_mode)
+        vanilla_dir = self.__get_vanilla()
 
-    def set(self, dir_mode):  # TODO: Test this method
-        # verify mode is installed
-        if not self.__get_mode_dir(dir_mode):
-            print("Application is not installed in the specified mode.")
-            return False
+        # do we need to swap?
+        if target_dir == vanilla_dir:
+            print(f"{target_mode.name} already active!")
+            return True
 
         # close game
         self.game.close()
 
-        # activate mode by swapping folders if needed
-        if dir_mode == DirectoryMode.USER:
-            self.__set_active(DirectoryMode.DEVELOPER, DirectoryMode.USER)
-        else:
-            self.__set_active(DirectoryMode.USER, DirectoryMode.DEVELOPER)
+        # backup source mode
+        print(f"Renaming {source_dir} -> {source_dir_backup}")
+        os.rename(source_dir, source_dir_backup)
+
+        # activate target mode
+        print(f"Renaming {target_dir} -> {vanilla_dir}")
+        os.rename(target_dir, vanilla_dir)
+
+        print(f"Set mode: {dir_mode.name} successfully!")
         return True
 
-    # def __set_active_new(self, dir_mode):
-    #     vanilla_dir = self.__get_vanilla()
-    #     source_dir = self.get(dir_mode)
-
-    #     # do we need to swap?
-    #     if source_dir is vanilla_dir:
-    #         print(f"{dir_mode.name} already active!")
-    #         return
-
-    #     # swap folders
-    #     os.rename(
-    #         self.get(source_dir_mode),
-    #         os.path.join(
-    #             self.game.steam.get_games_dir(), f"backup_hud_{source_dir_mode.name}." + self.game.get_title()
-    #         ),
-    #     )
-    #     os.rename(
-    #         self.get(target_dir_mode),
-    #         os.path.join(target_dir),
-    #     )
-
-    def __set_active(self, source_dir_mode, target_dir_mode):
-        # set variables
-        target_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())
-        old_target_dir = self.get(target_dir_mode)
-
-        # do we need to swap?
-        if old_target_dir is target_dir:
-            print(f"{target_dir_mode.name} already active!")
-            return
-
-        # swap folders
-        os.rename(
-            self.get(source_dir_mode),
-            os.path.join(
-                self.game.steam.get_games_dir(), f"backup_hud_{source_dir_mode.name}." + self.game.get_title()
-            ),
-        )
-        os.rename(
-            self.get(target_dir_mode),
-            os.path.join(target_dir),
-        )
-
-    def __get_vanilla(self):
-        official_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())
-        return official_dir
-
-    def __get_active(self):
-        active_dir = os.path.join(self.game.steam.get_games_dir(), self.game.get_title())
-
-        if not os.path.isdir(active_dir):
-            print(f"Active directory '{active_dir}' does not exist.")
-            return None
-        else:
-            return active_dir
-
-    def get(self, dir_mode):
-        # set variables
-        self.game._validate_dir_mode(dir_mode)
-        id_filename = self.get_id_filename(dir_mode)
-        steam_games_dir = self.game.steam.get_games_dir()
-
-        # Search through folders in the Steam games directory
-        for folder_name in os.listdir(steam_games_dir):
-            folder_path = os.path.join(steam_games_dir, folder_name)
-            if os.path.isdir(folder_path):
-                id_path = os.path.join(folder_path, id_filename)
-                if os.path.isfile(id_path):
-                    print(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
-                    return folder_path
-
-        print(f"No installation directory found for mode '{dir_mode}'.")
-        return None
-
-    def get_id_filename(self, dir_mode):
-        self.game._validate_dir_mode(dir_mode)
-        return ID_FILE_NAMES[dir_mode]
-
-    def __get_id_path(self, dir_mode):
-        mode_dir = self.__get_mode_dir(dir_mode)
-        if mode_dir is None:
-            print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
-
-            # prompt user to manually select it
-            id_path = self.__set_id_location(dir_mode)
-            if id_path is None:
-                print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
-                return None
-        else:
-            id_path = os.path.join(mode_dir, self.get_id_filename(dir_mode))
-
-        print("ID Path:", id_path)
-        return id_path
-
-    def set_id_content(self, dir_mode, installation_state):
-        self.game._validate_dir_mode(dir_mode)
-
-        # get id path
-        id_path = self.__get_id_path(dir_mode)
-        if id_path is None:
-            return None
-
-        self.__write_id_content(dir_mode, self.get(dir_mode), installation_state)
-
-        print(f"result={id_path}")
-
-    def __write_id_content(self, dir_mode, directory, installation_state=None):
-        state_data = {
-            "directory_mode": dir_mode.name,
-            "installation_state": installation_state.name if installation_state is not None else None,
-            "game_directory": directory,
-        }
-
-        id_file_name = self.get_id_filename(dir_mode)
-        id_file_path = os.path.join(directory, id_file_name)
-        with open(id_file_path, "w", encoding="utf-8") as file_handle:
-            json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
-
-    def __set_id_location(self, dir_mode):
+    def set_id_location(self, dir_mode):
+        "Set id file location"
         self.game._validate_dir_mode(dir_mode)
 
         print(f"Manually setting directory for: {dir_mode.name}")
@@ -196,3 +95,83 @@ class GameV2Dir:
         # write selection
         self.__write_id_content(dir_mode, target_dir, install_state)
         return True
+
+    def get(self, dir_mode):
+        "Get directory"
+        # set variables
+        self.game._validate_dir_mode(dir_mode)
+        id_filename = self.get_id_filename(dir_mode)
+        steam_games_dir = self.game.steam.get_games_dir()
+
+        # Search through folders in the Steam games directory
+        for folder_name in os.listdir(steam_games_dir):
+            folder_path = os.path.join(steam_games_dir, folder_name)
+            if os.path.isdir(folder_path):
+                id_path = os.path.join(folder_path, id_filename)
+                if os.path.isfile(id_path):
+                    print(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
+                    return folder_path
+
+        print(f"No installation directory found for mode '{dir_mode}'.")
+        return None
+
+    def get_id_filename(self, dir_mode):
+        "Get id filename"
+        self.game._validate_dir_mode(dir_mode)
+        return ID_FILE_NAMES[dir_mode]
+
+    def __get_vanilla(self):
+        """Get the vanilla directory path of the game"""
+        print("Getting vanilla directory path...")
+
+        # Get the games directory from the steam object of the game
+        games_dir = self.game.steam.get_games_dir()
+        # Get the title of the game
+        title = self.game.get_title()
+
+        # Construct and return the vanilla directory path
+        vanilla_dir = os.path.join(games_dir, title)
+        print(f"Vanilla directory path is {vanilla_dir}.")
+        return vanilla_dir
+
+    def __get_id_path(self, dir_mode):
+        "Get id filename path"
+        mode_dir = self.get(dir_mode)
+        if mode_dir is None:
+            print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
+        else:
+            id_path = os.path.join(mode_dir, self.get_id_filename(dir_mode))
+
+        print("ID Path:", id_path)
+        return id_path
+
+    def _set_id_content(self, dir_mode, installation_state):
+        "Set id file content"
+        self.game._validate_dir_mode(dir_mode)
+
+        # get id path
+        id_path = self.__get_id_path(dir_mode)
+        if id_path is None:
+            return None
+
+        self.__write_id_content(dir_mode, self.get(dir_mode), installation_state)
+
+        print(f"result={id_path}")
+
+    def __write_id_content(self, dir_mode, directory, installation_state=None):
+        """Write id file content.
+
+        This method is needed because it us used by set id location & set id content
+        'directory' param is needed because the dir_mode wouldn't be able to be retrieved yet
+        when setting id location"""
+        state_data = {
+            "directory_mode": dir_mode.name,
+            "installation_state": installation_state.name if installation_state is not None else None,
+            "game_directory": directory,
+        }
+
+        id_file_name = self.get_id_filename(dir_mode)
+        id_file_path = os.path.join(directory, id_file_name)
+        with open(id_file_path, "w", encoding="utf-8") as file_handle:
+            json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
+        print(f"Written ID content to: {id_file_path}")

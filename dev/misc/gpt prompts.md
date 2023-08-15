@@ -3,8 +3,9 @@ Please enhance the provided code by simplifying and optimizing it according to b
 
 Ensure that any repeated constant values are defined as class variables and used consistently throughout the class to improve code maintainability and reduce redundancy.
 
-Furthermore, generate code that adds print statements to all methods in a class or to a specific function. The print statements should display messages before and after each method/function call, including the method/function name. Ensure that the existing functionality of the class/function is preserved and not altered. Please provide the name of the class or function, and specify whether it's a class or function.
+Furthermore, generate code that adds print statements to all methods in a class or to a specific function. The print statements should display messages before and after each method/function call, including the method/function name. Ensure that the existing functionality of the class/function is preserved and not altered.
 
+I'm going to give you my code in my next prompt.
 
 # improve code - general
 Please enhance the provided code by simplifying and optimizing it according to best practices. Additionally, add short and concise documentation for the module, classes, methods, and functions where applicable to improve code readability and maintainability.

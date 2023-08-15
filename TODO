@@ -1,8 +1,15 @@
 Features:
 
+	☐ Cleanup todo
+
 	Game class:
+		☐ Update GPT prompt to organize methods alphabetically
+
 		☐ Redo the game class from first principles @started(23-08-14 12:31)
-			☐ Test game.dir.set()
+		Goal: Extremely proper game class with no ambiguity so rewrites don't have to happen
+		Keep error handling to a minimum to none. Just functions that return True/None. Do later as needed
+			☐ Test & finish game.dir.set()
+			☐ Prompt to manually set the dev directory somewhere. probably hud_editing.start
 			☐ Create installer class
 			☐ Test installer class
 
@@ -62,8 +69,9 @@ Refactoring:
 			Consider code paths. For example retrieving the steam game dir is vital,
 			if that fails. the program should raise an exception, then maybe catch it
 			and display it in a messagebox. or display the message box inside the class?
+	☐ Private and internal classes dont need param checking, only public
 	☐ Handle 'utf-8' codec error when VPK class fails to extract specific files
-	☐ Make internal class methods protected by adding underscores
+	☐ Make internal class methods protected by adding underscores. And internal with double __
 	☐ Add dir_mode enum checks to game class?
 	☐ Remove duplicate code in hud.py related to GuiHudStart instance creation
 		☐ Automatically detect and refactor

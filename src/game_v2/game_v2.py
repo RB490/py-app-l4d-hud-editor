@@ -1,10 +1,13 @@
+"Game class"
+# pylint: disable=wrong-import-position
 from enum import Enum, auto
 
+from utils.shared_utils import Singleton
 from utils.steam_info_retriever import SteamInfoRetriever
 
 
 class TitleRetrievalError(Exception):
-    pass
+    "Custom exception for invalid TitleRetrievalError parameter"
 
 
 class DirModeError(Exception):
@@ -42,18 +45,18 @@ ID_FILE_NAMES = {
 from game_v2.dir import GameV2Dir
 from game_v2.installer import GameV2Installer
 from game_v2.window import GameV2Window
-from utils.shared_utils import Singleton
 
 
 class GameV2(metaclass=Singleton):
     """Singleton that handles anything related to the game. such as running and installation the dev/user versions"""
 
     def __init__(self, persistent_data):
+        print(self.__class__.__name__)
         self.persistent_data = persistent_data
         self.window = GameV2Window(self)
-        self.dir = GameV2Dir(self)
         self.installer = GameV2Installer(self)
         self.steam = SteamInfoRetriever(persistent_data)
+        self.dir = GameV2Dir(self)
 
         self.title = "Left 4 Dead 2"
 
@@ -82,4 +85,14 @@ class GameV2(metaclass=Singleton):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
     def close(self):
+        "Close"
         print("TODO close game")
+
+
+def debug_gamev2_class(persistent_data):
+    "debug game class"
+    print("this is a test")
+
+    g_i = GameV2(persistent_data)
+    # g_i.dir.set(DirectoryMode.USER)
+    g_i.dir.set(DirectoryMode.USER)

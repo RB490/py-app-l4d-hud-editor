@@ -6,7 +6,6 @@ from tkinter import messagebox
 import pyperclip  # type: ignore
 import vdf  # type: ignore
 
-from utils.get_user_input import get_user_input
 from game.game import Game
 from gui.start import GuiHudStart
 from utils.constants import UNIVERSAL_GAME_MAP
@@ -17,6 +16,7 @@ from utils.functions import (
     remove_stored_hud,
     remove_temp_hud,
 )
+from utils.get_user_input import get_user_input
 
 
 class EditorMenuHandler:
