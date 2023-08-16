@@ -17,12 +17,13 @@ Features:
 			✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
 			✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
 			✔ Write update/repair() @done(23-08-16 04:40)
-			☐ Refactor: install/update/repair has so much duplicate code!
+			✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
+			✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
 			
-			☐ Test: saving game custom position. because i don't get how custom pos gets saved
-			☐ Installer: Re-enable prompts & checks in install() & try:catch
 			☐ Implementation: Prompt to manually set the dev directory in hud_editing.start
-		
+			☐ Implementation: Replace & delete the old game instance
+			
+		☐ Test: saving game custom position. because i don't get how custom pos gets saved
 		☐ Write commands class
 		☐ Test commands class
 

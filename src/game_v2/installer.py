@@ -1,5 +1,10 @@
 # pylint: disable=protected-access, broad-exception-caught, unused-private-member
-"Game class installation methods"
+"""Game class installation methods
+
+Notes:
+    There is a fair amount of duplicate install/update/repair. Choosing to leave 
+    as is right now because the added complexity isn't worth it
+"""
 import filecmp
 import os
 import shutil
@@ -23,7 +28,7 @@ class GameV2Installer:
         # TODO Installer: Finish all functionality
         # TODO Installer: Restore checks & prompts when finished
 
-    def _uninstall(self, silent=False):
+    def _uninstall(self):
         "Uninstall"
         print("Uninstalling..")
 
@@ -73,11 +78,14 @@ class GameV2Installer:
         self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.VERIFYING_GAME)
 
         # perform installation steps
-        self.__process_installation_steps()
-
-        # finished
-        print("Finished updating!")
-        return True
+        try:
+            self.__process_installation_steps()
+            print("Finished updating!")
+            return True
+        except Exception as err_info:
+            print(f"Update error: {err_info}")
+            # since installation state is saved, don't do anything here
+            return False
 
     def _repair(self):
         print("Repairing...")
@@ -106,11 +114,15 @@ class GameV2Installer:
         self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.EXTRACTING_PAKS)
 
         # perform installation steps
-        self.__process_installation_steps()
-
-        # finished
-        print("Finished reparing!")
-        return True
+        try:
+            self.__process_installation_steps()
+            # finished
+            print("Finished reparing!")
+            return True
+        except Exception as err_info:
+            print(f"Repair error: {err_info}")
+            # since installation state is saved, don't do anything here
+            return False
 
     def _install(self):
         "Install"
@@ -119,43 +131,37 @@ class GameV2Installer:
         current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
 
         # already installed?
-        # if current_state is InstallationState.COMPLETED:
-        #     print("Already installed!")
-        #     return True
+        if current_state is InstallationState.COMPLETED:
+            print("Already installed!")
+            return True
 
         # confirm start
-        # if not prompt_start(self.game, "install"):
-        #     return False
+        if not prompt_start(self.game, "install"):
+            return False
 
         # close game
         self.game.close()
 
         # delete dev folder if needed
-        # if current_state == InstallationState.UNKNOWN:
-        #     invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        if current_state == InstallationState.UNKNOWN:
+            invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        #     if invalid_dev_dir:
-        #         extra_message = "Consider if you want to try to repair the installation instead"
-        #         if not prompt_delete(self.game, extra_message):
-        #             return False
-        #         shutil.rmtree(invalid_dev_dir)
-
-        # invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        # if invalid_dev_dir:
-        #     shutil.rmtree(invalid_dev_dir)
-        # current_state = InstallationState.REBUILDING_AUDIO
+            if invalid_dev_dir:
+                extra_message = "Consider if you want to try to repair the installation instead"
+                if not prompt_delete(self.game, extra_message):
+                    return False
+                shutil.rmtree(invalid_dev_dir)
 
         # install
-        # try:
-        self.__process_installation_steps()
-        # except: Exception as err_info:
-        #     print(f"Installation error: {err_info}")
-        #     since installation state is saved, don't do anything here
-        #     return False
-
-        # finished
-        print("Finished installing!")
-        return True
+        try:
+            self.__process_installation_steps()
+            # finished
+            print("Finished installing!")
+            return True
+        except Exception as err_info:
+            print(f"Installation error: {err_info}")
+            # since installation state is saved, don't do anything here
+            return False
 
     def __process_installation_steps(self):
         resume_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
