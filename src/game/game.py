@@ -2,10 +2,12 @@
 import os
 import shutil
 import subprocess
+import time
 
 import psutil
 import vdf  # type: ignore
 import win32gui
+import win32process
 
 from game.commands import GameCommands
 from game.manager import GameManager
@@ -16,9 +18,63 @@ from utils.functions import (
     is_valid_window,
     load_data,
     move_hwnd_to_position,
-    wait_for_process_and_get_hwnd,
 )
 from utils.shared_utils import Singleton
+
+
+def wait_for_process_and_get_hwnd(executable_name, timeout_seconds=60):
+    # pylint: disable=c-extension-no-member
+    """
+    Waits for a process to start and returns its window handle (HWND).
+
+    :param executable_name: The name of the executable to wait for.
+    :param timeout_seconds: The maximum time to wait for the process to start, in seconds. If None, waits indefinitely.
+    :return: The window handle (HWND) of the process, or None if not found.
+    """
+
+    start_time = time.time()
+
+    while timeout_seconds is None or time.time() - start_time <= timeout_seconds:
+        # Check if the process with the given executable name is running
+        for proc in psutil.process_iter(attrs=["pid", "name"]):
+            if proc.info["name"] == executable_name:
+                pid = proc.info["pid"]
+                break
+        else:
+            if timeout_seconds is not None:
+                time.sleep(0.1)  # Wait and retry if the process is not found
+                continue
+            else:
+                print(f"Process '{executable_name}' not found")
+                return None
+
+        start_time_hwnd = time.time()
+        while timeout_seconds is None or time.time() - start_time_hwnd <= timeout_seconds:
+            hwnds = []
+
+            # Callback to find window handles associated with the process
+            def callback(hwnd, hwnds):
+                _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
+                if found_pid == pid:
+                    hwnds.append(hwnd)
+                return True
+
+            # Enumerate all windows and find those associated with the process
+            win32gui.EnumWindows(callback, hwnds)
+            if hwnds:
+                print(f"Window handle found for process '{executable_name}': {hwnds[0]}")
+                return hwnds[0]
+
+            time.sleep(0.1)  # Wait and retry if window handle is not found
+
+        if timeout_seconds is not None:
+            print(f"No window handle found for process '{executable_name}'")
+            return None
+        else:
+            return None
+
+    print(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
+    return None
 
 
 class Game(metaclass=Singleton):
@@ -172,7 +228,7 @@ class Game(metaclass=Singleton):
             if self.persistent_data["game_mute"]:
                 file.write("\nvolume 1")  # adds the desired text to the file on a new line
             else:
-                file.write("\nvolume 1")  # adds the desired text to the file on a new line
+                file.write("\nvolume 0")  # adds the desired text to the file on a new line
 
         # disable fullscreen in video settings
         video_settings_path = os.path.join(config_dir, "video.txt")

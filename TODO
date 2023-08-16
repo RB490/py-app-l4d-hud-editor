@@ -6,13 +6,15 @@ Features:
 		✔ Write dir class @done(23-08-15 20:10)
 		✔ Test dir class @done(23-08-15 20:10)
 		☐ Write installer class @started(23-08-15 23:54)
-			☐ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True)
+			✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
 			☐ Installer: Re-enable prompts & checks in install()
 			☐ Test installer class
 			☐ Game: Still allow enabling of user mode or dev mode when the other isn't available(?)
 			☐ Write uninstall()
 			☐ Write update/repair()
 			☐ Installer: uninstall() when install gets cancelled or otherwise fails
+			☐ Test: saving game custom position. because i don't get how custom pos gets saved
+			☐ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs?
 			☐ Implementation: Prompt to manually set the dev directory in hud_editing.start
 		
 		☐ Write commands class

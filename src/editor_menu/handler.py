@@ -82,12 +82,7 @@ class EditorMenuHandler:
         """Method to handle the selected game position in the menu."""
         print(f"Selected Game Position: {pos}")
 
-        self.persistent_data["game_pos"] = pos
-
-        if "custom" in pos.lower():
-            self.persistent_data["game_pos_custom_coord"] = pos
-
-        self.game.move(pos)
+        self.game.set_position(pos)
         self.editor_menu.create_and_refresh_menu()
 
     def editor_menu_game_toggle_insecure(self):

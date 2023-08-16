@@ -10,7 +10,7 @@ from tkinter import filedialog, messagebox
 
 from utils.constants import MODS_DIR, SCRIPT_NAME
 from utils.functions import (
-    copy_files_in_directory,
+    copy_directory,
     get_dir_size_in_gb,
     get_steam_info,
     load_data,
@@ -684,9 +684,7 @@ class GameManager:
         self.write_id_file(
             DirectoryMode.DEVELOPER, self.get_dir(DirectoryMode.DEVELOPER), InstallationState.COPYING_FILES
         )
-        copy_files_in_directory(
-            self.get_dir(DirectoryMode.USER), self.get_dir(DirectoryMode.DEVELOPER), self.user_dir_id_file
-        )
+        copy_directory(self.get_dir(DirectoryMode.USER), self.get_dir(DirectoryMode.DEVELOPER), self.user_dir_id_file)
 
     def _prompt_game_verified(self):
         print("Prompting user to verify game")
@@ -816,9 +814,9 @@ class GameManager:
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
         main_dir = self.get_main_dir(DirectoryMode.DEVELOPER)
 
-        copy_files_in_directory(mods_dev_map_dir, main_dir)
-        copy_files_in_directory(mods_addons_dir, main_dir)
-        copy_files_in_directory(mods_sourcemod_dir, main_dir)
+        copy_directory(mods_dev_map_dir, main_dir)
+        copy_directory(mods_addons_dir, main_dir)
+        copy_directory(mods_sourcemod_dir, main_dir)
 
     def _rebuild_audio(self):
         print("Rebuilding audio")
@@ -833,7 +831,8 @@ class GameManager:
             file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
 
         self.game.close()
-        self.game.run(DirectoryMode.DEVELOPER, "wait on close")
+        self.game.run(DirectoryMode.DEVELOPER)
+
         print("Finished rebuilding audio")
         # Run, % STEAM_INFO.exePath A_Space "-applaunch " this.game.obj.appid " -novid -w 1 -h 1 -x 0 -y 0 -windowed"
 

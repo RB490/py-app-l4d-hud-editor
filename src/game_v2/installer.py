@@ -1,10 +1,9 @@
-# pylint: disable=protected-access, broad-exception-caught
+# pylint: disable=protected-access, broad-exception-caught, unused-private-member
 "Game class installation methods"
 import filecmp
 import os
-import shutil
 
-from game_v2.game_v2 import DirectoryMode, InstallationError, InstallationState
+from game_v2.game_v2 import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
 from game_v2.installer_prompts import (
@@ -13,7 +12,7 @@ from game_v2.installer_prompts import (
     prompt_verify_game,
 )
 from utils.constants import MODS_DIR
-from utils.functions import copy_files_in_directory
+from utils.functions import copy_directory, wait_for_process, wait_process_close
 from utils.vpk import VPKClass
 
 
@@ -24,7 +23,8 @@ class GameV2Installer:
         self.game = game_class
         self.persistent_data = self.game.persistent_data
         print(self.__class__.__name__)
-        # TODO Create installer class
+        # TODO Installer: Finish all functionality
+        # TODO Installer: Restore checks & prompts when finished
 
     def _install(self):
         print("Running installer..")
@@ -84,7 +84,7 @@ class GameV2Installer:
 
         # finished
         self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
-        
+
         print("Finished installing!")
         return True
 
@@ -125,7 +125,7 @@ class GameV2Installer:
     def __copy_game_files(self):
         print("Copying game files into developer directory")
 
-        copy_files_in_directory(
+        copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
             self.game.dir.get_id_filename(DirectoryMode.USER),
@@ -223,14 +223,26 @@ class GameV2Installer:
     def __install_mods(self):
         print("Installing mods")
 
-        mods_dev_map_dir = os.path.join(MODS_DIR, self.game.get_title(), "export")
+        # variables
+        mods_dev_map_dir = os.path.join(MODS_DIR, "Dev Map", self.game.get_title(), "export")
         mods_addons_dir = os.path.join(MODS_DIR, "Addons", "Export")
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
         main_dir = self.game.dir._get_main_dir(DirectoryMode.DEVELOPER)
 
-        copy_files_in_directory(mods_dev_map_dir, main_dir)
-        copy_files_in_directory(mods_addons_dir, main_dir)
-        copy_files_in_directory(mods_sourcemod_dir, main_dir)
+        # exceptions - we absolutely need these
+        if not os.path.exists(mods_dev_map_dir):
+            raise FileNotFoundError(f"Directory not found: {mods_dev_map_dir}")
+
+        if not os.path.exists(mods_addons_dir):
+            raise FileNotFoundError(f"Directory not found: {mods_addons_dir}")
+
+        if not os.path.exists(mods_sourcemod_dir):
+            raise FileNotFoundError(f"Directory not found: {mods_sourcemod_dir}")
+
+        # copy files
+        copy_directory(mods_dev_map_dir, main_dir)
+        copy_directory(mods_addons_dir, main_dir)
+        copy_directory(mods_sourcemod_dir, main_dir)
 
     def __rebuild_audio(self):
         print("Rebuilding audio")
@@ -245,4 +257,9 @@ class GameV2Installer:
 
         # run game to rebuild audio
         self.game.close()
-        self.game.window.run(DirectoryMode.DEVELOPER, wait_on_close=True)
+        self.game.window.run(DirectoryMode.DEVELOPER)
+
+        if not wait_for_process(self.game.get_exe(), 60):  # account for steam starting up
+            return False
+        if not wait_process_close(self.game.get_exe(), 300):  # account audio rebuilding
+            return False

@@ -21,7 +21,7 @@ import win32con
 import win32gui
 import win32process
 
-from .constants import GAME_POSITIONS, NEW_HUD_DIR, PERSISTENT_DATA_PATH
+from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
 
 def generate_random_string(length=8):
@@ -120,14 +120,25 @@ def move_hwnd_to_position(hwnd, position):
     This function moves a window (specified by its hwnd) to the desired position on the screen.
     `position` is a string that can take values from GAME_POSITIONS list.
     """
-
     print(f"move_hwnd_to_position: hwnd: {hwnd} position: {position}")
+
+    positions = [
+        "Center",
+        "Top Left",
+        "Top Right",
+        "Bottom Left",
+        "Bottom Right",
+        "Top",
+        "Bottom",
+        "Left",
+        "Right",
+    ]
 
     # Validate the hwnd argument
     if hwnd is None or not is_valid_window(hwnd):
         raise ValueError(f"Invalid hwnd: {hwnd}")
     # Validate the position argument
-    if position not in GAME_POSITIONS:
+    if position not in positions:
         raise ValueError(f"Invalid position: {position}")
 
     # Save the handle of the currently focused window
@@ -250,7 +261,7 @@ def prompt_create_new_hud(persistent_data):
     folder_path = prompt_for_folder("New HUD: Select folder")
     if folder_path:
         persistent_data["stored_huds"].append(folder_path)
-        copy_files_in_directory(NEW_HUD_DIR, folder_path)
+        copy_directory(NEW_HUD_DIR, folder_path)
         print(f'stored_huds: {persistent_data["stored_huds"]}')
         return True
     else:
@@ -304,69 +315,47 @@ def wait_for_process(exe, timeout=None):
     :return: True if the process is found, False if the timeout is reached.
     :rtype: bool
     """
+    print(f"Waiting for {exe} to run")
     start_time = time.time()
     while True:
         for process_name in psutil.process_iter():
             if process_name.name() == exe:
+                print(f"Process {exe} running!")
                 return True
         if timeout is not None and time.time() - start_time > timeout:
+            print("Timeout reached!")
             return False
         time.sleep(0.1)
 
 
-def wait_for_process_and_get_hwnd(executable_name, timeout_seconds=60):
-    # pylint: disable=c-extension-no-member
-    """
-    Waits for a process to start and returns its window handle (HWND).
+def wait_process_close(executable, timeout=None):
+    "Wait for a process to close (if it exists)"
+    print(f"Waiting for {executable} to close")
 
-    :param executable_name: The name of the executable to wait for.
-    :param timeout_seconds: The maximum time to wait for the process to start, in seconds. If None, waits indefinitely.
-    :return: The window handle (HWND) of the process, or None if not found.
-    """
-
-    start_time = time.time()
-
-    while timeout_seconds is None or time.time() - start_time <= timeout_seconds:
-        # Check if the process with the given executable name is running
-        for proc in psutil.process_iter(attrs=["pid", "name"]):
-            if proc.info["name"] == executable_name:
-                pid = proc.info["pid"]
-                break
-        else:
-            if timeout_seconds is not None:
-                time.sleep(0.1)  # Wait and retry if the process is not found
-                continue
-            else:
-                print(f"Process '{executable_name}' not found")
-                return None
-
-        start_time_hwnd = time.time()
-        while timeout_seconds is None or time.time() - start_time_hwnd <= timeout_seconds:
-            hwnds = []
-
-            # Callback to find window handles associated with the process
-            def callback(hwnd, hwnds):
-                _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-                if found_pid == pid:
-                    hwnds.append(hwnd)
-                return True
-
-            # Enumerate all windows and find those associated with the process
-            win32gui.EnumWindows(callback, hwnds)
-            if hwnds:
-                print(f"Window handle found for process '{executable_name}': {hwnds[0]}")
-                return hwnds[0]
-
-            time.sleep(0.1)  # Wait and retry if window handle is not found
-
-        if timeout_seconds is not None:
-            print(f"No window handle found for process '{executable_name}'")
-            return None
-        else:
-            return None
-
-    print(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
-    return None
+    # Get the list of processes with the same name as the executable
+    processes = [p for p in psutil.process_iter() if p.name() == executable]
+    # If no processes are found, return immediately
+    if not processes:
+        print(f"{executable} to not running!")
+        return False
+    # Otherwise, wait for the processes to terminate or until timeout is reached
+    start = time.time()
+    while True:
+        # Check if any process is still alive
+        alive = any(p.is_running() for p in processes)
+        # If not, return
+        if not alive:
+            print(f"Process {executable} closed!")
+            return True
+        # Otherwise, check the elapsed time if timeout is provided
+        if timeout is not None:
+            elapsed = time.time() - start
+            # If timeout is reached, raise an exception
+            if elapsed >= timeout:
+                print(f"Process {executable} did not close after {timeout} seconds")
+                return False
+        # Sleep for a short interval and repeat
+        time.sleep(0.1)
 
 
 def get_hwnd_for_exe(executable_name):
@@ -443,7 +432,7 @@ def is_process_running_from_hwnd(hwnd: int) -> bool:
         return False
 
 
-def copy_files_in_directory(src_dir, dest_dir, ignore_file=None):
+def copy_directory(src_dir, dest_dir, ignore_file=None):
     "Copy the files in asource directory to a destination directory, overwriting if necessary."
     # pylint: disable=broad-exception-raised
     # pylint: disable=broad-exception-caught
@@ -492,8 +481,8 @@ def copy_files_in_directory(src_dir, dest_dir, ignore_file=None):
 
     except Exception as err_info:
         print(f"An error occurred during copy files in directory: {err_info}")
-
-    print(f"Copied files '{src_dir}' -> '{dest_dir}'")
+    else:
+        print(f"Copied files '{src_dir}' -> '{dest_dir}'")
 
 
 def get_dir_size(path):

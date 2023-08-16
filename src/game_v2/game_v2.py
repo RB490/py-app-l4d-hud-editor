@@ -1,8 +1,13 @@
 "Game class"
 # pylint: disable=wrong-import-position, ungrouped-imports, protected-access
+import os
+import shutil
 from enum import Enum, auto
 
+import vdf  # type: ignore
+
 from game_v2.commands import GameV2Commands
+from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.shared_utils import Singleton
 from utils.steam_info_retriever import SteamInfoRetriever
 
@@ -10,8 +15,10 @@ from utils.steam_info_retriever import SteamInfoRetriever
 class TitleRetrievalError(Exception):
     "Custom exception for invalid TitleRetrievalError parameter"
 
+
 class InstallationError(Exception):
     "Custom exception for installation errors"
+
 
 class DirModeError(Exception):
     "Custom exception for invalid DirectoryMode parameter"
@@ -51,6 +58,39 @@ from game_v2.installer import GameV2Installer
 from game_v2.window import GameV2Window
 
 
+class VideoSettingsModifier:
+    "Modify video.txt"
+
+    def __init__(self, config_dir):
+        self.config_dir = config_dir
+        self.video_settings_path = os.path.join(config_dir, "video.txt")
+
+    def load_video_settings(self):
+        "Load"
+        if os.path.exists(self.video_settings_path):
+            return vdf.load(open(self.video_settings_path, encoding="utf-8"))
+        return None
+
+    def save_video_settings(self, video_settings):
+        "Save"
+        with open(self.video_settings_path, "w", encoding="utf-8") as f_handle:
+            vdf.dump(video_settings, f_handle, pretty=True)
+
+    def set_fullscreen(self, fullscreen_value):
+        "Modify key value"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            video_settings["VideoConfig"]["setting.fullscreen"] = fullscreen_value
+            self.save_video_settings(video_settings)
+
+    def set_nowindowborder(self, nowindowborder_value):
+        "Modify key value"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            video_settings["VideoConfig"]["setting.nowindowborder"] = nowindowborder_value
+            self.save_video_settings(video_settings)
+
+
 class GameV2(metaclass=Singleton):
     """Singleton that handles anything related to the game. such as running and installation the dev/user versions"""
 
@@ -65,6 +105,7 @@ class GameV2(metaclass=Singleton):
 
         self.title = "Left 4 Dead 2"
         self.exe = "left4dead2.exe"
+        self.app_id = "550"
 
     def get_title(self):
         """Retrieve information"""
@@ -73,6 +114,10 @@ class GameV2(metaclass=Singleton):
     def get_exe(self):
         """Retrieve information"""
         return self.exe
+
+    def get_app_id(self):
+        """Retrieve information"""
+        return self.app_id
 
     def get_version(self):
         """
@@ -89,6 +134,57 @@ class GameV2(metaclass=Singleton):
         valid_titles = {"left 4 dead": "L4D1", "left 4 dead 2": "L4D2"}
         return valid_titles.get(title, None)
 
+    def _write_config(self):
+        # variables
+        config_dir = self.dir._get_cfg_dir(DirectoryMode.DEVELOPER)
+        valverc_path = os.path.join(config_dir, "valve.rc")
+        autoexec_name = os.path.split(EDITOR_AUTOEXEC_PATH)[-1]
+        autoexec_path = os.path.join(config_dir, autoexec_name)
+
+        # delete config
+        open(os.path.join(config_dir, "config.cfg"), "w", encoding="utf-8").close()
+        open(os.path.join(config_dir, "config_default.cfg"), "w", encoding="utf-8").close()
+
+        # write config
+        with open(valverc_path, "w", encoding="utf-8") as cfg_file:
+            cfg_file.write(f"exec {autoexec_name}")
+
+        shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
+
+        # append user settings to autoexec
+        with open(EDITOR_AUTOEXEC_PATH, "a", encoding="utf-8") as file:
+            if self.persistent_data["game_mute"]:
+                file.write("\nvolume 1")  # adds the desired text to the file on a new line
+            else:
+                file.write("\nvolume 0")  # adds the desired text to the file on a new line
+
+        # disable fullscreen in video settings
+        video_modifier = VideoSettingsModifier(config_dir)
+        video_modifier.set_fullscreen(0)
+
+        print(autoexec_name)
+
+    def _disable_addons(self):
+        # variables
+        addons_dir = self.dir._get_addons_dir(DirectoryMode.DEVELOPER)
+
+        # disable mods by overwriting them with a dummy vpk (empty file caused ingame console errors)
+        dirs = [
+            addons_dir,
+            os.path.join(addons_dir, "Workshop"),
+        ]
+        # not recursing so sourcemod doesn't break + game doesn't check subfolders
+        # for addons anyways (besides addons/workshop)
+        for loop_dir in dirs:
+            for root, dirs, files in os.walk(loop_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    if file.endswith((".dll")):
+                        open(file_path, "w", encoding="utf-8").close()
+                    if file.endswith((".vpk")):
+                        shutil.copy(DUMMY_ADDON_VPK_PATH, file_path)
+                        print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
+
     def _validate_dir_mode(self, dir_mode):
         "Validate the dir_mode parameter"
         if not isinstance(dir_mode, DirectoryMode):
@@ -103,12 +199,17 @@ def debug_gamev2_class(persistent_data):
     "debug game class"
     print("this is a test")
 
-    g_i = GameV2(persistent_data)
+    gamez = GameV2(persistent_data)
 
     ###########################
     # Installer
     ###########################
-    result = g_i.installer._install()
+    # result = gamez.installer._install()
+    # result = gamez.installer.__install_mods()
+    result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
+    # result = gamez._disable_addons()
+    # result = gamez._write_config()
+
     print(f"install result = {result}")
 
     ###########################

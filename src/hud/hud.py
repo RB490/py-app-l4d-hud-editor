@@ -6,7 +6,6 @@ from tkinter.filedialog import asksaveasfilename
 
 import keyboard
 
-from utils.vpk import VPKClass
 from game.game import Game
 
 # pylint: disable=unused-import
@@ -15,8 +14,9 @@ from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
-from utils.functions import copy_files_in_directory, load_data
+from utils.functions import copy_directory, load_data
 from utils.shared_utils import Singleton, show_message
+from utils.vpk import VPKClass
 
 
 class Hud(metaclass=Singleton):
@@ -100,7 +100,7 @@ class Hud(metaclass=Singleton):
         # pylint: disable=broad-exception-caught
         try:
             # Copy the contents of source_dir to target_dir
-            copy_files_in_directory(source_dir, target_dir)
+            copy_directory(source_dir, target_dir)
         except Exception as general_error:
             print(f"An error occurred: {general_error}")
 

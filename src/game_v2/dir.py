@@ -135,14 +135,25 @@ class GameV2Dir:
         print(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
-    def _get_cfg_dir(self, dir_mode):
-        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+    def __get_main_sub_dir(self, dir_mode, subdirectory):
+        "Get the full path to the specified subdirectory (cfg or addons)"
         
         main_dir = self._get_main_dir(dir_mode)
-        config_dir = os.path.join(main_dir, "cfg")
+        dir_path = os.path.join(main_dir, subdirectory)
 
-        print(f"Get {dir_mode.name} config dir: {config_dir}")
-        return config_dir
+        if not os.path.exists(dir_path):
+            raise FileNotFoundError(f"{subdirectory} directory not found for {dir_mode.name} mode")
+
+        print(f"Get {dir_mode.name} {subdirectory} dir: {dir_path}")
+        return dir_path
+
+    def _get_cfg_dir(self, dir_mode):
+        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        return self.__get_main_sub_dir(dir_mode, "cfg")
+
+    def _get_addons_dir(self, dir_mode):
+        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        return self.__get_main_sub_dir(dir_mode, "addons")
 
     def _get_id_filename(self, dir_mode):
         "Get id filename"

@@ -1,0 +1,9 @@
+"AddonInfo"
+{
+	addonSteamAppID		"550"
+	addonversion		"0.0"
+	addontitle			"Dummy VPK"
+	addonauthor			"Dummy VPK"
+	addontagline		""
+	addonDescription	"Dummy VPK"
+}

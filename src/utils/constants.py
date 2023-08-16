@@ -24,6 +24,7 @@ MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
 SNIPPETS_DIR = os.path.join(ASSETS_DIR, "snippets")
 EDITOR_AUTOEXEC_PATH = os.path.join(MISC_DIR, "hud_editor_autoexec.cfg")
+DUMMY_ADDON_VPK_PATH = os.path.join(MISC_DIR, "dummy_addon_vpk.vpk")
 SCRIPT_NAME = "L4D Hud Editor"
 SCRIPT_FILE_NAME = os.path.basename(PROJECT_ROOT)
 PERSISTENT_DATA_PATH = os.path.join(MISC_DIR, SCRIPT_NAME + ".json")
