@@ -205,12 +205,16 @@ def debug_gamev2_class(persistent_data):
     # Installer
     ###########################
     # result = gamez.installer._install()
+    gamez.installer._uninstall()
+
+    
+    # result = gamez.installer._uninstall()
     # result = gamez.installer.__install_mods()
-    result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
+    # result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
     # result = gamez._disable_addons()
     # result = gamez._write_config()
 
-    print(f"install result = {result}")
+    # print(f"install result = {result}")
 
     ###########################
     # Directory

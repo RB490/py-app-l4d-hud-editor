@@ -2,15 +2,12 @@
 "Game class installation methods"
 import filecmp
 import os
+import shutil
 
 from game_v2.game_v2 import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
-from game_v2.installer_prompts import (
-    prompt_delete_unknown,
-    prompt_start,
-    prompt_verify_game,
-)
+from game_v2.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
 from utils.functions import copy_directory, wait_for_process, wait_process_close
 from utils.vpk import VPKClass
@@ -26,8 +23,31 @@ class GameV2Installer:
         # TODO Installer: Finish all functionality
         # TODO Installer: Restore checks & prompts when finished
 
+    def _uninstall(self):
+        "Uninstall"
+        print("Uninstalling..")
+
+        # is dev installed?
+        if not self.game.dir.get(DirectoryMode.DEVELOPER):
+            return True
+
+        # prompt user
+        if not prompt_delete(self.game):
+            return False
+
+        # close the game
+        self.game.close()
+
+        # remove directory
+        print("Deleting game directory...")
+        shutil.rmtree(self.game.get(DirectoryMode.DEVELOPER))
+
+        # finished
+        print("Uninstalled!")
+
     def _install(self):
-        print("Running installer..")
+        "Install"
+        print("Installing..")
 
         # variables
         current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
@@ -57,7 +77,8 @@ class GameV2Installer:
         #     invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         #     if invalid_dev_dir:
-        #         if not prompt_delete_unknown(self.game):
+        #         extra_message = "Consider if you want to try to repair the installation instead"
+        #         if not prompt_delete(self.game, extra_message):
         #             return False
         #         shutil.rmtree(invalid_dev_dir)
 

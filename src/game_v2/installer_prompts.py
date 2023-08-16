@@ -33,13 +33,15 @@ def prompt_start(game_class, install_type, message_extra=""):
     return response
 
 
-def prompt_delete_unknown(game_class):
+def prompt_delete(game_class, message_extra=""):
     "Installer prompts"
 
     # create message
-    title = f"Delete invalid developer directory for {game_class.get_title()}?"
+    title = f"Delete developer directory for {game_class.get_title()}?"
     message = f"{title}\n\n"
-    message += f"Directory:\n'{game_class.dir.get(DirectoryMode.DEVELOPER)})'"
+    message += f"Directory:\n'{game_class.dir.get(DirectoryMode.DEVELOPER)}'"
+    if message_extra:  # Check if the variable is not empty
+        message += f"\n\n{message_extra}\n"  # Add the extra line
 
     # prompt message
     response = show_message(message, "yesno", title)  # Using "yesno" type for this confirmation
