@@ -2,33 +2,28 @@ Features:
 	Sync:
 
 
-		☐ Note: set_id_location:developer isn't used anywhere in the code yet! It should be asked during install()
-		☐ Note: set_id_location:user isn't used anywhere in the code yet! It should be asked somewhere...
+		☐ set_id_location:developer isn't used anywhere in the code yet! It should be asked during install() @critical
+		☐ set_id_location:user isn't used anywhere in the code yet! It should be asked somewhere... @critical
 
-		☐ Bug: Different separators in is_subdirectory even after trying various normpath solutions
-		parent: E:\games\steam\steamapps\common
-		child: E:/Games/Steam/steamapps/common/Left 4 Dead 2
-		output: E:/Games/Steam/steamapps/common/Left 4 Dead 2 is not subdirectory of E:\games\steam\steamapps\common
-
-		☐ Refactor: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant
+		☐ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low
 		
-		☐ I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to
-
-		☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures
-			- Bad unsync detection: Keep track of sync status in the ID file
-			- Fixing unsync's
-				- Simple & faster solution:
-					- every file that i sync to the game folder, i also sync to a designated temporary sync folder
-					- keep track in the ID file which folder this is probably? as i would create a temp dir and save it there
-					- 1. first loop all the files in the unsync folder 2. loop the unsync dirs and only delete if empty
-						- ^ but how would i know if a file is custom
-				- Simple & great solution (could be a little slow) // actually, no, just materials & resource =1,5gb :
-					- During installation process create a backup of the main directory
-					- If the script detects that it failed to unsync somehow - delete the entire main dir and restore from backup
-						- Detection could work in many ways. Probably simply another ID file. or even the same ID file
-		☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing
-		os.move error could happen if for example a file in the game dir is locked because in use
-		☐ Sync: Review and enhance target directory validation in sync()
+		Sync:
+			☐ Refactor: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant @high 
+			☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical
+				- Bad unsync detection: Keep track of sync status in the ID file
+				- Fixing unsync's
+					- Simple & faster solution:
+						- every file that i sync to the game folder, i also sync to a designated temporary sync folder
+						- keep track in the ID file which folder this is probably? as i would create a temp dir and save it there
+						- 1. first loop all the files in the unsync folder 2. loop the unsync dirs and only delete if empty
+							- ^ but how would i know if a file is custom
+					- Simple & great solution (could be a little slow) // actually, no, just materials & resource =1,5gb :
+						- During installation process create a backup of the main directory
+						- If the script detects that it failed to unsync somehow - delete the entire main dir and restore from backup
+							- Detection could work in many ways. Probably simply another ID file. or even the same ID file
+			☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
+			os.move error could happen if for example a file in the game dir is locked because in use
+			☐ Sync: Review and enhance target directory validation in sync() @high
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder
@@ -36,6 +31,10 @@ Bugs:
 	☐ Address in-game console bugs related to malformed VPK addons loading
 		☐ Explore potential fixes, e.g., creating small VPK to overwrite malformed ones
 	☐ Investigate console errors for failing to load maps
+	☐ Bug: Different separators in is_subdirectory even after trying various normpath solutions @low
+	parent: E:\games\steam\steamapps\common
+	child: E:/Games/Steam/steamapps/common/Left 4 Dead 2
+	output: E:/Games/Steam/steamapps/common/Left 4 Dead 2 is not subdirectory of E:\games\steam\steamapps\common
 
 GUI:
 	☐ Add context menu functionality for treeview in browser
