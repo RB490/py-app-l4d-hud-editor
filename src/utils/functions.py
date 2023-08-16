@@ -17,11 +17,24 @@ import psutil
 import pyautogui
 import vdf  # type: ignore
 import win32api
-import win32con
+import win32con  # type: ignore
 import win32gui
 import win32process
+from ahk import AHK
 
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
+
+
+def move_window_with_ahk(window_title, new_x, new_y):
+    "Move window: https://pypi.org/project/ahk/"
+    ahk = AHK()
+
+    try:
+        win = ahk.find_window(title=window_title)  # Find the opened window
+        win.move(new_x, new_y)
+        print(f"Moved {window_title} -> {new_x}x{new_y}")
+    except Exception:
+        print("Failed to move window using AHK")
 
 
 def generate_random_string(length=8):
@@ -114,13 +127,13 @@ def is_valid_window(hwnd):
     return ctypes.windll.user32.IsWindow(hwnd)
 
 
-def move_hwnd_to_position(hwnd, position):
+def move_hwnd_to_position_old(hwnd, position):
     # pylint: disable=c-extension-no-member, unsubscriptable-object
     """
     This function moves a window (specified by its hwnd) to the desired position on the screen.
     `position` is a string that can take values from GAME_POSITIONS list.
     """
-    print(f"move_hwnd_to_position: hwnd: {hwnd} position: {position}")
+    print(f"Moving hwnd {hwnd} -> {position}")
 
     positions = [
         "Center",
@@ -325,6 +338,39 @@ def wait_for_process(exe, timeout=None):
         if timeout is not None and time.time() - start_time > timeout:
             print("Timeout reached!")
             return False
+        time.sleep(0.1)
+
+
+def wait_for_process_with_ram_threshold(exe, timeout=None):
+    """
+    Wait until a process is running and consumes a specified amount of RAM.
+
+    :param exe: The executable name of the process.
+    :type exe: str
+    :param timeout: The maximum time to wait in seconds (optional).
+    :type timeout: float or None
+    :return: True if the process is found and RAM threshold is reached, False if timeout is reached.
+    :rtype: bool
+    """
+    ram_threshold_mb = 222  # Hardcoded RAM threshold in MB
+    print(f"Waiting for {exe} to run and use {ram_threshold_mb} MB of RAM")
+
+    start_time = time.time()
+    while True:
+        for process in psutil.process_iter(attrs=["name", "pid", "memory_info"]):
+            if process.info["name"] == exe:
+                # process_pid = process.info['pid']
+                process_memory_info = process.info["memory_info"]
+                ram_used_mb = process_memory_info.rss / (1024 * 1024)  # Convert bytes to MB
+
+                if ram_used_mb >= ram_threshold_mb:
+                    print(f"Process {exe} running and using {ram_used_mb:.2f} MB of RAM.")
+                    return True
+
+        if timeout is not None and time.time() - start_time > timeout:
+            print("Timeout reached!")
+            return False
+
         time.sleep(0.1)
 
 

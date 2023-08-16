@@ -1,36 +1,9 @@
 Features:
-
-	Game class:
-		☐ Rewrite from first principles
 		
-		✔ Write dir class @done(23-08-15 20:10)
-		✔ Test dir class @done(23-08-15 20:10)
-		☐ Write installer class @started(23-08-15 23:54)
-			✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
-			✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
-			✔ Test installer class @done(23-08-16 02:42)
-			✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
-			Nuh-uh. I need to have access to both game folders
-			
-			✔ Write uninstall() @done(23-08-16 03:28)
-			✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
-			✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
-			✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
-			✔ Write update/repair() @done(23-08-16 04:40)
-			✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
-			✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
-			
-			✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
-			
-			✔ Write commands class @done(23-08-16 05:35)
-			✔ Test commands class @done(23-08-16 05:35)
-			
-			✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
-			✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
-				- self.game.manager	
-				- self.game.run	
-		
-		☐ Test: saving game custom position. because i don't get how custom pos gets saved
+		✔ Fixed: saving game custom position @done(23-08-16 08:12)
+		☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes
+		☐ Bug: Sometimes hwnd doesn't get retrieved when the game launches. Add a loop to check it for a few seconds longer
+		☐ Save settings on exit?
 
 	Sync:
 		☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures
@@ -101,11 +74,6 @@ Additional Ideas and Considerations:
 	Notes
 	- https://github.com/RB490/py-app-l4d-hud-editor/blob/580ad38869ce6babdd931836555ee3187984c99c/todo_legacy.md
 	
-Archive:
-	✔ Installer: Keep track of installation status @done(23-08-12 17:17)
-	✔ Use InvalidIDError @done(23-08-12 15:55)
-	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
-
 
 Todos shortcuts:
 	You can write plain text notes/descriptions wherever you want
@@ -126,3 +94,64 @@ Todos shortcuts:
 		✔ Now it will show the elapsed time @started(17-11-03 10:42) @done(17-11-03 20:11) @lasted(9h29m)
 		☐ You can provide time estimates for your todos @1h30m
 		☐ We are even doing some natural language processing @est(1 day and 20 minutes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Archive:
+	✔ Installer: Keep track of installation status @done(23-08-12 17:17)
+	✔ Use InvalidIDError @done(23-08-12 15:55)
+	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
+
+	Game class:
+		✔ Rewrite from first principles @done(23-08-16 06:00)
+		
+		✔ Write dir class @done(23-08-15 20:10)
+		✔ Test dir class @done(23-08-15 20:10)
+		✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
+			✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
+			✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
+			✔ Test installer class @done(23-08-16 02:42)
+			✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
+			Nuh-uh. I need to have access to both game folders
+			
+			✔ Write uninstall() @done(23-08-16 03:28)
+			✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
+			✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
+			✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
+			✔ Write update/repair() @done(23-08-16 04:40)
+			✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
+			✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
+			
+			✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
+			
+			✔ Write commands class @done(23-08-16 05:35)
+			✔ Test commands class @done(23-08-16 05:35)
+			
+			✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
+			✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)

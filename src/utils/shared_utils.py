@@ -1,4 +1,5 @@
 """Shared utility functions"""
+# pylint: disable=c-extension-no-member
 import os
 import sys
 import tkinter as tk
@@ -6,9 +7,68 @@ from tkinter import messagebox
 from typing import Dict, Type
 
 import psutil
+import win32api
+import win32con
+import win32gui
+import win32process
+
+
+def move_hwnd_to_position(hwnd, position):
+    """
+    Move a window (specified by its hwnd) to the desired position on the screen.
+
+    Args:
+        hwnd (int): The handle of the window to be moved.
+        position (str or tuple or dict): The desired position on the screen.
+            It can be a predefined position (str) from the list of predefined_positions,
+            a tuple (x, y) with specific coordinates, or a dictionary {'x': x, 'y': y}.
+
+    Raises:
+        ValueError: If the position format is invalid.
+    """
+    predefined_positions = {
+        "Center": (0.5, 0.5),
+        "Top Left": (0, 0),
+        "Top Right": (1, 0),
+        "Bottom Left": (0, 1),
+        "Bottom Right": (1, 1),
+        "Top": (0.5, 0),
+        "Bottom": (0.5, 1),
+        "Left": (0, 0.5),
+        "Right": (1, 0.5),
+    }
+
+    rect = win32gui.GetWindowRect(hwnd)
+    win_width = rect[2] - rect[0]
+    win_height = rect[3] - rect[1]
+
+    screen_width = win32api.GetSystemMetrics(0)
+    screen_height = win32api.GetSystemMetrics(1)
+
+    if position is None or position == "":
+        print("No position provided, defaulting to center!")
+        position = "Center"
+
+    if position in predefined_positions:
+        win_x, win_y = predefined_positions[position]
+        win_x = int(win_x * (screen_width - win_width))
+        win_y = int(win_y * (screen_height - win_height))
+    elif isinstance(position, tuple):
+        win_x, win_y = position
+    elif isinstance(position, dict) and "x" in position and "y" in position:
+        win_x, win_y = position["x"], position["y"]
+    else:
+        raise ValueError("Invalid position format")
+
+    win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
+
+    _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    window_executable = os.path.basename(psutil.Process(pid).exe())
+    print(f"Moved '{window_executable}' to position ({win_x}, {win_y})")
 
 
 def close_process_executable(executable):
+    "Close process based on executable"
     for proc in psutil.process_iter(["name"]):
         if proc.info["name"] == executable:
             proc.kill()

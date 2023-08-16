@@ -185,9 +185,9 @@ class Game(metaclass=Singleton):
         # append user settings to autoexec
         with open(autoexec_path, "a", encoding="utf-8") as file:
             if self.persistent_data["game_mute"]:
-                file.write("\nvolume 1")  # adds the desired text to the file on a new line
-            else:
                 file.write("\nvolume 0")  # adds the desired text to the file on a new line
+            else:
+                file.write("\nvolume 1")  # adds the desired text to the file on a new line
 
         # disable fullscreen in video settings
         video_modifier = VideoSettingsModifier(config_dir)

@@ -1,4 +1,4 @@
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, c-extension-no-member
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
 import subprocess
@@ -10,9 +10,9 @@ from utils.functions import (
     get_hwnd_for_exe,
     is_process_running,
     is_valid_window,
-    move_hwnd_to_position,
-    wait_for_process,
+    wait_for_process_with_ram_threshold,
 )
+from utils.shared_utils import move_hwnd_to_position
 
 
 class GameWindow:
@@ -41,12 +41,33 @@ class GameWindow:
             print(f"Get {self.get_exe()} hwnd '{self.hwnd}'")
             return self.hwnd
 
-    def __restore_saved_position(self):
+    def restore_saved_position(self):
+        "Restore saved position"
         self.set_position(self.persistent_data["game_pos"])
 
+    def save_position(self):
+        "Save custom position"
+        # pylint: disable=unused-variable
+        # Save custom location
+        game_hwnd = self.game.window.get_hwnd()
+        if game_hwnd:
+            left, top, right, bottom = win32gui.GetWindowRect(game_hwnd)
+            x_coordinate = left
+            y_coordinate = top
+            custom_position_tuple = (x_coordinate, y_coordinate)
+
+            # Store the custom coordinate tuple in the persistent data dictionary
+            self.persistent_data["game_pos"] = "Custom (Save)"
+            self.persistent_data["game_pos_custom_coord"] = custom_position_tuple
+
+            print("Stored Custom Position Tuple:", custom_position_tuple)
+            return custom_position_tuple
+        else:
+            return None
+
     def set_position(self, position):
-        # pylint: disable=c-extension-no-member
         """Move window to position"""
+        # pylint: disable=c-extension-no-member
         if position not in GAME_POSITIONS:
             raise Exception("Invalid position")
 
@@ -54,17 +75,20 @@ class GameWindow:
         self.persistent_data["game_pos"] = position
 
         if "custom" in position.lower():
-            self.persistent_data["game_pos_custom_coord"] = position
-            window_pos = self.persistent_data.get("game_pos_custom_coord")  # using get method to avoid KeyError
+            # Use custom location
+            print("Restoring position:", position)
 
-            if (
-                isinstance(window_pos, tuple)
-                and len(window_pos) == 2
-                and all(isinstance(i, int) and i >= 0 for i in window_pos)
+            # restore
+            custom_position_tuple = self.persistent_data.get("game_pos_custom_coord")
+            if (  # verify tuple legitimacy
+                isinstance(custom_position_tuple, tuple)
+                and len(custom_position_tuple) == 2
+                and all(isinstance(i, int) and i >= 0 for i in custom_position_tuple)
             ):
-                win32gui.SetWindowPos(self.get_hwnd(), 0, *window_pos, 0, 0, 0)
-        else:
-            move_hwnd_to_position(self.get_hwnd(), position)
+                position = custom_position_tuple
+
+        # move game
+        move_hwnd_to_position(self.game.window.get_hwnd(), position)
 
     def __set_hwnd(self, timeout_seconds=0):
         """Retrieve game hwnd"""
@@ -72,7 +96,7 @@ class GameWindow:
         # exception because we need the window handle
         try:
             # wait until game is running
-            wait_for_process(self.get_exe(), timeout_seconds)
+            wait_for_process_with_ram_threshold(self.get_exe(), timeout_seconds)
 
             # retrieve hwnd
             self.hwnd = get_hwnd_for_exe(self.get_exe())
@@ -87,7 +111,7 @@ class GameWindow:
 
     def run(self, dir_mode, write_config=True):
         """Start game
-        
+
         write_config is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
 
         self.game._validate_dir_mode(dir_mode)
@@ -102,7 +126,7 @@ class GameWindow:
         # run game
         if self.is_running():
             self.__set_hwnd()
-            self.__restore_saved_position()
+            self.restore_saved_position()
             return True
 
         # setup
@@ -123,7 +147,7 @@ class GameWindow:
         self.__set_hwnd(20)
 
         # set position
-        self.__restore_saved_position()
+        self.restore_saved_position()
 
         return True
 

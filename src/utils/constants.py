@@ -42,19 +42,19 @@ EDITOR_HUD_RELOAD_MODES = {
     "Fonts": "reload_fonts",
 }
 
-# List of preset game positions
-GAME_POSITIONS = [
-    "Custom (Save)",
-    "Center",
-    "Top Left",
-    "Top Right",
-    "Bottom Left",
-    "Bottom Right",
-    "Top",
-    "Bottom",
-    "Left",
-    "Right",
-]
+# Object of preset game positions
+GAME_POSITIONS = {
+    "Custom (Save)": (None),
+    "Center": (0.5, 0.5),
+    "Top Left": (0, 0),
+    "Top Right": (1, 0),
+    "Bottom Left": (0, 1),
+    "Bottom Right": (1, 1),
+    "Top": (0.5, 0),
+    "Bottom": (0.5, 1),
+    "Left": (0, 0.5),
+    "Right": (1, 0.5),
+}
 
 # Dictionary of map codes for each map
 MAP_CODES = {

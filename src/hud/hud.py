@@ -145,7 +145,7 @@ class Hud(metaclass=Singleton):
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""
 
-        if not self.game.is_running():
+        if not self.game.window.is_running():
             self.finish_editing(open_start_gui=True)
         else:
             # Schedule the function to be called again
