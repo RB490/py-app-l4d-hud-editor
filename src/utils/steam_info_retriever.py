@@ -1,3 +1,4 @@
+"Steam info retriever"
 import os
 import tkinter as tk
 import winreg
@@ -107,7 +108,7 @@ class SteamInfoRetriever(metaclass=Singleton):
             return steam_path
 
         self.__print_if_debug("Steam directory not found.")
-        raise NotADirectoryError("Steam directory not found")
+        raise NotADirectoryError("Steam directory not found. Check your installation!")
 
     def ask_for_directory(self):
         """
@@ -225,4 +226,4 @@ class SteamInfoRetriever(metaclass=Singleton):
         """
         self.__print_if_debug("Saving Steam root directory to persistent_data...")
         self.persistent_data["steam_root_dir"] = root_dir
-        self.__print_if_debug("Steam root directory saved:", root_dir)
+        self.__print_if_debug(f"Steam root directory saved: {root_dir}")
