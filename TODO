@@ -25,7 +25,10 @@ Features:
 			✔ Write commands class @done(23-08-16 05:35)
 			✔ Test commands class @done(23-08-16 05:35)
 			
-			☐ Implementation: Replace & delete the old game instance
+			✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
+			✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
+				- self.game.manager	
+				- self.game.run	
 		
 		☐ Test: saving game custom position. because i don't get how custom pos gets saved
 
@@ -81,7 +84,6 @@ Refactoring:
 	☐ Consider simplifying main GUI by integrating its functionality into menu class
 	☐ Explore restructuring options for more efficient code flow
 	☐ Evaluate the use of singleton patterns in GUI management
-	☐ Centralize video settings calls into a general function
 	☐ Break up the game commands execute method for better organization
 	☐ Consider alternatives for using subclasses and direct referencing
 	☐ Reevaluate the use of persistent_data in classes, possibly with a dedicated class or alternative approach

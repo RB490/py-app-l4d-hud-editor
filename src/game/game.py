@@ -1,315 +1,259 @@
-"""Module providing functions related to the game. such as running and installation the dev/user versions"""
+"Game class"
+# pylint: disable=wrong-import-position, ungrouped-imports, protected-access
 import os
 import shutil
-import subprocess
-import time
+from enum import Enum, auto
 
-import psutil
 import vdf  # type: ignore
-import win32gui
-import win32process
 
+from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
+from utils.shared_utils import Singleton, close_process_executable
+from utils.steam_info_retriever import SteamInfoRetriever
+
+
+class TitleRetrievalError(Exception):
+    "Custom exception for invalid TitleRetrievalError parameter"
+
+
+class InstallationError(Exception):
+    "Custom exception for installation errors"
+
+
+class DirModeError(Exception):
+    "Custom exception for invalid DirectoryMode parameter"
+
+
+class InstallationState(Enum):
+    """Enumeration representing installation states"""
+
+    UNKNOWN = auto()  # for example if the id file json was damaged
+    COMPLETED = auto()
+    # NOT_STARTED = auto()  # hud dev folder created
+    # PAUSED = auto()
+    # CANCELLED = auto()
+
+    CREATE_DEV_DIR = auto()
+    COPYING_FILES = auto()
+    VERIFYING_GAME = auto()
+    EXTRACTING_PAKS = auto()
+    INSTALLING_MODS = auto()
+    REBUILDING_AUDIO = auto()
+
+
+class DirectoryMode(Enum):
+    """Enumeration representing directory modes"""
+
+    USER = auto()
+    DEVELOPER = auto()
+
+
+ID_FILE_NAMES = {
+    DirectoryMode.USER: "_user_directory.DoNotDelete",
+    DirectoryMode.DEVELOPER: "_hud_development_directory.DoNotDelete",
+}
+
+
+class VideoSettingsModifier:
+    "Modify video.txt"
+
+    def __init__(self, config_dir):
+        self.config_dir = config_dir
+        self.video_settings_path = os.path.join(config_dir, "video.txt")
+
+    def load_video_settings(self):
+        "Load"
+        if os.path.exists(self.video_settings_path):
+            return vdf.load(open(self.video_settings_path, encoding="utf-8"))
+        return None
+
+    def save_video_settings(self, video_settings):
+        "Save"
+        with open(self.video_settings_path, "w", encoding="utf-8") as f_handle:
+            vdf.dump(video_settings, f_handle, pretty=True)
+
+    def modify_video_setting(self, setting_key, setting_value):
+        "Modify a specific key value"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            video_settings["VideoConfig"][setting_key] = setting_value
+            self.save_video_settings(video_settings)
+
+    def set_fullscreen(self, fullscreen_value):
+        "Set fullscreen"
+        self.modify_video_setting("setting.fullscreen", fullscreen_value)
+
+    def set_nowindowborder(self, nowindowborder_value):
+        "Set window border"
+        self.modify_video_setting("setting.nowindowborder", nowindowborder_value)
+
+    def get_nowindowborder(self):
+        "Get borderless (setting.nowindowborder)"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            return video_settings["VideoConfig"]["setting.nowindowborder"]
+        return None
+
+    def get_fullscreen(self):
+        "Get fullscreen (setting.fullscreen)"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            return video_settings["VideoConfig"]["setting.fullscreen"]
+        return None
+
+    def get_width(self):
+        "Get width (setting.defaultres)"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            return video_settings["VideoConfig"]["setting.defaultres"]
+        return None
+
+    def get_height(self):
+        "Get height (setting.defaultresheight)"
+        video_settings = self.load_video_settings()
+        if video_settings is not None:
+            return video_settings["VideoConfig"]["setting.defaultresheight"]
+        return None
+
+
+# importing after the above enums and exceptions becaus they are needed for the subclasses
 from game.commands import GameCommands
-from game.manager import GameManager
-from utils.constants import EDITOR_AUTOEXEC_PATH, GAME_POSITIONS
-from utils.functions import (
-    get_steam_info,
-    is_process_running,
-    is_valid_window,
-    load_data,
-    move_hwnd_to_position,
-)
-from utils.shared_utils import Singleton
-
-
-def wait_for_process_and_get_hwnd(executable_name, timeout_seconds=60):
-    # pylint: disable=c-extension-no-member
-    """
-    Waits for a process to start and returns its window handle (HWND).
-
-    :param executable_name: The name of the executable to wait for.
-    :param timeout_seconds: The maximum time to wait for the process to start, in seconds. If None, waits indefinitely.
-    :return: The window handle (HWND) of the process, or None if not found.
-    """
-
-    start_time = time.time()
-
-    while timeout_seconds is None or time.time() - start_time <= timeout_seconds:
-        # Check if the process with the given executable name is running
-        for proc in psutil.process_iter(attrs=["pid", "name"]):
-            if proc.info["name"] == executable_name:
-                pid = proc.info["pid"]
-                break
-        else:
-            if timeout_seconds is not None:
-                time.sleep(0.1)  # Wait and retry if the process is not found
-                continue
-            else:
-                print(f"Process '{executable_name}' not found")
-                return None
-
-        start_time_hwnd = time.time()
-        while timeout_seconds is None or time.time() - start_time_hwnd <= timeout_seconds:
-            hwnds = []
-
-            # Callback to find window handles associated with the process
-            def callback(hwnd, hwnds):
-                _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-                if found_pid == pid:
-                    hwnds.append(hwnd)
-                return True
-
-            # Enumerate all windows and find those associated with the process
-            win32gui.EnumWindows(callback, hwnds)
-            if hwnds:
-                print(f"Window handle found for process '{executable_name}': {hwnds[0]}")
-                return hwnds[0]
-
-            time.sleep(0.1)  # Wait and retry if window handle is not found
-
-        if timeout_seconds is not None:
-            print(f"No window handle found for process '{executable_name}'")
-            return None
-        else:
-            return None
-
-    print(f"Process '{executable_name}' not found within {timeout_seconds} seconds")
-    return None
+from game.dir import GameDir
+from game.installer import GameInstaller
+from game.window import GameWindow
 
 
 class Game(metaclass=Singleton):
-    """Singleton with functions related to the game. such as running and installation the dev/user versions"""
+    """Singleton that handles anything related to the game. such as running and installation the dev/user versions"""
 
-    # pylint: disable=unused-argument
     def __init__(self, persistent_data):
+        print(self.__class__.__name__)
         self.persistent_data = persistent_data
-        self.steam_info = get_steam_info(self.persistent_data)
-        self.manager = GameManager(self.persistent_data, self)
-        self.command = GameCommands(self.persistent_data, self)
+        self.window = GameWindow(self)
+        self.installer = GameInstaller(self)
+        self.command = GameCommands(self)
+        self.steam = SteamInfoRetriever(persistent_data)
+        self.dir = GameDir(self)
 
-        self.game_title = "Left 4 Dead 2"
-        self.game_exe = "left4dead2.exe"
-        self.game_appid = 550
-        self.game_hwnd = None
-
-        # set metadata
-        # self.active_exe = os.path.join(self.active_dir, self.game_exe)
-        # print(self.active_exe)
-        # self.run("user")
-        # input('press enter to force close game')
-        # self.close()
-        # self.run("dev")
-
-    def save_position(self):
-        # pylint: disable=c-extension-no-member
-        """Save window position"""
-        rect = win32gui.GetWindowRect(self.get_hwnd())
-        self.persistent_data["game_pos_custom_coord"] = (rect[0], rect[1])
-
-    def set_hwnd(self):
-        """Retrieve game hwnd"""
-        # wait until game is running
-        self.game_hwnd = wait_for_process_and_get_hwnd(self.get_exe())
-        if not self.game_hwnd:
-            raise LookupError("No window handle was found")
-        print(f"{self.get_exe()} hwnd '{self.game_hwnd}'")
+        self.title = "Left 4 Dead 2"
+        self.exe = "left4dead2.exe"
+        self.app_id = "550"
 
     def get_title(self):
         """Retrieve information"""
-        return self.game_title
-
-    def get_version(self):
-        # pylint: disable=pointless-statement
-        """Retrieve information"""
-
-        game_title = self.get_title().lower()
-        assert game_title in ["left 4 dead", "left 4 dead 2"], "Invalid game title"
-
-        if game_title == "left 4 dead":
-            return "L4D1"
-        elif game_title == "left 4 dead 2":
-            return "L4D2"
-        else:
-            None
+        return self.title
 
     def get_exe(self):
         """Retrieve information"""
-        return self.game_exe
+        return self.exe
 
-    def get_appid(self):
+    def get_app_id(self):
         """Retrieve information"""
-        return self.game_appid
+        return self.app_id
 
-    def get_dir(self, dir_mode):
-        """Retrieve information"""
-        return self.manager.get_dir(dir_mode)
+    def get_version(self):
+        """
+        Retrieve game version based on title.
 
-    def get_hwnd(self):
-        """Retrieve information"""
+        :return: Game version string ("L4D1" or "L4D2") or None for invalid titles.
+        :raises: TitleRetrievalError if the title cannot be retrieved.
+        """
+        try:
+            title = self.get_title().lower()
+        except Exception as err_info:
+            raise TitleRetrievalError("Error retrieving title") from err_info
 
-        if self.game_hwnd is None or not is_valid_window(self.game_hwnd):
-            self.set_hwnd()
-
-        return self.game_hwnd
-
-    def get_main_dir(self, dir_mode):
-        """Retrieve information"""
-        return self.manager.get_main_dir(dir_mode)
-
-    def get_dev_config_dir(self):
-        """Retrieve information"""
-        return os.path.join(self.get_main_dir("dev"), "cfg")
-
-    def move(self, position):
-        # pylint: disable=c-extension-no-member
-        """Move window to position"""
-        assert position in GAME_POSITIONS, "Invalid position"
-
-        if "custom" in position.lower():
-            window_pos = self.persistent_data.get("game_pos_custom_coord")  # using get method to avoid KeyError
-
-            if (
-                isinstance(window_pos, tuple)
-                and len(window_pos) == 2
-                and all(isinstance(i, int) and i >= 0 for i in window_pos)
-            ):
-                win32gui.SetWindowPos(self.get_hwnd(), 0, *window_pos, 0, 0, 0)
-        else:
-            move_hwnd_to_position(self.get_hwnd(), position)
-
-    def is_running(self):
-        """Checks if the game is running"""
-        return is_process_running(self.get_exe())
-
-    def activate_mode(self, dir_mode):
-        """Switch between user/dev modes"""
-        return self.manager.activate_mode(dir_mode)
+        valid_titles = {"left 4 dead": "L4D1", "left 4 dead 2": "L4D2"}
+        return valid_titles.get(title, None)
 
     def _write_config(self):
-        # don't alter user installation
-        if self.manager.get_active_mode() == "user":
-            print("Cancelled writing config for user folder")
-            return
-
-        # retrieve variables
-        addons_dir = os.path.join(self.get_main_dir("dev"), "Addons")
-        config_dir = os.path.join(self.get_main_dir("dev"), "cfg")
-
-        # disable mods by overwriting them with empty files
-        dirs = [
-            addons_dir,
-            os.path.join(addons_dir, "Workshop"),
-        ]
-        # don't recurse so sourcemod doesn't break + game doesn't check subfolders
-        #   for addons anyways besides addons/workshop
-        for loop_dir in dirs:
-            for root, dirs, files in os.walk(loop_dir):
-                for file in files:
-                    if file.endswith((".vpk", ".dll")):
-                        open(os.path.join(root, file), "w", encoding="utf-8").close()
+        # variables
+        config_dir = self.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
+        valverc_path = os.path.join(config_dir, "valve.rc")
+        autoexec_name = os.path.split(EDITOR_AUTOEXEC_PATH)[-1]
+        autoexec_path = os.path.join(config_dir, autoexec_name)
 
         # delete config
         open(os.path.join(config_dir, "config.cfg"), "w", encoding="utf-8").close()
         open(os.path.join(config_dir, "config_default.cfg"), "w", encoding="utf-8").close()
 
         # write config
-        autoexec_name = os.path.split(EDITOR_AUTOEXEC_PATH)[-1]
-        autoexec_path = os.path.join(config_dir, autoexec_name)
-
-        os.remove(os.path.join(config_dir, "valve.rc"))
-        with open(os.path.join(config_dir, "valve.rc"), "w", encoding="utf-8") as cfg_file:
+        with open(valverc_path, "w", encoding="utf-8") as cfg_file:
             cfg_file.write(f"exec {autoexec_name}")
 
         shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
 
         # append user settings to autoexec
-        with open(EDITOR_AUTOEXEC_PATH, "a", encoding="utf-8") as file:
-            file.write("\nmap {UNIVERSAL_GAME_MAP}")  # adds the desired text to the file on a new line
+        with open(autoexec_path, "a", encoding="utf-8") as file:
             if self.persistent_data["game_mute"]:
                 file.write("\nvolume 1")  # adds the desired text to the file on a new line
             else:
                 file.write("\nvolume 0")  # adds the desired text to the file on a new line
 
         # disable fullscreen in video settings
-        video_settings_path = os.path.join(config_dir, "video.txt")
-        if os.path.exists(video_settings_path):
-            video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
-            video_settings["VideoConfig"]["setting.fullscreen"] = 0
-            vdf.dump(video_settings, open(video_settings_path, "w", encoding="utf-8"), pretty=True)
+        video_modifier = VideoSettingsModifier(config_dir)
+        video_modifier.set_fullscreen(0)
+
+        print(autoexec_name)
+
+    def _disable_addons(self):
+        # variables
+        addons_dir = self.dir._get_addons_dir(DirectoryMode.DEVELOPER)
+
+        # disable mods by overwriting them with a dummy vpk (empty file caused ingame console errors)
+        dirs = [
+            addons_dir,
+            os.path.join(addons_dir, "Workshop"),
+        ]
+        # not recursing so sourcemod doesn't break + game doesn't check subfolders
+        # for addons anyways (besides addons/workshop)
+        for loop_dir in dirs:
+            for root, dirs, files in os.walk(loop_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    if file.endswith((".dll")):
+                        open(file_path, "w", encoding="utf-8").close()
+                    if file.endswith((".vpk")):
+                        shutil.copy(DUMMY_ADDON_VPK_PATH, file_path)
+                        print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
+
+    def _validate_dir_mode(self, dir_mode):
+        "Validate the dir_mode parameter"
+        if not isinstance(dir_mode, DirectoryMode):
+            raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
     def close(self):
-        """Close game"""
-        for proc in psutil.process_iter(["name"]):
-            if proc.info["name"] == self.get_exe():
-                proc.kill()
-                proc.wait()  # Wait for the process to fully terminate
-                break
-        # print('close(): game force closed')
-
-    def run(self, dir_mode, wait_on_close=False):
-        """Start game"""
-
-        # activate selected dir_mode
-        result = self.activate_mode(dir_mode)
-        if not result:
-            return False
-
-        # run game
-        if self.is_running():
-            self.set_hwnd()
-            self.move(self.persistent_data["game_pos"])
-            return
-
-        # write config
-        self._write_config()
-
-        # build game argument params
-        game_args = " -novid"  # skip intro videos
-        game_args += " -console"  # enable developer console
-
-        # run game
-        if wait_on_close:
-            # Run without waiting (opening through steam means code would not connect to left4dead2.exe)
-            exe_path = os.path.join(self.get_dir("dev"), self.game_exe)
-            subprocess.run('"' + exe_path + '"' + game_args, shell=True, check=False)
-        else:
-            # run the game through steam to prevent steam issues
-            steam_args = f" -applaunch {str(self.get_appid())}"
-            steam_exe = self.steam_info.get("steam_exe")
-            subprocess.Popen('"' + steam_exe + '"' + steam_args + game_args, shell=True)
-
-        # set hwnd
-        self.set_hwnd()
-
-        # set position
-        self.move(self.persistent_data["game_pos"])
+        "Close"
+        close_process_executable(self.get_exe())
 
 
-def debug_game_class():
-    """Debug the class"""
-    os.system("cls")  # clear terminal
+def debug_game_class(persistent_data):
+    "debug game class"
+    print("this is a test")
 
-    saved_data = load_data()
-    game_debug_instance = Game(saved_data)
-    result = game_debug_instance.get_title()
-    print(result)
+    gamez = Game(persistent_data)
 
-    result = game_debug_instance.manager.get_active_dir()
-    print(f"result: {result}")
-    input("end of class_game autoexecute")
+    ###########################
+    # Installer
+    ###########################
+    # result = gamez.installer._install()
+    result = gamez.window.run(DirectoryMode.DEVELOPER)
+    # result = gamez.command.execute("noclip")
+    result = gamez.command._get_reload_fonts_command()
+    # result = gamez.command.execute()
+    # result = gamez.command.execute()
+    # result = gamez.installer._uninstall()
+    # gamez.installer._install()
 
-    # game_instance = Game(PERSISTENT_DATA)
-    # game_manager_instance = GameManager(PERSISTENT_DATA, game_instance)
+    # result = gamez.installer._uninstall()
+    # result = gamez.installer.__install_mods()
+    # result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
+    # result = gamez._disable_addons()
+    # result = gamez._write_config()
 
-    # debug_hud_syncer()
-    # debug_hud_select_gui(PERSISTENT_DATA, game_manager_instance)
-    # game_manager_instance.run_update_or_repair()
-    # game_manager_instance.run_update_or_repair("repair")
+    print(f"install result = {result}")
 
-    # hud_edit.finish_editing(open_start_gui=False)
-    # game_instance.run("dev")
-    # game_instance.command.execute("map c12m2_traintunnel")
-    # game_instance.command.execute("give_all_items")
-    # game_instance.command.execute("echo this is a test 5!")
-    # game_instance.command.execute("hud_reloadscheme")
-    # game_instance.command.execute("")
+    ###########################
+    # Directory
+    ###########################
+    # g_i.dir.set(DirectoryMode.USER)
+    # g_i.dir.set(DirectoryMode.USER)

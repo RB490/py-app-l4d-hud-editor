@@ -4,9 +4,8 @@ import sys
 from tkinter import messagebox
 
 import pyperclip  # type: ignore
-import vdf  # type: ignore
 
-from game.game import Game
+from game.game import DirectoryMode, Game, VideoSettingsModifier  # type: ignore
 from gui.start import GuiHudStart
 from utils.constants import UNIVERSAL_GAME_MAP
 from utils.functions import (
@@ -47,20 +46,18 @@ class EditorMenuHandler:
         """Method to handle the selected game resolution in the menu."""
         print(f"Selected resolution: {string_resolution}")
 
-        config_dir = self.game.get_dev_config_dir()
+        config_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
 
         # save new resolution
         width, height = map(int, string_resolution.split("x"))
         self.persistent_data["game_res"] = (width, height)
 
         # retrieve window settings
-        video_settings_path = os.path.join(config_dir, "video.txt")
-        if os.path.exists(video_settings_path):
-            video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
+        video_settings_modifier = VideoSettingsModifier(config_dir)
+        video_settings = video_settings_modifier.load_video_settings()
 
-            print(video_settings)
-
-            has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
+        if video_settings:
+            has_border = video_settings_modifier.get_nowindowborder()
             is_fullscreen = 1
         else:
             # use default video settings
@@ -113,7 +110,7 @@ class EditorMenuHandler:
         """Method to handle the selected secure/insecure option in the menu."""
         self.hud.stop_game_exit_check()
         self.game.close()
-        self.game.run("dev")
+        self.game.window.run(DirectoryMode.DEVELOPER)
         self.hud.start_game_exit_check()
 
     def editor_menu_game_toggle_mute(self):

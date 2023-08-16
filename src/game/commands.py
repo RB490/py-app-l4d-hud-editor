@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 """This module is a sub class of the game class.
 functions related to the game folder such as switching between user/dev modes"""
 import ctypes
@@ -5,13 +6,13 @@ import os
 import time
 
 import pyautogui
-import vdf  # type: ignore
 import win32api
 import win32con
 import win32gui
 
-from utils.constants import KEY_MAP, KEY_SCANCODES
-from utils.functions import click_at, focus_hwnd, get_steam_info
+from game.game import DirectoryMode, VideoSettingsModifier
+from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
+from utils.functions import click_at, focus_hwnd
 
 
 class GameCommands:
@@ -21,100 +22,13 @@ class GameCommands:
     - Sending direct console commands
     - Taking 'custom' input such as 'reloadFonts' or 'giveAllItems' and executing the correlating cmds"""
 
-    def __init__(self, persistent_data, game_class):
-        self.persistent_data = persistent_data
-        self.steam_info = get_steam_info(self.persistent_data)
+    def __init__(self, game_class):
         self.game = game_class
+        self.persistent_data = self.game.persistent_data
+
         self.show_ui_panel = None
         self.previous_ui_panel = None
         self.is_inspect_hud_enabled = False
-
-    def set_inspect_hud(self, status: bool) -> None:
-        """Set inspect hud status for usage in the execute method"""
-        assert isinstance(status, bool), "status must be a Boolean value"
-        if status:
-            print("HUD inspection enabled.")
-            self.is_inspect_hud_enabled = True
-        else:
-            print("HUD inspection disabled.")
-            self.is_inspect_hud_enabled = False
-        self.execute("vgui_drawtree 1")
-
-    def set_ui_panel(self, panel):
-        """Set & show ui panel for usage in the execute method"""
-
-        # set panel to be shown
-        self.show_ui_panel = panel
-
-        print(f"set_ui_panel: {panel}")
-
-    def send_keys_in_foreground(self, keys):
-        # pylint: disable=c-extension-no-member
-        """
-        Send specified keys to game
-
-        Notes:
-            This works in menus, but not ingame. For example:
-            - Alt+F4 is detected great for closing vgui_drawtree
-            - Chat detects these keypresses. Also while in the 'escape' ingame main menu
-            - Normal commands like executing something bound to 'o' don't get detected
-        """
-        # Get window handle
-        game_hwnd = self.game.get_hwnd()
-
-        # Check if the window handle is valid
-        if not win32gui.IsWindow(game_hwnd):
-            return
-
-        # Save the handle of the currently focused window
-        focused_hwnd = win32gui.GetForegroundWindow()
-
-        focus_hwnd(game_hwnd)
-        for key in keys:
-            win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
-            # print(f"Holding down key: {KEY_MAP[key.lower()]}")
-        for key in reversed(keys):
-            win32api.keybd_event(KEY_MAP[key.lower()], 0, win32con.KEYEVENTF_KEYUP, 0)
-            # print(f"Releasing key: {KEY_MAP[key.lower()]}")
-
-        # Restore focus to the previously focused window
-        if game_hwnd is not focused_hwnd:
-            focus_hwnd(focused_hwnd)
-
-    def send_keys_in_background(self, keys):
-        # pylint: disable=c-extension-no-member
-        """
-        Sends one or more key presses to the game window using the Windows API.
-
-        Notes:
-            This works ingame, but not in menus. For example:
-            - Sending alt+f4 to close vgui_drawtree 1 doesn't work
-            - Sending 'space' to jump does work
-
-        Sources:
-        - Key scancodes: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-        - Keyup scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
-        - Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-        """
-
-        # Get window handle
-        hwnd = self.game.get_hwnd()
-
-        # Check if the window handle is valid
-        if not win32gui.IsWindow(hwnd):
-            return
-
-        wm_keydown = 0x100
-        wm_keyup = 0x101
-
-        for key in keys:
-            scancode = KEY_SCANCODES[key.lower()]
-            keydown_param = scancode << 16 | 1
-            ctypes.windll.user32.SendMessageW(hwnd, wm_keydown, 0, keydown_param)
-        for key in reversed(keys):
-            scancode = KEY_SCANCODES[key.lower()]
-            keyup_param = scancode << 16 | 1 | 0x20000000
-            ctypes.windll.user32.SendMessageW(hwnd, wm_keyup, 0, keyup_param)
 
     def execute(self, input_command):
         """Execute game commands"""
@@ -127,7 +41,9 @@ class GameCommands:
             output_command += f"; wait; showpanel {self.show_ui_panel}"
 
         # write command to file
-        command_file = os.path.join(self.game.get_main_dir("dev"), "cfg", "hud_editor_command.cfg")
+        command_file = os.path.join(
+            self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "cfg", "hud_editor_command.cfg"
+        )
         with open(command_file, "w", encoding="utf-8") as file_handle:
             file_handle.write(output_command)
 
@@ -141,7 +57,7 @@ class GameCommands:
             output_command += "; vgui_drawtree 1; wait; "
 
         # execute command
-        self.send_keys_in_background(["f11"])
+        self.send_keys_in_background([HOTKEY_EXECUTE_AUTOEXEC])
         print(f"Executed command: '{output_command}'")
 
         # perform mouse clicks
@@ -205,21 +121,18 @@ class GameCommands:
             mat_setvideomode <width> <height> <fullscreen bool, true = windowed> <borderless bool, true = borderless>
             Note: this command doesn't have any effect when the current video settings are identical
         """
-        video_settings_path = os.path.join(os.path.join(self.game.get_main_dir("dev"), "cfg"), "video.txt")
+
+        video_settings_modifier = VideoSettingsModifier(
+            os.path.join(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "cfg")
+        )
+        video_settings = video_settings_modifier.load_video_settings()
 
         # retrieve current video settings
-        if os.path.exists(video_settings_path):
-            video_settings = vdf.load(open(video_settings_path, encoding="utf-8"))
-
-            has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
-            is_fullscreen = 1
-
-            video_settings["VideoConfig"]["setting.fullscreen"] = 0
-            vdf.dump(video_settings, open(video_settings_path, "w", encoding="utf-8"), pretty=True)
-
-            width = video_settings["VideoConfig"]["setting.defaultres"]
-            height = video_settings["VideoConfig"]["setting.defaultresheight"]
-            has_border = video_settings["VideoConfig"]["setting.nowindowborder"]
+        if video_settings is not None:
+            video_settings_modifier.set_fullscreen(0)
+            width = video_settings_modifier.get_width()
+            height = video_settings_modifier.get_height()
+            has_border = video_settings_modifier.get_nowindowborder()
             is_fullscreen = 1
         else:
             # use default video settings
@@ -235,3 +148,89 @@ class GameCommands:
         output += f";mat_setvideomode {width} {height} {int(is_fullscreen)} {int(has_border)}"
 
         return output
+
+    def set_inspect_hud(self, status: bool) -> None:
+        """Set inspect hud status for usage in the execute method"""
+        if status:
+            print("HUD inspection enabled.")
+            self.is_inspect_hud_enabled = True
+        else:
+            print("HUD inspection disabled.")
+            self.is_inspect_hud_enabled = False
+        self.execute("vgui_drawtree 1")
+
+    def set_ui_panel(self, panel):
+        """Set & show ui panel for usage in the execute method"""
+
+        # set panel to be shown
+        self.show_ui_panel = panel
+
+        print(f"set_ui_panel: {panel}")
+
+    def send_keys_in_foreground(self, keys):
+        # pylint: disable=c-extension-no-member
+        """
+        Send specified keys to game
+
+        Notes:
+            This works in menus, but not ingame. For example:
+            - Alt+F4 is detected great for closing vgui_drawtree
+            - Chat detects these keypresses. Also while in the 'escape' ingame main menu
+            - Normal commands like executing something bound to 'o' don't get detected
+        """
+        # Get window handle
+        game_hwnd = self.game.window.get_hwnd()
+
+        # Check if the window handle is valid
+        if not win32gui.IsWindow(game_hwnd):
+            return
+
+        # Save the handle of the currently focused window
+        focused_hwnd = win32gui.GetForegroundWindow()
+
+        focus_hwnd(game_hwnd)
+        for key in keys:
+            win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
+            # print(f"Holding down key: {KEY_MAP[key.lower()]}")
+        for key in reversed(keys):
+            win32api.keybd_event(KEY_MAP[key.lower()], 0, win32con.KEYEVENTF_KEYUP, 0)
+            # print(f"Releasing key: {KEY_MAP[key.lower()]}")
+
+        # Restore focus to the previously focused window
+        if game_hwnd is not focused_hwnd:
+            focus_hwnd(focused_hwnd)
+
+    def send_keys_in_background(self, keys):
+        # pylint: disable=c-extension-no-member
+        """
+        Sends one or more key presses to the game window using the Windows API.
+
+        Notes:
+            This works ingame, but not in menus. For example:
+            - Sending alt+f4 to close vgui_drawtree 1 doesn't work
+            - Sending 'space' to jump does work
+
+        Sources:
+        - Key scancodes: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+        - Keyup scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
+        - Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
+        """
+
+        # Get window handle
+        hwnd = self.game.window.get_hwnd()
+
+        # Check if the window handle is valid
+        if not win32gui.IsWindow(hwnd):
+            return
+
+        wm_keydown = 0x100
+        wm_keyup = 0x101
+
+        for key in keys:
+            scancode = KEY_SCANCODES[key.lower()]
+            keydown_param = scancode << 16 | 1
+            ctypes.windll.user32.SendMessageW(hwnd, wm_keydown, 0, keydown_param)
+        for key in reversed(keys):
+            scancode = KEY_SCANCODES[key.lower()]
+            keyup_param = scancode << 16 | 1 | 0x20000000
+            ctypes.windll.user32.SendMessageW(hwnd, wm_keyup, 0, keyup_param)

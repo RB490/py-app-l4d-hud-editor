@@ -9,26 +9,24 @@ import filecmp
 import os
 import shutil
 
-from game_v2.game_v2 import DirectoryMode, InstallationState
+from game.game import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
-from game_v2.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
+from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
 from utils.functions import copy_directory, wait_for_process, wait_process_close
 from utils.vpk import VPKClass
 
 
-class GameV2Installer:
+class GameInstaller:
     "Game class installation methods"
 
     def __init__(self, game_class):
         self.game = game_class
         self.persistent_data = self.game.persistent_data
         print(self.__class__.__name__)
-        # TODO Installer: Finish all functionality
-        # TODO Installer: Restore checks & prompts when finished
 
-    def _uninstall(self):
+    def uninstall(self):
         "Uninstall"
         print("Uninstalling..")
 
@@ -51,7 +49,8 @@ class GameV2Installer:
         # finished
         print("Uninstalled!")
 
-    def _update(self):
+    def update(self):
+        "Update"
         print("Updating...")
 
         current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
@@ -87,7 +86,8 @@ class GameV2Installer:
             # since installation state is saved, don't do anything here
             return False
 
-    def _repair(self):
+    def repair(self):
+        "Repair"
         print("Repairing...")
 
         current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
@@ -332,7 +332,7 @@ class GameV2Installer:
         mods_dev_map_dir = os.path.join(MODS_DIR, "Dev Map", self.game.get_title(), "export")
         mods_addons_dir = os.path.join(MODS_DIR, "Addons", "Export")
         mods_sourcemod_dir = os.path.join(MODS_DIR, "SourceMod", "Export")
-        main_dir = self.game.dir._get_main_dir(DirectoryMode.DEVELOPER)
+        main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
 
         # exceptions - we absolutely need these
         if not os.path.exists(mods_dev_map_dir):
@@ -353,7 +353,7 @@ class GameV2Installer:
         print("Rebuilding audio")
 
         # variables
-        cfg_dir = self.game.dir._get_cfg_dir(DirectoryMode.DEVELOPER)
+        cfg_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
         valverc_path = os.path.join(cfg_dir, "valve.rc")
 
         # write .rc file

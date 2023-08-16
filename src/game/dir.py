@@ -4,13 +4,13 @@ import json
 import os
 from tkinter import filedialog
 
-from game_v2.game_v2 import ID_FILE_NAMES, DirectoryMode, InstallationState
+from game.game import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
 from utils.functions import generate_random_string, rename_with_timeout
 from utils.shared_utils import show_message
 
 
-class GameV2Dir:
+class GameDir:
     "Game class directory methods"
 
     def __init__(self, game_class):
@@ -152,7 +152,7 @@ class GameV2Dir:
             print("No active mode found")
             return None
 
-    def _get_main_dir(self, dir_mode):
+    def get_main_dir(self, dir_mode):
         "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
 
         root_dir = self.get(dir_mode)
@@ -166,7 +166,7 @@ class GameV2Dir:
     def __get_main_sub_dir(self, dir_mode, subdirectory):
         "Get the full path to the specified subdirectory (cfg or addons)"
 
-        main_dir = self._get_main_dir(dir_mode)
+        main_dir = self.get_main_dir(dir_mode)
         dir_path = os.path.join(main_dir, subdirectory)
 
         if not os.path.exists(dir_path):
@@ -175,7 +175,7 @@ class GameV2Dir:
         print(f"Get {dir_mode.name} {subdirectory} dir: {dir_path}")
         return dir_path
 
-    def _get_cfg_dir(self, dir_mode):
+    def get_cfg_dir(self, dir_mode):
         "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
         return self.__get_main_sub_dir(dir_mode, "cfg")
 

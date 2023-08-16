@@ -6,8 +6,7 @@ from tkinter.filedialog import asksaveasfilename
 
 import keyboard
 
-from game.game import Game
-from game_v2.game_v2 import DirectoryMode
+from game.game import DirectoryMode, Game
 
 # pylint: disable=unused-import
 from gui.browser import GuiHudBrowser
@@ -187,7 +186,7 @@ class Hud(metaclass=Singleton):
         self.stop_game_exit_check()
 
         # enable dev mode
-        result = self.game.activate_mode("dev")
+        result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if not result:
             print("Could not activate developer mode")
             start_instance = GuiHudStart(self.persistent_data)
@@ -196,13 +195,17 @@ class Hud(metaclass=Singleton):
 
         # sync the hud to the game folder
         if sync_hud:
-            self.syncer.sync(self.hud_dir, self.game.get_dir("dev"), os.path.basename(self.game.get_main_dir("dev")))
+            self.syncer.sync(
+                self.hud_dir,
+                self.game.dir.get(DirectoryMode.DEVELOPER),
+                os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
+            )
 
         # hotkeys
         keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
 
         # run the game
-        self.game.run("dev")
+        self.game.window.run(DirectoryMode.DEVELOPER)
 
         # refresh hud incase game has not restarted
         self.game.command.execute("reload_all")
@@ -223,8 +226,8 @@ class Hud(metaclass=Singleton):
         """Sync hud"""
 
         hud_dir = self.hud_dir
-        dev_game_dir = self.game.get_dir("dev")
-        main_dev_dir_basename = os.path.basename(self.game.get_main_dir("dev"))
+        dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
 
         print("hud_dir:", hud_dir)
         print("dev_game_dir:", dev_game_dir)
@@ -268,7 +271,7 @@ class Hud(metaclass=Singleton):
         self.hud_dir = None
 
         # enable user mode
-        self.game.activate_mode("user")
+        self.game.dir.set(DirectoryMode.DEVELOPER)
 
         # callback to the gui
         if open_start_gui:

@@ -7,7 +7,7 @@ import webbrowser
 from tkinter import Menu, PhotoImage
 
 from editor_menu.handler import EditorMenuHandler
-from game.game import Game
+from game.game import DirectoryMode, Game
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
@@ -733,7 +733,10 @@ class EditorMenuClass:
         self.file_menu.add_command(label="Open", state="disabled", columnbreak=True)
         self.file_menu.add_separator()
         self.file_menu.add_command(
-            label="Game", command=self.create_lambda_command(self.handler.editor_open_folder, self.game.get_dir("dev"))
+            label="Game",
+            command=self.create_lambda_command(
+                self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)
+            ),
         )
         self.file_menu.add_command(
             label="Script", command=self.create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT)

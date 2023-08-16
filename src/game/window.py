@@ -15,7 +15,7 @@ from utils.functions import (
 )
 
 
-class GameV2Window:
+class GameWindow:
     "Game class window methods"
 
     def __init__(self, game_class):

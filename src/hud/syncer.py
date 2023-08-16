@@ -3,7 +3,7 @@ import hashlib
 import os
 import shutil
 
-from game.game import Game
+from game.game import DirectoryMode, Game
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import load_data
 
@@ -242,6 +242,7 @@ class HudSyncer:
 
 
 def debug_hud_syncer():
+    # pylint: disable=line-too-long
     """Debugs the hud syncer class"""
     os.system("cls")  # clear terminal
 
@@ -260,13 +261,17 @@ def debug_hud_syncer():
     shutil.copytree(target_dir_template, target_dir_workspace)
 
     hud_syncer = HudSyncer()
-    hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    hud_syncer.sync(
+        source_dir_workspace,
+        target_dir_workspace,
+        os.path.basename(game_instance.dir.get_main_dir(DirectoryMode.DEVELOPER)),
+    )
     # input("enter to sync a second time")
-    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.dir.get_main_dir(DirectoryMode.DEVELOPER)))
     # input("enter to sync a third time")
-    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.dir.get_main_dir(DirectoryMode.DEVELOPER)))
     # input("enter to sync a fourth time")
-    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.get_main_dir("dev")))
+    # hud_syncer.sync(source_dir_workspace, target_dir_workspace, os.path.basename(game_instance.dirlget_main_dir(DirectoryMode.DEVELOPER)))
 
     input("enter to unsync")
     hud_syncer.un_sync()
