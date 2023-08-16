@@ -8,7 +8,7 @@ from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 
 from game.game import Game
-from game.game_constants import DirectoryMode
+from game.constants import DirectoryMode
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,

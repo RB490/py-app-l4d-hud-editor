@@ -8,7 +8,7 @@ from tkinter import Menu, PhotoImage
 
 from editor_menu.handler import EditorMenuHandler
 from game.game import Game
-from game.game_constants import DirectoryMode
+from game.constants import DirectoryMode
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,

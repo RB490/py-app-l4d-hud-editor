@@ -8,7 +8,7 @@ Notes:
 import filecmp
 import os
 import shutil
-from game.game_constants import DirectoryMode, InstallationState
+from game.constants import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game

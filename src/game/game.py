@@ -3,7 +3,7 @@
 import os
 import shutil
 
-from game.game_constants import DirectoryMode, DirModeError, TitleRetrievalError
+from game.constants import DirectoryMode, DirModeError, TitleRetrievalError
 from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.shared_utils import Singleton, close_process_executable

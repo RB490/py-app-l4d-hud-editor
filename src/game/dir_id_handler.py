@@ -3,7 +3,7 @@ import json
 import os
 from tkinter import filedialog
 
-from game.game_constants import ID_FILE_NAMES, DirectoryMode, InstallationState
+from game.constants import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
 from utils.shared_utils import show_message
 

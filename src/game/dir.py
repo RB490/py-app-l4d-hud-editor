@@ -5,7 +5,7 @@ import os
 from tkinter import filedialog
 
 from game.dir_id_handler import GameIDHandler
-from game.game_constants import ID_FILE_NAMES, DirectoryMode, InstallationState
+from game.constants import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
 from utils.functions import generate_random_string, rename_with_timeout
 from utils.shared_utils import show_message
