@@ -7,7 +7,8 @@ import webbrowser
 from tkinter import Menu, PhotoImage
 
 from editor_menu.handler import EditorMenuHandler
-from game.game import DirectoryMode, Game
+from game.game import Game
+from game.game_constants import DirectoryMode
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
@@ -682,7 +683,7 @@ class EditorMenuClass:
         Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
         """
         save_data(self.persistent_data)
-        
+
         self.menu_bar = Menu(self.root, tearoff=False)
 
         self.create_reload_mode_menu(self.menu_bar)

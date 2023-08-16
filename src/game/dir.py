@@ -4,7 +4,8 @@ import json
 import os
 from tkinter import filedialog
 
-from game.game import ID_FILE_NAMES, DirectoryMode, InstallationState
+from game.dir_id_handler import GameIDHandler
+from game.game_constants import ID_FILE_NAMES, DirectoryMode, InstallationState
 from utils.constants import SCRIPT_NAME
 from utils.functions import generate_random_string, rename_with_timeout
 from utils.shared_utils import show_message
@@ -16,6 +17,8 @@ class GameDir:
     def __init__(self, game_class):
         self.game = game_class
         self.persistent_data = self.game.persistent_data
+        # pylint: disable=invalid-name
+        self.id = GameIDHandler(self)
 
         print(self.__class__.__name__)
 
@@ -116,7 +119,7 @@ class GameDir:
 
         self.__write_id_content(dir_mode, self.get(dir_mode), installation_state)
 
-        print(f"result={id_path}")
+        print(f"Wrote content to: '{id_path}'")
 
     def get(self, dir_mode):
         "Get directory"
@@ -163,6 +166,27 @@ class GameDir:
         print(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
+    def get_main_dir_backup(self, dir_mode):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_'"
+        main_dir = self.get_main_dir(dir_mode)
+        main_dir_name = os.path.basename(os.path.dirname(main_dir))
+        main_dir_backup_name = f"_backup_{main_dir_name}_"
+        main_dir_backup = os.path.join(main_dir, main_dir_backup_name)
+        print(f"Main directory backup: '{main_dir_backup}'")
+        return main_dir_backup
+
+    def get_main_dir_backup_resource(self, dir_mode):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\resource'"
+        resource_backup_dir = os.path.join(self.get_main_dir_backup(dir_mode), "resource")
+        print(f"Resource backup directory: '{resource_backup_dir}'")
+        return resource_backup_dir
+
+    def get_main_dir_backup_materials(self, dir_mode):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\materials'"
+        materials_backup_dir = os.path.join(self.get_main_dir_backup(dir_mode), "materials")
+        print(f"Materials backup directory: '{materials_backup_dir}'")
+        return materials_backup_dir
+
     def __get_main_sub_dir(self, dir_mode, subdirectory):
         "Get the full path to the specified subdirectory (cfg or addons)"
 
@@ -176,11 +200,11 @@ class GameDir:
         return dir_path
 
     def get_cfg_dir(self, dir_mode):
-        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        "Get the full path to the config dir eg. 'Left 4 Dead 2\\cfg'"
         return self.__get_main_sub_dir(dir_mode, "cfg")
 
     def _get_addons_dir(self, dir_mode):
-        "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
+        "Get the full path to the addons dir eg. 'Left 4 Dead 2\\addons'"
         return self.__get_main_sub_dir(dir_mode, "addons")
 
     def _get_id_filename(self, dir_mode):

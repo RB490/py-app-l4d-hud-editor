@@ -1,11 +1,28 @@
 Features:
-		
-		✔ Fixed: saving game custom position @done(23-08-16 08:12)
-		
-		☐ Save settings on exit?
-
 	Sync:
+		☐ I think i need an ID file class that will handle everything there is to do with it
+			- Write different types of content such as InstallationState & Sync state
+		
+		☐ Note: set_id_location isn't used anywhere in the code yet! It should be asked during install()
+
+		☐ Clean up the game module some? Maybe submodule some stuff. Also submodule videosettingsmodifier and maybe rename it
+		
+		☐ move ID_file_names inside the id handler class
+
+		☐ I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to
+
 		☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures
+			- Bad unsync detection: Keep track of sync status in the ID file
+			- Fixing unsync's
+				- Simple & faster solution:
+					- every file that i sync to the game folder, i also sync to a designated temporary sync folder
+					- keep track in the ID file which folder this is probably? as i would create a temp dir and save it there
+					- 1. first loop all the files in the unsync folder 2. loop the unsync dirs and only delete if empty
+						- ^ but how would i know if a file is custom
+				- Simple & great solution (could be a little slow) // actually, no, just materials & resource =1,5gb :
+					- During installation process create a backup of the main directory
+					- If the script detects that it failed to unsync somehow - delete the entire main dir and restore from backup
+						- Detection could work in many ways. Probably simply another ID file. or even the same ID file
 		☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing
 		os.move error could happen if for example a file in the game dir is locked because in use
 		☐ Sync: Review and enhance target directory validation in sync()

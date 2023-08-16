@@ -8,13 +8,16 @@ Notes:
 import filecmp
 import os
 import shutil
-
-from game.game import DirectoryMode, InstallationState
+from game.game_constants import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import copy_directory, wait_for_process_with_ram_threshold, wait_process_close
+from utils.functions import (
+    copy_directory,
+    wait_for_process_with_ram_threshold,
+    wait_process_close,
+)
 from utils.vpk import VPKClass
 
 
@@ -171,6 +174,7 @@ class GameInstaller:
             InstallationState.COPYING_FILES,
             InstallationState.VERIFYING_GAME,
             InstallationState.EXTRACTING_PAKS,
+            InstallationState.MAIN_DIR_BACKUP,
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
@@ -206,6 +210,8 @@ class GameInstaller:
         elif state == InstallationState.EXTRACTING_PAKS:
             self.__extract_paks()
             self.__disable_paks()
+        elif state == InstallationState.MAIN_DIR_BACKUP:
+            self._main_dir_backup()
         elif state == InstallationState.INSTALLING_MODS:
             self.__install_mods()
         elif state == InstallationState.REBUILDING_AUDIO:
@@ -228,8 +234,6 @@ class GameInstaller:
         return
 
     def __copy_game_files(self):
-        print("Copying game files into developer directory")
-
         copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
@@ -324,6 +328,35 @@ class GameInstaller:
             os.rename(source_filepath, target_filepath)
 
         self.__find_pak_files(dev_dir, disable_callback)
+
+    def _main_dir_backup(self):
+        print("Copying main directory to create a backup for the sync class")
+
+        resource_dir = os.path.join(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "resource")
+        resource_backup_dir = self.game.dir.get_main_dir_backup_resource(DirectoryMode.DEVELOPER)
+        materials_dir = os.path.join(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "materials")
+        materials_backup_dir = self.game.dir.get_main_dir_backup_materials(DirectoryMode.DEVELOPER)
+        backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
+
+        # create backup dir from scratch
+        if os.path.isdir(backup_dir):
+            print("Removing previous backup directory to keep it 100% clean")
+            shutil.rmtree(backup_dir)
+        os.makedirs(backup_dir)
+
+        print(resource_dir)
+        print(resource_backup_dir)
+        print(materials_dir)
+        print(materials_backup_dir)
+
+        copy_directory(
+            resource_dir,
+            resource_backup_dir,
+        )
+        copy_directory(
+            materials_dir,
+            materials_backup_dir,
+        )
 
     def __install_mods(self):
         print("Installing mods")

@@ -2,117 +2,12 @@
 # pylint: disable=wrong-import-position, ungrouped-imports, protected-access
 import os
 import shutil
-from enum import Enum, auto
 
-import vdf  # type: ignore
-
+from game.game_constants import DirectoryMode, DirModeError, TitleRetrievalError
+from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
-
-
-class TitleRetrievalError(Exception):
-    "Custom exception for invalid TitleRetrievalError parameter"
-
-
-class InstallationError(Exception):
-    "Custom exception for installation errors"
-
-
-class DirModeError(Exception):
-    "Custom exception for invalid DirectoryMode parameter"
-
-
-class InstallationState(Enum):
-    """Enumeration representing installation states"""
-
-    UNKNOWN = auto()  # for example if the id file json was damaged
-    COMPLETED = auto()
-    # NOT_STARTED = auto()  # hud dev folder created
-    # PAUSED = auto()
-    # CANCELLED = auto()
-
-    CREATE_DEV_DIR = auto()
-    COPYING_FILES = auto()
-    VERIFYING_GAME = auto()
-    EXTRACTING_PAKS = auto()
-    INSTALLING_MODS = auto()
-    REBUILDING_AUDIO = auto()
-
-
-class DirectoryMode(Enum):
-    """Enumeration representing directory modes"""
-
-    USER = auto()
-    DEVELOPER = auto()
-
-
-ID_FILE_NAMES = {
-    DirectoryMode.USER: "_user_directory.DoNotDelete",
-    DirectoryMode.DEVELOPER: "_hud_development_directory.DoNotDelete",
-}
-
-
-class VideoSettingsModifier:
-    "Modify video.txt"
-
-    def __init__(self, config_dir):
-        self.config_dir = config_dir
-        self.video_settings_path = os.path.join(config_dir, "video.txt")
-
-    def load_video_settings(self):
-        "Load"
-        if os.path.exists(self.video_settings_path):
-            return vdf.load(open(self.video_settings_path, encoding="utf-8"))
-        return None
-
-    def save_video_settings(self, video_settings):
-        "Save"
-        with open(self.video_settings_path, "w", encoding="utf-8") as f_handle:
-            vdf.dump(video_settings, f_handle, pretty=True)
-
-    def modify_video_setting(self, setting_key, setting_value):
-        "Modify a specific key value"
-        video_settings = self.load_video_settings()
-        if video_settings is not None:
-            video_settings["VideoConfig"][setting_key] = setting_value
-            self.save_video_settings(video_settings)
-
-    def set_fullscreen(self, fullscreen_value):
-        "Set fullscreen"
-        self.modify_video_setting("setting.fullscreen", fullscreen_value)
-
-    def set_nowindowborder(self, nowindowborder_value):
-        "Set window border"
-        self.modify_video_setting("setting.nowindowborder", nowindowborder_value)
-
-    def get_nowindowborder(self):
-        "Get borderless (setting.nowindowborder)"
-        video_settings = self.load_video_settings()
-        if video_settings is not None:
-            return video_settings["VideoConfig"]["setting.nowindowborder"]
-        return None
-
-    def get_fullscreen(self):
-        "Get fullscreen (setting.fullscreen)"
-        video_settings = self.load_video_settings()
-        if video_settings is not None:
-            return video_settings["VideoConfig"]["setting.fullscreen"]
-        return None
-
-    def get_width(self):
-        "Get width (setting.defaultres)"
-        video_settings = self.load_video_settings()
-        if video_settings is not None:
-            return video_settings["VideoConfig"]["setting.defaultres"]
-        return None
-
-    def get_height(self):
-        "Get height (setting.defaultresheight)"
-        video_settings = self.load_video_settings()
-        if video_settings is not None:
-            return video_settings["VideoConfig"]["setting.defaultresheight"]
-        return None
 
 
 # importing after the above enums and exceptions becaus they are needed for the subclasses
@@ -235,7 +130,9 @@ def debug_game_class(persistent_data):
     # Installer
     ###########################
     # result = gamez.installer._install()
-    result = gamez.window.run(DirectoryMode.DEVELOPER)
+    result = gamez.installer._main_dir_backup()
+    print("hi there!")
+    # result = gamez.window.run(DirectoryMode.DEVELOPER)
     # result = gamez.command.execute("noclip")
     # result = gamez.command._get_reload_fonts_command()
     # result = gamez.command.execute()
