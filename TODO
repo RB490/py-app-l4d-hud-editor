@@ -1,8 +1,7 @@
 Features:
 		
 		✔ Fixed: saving game custom position @done(23-08-16 08:12)
-		☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes
-		☐ Bug: Sometimes hwnd doesn't get retrieved when the game launches. Add a loop to check it for a few seconds longer
+		
 		☐ Save settings on exit?
 
 	Sync:
@@ -70,37 +69,73 @@ Additional Ideas and Considerations:
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 	☐ Multi-game support: Explore multi-game support feasibility
 	☐ Command line: Evaluate potential of using command line interface instead of GUI
+	☐ Pull some workshop map off of steam to use for L4D2. And possibly a map for L4D1
 
-	Notes
-	- https://github.com/RB490/py-app-l4d-hud-editor/blob/580ad38869ce6babdd931836555ee3187984c99c/todo_legacy.md
-	
+	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible?
+		- Seemingly impossible although apparently it is possible: Run a process detached from python
+		- Note: Running the game before starting the editor works fine.
+			- so could use a script to launch it and then the editor
+		- I was able to get it to work with notepad.exe using subprocess start /B notepad.exe,
+		- however that didn't work for the game or steam
+		- this is legitimately around 2 hours of trail and error:
+		# Use subprocess.Popen with DETACHED_PROCESS flag
+        # result = subprocess.Popen(steam_command, shell=True)
+        # result = subprocess.Popen([steam_command], shell=True)
+        # result = subprocess.run(steam_command, shell=True, check=True)
+        # result = subprocess.run([steam_command], shell=True, check=True)
+        # result = subprocess.Popen(steam_command, shell=False, creationflags=subprocess.DETACHED_PROCESS)
+        # result = subprocess.Popen([steam_command], shell=False, creationflags=subprocess.DETACHED_PROCESS)
+        # result = subprocess.Popen(["start", "/B", steam_command], shell=True)
+        # result = subprocess.Popen(["cmd", "/c", steam_command])
+        # os.system(steam_command)
 
-Todos shortcuts:
-	You can write plain text notes/descriptions wherever you want
-	New:
-		✔ Press Cmd/Ctrl+Enter to add a new todo @done(23-08-12 00:05)
-	Done:
-		✔ Press Alt+D to mark a todo as done @done(23-08-12 00:12)
-		✔ Press it again to undo the action
-	Cancelled:
-		✘ Press Alt+C to mark a todo as cancelled
-		☐ Press it again to undo the action
-	Tagging:
-		☐ You can add tags using the @ symbol, like this @tag
-		☐ There are some special, customizable tags: @critical @high @low @today
-	Timekeeping:
-		✔ Completed todos can show a timestamp @done(17-11-03 10:42)
-		☐ Press Alt+S to mark a todo as started @started(23-08-15 20:13)
-		✔ Now it will show the elapsed time @started(17-11-03 10:42) @done(17-11-03 20:11) @lasted(9h29m)
-		☐ You can provide time estimates for your todos @1h30m
-		☐ We are even doing some natural language processing @est(1 day and 20 minutes)
+        # detached_process_flag = 0x00000008  # Constant for creating a detached process
+        # subprocess.Popen(
+        #     steam_command,
+        #     shell=True,
+        #     creationflags=detached_process_flag,
+        #     start_new_session=True,  # Required for some platforms
+        # )
 
+        # ahk_script = f"Run cmd.exe /c del {steam_command}"
+        # steam_command_cmd = f'{steam_exe} {steam_args} {" ".join(game_args)}'
+        # steam_command_cmd_quoted = f'"{steam_exe} {steam_args} {" ".join(game_args)}"'
+        # steam_command_quoted = f'"{steam_command}"'
+        # pristine_command = f'{steam_exe}'
+        # print(f"steam command cmd: {steam_command_cmd}")
+        # print(f"steam command cmd quoted: {steam_command_cmd_quoted}")
+        # print(f"steam command: {steam_command}")
+        # print(f"steam command quoted: {steam_command_quoted}")
+        # ahk_script = f"Run cmd.exe /k del {steam_command_cmd_quoted}"
+        # ahk_script = "run cmd /k E:\games\steam\steam.exe -applaunch 550 -novid -console"
+        # ahk_script = f"run cmd /k {pristine_command} {steam_args}"
+        # ahk_script = f"run {pristine_command} {steam_args}"
+        # print(ahk_script)
+        # ahk.run_script(ahk_script, blocking=False)
 
+        # print(self.game.steam.get_exe_path())
+        # subprocess.Popen(["rm", "-r", self.game.steam.get_exe_path()])
 
+        # subprocess.Popen(['python', os.path.realpath(__file__), '0'], close_fds=True)
+        # print(f'file =================================== {os.path.realpath(__file__)}')
+        # subprocess.Popen(["python", self.game.steam.get_exe_path(), "0"], close_fds=True)
 
+        # DETACHED_PROCESS = 0x00000008
 
+        # pid = subprocess.Popen([sys.executable, "longtask.py"], creationflags=DETACHED_PROCESS).pid
 
+        # import subprocess
 
+        # subprocess.Popen(["notepad.exe", "test.txt"])
+
+        # command = "longtask.py &"
+        # subprocess.Popen(command, shell=True)
+
+        # command = "start /B notepad.exe"
+        # subprocess.Popen(command, shell=True)
+
+        # command = f"start /B {self.game.steam.get_exe_path()}"
+        # subprocess.Popen(command, shell=True)
 
 
 

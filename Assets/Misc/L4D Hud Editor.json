@@ -5,7 +5,7 @@
     "game_insecure": false,
     "game_mode": "Coop",
     "game_mute": true,
-    "game_pos": "Center",
+    "game_pos": "Top Left",
     "game_pos_custom_coord": null,
     "game_res": [
         1600,
@@ -15,9 +15,9 @@
     "reload_mouse_clicks_coord_2": null,
     "reload_mouse_clicks_enabled": false,
     "reload_reopen_menu_on_reload": false,
+    "steam_root_dir": "E:/games/steam",
     "stored_huds": [
         "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"
     ],
-    "steam_root_dir": "E:/games/steam",
     "stored_temp_huds": []
 }

@@ -228,7 +228,6 @@ class Game(metaclass=Singleton):
 
 def debug_game_class(persistent_data):
     "debug game class"
-    print("this is a test")
 
     gamez = Game(persistent_data)
 

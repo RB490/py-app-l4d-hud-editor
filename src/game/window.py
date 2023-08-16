@@ -1,6 +1,11 @@
 # pylint: disable=broad-exception-caught, c-extension-no-member
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
+import os
+import subprocess
+import sys
+import time
+
 import ahk
 import win32gui
 
@@ -141,46 +146,24 @@ class GameWindow:
         steam_exe = self.game.steam.get_exe_path()
         steam_command = f'"{steam_exe}" {steam_args} {" ".join(game_args)}'
 
-        # Use subprocess.Popen with DETACHED_PROCESS flag
-        # result = subprocess.Popen(steam_command, shell=True)
-        # result = subprocess.Popen([steam_command], shell=True)
-        # result = subprocess.run(steam_command, shell=True, check=True)
-        # result = subprocess.run([steam_command], shell=True, check=True)
-        # result = subprocess.Popen(steam_command, shell=False, creationflags=subprocess.DETACHED_PROCESS)
-        # result = subprocess.Popen([steam_command], shell=False, creationflags=subprocess.DETACHED_PROCESS)
-        # result = subprocess.Popen(["start", "/B", steam_command], shell=True)
-        # result = subprocess.Popen(["cmd", "/c", steam_command])
-        # os.system(steam_command)
-
-        # detached_process_flag = 0x00000008  # Constant for creating a detached process
-        # subprocess.Popen(
-        #     steam_command,
-        #     shell=True,
-        #     creationflags=detached_process_flag,
-        #     start_new_session=True,  # Required for some platforms
-        # )
-
-        # ahk_script = f"Run cmd.exe /c del {steam_command}"
-        steam_command_cmd = f'{steam_exe} {steam_args} {" ".join(game_args)}'
-        steam_command_quoted = f'"{steam_command}"'
-        print(f"steam command cmd: {steam_command_cmd}")
-        print(f"steam command: {steam_command}")
-        print(f"steam command quoted: {steam_command_quoted}")
-        ahk_script = f"Run cmd.exe /k del {steam_command_cmd}"
-
-        ahk.run_script(ahk_script, blocking=False)
+        result = subprocess.Popen(
+            steam_command,
+            shell=True,
+            creationflags=subprocess.DETACHED_PROCESS,
+            start_new_session=True,  # Required for some platforms
+        )
 
         if not result:
             print("Unable to run game!")
             return False
 
         # # set hwnd
-        # self.__set_hwnd(20)
+        self.__set_hwnd(20)
 
         # # set position
-        # self.restore_saved_position()
+        self.restore_saved_position()
 
-        # return True
+        return True
 
     def is_running(self):
         """Checks if the game is running"""

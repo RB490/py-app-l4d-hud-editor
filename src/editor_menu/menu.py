@@ -19,7 +19,7 @@ from utils.constants import (
     SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
-from utils.functions import retrieve_hud_name_for_dir
+from utils.functions import retrieve_hud_name_for_dir, save_data
 
 
 class EditorMenuClass:
@@ -681,6 +681,8 @@ class EditorMenuClass:
         """
         Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
         """
+        save_data(self.persistent_data)
+        
         self.menu_bar = Menu(self.root, tearoff=False)
 
         self.create_reload_mode_menu(self.menu_bar)
