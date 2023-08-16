@@ -23,12 +23,13 @@ class GameV2Installer:
         # TODO Installer: Finish all functionality
         # TODO Installer: Restore checks & prompts when finished
 
-    def _uninstall(self):
+    def _uninstall(self, silent=False):
         "Uninstall"
         print("Uninstalling..")
 
         # is dev installed?
         if not self.game.dir.get(DirectoryMode.DEVELOPER):
+            print("Not installed!")
             return True
 
         # prompt user
@@ -40,29 +41,86 @@ class GameV2Installer:
 
         # remove directory
         print("Deleting game directory...")
-        shutil.rmtree(self.game.get(DirectoryMode.DEVELOPER))
+        shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
 
         # finished
         print("Uninstalled!")
+
+    def _update(self):
+        print("Updating...")
+
+        current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+
+        # is installed?
+        if current_state is not InstallationState.COMPLETED:
+            print("Not installed!")
+            return False
+
+        # confirm start
+        if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):
+            return False
+
+        # close game
+        self.game.close()
+
+        # acativate developer mode
+        self.game.dir.set(DirectoryMode.DEVELOPER)
+
+        # enable paks
+        self.__enable_paks()
+
+        # set resume state
+        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.VERIFYING_GAME)
+
+        # perform installation steps
+        self.__process_installation_steps()
+
+        # finished
+        print("Finished updating!")
+        return True
+
+    def _repair(self):
+        print("Repairing...")
+
+        current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+
+        # is installed?
+        if current_state is not InstallationState.COMPLETED:
+            print("Not installed!")
+            return False
+
+        # confirm start
+        if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):
+            return False
+
+        # close game
+        self.game.close()
+
+        # acativate developer mode
+        self.game.dir.set(DirectoryMode.DEVELOPER)
+
+        # enable paks
+        self.__enable_paks()
+
+        # set resume state
+        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.EXTRACTING_PAKS)
+
+        # perform installation steps
+        self.__process_installation_steps()
+
+        # finished
+        print("Finished reparing!")
+        return True
 
     def _install(self):
         "Install"
         print("Installing..")
 
-        # variables
         current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
-        installation_steps = [
-            InstallationState.CREATE_DEV_DIR,
-            InstallationState.COPYING_FILES,
-            InstallationState.VERIFYING_GAME,
-            InstallationState.EXTRACTING_PAKS,
-            InstallationState.INSTALLING_MODS,
-            InstallationState.REBUILDING_AUDIO,
-        ]
 
         # already installed?
         # if current_state is InstallationState.COMPLETED:
-        #     print("Already installed")
+        #     print("Already installed!")
         #     return True
 
         # confirm start
@@ -85,28 +143,48 @@ class GameV2Installer:
         # invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         # if invalid_dev_dir:
         #     shutil.rmtree(invalid_dev_dir)
-        current_state = InstallationState.REBUILDING_AUDIO
+        # current_state = InstallationState.REBUILDING_AUDIO
 
-        # # perform installation
-        try:
-            # Find the index of the last completed step or -1 if not found
-            last_completed_index = (
-                0 if current_state is InstallationState.UNKNOWN else installation_steps.index(current_state)
-            )
-
-            # Perform installation steps starting from the next step after the last completed one
-            for _, state in enumerate(installation_steps[last_completed_index:]):
-                input(f"press enter to: {state}")
-                self.game.dir._set_id_content(DirectoryMode.DEVELOPER, state)
-                self.__perform_installation_step(state)
-        except Exception as err_info:
-            print(f"An error occurred during installation initialization: {err_info}")
-            return False
+        # install
+        # try:
+        self.__process_installation_steps()
+        # except: Exception as err_info:
+        #     print(f"Installation error: {err_info}")
+        #     since installation state is saved, don't do anything here
+        #     return False
 
         # finished
-        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
-
         print("Finished installing!")
+        return True
+
+    def __process_installation_steps(self):
+        resume_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+
+        installation_steps = [
+            InstallationState.CREATE_DEV_DIR,
+            InstallationState.COPYING_FILES,
+            InstallationState.VERIFYING_GAME,
+            InstallationState.EXTRACTING_PAKS,
+            InstallationState.INSTALLING_MODS,
+            InstallationState.REBUILDING_AUDIO,
+        ]
+
+        # try:
+        # Find the index of the last completed step or -1 if not found
+        last_completed_index = (
+            0 if resume_state is InstallationState.UNKNOWN else installation_steps.index(resume_state)
+        )
+
+        # Perform installation steps starting from the next step after the last completed one
+        for _, state in enumerate(installation_steps[last_completed_index:]):
+            self.__perform_installation_step(state)
+            self.game.dir._set_id_content(DirectoryMode.DEVELOPER, state)
+        # except Exception as err_info:
+        #     print(f"step process error: {err_info}")
+        #     return False
+
+        # Update installation state to completed or repaired based on process type
+        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
         return True
 
     def __perform_installation_step(self, state):
@@ -135,7 +213,7 @@ class GameV2Installer:
         os.mkdir(dev_dir)
 
         # write id file
-        id_path = os.path.join(dev_dir, self.game.dir.get_id_filename(DirectoryMode.DEVELOPER))
+        id_path = os.path.join(dev_dir, self.game.dir._get_id_filename(DirectoryMode.DEVELOPER))
         with open(id_path, "w", encoding="utf-8"):
             pass
 
@@ -149,7 +227,7 @@ class GameV2Installer:
         copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
-            self.game.dir.get_id_filename(DirectoryMode.USER),
+            self.game.dir._get_id_filename(DirectoryMode.USER),
         )
 
     def __prompt_verify_game(self):
@@ -278,7 +356,7 @@ class GameV2Installer:
 
         # run game to rebuild audio
         self.game.close()
-        self.game.window.run(DirectoryMode.DEVELOPER)
+        self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
 
         if not wait_for_process(self.game.get_exe(), 60):  # account for steam starting up
             return False

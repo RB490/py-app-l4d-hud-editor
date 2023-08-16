@@ -85,8 +85,10 @@ class GameV2Window:
             print(f"An error occurred retrieving window handle: {err_info}")
             return False
 
-    def run(self, dir_mode):
-        """Start game"""
+    def run(self, dir_mode, write_config=True):
+        """Start game
+        
+        write_config is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
 
         self.game._validate_dir_mode(dir_mode)
 
@@ -105,7 +107,8 @@ class GameV2Window:
 
         # setup
         self.game._disable_addons()
-        self.game._write_config()
+        if write_config:
+            self.game._write_config()
 
         # build game argument params
         game_args = ["-novid", "-console"]  # novid=Skip intro videos  # consoleEnable developer console

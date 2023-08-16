@@ -1,5 +1,5 @@
 "Game class directory methods"
-# pylint: disable=protected-access
+# pylint: disable=protected-access, broad-exception-caught
 import json
 import os
 from tkinter import filedialog
@@ -43,7 +43,7 @@ class GameV2Dir:
         vanilla_dir = self.__get_vanilla()
 
         # do we need to swap?
-        if os.path.samefile(target_dir, vanilla_dir):
+        if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
             print(f"{target_mode.name} already active!")
             return True
 
@@ -198,14 +198,16 @@ class GameV2Dir:
             id_path = self.__get_id_path(dir_mode)
 
             # read data from path
-            with open(id_path, "r", encoding="utf-8") as file_handle:
-                json_data = json.load(file_handle)
+            try:
+                with open(id_path, "r", encoding="utf-8") as file_handle:
+                    json_data = json.load(file_handle)
                 installation_state_str = json_data.get("installation_state")
-
                 if installation_state_str:
                     # Convert string to InstallationState enum value
                     print(f"Installation state: {installation_state_str}")
                     return InstallationState[installation_state_str]
+            except Exception:
+                pass
 
         # fallback
         return InstallationState.UNKNOWN

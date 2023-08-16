@@ -8,7 +8,7 @@ import vdf  # type: ignore
 
 from game_v2.commands import GameV2Commands
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
-from utils.shared_utils import Singleton
+from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
 
 
@@ -152,7 +152,7 @@ class GameV2(metaclass=Singleton):
         shutil.copy(EDITOR_AUTOEXEC_PATH, autoexec_path)
 
         # append user settings to autoexec
-        with open(EDITOR_AUTOEXEC_PATH, "a", encoding="utf-8") as file:
+        with open(autoexec_path, "a", encoding="utf-8") as file:
             if self.persistent_data["game_mute"]:
                 file.write("\nvolume 1")  # adds the desired text to the file on a new line
             else:
@@ -192,7 +192,7 @@ class GameV2(metaclass=Singleton):
 
     def close(self):
         "Close"
-        print("TODO close game")
+        close_process_executable(self.get_exe())
 
 
 def debug_gamev2_class(persistent_data):
@@ -205,16 +205,17 @@ def debug_gamev2_class(persistent_data):
     # Installer
     ###########################
     # result = gamez.installer._install()
-    gamez.installer._uninstall()
+    result = gamez.installer._update()
+    # result = gamez.installer._uninstall()
+    # gamez.installer._install()
 
-    
     # result = gamez.installer._uninstall()
     # result = gamez.installer.__install_mods()
     # result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
     # result = gamez._disable_addons()
     # result = gamez._write_config()
 
-    # print(f"install result = {result}")
+    print(f"install result = {result}")
 
     ###########################
     # Directory

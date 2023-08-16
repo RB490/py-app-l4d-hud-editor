@@ -5,6 +5,16 @@ import tkinter as tk
 from tkinter import messagebox
 from typing import Dict, Type
 
+import psutil
+
+
+def close_process_executable(executable):
+    for proc in psutil.process_iter(["name"]):
+        if proc.info["name"] == executable:
+            proc.kill()
+            proc.wait()  # Wait for the process to fully terminate
+            break
+
 
 class Singleton(type):
     """Metaclass for creating singleton classes.

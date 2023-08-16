@@ -11,11 +11,16 @@ Features:
 			✔ Test installer class @done(23-08-16 02:42)
 			✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
 			Nuh-uh. I need to have access to both game folders
+			
 			✔ Write uninstall() @done(23-08-16 03:28)
-			☐ Write update/repair()
-			☐ Installer: uninstall() when install gets cancelled or otherwise fails
+			✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
+			✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
+			✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
+			✔ Write update/repair() @done(23-08-16 04:40)
+			☐ Refactor: install/update/repair has so much duplicate code!
+			
 			☐ Test: saving game custom position. because i don't get how custom pos gets saved
-			☐ Installer: Re-enable prompts & checks in install()
+			☐ Installer: Re-enable prompts & checks in install() & try:catch
 			☐ Implementation: Prompt to manually set the dev directory in hud_editing.start
 		
 		☐ Write commands class
