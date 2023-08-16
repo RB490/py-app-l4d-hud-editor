@@ -7,6 +7,7 @@ from tkinter.filedialog import asksaveasfilename
 import keyboard
 
 from game.game import Game
+from game_v2.game_v2 import DirectoryMode
 
 # pylint: disable=unused-import
 from gui.browser import GuiHudBrowser
@@ -167,11 +168,16 @@ class Hud(metaclass=Singleton):
             if not result:
                 start_instance = GuiHudStart(self.persistent_data)
                 start_instance.show()
-                return
+                return False
+
+        # is developer mode installed?
+        if not self.game.dir.get(DirectoryMode.DEVELOPER):
+            show_message("infobox", "Development mode not installed!")
+            return False
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
-            return
+            return False
 
         # unsync previous hud
         if sync_hud:
@@ -186,7 +192,7 @@ class Hud(metaclass=Singleton):
             print("Could not activate developer mode")
             start_instance = GuiHudStart(self.persistent_data)
             start_instance.show()
-            return
+            return False
 
         # sync the hud to the game folder
         if sync_hud:
@@ -210,6 +216,8 @@ class Hud(metaclass=Singleton):
             self.browser.run()
         else:
             self.browser.show()
+
+        return True
 
     def sync(self):
         """Sync hud"""

@@ -20,12 +20,12 @@ Features:
 			✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
 			✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
 			
-			☐ Implementation: Prompt to manually set the dev directory in hud_editing.start
-			☐ Implementation: Replace & delete the old game instance
+			✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
 			
-		☐ Test: saving game custom position. because i don't get how custom pos gets saved
-		☐ Write commands class
-		☐ Test commands class
+			☐ Test: saving game custom position. because i don't get how custom pos gets saved
+			☐ Write commands class
+			☐ Test commands class
+		☐ Implementation: Replace & delete the old game instance
 
 	Sync:
 		☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures
