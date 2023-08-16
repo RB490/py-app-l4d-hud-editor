@@ -1,14 +1,17 @@
 Features:
 	Sync:
-		☐ I think i need an ID file class that will handle everything there is to do with it
-			- Write different types of content such as InstallationState & Sync state
-		
-		☐ Note: set_id_location isn't used anywhere in the code yet! It should be asked during install()
 
-		☐ Clean up the game module some? Maybe submodule some stuff. Also submodule videosettingsmodifier and maybe rename it
-		
-		☐ move ID_file_names inside the id handler class
 
+		☐ Note: set_id_location:developer isn't used anywhere in the code yet! It should be asked during install()
+		☐ Note: set_id_location:user isn't used anywhere in the code yet! It should be asked somewhere...
+
+		☐ Bug: Different separators in is_subdirectory even after trying various normpath solutions
+		parent: E:\games\steam\steamapps\common
+		child: E:/Games/Steam/steamapps/common/Left 4 Dead 2
+		output: E:/Games/Steam/steamapps/common/Left 4 Dead 2 is not subdirectory of E:\games\steam\steamapps\common
+
+		☐ Refactor: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant
+		
 		☐ I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to
 
 		☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures

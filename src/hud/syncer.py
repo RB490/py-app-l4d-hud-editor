@@ -3,7 +3,8 @@ import hashlib
 import os
 import shutil
 
-from game.game import DirectoryMode, Game
+from game.constants import DirectoryMode
+from game.game import Game
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import load_data
 

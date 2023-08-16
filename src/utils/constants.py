@@ -1,5 +1,6 @@
 """Global constant variables"""
 import os
+from enum import Enum, auto
 
 # # Get the absolute path of the current directory
 # current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -33,6 +34,14 @@ UNIVERSAL_GAME_MAP = "hud_dev_map"
 HOTKEY_SYNC_HUD = "ctrl+s"
 HOTKEY_TOGGLE_BROWSER = "F5"
 HOTKEY_EXECUTE_AUTOEXEC = "F11"
+
+
+class SyncState(Enum):
+    """Enumeration representing sync states"""
+
+    FULLY_SYNCED = auto()
+    NOT_SYNCED = auto()
+
 
 EDITOR_HUD_RELOAD_MODES = {
     "All": "reload_all",

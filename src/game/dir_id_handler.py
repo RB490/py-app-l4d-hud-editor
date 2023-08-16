@@ -1,20 +1,45 @@
-# pylint: disable=protected-access
+"""Handles game ID and state information for different directory modes."""
+# pylint: disable=protected-access, broad-exception-raised, broad-exception-caught
 import json
 import os
 from tkinter import filedialog
 
-from game.constants import ID_FILE_NAMES, DirectoryMode, InstallationState
-from utils.constants import SCRIPT_NAME
-from utils.shared_utils import show_message
+from game.constants import DirectoryMode, InstallationState
+from utils.constants import SCRIPT_NAME, SyncState
+from utils.shared_utils import is_subdirectory, show_message
 
 
 class GameIDHandler:
+    """Handles game ID and state information for different directory modes."""
+
     def __init__(self, game_class):
+        """Initialize the GameIDHandler with the associated game class."""
         self.game = game_class
+
+        self.id_file_names = {
+            DirectoryMode.USER: "_user_directory.DoNotDelete",
+            DirectoryMode.DEVELOPER: "_hud_development_directory.DoNotDelete",
+        }
 
         print(self.__class__.__name__)
 
-    def set_id_location(self, dir_mode):
+    def _get_id_filename(self, dir_mode):
+        self.game._validate_dir_mode(dir_mode)
+        return self.id_file_names[dir_mode]
+
+    def __get_id_path(self, dir_mode):
+        """Get the path of the ID file for a specific directory mode."""
+        mode_dir = self.game.dir.get(dir_mode)
+        if mode_dir is None:
+            raise Exception((f"Directory '{mode_dir}' does not exist. Unable to construct ID path."))
+
+        id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
+        # print("ID Path:", id_path)
+        return id_path
+
+    def set_id_path(self, dir_mode):
+        """Manually set the directory for a given directory mode."""
+
         self.game._validate_dir_mode(dir_mode)
 
         print(f"Manually setting directory for: {dir_mode.name}")
@@ -27,106 +52,155 @@ class GameIDHandler:
         result = show_message(message, "yesno", SCRIPT_NAME)
         if not result:
             print(f"Could not set ID location for {dir_mode.name}")
-            return None
+            return False
 
-        target_dir = filedialog.askdirectory(
+        id_dir = filedialog.askdirectory(
             mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
         )
-        if not os.path.isdir(target_dir):
+        if not os.path.isdir(id_dir):
             print(f"Could not set ID location for {dir_mode.name}")
-            return None
+            return False
+
+        # verify target_dir location
+        if not is_subdirectory(self.game.steam.get_games_dir(), id_dir):
+            print("Invalid directory! Not inside the steam games folder.")
+            return False
+
+        # verify game executable
+        exe_file = os.path.join(id_dir, self.game.get_exe())
+        exe_file = os.path.normpath(exe_file)
+        if not os.path.isfile(exe_file):
+            print(f"Invalid directory! Executable not present: {exe_file}")
+            return False
+        else:
+            print(f"Directory valid! Executable present: {exe_file}")
 
         if dir_mode == DirectoryMode.DEVELOPER:
             message = f"Is {dir_mode.name} mode fully installed?"
             is_fully_installed = show_message(message, "yesno", SCRIPT_NAME)
-            if is_fully_installed:
-                install_state = InstallationState.COMPLETED
-            else:
-                install_state = InstallationState.UNKNOWN
+            install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.UNKNOWN
         else:
             install_state = InstallationState.COMPLETED
 
-        self.__write_id_content(dir_mode, install_state)
-        return True
-
-    def _set_id_content(self, dir_mode, installation_state):
-        self.game._validate_dir_mode(dir_mode)
-
-        id_path = self.__get_id_path(dir_mode)
-        if id_path is None:
-            return None
-
-        state_data = {
+        initial_state_data = {
             "directory_mode": dir_mode.name,
-            "installation_state": installation_state.name if installation_state is not None else None,
-            "game_directory": self.game.get(dir_mode),
+            "game_directory": id_dir,
+            "installation_state": install_state.name,
+            "sync_state": SyncState.FULLY_SYNCED.name,
         }
 
-        self.__write_id_content(id_path, state_data)
-        print(f"Wrote content to: '{id_path}'")
+        self.__create_id_file(id_dir)
+        self.__write_id_content(dir_mode, initial_state_data)
+        return True
 
-    def __get_id_path(self, dir_mode):
-        mode_dir = self.game.get(dir_mode)
-        if mode_dir is None:
-            print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
-            return None
-        id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
-        print("ID Path:", id_path)
-        return id_path
+    def get_installation_state(self, dir_mode):
+        """Get the installation state for a specific directory mode."""
+        return self.__get_state(dir_mode, "installation_state", InstallationState.UNKNOWN)
 
-    def write_installation_state(self, dir_mode, installation_state):
+    def set_installation_state(self, dir_mode, installation_state):
+        """Set the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
+        self.__set_state(dir_mode, "installation_state", installation_state)
 
+    def get_sync_state(self, dir_mode):
+        """Get the synchronization state for a specific directory mode."""
+        return self.__get_state(dir_mode, "sync_state", SyncState.FULLY_SYNCED)
+
+    def set_sync_state(self, dir_mode, sync_state):
+        """Set the synchronization state for a specific directory mode."""
+        self.game._validate_dir_mode(dir_mode)
+        self.__set_state(dir_mode, "sync_state", sync_state)
+
+    def __get_state(self, dir_mode, state_key, default_value):
+        """Get a specific state value from the ID file with a default value if not present."""
+        id_path = self.__get_id_path(dir_mode)
+
+        if id_path is None:
+            return default_value
+
+        state_data = self.__read_id_content(id_path)
+        state_value = state_data.get(state_key)
+
+        if state_value is None:
+            return default_value
+
+        return state_value
+
+    def __set_state(self, dir_mode, state_key, state_value):
+        """Set a specific state value in the ID file."""
         id_path = self.__get_id_path(dir_mode)
         if id_path is None:
             return None
 
         state_data = self.__read_id_content(id_path)
-        state_data["installation_state"] = installation_state.name if installation_state is not None else None
-
-        self.__write_id_content(id_path, state_data)
-        print(f"Updated installation state in ID file: '{id_path}'")
-
-    def write_sync_state(self, dir_mode, sync_state):
-        self.game._validate_dir_mode(dir_mode)
-
-        id_path = self.__get_id_path(dir_mode)
-        if id_path is None:
-            return None
-
-        state_data = self.__read_id_content(id_path)
-        state_data["sync_state"] = sync_state
-
-        self.__write_id_content(id_path, state_data)
-        print(f"Updated sync state in ID file: '{id_path}'")
+        state_data[state_key] = state_value.name if state_value is not None else None
+        self.__write_id_content(dir_mode, state_data)
+        print(f"Updated {state_key} state to: '{state_value.name}'")
 
     def __read_id_content(self, id_path):
-        if os.path.isfile(id_path):
-            with open(id_path, "r", encoding="utf-8") as file_handle:
-                return json.load(file_handle)
-        else:
-            return {}
+        """Read and return the content of the ID file."""
+        try:
+            if os.path.isfile(id_path):
+                with open(id_path, "r", encoding="utf-8") as file_handle:
+                    return json.load(file_handle)
+        except Exception as err:
+            print(f"Error reading ID content: {err}")
+        return {}  # Fallback to empty json
 
-    def __write_id_content(self, id_path, state_data):
-        with open(id_path, "w", encoding="utf-8") as file_handle:
-            json.dump(state_data, file_handle, indent=4)
-        print(f"Written ID content to: {id_path}")
+    def __write_id_content(self, dir_mode, state_data):
+        """Write the state data to the ID file."""
+        id_path = self.__get_id_path(dir_mode)
 
-    def _get_id_filename(self, dir_mode):
-        self.game._validate_dir_mode(dir_mode)
-        return ID_FILE_NAMES[dir_mode]
+        state_data["directory_mode"] = dir_mode.name
+        state_data["game_directory"] = self.game.dir.get(dir_mode)
+
+        try:
+            with open(id_path, "w", encoding="utf-8") as file_handle:
+                json.dump(state_data, file_handle, indent=4)
+                print(f"Set ID content in: {id_path}")
+                return True
+        except Exception as err_info:
+            raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
+
+    def __create_id_file(self, directory):
+        """Create an ID file in the specified directory."""
+
+        try:
+            id_path = os.path.join(directory, self._get_id_filename(DirectoryMode.DEVELOPER))
+
+            with open(id_path, "w", encoding="utf-8") as file_handle:
+                json.dump({}, file_handle, indent=4)
+        except Exception as err_info:
+            raise Exception(f"Unable to create ID file: {err_info}") from err_info
 
 
-# Example usage:
-# game = YourGameClass()  # Replace with your actual game class instantiation
-# id_handler = IDFileHandler(game)
-# id_handler.set_id_location(DirectoryMode.DEVELOPER)
-# id_handler.write_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
-# id_handler.write_sync_state(DirectoryMode.DEVELOPER, "synced")
-# etc.
+def debug_id_handler(game_class):
+    "Debug"
+    game_id_handler = game_class.dir.id
+    # game_class.dir.id.set_id_path(DirectoryMode.DEVELOPER)
 
+    # Set the ID location for developer directory
+    dir_mode = DirectoryMode.DEVELOPER
+    game_id_handler.set_id_path(dir_mode)
 
-def debug_id_handler(persistent_data):
-    # game_class = Game(persistent_data)
-    # game_class.dir.id.set_id_location(DirectoryMode.DEVELOPER)
-    print(persistent_data)
+    # Set installation state for developer directory
+    installation_state = InstallationState.COMPLETED
+    game_id_handler.set_installation_state(dir_mode, installation_state)
+
+    # Set sync state for developer directory
+    sync_state = SyncState.FULLY_SYNCED
+    game_id_handler.set_sync_state(dir_mode, sync_state)
+
+    # Get installation state for developer directory
+    retrieved_installation_state = game_id_handler.get_installation_state(dir_mode)
+    if retrieved_installation_state:
+        print("Retrieved Installation State:", retrieved_installation_state.name)
+    else:
+        print("Installation State not found.")
+
+    # Get sync state for developer directory
+    retrieved_sync_state = game_id_handler.get_sync_state(dir_mode)
+    if retrieved_sync_state:
+        print("Retrieved Sync State:", retrieved_sync_state.name)
+    else:
+        print("Sync State not found.")

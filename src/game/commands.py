@@ -10,7 +10,6 @@ import win32api
 import win32con
 import win32gui
 
-from game.game import DirectoryMode, VideoSettingsModifier
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
 from utils.functions import click_at, focus_hwnd
 

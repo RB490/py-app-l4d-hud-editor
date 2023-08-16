@@ -12,6 +12,34 @@ import win32con
 import win32gui
 import win32process
 
+def is_subdirectory(parent_dir, child_dir):
+    """
+    Check if a directory is a subdirectory of another directory.
+    
+    Args:
+        parent_dir (str): The parent directory.
+        child_dir (str): The potential subdirectory.
+        
+    Returns:
+        bool: True if child_dir is a subdirectory of parent_dir, False otherwise.
+    """
+    parent_path = os.path.abspath(parent_dir)
+    child_path = os.path.abspath(child_dir)
+
+    # Normalize paths to handle different path separators and case sensitivity
+    parent_path = os.path.normcase(parent_path)
+    child_path = os.path.normcase(child_path)
+
+    # Normalize paths to handle different path separators and case sensitivity
+    parent_path = os.path.normpath(parent_path)
+    child_path = os.path.normpath(child_path)
+
+    if child_path.startswith(parent_path):
+        print(f"{child_dir} is a subdirectory of {parent_dir}")
+        return True
+    else:
+        print(f"{child_dir} is not subdirectory of {parent_dir}")
+        return False
 
 def move_hwnd_to_position(hwnd, position):
     """

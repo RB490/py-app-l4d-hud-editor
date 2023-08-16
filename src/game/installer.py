@@ -8,6 +8,7 @@ Notes:
 import filecmp
 import os
 import shutil
+
 from game.constants import DirectoryMode, InstallationState
 
 # pylint: disable=unused-import
@@ -56,7 +57,7 @@ class GameInstaller:
         "Update"
         print("Updating...")
 
-        current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # is installed?
         if current_state is not InstallationState.COMPLETED:
@@ -77,7 +78,7 @@ class GameInstaller:
         self.__enable_paks()
 
         # set resume state
-        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.VERIFYING_GAME)
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.VERIFYING_GAME)
 
         # perform installation steps
         try:
@@ -93,7 +94,7 @@ class GameInstaller:
         "Repair"
         print("Repairing...")
 
-        current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # is installed?
         if current_state is not InstallationState.COMPLETED:
@@ -114,7 +115,7 @@ class GameInstaller:
         self.__enable_paks()
 
         # set resume state
-        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.EXTRACTING_PAKS)
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.EXTRACTING_PAKS)
 
         # perform installation steps
         try:
@@ -131,7 +132,7 @@ class GameInstaller:
         "Install"
         print("Installing..")
 
-        current_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # already installed?
         if current_state is InstallationState.COMPLETED:
@@ -167,7 +168,7 @@ class GameInstaller:
             return False
 
     def __process_installation_steps(self):
-        resume_state = self.game.dir._get_installation_state(DirectoryMode.DEVELOPER)
+        resume_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
@@ -188,13 +189,13 @@ class GameInstaller:
         # Perform installation steps starting from the next step after the last completed one
         for _, state in enumerate(installation_steps[last_completed_index:]):
             self.__perform_installation_step(state)
-            self.game.dir._set_id_content(DirectoryMode.DEVELOPER, state)
+            self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
         # except Exception as err_info:
         #     print(f"step process error: {err_info}")
         #     return False
 
         # Update installation state to completed or repaired based on process type
-        self.game.dir._set_id_content(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
         return True
 
     def __perform_installation_step(self, state):
@@ -225,9 +226,15 @@ class GameInstaller:
         os.mkdir(dev_dir)
 
         # write id file
-        id_path = os.path.join(dev_dir, self.game.dir._get_id_filename(DirectoryMode.DEVELOPER))
+        id_path = os.path.join(dev_dir, self.game.dir.id._get_id_filename(DirectoryMode.DEVELOPER))
         with open(id_path, "w", encoding="utf-8"):
             pass
+
+        # copy executable
+        game_exe = self.game.get_exe()
+        source_exe_path = os.path.join(self.game.dir.get(DirectoryMode.USER), game_exe)
+        target_exe_path = os.path.join(dev_dir, game_exe)
+        shutil.copy2(source_exe_path, target_exe_path)
 
         # activate directory
         self.game.dir.set(DirectoryMode.DEVELOPER)
@@ -237,7 +244,7 @@ class GameInstaller:
         copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
-            self.game.dir._get_id_filename(DirectoryMode.USER),
+            self.game.dir.id._get_id_filename(DirectoryMode.USER),
         )
 
     def __prompt_verify_game(self):

@@ -1,14 +1,10 @@
 "Game class directory methods"
 # pylint: disable=protected-access, broad-exception-caught
-import json
 import os
-from tkinter import filedialog
 
+from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
-from game.constants import ID_FILE_NAMES, DirectoryMode, InstallationState
-from utils.constants import SCRIPT_NAME
 from utils.functions import generate_random_string, rename_with_timeout
-from utils.shared_utils import show_message
 
 
 class GameDir:
@@ -18,7 +14,7 @@ class GameDir:
         self.game = game_class
         self.persistent_data = self.game.persistent_data
         # pylint: disable=invalid-name
-        self.id = GameIDHandler(self)
+        self.id = GameIDHandler(self.game)
 
         print(self.__class__.__name__)
 
@@ -68,64 +64,11 @@ class GameDir:
         print(f"Set mode: {dir_mode.name} successfully!")
         return True
 
-    def set_id_location(self, dir_mode):
-        "Set id file location"
-        self.game._validate_dir_mode(dir_mode)
-
-        print(f"Manually setting directory for: {dir_mode.name}")
-
-        # prompt user to manually select
-        message = (
-            f"Could not find ID file for the {dir_mode.name} installation directory.\n\n"
-            "Is it installed and do you want to manually select it?\n"
-            "If so - Be sure to select the correct directory!"
-        )
-        result = show_message(message, "yesno", SCRIPT_NAME)
-        if not result:
-            print(f"Could not set ID location for {dir_mode.name}")
-            return None
-
-        # manually select
-        target_dir = filedialog.askdirectory(
-            mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
-        )
-        if not os.path.isdir(target_dir):
-            print(f"Could not set ID location for {dir_mode.name}")
-            return None
-
-        # prompt user about dev installation state
-        if dir_mode == DirectoryMode.DEVELOPER:
-            message = f"Is {dir_mode.name} mode fully installed?"
-            is_fully_installed = show_message(message, "yesno", SCRIPT_NAME)
-            if is_fully_installed:
-                install_state = InstallationState.COMPLETED
-            else:
-                install_state = InstallationState.UNKNOWN
-        else:
-            install_state = InstallationState.COMPLETED  # user mode
-
-        # write selection
-        self.__write_id_content(dir_mode, target_dir, install_state)
-        return True
-
-    def _set_id_content(self, dir_mode, installation_state):
-        "Set id file content"
-        self.game._validate_dir_mode(dir_mode)
-
-        # get id path
-        id_path = self.__get_id_path(dir_mode)
-        if id_path is None:
-            return None
-
-        self.__write_id_content(dir_mode, self.get(dir_mode), installation_state)
-
-        print(f"Wrote content to: '{id_path}'")
-
     def get(self, dir_mode):
         "Get directory"
         # set variables
         self.game._validate_dir_mode(dir_mode)
-        id_filename = self._get_id_filename(dir_mode)
+        id_filename = self.id._get_id_filename(dir_mode)
         steam_games_dir = self.game.steam.get_games_dir()
 
         # Search through folders in the Steam games directory
@@ -207,35 +150,6 @@ class GameDir:
         "Get the full path to the addons dir eg. 'Left 4 Dead 2\\addons'"
         return self.__get_main_sub_dir(dir_mode, "addons")
 
-    def _get_id_filename(self, dir_mode):
-        "Get id filename"
-        self.game._validate_dir_mode(dir_mode)
-        return ID_FILE_NAMES[dir_mode]
-
-    def _get_installation_state(self, dir_mode):
-        "Retrieve installation state from json in id file"
-        self.game._validate_dir_mode(dir_mode)
-
-        # get state from id file
-        if self.game.dir.get(dir_mode):
-            # set path
-            id_path = self.__get_id_path(dir_mode)
-
-            # read data from path
-            try:
-                with open(id_path, "r", encoding="utf-8") as file_handle:
-                    json_data = json.load(file_handle)
-                installation_state_str = json_data.get("installation_state")
-                if installation_state_str:
-                    # Convert string to InstallationState enum value
-                    print(f"Installation state: {installation_state_str}")
-                    return InstallationState[installation_state_str]
-            except Exception:
-                pass
-
-        # fallback
-        return InstallationState.UNKNOWN
-
     def __get_vanilla(self):
         """Get the vanilla directory path of the game"""
         print("Getting vanilla directory path...")
@@ -249,33 +163,3 @@ class GameDir:
         vanilla_dir = os.path.join(games_dir, title)
         print(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
-
-    def __get_id_path(self, dir_mode):
-        "Get id filename path"
-        mode_dir = self.get(dir_mode)
-        if mode_dir is None:
-            print(f"Error: Directory '{mode_dir}' does not exist. Unable to construct ID path.")
-        else:
-            id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
-
-        print("ID Path:", id_path)
-        return id_path
-
-    def __write_id_content(self, dir_mode, directory, installation_state=None):
-        """Write id file content.
-
-        This method is needed because it us used by 'set id location' & 'set id content' &
-        in the installer class to create the first id file
-        'directory' param is needed because the dir_mode wouldn't be able to be retrieved yet
-        when setting id location"""
-        state_data = {
-            "directory_mode": dir_mode.name,
-            "installation_state": installation_state.name if installation_state is not None else None,
-            "game_directory": directory,
-        }
-
-        id_file_name = self._get_id_filename(dir_mode)
-        id_file_path = os.path.join(directory, id_file_name)
-        with open(id_file_path, "w", encoding="utf-8") as file_handle:
-            json.dump(state_data, file_handle, indent=4)  # Write state data as JSON
-        print(f"Written ID content to: {id_file_path}")

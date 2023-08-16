@@ -36,9 +36,3 @@ class InstallationState(Enum):
     MAIN_DIR_BACKUP = auto()
     INSTALLING_MODS = auto()
     REBUILDING_AUDIO = auto()
-
-
-ID_FILE_NAMES = {
-    DirectoryMode.USER: "_user_directory.DoNotDelete",
-    DirectoryMode.DEVELOPER: "_hud_development_directory.DoNotDelete",
-}

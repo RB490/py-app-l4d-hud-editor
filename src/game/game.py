@@ -3,18 +3,17 @@
 import os
 import shutil
 
+# importing after the above enums and exceptions becaus they are needed for the subclasses
+from game.commands import GameCommands
 from game.constants import DirectoryMode, DirModeError, TitleRetrievalError
+from game.dir import GameDir
+from game.dir_id_handler import debug_id_handler
+from game.installer import GameInstaller
 from game.video_settings_modifier import VideoSettingsModifier
+from game.window import GameWindow
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
-
-
-# importing after the above enums and exceptions becaus they are needed for the subclasses
-from game.commands import GameCommands
-from game.dir import GameDir
-from game.installer import GameInstaller
-from game.window import GameWindow
 
 
 class Game(metaclass=Singleton):
@@ -130,8 +129,8 @@ def debug_game_class(persistent_data):
     # Installer
     ###########################
     # result = gamez.installer._install()
-    result = gamez.installer._main_dir_backup()
-    print("hi there!")
+    # result = gamez.installer._main_dir_backup()
+    # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
     # result = gamez.command.execute("noclip")
     # result = gamez.command._get_reload_fonts_command()
@@ -146,7 +145,9 @@ def debug_game_class(persistent_data):
     # result = gamez._disable_addons()
     # result = gamez._write_config()
 
-    print(f"install result = {result}")
+    # print(f"install result = {result}")
+
+    debug_id_handler(gamez)
 
     ###########################
     # Directory
