@@ -1,3 +1,4 @@
+"Game constants"
 from enum import Enum, auto
 
 
