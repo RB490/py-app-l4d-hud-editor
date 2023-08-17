@@ -18,9 +18,21 @@ Features:
 
 
 	General:
+		☐ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions?
+			- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
+			# get user directory
+			if not self.game.dir.get(DirectoryMode.USER):
+				try:
+					self.game.dir.id.set_id_path(DirectoryMode.USER)
+				except Exception as err_info:
+					show_message(f"{err_info}", "error", 'Could not get user directory!')
+					return False
+
 		☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
 			if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
 		☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
+		☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
+		☐ Refactor: loading/saving data: confirm throughout the script json reading/writing is done by the same funcs
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder

@@ -7,8 +7,8 @@ from tkinter import filedialog, ttk
 
 from PIL import Image, ImageTk
 
-from game.game import Game
 from game.constants import DirectoryMode
+from game.game import Game
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,
@@ -254,11 +254,6 @@ class GuiHudStart(metaclass=Singleton):
         self.selected_hud_name = ""
 
         self.update_treeview()
-
-    def start_editing_hud(self):
-        """Start editing hud"""
-        self.save_window_geometry()
-        self.hide()
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""

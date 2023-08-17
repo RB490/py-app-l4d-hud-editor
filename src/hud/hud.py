@@ -7,13 +7,11 @@ from tkinter.filedialog import asksaveasfilename
 import keyboard
 
 from game.game import DirectoryMode, Game
-
-# pylint: disable=unused-import
 from gui.browser import GuiHudBrowser
 from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
-from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, NEW_HUD_DIR
+from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, SyncState
 from utils.functions import copy_directory, load_data
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
@@ -30,14 +28,41 @@ class Hud(metaclass=Singleton):
         self.hud_dir = None
         self.threaded_timer_game_exit = None
         self.browser = None
+        self.detect_incorrectly_still_synced = False
 
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
+    def restore_game_files_backup(self):
+        backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
+
+        print(backup_dir)
+
+    def start_editing_debug_bad_unsync(self):
+        # is developer mode installed? - also checks for user directory
+        
+        
+        self.game.dir.id.set_id_path(DirectoryMode.USER)
+        # self.game.dir.set(DirectoryMode.DEVELOPER)
+        return
+
+
+
+        if self.detect_incorrectly_still_synced is False:
+            print("checking if the hud is still synced while it shouldnt be")
+            sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+
+            if sync_state_id == SyncState.FULLY_SYNCED:
+                self.restore_game_files_backup()
+        else:
+            print("NOT checking bad unsync")
+
+        self.detect_incorrectly_still_synced = True
+
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
 
-        print(f"start_editing: ({hud_dir})")
+        print(f"Start editing: ({hud_dir})")
 
         # verify parameters
         if not os.path.isdir(hud_dir):
@@ -54,8 +79,10 @@ class Hud(metaclass=Singleton):
 
         # is developer mode installed? - also checks for user directory
         if not self.game.dir.get(DirectoryMode.DEVELOPER):
-            show_message("infobox", "Development mode not installed!")
+            show_message("Development mode not installed!", "error")
             return False
+
+        # check if the script failed to unsync in a previous instance. for example if crashed
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:
@@ -277,12 +304,11 @@ class Hud(metaclass=Singleton):
             self.threaded_timer_game_exit = None
 
 
-def debug_hud():
+def debug_hud(persistent_data):
     # pylint: disable=unused-variable
     """Debug the hud class"""
     print("debug_hud")
 
-    persistent_data = load_data()
     my_hud_instanc = Hud(persistent_data)
     # my_hud_instanc.save_as_folder()
     my_hud_instanc.start_editing(my_hud_instanc.get_dir())

@@ -19,7 +19,6 @@ class Game(metaclass=Singleton):
     """Singleton that handles anything related to the game. such as running and installation the dev/user versions"""
 
     def __init__(self, persistent_data):
-        print(self.__class__.__name__)
         self.persistent_data = persistent_data
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)

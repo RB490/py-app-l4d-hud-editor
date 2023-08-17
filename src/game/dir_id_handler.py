@@ -17,11 +17,9 @@ class GameIDHandler:
         self.game = game_class
 
         self.id_file_names = {
-            DirectoryMode.USER: "_user_directory.DoNotDelete",
-            DirectoryMode.DEVELOPER: "_hud_development_directory.DoNotDelete",
+            DirectoryMode.USER: "_hud_editor_id_file__user_directory.DoNotDelete",
+            DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
         }
-
-        print(self.__class__.__name__)
 
     def _get_id_filename(self, dir_mode):
         self.game._validate_dir_mode(dir_mode)
@@ -91,7 +89,7 @@ class GameIDHandler:
                 "sync_state": SyncState.FULLY_SYNCED.name,
             }
 
-            self.__create_id_file(id_dir)
+            self.__create_id_file(dir_mode, id_dir)
             self.__write_id_content(dir_mode, initial_state_data)
             return True
         except Exception as err_info:
@@ -168,11 +166,11 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
 
-    def __create_id_file(self, directory):
+    def __create_id_file(self, dir_mode, directory):
         """Create an ID file in the specified directory."""
 
         try:
-            id_path = os.path.join(directory, self._get_id_filename(DirectoryMode.DEVELOPER))
+            id_path = os.path.join(directory, self._get_id_filename(dir_mode))
 
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump({}, file_handle, indent=4)

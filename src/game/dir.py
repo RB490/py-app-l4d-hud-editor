@@ -17,8 +17,6 @@ class GameDir:
         # pylint: disable=invalid-name
         self.id = GameIDHandler(self.game)
 
-        print(self.__class__.__name__)
-
     def _get_dir_backup_name(self, dir_mode):
         random_string = generate_random_string()
         output = os.path.join(

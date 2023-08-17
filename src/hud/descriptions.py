@@ -73,26 +73,21 @@ class HudDescriptions:
 
     def read_from_disk(self):
         """Read persistent data from disk"""
-        print("load_from_disk")
 
         try:
             with open(HUD_DESCRIPTIONS_PATH, "r", encoding="utf-8") as file:
                 data = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
-            # print(f"Error loading data from {file_path}")
             data = {}
 
-        # print(f"read_from_disk: \n{json.dumps(data, sort_keys=True, indent=4)}")
         self.data = data
         return
 
     def save_to_disk(self):
         """Save persistent data to disk"""
-        print("save_to_disk")
         data = self.data
         try:
             with open(HUD_DESCRIPTIONS_PATH, "w", encoding="utf-8") as file:
-                # json.dump(data, file) # fastest, but doesn't allow formatting - and i use tiny jsons
                 pretty_json = json.dumps(data, sort_keys=True, indent=4)
                 file.write(pretty_json)
         except (FileNotFoundError, TypeError):
