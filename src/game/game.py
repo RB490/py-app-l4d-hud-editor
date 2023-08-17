@@ -7,7 +7,6 @@ import shutil
 from game.commands import GameCommands
 from game.constants import DirectoryMode, DirModeError, TitleRetrievalError
 from game.dir import GameDir
-from game.dir_id_handler import debug_id_handler
 from game.installer import GameInstaller
 from game.video_settings_modifier import VideoSettingsModifier
 from game.window import GameWindow

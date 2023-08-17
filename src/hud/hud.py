@@ -34,7 +34,7 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
-    def start_editing(self, hud_dir, sync_hud=True):
+    def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
 
         print(f"start_editing: ({hud_dir})")
@@ -52,18 +52,17 @@ class Hud(metaclass=Singleton):
                 start_instance.show()
                 return False
 
-        # is developer mode installed?
+        # is developer mode installed? - also checks for user directory
         if not self.game.dir.get(DirectoryMode.DEVELOPER):
             show_message("infobox", "Development mode not installed!")
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
+        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:
             return False
 
         # unsync previous hud
-        if sync_hud:
-            self.syncer.un_sync()
+        self.syncer.un_sync()
 
         # Stop checking for game exit
         self.stop_game_exit_check()
@@ -77,12 +76,11 @@ class Hud(metaclass=Singleton):
             return False
 
         # sync the hud to the game folder
-        if sync_hud:
-            self.syncer.sync(
-                self.hud_dir,
-                self.game.dir.get(DirectoryMode.DEVELOPER),
-                os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
-            )
+        self.syncer.sync(
+            self.hud_dir,
+            self.game.dir.get(DirectoryMode.DEVELOPER),
+            os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
+        )
 
         # hotkeys
         keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)

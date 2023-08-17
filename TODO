@@ -1,33 +1,26 @@
 Features:
 	Sync:
 		
-
-		☐ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low
-		
 		Sync:
-			☐ Sync: Debugging -> Refactor debugging files
+			☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04)
+				✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
+				✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
+				☐ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04)
+				☐ Write code to fix bad unsynx
+
+			☐ Sync: use the ID class to set/get sync state
 			☐ Sync: Debugging -> Tiny hud with all the possible features to (unit) test with
 			☐ Refactor: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant @high 
-			☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical
-				- Bad unsync detection: Keep track of sync status in the ID file
-				- Fixing unsync's
-					- Simple & faster solution:
-						- every file that i sync to the game folder, i also sync to a designated temporary sync folder
-						- keep track in the ID file which folder this is probably? as i would create a temp dir and save it there
-						- 1. first loop all the files in the unsync folder 2. loop the unsync dirs and only delete if empty
-							- ^ but how would i know if a file is custom
-					- Simple & great solution (could be a little slow) // actually, no, just materials & resource =1,5gb :
-						- During installation process create a backup of the main directory
-						- If the script detects that it failed to unsync somehow - delete the entire main dir and restore from backup
-							- Detection could work in many ways. Probably simply another ID file. or even the same ID file
 			☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
-			os.move error could happen if for example a file in the game dir is locked because in use
+				os.move error could happen if for example a file in the game dir is locked because in use
 			☐ Sync: Review and enhance target directory validation in sync() @high
+			☐ Sync: Debugging -> Refactor debugging files
 
-	ID:
-		☐ Refactor: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 
 	General:
+		☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
+			if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
+		☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder
@@ -188,6 +181,9 @@ Archive:
 	✔ Use InvalidIDError @done(23-08-12 15:55)
 	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
 
+	✔ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low @done(23-08-17 11:53)
+	✔ ^ yes this is needed to avoid important recursion @done(23-08-17 11:53)
+
 	Game class:
 		✔ Rewrite from first principles @done(23-08-16 06:00)
 		
@@ -215,3 +211,4 @@ Archive:
 			
 			✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
 			✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
+
