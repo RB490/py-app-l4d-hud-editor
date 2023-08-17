@@ -40,11 +40,11 @@ class GameDir:
         target_dir = self.get(target_mode)
         vanilla_dir = self.__get_vanilla_dir()
 
-        if not verify_directory(source_dir, 'Could not retrieve source directory!'):
+        if not verify_directory(source_dir, "Could not retrieve source directory!"):
             return False
-        if not verify_directory(target_dir, 'Could not retrieve target directory!'):
+        if not verify_directory(target_dir, "Could not retrieve target directory!"):
             return False
-        if not verify_directory(vanilla_dir, 'Could not retrieve vanilla directory!'):
+        if not verify_directory(vanilla_dir, "Could not retrieve vanilla directory!"):
             return False
 
         # do we need to swap?
@@ -114,9 +114,9 @@ class GameDir:
     def get_main_dir_backup(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_'"
         main_dir = self.get_main_dir(dir_mode)
-        main_dir_name = os.path.basename(os.path.dirname(main_dir))
-        main_dir_backup_name = f"_backup_{main_dir_name}_"
-        main_dir_backup = os.path.join(main_dir, main_dir_backup_name)
+        main_dir_name = os.path.basename(main_dir)
+        main_dir_backup_name = f"_hud_dev_backup_{main_dir_name}"
+        main_dir_backup = os.path.join(self.get(dir_mode), main_dir_backup_name)
         print(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 

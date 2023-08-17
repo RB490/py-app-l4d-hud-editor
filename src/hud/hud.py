@@ -38,27 +38,22 @@ class Hud(metaclass=Singleton):
 
         backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 
-        print(f"backup_dir: {backup_dir}")
+        print("Restored game files backup!")
+
+
 
     def start_editing_debug_bad_unsync(self):
         # is developer mode installed? - also checks for user directory
 
         if self.detect_incorrectly_still_synced is False:
-            print("checking if the hud is still synced while it shouldnt be")
+            
+            # restore backup if synced
             sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
-
-            print(f"sync state = {sync_state_id} && {sync_state_id.name}")
-
             if sync_state_id == SyncState.FULLY_SYNCED:
                 self.restore_game_files_backup()
-            else:
-                print("sync state is not fully synced?")
-        else:
-            print("NOT checking bad unsync")
 
-        self.detect_incorrectly_still_synced = True
-
-        print("finished bad unsync")
+            # only detect it once per script instance
+            self.detect_incorrectly_still_synced = True
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
