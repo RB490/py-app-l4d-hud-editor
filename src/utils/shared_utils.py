@@ -5,19 +5,22 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 from typing import Dict, Type
-from ahk import AHK
 
 import psutil
 import win32api
 import win32con
 import win32gui
 import win32process
+from ahk import AHK
+
 
 def verify_directory(directory, error_message):
+    """Reduces clutter. Example: if not verify_directory(source_dir, "Could not retrieve source directory!"):"""
     if not os.path.isdir(directory):
         print(error_message)
         return False
     return True
+
 
 def is_subdirectory(parent_dir, child_dir):
     """

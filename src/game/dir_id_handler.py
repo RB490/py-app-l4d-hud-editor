@@ -40,11 +40,10 @@ class GameIDHandler:
         """Manually set the directory for a given directory mode."""
 
         print(f"Manually setting directory for: {dir_mode.name}")
-        
+
         try:
             self.game._validate_dir_mode(dir_mode)
 
-            
             # prompt - manually select location?
             message = (
                 f"Could not find {self.game.get_title()} ID file for the {dir_mode.name} installation directory!\n\n"
@@ -58,7 +57,7 @@ class GameIDHandler:
             id_dir = filedialog.askdirectory(
                 mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
             )
-            
+
             # verify location - existence
             if not os.path.isdir(id_dir):
                 raise ValueError("Invalid directory specified")

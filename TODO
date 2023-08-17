@@ -2,11 +2,11 @@ Features:
 	Sync:
 		
 		Sync:
-			☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04)
+			✔ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m10s)
 				✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
 				✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
-				☐ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04)
-				☐ Write code to fix bad unsynx
+				✔ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m4s)
+				✔ Write code to fix bad unsynx @done(23-08-17 13:34)
 
 			☐ Sync: use the ID class to set/get sync state
 			☐ Sync: Debugging -> Tiny hud with all the possible features to (unit) test with
@@ -18,6 +18,9 @@ Features:
 
 
 	General:
+		☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
+		☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
+		☐ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it
 		☐ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions?
 			- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
 			# get user directory

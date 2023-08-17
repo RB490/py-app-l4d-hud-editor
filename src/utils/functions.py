@@ -16,11 +16,9 @@ from tkinter import filedialog
 import psutil
 import pyautogui
 import vdf  # type: ignore
-import win32api
 import win32con  # type: ignore
 import win32gui
 import win32process
-from ahk import AHK
 
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
@@ -38,16 +36,16 @@ def rename_with_timeout(src, dst, timeout=5):
     - A program that's shutting down is still temporary locking them
     - Miscelanious operating system issue where renaming fails once but is fine the next time"""
     start = time.time()
-    
+
     print(f"Renaming {src} -> {dst} with timeout: {timeout}")
-    
+
     while True:
         try:
             os.rename(src, dst)
             return True
         except Exception:
             if time.time() - start > timeout:
-                print('Failed to rename!')
+                print("Failed to rename!")
                 return False
             else:
                 time.sleep(0.1)
@@ -363,8 +361,7 @@ def is_process_running_from_hwnd(hwnd: int) -> bool:
 
 def copy_directory(src_dir, dest_dir, ignore_file=None):
     "Copy the files in asource directory to a destination directory, overwriting if necessary."
-    # pylint: disable=broad-exception-raised
-    # pylint: disable=broad-exception-caught
+    # pylint: disable=broad-exception-raised, broad-exception-caught
 
     try:
         # Normalize paths

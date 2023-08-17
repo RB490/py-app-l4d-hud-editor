@@ -1,10 +1,11 @@
 "Game class directory methods"
-# pylint: disable=protected-access, broad-exception-caught
+# pylint: disable=protected-access, broad-exception-caught, broad-exception-raised
 import os
+import shutil
 
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
-from utils.functions import generate_random_string, rename_with_timeout
+from utils.functions import copy_directory, generate_random_string, rename_with_timeout
 from utils.shared_utils import verify_directory
 
 
@@ -111,6 +112,18 @@ class GameDir:
         print(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
+    def get_main_dir_resource(self, dir_mode):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2\\resource'"
+        main_dir_resource = os.path.join(self.get_main_dir(dir_mode), "resource")
+        print(f"Resource main directory: '{main_dir_resource}'")
+        return main_dir_resource
+
+    def get_main_dir_materials(self, dir_mode):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2\\materials'"
+        main_dir_materials = os.path.join(self.get_main_dir(dir_mode), "materials")
+        print(f"materials main directory: '{main_dir_materials}'")
+        return main_dir_materials
+
     def get_main_dir_backup(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_'"
         main_dir = self.get_main_dir(dir_mode)
@@ -122,15 +135,15 @@ class GameDir:
 
     def get_main_dir_backup_resource(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\resource'"
-        resource_backup_dir = os.path.join(self.get_main_dir_backup(dir_mode), "resource")
-        print(f"Resource backup directory: '{resource_backup_dir}'")
-        return resource_backup_dir
+        main_dir_backup_resource = os.path.join(self.get_main_dir_backup(dir_mode), "resource")
+        print(f"Resource backup directory: '{main_dir_backup_resource}'")
+        return main_dir_backup_resource
 
     def get_main_dir_backup_materials(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\materials'"
-        materials_backup_dir = os.path.join(self.get_main_dir_backup(dir_mode), "materials")
-        print(f"Materials backup directory: '{materials_backup_dir}'")
-        return materials_backup_dir
+        main_dir_backup_materials = os.path.join(self.get_main_dir_backup(dir_mode), "materials")
+        print(f"Materials backup directory: '{main_dir_backup_materials}'")
+        return main_dir_backup_materials
 
     def __get_main_sub_dir(self, dir_mode, subdirectory):
         "Get the full path to the specified subdirectory (cfg or addons)"
@@ -165,3 +178,27 @@ class GameDir:
         vanilla_dir = os.path.join(games_dir, title)
         print(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
+
+    def restore_developer_game_files(self):
+        "Restore developer game files using backup"
+        print("Restoring game files")
+
+        try:
+            # receive variables
+            main_dir_backup = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
+            main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
+
+            main_dir_resource = self.game.dir.get_main_dir_resource(DirectoryMode.DEVELOPER)
+            main_dir_materials = self.game.dir.get_main_dir_materials(DirectoryMode.DEVELOPER)
+
+            # delete potentially beschmirched game directories
+            shutil.rmtree(main_dir_resource)
+            shutil.rmtree(main_dir_materials)
+
+            # copy files
+            copy_directory(main_dir_backup, main_dir)
+
+            print("Restored game files!")
+            return True
+        except Exception as err_info:
+            raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info

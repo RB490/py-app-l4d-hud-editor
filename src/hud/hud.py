@@ -1,4 +1,5 @@
 """Methods related to editing a hud"""
+# pylint: disable=broad-exception-raised, broad-exception-caught
 import os
 import threading
 from tkinter import filedialog
@@ -12,7 +13,7 @@ from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, SyncState
-from utils.functions import copy_directory, load_data
+from utils.functions import copy_directory
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
@@ -33,24 +34,15 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
-    def restore_game_files_backup(self):
-        print("restore_game_files_backup")
-
-        backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
-
-        print("Restored game files backup!")
-
-
-
     def start_editing_debug_bad_unsync(self):
-        # is developer mode installed? - also checks for user directory
-
+        # restore game files if a hud is still incorrectly synced (only once at the start of a new script instance)
         if self.detect_incorrectly_still_synced is False:
-            
-            # restore backup if synced
             sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+
+            # restore game files if still synced
             if sync_state_id == SyncState.FULLY_SYNCED:
-                self.restore_game_files_backup()
+                self.game.dir.restore_developer_game_files()
+                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
             # only detect it once per script instance
             self.detect_incorrectly_still_synced = True
@@ -78,7 +70,17 @@ class Hud(metaclass=Singleton):
             show_message("Development mode not installed!", "error")
             return False
 
-        # check if the script failed to unsync in a previous instance. for example if crashed
+        # restore game files if a hud is still incorrectly synced (only once at the start of a new script instance)
+        if self.detect_incorrectly_still_synced is False:
+            sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+
+            # restore game files if still synced
+            if sync_state_id == SyncState.FULLY_SYNCED:
+                self.game.dir.restore_developer_game_files()
+                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
+
+            # only detect it once per script instance
+            self.detect_incorrectly_still_synced = True
 
         # cancel if this hud is already being edited
         if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:

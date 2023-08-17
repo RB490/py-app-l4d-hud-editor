@@ -69,7 +69,7 @@ class GameInstaller:
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
-                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
 
         # confirm start
@@ -114,7 +114,7 @@ class GameInstaller:
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
-                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
 
         # confirm start
@@ -160,16 +160,16 @@ class GameInstaller:
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
-                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
 
         # get dev directory
         try:
             self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
         except Exception as err_info:
-            show_message(f"{err_info}", "error", 'Could not get developer directory!')
+            show_message(f"{err_info}", "error", "Could not get developer directory!")
             return False
-        
+
         # confirm start
         if not prompt_start(self.game, "install"):
             return False
