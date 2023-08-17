@@ -98,7 +98,7 @@ class GameIDHandler:
     def get_installation_state(self, dir_mode):
         """Get the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return self.__get_state(dir_mode, "installation_state", InstallationState.UNKNOWN)
+        return SyncState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN)]
 
     def set_installation_state(self, dir_mode, installation_state):
         """Set the installation state for a specific directory mode."""
@@ -108,14 +108,14 @@ class GameIDHandler:
     def get_sync_state(self, dir_mode):
         """Get the synchronization state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return self.__get_state(dir_mode, "sync_state", SyncState.FULLY_SYNCED)
+        return SyncState[self.__get_state_value(dir_mode, "sync_state", SyncState.FULLY_SYNCED)]
 
     def set_sync_state(self, dir_mode, sync_state):
         """Set the synchronization state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
         self.__set_state(dir_mode, "sync_state", sync_state)
 
-    def __get_state(self, dir_mode, state_key, default_value):
+    def __get_state_value(self, dir_mode, state_key, default_value):
         """Get a specific state value from the ID file with a default value if not present."""
         id_path = self.__get_id_path(dir_mode)
 

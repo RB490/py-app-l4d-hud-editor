@@ -34,30 +34,31 @@ class Hud(metaclass=Singleton):
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
     def restore_game_files_backup(self):
+        print("restore_game_files_backup")
+
         backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 
-        print(backup_dir)
+        print(f"backup_dir: {backup_dir}")
 
     def start_editing_debug_bad_unsync(self):
         # is developer mode installed? - also checks for user directory
-        
-        
-        self.game.dir.id.set_id_path(DirectoryMode.USER)
-        # self.game.dir.set(DirectoryMode.DEVELOPER)
-        return
-
-
 
         if self.detect_incorrectly_still_synced is False:
             print("checking if the hud is still synced while it shouldnt be")
             sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
 
+            print(f"sync state = {sync_state_id} && {sync_state_id.name}")
+
             if sync_state_id == SyncState.FULLY_SYNCED:
                 self.restore_game_files_backup()
+            else:
+                print("sync state is not fully synced?")
         else:
             print("NOT checking bad unsync")
 
         self.detect_incorrectly_still_synced = True
+
+        print("finished bad unsync")
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
