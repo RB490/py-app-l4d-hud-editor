@@ -30,7 +30,7 @@ class GameDir:
         self.game._validate_dir_mode(dir_mode)
         print(f"Setting mode: {dir_mode.name}")
 
-        # note: retrieving source & target dir with self.get also already checks whether they are installed
+        # retrieving source & target dir with self.get also already checks whether they are installed
         rename_timeout = 3
         # variables - source
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER

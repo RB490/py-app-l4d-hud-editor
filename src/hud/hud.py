@@ -34,6 +34,133 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
+    def start_editing(self, hud_dir, sync_hud=True):
+        """Perform all the actions needed to start hud editing"""
+
+        print(f"start_editing: ({hud_dir})")
+
+        # verify parameters
+        if not os.path.isdir(hud_dir):
+            raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
+        self.hud_dir = hud_dir
+
+        # prompt to start game during debug mode
+        if DEBUG_MODE:
+            result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
+            if not result:
+                start_instance = GuiHudStart(self.persistent_data)
+                start_instance.show()
+                return False
+
+        # is developer mode installed?
+        if not self.game.dir.get(DirectoryMode.DEVELOPER):
+            show_message("infobox", "Development mode not installed!")
+            return False
+
+        # cancel if this hud is already being edited
+        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
+            return False
+
+        # unsync previous hud
+        if sync_hud:
+            self.syncer.un_sync()
+
+        # Stop checking for game exit
+        self.stop_game_exit_check()
+
+        # enable dev mode
+        result = self.game.dir.set(DirectoryMode.DEVELOPER)
+        if not result:
+            print("Could not activate developer mode")
+            start_instance = GuiHudStart(self.persistent_data)
+            start_instance.show()
+            return False
+
+        # sync the hud to the game folder
+        if sync_hud:
+            self.syncer.sync(
+                self.hud_dir,
+                self.game.dir.get(DirectoryMode.DEVELOPER),
+                os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
+            )
+
+        # hotkeys
+        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
+
+        # run the game
+        self.game.window.run(DirectoryMode.DEVELOPER)
+
+        # refresh hud incase game has not restarted
+        self.game.command.execute("reload_all")
+
+        # Start checking for game exit
+        self.wait_for_game_exit_then_finish_editing()
+
+        # Open browser
+        if not isinstance(self.browser, GuiHudBrowser):
+            self.browser = GuiHudBrowser(self.persistent_data)
+            self.browser.run()
+        else:
+            self.browser.show()
+
+        return True
+
+    def finish_editing(self, open_start_gui=True):
+        """Perform all the actions needed to finish hud editing"""
+        print("finish_editing")
+
+        # Stop checking for game exit
+        self.stop_game_exit_check()
+
+        # close browser
+        if isinstance(self.browser, GuiHudBrowser):
+            self.browser.hide()
+
+        # unsync hud
+        self.syncer.un_sync()
+
+        # remove hotkey
+        hotkeys = keyboard.get_hotkey_name()
+        if HOTKEY_SYNC_HUD in hotkeys:
+            print("Hotkey exists")
+            keyboard.remove_hotkey(self.sync)
+
+        # clear variables
+        self.hud_dir = None
+
+        # enable user mode
+        self.game.dir.set(DirectoryMode.DEVELOPER)
+
+        # callback to the gui
+        if open_start_gui:
+            start_instance = GuiHudStart(self.persistent_data)
+            start_instance.show()
+
+    def sync(self):
+        """Sync hud"""
+
+        hud_dir = self.hud_dir
+        dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
+
+        print("hud_dir:", hud_dir)
+        print("dev_game_dir:", dev_game_dir)
+        print("main_dev_dir_basename:", main_dev_dir_basename)
+
+        # pylint: disable=broad-exception-caught
+        try:
+            self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
+        except Exception as err_info:
+            print(f"Could not sync: {err_info}")
+
+    def un_sync(self):
+        """Unsync hud"""
+
+        self.syncer.un_sync()
+
+        # clear variables
+        self.hud_dir = None
+
     def is_loaded(self):
         "Verify if hud is loaded"
         if self.hud_dir:
@@ -126,6 +253,15 @@ class Hud(metaclass=Singleton):
         else:
             print("Saving canceled.")
 
+    def wait_for_game_exit_then_finish_editing(self):
+        """Used to finish editing when game closes"""
+
+        if not self.game.window.is_running():
+            self.finish_editing(open_start_gui=True)
+        else:
+            # Schedule the function to be called again
+            self.start_game_exit_check()
+
     def start_game_exit_check(self):
         """Start game exit check"""
         # Stop any currently running thread
@@ -141,142 +277,6 @@ class Hud(metaclass=Singleton):
         if self.threaded_timer_game_exit is not None:
             self.threaded_timer_game_exit.cancel()
             self.threaded_timer_game_exit = None
-
-    def wait_for_game_exit_then_finish_editing(self):
-        """Used to finish editing when game closes"""
-
-        if not self.game.window.is_running():
-            self.finish_editing(open_start_gui=True)
-        else:
-            # Schedule the function to be called again
-            self.start_game_exit_check()
-
-    def start_editing(self, hud_dir, sync_hud=True):
-        """Perform all the actions needed to start hud editing"""
-
-        print(f"start_editing: ({hud_dir})")
-
-        # verify parameters
-        if not os.path.isdir(hud_dir):
-            raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
-        self.hud_dir = hud_dir
-
-        # prompt to start game during debug mode
-        if DEBUG_MODE:
-            result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
-            if not result:
-                start_instance = GuiHudStart(self.persistent_data)
-                start_instance.show()
-                return False
-
-        # is developer mode installed?
-        if not self.game.dir.get(DirectoryMode.DEVELOPER):
-            show_message("infobox", "Development mode not installed!")
-            return False
-
-        # cancel if this hud is already being edited
-        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud:
-            return False
-
-        # unsync previous hud
-        if sync_hud:
-            self.syncer.un_sync()
-
-        # Stop checking for game exit
-        self.stop_game_exit_check()
-
-        # enable dev mode
-        result = self.game.dir.set(DirectoryMode.DEVELOPER)
-        if not result:
-            print("Could not activate developer mode")
-            start_instance = GuiHudStart(self.persistent_data)
-            start_instance.show()
-            return False
-
-        # sync the hud to the game folder
-        if sync_hud:
-            self.syncer.sync(
-                self.hud_dir,
-                self.game.dir.get(DirectoryMode.DEVELOPER),
-                os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
-            )
-
-        # hotkeys
-        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
-
-        # run the game
-        self.game.window.run(DirectoryMode.DEVELOPER)
-
-        # refresh hud incase game has not restarted
-        self.game.command.execute("reload_all")
-
-        # Start checking for game exit
-        self.wait_for_game_exit_then_finish_editing()
-
-        # Open browser
-        if not isinstance(self.browser, GuiHudBrowser):
-            self.browser = GuiHudBrowser(self.persistent_data)
-            self.browser.run()
-        else:
-            self.browser.show()
-
-        return True
-
-    def sync(self):
-        """Sync hud"""
-
-        hud_dir = self.hud_dir
-        dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
-
-        print("hud_dir:", hud_dir)
-        print("dev_game_dir:", dev_game_dir)
-        print("main_dev_dir_basename:", main_dev_dir_basename)
-
-        # pylint: disable=broad-exception-caught
-        try:
-            self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
-        except Exception as err_info:
-            print(f"Could not sync: {err_info}")
-
-    def un_sync(self):
-        """Unsync hud"""
-
-        self.syncer.un_sync()
-
-        # clear variables
-        self.hud_dir = None
-
-    def finish_editing(self, open_start_gui=True):
-        """Perform all the actions needed to finish hud editing"""
-        print("finish_editing")
-
-        # Stop checking for game exit
-        self.stop_game_exit_check()
-
-        # close browser
-        if isinstance(self.browser, GuiHudBrowser):
-            self.browser.hide()
-
-        # unsync hud
-        self.syncer.un_sync()
-
-        # remove hotkey
-        hotkeys = keyboard.get_hotkey_name()
-        if HOTKEY_SYNC_HUD in hotkeys:
-            print("Hotkey exists")
-            keyboard.remove_hotkey(self.sync)
-
-        # clear variables
-        self.hud_dir = None
-
-        # enable user mode
-        self.game.dir.set(DirectoryMode.DEVELOPER)
-
-        # callback to the gui
-        if open_start_gui:
-            start_instance = GuiHudStart(self.persistent_data)
-            start_instance.show()
 
 
 def debug_hud():

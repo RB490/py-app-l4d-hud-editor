@@ -5,7 +5,7 @@ import os
 from tkinter import filedialog
 
 from game.constants import DirectoryMode, InstallationState
-from utils.constants import SCRIPT_NAME, SyncState
+from utils.constants import SyncState
 from utils.shared_utils import is_subdirectory, show_message
 
 
@@ -30,8 +30,9 @@ class GameIDHandler:
     def __get_id_path(self, dir_mode):
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
-        if mode_dir is None:
-            raise Exception((f"Directory '{mode_dir}' does not exist. Unable to construct ID path."))
+        if not mode_dir:
+            print(f"Unable to construct ID path: Could not retrieve directory for {dir_mode.name}")
+            return None
 
         id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
         # print("ID Path:", id_path)
@@ -40,61 +41,65 @@ class GameIDHandler:
     def set_id_path(self, dir_mode):
         """Manually set the directory for a given directory mode."""
 
-        self.game._validate_dir_mode(dir_mode)
-
         print(f"Manually setting directory for: {dir_mode.name}")
+        
+        try:
+            self.game._validate_dir_mode(dir_mode)
 
-        message = (
-            f"Could not find ID file for the {dir_mode.name} installation directory.\n\n"
-            "Is it installed and do you want to manually select it?\n"
-            "If so - Be sure to select the correct directory!"
-        )
-        result = show_message(message, "yesno", SCRIPT_NAME)
-        if not result:
-            print(f"Could not set ID location for {dir_mode.name}")
-            return False
+            
+            # prompt - manually select location?
+            message = (
+                f"Could not find {self.game.get_title()} ID file for the {dir_mode.name} installation directory!\n\n"
+                "Is it installed and do you want to manually select it?"
+            )
+            result = show_message(message, "yesno", "Set ID location")
+            if not result:
+                raise ValueError("User chose not to select a directory")
 
-        id_dir = filedialog.askdirectory(
-            mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
-        )
-        if not os.path.isdir(id_dir):
-            print(f"Could not set ID location for {dir_mode.name}")
-            return False
+            # manually select location
+            id_dir = filedialog.askdirectory(
+                mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
+            )
+            
+            # verify location - existence
+            if not os.path.isdir(id_dir):
+                raise ValueError("Invalid directory specified")
 
-        # verify target_dir location
-        if not is_subdirectory(self.game.steam.get_games_dir(), id_dir):
-            print("Invalid directory! Not inside the steam games folder.")
-            return False
+            # verify location - is a steam game
+            if not is_subdirectory(self.game.steam.get_games_dir(), id_dir):
+                raise ValueError("Directory is not inside the steam games folder")
 
-        # verify game executable
-        exe_file = os.path.join(id_dir, self.game.get_exe())
-        exe_file = os.path.normpath(exe_file)
-        if not os.path.isfile(exe_file):
-            print(f"Invalid directory! Executable not present: {exe_file}")
-            return False
-        else:
-            print(f"Directory valid! Executable present: {exe_file}")
+            # verify location - is the correct steam game
+            exe_file = os.path.join(id_dir, self.game.get_exe())
+            exe_file = os.path.normpath(exe_file)
+            if not os.path.isfile(exe_file):
+                raise ValueError(f"{exe_file} is not present in the directory")
 
-        if dir_mode == DirectoryMode.DEVELOPER:
-            message = f"Is {dir_mode.name} mode fully installed?"
-            is_fully_installed = show_message(message, "yesno", SCRIPT_NAME)
-            install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.UNKNOWN
-        else:
-            install_state = InstallationState.COMPLETED
+            # prompt installation state
+            if dir_mode == DirectoryMode.DEVELOPER:
+                message = f"Is {dir_mode.name} mode fully installed?"
+                is_fully_installed = show_message(message, "yesno", "SCRIPT_NAME")
+                install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.UNKNOWN
+            else:
+                install_state = InstallationState.COMPLETED
 
-        initial_state_data = {
-            "directory_mode": dir_mode.name,
-            "game_directory": id_dir,
-            "installation_state": install_state.name,
-            "sync_state": SyncState.FULLY_SYNCED.name,
-        }
+            # write ID file
+            initial_state_data = {
+                "directory_mode": dir_mode.name,
+                "game_directory": id_dir,
+                "installation_state": install_state.name,
+                "sync_state": SyncState.FULLY_SYNCED.name,
+            }
 
-        self.__create_id_file(id_dir)
-        self.__write_id_content(dir_mode, initial_state_data)
-        return True
+            self.__create_id_file(id_dir)
+            self.__write_id_content(dir_mode, initial_state_data)
+            return True
+        except Exception as err_info:
+            raise RuntimeError(f"Could not set {dir_mode.name} ID location! \n\n{err_info}") from err_info
 
     def get_installation_state(self, dir_mode):
         """Get the installation state for a specific directory mode."""
+        self.game._validate_dir_mode(dir_mode)
         return self.__get_state(dir_mode, "installation_state", InstallationState.UNKNOWN)
 
     def set_installation_state(self, dir_mode, installation_state):
@@ -104,6 +109,7 @@ class GameIDHandler:
 
     def get_sync_state(self, dir_mode):
         """Get the synchronization state for a specific directory mode."""
+        self.game._validate_dir_mode(dir_mode)
         return self.__get_state(dir_mode, "sync_state", SyncState.FULLY_SYNCED)
 
     def set_sync_state(self, dir_mode, sync_state):

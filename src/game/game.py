@@ -125,10 +125,12 @@ def debug_game_class(persistent_data):
 
     gamez = Game(persistent_data)
 
+    # result = gamez.dir.get(DirectoryMode.USER)
+
     ###########################
     # Installer
     ###########################
-    # result = gamez.installer._install()
+    result = gamez.installer._install()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
@@ -145,9 +147,9 @@ def debug_game_class(persistent_data):
     # result = gamez._disable_addons()
     # result = gamez._write_config()
 
-    # print(f"install result = {result}")
+    print(f"install result = {result}")
 
-    debug_id_handler(gamez)
+    # debug_id_handler(gamez)
 
     ###########################
     # Directory

@@ -19,6 +19,7 @@ from utils.functions import (
     wait_for_process_with_ram_threshold,
     wait_process_close,
 )
+from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
 
@@ -139,6 +140,21 @@ class GameInstaller:
             print("Already installed!")
             return True
 
+        # get user directory
+        if not self.game.dir.get(DirectoryMode.USER):
+            try:
+                self.game.dir.id.set_id_path(DirectoryMode.USER)
+            except Exception as err_info:
+                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                return False
+
+        # get dev directory
+        try:
+            self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+        except Exception as err_info:
+            show_message(f"{err_info}", "error", 'Could not get developer directory!')
+            return False
+        
         # confirm start
         if not prompt_start(self.game, "install"):
             return False

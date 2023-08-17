@@ -1,13 +1,12 @@
 Features:
 	Sync:
-
-
-		☐ set_id_location:developer isn't used anywhere in the code yet! It should be asked during install() @critical
-		☐ set_id_location:user isn't used anywhere in the code yet! It should be asked somewhere... @critical
+		☐ set_id_location:user Also maybe a (few) checks in crucial locations for user folder?
 
 		☐ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low
 		
 		Sync:
+			☐ Sync: Debugging -> Refactor debugging files
+			☐ Sync: Debugging -> Tiny hud with all the possible features to (unit) test with
 			☐ Refactor: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant @high 
 			☐ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical
 				- Bad unsync detection: Keep track of sync status in the ID file
@@ -24,6 +23,11 @@ Features:
 			☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
 			os.move error could happen if for example a file in the game dir is locked because in use
 			☐ Sync: Review and enhance target directory validation in sync() @high
+
+	ID:
+		☐ Refactor: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
+
+	General:
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder

@@ -1,10 +1,11 @@
 """Shared utility functions"""
-# pylint: disable=c-extension-no-member
+# pylint: disable=c-extension-no-member, broad-exception-caught
 import os
 import sys
 import tkinter as tk
 from tkinter import messagebox
 from typing import Dict, Type
+from ahk import AHK
 
 import psutil
 import win32api
