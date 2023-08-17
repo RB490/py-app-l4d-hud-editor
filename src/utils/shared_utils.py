@@ -13,6 +13,11 @@ import win32con
 import win32gui
 import win32process
 
+def verify_directory(directory, error_message):
+    if not os.path.isdir(directory):
+        print(error_message)
+        return False
+    return True
 
 def is_subdirectory(parent_dir, child_dir):
     """

@@ -1,6 +1,6 @@
 Features:
 	Sync:
-		☐ set_id_location:user Also maybe a (few) checks in crucial locations for user folder?
+		
 
 		☐ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low
 		
@@ -62,6 +62,8 @@ Refactoring:
 			Consider code paths. For example retrieving the steam game dir is vital,
 			if that fails. the program should raise an exception, then maybe catch it
 			and display it in a messagebox. or display the message box inside the class?
+	☐ Refactor: Start GUI
+	☐ Refactor: installer's install() repair() update() have a lot of duplicate code
 	☐ Private and internal classes dont need param checking, only public
 	☐ Handle VPK class failing to extract specific files during installation
 	☐ Make internal class methods protected by adding underscores. And internal with double __

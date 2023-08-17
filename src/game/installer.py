@@ -65,6 +65,14 @@ class GameInstaller:
             print("Not installed!")
             return False
 
+        # get user directory
+        if not self.game.dir.get(DirectoryMode.USER):
+            try:
+                self.game.dir.id.set_id_path(DirectoryMode.USER)
+            except Exception as err_info:
+                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                return False
+
         # confirm start
         if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):
             return False
@@ -101,6 +109,14 @@ class GameInstaller:
         if current_state is not InstallationState.COMPLETED:
             print("Not installed!")
             return False
+
+        # get user directory
+        if not self.game.dir.get(DirectoryMode.USER):
+            try:
+                self.game.dir.id.set_id_path(DirectoryMode.USER)
+            except Exception as err_info:
+                show_message(f"{err_info}", "error", 'Could not get user directory!')
+                return False
 
         # confirm start
         if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):

@@ -38,12 +38,16 @@ def rename_with_timeout(src, dst, timeout=5):
     - A program that's shutting down is still temporary locking them
     - Miscelanious operating system issue where renaming fails once but is fine the next time"""
     start = time.time()
+    
+    print(f"Renaming {src} -> {dst} with timeout: {timeout}")
+    
     while True:
         try:
             os.rename(src, dst)
             return True
         except Exception:
             if time.time() - start > timeout:
+                print('Failed to rename!')
                 return False
             else:
                 time.sleep(0.1)

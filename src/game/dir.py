@@ -5,6 +5,7 @@ import os
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
 from utils.functions import generate_random_string, rename_with_timeout
+from utils.shared_utils import verify_directory
 
 
 class GameDir:
@@ -39,7 +40,14 @@ class GameDir:
         # variables - target
         target_mode = dir_mode
         target_dir = self.get(target_mode)
-        vanilla_dir = self.__get_vanilla()
+        vanilla_dir = self.__get_vanilla_dir()
+
+        if not verify_directory(source_dir, 'Could not retrieve source directory!'):
+            return False
+        if not verify_directory(target_dir, 'Could not retrieve target directory!'):
+            return False
+        if not verify_directory(vanilla_dir, 'Could not retrieve vanilla directory!'):
+            return False
 
         # do we need to swap?
         if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
@@ -50,15 +58,11 @@ class GameDir:
         self.game.close()
 
         # backup source mode
-        print(f"Renaming {source_dir} -> {source_dir_backup}")
         if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
-            print(f"Failed to rename {source_dir} -> {source_dir_backup}")
             return False
 
         # activate target mode
-        print(f"Renaming {target_dir} -> {vanilla_dir}")
         if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
-            print(f"Failed to rename {target_dir} -> {vanilla_dir}")
             return False
 
         print(f"Set mode: {dir_mode.name} successfully!")
@@ -86,7 +90,7 @@ class GameDir:
     def _get_active_mode(self):
         dev_dir = self.get(DirectoryMode.DEVELOPER)
         user_dir = self.get(DirectoryMode.USER)
-        vanilla_dir = self.__get_vanilla()
+        vanilla_dir = self.__get_vanilla_dir()
 
         if dev_dir == vanilla_dir:
             print(f"Active mode: {DirectoryMode.DEVELOPER.name}")
@@ -150,7 +154,7 @@ class GameDir:
         "Get the full path to the addons dir eg. 'Left 4 Dead 2\\addons'"
         return self.__get_main_sub_dir(dir_mode, "addons")
 
-    def __get_vanilla(self):
+    def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
         print("Getting vanilla directory path...")
 
