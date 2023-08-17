@@ -32,7 +32,7 @@ class Hud(metaclass=Singleton):
         self.detect_incorrectly_still_synced = False
 
         if DEBUG_MODE:
-            self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
+            self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "2020HUD")
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""

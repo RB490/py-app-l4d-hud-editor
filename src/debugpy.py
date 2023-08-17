@@ -15,8 +15,7 @@ os.system("cls")  # clear terminal
 persistent_data = load_data()
 # debug_game_class(persistent_data)
 
-hud_inc = Hud(persistent_data)
-hud_inc.start_editing_debug_bad_unsync()
+# hud_inc = Hud(persistent_data)
 
 # browse = get_debug_gui_browser_instance(persistent_data)
 # browse.run()
