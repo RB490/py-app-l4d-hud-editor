@@ -25,18 +25,6 @@ from ahk import AHK
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
 
-def move_window_with_ahk(window_title, new_x, new_y):
-    "Move window: https://pypi.org/project/ahk/"
-    ahk = AHK()
-
-    try:
-        win = ahk.find_window(title=window_title)  # Find the opened window
-        win.move(new_x, new_y)
-        print(f"Moved {window_title} -> {new_x}x{new_y}")
-    except Exception:
-        print("Failed to move window using AHK")
-
-
 def generate_random_string(length=8):
     "Generate random string"
     characters = string.ascii_letters + string.digits
@@ -44,7 +32,11 @@ def generate_random_string(length=8):
 
 
 def rename_with_timeout(src, dst, timeout=5):
-    "Try to rename src to dst within timeout seconds"
+    """Try to rename src to dst within timeout seconds.
+
+    This aims to work around some possible exceptions:
+    - A program that's shutting down is still temporary locking them
+    - Miscelanious operating system issue where renaming fails once but is fine the next time"""
     start = time.time()
     while True:
         try:

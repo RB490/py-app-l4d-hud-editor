@@ -12,14 +12,15 @@ import win32con
 import win32gui
 import win32process
 
+
 def is_subdirectory(parent_dir, child_dir):
     """
     Check if a directory is a subdirectory of another directory.
-    
+
     Args:
         parent_dir (str): The parent directory.
         child_dir (str): The potential subdirectory.
-        
+
     Returns:
         bool: True if child_dir is a subdirectory of parent_dir, False otherwise.
     """
@@ -40,6 +41,19 @@ def is_subdirectory(parent_dir, child_dir):
     else:
         print(f"{child_dir} is not subdirectory of {parent_dir}")
         return False
+
+
+def move_window_with_ahk(window_title, new_x, new_y):
+    "Move window: https://pypi.org/project/ahk/"
+    ahk = AHK()
+
+    try:
+        win = ahk.find_window(title=window_title)  # Find the opened window
+        win.move(new_x, new_y)
+        print(f"Moved {window_title} -> {new_x}x{new_y}")
+    except Exception:
+        print("Failed to move window using AHK")
+
 
 def move_hwnd_to_position(hwnd, position):
     """
