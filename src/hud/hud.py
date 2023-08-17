@@ -34,19 +34,6 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud_debug", "Workspace", "2020HUD")
 
-    def start_editing_debug_bad_unsync(self):
-        # restore game files if a hud is still incorrectly synced (only once at the start of a new script instance)
-        if self.detect_incorrectly_still_synced is False:
-            sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
-
-            # restore game files if still synced
-            if sync_state_id == SyncState.FULLY_SYNCED:
-                self.game.dir.restore_developer_game_files()
-                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-
-            # only detect it once per script instance
-            self.detect_incorrectly_still_synced = True
-
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
 
@@ -76,7 +63,7 @@ class Hud(metaclass=Singleton):
 
             # restore game files if still synced
             if sync_state_id == SyncState.FULLY_SYNCED:
-                self.game.dir.restore_developer_game_files()
+                self.game.dir.restore_developer_directory()
                 self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
             # only detect it once per script instance

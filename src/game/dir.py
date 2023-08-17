@@ -179,7 +179,7 @@ class GameDir:
         print(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
 
-    def restore_developer_game_files(self):
+    def restore_developer_directory(self):
         "Restore developer game files using backup"
         print("Restoring game files")
 
