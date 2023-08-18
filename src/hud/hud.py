@@ -1,6 +1,7 @@
 """Methods related to editing a hud"""
 # pylint: disable=broad-exception-raised, broad-exception-caught
 import os
+import shutil
 import threading
 from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
@@ -13,7 +14,7 @@ from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, SyncState
-from utils.functions import copy_directory
+from utils.functions import copy_directory, load_data
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
@@ -30,9 +31,6 @@ class Hud(metaclass=Singleton):
         self.threaded_timer_game_exit = None
         self.browser = None
         self.detect_incorrectly_still_synced = False
-
-        if DEBUG_MODE:
-            self.hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "2020HUD")
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
@@ -294,6 +292,29 @@ def debug_hud(persistent_data):
     """Debug the hud class"""
     print("debug_hud")
 
+    debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "2020HUD")
+
     my_hud_instanc = Hud(persistent_data)
+    my_hud_instanc.hud_dir = debug_hud_dir
+
     # my_hud_instanc.save_as_folder()
     my_hud_instanc.start_editing(my_hud_instanc.get_dir())
+
+
+def create_hud_workspace():
+    # pylint: disable=line-too-long
+    """Debugs the hud syncer class"""
+
+    saved_data = load_data()
+    game_instance = Game(saved_data)
+
+    sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud")
+    if os.path.isdir(os.path.join(sync_debug_dir, "workspace")):
+        shutil.rmtree(os.path.join(sync_debug_dir, "workspace"))
+
+    source_dir_template = os.path.join(sync_debug_dir, "samples", "tiny", "debug_hud")
+    target_dir_template = os.path.join(sync_debug_dir, "samples", "large", "game_dir")
+    source_dir_workspace = os.path.join(sync_debug_dir, "workspace", "debug_hud")
+    target_dir_workspace = os.path.join(sync_debug_dir, "workspace", "game_dir")
+    shutil.copytree(source_dir_template, source_dir_workspace)
+    shutil.copytree(target_dir_template, target_dir_workspace)

@@ -29,19 +29,12 @@ Current:
 
 
 Features:
-	✔ Sync: Add check for detecting invalid main_name param. it should be valid subdirectory within the target directory containing folders such as 'resource' and 'scripts' @done(23-08-18 18:08)
-
-	✔ Sync: Unit test @done(23-08-18 18:07)
-
-
-	☐ Sync: Rewrite(?)
-		- Ideas: Considering i now have access to a backup folder 
-	☐ Sync: use the ID class to set/get sync state
-	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant @high 
+	☐ Sync: use the ID class to set/get sync state + modify test
+	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high 
+	
 	☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
 		os.move error could happen if for example a file in the game dir is locked because in use
 	☐ Sync: Review and enhance target directory validation in sync() @high
-	☐ Sync: Debugging -> Refactor debugging files
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder: use threading
@@ -77,6 +70,7 @@ Refactoring:
 			if that fails. the program should raise an exception, then maybe catch it
 			and display it in a messagebox. or display the message box inside the class?
 	☐ Refactor: Start GUI
+	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
 	☐ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it
