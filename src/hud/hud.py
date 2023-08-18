@@ -74,7 +74,7 @@ class Hud(metaclass=Singleton):
             return False
 
         # unsync previous hud
-        self.syncer.un_sync()
+        self.syncer.unsync()
 
         # Stop checking for game exit
         self.stop_game_exit_check()
@@ -127,7 +127,7 @@ class Hud(metaclass=Singleton):
             self.browser.hide()
 
         # unsync hud
-        self.syncer.un_sync()
+        self.syncer.unsync()
 
         # remove hotkey
         hotkeys = keyboard.get_hotkey_name()
@@ -163,10 +163,10 @@ class Hud(metaclass=Singleton):
         except Exception as err_info:
             print(f"Could not sync: {err_info}")
 
-    def un_sync(self):
+    def unsync(self):
         """Unsync hud"""
 
-        self.syncer.un_sync()
+        self.syncer.unsync()
 
         # clear variables
         self.hud_dir = None

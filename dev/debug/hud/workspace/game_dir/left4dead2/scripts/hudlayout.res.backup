@@ -1,396 +1,6 @@
+
 "Resource/HudLayout.res"
 {
-	"CustomCrosshair"
-	{
-		"ControlName"	"ImagePanel"
-		"fieldName"	"CustomCrosshair"
-		"xpos"		"c-8"
-		"ypos"		"c-8"
-		"wide"		"16"
-		"tall"		"16"
-		"visible"	"1"
-		"enabled"	"1"
-		"scaleImage"	"0"
-		"image"		"_crosshair\crosshair"
-		"zpos"		"-100" //zpos -2 and under hides crosshair behind credits
-	}
-	"CrosshairDebugBackground"
-	{
-		"ControlName"	"Panel"
-		"fieldName"		"CrosshairDebugBackground"
-		"xpos"			"c-32"
-		"ypos"          "c-32"
-		"wide"			"64"
-		"tall"			"64"
-		"visible"		"0"
-		"enabled"		"1"
-		"zpos"			"-2000"
-		"bgcolor_override"	"TransparentLightBlack"
-	}
-	//ink TWEAKED////////////////////////////////////////////////////
-	HudWeaponSelection
-	{
-		"fieldName" "HudWeaponSelection"
-		"xpos"	"r197"
-		"ypos"	"c95"
-		"wide"	"200"
-		"tall"	"175"
-		"visible" "1"
-		"enabled" "1"
-		"usetitlesafe" "1"
-		
-		"if_split_screen_horizontal"
-		{
-			"ypos"	"0"
-		}
-
-		"LargeBoxWide" "150"
-		"LargeBoxTall" "32"
-		"SmallBoxWide" "150"
-		"SmallBoxTall" "24"
-		"BoxGap" "1"
-		"BoxDirection" "0"	// 0 is up, 1 is down, 2 is left, 3 is right
-
-		"SelectionNumberXPos" "0"
-		"SelectionNumberYPos" "0"
-		"SelectionGrowTime"	"0"
-
-		"Ammo1XPos"	"0"
-		"Ammo1YPos"	"0"
-
-		"Ammo2XPos"	"0"
-		"Ammo2YPos"	"0"
-
-		"IconXPos" "0"	// negative numbers mean right side
-		"IconYPos" "0"
-		"IconYPos_lodef" "0"
-
-		"TextYPos" "0"	
-		"TextColor" "0"
-		"MaxSlots"	"0"
-		"PlaySelectSounds"	"0"
-			
-		"PrimaryWeaponsYPos"	"10"	
-		"PrimaryWeaponBoxWide"	"70"
-		"PrimaryWeaponBoxTall"	"34"
-		
-		"MeleeWeaponX"		"-26"
-		"MeleeWeaponY"		"2"
-		"MeleeWeaponWide"	"49"
-		"MeleeWeaponTall"	"22"	
-		
-		"ChainsawX"			"-38"
-		"ChainsawY"			"2"
-		"ChainsawWide"		"41"
-		"ChainsawTall"		"19"	
-		"ChainsawBarX"		"8"
-		"ChainsawBarY"		"5"
-		"ChainsawBarWide"	"5"
-		"ChainsawBarTall"	"16"		
-				
-		"PrimaryAmmoXPos"	"26"
-		"PrimaryAmmoYPos"	"-8"
-		"ReserveAmmoXPos"	"65"
-		"ReserveAmmoYPos"	"18"	
-		
-		"AmmoIconXPos"	"60"
-		"AmmoIconYPos"	"21"
-		"AmmoIconSize"	"19"	// wide and tall
-		
-		"SpecialAmmoXPos"	"31"
-		"SpecialAmmoYPos"	"12"
-				
-		"PrimaryWeaponsYPos"	"10"
-		"PrimaryWeaponWide"		"10"
-		"PrimaryWeaponTall"		"25"
-				
-		"PrimaryBindingYPos"	"0"
-		
-		"PistolBoxWide"	"21"
-		"PistolBoxTall"	"21"
-				
-		"RightSideIndent"	"10"
-		"IconSize"		"21"	// square weapon icon sizes			
-		
-		"PrimaryAmmoFont"		"ink_shadow_64"
-		"ReserveAmmoFont"		"ink_25"		
-		"PistolAmmoFont"		"ink_25"
-		
-		"SelectedItemColor"				"255 255 255 255"
-		"UnselectedItemColor"			"255 255 255 255"
-		"SelectedReserveAmmoColor"		"255 255 255 100"
-		"UnselectedReserveAmmoColor"	"255 255 255 100"
-		
-		"InactiveItemColor"		"0 0 0 0"		[$WIN32]
-		"InactiveItemColor"		"0 0 0 0"		[$X360]
-		
-		"SelectedScale"	"1.0"	// scale selected boxes by this much
-	}
-
-	CHudLocalPlayerDisplay
-	{
-		"fieldName" 	"CHudLocalPlayerDisplay"
-		"visible"	"1"
-		"enabled" 	"1"
-		"usetitlesafe"	"1"
-		"xpos"		"0"
-		"ypos"		"99"
-		"wide"		"f0"
-		"tall"		"f0"
-		"if_split_screen_left"
-		{
-			"xpos"	"0"
-		}
-		
-		"if_split_screen_top"
-		{
-			"ypos"	"r90"
-		}
-	}
-
-	// Tank approaching / Too far from Survivors
-	HudZombiePanel
-	{
-		"fieldName" "HudZombiePanel"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"	"0"
-		"ypos"	"c30"
-		"wide"	"f0"
-		"tall"	"155"
-		"PaintBackgroundType"	"2"
-		"if_split_screen_horizontal"
- 		{
- 			"ypos"	"c-45"			
-  		}
-  		"if_split_screen_left"
-		{
-			"xpos"	"c-145"
-		}
-		"if_split_screen_right"
-		{
-			"xpos"	"c-175"
-		}
-	}
-	"HudZombieHealth"
-	{
-		"fieldName"		"HudZombieHealth"
-		"xpos"			"r400"		//3--
-		"ypos"			"r135"
-		"wide"			"400"
-		"tall"			"150"
-		"visible"		"1"
-		"enabled"		"1"
-		"usetitlesafe"	"1"	// 2
-		  		
-  		"if_split_screen_left"
-		{
-			"xpos"	"1"
-		}
-	}
-	"CHudAbilityTimer"
-	{
-		"ControlName"	"CHudAbilityTimer"
-		"fieldName"		"CHudAbilityTimer"
-		"xpos"			"r86"
-		"ypos"			"r95"
-		"wide"			"80"
-		"tall"			"70"
-		"visible"		"1"
-		"enabled"		"1"
-		"ability_surpressed_color" "127 127 127 255"
-		"ability_charging_color" "127 127 127 255"
-		"ability_ready_color" "255 255 255 255"
-		"usetitlesafe"	"1"
-		
-  		"if_split_screen_left"
-		{
-			"xpos"	"-8"
-		}
-	}
-	CHudZombieTeamDisplay
-	{
-		"fieldName" "CHudZombieTeamDisplay"
-		"visible" "1"
-		"enabled" "1"
-		
-		"usetitlesafe"	"1"
-		"xpos"		"-18"
-		"ypos"		"r91"
-		"wide"		"f0"
-		"tall"		"100"
-		
-		// vert:
-		//"xpos"		"r100"
-		//"ypos"		"20"
-		//"wide"		"100"
-		//"tall"		"460"
-		
-		"VertPanelSpacing"   "45"
-		"HorizPanelSpacing"   "140"
-		
-		"if_split_screen_horizontal"
-		{
-			"ypos"	"c-59"		
-		}
-		
-		"if_split_screen_vertical"
-		{
-			"xpos"	"c-140"
-		}
-	}
-	HudGhostPanel
-	{
-		"fieldName"	"HudGhostPanel"
-		"visible"	"1"
-		"enabled"	"1"
-		"xpos"		"0"		//c-180
-		"ypos"		"c30"
-		"wide"		"f0"	//350
-		"tall"		"155"
-		"WhiteText"	"192 192 192 255"
-		"RedText"	"246 5 5 255"
-		"padding"	"4"
-		"bgcolor_override"	"0 0 0 0"
- 		"if_split_screen_horizontal"
- 		{
-			"ypos"	"c-45"			
-  		}
-  		"if_split_screen_left"
-		{
-			"xpos"	"c-145"
-		}
-		"if_split_screen_right"
-		{
-			"xpos"	"c-205"
-		}
-	}
-
-	HudPZDamageRecord
-	{
-		"fieldName" "HudPZDamageRecord"
-		"xpos"	"-5"
-		"ypos"	"50"
-		"wide"	"f20"
-		"tall"  "90"
-		"visible" "1"
-		"enabled" "1"
-		"PaintBackgroundType"	"2"
-		"usetitlesafe" "1"
-		
-		"label_textalign"		"west"
-		
-		"if_split_screen_horizontal"
- 		{
-			"ypos"	"20"
-			"label_textalign"		"west"
-  		}
-  		
-  		"if_split_screen_vertical"
- 		{
-			"ypos"	"20"
-			"label_textalign"		"center"
-  		}
-	}
-	
-	CHudTeamDisplay
-	{
-		"fieldName" "CHudTeamDisplay"
-		"visible" "1"
-		"enabled" "1"
-		
-		"usetitlesafe"	"1"
-
-		"xpos"		"6"
-		"ypos"		"r225"
-		"wide"		"f0"
-		"tall"		"250"
-		
-		"if_split_screen_horizontal"
-		{
-			"ypos"	"c-59"		
-		}
-		
-		"if_split_screen_vertical"
-		{
-			"xpos"			"c-300"	
-			"wide"			"600"
-			"tall"			"100"
-			"usetitlesafe"	"1"
-		}
-	}
-	
-	PZEndGamePanel
-	{
-		"fieldName" "PZEndGamePanel"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"	"c-377"
-		"ypos"	"c10"
-		"wide"	"354"
-		"tall"	"200"
-	}
-	
-	"CHudVote"
-	{
-		"fieldName"		"CHudVote"
-		"xpos"			"-3"
-		"ypos"			"c-260"
-		"wide"			"210" [$ENGLISH]
-		"wide"			"290" [!$ENGLISH]
-		"tall"			"200"
-		"visible"		"1"
-		"enabled"		"1"
-		"bgcolor_override"	"0 0 0 0"
-		"PaintBackgroundType"	"0" // rounded corners
-		"usetitlesafe"	"1"
-	}
-	
-	HudScavengeProgress
-	{
-		"fieldName" "HudScavengeProgress"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"		"c-45"	
-		"ypos"		"5"	
-		"zpos"		"0"
-		"wide"	 "85"
-		"tall"	 "43"
-		"PaintBackground"	"0"
-	
-		"NumberFont"		"HudNumbers"
-	}
-	
-	HudSurvivalTimer
-	{
-		"fieldName" "HudSurvivalTimer"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"		"c-225"
-		"ypos"		"-42"	[$WIN32]
-		"zpos"		"0"
-		"wide"	 "350"
-		"tall"	 "100"
-		"PaintBackground"	"0"
-		"NumberFont"		"HudNumbers"
-	}
-
-	HudScavengeTimer
-	{
-		"fieldName" "HudScavengeTimer"
-		"visible" "1"
-		"enabled" "1"
-		"xpos"		"c-225"
-		"ypos"		"3"	[$WIN32]	
-		"ypos"		"5"	[$X360]
-		"zpos"		"0"
-		"wide"	 "440"
-		"tall"	 "100"
-		"PaintBackground"	"0"
-	
-		"NumberFont"		"HudNumbers"
-	}
-	//ink END ///////////////////////////////////////////////////////
 	overview
 	{
 		"fieldname"				"overview"
@@ -457,9 +67,71 @@
 		"RightTitleY"	"422"
 	}
 
+	HudSurvivalTimer
+	{
+		"fieldName" "HudSurvivalTimer"
+		"visible" "1"
+		"enabled" "1"
+		"xpos"		"c-220"
+		"ypos"		"-10"	[$WIN32]
+		"ypos"		"-2"	[$X360]
+		"zpos"		"0"
+		"wide"	 "440"
+		"tall"	 "100"
 
+		"PaintBackground"	"0"
+		
+		"NumberFont"		"HudNumbers"
+	}
 
+	HudScriptedMode
+	{
+		"fieldName"	"HudScriptedMode"
+		"visible"	"1"
+		"enabled"	"1"
+		"xpos"		"c-320"
+		"ypos"		"0"
+		"zpos"		"0"
+		"wide"		"640"
+		"tall"	 	"480"
 
+		"PaintBackground"	"0"
+		
+		"NumberFont"	"HudNumbers"
+	}
+
+	HudScavengeTimer
+	{
+		"fieldName" "HudScavengeTimer"
+		"visible" "1"
+		"enabled" "1"
+		"xpos"		"c-220"
+		"ypos"		"15"	[$WIN32]
+		"ypos"		"5"	[$X360]
+		"zpos"		"0"
+		"wide"	 "440"
+		"tall"	 "100"
+
+		"PaintBackground"	"0"
+		
+		"NumberFont"		"HudNumbers"
+	}
+
+	HudScavengeProgress
+	{
+		"fieldName" "HudScavengeProgress"
+		"visible" "1"
+		"enabled" "1"
+		"xpos"		"c-42"
+		"ypos"		"23"
+		"zpos"		"0"
+		"wide"	 "85"
+		"tall"	 "43"
+
+		"PaintBackground"	"0"
+		
+		"NumberFont"		"HudNumbers"
+	}
 
 	TargetID
 	{
@@ -523,6 +195,23 @@
 	HudProgressBar
 	{
 		"fieldName" "HudProgressBar"
+		"xpos"	"c-114"
+		"ypos"	"c10"
+		"if_split_screen_vertical"
+		{
+			"ypos"	"c-10"
+		}
+		"wide"	"300"
+		"tall"  "80"
+		"visible" "1"
+		"enabled" "1"
+		"PaintBackgroundType"	"0" // No corners
+		"PaintBackground"	"0"
+	}
+	
+	BuildableCostPanel	
+	{
+		"fieldName" "BuildableCostPanel"
 		"xpos"	"c-114"
 		"ypos"	"c10"
 		"if_split_screen_vertical"
@@ -713,6 +402,108 @@
 		"BorderThickness" "88"
 	}
 
+	HudWeaponSelection
+	{
+		"fieldName" "HudWeaponSelection"
+		"xpos"	"r98"
+		"ypos"	"c-90"
+		"wide"	"100"
+		"tall"	"175"
+		"visible" "1"
+		"enabled" "1"
+		"usetitlesafe" "1"
+		
+		"if_split_screen_horizontal"
+		{
+			"ypos"	"0"
+		}
+
+		"LargeBoxWide" "150"
+		"LargeBoxTall" "32"
+		"SmallBoxWide" "150"
+		"SmallBoxTall" "24"
+		"BoxGap" "1"
+		"BoxDirection" "0"	// 0 is up, 1 is down, 2 is left, 3 is right
+
+		"SelectionNumberXPos" "4"
+		"SelectionNumberYPos" "4"
+		"SelectionGrowTime"	"0.4"
+
+		"Ammo1XPos"	"55"
+		"Ammo1YPos"	"4"
+
+		"Ammo2XPos"	"58"
+		"Ammo2YPos"	"5"
+
+		"IconXPos" "-55"	// negative numbers mean right side
+		"IconYPos" "-5"
+		"IconYPos_lodef" "2"
+
+		"TextYPos" "68"	
+		"TextColor" "SelectionTextFg"
+		"MaxSlots"	"5"
+		"PlaySelectSounds"	"0"
+			
+		"PrimaryWeaponsYPos"	"10"	
+		"PrimaryWeaponBoxWide"	"53"
+		"PrimaryWeaponBoxTall"	"28"
+		
+		"MeleeWeaponX"		"2"
+		"MeleeWeaponY"		"0"
+		"MeleeWeaponWide"	"49"
+		"MeleeWeaponTall"	"22"	
+		
+		"ChainsawX"			"2"
+		"ChainsawY"			"2"
+		"ChainsawWide"		"41"
+		"ChainsawTall"		"19"	
+		"ChainsawBarX"		"45"
+		"ChainsawBarY"		"2"
+		"ChainsawBarWide"	"5"
+		"ChainsawBarTall"	"19"		
+				
+		"PrimaryAmmoXPos"	"22"
+		"PrimaryAmmoYPos"	"0"
+		"ReserveAmmoXPos"	"22"
+		"ReserveAmmoYPos"	"14"	
+		
+		"AmmoIconXPos"	"20"
+		"AmmoIconYPos"	"3"
+		"AmmoIconSize"	"22"	// wide and tall
+		
+		"SpecialAmmoXPos"	"29"
+		"SpecialAmmoYPos"	"4"
+				
+		"PrimaryWeaponsYPos"	"10"
+		"PrimaryWeaponWide"		"60"
+		"PrimaryWeaponTall"		"20"
+				
+		"PrimaryBindingYPos"	"38"
+		
+		"PistolBoxWide"	"53"
+		"PistolBoxTall"	"24"
+				
+		"RightSideIndent"	"10"
+		"IconSize"		"24"	// square weapon icon sizes			
+		
+		"PrimaryAmmoFont"		"HudAmmo"
+		"ReserveAmmoFont"		"HudAmmoSmall"		
+		"PistolAmmoFont"		"HudAmmo"
+		
+		"SelectedItemColor"				"142 214 57 255"
+		"UnselectedItemColor"			"White"
+		"SelectedReserveAmmoColor"		"93 142 32 255"
+		"UnselectedReserveAmmoColor"	"169 169 169 255"
+		
+		"InactiveItemColor"		"90 90 90 255"		[$WIN32]
+		"InactiveItemColor"		"55 55 55 255"		[$X360]
+		
+		"SelectedScale"	"1.0"	// scale selected boxes by this much
+		
+		"SpecialAmmoXPos"	"18"
+		"SpecialAmmoYPos"	"6"
+	}
+
 	HudCrosshair
 	{
 		"fieldName" "HudCrosshair"
@@ -890,6 +681,58 @@
 		"enabled" "1"
 		"wide"	 "640"
 		"tall"	 "480"
+	}
+	
+	"CHudVote"
+	{
+		"fieldName"		"CHudVote"
+		"xpos"			"10"			
+		"ypos"			"c-80"
+		"wide"			"210" [$ENGLISH]
+		"wide"			"290" [!$ENGLISH]
+		"tall"			"200"
+		"visible"		"1"
+		"enabled"		"1"
+		"bgcolor_override"	"0 0 0 0"
+		"PaintBackgroundType"	"0" // rounded corners
+		"usetitlesafe"	"1"
+	}
+	
+	"CHudAbilityTimer"
+	{
+		"ControlName"	"CHudAbilityTimer"
+		"fieldName"		"CHudAbilityTimer"
+		"xpos"			"r72"
+		"ypos"			"r120"
+		"wide"			"80"
+		"tall"			"70"
+		"visible"		"1"
+		"enabled"		"1"
+		"ability_surpressed_color" "127 127 127 255"
+		"ability_charging_color" "127 127 127 255"
+		"ability_ready_color" "255 255 255 255"
+		"usetitlesafe"	"1"
+		
+  		"if_split_screen_left"
+		{
+			"xpos"	"-8"
+		}
+	}
+	"HudZombieHealth"
+	{
+		"fieldName"		"HudZombieHealth"
+		"xpos"			"r387"
+		"ypos"			"r100"
+		"wide"			"400"
+		"tall"			"100"
+		"visible"		"1"
+		"enabled"		"1"
+		"usetitlesafe"	"1"	// 2
+		  		
+  		"if_split_screen_left"
+		{
+			"xpos"	"1"
+		}
 	}
 	CBudgetPanel
 	{
@@ -1098,6 +941,57 @@
 		"enabled"		"1"
 		"PaintBackgroundType"	"2"
 	}
+	
+	CHudLocalPlayerDisplay
+	{
+		"fieldName" "CHudLocalPlayerDisplay"
+		"visible" "1"
+		"enabled" "1"
+		
+		"usetitlesafe"	"1"
+
+		"xpos"		"r160"
+		"ypos"		"r91"
+		"wide"		"160"
+		"tall"		"320"
+		
+		"if_split_screen_left"
+		{
+			"xpos"	"0"
+		}
+		
+		"if_split_screen_top"
+		{
+			"ypos"	"r90"
+		}
+	}
+
+	CHudTeamDisplay
+	{
+		"fieldName" "CHudTeamDisplay"
+		"visible" "1"
+		"enabled" "1"
+		
+		"usetitlesafe"	"1"
+
+		"xpos"		"5"
+		"ypos"		"r73"
+		"wide"		"f0"
+		"tall"		"100"
+		
+		"if_split_screen_horizontal"
+		{
+			"ypos"	"c-59"		
+		}
+		
+		"if_split_screen_vertical"
+		{
+			"xpos"			"c-300"	
+			"wide"			"600"
+			"tall"			"100"
+			"usetitlesafe"	"1"
+		}
+	}
 
 	HudFinaleMeter
 	{
@@ -1135,6 +1029,68 @@
 		"enabled"				"1"
 		"PaintBackgroundType"	"0"
 		"usetitlesafe"			"2"
+	}
+
+	// Tank approaching / Too far from Survivors
+	HudZombiePanel
+	{
+		"fieldName" "HudZombiePanel"
+		"visible" "1"
+		"enabled" "1"
+		"xpos"			"c-190"
+		"ypos"			"c10"
+		"wide"			"400"
+		"tall"			"155"
+		//"PaintBackgroundType"	"2"
+		
+		"if_split_screen_horizontal"
+ 		{
+ 			"ypos"	"c-45"			
+  		}
+  		
+  		"if_split_screen_left"
+		{
+			"xpos"	"c-145"
+		}
+		
+		"if_split_screen_right"
+		{
+			"xpos"	"c-175"
+		}
+	}
+
+ 	HudGhostPanel
+	{
+		"fieldName"		"HudGhostPanel"
+		"visible"		"1"
+		"enabled"		"1"
+		"xpos"			"c-180"
+		"ypos"			"c10"
+		"wide"			"400"
+		"tall"			"155"
+		"WhiteText"		"192 192 192 255"
+		"RedText"		"246 5 5 255"
+		"padding"		"4"
+		
+ 		"if_split_screen_horizontal"
+ 		{
+			"ypos"	"c-45"			
+  		}
+  		
+  		"if_split_screen_left"
+		{
+			"xpos"	"c-145"
+		}
+		
+		"if_split_screen_right"
+		{
+			"xpos"	"c-205"
+		}
+		
+		"if_split_screen_top"	[$X360]
+		{
+			"ypos"	"c-70"
+		}
 	}
 
 	HudCredits
@@ -1207,6 +1163,33 @@
 		"usetitlesafe"	"0"
 	}
 	
+	HudPZDamageRecord
+	{
+		"fieldName" "HudPZDamageRecord"
+		"xpos"	"0"			
+		"ypos"	"170"			
+		"wide"	"f0"
+		"tall"  "75"
+		"visible" "1"
+		"enabled" "1"
+		"PaintBackgroundType"	"2"
+		"usetitlesafe" "1"
+		
+		"label_textalign"		"west"
+		
+		"if_split_screen_horizontal"
+ 		{
+			"ypos"	"55"
+			"label_textalign"		"west"
+  		}
+  		
+  		"if_split_screen_vertical"
+ 		{
+			"ypos"	"55"
+			"label_textalign"		"center"
+  		}
+	}
+	
 	StatsCrawl
 	{
 		"fieldName" "StatsCrawl"
@@ -1243,6 +1226,50 @@
 			"box_size"		"16"
 			"spacer"		"4"
 			"box_inset"		"1"
+		}
+	}
+	
+	PZEndGamePanel
+	{
+		"fieldName" "PZEndGamePanel"
+		"visible" "1"
+		"enabled" "1"
+
+		"xpos"	"c-177"
+		"ypos"	"c10"
+		"wide"	"354"
+		"tall"	"200"
+	}
+	
+	CHudZombieTeamDisplay
+	{
+		"fieldName" "CHudZombieTeamDisplay"
+		"visible" "1"
+		"enabled" "1"
+		
+		"usetitlesafe"	"1"
+		"xpos"		"0"
+		"ypos"		"r75"
+		"wide"		"f0"
+		"tall"		"100"
+		
+		// vert:
+		//"xpos"		"r100"
+		//"ypos"		"20"
+		//"wide"		"100"
+		//"tall"		"460"
+		
+		"VertPanelSpacing"   "45"
+		"HorizPanelSpacing"   "140"
+		
+		"if_split_screen_horizontal"
+		{
+			"ypos"	"c-59"		
+		}
+		
+		"if_split_screen_vertical"
+		{
+			"xpos"	"c-140"
 		}
 	}
 }

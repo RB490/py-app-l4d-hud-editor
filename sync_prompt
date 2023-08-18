@@ -1,0 +1,46 @@
+built in python module for syncinmg? // Gpt to use it // gpt syncing class. // prompt engineering // see chatgpt history
+
+
+
+
+Python.
+
+
+Syncing:
+
+  *   	I want to sync files and folders from a source to target directory.
+  *   	Items that exist in target should be overwritten.
+  *   	Items that don't exist should be created.
+  *   	I want to be able to sync very often. So it should be as fast and efficient as possible. Possibly using the rsync module?
+
+Unsyncing:
+
+  *   	I want to be able to unsync where target is restored to its original state before being synced
+  *		I need to be able to unsync single items that were deleted in the source directory
+  *   	The target folder is very large in size so a full backup is not a option
+  *   	I want you to come up with a solution for unsyncing
+
+Target directory layout:
+
+bin
+config
+hl2
+left4dead2
+left4dead2_dlc1
+left4dead2_dlc2
+left4dead2_dlc3
+platform
+sdk_content
+sdk_tools
+update
+_hud_editor_id_file__user_directory.DoNotDelete
+debug.log
+left4dead2.exe
+
+I need the source directory to be synced with 'left4dead2'. And any item that gets synced to 'left4dead2' should be checked for inside the dlc folders: left4dead2_dlc1, left4dead2_dlc2, left4dead2_dlc3, update. if they exist, they should be backed up and restored when the item gets unsynced
+
+General information
+
+	* i need the script to use the root and all subdirectories of the source and target folder
+	* not every item (file or folder) in the source folder will exist in the target directory. these items shouldn't and can't be backed up. they should be fully deleted when unsyncing
+	* use a file comparison method to only sync items when they have been changed to avoid copying the entire source to target on every sync
