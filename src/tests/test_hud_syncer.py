@@ -93,7 +93,7 @@ class TestHudSyncer(unittest.TestCase):
             os.path.join(self.syncer.target_dir_root, "left4dead2"),
             os.path.join(self.syncer.target_dir_root, "left4dead2", "scripts"),
             os.path.join(self.syncer.target_dir_root, "left4dead2_dlc1"),
-            os.path.join(self.syncer.target_dir_root, "left4dead2_dlc1", "scripts")
+            os.path.join(self.syncer.target_dir_root, "left4dead2_dlc1", "scripts"),
         ]
         for dir_path in required_dirs:
             self.assertTrue(os.path.isdir(dir_path))
@@ -104,11 +104,10 @@ class TestHudSyncer(unittest.TestCase):
             os.path.join(fake_main_dir, "my_custom_source_folder"),
             os.path.join(fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
             os.path.join(fake_main_dir, "scripts", "hudlayout.res.backup"),
-            os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res.backup")
+            os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res.backup"),
         ]
         for file_path in synced_files:
             self.assertTrue(os.path.exists(file_path))
-
 
     @patch("builtins.print")  # Mock the print function
     def test_unsync(self, mock_print):
@@ -136,7 +135,7 @@ class TestHudSyncer(unittest.TestCase):
         for subdir_name in self.syncer.target_sub_dir_names:
             self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root, subdir_name)))
             self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root)))
-        
+
         os.startfile(self.fake_target_dir)
 
     def test_calculate_md5_hash(self):

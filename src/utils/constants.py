@@ -2,40 +2,40 @@
 import os
 from enum import Enum, auto
 
-# # Get the absolute path of the current directory
-# current_dir = os.path.abspath(os.path.dirname(__file__))
-
-# # Navigate up one level to retrieve the parent directory of 'modules'
-# parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
-
-# # Navigate up one more level to retrieve the parent directory of 'utils'
-# grandparent_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
-
-# print(grandparent_dir)
-
+# core
 DEBUG_MODE = True
+SCRIPT_NAME = "L4D Hud Editor"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SCRIPT_FILE_NAME = os.path.basename(PROJECT_ROOT)
+
+# main directories
 DEVELOPMENT_DIR = os.path.join(PROJECT_ROOT, "dev")
 ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+
+# assets
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
-NEW_HUD_DIR = os.path.join(ASSETS_DIR, "new hud template")
 MODS_DIR = os.path.join(ASSETS_DIR, "dependencies", "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
-SNIPPETS_DIR = os.path.join(ASSETS_DIR, "snippets")
-EDITOR_AUTOEXEC_PATH = os.path.join(MISC_DIR, "hud_editor_autoexec.cfg")
-DUMMY_ADDON_VPK_PATH = os.path.join(MISC_DIR, "dummy_addon_vpk.vpk")
-SCRIPT_NAME = "L4D Hud Editor"
-SCRIPT_FILE_NAME = os.path.basename(PROJECT_ROOT)
-PERSISTENT_DATA_PATH = os.path.join(MISC_DIR, SCRIPT_NAME + ".json")
-HUD_DESCRIPTIONS_PATH = os.path.join(MISC_DIR, "hud_file_descriptions.json")
+
+# data
+SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")
+NEW_HUD_DIR = os.path.join(DATA_DIR, "new hud template")
+EDITOR_AUTOEXEC_PATH = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
+DUMMY_ADDON_VPK_PATH = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
+PERSISTENT_DATA_PATH = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
+HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
+
+# misc
 UNIVERSAL_GAME_MAP = "hud_dev_map"
 HOTKEY_SYNC_HUD = "ctrl+s"
 HOTKEY_TOGGLE_BROWSER = "F5"
 HOTKEY_EXECUTE_AUTOEXEC = "F11"
 
 
+# data structures
 class SyncState(Enum):
     """Enumeration representing sync states"""
 

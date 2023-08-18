@@ -29,9 +29,11 @@ Current:
 
 
 Features:
+	☐ Sync: Cleanup test
+
 	☐ Sync: use the ID class to set/get sync state + modify test
 	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high 
-	
+
 	☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
 		os.move error could happen if for example a file in the game dir is locked because in use
 	☐ Sync: Review and enhance target directory validation in sync() @high
