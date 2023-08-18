@@ -2,7 +2,7 @@
 
 import tkinter as tk
 
-from editor_menu.menu import EditorMenuClass
+from menu.menu import EditorMenuClass
 from game.game import Game
 from hud.hud import Hud
 

@@ -16,13 +16,13 @@ DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 # assets
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
-MODS_DIR = os.path.join(ASSETS_DIR, "dependencies", "mods")
+MODS_DIR = os.path.join(ASSETS_DIR, "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
 
 # data
 SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")
-NEW_HUD_DIR = os.path.join(DATA_DIR, "new hud template")
+NEW_HUD_DIR = os.path.join(DATA_DIR, "new_hud_template")
 EDITOR_AUTOEXEC_PATH = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
 DUMMY_ADDON_VPK_PATH = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
 PERSISTENT_DATA_PATH = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")

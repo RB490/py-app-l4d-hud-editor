@@ -6,7 +6,7 @@ import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
 
-from editor_menu.handler import EditorMenuHandler
+from menu.handler import EditorMenuHandler
 from game.game import Game
 from game.constants import DirectoryMode
 from utils.constants import (

@@ -6,7 +6,7 @@ from tkinter import ttk
 import keyboard
 import win32gui
 
-from editor_menu.menu import EditorMenuClass
+from menu.menu import EditorMenuClass
 from game.game import Game
 from utils.constants import HOTKEY_TOGGLE_BROWSER
 from utils.functions import save_and_exit_script
