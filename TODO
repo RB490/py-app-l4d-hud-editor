@@ -29,12 +29,7 @@ Current:
 
 
 Features:
-
 	
-
-	
-
-	☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
 		os.move error could happen if for example a file in the game dir is locked because in use
 	☐ Sync: Review and enhance target directory validation in sync() @high
 
@@ -217,7 +212,7 @@ Archive:
 	
 	Sync:
 		✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
-		
+		✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)
 		✔ Sync: Cleanup test @done(23-08-19 22:43)
 		✔ Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-19 22:43) @lasted(2d10h39m43s)
 		✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)

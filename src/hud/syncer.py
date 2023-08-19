@@ -1,4 +1,5 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
+# pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised
 import hashlib
 import os
 import shutil
@@ -185,8 +186,12 @@ class HudSyncer(metaclass=Singleton):
                     and target_item not in self.hud_items_custom
                     and not os.path.isdir(target_item)
                 ):
-                    os.rename(target_item, target_item_backup)
-                    print(f"Backup: {target_item} -> {target_item_backup}")
+                    try:
+                        os.rename(target_item, target_item_backup)
+                        print(f"Backup: {target_item} -> {target_item_backup}")
+                    except Exception as e:
+                        # print(f"Error backing up {target_item}: {e}")
+                        raise Exception(f"Error backing up {target_item}: {e}") from e
 
         # print(f"custom items: {self.hud_items_custom}")
 
@@ -220,8 +225,12 @@ class HudSyncer(metaclass=Singleton):
                     overwrite_target = True
 
                 if overwrite_target:
-                    shutil.copy(item, target_item)
-                    print(f"Copying: {item} -> {target_item}")
+                    try:
+                        shutil.copy(item, target_item)
+                        print(f"Copying: {item} -> {target_item}")
+                    except Exception as e:
+                        # print(f"Error copying {item} to {target_item}: {e}")
+                        raise Exception(f"Error copying {item} to {target_item}: {e}") from e
 
     def __remove_deleted_source_items(self):
         for item in self.hud_items_previous:
