@@ -13,7 +13,7 @@ from gui.browser import GuiHudBrowser
 from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
-from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, SyncState
+from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD
 from utils.functions import copy_directory
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
@@ -25,12 +25,11 @@ class Hud(metaclass=Singleton):
     def __init__(self, persistent_data) -> None:
         self.game = Game(persistent_data)
         self.persistent_data = persistent_data
-        self.syncer = HudSyncer()
+        self.syncer = HudSyncer(persistent_data)
         self.desc = HudDescriptions()
         self.hud_dir = None
         self.threaded_timer_game_exit = None
         self.browser = None
-        self.detect_incorrectly_still_synced = False
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
@@ -54,18 +53,6 @@ class Hud(metaclass=Singleton):
         if not self.game.dir.get(DirectoryMode.DEVELOPER):
             show_message("Development mode not installed!", "error")
             return False
-
-        # restore game files if a hud is still incorrectly synced (only once at the start of a new script instance)
-        if self.detect_incorrectly_still_synced is False:
-            sync_state_id = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
-
-            # restore game files if still synced
-            if sync_state_id == SyncState.FULLY_SYNCED:
-                self.game.dir.restore_developer_directory()
-                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-
-            # only detect it once per script instance
-            self.detect_incorrectly_still_synced = True
 
         # cancel if this hud is already being edited
         if self.syncer.is_synced() and self.syncer.get_source_dir() == self.hud_dir:

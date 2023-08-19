@@ -1,5 +1,6 @@
 """Handles game ID and state information for different directory modes."""
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught
+from gettext import install
 import json
 import os
 from tkinter import filedialog
@@ -103,6 +104,7 @@ class GameIDHandler:
         """Set the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
         self.__set_state(dir_mode, "installation_state", installation_state)
+        return installation_state
 
     def get_sync_state(self, dir_mode):
         """Get the synchronization state for a specific directory mode."""
@@ -113,6 +115,7 @@ class GameIDHandler:
         """Set the synchronization state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
         self.__set_state(dir_mode, "sync_state", sync_state)
+        return sync_state
 
     def __get_state_value(self, dir_mode, state_key, default_value):
         """Get a specific state value from the ID file with a default value if not present."""

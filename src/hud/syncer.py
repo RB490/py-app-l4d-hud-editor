@@ -3,7 +3,10 @@ import hashlib
 import os
 import shutil
 
+from game.constants import DirectoryMode
+from game.game import Game
 from utils.constants import SyncState
+from utils.shared_utils import Singleton
 
 
 def calculate_md5_hash(file_path):
@@ -33,11 +36,13 @@ def get_subdirectories_names(directory):
     return [name for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
 
 
-class HudSyncer:
+class HudSyncer(metaclass=Singleton):
     """functions providing hud syncing/unsyncing capability from the source to game dir"""
 
-    def __init__(self):
-        self.sync_state = SyncState.NOT_SYNCED
+    def __init__(self, persistent_data):
+        self.game = Game(persistent_data)
+        self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+        # self.sync_state = SyncState.NOT_SYNCED
         self.source_dir = None  # hud folder
         self.target_dir_root = None  # eg: '..\steamapps\common\Left 4 Dead 2'
         self.target_dir_main_name = None  # 'left4dead2' as opposed to 'left4dead2_dlc1'
@@ -45,6 +50,13 @@ class HudSyncer:
         self.hud_items_custom = []  # the custom hud files and directories
         self.hud_items_previous = []  # the previous hud files and directories. used to compare and find deletes items
         self.hud_items = None  # the hud files and directories
+
+        # restore game files if a hud is still incorrectly synced (syncer being a singleton makes this once per script)
+        if self.sync_state == SyncState.FULLY_SYNCED:
+            result = str(input("Press enter to restore developer restory! Or N to leave it as is"))
+            if result is not "N":
+                self.game.dir.restore_developer_directory()
+                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
     def get_source_dir(self):
         """Return source directory"""
@@ -64,7 +76,7 @@ class HudSyncer:
     def unsync(self):
         """Unsync the hud"""
         print("Unsyncing...")
-        
+
         # verify we can unsync
         if not self.is_synced():
             print("Unsync: No hud to unsync!")
@@ -81,7 +93,7 @@ class HudSyncer:
             self.__unsync_item(item)
 
         # finished
-        self.sync_state = SyncState.FULLY_SYNCED
+        self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
         print("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
@@ -144,7 +156,9 @@ class HudSyncer:
         # Unsync deleted items in target
         self.__remove_deleted_source_items()
 
-        self.sync_state = SyncState.FULLY_SYNCED
+        self.sync_state = self.sync_state = self.game.dir.id.set_sync_state(
+            DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED
+        )
 
         print("Synced!")
         # input("end of sync()")

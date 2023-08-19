@@ -30,11 +30,15 @@ Current:
 
 Features:
 
-	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high 
+	
+
+	
 
 	☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
 		os.move error could happen if for example a file in the game dir is locked because in use
 	☐ Sync: Review and enhance target directory validation in sync() @high
+
+	☐ Test: Sync: restore_developer_directory
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder: use threading
@@ -212,7 +216,7 @@ Archive:
 	
 	
 	Sync:
-		✔ Sync: use the ID class to set/get sync state + modify test @done(23-08-19 22:59)
+		✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
 		
 		✔ Sync: Cleanup test @done(23-08-19 22:43)
 		✔ Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-19 22:43) @lasted(2d10h39m43s)

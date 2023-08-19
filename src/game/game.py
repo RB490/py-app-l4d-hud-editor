@@ -26,6 +26,8 @@ class Game(metaclass=Singleton):
         self.steam = SteamInfoRetriever(persistent_data)
         self.dir = GameDir(self)
 
+        print("Game Class Init")
+
         self.title = "Left 4 Dead 2"
         self.exe = "left4dead2.exe"
         self.app_id = "550"
