@@ -18,10 +18,11 @@ os.system("cls")  # clear terminal
 
 
 persistent_data = load_data()
-debug_game_class(persistent_data)
 
-# start_gui = GuiHudStart(persistent_data)
-# start_gui.run()
+# debug_game_class(persistent_data)
+
+start_gui = GuiHudStart(persistent_data)
+start_gui.run()
 
 # hud_inc = Hud(persistent_data)
 

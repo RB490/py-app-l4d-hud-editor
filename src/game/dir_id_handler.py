@@ -120,14 +120,17 @@ class GameIDHandler:
         id_path = self.__get_id_path(dir_mode)
 
         if id_path is None:
+            print(f"ID path is None. Using default state '{default_value}' value for '{state_key}'")
             return default_value
 
         state_data = self.__read_id_content(id_path)
         state_value = state_data.get(state_key)
 
         if state_value is None:
+            print(f"State value for key '{state_key}' is None using  '{default_value}'")
             return default_value
 
+        print(f"Retrieved state value '{state_value}' for '{state_key}'")
         return state_value
 
     def __set_state(self, dir_mode, state_key, state_value):

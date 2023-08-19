@@ -32,10 +32,8 @@ class GameInstaller:
         self.game = game_class
         self.persistent_data = self.game.persistent_data
 
-    async def async_delete_game_directory(self, folder_path):
-        await asyncio.to_thread(shutil.rmtree, folder_path)
-
-    async def _uninstall(self):
+    def uninstall(self):
+        "Uninstall"
         print("Uninstalling..")
 
         # is dev installed?
@@ -50,17 +48,12 @@ class GameInstaller:
         # close the game
         self.game.close()
 
-        # remove directory asynchronously
+        # remove directory
         print("Deleting game directory...")
-        folder_path = self.game.dir.get(DirectoryMode.DEVELOPER)
-        await self.async_delete_game_directory(folder_path)
+        shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
 
         # finished
         print("Uninstalled!")
-
-    def uninstall(self):
-        # Run the internal asynchronous method using the event loop
-        asyncio.run(self._uninstall())
 
     def update(self):
         "Update"
