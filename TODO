@@ -30,10 +30,6 @@ Current:
 
 Features:
 	
-		os.move error could happen if for example a file in the game dir is locked because in use
-	☐ Sync: Review and enhance target directory validation in sync() @high
-
-	☐ Test: Sync: restore_developer_directory
 
 Bugs:
 	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder: use threading

@@ -54,8 +54,8 @@ class HudSyncer(metaclass=Singleton):
 
         # restore game files if a hud is still incorrectly synced (syncer being a singleton makes this once per script)
         if self.sync_state == SyncState.FULLY_SYNCED:
-            result = str(input("Press enter to restore developer restory! Or N to leave it as is"))
-            if result is not "N":
+            result = str(input("Press enter to restore developer restory! Or 'no' to leave it as is"))
+            if result is not "no":
                 self.game.dir.restore_developer_directory()
                 self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
