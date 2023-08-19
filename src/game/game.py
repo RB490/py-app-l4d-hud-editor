@@ -125,12 +125,12 @@ def debug_game_class(persistent_data):
 
     gamez = Game(persistent_data)
 
-    # result = gamez.dir.get(DirectoryMode.USER)
+    result = gamez.dir.get(DirectoryMode.USER)
 
     ###########################
     # Installer
     ###########################
-    result = gamez.installer._install()
+    result = gamez.installer.install()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)

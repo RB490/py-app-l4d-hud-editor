@@ -5,21 +5,14 @@ Current:
 
 
 
+	☐ Separate game class from sync again? Weird error with terrible non descript error message and confusing debug code paths with the singleton
+	
+	- Caused by this line in syncer while dev mode is not installed:  # self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+		- Adding check for dev dir fixed it. but id class should be modified in some way aswell. check if game dir exists. or proper defaults
+			- Proper defaults: retrieve install/sync states while dev mode isn't installed. also probably a unit test class for id class
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder: use threading
+		^ adding asyncio still has unresponsive tkinter gui? so is there any difference? no freezing?
 
 
 
@@ -32,7 +25,6 @@ Features:
 	
 
 Bugs:
-	☐ Resolve GUI hanging when running lengthy tasks like uninstalling dev folder: use threading
 	☐ Fix 'added' files option not working in treeview, no data retrieved
 	☐ Address in-game console bugs related to malformed VPK addons loading
 		☐ Explore potential fixes, e.g., creating small VPK to overwrite malformed ones
@@ -61,7 +53,7 @@ Refactoring:
 			Consider code paths. For example retrieving the steam game dir is vital,
 			if that fails. the program should raise an exception, then maybe catch it
 			and display it in a messagebox. or display the message box inside the class?
-	☐ Refactor: Start GUI
+	☐ Refactor: Start GUI. Messageboxes for dev menu results
 	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
@@ -207,6 +199,7 @@ Archive:
 	
 	
 	Sync:
+		✔ Test: Sync: restore_developer_directory @done(23-08-20 00:20)
 		✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
 		✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)
 		✔ Sync: Cleanup test @done(23-08-19 22:43)

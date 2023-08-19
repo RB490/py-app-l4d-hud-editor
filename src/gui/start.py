@@ -181,7 +181,7 @@ class GuiHudStart(metaclass=Singleton):
         This method installs developer mode.
         """
         print("Install developer mode")
-        self.game.installer.uninstall()
+        self.game.installer.install()
 
     def installer_update(self):
         """

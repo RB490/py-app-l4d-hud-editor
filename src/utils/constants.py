@@ -41,6 +41,7 @@ class SyncState(Enum):
 
     FULLY_SYNCED = auto()
     NOT_SYNCED = auto()
+    UNKNOWN = auto()
 
 
 EDITOR_HUD_RELOAD_MODES = {

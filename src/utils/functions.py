@@ -1,5 +1,6 @@
 # pylint: disable=broad-exception-caught
 """Functions used throughout the program"""
+import asyncio
 import ctypes
 import json
 import os
@@ -22,6 +23,8 @@ import win32process
 
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
+async def async_delete_directory(directory_path):
+    await asyncio.to_thread(shutil.rmtree, directory_path)
 
 def generate_random_string(length=8):
     "Generate random string"

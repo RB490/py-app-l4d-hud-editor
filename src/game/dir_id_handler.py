@@ -1,6 +1,5 @@
 """Handles game ID and state information for different directory modes."""
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught
-from gettext import install
 import json
 import os
 from tkinter import filedialog
@@ -30,7 +29,6 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
-            print(f"Unable to construct ID path: Could not retrieve directory for {dir_mode.name}")
             return None
 
         id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
@@ -86,7 +84,7 @@ class GameIDHandler:
                 "directory_mode": dir_mode.name,
                 "game_directory": id_dir,
                 "installation_state": install_state.name,
-                "sync_state": SyncState.FULLY_SYNCED.name,
+                "sync_state": SyncState.UNKNOWN.name,
             }
 
             self.__create_id_file(dir_mode, id_dir)
@@ -98,7 +96,7 @@ class GameIDHandler:
     def get_installation_state(self, dir_mode):
         """Get the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return SyncState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN)]
+        return SyncState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN.name)]
 
     def set_installation_state(self, dir_mode, installation_state):
         """Set the installation state for a specific directory mode."""
@@ -109,7 +107,7 @@ class GameIDHandler:
     def get_sync_state(self, dir_mode):
         """Get the synchronization state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return SyncState[self.__get_state_value(dir_mode, "sync_state", SyncState.FULLY_SYNCED)]
+        return SyncState[self.__get_state_value(dir_mode, "sync_state", SyncState.UNKNOWN.name)]
 
     def set_sync_state(self, dir_mode, sync_state):
         """Set the synchronization state for a specific directory mode."""

@@ -42,8 +42,11 @@ class HudSyncer(metaclass=Singleton):
 
     def __init__(self, persistent_data):
         self.game = Game(persistent_data)
-        self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
-        # self.sync_state = SyncState.NOT_SYNCED
+        
+        if self.game.dir.get(DirectoryMode.DEVELOPER):
+            self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+        else:
+            self.sync_state = SyncState.FULLY_SYNCED
         self.source_dir = None  # hud folder
         self.target_dir_root = None  # eg: '..\steamapps\common\Left 4 Dead 2'
         self.target_dir_main_name = None  # 'left4dead2' as opposed to 'left4dead2_dlc1'
@@ -53,7 +56,7 @@ class HudSyncer(metaclass=Singleton):
         self.hud_items = None  # the hud files and directories
 
         # restore game files if a hud is still incorrectly synced (syncer being a singleton makes this once per script)
-        if self.sync_state == SyncState.FULLY_SYNCED:
+        if self.game.dir.get(DirectoryMode.DEVELOPER) and self.sync_state == SyncState.FULLY_SYNCED:
             result = str(input("Press enter to restore developer restory! Or 'no' to leave it as is"))
             if result is not "no":
                 self.game.dir.restore_developer_directory()

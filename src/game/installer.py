@@ -5,6 +5,7 @@ Notes:
     There is a fair amount of duplicate install/update/repair. Choosing to leave 
     as is right now because the added complexity isn't worth it
 """
+import asyncio
 import filecmp
 import os
 import shutil
@@ -15,6 +16,7 @@ from game.constants import DirectoryMode, InstallationState
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
 from utils.functions import (
+    async_delete_directory,
     copy_directory,
     wait_for_process_with_ram_threshold,
     wait_process_close,
@@ -30,8 +32,10 @@ class GameInstaller:
         self.game = game_class
         self.persistent_data = self.game.persistent_data
 
-    def uninstall(self):
-        "Uninstall"
+    async def async_delete_game_directory(self, folder_path):
+        await asyncio.to_thread(shutil.rmtree, folder_path)
+
+    async def _uninstall(self):
         print("Uninstalling..")
 
         # is dev installed?
@@ -46,12 +50,17 @@ class GameInstaller:
         # close the game
         self.game.close()
 
-        # remove directory
+        # remove directory asynchronously
         print("Deleting game directory...")
-        shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
+        folder_path = self.game.dir.get(DirectoryMode.DEVELOPER)
+        await self.async_delete_game_directory(folder_path)
 
         # finished
         print("Uninstalled!")
+
+    def uninstall(self):
+        # Run the internal asynchronous method using the event loop
+        asyncio.run(self._uninstall())
 
     def update(self):
         "Update"
@@ -144,11 +153,13 @@ class GameInstaller:
             # since installation state is saved, don't do anything here
             return False
 
-    def _install(self):
+    def install(self):
         "Install"
         print("Installing..")
 
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
+
+        input("this is a test")
 
         # already installed?
         if current_state is InstallationState.COMPLETED:
