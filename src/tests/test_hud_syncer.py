@@ -1,4 +1,4 @@
-# pylint: disable=protected-access, unspecified-encoding, missing-module-docstring, missing-class-docstring, missing-function-docstring, invalid-name
+# pylint: disable=protected-access, unspecified-encoding, missing-module-docstring, missing-class-docstring, missing-function-docstring, invalid-name, unused-argument
 import hashlib
 import os
 import random
@@ -14,6 +14,7 @@ from hud.syncer import (
     get_all_files_and_dirs,
     get_subdirectories_names,
 )
+from utils.constants import SyncState
 
 
 class TestHudSyncer(unittest.TestCase):
@@ -60,7 +61,7 @@ class TestHudSyncer(unittest.TestCase):
 
     def setUp(self):
         self.syncer = HudSyncer()
-        
+
         # Create a temporary directory to use as source and target
         self.test_dir = tempfile.mkdtemp()
         self.temp_dir = os.path.join(self.test_dir, "hud_sync_debug")
@@ -90,8 +91,8 @@ class TestHudSyncer(unittest.TestCase):
         self.assertEqual(self.syncer.source_dir, self.fake_source_dir)
         self.assertEqual(self.syncer.target_dir_root, self.fake_target_dir)
         self.assertEqual(self.syncer.target_dir_main_name, self.fake_main_name)
-        self.assertTrue(self.syncer.is_synced)
         self.assertIn(self.fake_main_name, self.syncer.target_sub_dir_names)
+        self.assertEqual(self.syncer.sync_state, SyncState.FULLY_SYNCED)
 
         # Assertions for directory structure
         required_dirs = [
@@ -116,7 +117,7 @@ class TestHudSyncer(unittest.TestCase):
         ]
         for file_path in check_files_exist:
             self.assertTrue(os.path.exists(file_path))
-            
+
         # Assertions for synced files and folders - do not exist
         check_files_not_exist = [
             os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res"),
@@ -131,7 +132,7 @@ class TestHudSyncer(unittest.TestCase):
         self.syncer.target_dir_root = self.fake_target_dir
         self.syncer.target_dir_main_name = self.fake_main_name
         self.syncer.target_sub_dir_names = ["left4dead2", "left4dead2_dlc1"]
-        self.syncer.is_synced = True
+        self.syncer.sync_state = True
 
         fake_main_dir = os.path.join(self.fake_target_dir, self.fake_main_name)
         fake_main_sub_dir = os.path.join(self.fake_target_dir, self.syncer.target_sub_dir_names[1])
@@ -143,6 +144,9 @@ class TestHudSyncer(unittest.TestCase):
         self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
         print(f"custom items: {self.syncer.hud_items_custom}")
         self.syncer.unsync()
+
+        # Variable assertion
+        self.assertEqual(self.syncer.sync_state, SyncState.NOT_SYNCED)
 
         # Assertions for directory structure
         self.assertTrue(os.path.isdir(self.syncer.source_dir))
@@ -230,4 +234,4 @@ def debug_hud_syncer():
     suite.addTests(loader.loadTestsFromTestCase(TestHudSyncer))
 
     runner = unittest.TextTestRunner(verbosity=2)
-    result = runner.run(suite)
+    runner.run(suite)

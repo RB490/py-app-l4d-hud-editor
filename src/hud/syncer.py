@@ -3,6 +3,8 @@ import hashlib
 import os
 import shutil
 
+from utils.constants import SyncState
+
 
 def calculate_md5_hash(file_path):
     """Calculate MD5 hash of a file."""
@@ -35,7 +37,7 @@ class HudSyncer:
     """functions providing hud syncing/unsyncing capability from the source to game dir"""
 
     def __init__(self):
-        self.is_synced = False
+        self.sync_state = SyncState.NOT_SYNCED
         self.source_dir = None  # hud folder
         self.target_dir_root = None  # eg: '..\steamapps\common\Left 4 Dead 2'
         self.target_dir_main_name = None  # 'left4dead2' as opposed to 'left4dead2_dlc1'
@@ -50,26 +52,36 @@ class HudSyncer:
 
     def get_sync_status(self):
         """Return sync status"""
-        return self.is_synced
+        return self.sync_state
+
+    def is_synced(self):
+        """Return sync status"""
+        if self.sync_state == SyncState.FULLY_SYNCED:
+            return True
+        else:
+            return False
 
     def unsync(self):
         """Unsync the hud"""
         print("Unsyncing...")
-        if not self.get_sync_status():
+        
+        # verify we can unsync
+        if not self.is_synced():
             print("Unsync: No hud to unsync!")
             return
 
         print(f"Unsyncing hud: {self.hud_items}")
 
-        # Explanation: Modifying a list while iterating can cause unexpected behavior.
-        # List length and positions change, disrupting iteration. This leads to skipped items or errors,
-        # e.g., removing items while iterating can miss or access wrong indices.
+        # Copy list to avoid causing issues with the loop
         hud_items_copy = self.hud_items.copy()
 
+        # unsync every item
         for item in hud_items_copy:
             print(f"Unsyncing: {item}")
             self.__unsync_item(item)
 
+        # finished
+        self.sync_state = SyncState.FULLY_SYNCED
         print("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
@@ -90,7 +102,7 @@ class HudSyncer:
         # print(f"target_dir_main_name: {target_dir_main_name}")
 
         # Unsync the previous hud (if syncing different hud)
-        if self.get_sync_status() and self.source_dir != source_dir:
+        if self.is_synced() and self.source_dir != source_dir:
             self.unsync()
 
         # Save input
@@ -107,10 +119,13 @@ class HudSyncer:
             raise ValueError(f"Invalid target directory: '{target_dir}'")
         if target_dir_main_name not in self.target_sub_dir_names:
             raise ValueError(f"Main directory name '{target_dir}' is not a subdirectory '{self.target_sub_dir_names}")
+        no_materials_subdir_msg = (
+            f"Main directory name '{target_dir}' is not a valid subdirectory\n"
+            "because it doesn't have a materials subdirectory!"
+        )
+
         if not os.path.isdir(os.path.join(target_dir, target_dir_main_name, "materials")):
-            raise ValueError(
-                f"Main directory name '{target_dir}' is not a valid subdirectory because it doesn't have a materials subdirectory!"
-            )
+            raise ValueError(f"{no_materials_subdir_msg}")
 
         # input
         print()
@@ -129,7 +144,7 @@ class HudSyncer:
         # Unsync deleted items in target
         self.__remove_deleted_source_items()
 
-        self.is_synced = True
+        self.sync_state = SyncState.FULLY_SYNCED
 
         print("Synced!")
         # input("end of sync()")
@@ -146,7 +161,7 @@ class HudSyncer:
                 if target_sub_dir_name == self.target_dir_main_name:
                     if not os.path.exists(target_item) and target_item not in self.hud_items_custom:
                         self.hud_items_custom.append(target_item)
-                        # print(f"adding custom file: {target_item}")
+                        print(f"adding custom file: {target_item}")
 
                 # backup existing file
                 # print(f"loop hud item: {item}")

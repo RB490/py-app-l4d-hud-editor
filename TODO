@@ -1,7 +1,7 @@
 
 
 Current:
-	☐ Vibe
+
 
 
 
@@ -29,9 +29,7 @@ Current:
 
 
 Features:
-	✔ Sync: Cleanup test @done(23-08-19 22:43)
 
-	☐ Sync: use the ID class to set/get sync state + modify test
 	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high 
 
 	☐ Sync: Refine error handling strategy in sync class(?) possibly during unit testing @high
@@ -209,44 +207,52 @@ Additional Ideas and Considerations:
 
 
 Archive:
-			✔ Sync: Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m10s)
-				✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
-				✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
-				✔ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m4s)
-				✔ Write code to fix bad unsynx @done(23-08-17 13:34)
+	
 
-				✔ Installer: Keep track of installation status @done(23-08-12 17:17)
-				✔ Use InvalidIDError @done(23-08-12 15:55)
-				✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
+	
+	
+	Sync:
+		✔ Sync: use the ID class to set/get sync state + modify test @done(23-08-19 22:59)
+		
+		✔ Sync: Cleanup test @done(23-08-19 22:43)
+		✔ Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-19 22:43) @lasted(2d10h39m43s)
+		✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
+		✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
+		✔ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m4s)
+		✔ Write code to fix bad unsynx @done(23-08-17 13:34)
 
-				✔ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low @done(23-08-17 11:53)
-				✔ ^ yes this is needed to avoid important recursion @done(23-08-17 11:53)
+		✔ Installer: Keep track of installation status @done(23-08-12 17:17)
+		✔ Use InvalidIDError @done(23-08-12 15:55)
+		✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
 
-				Game class:
-					✔ Rewrite from first principles @done(23-08-16 06:00)
-					
-					✔ Write dir class @done(23-08-15 20:10)
-					✔ Test dir class @done(23-08-15 20:10)
-					✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
-						✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
-						✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
-						✔ Test installer class @done(23-08-16 02:42)
-						✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
-						Nuh-uh. I need to have access to both game folders
-						
-						✔ Write uninstall() @done(23-08-16 03:28)
-						✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
-						✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
-						✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
-						✔ Write update/repair() @done(23-08-16 04:40)
-						✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
-						✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
-						
-						✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
-						
-						✔ Write commands class @done(23-08-16 05:35)
-						✔ Test commands class @done(23-08-16 05:35)
-						
-						✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
-						✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
+		✔ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low @done(23-08-17 11:53)
+		✔ ^ yes this is needed to avoid important recursion @done(23-08-17 11:53)
+
+	Game class:
+		✔ Rewrite from first principles @done(23-08-16 06:00)
+		
+		✔ Write dir class @done(23-08-15 20:10)
+		✔ Test dir class @done(23-08-15 20:10)
+		✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
+			✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
+			✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
+			✔ Test installer class @done(23-08-16 02:42)
+			✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
+			Nuh-uh. I need to have access to both game folders
+			
+			✔ Write uninstall() @done(23-08-16 03:28)
+			✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
+			✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
+			✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
+			✔ Write update/repair() @done(23-08-16 04:40)
+			✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
+			✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
+			
+			✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
+			
+			✔ Write commands class @done(23-08-16 05:35)
+			✔ Test commands class @done(23-08-16 05:35)
+			
+			✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
+			✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
 

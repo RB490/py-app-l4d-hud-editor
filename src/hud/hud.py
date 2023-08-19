@@ -14,7 +14,7 @@ from gui.start import GuiHudStart
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, DEVELOPMENT_DIR, HOTKEY_SYNC_HUD, SyncState
-from utils.functions import copy_directory, load_data
+from utils.functions import copy_directory
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
@@ -68,7 +68,7 @@ class Hud(metaclass=Singleton):
             self.detect_incorrectly_still_synced = True
 
         # cancel if this hud is already being edited
-        if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir:
+        if self.syncer.is_synced() and self.syncer.get_source_dir() == self.hud_dir:
             return False
 
         # unsync previous hud
@@ -304,9 +304,6 @@ def debug_hud(persistent_data):
 def create_hud_workspace():
     # pylint: disable=line-too-long
     """Debugs the hud syncer class"""
-
-    saved_data = load_data()
-    game_instance = Game(saved_data)
 
     sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud")
     if os.path.isdir(os.path.join(sync_debug_dir, "workspace")):
