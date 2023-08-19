@@ -159,8 +159,6 @@ class GameInstaller:
 
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
-        input("this is a test")
-
         # already installed?
         if current_state is InstallationState.COMPLETED:
             print("Already installed!")
@@ -176,7 +174,10 @@ class GameInstaller:
 
         # get dev directory
         try:
-            self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+            result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+            if result:
+                print('Successfully selected the developer directory. Finished installation.')
+                return True
         except Exception as err_info:
             show_message(f"{err_info}", "error", "Could not get developer directory!")
             return False

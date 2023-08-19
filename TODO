@@ -15,7 +15,9 @@ Current:
 		^ adding asyncio still has unresponsive tkinter gui? so is there any difference? no freezing?
 
 
-
+	☐ Issue i got personally confused that i should be using self.game.dir.get(DirectoryMode.USER) to check if dev exists
+		- instead of game.dir.id.get_installation_state -- they should  probably both function. that and/or make a separate function
+		- is_installed in game.is_installed or whatever
 
 
 
