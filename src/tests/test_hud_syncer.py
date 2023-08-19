@@ -23,9 +23,11 @@ class TestHudSyncer(unittest.TestCase):
             file.write(random_text)
 
     def create_fake_source_files(self):
+        # Create fake source directory
         self.fake_source_dir = os.path.join(self.temp_dir, "my_source_dir")
         os.makedirs(self.fake_source_dir, exist_ok=True)
 
+        # Create files and directories inside source directory
         self._create_file(os.path.join(self.fake_source_dir, "my_source_test_file.txt"))
         os.makedirs(os.path.join(self.fake_source_dir, "scripts"))
         self._create_file(os.path.join(self.fake_source_dir, "scripts", "hudlayout.res"))
@@ -33,30 +35,35 @@ class TestHudSyncer(unittest.TestCase):
         self._create_file(os.path.join(self.fake_source_dir, "my_custom_source_folder", "my_custom_source_file.txt"))
 
     def create_fake_target_files(self):
+        # Create fake target directory
         self.fake_target_dir = os.path.join(self.temp_dir, "my_target_dir")
         os.makedirs(self.fake_target_dir, exist_ok=True)
 
+        # Create subdirectory 'left4dead2' within target directory
         self.fake_target_sub_dir = os.path.join(self.fake_target_dir, "left4dead2")
         os.makedirs(self.fake_target_sub_dir, exist_ok=True)
+
+        # Create file and subdirectories within 'left4dead2'
         self._create_file(os.path.join(self.fake_target_sub_dir, "just_some_target_file.txt"))
         os.makedirs(os.path.join(self.fake_target_sub_dir, "materials"))
         os.makedirs(os.path.join(self.fake_target_sub_dir, "scripts"))
         self._create_file(os.path.join(self.fake_target_sub_dir, "scripts", "hudlayout.res"))
 
+        # Create subdirectory 'left4dead2_dlc1' within target directory
         self.fake_target_sub_dir_dlc1 = os.path.join(self.fake_target_dir, "left4dead2_dlc1")
         os.makedirs(self.fake_target_sub_dir_dlc1, exist_ok=True)
+
+        # Create subdirectories within 'left4dead2_dlc1'
         os.makedirs(os.path.join(self.fake_target_sub_dir_dlc1, "materials"))
         os.makedirs(os.path.join(self.fake_target_sub_dir_dlc1, "scripts"))
         self._create_file(os.path.join(self.fake_target_sub_dir_dlc1, "scripts", "hudlayout.res"))
 
     def setUp(self):
         self.syncer = HudSyncer()
+        
         # Create a temporary directory to use as source and target
         self.test_dir = tempfile.mkdtemp()
         self.temp_dir = os.path.join(self.test_dir, "hud_sync_debug")
-        # self.temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "temp_test_dir", "hud_sync_debug")
-        # shutil.rmtree(self.temp_dir)
-        # os.makedirs(self.temp_dir, exist_ok=True)
 
         # Create the required files and directories for source
         self.create_fake_source_files()
@@ -68,7 +75,6 @@ class TestHudSyncer(unittest.TestCase):
 
     def tearDown(self):
         # shutil.rmtree(self.test_dir)
-        # shutil.rmtree(self.temp_dir)
         pass
 
     @patch("builtins.print")  # Mock the print function
@@ -98,16 +104,25 @@ class TestHudSyncer(unittest.TestCase):
         for dir_path in required_dirs:
             self.assertTrue(os.path.isdir(dir_path))
 
-        # Assertions for synced files and folders
-        synced_files = [
+        # Assertions for synced files and folders - exist
+        check_files_exist = [
+            os.path.join(self.fake_source_dir, "scripts", "hudlayout.res"),
+            os.path.join(fake_main_dir, "just_some_target_file.txt"),
             os.path.join(fake_main_dir, "my_source_test_file.txt"),
             os.path.join(fake_main_dir, "my_custom_source_folder"),
             os.path.join(fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
             os.path.join(fake_main_dir, "scripts", "hudlayout.res.backup"),
             os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res.backup"),
         ]
-        for file_path in synced_files:
+        for file_path in check_files_exist:
             self.assertTrue(os.path.exists(file_path))
+            
+        # Assertions for synced files and folders - do not exist
+        check_files_not_exist = [
+            os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res"),
+        ]
+        for file_path in check_files_not_exist:
+            self.assertFalse(os.path.exists(file_path))
 
     @patch("builtins.print")  # Mock the print function
     def test_unsync(self, mock_print):
@@ -136,7 +151,27 @@ class TestHudSyncer(unittest.TestCase):
             self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root, subdir_name)))
             self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root)))
 
-        os.startfile(self.fake_target_dir)
+        # Assertions for synced files and folders - exist
+        check_files_not_exist = [
+            os.path.join(self.fake_source_dir, "scripts", "hudlayout.res"),
+            os.path.join(fake_main_dir, "just_some_target_file.txt"),
+            os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res"),
+        ]
+        for file_path in check_files_not_exist:
+            self.assertTrue(os.path.exists(file_path))
+
+        # Assertions for synced files and folders - do not exist
+        check_files = [
+            os.path.join(fake_main_dir, "my_source_test_file.txt"),
+            os.path.join(fake_main_dir, "my_custom_source_folder"),
+            os.path.join(fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
+            os.path.join(fake_main_dir, "scripts", "hudlayout.res.backup"),
+            os.path.join(fake_main_sub_dir, "scripts", "hudlayout.res.backup"),
+        ]
+        for file_path in check_files:
+            self.assertFalse(os.path.exists(file_path))
+
+        # os.startfile(self.fake_target_dir)
 
     def test_calculate_md5_hash(self):
         content = "test data"

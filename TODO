@@ -29,7 +29,7 @@ Current:
 
 
 Features:
-	☐ Sync: Cleanup test
+	✔ Sync: Cleanup test @done(23-08-19 22:43)
 
 	☐ Sync: use the ID class to set/get sync state + modify test
 	☐ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high 
@@ -50,16 +50,13 @@ Bugs:
 	output: E:/Games/Steam/steamapps/common/Left 4 Dead 2 is not subdirectory of E:\games\steam\steamapps\common
 
 GUI:
-	☐ Add context menu functionality for treeview in browser
-	☐ Add icons to enhance GUI aesthetics
-	☐ Incorporate progress GUI for the installer class
-		☐ Implement for install, update_or_repair, and remove operations
+	☐ General: Add icons to all GUI's
+	☐ General: Add icon buttons to all GUI's
+	☐ Browser: Treeview context menu
+	☐ Browser: Display custom and 'added-to-hud' status for files in the browser (Consider adding columns or a status ba)
+	☐ Browser: Treeview content menu icons
 	☐ Menu: Add icons
-	☐ Add GUI icons
-	☐ Add GUI button icons
-	☐ Display custom and added-to-hud status for files in the browser
-		☐ Consider adding columns or a status bar
-	☐ Enhance context menu icons in the treeview
+	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 
 Unit Testing:
 	☐ Create test classes for HUD descriptions(?) and definetly HUD syncer
