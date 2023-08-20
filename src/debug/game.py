@@ -5,13 +5,11 @@ from utils.constants import SyncState
 
 def debug_game_class(persistent_data):
     "debug game class"
-    print('debug game class')
+    print("debug game class")
 
     gamez = Game(persistent_data)
 
     result = gamez.dir.get(DirectoryMode.USER)
-
-
 
     ###########################
     # Installer
@@ -36,7 +34,10 @@ def debug_game_class(persistent_data):
     ###########################
     # ID
     ###########################
+    # result = gamez.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
+    # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.id.get_sync_state(DirectoryMode.USER)
     # result = SyncState["COMPLETED"]
 
     ###########################

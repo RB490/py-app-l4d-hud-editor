@@ -29,6 +29,7 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
+            print(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
         id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
@@ -75,7 +76,7 @@ class GameIDHandler:
             if dir_mode == DirectoryMode.DEVELOPER:
                 message = f"Is {dir_mode.name} mode fully installed?"
                 is_fully_installed = show_message(message, "yesno", "SCRIPT_NAME")
-                install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.UNKNOWN
+                install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.NOT_INSTALLED
             else:
                 install_state = InstallationState.COMPLETED
 
@@ -96,7 +97,9 @@ class GameIDHandler:
     def get_installation_state(self, dir_mode):
         """Get the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return InstallationState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN.name)]
+        return InstallationState[
+            self.__get_state_value(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
+        ]
 
     def set_installation_state(self, dir_mode, installation_state):
         """Set the installation state for a specific directory mode."""
@@ -120,17 +123,17 @@ class GameIDHandler:
         id_path = self.__get_id_path(dir_mode)
 
         if id_path is None:
-            print(f"ID path is None. Using default state '{default_value}' value for '{state_key}'")
+            print(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
             return default_value
 
         state_data = self.__read_id_content(id_path)
         state_value = state_data.get(state_key)
 
         if state_value is None:
-            print(f"State value for key '{state_key}' is None using  '{default_value}'")
+            print(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
             return default_value
 
-        print(f"Retrieved state value '{state_value}' for '{state_key}'")
+        print(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
         return state_value
 
     def __set_state(self, dir_mode, state_key, state_value):

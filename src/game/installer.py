@@ -187,7 +187,7 @@ class GameInstaller:
             invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
             if invalid_dev_dir:
-                extra_message = "Consider if you want to try to repair the installation instead"
+                extra_message = "Consider if you want to try to repair the installation instead of deleting it"
                 if not prompt_delete(self.game, extra_message):
                     return False
                 shutil.rmtree(invalid_dev_dir)

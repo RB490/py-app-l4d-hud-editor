@@ -3,7 +3,7 @@
 
 import os
 
-from debug.debug_game import debug_game_class
+from debug.game import debug_game_class
 from utils.functions import load_data
 
 

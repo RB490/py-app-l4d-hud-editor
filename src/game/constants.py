@@ -24,7 +24,8 @@ class DirectoryMode(Enum):
 class InstallationState(Enum):
     """Enumeration representing installation states"""
 
-    UNKNOWN = auto()  # for example if the id file json was damaged
+    UNKNOWN = auto()
+    NOT_INSTALLED = auto()
     COMPLETED = auto()
     # NOT_STARTED = auto()  # hud dev folder created
     # PAUSED = auto()
