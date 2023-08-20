@@ -2,7 +2,6 @@
 
 Current:
 	
-	☐ General: Create custom app.ico
 
 Features:
 Bugs:
@@ -163,6 +162,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ General: Create custom app.ico @done(23-08-20 11:10)
 ✔ General: Add icons to all GUI's @done(23-08-20 11:03)
 ✔ Bug: Browser has a visual glitch when starting up. Shows and disappears within a second @done(23-08-20 11:03)
 ✔ Remove duplicate code in hud.py related to GuiHudStart instance creation @done(23-08-20 10:38) show_start_gui()

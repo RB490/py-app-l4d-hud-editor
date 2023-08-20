@@ -1,5 +1,5 @@
 """Module for debugging"""
-# pylint: disable=unused-import, unused-variable
+# pylint: disable=unused-import, unused-variable, unused-argument
 
 import os
 
@@ -34,7 +34,7 @@ def debug_gui(persistent_data):
     # descriptions_gui.run()
 
     # start
-    # show_start_gui(persistent_data)
+    show_start_gui(persistent_data)
 
     # browser
 
