@@ -28,9 +28,10 @@ def debug_main():
 def debug_gui(persistent_data):
     "debug gui"
 
-    descriptions_gui = descriptions.GuiHudDescriptions(persistent_data, "scripts\hudlayout.res")
+    descriptions_gui = descriptions.GuiHudDescriptions(persistent_data, "scripts\\hudlayout.res")
+    descriptions_gui.run()
 
-    show_start_gui()
+    show_start_gui(persistent_data)
 
     # set active debug hud to load files into browser
     hud_inc = get_hud_debug_instance(persistent_data)
