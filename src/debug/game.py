@@ -1,6 +1,6 @@
+"debug game class"
 from game.constants import DirectoryMode
 from game.game import Game
-from utils.constants import SyncState
 
 
 def debug_game_class(persistent_data):
@@ -9,7 +9,11 @@ def debug_game_class(persistent_data):
 
     gamez = Game(persistent_data)
 
-    result = gamez.dir.get(DirectoryMode.USER)
+    ###########################
+    # Game
+    ###########################
+
+    result = gamez.installed(DirectoryMode.DEVELOPER)
 
     ###########################
     # Installer
@@ -34,7 +38,9 @@ def debug_game_class(persistent_data):
     ###########################
     # ID
     ###########################
-    # result = gamez.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.id.get_installation_state
+    # result = gamez.installed("invalid input")
+
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.USER)
@@ -43,8 +49,11 @@ def debug_game_class(persistent_data):
     ###########################
     # Directory
     ###########################
-    # g_i.dir.set(DirectoryMode.USER)
-    # g_i.dir.set(DirectoryMode.USER)
+    # result = gamez.dir.set(DirectoryMode.USER)
+    # result = gamez.dir.set(DirectoryMode.USER)
+
+    # result = gamez.dir.get(DirectoryMode.USER)
+    # result = gamez.dir.get(DirectoryMode.USER)
 
     ###########################
     # Result

@@ -43,7 +43,7 @@ class HudSyncer(metaclass=Singleton):
     def __init__(self, persistent_data):
         self.game = Game(persistent_data)
 
-        if self.game.dir.get(DirectoryMode.DEVELOPER):
+        if self.game.installed(DirectoryMode.DEVELOPER):
             self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
         else:
             self.sync_state = SyncState.FULLY_SYNCED
@@ -56,11 +56,9 @@ class HudSyncer(metaclass=Singleton):
         self.hud_items = None  # the hud files and directories
 
         # restore game files if a hud is still incorrectly synced (syncer being a singleton makes this once per script)
-        if self.game.dir.get(DirectoryMode.DEVELOPER) and self.sync_state != SyncState.NOT_SYNCED:  # uknown/synced
-            result = str(input("Press enter to restore developer restory! Or 'no' to leave it as is"))
-            if result is not "no":
-                self.game.dir.restore_developer_directory()
-                self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
+        if self.game.installed(DirectoryMode.DEVELOPER) and self.sync_state != SyncState.NOT_SYNCED:  # uknown/synced
+            self.game.dir.restore_developer_directory()
+            self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
     def get_source_dir(self):
         """Return source directory"""

@@ -8,12 +8,12 @@ from utils.functions import load_data
 
 
 def debug_main():
+    "Main debug func"
     os.system("cls")  # clear terminal
     persistent_data = load_data()
-    
+
     print("debug_main")
     debug_game_class(persistent_data)
-
 
     # start_gui = GuiHudStart(persistent_data)
     # start_gui.run()

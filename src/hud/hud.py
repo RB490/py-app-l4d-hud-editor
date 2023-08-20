@@ -50,7 +50,7 @@ class Hud(metaclass=Singleton):
                 return False
 
         # is developer mode installed? - also checks for user directory
-        if not self.game.dir.get(DirectoryMode.DEVELOPER):
+        if not self.game.installed(DirectoryMode.DEVELOPER):
             show_message("Development mode not installed!", "error")
             return False
 

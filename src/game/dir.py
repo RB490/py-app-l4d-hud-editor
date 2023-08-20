@@ -181,7 +181,7 @@ class GameDir:
 
     def restore_developer_directory(self):
         "Restore developer game files using backup"
-        print("Restoring game files")
+        print("Restoring developer game files")
 
         try:
             # receive variables
@@ -198,7 +198,7 @@ class GameDir:
             # copy files
             copy_directory(main_dir_backup, main_dir)
 
-            print("Restored game files!")
+            print("Restored develoer game files!")
             return True
         except Exception as err_info:
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info

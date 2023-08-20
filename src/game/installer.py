@@ -5,7 +5,6 @@ Notes:
     There is a fair amount of duplicate install/update/repair. Choosing to leave 
     as is right now because the added complexity isn't worth it
 """
-import asyncio
 import filecmp
 import os
 import shutil
@@ -37,7 +36,7 @@ class GameInstaller:
         print("Uninstalling..")
 
         # is dev installed?
-        if not self.game.dir.get(DirectoryMode.DEVELOPER):
+        if not self.game.installed(DirectoryMode.DEVELOPER):
             print("Not installed!")
             return True
 
@@ -67,7 +66,7 @@ class GameInstaller:
             return False
 
         # get user directory
-        if not self.game.dir.get(DirectoryMode.USER):
+        if not self.game.installed(DirectoryMode.USER):
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
@@ -112,7 +111,7 @@ class GameInstaller:
             return False
 
         # get user directory
-        if not self.game.dir.get(DirectoryMode.USER):
+        if not self.game.installed(DirectoryMode.USER):
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
@@ -158,7 +157,7 @@ class GameInstaller:
             return True
 
         # get user directory
-        if not self.game.dir.get(DirectoryMode.USER):
+        if not self.game.installed(DirectoryMode.USER):
             try:
                 self.game.dir.id.set_id_path(DirectoryMode.USER)
             except Exception as err_info:
@@ -169,7 +168,7 @@ class GameInstaller:
         try:
             result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
             if result:
-                print('Successfully selected the developer directory. Finished installation.')
+                print("Successfully selected the developer directory. Finished installation.")
                 return True
         except Exception as err_info:
             show_message(f"{err_info}", "error", "Could not get developer directory!")

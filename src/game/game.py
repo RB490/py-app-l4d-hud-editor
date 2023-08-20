@@ -115,6 +115,13 @@ class Game(metaclass=Singleton):
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
+    def installed(self, dir_mode):
+        "Is mode installed?"
+        if self.dir.get(dir_mode):
+            return True
+        else:
+            return False
+
     def close(self):
         "Close"
         close_process_executable(self.get_exe())
