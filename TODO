@@ -1,14 +1,9 @@
 
 
 Current:
-	✔ Bug: Browser: 'All' toggle isn't working right. only addoninfo&addonimage are shown @started(23-08-20 21:30) @done(23-08-20 21:55) @lasted(25m16s)
-	✔ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
-	✔ Browser: Display custom status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
-	
-	☐ Browser: Showing which items are custom & 'added-to-hud'. Currently doing this in a column. Consider also a status bar + removing column?
 	
 	Features:
-		☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
+		
 		
 		Bugs:
 			
@@ -17,6 +12,7 @@ GUI:
 	☐ Browser: Treeview context menu functionality: integers
 	☐ Browser: Treeview context menu functionality: treeview_recycle
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
+		-  if not self.hud.get_dir() // self.menu_bar.entryconfig("Hud", state="disabled")
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 	☐ Browser: Treeview context menu icons
 	☐ Menu: Add icons
@@ -24,7 +20,7 @@ GUI:
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 
-	☐ Refactor: Start GUI. Messageboxes for dev menu results
+	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 
@@ -87,6 +83,7 @@ Additional Ideas and Considerations:
 	☐ Command line: Evaluate potential of using command line interface instead of GUI
 	☐ Pull some workshop map off of steam to use for L4D2. And possibly a map for L4D1
 	☐ Idea: Use threading GUI during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
+	☐ Browser: Status bar showing 'custom' & 'added-to-hud' status?
 
 	☐ Idea: Already tried this for an hour. But a way to retrieve the OS's default icon for a file path to be used in the treeview
 	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible?
@@ -177,77 +174,81 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
-✔ Browser: Last modified column read from the file like i did in sourcemod editor. Auto sort by this column @done(23-08-20 21:27)
-✔ Bug: Browser: Double click on header -> Some error message shows @done(23-08-20 21:19)
-✔ Browser: Treeview header sorting @done(23-08-20 21:18)
-✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
-	✔ Create an important note with example script:: you can only have one main gui. When using a subgui that should be using tk.Toplevel() otherwise garbage collection causes pyimage errors @done(23-08-20 18:58)
-✔ Browser: Treeview context menu functionality @started(23-08-20 14:15) @done(23-08-20 15:10) @lasted(55m38s)
-✔ Browser: Treeview menu icons @done(23-08-20 14:09)
-✔ General: Add icon buttons to all GUI's @started(23-08-20 11:34) @done(23-08-20 11:35) @lasted(1m8s)
-✔ General: Create custom app.ico @done(23-08-20 11:10)
-✔ General: Add icons to all GUI's @done(23-08-20 11:03)
-✔ Bug: Browser has a visual glitch when starting up. Shows and disappears within a second @done(23-08-20 11:03)
-✔ Remove duplicate code in hud.py related to GuiHudStart instance creation @done(23-08-20 10:38) show_start_gui()
-✔ Testing: Create test for syncer @done(23-08-20 10:29)
-✔ Am I using too many exceptions? When should i return a (None) value instead @done(23-08-20 10:28)
+	✔ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu @done(23-08-20 22:21)
+	✔ Bug: Browser: 'All' toggle isn't working right. only addoninfo&addonimage are shown @started(23-08-20 21:30) @done(23-08-20 21:55) @lasted(25m16s)
+	✔ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
+	✔ Browser: Display custom status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
+	✔ Browser: Last modified column read from the file like i did in sourcemod editor. Auto sort by this column @done(23-08-20 21:27)
+	✔ Bug: Browser: Double click on header -> Some error message shows @done(23-08-20 21:19)
+	✔ Browser: Treeview header sorting @done(23-08-20 21:18)
+	✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
+		✔ Create an important note with example script:: you can only have one main gui. When using a subgui that should be using tk.Toplevel() otherwise garbage collection causes pyimage errors @done(23-08-20 18:58)
+	✔ Browser: Treeview context menu functionality @started(23-08-20 14:15) @done(23-08-20 15:10) @lasted(55m38s)
+	✔ Browser: Treeview menu icons @done(23-08-20 14:09)
+	✔ General: Add icon buttons to all GUI's @started(23-08-20 11:34) @done(23-08-20 11:35) @lasted(1m8s)
+	✔ General: Create custom app.ico @done(23-08-20 11:10)
+	✔ General: Add icons to all GUI's @done(23-08-20 11:03)
+	✔ Bug: Browser has a visual glitch when starting up. Shows and disappears within a second @done(23-08-20 11:03)
+	✔ Remove duplicate code in hud.py related to GuiHudStart instance creation @done(23-08-20 10:38) show_start_gui()
+	✔ Testing: Create test for syncer @done(23-08-20 10:29)
+	✔ Am I using too many exceptions? When should i return a (None) value instead @done(23-08-20 10:28)
 
-✘ Bug: Different separators in is_subdirectory even after trying various normpath solutions @low @cancelled(23-08-20 10:24)
-✔ Investigate console errors for failing to load maps @done(23-08-20 10:21) config appending instead of rewriting the editor autoexec
+	✘ Bug: Different separators in is_subdirectory even after trying various normpath solutions @low @cancelled(23-08-20 10:24)
+	✔ Investigate console errors for failing to load maps @done(23-08-20 10:21) config appending instead of rewriting the editor autoexec
 
-✔ Address in-game console bugs related to malformed VPK addons loading @done(23-08-20 10:20) using tiny valid vpk's
-✔ Fix 'added' files option not working in treeview, no data retrieved @done(23-08-20 10:20)	
-✔ Bug: Addon title for the debug hud was not retrieved @done(23-08-20 10:16)
-✔ Bug: Addontitle: Exception with invalid format of the addoninfo.txt text file @done(23-08-20 10:16)
+	✔ Address in-game console bugs related to malformed VPK addons loading @done(23-08-20 10:20) using tiny valid vpk's
+	✔ Fix 'added' files option not working in treeview, no data retrieved @done(23-08-20 10:20)	
+	✔ Bug: Addon title for the debug hud was not retrieved @done(23-08-20 10:16)
+	✔ Bug: Addontitle: Exception with invalid format of the addoninfo.txt text file @done(23-08-20 10:16)
 
-✔ Instead of using game.dir.get create game.installed()? @done(23-08-20 09:52)
-✔ Issue i got personally confused that i should be using self.game.dir.get(DirectoryMode.USER) to check if dev exists @done(23-08-20 09:41)
-✘ Bug: ID handler: Calling ID handler without a dir_mode doesn't raise an error! also check for sync and other methods 'gamez.dir.id.get_installation_state' @cancelled(23-08-20 09:40) (Can't actually do anything with this. Just fix invalid method call)	
-✔ Retrieving installation state for mode that isn't installed returns UNKNOWN should it be UNAVAILABLE or just None instead? @done(23-08-20 09:38)	
-✔ Bug: ID handler: User dev mode is installed -> Get installation state -> Exception has occurred: KeyError @started(23-08-20 08:53) @done(23-08-20 09:10) @lasted(17m53s)
-	- Get installation state was using the SyncState enum!
-✔ Test: Sync: restore_developer_directory @done(23-08-20 00:20)
-✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
-✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)
-✔ Sync: Cleanup test @done(23-08-19 22:43)
-✔ Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-19 22:43) @lasted(2d10h39m43s)
-✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
-✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
-✔ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m4s)
-✔ Write code to fix bad unsynx @done(23-08-17 13:34)
+	✔ Instead of using game.dir.get create game.installed()? @done(23-08-20 09:52)
+	✔ Issue i got personally confused that i should be using self.game.dir.get(DirectoryMode.USER) to check if dev exists @done(23-08-20 09:41)
+	✘ Bug: ID handler: Calling ID handler without a dir_mode doesn't raise an error! also check for sync and other methods 'gamez.dir.id.get_installation_state' @cancelled(23-08-20 09:40) (Can't actually do anything with this. Just fix invalid method call)	
+	✔ Retrieving installation state for mode that isn't installed returns UNKNOWN should it be UNAVAILABLE or just None instead? @done(23-08-20 09:38)	
+	✔ Bug: ID handler: User dev mode is installed -> Get installation state -> Exception has occurred: KeyError @started(23-08-20 08:53) @done(23-08-20 09:10) @lasted(17m53s)
+		- Get installation state was using the SyncState enum!
+	✔ Test: Sync: restore_developer_directory @done(23-08-20 00:20)
+	✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
+	✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)
+	✔ Sync: Cleanup test @done(23-08-19 22:43)
+	✔ Handle script closure to ensure unsyncing even during crashes or failures @critical @started(23-08-17 12:04) @done(23-08-19 22:43) @lasted(2d10h39m43s)
+	✔ Bad unsync detection: Keep track of sync status in the ID file @done(23-08-17 11:55)
+	✔ Installation class: Maintain a backup of key directories @done(23-08-17 11:56)
+	✔ When should i check for bad unsync & fix it? Maybe hud.start_editing @started(23-08-17 12:04) @done(23-08-17 13:34) @lasted(1h30m4s)
+	✔ Write code to fix bad unsynx @done(23-08-17 13:34)
 
-✔ Installer: Keep track of installation status @done(23-08-12 17:17)
-✔ Use InvalidIDError @done(23-08-12 15:55)
-✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
+	✔ Installer: Keep track of installation status @done(23-08-12 17:17)
+	✔ Use InvalidIDError @done(23-08-12 15:55)
+	✔ Use dir_mode & installation status enum's throughout the game manager @done(23-08-12 15:55)
 
-✔ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low @done(23-08-17 11:53)
-✔ ^ yes this is needed to avoid important recursion @done(23-08-17 11:53)
+	✔ minor refactor: I'm passing self to the game subclasses, but since singleton im pretty sure i don't need to @low @done(23-08-17 11:53)
+	✔ ^ yes this is needed to avoid important recursion @done(23-08-17 11:53)
 
 
-✔ Rewrite from first principles @done(23-08-16 06:00)
+	✔ Rewrite from first principles @done(23-08-16 06:00)
 
-✔ Write dir class @done(23-08-15 20:10)
-✔ Test dir class @done(23-08-15 20:10)
-✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
-	✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
-	✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
-	✔ Test installer class @done(23-08-16 02:42)
-	✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
-	Nuh-uh. I need to have access to both game folders
-	
-	✔ Write uninstall() @done(23-08-16 03:28)
-	✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
-	✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
-	✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
-	✔ Write update/repair() @done(23-08-16 04:40)
-	✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
-	✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
-	
-	✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
-	
-	✔ Write commands class @done(23-08-16 05:35)
-	✔ Test commands class @done(23-08-16 05:35)
-	
-	✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
-	✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
+	✔ Write dir class @done(23-08-15 20:10)
+	✔ Test dir class @done(23-08-15 20:10)
+	✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
+		✔ Write .run() & test syntax used in installer: .run(mode, wait_on_close=True) @done(23-08-16 02:39)
+		✔ Refactor: wait_on_process_and_get_hwnd // probably/maybe split into 2 funcs? @done(23-08-16 02:41)
+		✔ Test installer class @done(23-08-16 02:42)
+		✘ Game: Still allow enabling of user mode or dev mode when the other isn't available(?) @cancelled(23-08-16 02:50)
+		Nuh-uh. I need to have access to both game folders
+		
+		✔ Write uninstall() @done(23-08-16 03:28)
+		✔ Bug: Game doesn't rebuild audio @done(23-08-16 04:27)
+		✔ Bug: Editor autoexec gets appended to rather than replaced @done(23-08-16 04:27)
+		✘ Installer: uninstall() when install gets cancelled or otherwise fails @cancelled(23-08-16 04:36)
+		✔ Write update/repair() @done(23-08-16 04:40)
+		✘ Refactor: install/update/repair has so much duplicate code! @cancelled(23-08-16 04:57)
+		✔ Installer: Re-enable prompts & checks in install() & try:catch @done(23-08-16 04:58)
+		
+		✔ Implementation: Prompt to manually set the dev directory in hud_editing.start @done(23-08-16 05:02)
+		
+		✔ Write commands class @done(23-08-16 05:35)
+		✔ Test commands class @done(23-08-16 05:35)
+		
+		✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
+		✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
 

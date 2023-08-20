@@ -5,7 +5,6 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, ttk
 
-from numpy import pad
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
@@ -114,36 +113,13 @@ class GuiHudStart(metaclass=Singleton):
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)
 
-        # create a menu bar
-        menu_bar = tk.Menu(self.root)
+        from menu.menu import EditorMenuClass
 
-        # File menu
-        file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="New", accelerator="Ctrl+N", command=self.prompt_new_hud_btn)
-        file_menu.add_command(label="Add", accelerator="Ctrl+O", command=self.prompt_add_hud_btn)
-        file_menu.add_separator()
-        file_menu.add_command(label="Edit", accelerator="Enter", command=self.edit_selected_hud)
-        file_menu.add_separator()
-        file_menu.add_command(label="Exit", accelerator="Ctrl+Q", command=self.on_close)
-        menu_bar.add_cascade(label="File", menu=file_menu)
-
-        # Edit menu
-        dev_menu = tk.Menu(menu_bar, tearoff=0)
-        dev_menu.add_command(label="User Dir", command=self.installer_user_dir)
-        dev_menu.add_command(label="Dev Dir", command=self.installer_dev_dir)
-        dev_menu.add_separator()
-        dev_menu.add_command(label="Enable", command=self.installer_enable)
-        dev_menu.add_command(label="Disable", command=self.installer_disable)
-        dev_menu.add_separator()
-        dev_menu.add_command(label="Install", command=self.installer_install)
-        dev_menu.add_command(label="Update", command=self.installer_update)
-        dev_menu.add_command(label="Repair", command=self.installer_repair)
-        dev_menu.add_separator()
-        dev_menu.add_command(label="Remove", command=self.installer_remove)
-        menu_bar.add_cascade(label="Develop", menu=dev_menu)
+        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
+        self.my_editor_menu.create_and_refresh_menu_developer_installer()
 
         # Configure the root window with the menubar
-        self.root.config(menu=menu_bar)
+        # self.root.config(menu=menu_bar)
         self.update_treeview()
 
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
@@ -153,70 +129,6 @@ class GuiHudStart(metaclass=Singleton):
         print("start: run")
         self.show()
         self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
-
-    def installer_user_dir(self):
-        """This method returns the user directory."""
-        print("Opening user directory")
-        try:
-            directory = self.game.dir.get(DirectoryMode.USER)
-            os.startfile(directory)
-        except Exception as err_info:
-            print(f"Could not open user directory: {err_info}")
-            show_message("Directory does not exist!", "error")
-
-    def installer_dev_dir(self):
-        """
-        This method returns the developer directory.
-        """
-        print("Opening developer directory")
-        try:
-            directory = self.game.dir.get(DirectoryMode.DEVELOPER)
-            os.startfile(directory)
-        except Exception as err_info:
-            print(f"Could not open developer directory: {err_info}")
-            show_message("Directory does not exist!", "error")
-
-    def installer_enable(self):
-        """
-        This method enables developer mode.
-        """
-        print("Enabling developer mode")
-        self.game.dir.set(DirectoryMode.DEVELOPER)
-
-    def installer_disable(self):
-        """
-        This method disables developer mode.
-        """
-        print("Disabling developer mode")
-        self.game.dir.set(DirectoryMode.USER)
-
-    def installer_install(self):
-        """
-        This method installs developer mode.
-        """
-        print("Install developer mode")
-        self.game.installer.install()
-
-    def installer_update(self):
-        """
-        This method updates developer mode.
-        """
-        print("Updating developer mode")
-        self.game.installer.update()
-
-    def installer_repair(self):
-        """
-        This method repairs developer mode.
-        """
-        print("Repairing developer mode")
-        self.game.installer.repair()
-
-    def installer_remove(self):
-        """
-        This method removes developer mode.
-        """
-        print("Removing developer mode")
-        self.game.installer.uninstall()
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""

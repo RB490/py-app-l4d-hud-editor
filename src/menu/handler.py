@@ -301,3 +301,67 @@ class EditorMenuHandler:
     def editor_menu_disconnect(self):
         """Send input keys to game"""
         self.game.command.send_keys_in_background("f11")
+
+    def installer_user_dir(self):
+        """This method returns the user directory."""
+        print("Opening user directory")
+        try:
+            directory = self.game.dir.get(DirectoryMode.USER)
+            os.startfile(directory)
+        except Exception as err_info:
+            print(f"Could not open user directory: {err_info}")
+            show_message("Directory does not exist!", "error")
+
+    def installer_dev_dir(self):
+        """
+        This method returns the developer directory.
+        """
+        print("Opening developer directory")
+        try:
+            directory = self.game.dir.get(DirectoryMode.DEVELOPER)
+            os.startfile(directory)
+        except Exception as err_info:
+            print(f"Could not open developer directory: {err_info}")
+            show_message("Directory does not exist!", "error")
+
+    def installer_enable(self):
+        """
+        This method enables developer mode.
+        """
+        print("Enabling developer mode")
+        self.game.dir.set(DirectoryMode.DEVELOPER)
+
+    def installer_disable(self):
+        """
+        This method disables developer mode.
+        """
+        print("Disabling developer mode")
+        self.game.dir.set(DirectoryMode.USER)
+
+    def installer_install(self):
+        """
+        This method installs developer mode.
+        """
+        print("Install developer mode")
+        self.game.installer.install()
+
+    def installer_update(self):
+        """
+        This method updates developer mode.
+        """
+        print("Updating developer mode")
+        self.game.installer.update()
+
+    def installer_repair(self):
+        """
+        This method repairs developer mode.
+        """
+        print("Repairing developer mode")
+        self.game.installer.repair()
+
+    def installer_remove(self):
+        """
+        This method removes developer mode.
+        """
+        print("Removing developer mode")
+        self.game.installer.uninstall()

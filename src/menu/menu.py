@@ -6,9 +6,9 @@ import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
 
-from menu.handler import EditorMenuHandler
-from game.game import Game
 from game.constants import DirectoryMode
+from game.game import Game
+from menu.handler import EditorMenuHandler
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
@@ -28,7 +28,7 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(self, child_instance, root, persistent_data):
+    def __init__(self, child_instance, root, persistent_data, only_dev_menu=None):
         self.handler = EditorMenuHandler(self, persistent_data)
         self.root = root
         self.child_instance = child_instance
@@ -678,9 +678,40 @@ class EditorMenuClass:
                 label=label, command=lambda action=action: self.handler.editor_give_items(action)
             )
 
+    def create_developer_installer_menu(self, menubar):
+        """Create give items menu"""
+
+        self.dev_install_menu = tk.Menu(menubar, tearoff=0)
+
+        self.dev_install_menu.add_command(label="User Dir", command=self.handler.installer_user_dir)
+        self.dev_install_menu.add_command(label="Dev Dir", command=self.handler.installer_dev_dir)
+        self.dev_install_menu.add_separator()
+        self.dev_install_menu.add_command(label="Enable", command=self.handler.installer_enable)
+        self.dev_install_menu.add_command(label="Disable", command=self.handler.installer_disable)
+        self.dev_install_menu.add_separator()
+        self.dev_install_menu.add_command(label="Install", command=self.handler.installer_install)
+        self.dev_install_menu.add_command(label="Update", command=self.handler.installer_update)
+        self.dev_install_menu.add_command(label="Repair", command=self.handler.installer_repair)
+        self.dev_install_menu.add_separator()
+        self.dev_install_menu.add_command(label="Remove", command=self.handler.installer_remove)
+
+    def create_and_refresh_menu_developer_installer(self):
+        """
+        Creates the menu bar for the application geared towards only developer options
+        """
+        save_data(self.persistent_data)
+
+        self.menu_bar = Menu(self.root, tearoff=False)
+
+        self.create_developer_installer_menu(self.menu_bar)
+
+        self.menu_bar.add_cascade(label="Developer", menu=self.dev_install_menu)
+
+        self.root.config(menu=self.menu_bar)
+
     def create_and_refresh_menu(self):
         """
-        Creates the menu bar for the application with three cascading menus: File, Edit, and Help.
+        Creates the menu bar for the application
         """
         save_data(self.persistent_data)
 
@@ -697,6 +728,7 @@ class EditorMenuClass:
         self.create_help_menu(self.menu_bar)
         self.create_give_items_menu(self.menu_bar)
         self.create_clipboard_menu(self.menu_bar)
+        self.create_developer_installer_menu(self.menu_bar)
 
         # ----------------------------------
         #       Parent tools menu
@@ -797,6 +829,7 @@ class EditorMenuClass:
         self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
         self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
         self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
+        self.menu_bar.add_cascade(label="Installer", menu=self.dev_install_menu)
         # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying menu as popup
 
         if not self.hud.get_dir():
