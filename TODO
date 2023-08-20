@@ -4,15 +4,20 @@ Current:
 	
 
 Features:
+	☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
 Bugs:
-	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
+	
 GUI:
-	☐ General: Add icon buttons to all GUI's
 	☐ Browser: Treeview context menu
 	☐ Browser: Display custom and 'added-to-hud' status for files in the browser (Consider adding columns or a status ba)
 	☐ Browser: Treeview content menu icons
 	☐ Menu: Add icons
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
+
+	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
+		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
+
+	☐ Refactor: Start GUI. Messageboxes for dev menu results
 
 Unit Testing:
 	☐ Unit test: HudDescriptions
@@ -20,7 +25,7 @@ Unit Testing:
 Refactoring:
 	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
 	
-	☐ Refactor: Start GUI. Messageboxes for dev menu results
+	
 	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
@@ -37,7 +42,7 @@ Refactoring:
 
 	☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
 		if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
-	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
+
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: loading/saving data: confirm throughout the script json reading/writing is done by the same funcs
@@ -54,7 +59,7 @@ Refactoring:
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 	☐ Make the function to create lambda commands a shared utility, and use it in the project
 	☐ Streamline and test HUD editing process for improved code path
-	☐ Consider simplifying main GUI by integrating its functionality into menu class
+	
 	☐ Explore restructuring options for more efficient code flow
 	☐ Evaluate the use of singleton patterns in GUI management
 	☐ Break up the game commands execute method for better organization
@@ -162,6 +167,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ General: Add icon buttons to all GUI's @started(23-08-20 11:34) @done(23-08-20 11:35) @lasted(1m8s)
 ✔ General: Create custom app.ico @done(23-08-20 11:10)
 ✔ General: Add icons to all GUI's @done(23-08-20 11:03)
 ✔ Bug: Browser has a visual glitch when starting up. Shows and disappears within a second @done(23-08-20 11:03)

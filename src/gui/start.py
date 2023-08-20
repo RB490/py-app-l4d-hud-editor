@@ -5,11 +5,12 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, ttk
 
+from numpy import pad
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
 from game.game import Game
-from utils.constants import APP_ICON
+from utils.constants import APP_ICON, IMAGES_DIR
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,
@@ -51,6 +52,9 @@ class GuiHudStart(metaclass=Singleton):
         self.selected_hud_name = ""
         self.selected_hud_dir = ""
 
+        # Create image buttons
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
+
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
         self.frame.pack(fill="both", anchor="nw", expand=True)
@@ -68,28 +72,35 @@ class GuiHudStart(metaclass=Singleton):
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
 
-        # create a button above the picture frame
-        self.add_button = tk.Button(self.frame, text="Add", width=35, height=1, command=self.prompt_add_hud_btn)
-        self.add_button.pack(pady=5, padx=5)
+        # create a frame for all widgets
+        self.button_frame = tk.Frame(self.frame)
+        self.button_frame.pack(fill="both", anchor="nw", expand=True)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.frame, text="New", width=35, height=1, command=self.prompt_new_hud_btn)
-        self.new_button.pack(pady=5, padx=5)
+        self.add_button = tk.Button(self.button_frame, text="Add", height=25, command=self.prompt_add_hud_btn)
+        self.add_button.pack(fill=tk.X, pady=5, padx=5)
+        self.add_button.config(image=self.add_image, compound="left", padx=10)
+
+        # create a button above the picture frame
+        self.new_button = tk.Button(self.button_frame, text="New", height=25, command=self.prompt_new_hud_btn)
+        self.new_button.pack(fill=tk.X, pady=5, padx=5)
+        self.new_button.config(image=self.add_image, compound="left", padx=10)
 
         # create a picture frame on the right side
-        self.picture_frame = tk.Frame(self.frame, bg="black")
-        self.picture_frame.pack(padx=5, pady=5)
+        self.picture_frame = tk.Frame(self.button_frame, bg="black")
+        self.picture_frame.pack(fill=tk.X, pady=5, padx=5)
 
         # Add the image viewport, display it in the picture frame and set the initial image
-        self.picture_canvas = tk.Canvas(self.picture_frame, relief="ridge", bd=4)
+        self.picture_canvas = tk.Canvas(self.picture_frame, relief="groove", bd=3)
         self.picture_canvas.pack()
         self.picture_canvas.config(width=250, height=200)
         # setting the image isn't possible before calling mainloop()
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.frame, text="Edit", width=35, height=1, command=self.edit_selected_hud)
-        self.edit_button.pack(pady=5, padx=5)
+        self.edit_button = tk.Button(self.button_frame, text="Edit", height=25, command=self.edit_selected_hud)
+        self.edit_button.pack(fill=tk.X, pady=5, padx=5)
+        self.edit_button.config(image=self.add_image, compound="left", padx=10)
 
         # Create a context menu for the treeview
         self.context_menu = tk.Menu(self.treeview, tearoff=0)
