@@ -105,6 +105,10 @@ class GameDir:
         "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
 
         root_dir = self.get(dir_mode)
+        if not os.path.isdir(root_dir):
+            print(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
+            return None
+        
         main_dir_name = self.game.get_title().replace(" ", "")
         main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
         main_dir = os.path.join(root_dir, main_dir_name)

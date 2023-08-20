@@ -4,7 +4,6 @@ import tkinter as tk
 import tkinter.messagebox as messagebox
 from tkinter import simpledialog
 
-from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
 
 
@@ -18,6 +17,8 @@ class GuiHudDescriptions:
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.iconbitmap(APP_ICON)
+
+        from hud.hud import Hud
 
         self.hud = Hud(persistent_data)
         self.relative_path = relative_path

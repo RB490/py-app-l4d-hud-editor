@@ -41,6 +41,8 @@ def debug_gui(persistent_data):
     browse = get_debug_gui_browser_instance(persistent_data)
     browse.run()
 
+    # show_descriptions_gui(persistent_data, "scripts\\hudlayout.res")
+
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
     # my_editor_menu_gui.run()
@@ -51,4 +53,10 @@ def get_debug_gui_browser_instance(persistent_data):
     "debug_gui_browser"
     print("debug_browser")
     hud_inc = get_hud_debug_instance(persistent_data)  # set active debug hud to load files into browser
+
     return GuiHudBrowser(persistent_data)
+
+
+def show_descriptions_gui(persistent_data, relative_path):
+    descriptions_gui = descriptions.GuiHudDescriptions(persistent_data, relative_path)
+    descriptions_gui.run()

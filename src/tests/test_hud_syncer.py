@@ -15,7 +15,7 @@ from hud.syncer import (
     get_subdirectories_names,
 )
 from utils.constants import SyncState
-from utils.functions import load_data
+from utils.functions import get_backup_path, load_data
 
 
 class TestHudSyncer(unittest.TestCase):
@@ -116,8 +116,8 @@ class TestHudSyncer(unittest.TestCase):
             os.path.join(self.fake_main_dir, "my_source_test_file.txt"),
             os.path.join(self.fake_main_dir, "my_custom_source_folder"),
             os.path.join(self.fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
-            os.path.join(self.fake_main_dir, "scripts", "hudlayout.res.backup"),
-            os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res.backup"),
+            get_backup_path(os.path.join(self.fake_main_dir, "scripts", "hudlayout.res")),
+            get_backup_path(os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res")),
         ]
         for file_path in check_files_exist:
             self.assertTrue(os.path.exists(file_path))
@@ -170,8 +170,8 @@ class TestHudSyncer(unittest.TestCase):
             os.path.join(self.fake_main_dir, "my_source_test_file.txt"),
             os.path.join(self.fake_main_dir, "my_custom_source_folder"),
             os.path.join(self.fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
-            os.path.join(self.fake_main_dir, "scripts", "hudlayout.res.backup"),
-            os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res.backup"),
+            get_backup_path(os.path.join(self.fake_main_dir, "scripts", "hudlayout.res")),
+            get_backup_path(os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res")),
         ]
         for file_path in check_files:
             self.assertFalse(os.path.exists(file_path))

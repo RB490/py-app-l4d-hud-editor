@@ -7,6 +7,7 @@ import shutil
 from game.constants import DirectoryMode
 from game.game import Game
 from utils.constants import SyncState
+from utils.functions import get_backup_path
 from utils.shared_utils import Singleton
 
 
@@ -171,7 +172,7 @@ class HudSyncer(metaclass=Singleton):
 
             for item in self.hud_items:
                 target_item = item.replace(self.source_dir, target_sub_dir)
-                target_item_backup = target_item + ".backup"
+                target_item_backup = get_backup_path(target_item)
 
                 # save custom items in the main directory
                 if target_sub_dir_name == self.target_dir_main_name:
@@ -245,7 +246,7 @@ class HudSyncer(metaclass=Singleton):
         for target_sub_dir_name in self.target_sub_dir_names:
             target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
             target_item = item.replace(self.source_dir, target_sub_dir)
-            target_item_backup = target_item + ".backup"
+            target_item_backup = get_backup_path(target_item)
 
             print(f"Unsync directory: {target_sub_dir}")
             print(f"& target_item_backup: {target_item_backup}")

@@ -7,10 +7,16 @@ import keyboard
 import win32gui
 from PIL import Image, ImageTk
 
+from game.constants import DirectoryMode
 from game.game import Game
+from gui.descriptions import GuiHudDescriptions
 from menu.menu import EditorMenuClass
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER
-from utils.functions import get_image_for_file_extension, save_and_exit_script
+from utils.functions import (
+    get_backup_path,
+    get_image_for_file_extension,
+    save_and_exit_script,
+)
 from utils.shared_utils import Singleton
 
 
@@ -104,18 +110,16 @@ class GuiHudBrowser(metaclass=Singleton):
 
         # Create a context menu
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
-
-        # Add options to the context menu
-        self.context_menu.add_command(label="Open File", command=self.dummy_handler)
-        self.context_menu.add_command(label="Open Default File", command=self.dummy_handler)
-        self.context_menu.add_command(label="Open Folder", command=self.dummy_handler)
-        self.context_menu.add_command(label="Open Game Folder", command=self.dummy_handler)
+        self.context_menu.add_command(label="Open File", command=self.treeview_open_file)
+        self.context_menu.add_command(label="Open Default File", command=self.treeview_open_default_file)
+        self.context_menu.add_command(label="Open Folder", command=self.treeview_open_folder)
+        self.context_menu.add_command(label="Open Game Folder", command=self.treeview_open_game_folder)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Description", command=self.dummy_handler)
-        self.context_menu.add_command(label="Integers", command=self.dummy_handler)
-        self.context_menu.add_command(label="Describe", command=self.dummy_handler)
+        self.context_menu.add_command(label="Description", command=self.treeview_description)
+        self.context_menu.add_command(label="Integers", command=self.treeview_integers)
+        self.context_menu.add_command(label="Describe", command=self.treeview_describe)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Recycle", command=self.dummy_handler)
+        self.context_menu.add_command(label="Recycle", command=self.treeview_recycle)
 
         # Bind the context menu to the right-click event on the treeview
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
@@ -206,9 +210,15 @@ class GuiHudBrowser(metaclass=Singleton):
 
     def treeview_get_selected_full_path(self):
         """Retrieve selected treeview row path"""
-        relative_path = self.treeview_get_selected_values()[3]
+        relative_path = self.treeview_get_selected_relative_path()
         full_path = os.path.join(self.hud.get_dir(), relative_path)
         return full_path if full_path else "No item selected"
+
+    def treeview_get_selected_relative_path(self):
+        values = self.treeview_get_selected_values()
+        if values:
+            return values[3]
+        return None
 
     def treeview_on_double_click(self, event):
         """Handle user clicks"""
@@ -286,3 +296,70 @@ class GuiHudBrowser(metaclass=Singleton):
         """Runs on close"""
         self.save_window_geometry()
         save_and_exit_script(self.persistent_data)
+
+    def treeview_open_file(self):
+        print("Method: treeview_open_file - Handle 'Open File' option")
+        full_path = self.treeview_get_selected_full_path()
+        os.startfile(full_path)
+
+    def treeview_open_default_file(self):
+        print("Method: treeview_open_default_file - andle 'Open Default File' option")
+        full_path = self.treeview_get_selected_full_path()
+        backup_path = get_backup_path(full_path)
+        if os.path.isfile(backup_path):
+            print(f"Opening default file: '{backup_path}'")
+            os.startfile(backup_path)
+        else:
+            print(f"Default file unavailable: '{backup_path}'")
+
+    def treeview_open_folder(self):
+        print("Method: treeview_open_folder - Handle 'Open Folder' option")
+        full_path = self.treeview_get_selected_full_path()
+        directory = os.path.dirname(full_path)
+        if os.path.isdir(directory):
+            print(f"Opening directory: '{directory}'")
+            os.startfile(directory)
+        else:
+            print(f"Directory unavailable: '{directory}'")
+
+    def treeview_open_game_folder(self):
+        print("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
+
+        if not self.game.installed(DirectoryMode.DEVELOPER):
+            print("Unable to open game directory. Developer directory is not installed.")
+            return
+
+        rel_path = self.treeview_get_selected_relative_path()
+        main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
+        game_directory = os.path.join(main_dir, rel_path)
+
+        if os.path.isdir(game_directory):
+            print(f"Opening game directory: '{game_directory}'")
+            os.startfile(game_directory)
+        else:
+            print(f"Game directory unavailable: '{game_directory}'")
+
+    def treeview_description(self):
+        print("Method: treeview_description - TODO: Handle 'Description' option")
+
+        rel_path = self.treeview_get_selected_relative_path()
+        # descriptions_gui = descriptions.GuiHudDescriptions(self.persistent_data, rel_path)
+        # descriptions_gui.run()
+
+        # descriptions_gui = GuiHudDescriptions(self.persistent_data, "scripts\hudlayout.res")
+        # descriptions_gui.run()
+        from debug.main import show_descriptions_gui
+
+        show_descriptions_gui(self.persistent_data, "scripts\\hudlayout.res")
+
+    def treeview_integers(self):
+        print("Method: treeview_integers - TODO: Handle 'Integers' option")
+        pass
+
+    def treeview_describe(self):
+        print("Method: treeview_describe - TODO: Handle 'Describe' option")
+        pass
+
+    def treeview_recycle(self):
+        print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
+        pass

@@ -24,11 +24,14 @@ from .constants import (
     FILE_EXT_FOLDER_ICON,
     FILE_EXT_IMAGES,
     FILE_EXT_WARNING_ICON,
-    IMAGES_DIR,
     NEW_HUD_DIR,
     PERSISTENT_DATA_PATH,
 )
 
+def get_backup_path(file_path):
+    """Get a backup path by appending '.backup' to the input file path"""
+    backup_path = file_path + ".backup"
+    return backup_path
 
 def get_image_for_file_extension(input_path):
     "Retrieve image for file extension"
