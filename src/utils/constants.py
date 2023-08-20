@@ -15,10 +15,13 @@ ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 # assets
-IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
 MODS_DIR = os.path.join(ASSETS_DIR, "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
+IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
+
+# asset files
+APP_ICON = os.path.join(ASSETS_DIR, "app.ico")
 
 # data
 SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")

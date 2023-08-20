@@ -2,9 +2,11 @@
 
 Current:
 	☐ General: Add icons to all GUI's
+	☐ General: Create custom app.ico
 
 Features:
 Bugs:
+	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 GUI:
 	☐ General: Add icon buttons to all GUI's
 	☐ Browser: Treeview context menu
@@ -36,6 +38,7 @@ Refactoring:
 
 	☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
 		if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
+	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: loading/saving data: confirm throughout the script json reading/writing is done by the same funcs
@@ -160,6 +163,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Bug: Browser has a visual glitch when starting up. Shows and disappears within a second @done(23-08-20 11:03)
 ✔ Remove duplicate code in hud.py related to GuiHudStart instance creation @done(23-08-20 10:38) show_start_gui()
 ✔ Testing: Create test for syncer @done(23-08-20 10:29)
 ✔ Am I using too many exceptions? When should i return a (None) value instead @done(23-08-20 10:28)

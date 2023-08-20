@@ -5,19 +5,22 @@ import tkinter.messagebox as messagebox
 from tkinter import simpledialog
 
 from hud.hud import Hud
-from utils.constants import IMAGES_DIR
+from utils.constants import APP_ICON, IMAGES_DIR
 
 
 class GuiHudDescriptions:
     """Class for the hud file descriptions gui"""
 
     def __init__(self, persistent_data, relative_path):
+        self.is_hidden = None
         self.root = tk.Tk()
+        self.hide()
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.iconbitmap(APP_ICON)
+
         self.hud = Hud(persistent_data)
         self.relative_path = relative_path
-        self.is_hidden = False
 
         # self.root.minsize(450, 400)
 
@@ -91,8 +94,6 @@ class GuiHudDescriptions:
         save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
         self.load_file(relative_path)
-
-        self.hide()
 
     def run(self):
         "Show & start main loop"

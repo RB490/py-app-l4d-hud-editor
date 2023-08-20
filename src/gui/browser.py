@@ -6,9 +6,9 @@ from tkinter import ttk
 import keyboard
 import win32gui
 
-from menu.menu import EditorMenuClass
 from game.game import Game
-from utils.constants import HOTKEY_TOGGLE_BROWSER
+from menu.menu import EditorMenuClass
+from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER
 from utils.functions import save_and_exit_script
 from utils.shared_utils import Singleton
 
@@ -24,15 +24,17 @@ class GuiHudBrowser(metaclass=Singleton):
         from hud.hud import Hud
 
         # set variables
+        self.is_hidden = None
         self.hud = Hud(persistent_data)
         self.game = Game(persistent_data)
         self.root = tk.Tk()
+        self.hide()
         self.persistent_data = persistent_data
         self.root.title("Browser")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 100)
+        self.root.iconbitmap(APP_ICON)
         # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
-        self.is_hidden = False
 
         # load saved geometry
         try:
@@ -123,7 +125,9 @@ class GuiHudBrowser(metaclass=Singleton):
 
         self.treeview_refresh(self.treeview)
 
-        self.hide()
+    def dummy_handler(self):
+        "Dummy method"
+        print("dummy")
 
     def run(self):
         "Show & start main loop"
@@ -132,10 +136,6 @@ class GuiHudBrowser(metaclass=Singleton):
 
         self.show()
         self.root.mainloop()
-
-    def dummy_handler(self):
-        "Dummy method"
-        print("dummy")
 
     def show(self):
         """Show gui"""

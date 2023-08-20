@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
 from game.game import Game
+from utils.constants import APP_ICON
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,
@@ -22,15 +23,19 @@ class GuiHudStart(metaclass=Singleton):
     """Class for the hud select gui"""
 
     def __init__(self, persistent_data):
+        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         self.persistent_data = persistent_data
         self.game = Game(persistent_data)
-        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        from hud.hud import Hud
 
+        from hud.hud import Hud  # avoid recursive import
+
+        self.is_hidden = None
         self.hud = Hud(persistent_data)
         self.root = tk.Tk()
+        self.hide()
         self.root.title("Select")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.iconbitmap(APP_ICON)
         # self.root.geometry("865x390")
         self.root.minsize(865, 375)
 
@@ -129,8 +134,6 @@ class GuiHudStart(metaclass=Singleton):
         # Configure the root window with the menubar
         self.root.config(menu=menu_bar)
         self.update_treeview()
-        # self.root.on_hide()
-        self.root.withdraw()  # hide gui
 
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
@@ -352,10 +355,12 @@ class GuiHudStart(metaclass=Singleton):
         """Hide gui"""
         # Hide the root window instead of closing it
         self.root.withdraw()
+        self.is_hidden = True
 
     def show(self):
         """Show gui"""
         # Show the window again
+        self.is_hidden = False
         self.root.deiconify()
 
     def destroy_gui(self):

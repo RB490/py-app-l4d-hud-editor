@@ -2,12 +2,12 @@
 
 import tkinter as tk
 
-from menu.menu import EditorMenuClass
 from game.game import Game
 from hud.hud import Hud
+from menu.menu import EditorMenuClass
 
 
-class GuiEditorMenu:
+class GuiEditorMenuPopupContextmenu:
     """
     A class representing a toggle window with hotkey functionality and a menu bar.
 
@@ -27,11 +27,12 @@ class GuiEditorMenu:
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
+        self.is_hidden = None
         self.root = tk.Tk()
+        self.hide()
         # self.root.geometry("300x200")
         self.root.title("Hud Editor")
         # self.root.withdraw()
-        self.is_hidden = False
         self.persistent_data = persistent_data
         self.game = Game(persistent_data)
         self.hud = Hud(persistent_data)
@@ -41,7 +42,22 @@ class GuiEditorMenu:
         # keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
 
         # self.show_menu()
+
+    def run(self):
+        "Show & start main loop"
+
+        self.show()
         self.root.mainloop()
+
+    def show(self):
+        """Show gui"""
+        self.root.deiconify()
+        self.is_hidden = False
+
+    def hide(self):
+        """Hide gui"""
+        self.root.withdraw()
+        self.is_hidden = True
 
     def toggle_visibility(self):
         """
@@ -84,4 +100,4 @@ class GuiEditorMenu:
 def debug_gui_editor_menu(persistent_data):
     """Debug gui class"""
     # pylint: disable=unused-variable
-    app = GuiEditorMenu(persistent_data)
+    app = GuiEditorMenuPopupContextmenu(persistent_data)
