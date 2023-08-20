@@ -6,7 +6,6 @@ from tkinter import ttk
 
 import keyboard
 import win32gui
-from genericpath import isfile
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
@@ -36,7 +35,6 @@ class GuiHudBrowser(metaclass=Singleton):
         self.is_hidden = None
         self.hud = Hud(persistent_data)
         self.game = Game(persistent_data)
-        self.descriptions_gui = None
         self.root = tk.Tk()
         self.hide()
         self.persistent_data = persistent_data
@@ -44,6 +42,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
+        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, self)
         # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
 
         # Store PhotoImage objects in a list to prevent garbage collection
@@ -410,13 +409,7 @@ class GuiHudBrowser(metaclass=Singleton):
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
         rel_path = self.treeview_get_selected_relative_path()
-        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path, self)
-        self.descriptions_gui.run()
-
-        # TODO wait until description closes -> update the treeview.
-        # or use a callback or someting as mainloop seems to exit this method here
-
-        print("gui closed!")
+        self.descriptions_gui.load_file(rel_path)
 
     def treeview_integers(self):
         "Treeview Handle 'Integers' option"

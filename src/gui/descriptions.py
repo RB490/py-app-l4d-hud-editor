@@ -1,4 +1,5 @@
 """Module for the hud file descriptions gui"""
+# pylint: disable=import-outside-toplevel
 import os
 import tkinter as tk
 import tkinter.messagebox as messagebox
@@ -11,7 +12,7 @@ from utils.shared_utils import Singleton
 class GuiHudDescriptions(metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, persistent_data, relative_path, parent_gui):
+    def __init__(self, persistent_data, parent_gui):
         self.is_hidden = None
         self.root = tk.Toplevel()
         self.hide()
@@ -22,18 +23,15 @@ class GuiHudDescriptions(metaclass=Singleton):
         from hud.hud import Hud
 
         self.hud = Hud(persistent_data)
-        self.relative_path = relative_path
         self.parent = parent_gui
+        self.relative_path = None
 
         # self.root.minsize(450, 400)
 
         # Create image buttons
-        # self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
-        # self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
-        # self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "fullscreen.png"))
-        # self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
-        # self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
+        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
+        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
 
         # define constants for padding and sizing
         pad_x = 10
@@ -74,10 +72,10 @@ class GuiHudDescriptions(metaclass=Singleton):
         add_ctrl_button.config(image=self.add_image, compound="center")
         add_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
-        # remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
-        # remove_ctrl_button.config(width=25, height=23)
-        # remove_ctrl_button.config(image=self.delete_image, compound="center")
-        # remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
+        remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
+        remove_ctrl_button.config(width=25, height=23)
+        remove_ctrl_button.config(image=self.delete_image, compound="center")
+        remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
         ctrl_desc_frame = tk.Frame(ctrl_label_frame)
         ctrl_desc_frame.pack(anchor="nw", side="top", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
@@ -93,13 +91,11 @@ class GuiHudDescriptions(metaclass=Singleton):
         save_button_frame = tk.Frame(self.root)
         save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
 
-        # save_button = tk.Button(
-        #     save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
-        # )
-        # save_button.config(image=self.save_image, compound="center")
-        # save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
-
-        self.load_file(relative_path)
+        save_button = tk.Button(
+            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
+        )
+        save_button.config(image=self.save_image, compound="center")
+        save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
     def run(self):
         "Show & start main loop"
@@ -132,6 +128,15 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         # load controls
         self.load_controls()
+
+        # run mainloop
+        self.run()
+
+    def clear_gui(self):
+        self.ctrl_menu_variable.set(None)
+        self.ctrl_menu["menu"].delete(0, "end")  # Delete all existing options
+        self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
+        self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
 
     def load_controls(self):
         """Load controls into option menu & load the first one"""
@@ -216,11 +221,14 @@ class GuiHudDescriptions(metaclass=Singleton):
         # save changes to disk
         self.hud.desc.save_to_disk()
 
-        # close gui
-        self.root.destroy()
+        # clear the gui
+        self.clear_gui()
+
+        # hide gui
+        self.hide()
 
         # call parent
-        self.parent.treeview_refresh()
+        self.parent.treeview_refresh(self.parent.treeview)
 
     def on_close(self):
         """On gui close"""
@@ -229,4 +237,4 @@ class GuiHudDescriptions(metaclass=Singleton):
         self.hud.desc.read_from_disk()
 
         # close gui
-        self.root.destroy()
+        self.hide()

@@ -1,7 +1,6 @@
 
 
 Current:
-	☐ Browser: Treeview context menu functionality: hud descriptions
 	
 	
 	
@@ -177,6 +176,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Browser: Treeview context menu functionality: hud descriptions @done(23-08-20 22:59)
 	✔ Browser: Disable multiple instances for the gui descriptions gui @done(23-08-20 22:40) made it a singleton
 	✔ Bug: Hud Descriptions Gui: Remove default options for controls @done(23-08-20 22:38)
 	✔ Bug: Try to load any file without controls into the hud descriptions gui -> some error @done(23-08-20 22:33)

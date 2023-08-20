@@ -6,7 +6,9 @@
         "file_relative_path": "addonimage.jpg"
     },
     "addoninfo.txt": {
-        "file_control_descriptions": {},
+        "file_control_descriptions": {
+            "None": ""
+        },
         "file_description": "VDF with information about the addon that gets shown in the 'addons' menu",
         "file_name": "addoninfo.txt",
         "file_relative_path": "addoninfo.txt"
