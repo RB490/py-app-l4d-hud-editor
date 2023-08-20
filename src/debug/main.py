@@ -23,6 +23,11 @@ def debug_main():
     # debug_game_class(persistent_data)
     debug_gui(persistent_data)
 
+    # hud = get_hud_debug_instance(persistent_data)
+    # result = hud.get_all_files_dict()
+    # result = hud.get_files_dict()
+
+    print(f"result={result}")
     input("Finished debugging! Press enter to continue..")
 
 
@@ -37,11 +42,8 @@ def debug_gui(persistent_data):
     # show_start_gui(persistent_data)
 
     # browser
-
     browse = get_debug_gui_browser_instance(persistent_data)
     browse.run()
-
-    # show_descriptions_gui(persistent_data, "scripts\\hudlayout.res")
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)

@@ -1,5 +1,5 @@
 """Module for the hud browser gui class"""
-import datetime
+from genericpath import isfile
 import os
 import tkinter as tk
 from datetime import datetime
@@ -13,7 +13,7 @@ from game.constants import DirectoryMode
 from game.game import Game
 from gui.descriptions import GuiHudDescriptions
 from menu.menu import EditorMenuClass
-from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER
+from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
 from utils.functions import (
     get_backup_path,
     get_image_for_file_extension,
@@ -248,6 +248,7 @@ class GuiHudBrowser(metaclass=Singleton):
         return full_path if full_path else "No item selected"
 
     def treeview_get_selected_relative_path(self):
+        "Treeview get info"
         values = self.treeview_get_selected_values()
         if values:
             return values[4]
@@ -286,10 +287,38 @@ class GuiHudBrowser(metaclass=Singleton):
         # Add items from the data_dict to the Treeview
         for file_name, desc_relpath_tuple in data_dict.items():
             file_desc = desc_relpath_tuple[0]
+
+            # path
             file_relative_path = desc_relpath_tuple[1]
             file_path = os.path.join(hud_dir, file_relative_path)
-            timestamp = os.path.getmtime(file_path)
-            last_modified = datetime.fromtimestamp(timestamp).strftime("%Y.%m.%d @ %H:%M:%S")
+
+            # custom file?
+            if self.game.installed(DirectoryMode.DEVELOPER) and self.hud.synced():
+                main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
+                file_path_backup = get_backup_path(os.path.join(main_dir, file_relative_path))
+                
+                is_custom = "N" if os.path.isfile(file_path_backup) else "Y"
+            else:
+                is_custom = "-"
+
+            # modified
+            if os.path.isfile(file_path):
+                timestamp = os.path.getmtime(file_path)
+                last_modified = datetime.fromtimestamp(timestamp).strftime("%Y.%m.%d @ %H:%M:%S")
+            else:
+                last_modified = "not_added"
+
+            # image
+            if os.path.isfile(file_path):
+                image_path = get_image_for_file_extension(file_path)
+            else:
+                image_path = os.path.join(IMAGES_DIR, "cross128.png")
+            image = Image.open(image_path)
+            image = image.resize((16, 16), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(image)
+            self.treeview_photo_images.append(photo)  # Store the PhotoImage object
+
+            # search
             if (
                 search_term
                 and search_term.lower() not in str(file_name).lower()
@@ -299,15 +328,10 @@ class GuiHudBrowser(metaclass=Singleton):
                 # Skip this item if search term is provided and not found in key or value
                 continue
 
-            image_path = get_image_for_file_extension(file_path)
-            image = Image.open(image_path)
-            image = image.resize((16, 16), Image.LANCZOS)
-            photo = ImageTk.PhotoImage(image)
-            self.treeview_photo_images.append(photo)  # Store the PhotoImage object
+            # add item
             treeview.insert(
-                "", "end", values=(file_name, file_desc, "", last_modified, file_relative_path), image=photo
+                "", "end", values=(file_name, file_desc, is_custom, last_modified, file_relative_path), image=photo
             )
-
             # treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path)) # legacy
 
         print("Treeview: Refreshed")
@@ -334,12 +358,14 @@ class GuiHudBrowser(metaclass=Singleton):
         save_and_exit_script(self.persistent_data)
 
     def treeview_open_file(self):
+        "Treeview Handle 'Open File' option"
         print("Method: treeview_open_file - Handle 'Open File' option")
         full_path = self.treeview_get_selected_full_path()
         os.startfile(full_path)
 
     def treeview_open_default_file(self):
-        print("Method: treeview_open_default_file - andle 'Open Default File' option")
+        "Treeview handle Open Default File' option"
+        print("Method: treeview_open_default_file - handle 'Open Default File' option")
         full_path = self.treeview_get_selected_full_path()
         backup_path = get_backup_path(full_path)
         if os.path.isfile(backup_path):
@@ -349,6 +375,7 @@ class GuiHudBrowser(metaclass=Singleton):
             print(f"Default file unavailable: '{backup_path}'")
 
     def treeview_open_folder(self):
+        "Treeview Handle 'Open Folder' option"
         print("Method: treeview_open_folder - Handle 'Open Folder' option")
         full_path = self.treeview_get_selected_full_path()
         directory = os.path.dirname(full_path)
@@ -359,6 +386,7 @@ class GuiHudBrowser(metaclass=Singleton):
             print(f"Directory unavailable: '{directory}'")
 
     def treeview_open_game_folder(self):
+        "Treeview Handle 'Open Game Folder' option"
         print("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
 
         if not self.game.installed(DirectoryMode.DEVELOPER):
@@ -376,6 +404,7 @@ class GuiHudBrowser(metaclass=Singleton):
             print(f"Game directory unavailable: '{game_directory}'")
 
     def treeview_description(self):
+        "Treeview Handle 'Description' option"
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
         rel_path = self.treeview_get_selected_relative_path()
@@ -389,15 +418,19 @@ class GuiHudBrowser(metaclass=Singleton):
         descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path)
         descriptions_gui.run()
 
-        # TODO wait until description closes -> update the treeview. or use a callback or someting as mainloop seems to exit this method here
+        # TODO wait until description closes -> update the treeview.
+        # or use a callback or someting as mainloop seems to exit this method here
 
         print("gui closed!")
 
     def treeview_integers(self):
+        "Treeview Handle 'Integers' option"
         print("Method: treeview_integers - TODO: Handle 'Integers' option")
 
     def treeview_describe(self):
+        "Treeview Handle 'Describe' option"
         print("Method: treeview_describe - TODO: Handle 'Describe' option")
 
     def treeview_recycle(self):
+        "Treeview Handle 'Recycle' option"
         print("Method: treeview_recycle - TODO: Handle 'Recycle' option")

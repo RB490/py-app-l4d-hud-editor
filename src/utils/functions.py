@@ -35,11 +35,11 @@ def get_backup_path(file_path):
 
 def get_image_for_file_extension(input_path):
     "Retrieve image for file extension"
-    if not os.path.isfile(input_path):  # Handle invalid path
-        print(f"Retrieved image for invalid path {input_path} {FILE_EXT_WARNING_ICON}")
-        return FILE_EXT_WARNING_ICON
 
-    if os.path.isdir(input_path):  # Handle directories
+    # Get the file extension
+    file_extension = os.path.splitext(input_path)[1]
+
+    if not file_extension:
         print(f"Retrieved image for directory {input_path} {FILE_EXT_FOLDER_ICON}")
         return FILE_EXT_FOLDER_ICON
 
@@ -53,9 +53,6 @@ def get_image_for_file_extension(input_path):
         ".vmt": os.path.join(FILE_EXT_IMAGES, "resource.ico"),
         ".vtf": os.path.join(FILE_EXT_IMAGES, "image.ico"),
     }
-
-    # Get the file extension
-    file_extension = os.path.splitext(input_path)[1]
 
     # Get the corresponding image path or return "warning.png"
     output_image_path = file_types.get(file_extension, FILE_EXT_WARNING_ICON)

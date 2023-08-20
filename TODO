@@ -1,29 +1,33 @@
 
 
 Current:
+	✔ Bug: Browser: 'All' toggle isn't working right. only addoninfo&addonimage are shown @started(23-08-20 21:30) @done(23-08-20 21:55) @lasted(25m16s)
+	✔ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
+	✔ Browser: Display custom status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
 	
-
-Features:
-	☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
-
-Bugs:
+	☐ Browser: Showing which items are custom & 'added-to-hud'. Currently doing this in a column. Consider also a status bar + removing column?
 	
+	Features:
+		☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
+		
+		Bugs:
+			
 GUI:
 	☐ Browser: Treeview context menu functionality: hud descriptions (gui images get garbage collected or something)
 	☐ Browser: Treeview context menu functionality: integers
 	☐ Browser: Treeview context menu functionality: treeview_recycle
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
-	☐ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar)
-	☐ Browser: Display custom status for files in the browser (Consider adding columns or a status bar)
-	☐ Menu: Add icons
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
+	☐ Browser: Treeview context menu icons
+	☐ Menu: Add icons
 
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 
 	☐ Refactor: Start GUI. Messageboxes for dev menu results
 
-	☐ Browser: Showing which items are custom & 'added-to-hud'. Currently doing this in a column. Consider also a status bar + removing column?
+	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
+
 
 Unit Testing:
 	☐ Unit test: HudDescriptions

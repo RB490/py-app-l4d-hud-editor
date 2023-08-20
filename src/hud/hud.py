@@ -152,6 +152,10 @@ class Hud(metaclass=Singleton):
         # clear variables
         self.hud_dir = None
 
+    def synced(self):
+        "Verify if hud is loaded"
+        return self.syncer.is_synced()
+
     def is_loaded(self):
         "Verify if hud is loaded"
         if self.hud_dir:
