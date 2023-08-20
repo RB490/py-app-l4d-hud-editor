@@ -36,6 +36,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.is_hidden = None
         self.hud = Hud(persistent_data)
         self.game = Game(persistent_data)
+        self.descriptions_gui = None
         self.root = tk.Tk()
         self.hide()
         self.persistent_data = persistent_data
@@ -354,6 +355,7 @@ class GuiHudBrowser(metaclass=Singleton):
 
     def on_close(self):
         """Runs on close"""
+        self.descriptions_gui.on_close()
         self.save_window_geometry()
         save_and_exit_script(self.persistent_data)
 
@@ -408,8 +410,8 @@ class GuiHudBrowser(metaclass=Singleton):
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
         rel_path = self.treeview_get_selected_relative_path()
-        descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path, self)
-        descriptions_gui.run()
+        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path, self)
+        self.descriptions_gui.run()
 
         # TODO wait until description closes -> update the treeview.
         # or use a callback or someting as mainloop seems to exit this method here

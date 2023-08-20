@@ -60,8 +60,8 @@ class GuiHudDescriptions:
         ctrl_button_frame.pack(side="bottom", fill="x", expand=False, padx=pad_x, pady=(0, pad_y))
 
         self.ctrl_menu_variable = tk.StringVar(self.root)
-        self.ctrl_menu_variable.set("Option 1")  # default value
-        controls_list = ["Option 1", "Option 2", "Option 3"]
+        self.ctrl_menu_variable.set("None")  # default value
+        controls_list = ["None"]
         self.ctrl_menu = tk.OptionMenu(
             ctrl_button_frame, self.ctrl_menu_variable, *controls_list, command=self.selected_ctrl
         )
