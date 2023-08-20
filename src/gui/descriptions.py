@@ -17,6 +17,7 @@ class GuiHudDescriptions:
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.hud = Hud(persistent_data)
         self.relative_path = relative_path
+        self.is_hidden = False
 
         # self.root.minsize(450, 400)
 
@@ -90,6 +91,24 @@ class GuiHudDescriptions:
         save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
         self.load_file(relative_path)
+
+        self.hide()
+
+    def run(self):
+        "Show & start main loop"
+
+        self.show()
+        self.root.mainloop()
+
+    def show(self):
+        """Show gui"""
+        self.root.deiconify()
+        self.is_hidden = False
+
+    def hide(self):
+        """Hide gui"""
+        self.root.withdraw()
+        self.is_hidden = True
 
     def load_file(self, relative_path):
         """Load description for hud file into the gui"""

@@ -370,9 +370,7 @@ class GuiHudStart(metaclass=Singleton):
         self.hide()
 
 
-def debug_gui_start(persistent_data):
-    # pylint: disable=unused-variable
-    """Debug the gui"""
-
-    d_s = GuiHudStart(persistent_data)
-    d_s.run()
+def show_start_gui(persistent_data):
+    "Show start gui"
+    start_instance = GuiHudStart(persistent_data)
+    start_instance.run()

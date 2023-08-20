@@ -1,15 +1,11 @@
 
 
 Current:
-
+	☐ General: Add icons to all GUI's
 
 Features:
-	
-
 Bugs:
-
 GUI:
-	☐ General: Add icons to all GUI's
 	☐ General: Add icon buttons to all GUI's
 	☐ Browser: Treeview context menu
 	☐ Browser: Display custom and 'added-to-hud' status for files in the browser (Consider adding columns or a status ba)
@@ -48,8 +44,6 @@ Refactoring:
 	☐ Handle VPK class failing to extract specific files during installation
 	☐ Make internal class methods protected by adding underscores. And internal with double __
 	☐ Add dir_mode enum checks to game class?
-	☐ Remove duplicate code in hud.py related to GuiHudStart instance creation
-		☐ Automatically detect and refactor
 	☐ Utilize exception handling for specific cases like AssertionError and ValueError
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Enums. For example for steam_info object (?) or make it into a class
@@ -166,6 +160,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Remove duplicate code in hud.py related to GuiHudStart instance creation @done(23-08-20 10:38) show_start_gui()
 ✔ Testing: Create test for syncer @done(23-08-20 10:29)
 ✔ Am I using too many exceptions? When should i return a (None) value instead @done(23-08-20 10:28)
 

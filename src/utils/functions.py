@@ -22,7 +22,6 @@ import win32process
 
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
-
 def generate_random_string(length=8):
     "Generate random string"
     characters = string.ascii_letters + string.digits
