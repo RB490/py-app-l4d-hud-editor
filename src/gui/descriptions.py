@@ -5,9 +5,10 @@ import tkinter.messagebox as messagebox
 from tkinter import simpledialog
 
 from utils.constants import APP_ICON, IMAGES_DIR
+from utils.shared_utils import Singleton
 
 
-class GuiHudDescriptions:
+class GuiHudDescriptions(metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self, persistent_data, relative_path, parent_gui):
