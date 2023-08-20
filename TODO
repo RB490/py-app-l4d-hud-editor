@@ -1,13 +1,6 @@
 
 
 Current:
-
-	
-	☐ Browser: Treeview context menu functionality: hud descriptions (gui images get garbage collected or something)
-	☐ Browser: Treeview context menu functionality: integers
-	☐ Browser: Treeview context menu functionality: treeview_recycle
-
-	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
 	☐ Browser: Treeview header sorting
 
 Features:
@@ -15,6 +8,10 @@ Features:
 Bugs:
 	
 GUI:
+	☐ Browser: Treeview context menu functionality: hud descriptions (gui images get garbage collected or something)
+	☐ Browser: Treeview context menu functionality: integers
+	☐ Browser: Treeview context menu functionality: treeview_recycle
+	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
 	☐ Browser: Display custom and 'added-to-hud' status for files in the browser (Consider adding columns or a status ba)
 	☐ Menu: Add icons
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
@@ -172,6 +169,8 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
+	✔ Create an important note with example script:: you can only have one main gui. When using a subgui that should be using tk.Toplevel() otherwise garbage collection causes pyimage errors @done(23-08-20 18:58)
 ✔ Browser: Treeview context menu functionality @started(23-08-20 14:15) @done(23-08-20 15:10) @lasted(55m38s)
 ✔ Browser: Treeview menu icons @done(23-08-20 14:09)
 ✔ General: Add icon buttons to all GUI's @started(23-08-20 11:34) @done(23-08-20 11:35) @lasted(1m8s)

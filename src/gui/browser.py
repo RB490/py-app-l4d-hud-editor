@@ -1,4 +1,5 @@
 """Module for the hud browser gui class"""
+import gc
 import os
 import tkinter as tk
 from tkinter import ttk
@@ -231,8 +232,6 @@ class GuiHudBrowser(metaclass=Singleton):
         """Clear treeview & load up-to-date content"""
 
         hud_dir = self.hud.get_dir()
-        # Store PhotoImage objects in a list to prevent garbage collection
-        self.treeview_photo_images = []
 
         print(f"Treeview: Refreshing directory: '{hud_dir}'")
 
@@ -348,9 +347,14 @@ class GuiHudBrowser(metaclass=Singleton):
 
         # descriptions_gui = GuiHudDescriptions(self.persistent_data, "scripts\hudlayout.res")
         # descriptions_gui.run()
-        from debug.main import show_descriptions_gui
+        # from debug.main import show_descriptions_gui
 
-        show_descriptions_gui(self.persistent_data, "scripts\\hudlayout.res")
+        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path)
+        self.descriptions_gui.run()
+
+        # TODO wait until description closes -> update the treeview. or use a callback or someting as mainloop seems to exit this method here
+
+        print("gui closed!")
 
     def treeview_integers(self):
         print("Method: treeview_integers - TODO: Handle 'Integers' option")

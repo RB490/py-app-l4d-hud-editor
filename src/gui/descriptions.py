@@ -12,7 +12,7 @@ class GuiHudDescriptions:
 
     def __init__(self, persistent_data, relative_path):
         self.is_hidden = None
-        self.root = tk.Tk()
+        self.root = tk.Toplevel()
         self.hide()
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -26,9 +26,12 @@ class GuiHudDescriptions:
         # self.root.minsize(450, 400)
 
         # Create image buttons
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
-        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
-        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
+        # self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
+        # self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
+        # self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "fullscreen.png"))
+        # self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
+        # self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
 
         # define constants for padding and sizing
         pad_x = 10
@@ -69,10 +72,10 @@ class GuiHudDescriptions:
         add_ctrl_button.config(image=self.add_image, compound="center")
         add_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
-        remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
-        remove_ctrl_button.config(width=25, height=23)
-        remove_ctrl_button.config(image=self.delete_image, compound="center")
-        remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
+        # remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
+        # remove_ctrl_button.config(width=25, height=23)
+        # remove_ctrl_button.config(image=self.delete_image, compound="center")
+        # remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
         ctrl_desc_frame = tk.Frame(ctrl_label_frame)
         ctrl_desc_frame.pack(anchor="nw", side="top", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
@@ -88,11 +91,11 @@ class GuiHudDescriptions:
         save_button_frame = tk.Frame(self.root)
         save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
 
-        save_button = tk.Button(
-            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
-        )
-        save_button.config(image=self.save_image, compound="center")
-        save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
+        # save_button = tk.Button(
+        #     save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
+        # )
+        # save_button.config(image=self.save_image, compound="center")
+        # save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
         self.load_file(relative_path)
 
