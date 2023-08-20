@@ -20,7 +20,46 @@ import win32con  # type: ignore
 import win32gui
 import win32process
 
-from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
+from .constants import (
+    FILE_EXT_FOLDER_ICON,
+    FILE_EXT_IMAGES,
+    FILE_EXT_WARNING_ICON,
+    IMAGES_DIR,
+    NEW_HUD_DIR,
+    PERSISTENT_DATA_PATH,
+)
+
+
+def get_image_for_file_extension(input_path):
+    "Retrieve image for file extension"
+    if not os.path.isfile(input_path):  # Handle invalid path
+        print(f"Retrieved image for invalid path {input_path} {FILE_EXT_WARNING_ICON}")
+        return FILE_EXT_WARNING_ICON
+
+    if os.path.isdir(input_path):  # Handle directories
+        print(f"Retrieved image for directory {input_path} {FILE_EXT_FOLDER_ICON}")
+        return FILE_EXT_FOLDER_ICON
+
+    # Define the file types and their corresponding icons
+    file_types = {
+        ".txt": os.path.join(FILE_EXT_IMAGES, "text.ico"),
+        ".res": os.path.join(FILE_EXT_IMAGES, "resource.ico"),
+        ".cfg": os.path.join(FILE_EXT_IMAGES, "config.ico"),
+        ".jpg": os.path.join(FILE_EXT_IMAGES, "image.ico"),
+        ".png": os.path.join(FILE_EXT_IMAGES, "image.ico"),
+        ".vmt": os.path.join(FILE_EXT_IMAGES, "resource.ico"),
+        ".vtf": os.path.join(FILE_EXT_IMAGES, "image.ico"),
+    }
+
+    # Get the file extension
+    file_extension = os.path.splitext(input_path)[1]
+
+    # Get the corresponding image path or return "warning.png"
+    output_image_path = file_types.get(file_extension, FILE_EXT_WARNING_ICON)
+
+    print(f"Retrieved image for {input_path} -> {output_image_path}")
+    return output_image_path
+
 
 def generate_random_string(length=8):
     "Generate random string"

@@ -5,11 +5,12 @@ from tkinter import ttk
 
 import keyboard
 import win32gui
+from PIL import Image, ImageTk
 
 from game.game import Game
 from menu.menu import EditorMenuClass
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER
-from utils.functions import save_and_exit_script
+from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.shared_utils import Singleton
 
 
@@ -35,6 +36,9 @@ class GuiHudBrowser(metaclass=Singleton):
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
         # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
+
+        # Store PhotoImage objects in a list to prevent garbage collection
+        self.treeview_photo_images = []
 
         # load saved geometry
         try:
@@ -83,7 +87,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.treeview.heading("description", text="Description", anchor="w")
         self.treeview.heading("custom", text="Custom", anchor="w")
         self.treeview.heading("path", text="Path", anchor="w")
-        self.treeview.column("#0", width=10, stretch=False)
+        self.treeview.column("#0", width=40, minwidth=40, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
         self.treeview.column("description", width=50)
         self.treeview.column("custom", width=1)
@@ -216,7 +220,11 @@ class GuiHudBrowser(metaclass=Singleton):
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""
 
-        print(f"Treeview: Refreshing directory: '{self.hud.get_dir()}'")
+        hud_dir = self.hud.get_dir()
+        # Store PhotoImage objects in a list to prevent garbage collection
+        self.treeview_photo_images = []
+
+        print(f"Treeview: Refreshing directory: '{hud_dir}'")
 
         print(f"display choice: '{self.display_choice.get()}'")
         display_choice = self.display_choice.get().lower()
@@ -237,6 +245,7 @@ class GuiHudBrowser(metaclass=Singleton):
         for file_name, desc_relpath_tuple in data_dict.items():
             file_desc = desc_relpath_tuple[0]
             file_relative_path = desc_relpath_tuple[1]
+            file_path = os.path.join(hud_dir, file_relative_path)
             if (
                 search_term
                 and search_term.lower() not in str(file_name).lower()
@@ -245,7 +254,15 @@ class GuiHudBrowser(metaclass=Singleton):
             ):
                 # Skip this item if search term is provided and not found in key or value
                 continue
-            treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path))
+
+            image_path = get_image_for_file_extension(file_path)
+            image = Image.open(image_path)
+            image = image.resize((16, 16), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(image)
+            self.treeview_photo_images.append(photo)  # Store the PhotoImage object
+            treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path), image=photo)
+
+            # treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path)) # legacy
 
         print("Treeview: Refreshed")
 

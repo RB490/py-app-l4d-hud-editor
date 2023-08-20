@@ -23,6 +23,16 @@ IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
 # asset files
 APP_ICON = os.path.join(ASSETS_DIR, "app.ico")
 
+# images
+FILE_EXT_FOLDER_ICON = (
+    "D:\\Programming and projects\\py-app-l4d-hud-editor\\assets\\images\\file_extensions\\folder.ico"
+)
+FILE_EXT_WARNING_ICON = (
+    "D:\\Programming and projects\\py-app-l4d-hud-editor\\assets\\images\\file_extensions\\error.ico"
+)
+FILE_EXT_IMAGES = os.path.join(IMAGES_DIR, "file_extensions")
+
+
 # data
 SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")
 NEW_HUD_DIR = os.path.join(DATA_DIR, "new_hud_template")
