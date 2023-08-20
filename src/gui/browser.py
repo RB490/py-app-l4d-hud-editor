@@ -1,6 +1,8 @@
 """Module for the hud browser gui class"""
+import datetime
 import os
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk
 
 import keyboard
@@ -87,7 +89,9 @@ class GuiHudBrowser(metaclass=Singleton):
         self.radio_2.pack(side="right", padx=5)
 
         # create a treeview with three columns
-        self.treeview = ttk.Treeview(self.frame, columns=("file", "description", "custom", "path"), height=15)
+        self.treeview = ttk.Treeview(
+            self.frame, columns=("file", "description", "custom", "modified", "path"), height=15
+        )
         self.treeview.heading("#0", text="")
         self.treeview.heading(
             "file", text="File", anchor="w", command=lambda: self.treeview_sort_column("file", False)
@@ -102,12 +106,16 @@ class GuiHudBrowser(metaclass=Singleton):
             "custom", text="Custom", anchor="w", command=lambda: self.treeview_sort_column("custom", False)
         )
         self.treeview.heading(
+            "modified", text="Modified", anchor="w", command=lambda: self.treeview_sort_column("modified", False)
+        )
+        self.treeview.heading(
             "path", text="Path", anchor="w", command=lambda: self.treeview_sort_column("path", False)
         )
         self.treeview.column("#0", width=40, minwidth=40, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
         self.treeview.column("description", width=50)
-        self.treeview.column("custom", width=1)
+        self.treeview.column("custom", width=25, stretch=False)
+        self.treeview.column("modified", width=140, stretch=False)
         self.treeview.column("path", width=50)
         self.treeview.pack(side="left", fill="both", expand=True, padx=5, pady=5)
         # self.treeview.bind("<<TreeviewSelect>>", self.treeview_on_click)
@@ -143,7 +151,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
         self.treeview_refresh(self.treeview)
-        self.treeview_sort_column("file", False)
+        self.treeview_sort_column("modified", True)
 
     def dummy_handler(self):
         "Dummy method"
@@ -242,7 +250,7 @@ class GuiHudBrowser(metaclass=Singleton):
     def treeview_get_selected_relative_path(self):
         values = self.treeview_get_selected_values()
         if values:
-            return values[3]
+            return values[4]
         return None
 
     def treeview_on_double_click(self, event):
@@ -280,6 +288,8 @@ class GuiHudBrowser(metaclass=Singleton):
             file_desc = desc_relpath_tuple[0]
             file_relative_path = desc_relpath_tuple[1]
             file_path = os.path.join(hud_dir, file_relative_path)
+            timestamp = os.path.getmtime(file_path)
+            last_modified = datetime.fromtimestamp(timestamp).strftime("%Y.%m.%d @ %H:%M:%S")
             if (
                 search_term
                 and search_term.lower() not in str(file_name).lower()
@@ -294,7 +304,9 @@ class GuiHudBrowser(metaclass=Singleton):
             image = image.resize((16, 16), Image.LANCZOS)
             photo = ImageTk.PhotoImage(image)
             self.treeview_photo_images.append(photo)  # Store the PhotoImage object
-            treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path), image=photo)
+            treeview.insert(
+                "", "end", values=(file_name, file_desc, "", last_modified, file_relative_path), image=photo
+            )
 
             # treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path)) # legacy
 

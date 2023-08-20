@@ -1,6 +1,7 @@
 
 
 Current:
+	
 
 Features:
 	☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
@@ -12,7 +13,8 @@ GUI:
 	☐ Browser: Treeview context menu functionality: integers
 	☐ Browser: Treeview context menu functionality: treeview_recycle
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
-	☐ Browser: Display custom and 'added-to-hud' status for files in the browser (Consider adding columns or a status ba)
+	☐ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar)
+	☐ Browser: Display custom status for files in the browser (Consider adding columns or a status bar)
 	☐ Menu: Add icons
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 
@@ -21,7 +23,7 @@ GUI:
 
 	☐ Refactor: Start GUI. Messageboxes for dev menu results
 
-	☐ Browser: Last modified column read from the file like i did in sourcemod editor. Auto sort by this column
+	☐ Browser: Showing which items are custom & 'added-to-hud'. Currently doing this in a column. Consider also a status bar + removing column?
 
 Unit Testing:
 	☐ Unit test: HudDescriptions
@@ -171,6 +173,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Browser: Last modified column read from the file like i did in sourcemod editor. Auto sort by this column @done(23-08-20 21:27)
 ✔ Bug: Browser: Double click on header -> Some error message shows @done(23-08-20 21:19)
 ✔ Browser: Treeview header sorting @done(23-08-20 21:18)
 ✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
