@@ -38,8 +38,8 @@ def debug_gui(persistent_data):
 
     # browser
 
-    browse = get_debug_gui_browser_instance(persistent_data)
-    browse.run()
+    # browse = get_debug_gui_browser_instance(persistent_data)
+    # browse.run()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
