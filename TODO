@@ -1,7 +1,6 @@
 
 
 Current:
-	☐ Bug: Browser: Double click on header -> Some error message shows
 
 Features:
 	☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
@@ -172,6 +171,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Bug: Browser: Double click on header -> Some error message shows @done(23-08-20 21:19)
 ✔ Browser: Treeview header sorting @done(23-08-20 21:18)
 ✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
 	✔ Create an important note with example script:: you can only have one main gui. When using a subgui that should be using tk.Toplevel() otherwise garbage collection causes pyimage errors @done(23-08-20 18:58)

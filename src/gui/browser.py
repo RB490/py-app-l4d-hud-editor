@@ -250,7 +250,8 @@ class GuiHudBrowser(metaclass=Singleton):
         # pylint: disable=unused-argument
 
         file_path = self.treeview_get_selected_full_path()
-        os.startfile(file_path)
+        if os.path.isfile(file_path):
+            os.startfile(file_path)
 
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""
