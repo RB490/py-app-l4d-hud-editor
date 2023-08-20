@@ -10,7 +10,7 @@ from utils.constants import APP_ICON, IMAGES_DIR
 class GuiHudDescriptions:
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, persistent_data, relative_path):
+    def __init__(self, persistent_data, relative_path, parent_gui):
         self.is_hidden = None
         self.root = tk.Toplevel()
         self.hide()
@@ -22,6 +22,7 @@ class GuiHudDescriptions:
 
         self.hud = Hud(persistent_data)
         self.relative_path = relative_path
+        self.parent = parent_gui
 
         # self.root.minsize(450, 400)
 
@@ -136,6 +137,11 @@ class GuiHudDescriptions:
 
         # update the controls list and OptionMenu with new values
         controls_list = self.hud.desc.get_controls(self.relative_path)
+
+        # controls available at all?
+        if not controls_list:
+            return
+
         menu = self.ctrl_menu["menu"]  # get the OptionMenu menu object
         menu.delete(0, "end")  # delete all existing options from the menu
         for item in controls_list:
@@ -211,6 +217,9 @@ class GuiHudDescriptions:
 
         # close gui
         self.root.destroy()
+
+        # call parent
+        self.parent.treeview_refresh()
 
     def on_close(self):
         """On gui close"""

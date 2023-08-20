@@ -1,5 +1,4 @@
 """Module for the hud browser gui class"""
-from genericpath import isfile
 import os
 import tkinter as tk
 from datetime import datetime
@@ -7,6 +6,7 @@ from tkinter import ttk
 
 import keyboard
 import win32gui
+from genericpath import isfile
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
@@ -296,7 +296,7 @@ class GuiHudBrowser(metaclass=Singleton):
             if self.game.installed(DirectoryMode.DEVELOPER) and self.hud.synced():
                 main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
                 file_path_backup = get_backup_path(os.path.join(main_dir, file_relative_path))
-                
+
                 is_custom = "N" if os.path.isfile(file_path_backup) else "Y"
             else:
                 is_custom = "-"
@@ -408,14 +408,7 @@ class GuiHudBrowser(metaclass=Singleton):
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
         rel_path = self.treeview_get_selected_relative_path()
-        # descriptions_gui = descriptions.GuiHudDescriptions(self.persistent_data, rel_path)
-        # descriptions_gui.run()
-
-        # descriptions_gui = GuiHudDescriptions(self.persistent_data, "scripts\hudlayout.res")
-        # descriptions_gui.run()
-        # from debug.main import show_descriptions_gui
-
-        descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path)
+        descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path, self)
         descriptions_gui.run()
 
         # TODO wait until description closes -> update the treeview.

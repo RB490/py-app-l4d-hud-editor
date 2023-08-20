@@ -1,28 +1,24 @@
 
 
 Current:
+	☐ Browser: Treeview context menu functionality: hud descriptions
 	
-	Features:
-		
-		
-		Bugs:
+	
+	
+	☐ Bug: Hud Descriptions Gui: Remove default options for controls
+Features:		
+Bugs:
 			
 GUI:
-	☐ Browser: Treeview context menu functionality: hud descriptions (gui images get garbage collected or something)
 	☐ Browser: Treeview context menu functionality: integers
 	☐ Browser: Treeview context menu functionality: treeview_recycle
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
 		-  if not self.hud.get_dir() // self.menu_bar.entryconfig("Hud", state="disabled")
+	
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
-	☐ Browser: Treeview context menu icons
-	☐ Menu: Add icons
-
-	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
-		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
-
-	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
-
-	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
+	
+	☐ Browser: @icons Treeview context menu icons - fetch from ahk version
+	☐ Menu: @icons  Add icons
 
 
 Unit Testing:
@@ -31,7 +27,13 @@ Unit Testing:
 Refactoring:
 	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
 	
+	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
+		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 	
+	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
+
+	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
+
 	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
@@ -174,6 +176,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Bug: Try to load any file without controls into the hud descriptions gui -> some error @done(23-08-20 22:33)
 	✔ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu @done(23-08-20 22:21)
 	✔ Bug: Browser: 'All' toggle isn't working right. only addoninfo&addonimage are shown @started(23-08-20 21:30) @done(23-08-20 21:55) @lasted(25m16s)
 	✔ Browser: 'added-to-hud' status for files in the browser (Consider adding columns or a status bar) @done(23-08-20 21:55)
