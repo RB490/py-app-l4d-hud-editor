@@ -1,6 +1,11 @@
 
 
 Current:
+	
+
+
+	☐ Bug: ID handler: Calling ID handler without a dir_mode doesn't raise an error! also check for sync and other methods 'gamez.dir.id.get_installation_state'
+
 	☐ Issue i got personally confused that i should be using self.game.dir.get(DirectoryMode.USER) to check if dev exists
 		- instead of game.dir.id.get_installation_state -- they should  probably both function. that and/or make a separate function
 		- is_installed in game.is_installed or whatever
@@ -186,7 +191,8 @@ Additional Ideas and Considerations:
 
 	
 	
-
+	✔ Bug: ID handler: User dev mode is installed -> Get installation state -> Exception has occurred: KeyError @started(23-08-20 08:53) @done(23-08-20 09:10) @lasted(17m53s)
+		- Get installation state was using the SyncState enum!
 	✔ Test: Sync: restore_developer_directory @done(23-08-20 00:20)
 	✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
 	✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)

@@ -96,7 +96,7 @@ class GameIDHandler:
     def get_installation_state(self, dir_mode):
         """Get the installation state for a specific directory mode."""
         self.game._validate_dir_mode(dir_mode)
-        return SyncState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN.name)]
+        return InstallationState[self.__get_state_value(dir_mode, "installation_state", InstallationState.UNKNOWN.name)]
 
     def set_installation_state(self, dir_mode, installation_state):
         """Set the installation state for a specific directory mode."""
