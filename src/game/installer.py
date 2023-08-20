@@ -15,7 +15,6 @@ from game.constants import DirectoryMode, InstallationState
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
 from utils.functions import (
-    async_delete_directory,
     copy_directory,
     wait_for_process_with_ram_threshold,
     wait_process_close,

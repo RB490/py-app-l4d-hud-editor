@@ -269,9 +269,3 @@ class GuiHudBrowser(metaclass=Singleton):
         """Runs on close"""
         self.save_window_geometry()
         save_and_exit_script(self.persistent_data)
-
-
-def get_debug_gui_browser_instance(persistent_data):
-    "debug_gui_browser"
-    print("debug_browser")
-    return GuiHudBrowser(persistent_data)

@@ -1,6 +1,5 @@
 # pylint: disable=broad-exception-caught
 """Functions used throughout the program"""
-import asyncio
 import ctypes
 import json
 import os
@@ -23,8 +22,6 @@ import win32process
 
 from .constants import NEW_HUD_DIR, PERSISTENT_DATA_PATH
 
-async def async_delete_directory(directory_path):
-    await asyncio.to_thread(shutil.rmtree, directory_path)
 
 def generate_random_string(length=8):
     "Generate random string"
@@ -182,7 +179,8 @@ def remove_temp_hud(persistent_data, hud_dir):
 def retrieve_hud_name_for_dir(hud_dir):
     """Retrieve hud name for a directory. Either directory name or from addoninfo.txt"""
     # verify input
-    assert os.path.isdir(hud_dir)
+    if not os.path.isdir(hud_dir):
+        raise ValueError(f"Invalid hud_dir directory path: '{hud_dir}'")
 
     # retrieve hud name (from addoninfo.txt if available)
     # hud_name = os.path.basename(os.path.dirname(hud_dir)) # retrieve name from parent folder
@@ -191,13 +189,14 @@ def retrieve_hud_name_for_dir(hud_dir):
 
     if os.path.exists(addoninfo_path):
         addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
-        if addon_info["AddonInfo"]["addontitle"]:
+
+        if addon_info.get("AddonInfo", {}).get("addontitle"):
             hud_name = addon_info["AddonInfo"]["addontitle"]
-            print(f"Retrieved '{hud_name}' @ '{addoninfo_path}'")
+            print(f"Hud name: Retrieved '{hud_name}' @ '{addoninfo_path}'")
         else:
-            print(f"Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
+            print(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
     else:
-        print(f"Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
+        print(f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
     return hud_name
 
 
