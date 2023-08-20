@@ -11,7 +11,7 @@ from utils.constants import IMAGES_DIR
 class GuiHudDescriptions:
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, relative_path, persistent_data):
+    def __init__(self, persistent_data, relative_path):
         self.root = tk.Tk()
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
