@@ -1,5 +1,4 @@
 """Module for the hud browser gui class"""
-import gc
 import os
 import tkinter as tk
 from tkinter import ttk
@@ -90,10 +89,21 @@ class GuiHudBrowser(metaclass=Singleton):
         # create a treeview with three columns
         self.treeview = ttk.Treeview(self.frame, columns=("file", "description", "custom", "path"), height=15)
         self.treeview.heading("#0", text="")
-        self.treeview.heading("file", text="File", anchor="w")
-        self.treeview.heading("description", text="Description", anchor="w")
-        self.treeview.heading("custom", text="Custom", anchor="w")
-        self.treeview.heading("path", text="Path", anchor="w")
+        self.treeview.heading(
+            "file", text="File", anchor="w", command=lambda: self.treeview_sort_column("file", False)
+        )
+        self.treeview.heading(
+            "description",
+            text="Description",
+            anchor="w",
+            command=lambda: self.treeview_sort_column("description", False),
+        )
+        self.treeview.heading(
+            "custom", text="Custom", anchor="w", command=lambda: self.treeview_sort_column("custom", False)
+        )
+        self.treeview.heading(
+            "path", text="Path", anchor="w", command=lambda: self.treeview_sort_column("path", False)
+        )
         self.treeview.column("#0", width=40, minwidth=40, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
         self.treeview.column("description", width=50)
@@ -133,6 +143,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
         self.treeview_refresh(self.treeview)
+        self.treeview_sort_column("file", False)
 
     def dummy_handler(self):
         "Dummy method"
@@ -173,6 +184,19 @@ class GuiHudBrowser(metaclass=Singleton):
         # Do something with the selected choice, such as refreshing the UI
         print(f"Radio button clicked: {display_choice}")
         self.treeview_refresh(self.treeview)
+
+    def treeview_sort_column(self, col, reverse):
+        """Sort selected treeview column"""
+        # pylint: disable=unused-variable
+        sorted_items = [(self.treeview.set(k, col), k) for k in self.treeview.get_children("")]
+        sorted_items.sort(reverse=reverse)
+
+        # rearrange items in sorted positions
+        for index, (val, k) in enumerate(sorted_items):
+            self.treeview.move(k, "", index)
+
+        # reverse sort next time
+        self.treeview.heading(col, command=lambda: self.treeview_sort_column(col, not reverse))
 
     def treeview_search(self, event):
         """Search treeview"""
@@ -349,8 +373,8 @@ class GuiHudBrowser(metaclass=Singleton):
         # descriptions_gui.run()
         # from debug.main import show_descriptions_gui
 
-        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path)
-        self.descriptions_gui.run()
+        descriptions_gui = GuiHudDescriptions(self.persistent_data, rel_path)
+        descriptions_gui.run()
 
         # TODO wait until description closes -> update the treeview. or use a callback or someting as mainloop seems to exit this method here
 
@@ -358,12 +382,9 @@ class GuiHudBrowser(metaclass=Singleton):
 
     def treeview_integers(self):
         print("Method: treeview_integers - TODO: Handle 'Integers' option")
-        pass
 
     def treeview_describe(self):
         print("Method: treeview_describe - TODO: Handle 'Describe' option")
-        pass
 
     def treeview_recycle(self):
         print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
-        pass

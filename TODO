@@ -1,10 +1,11 @@
 
 
 Current:
-	☐ Browser: Treeview header sorting
+	☐ Bug: Browser: Double click on header -> Some error message shows
 
 Features:
 	☐ Add all functionality of the start gui into the editor menu. Remaining: Create/Add hud & dev options menu
+
 Bugs:
 	
 GUI:
@@ -20,6 +21,8 @@ GUI:
 		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 
 	☐ Refactor: Start GUI. Messageboxes for dev menu results
+
+	☐ Browser: Last modified column read from the file like i did in sourcemod editor. Auto sort by this column
 
 Unit Testing:
 	☐ Unit test: HudDescriptions
@@ -169,6 +172,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+✔ Browser: Treeview header sorting @done(23-08-20 21:18)
 ✔ Browser: gui descriptions failing to load @done(23-08-20 18:58)
 	✔ Create an important note with example script:: you can only have one main gui. When using a subgui that should be using tk.Toplevel() otherwise garbage collection causes pyimage errors @done(23-08-20 18:58)
 ✔ Browser: Treeview context menu functionality @started(23-08-20 14:15) @done(23-08-20 15:10) @lasted(55m38s)
