@@ -2,27 +2,15 @@
 
 Current:
 	
+	☐ Browser: Treeview context menu functionality: integers
 	
-	
-
-	☐ Hud Descriptions. Add print statements?
 Features:		
 Bugs:
-			
 GUI:
-	☐ Browser: Treeview context menu functionality: integers
-	☐ Browser: Treeview context menu functionality: treeview_recycle
-	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available
-		-  if not self.hud.get_dir() // self.menu_bar.entryconfig("Hud", state="disabled")
-	
-	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
-	
-	☐ Browser: @icons Treeview context menu icons - fetch from ahk version
-	☐ Menu: @icons  Add icons
 
 
 Unit Testing:
-	☐ Unit test: HudDescriptions
+	☐ Unit test: HudDescriptions & add print statements(?)
 
 Refactoring:
 	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
@@ -50,7 +38,7 @@ Refactoring:
 
 	☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
 		if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
-
+	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: loading/saving data: confirm throughout the script json reading/writing is done by the same funcs
@@ -78,6 +66,8 @@ Refactoring:
 		☐ Determine what should happen for each instance
 
 Additional Ideas and Considerations:
+	☐ Browser: @icons Treeview context menu icons - fetch from ahk version
+	☐ Menu: @icons  Add icons
 	☐ Global hotkey management: Explore using a global singleton hotkey manager to streamline hotkey handling
 	☐ Editor menu: Add all start GUI functionality. We're almost there already.
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
@@ -86,7 +76,7 @@ Additional Ideas and Considerations:
 	☐ Pull some workshop map off of steam to use for L4D2. And possibly a map for L4D1
 	☐ Idea: Use threading GUI during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
 	☐ Browser: Status bar showing 'custom' & 'added-to-hud' status?
-
+	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available self.menu_bar.entryconfig("Hud", state="disabled")
 	☐ Idea: Already tried this for an hour. But a way to retrieve the OS's default icon for a file path to be used in the treeview
 	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible?
 		- Seemingly impossible although apparently it is possible: Run a process detached from python
@@ -176,6 +166,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Browser: Treeview context menu functionality: treeview_recycle @done(23-08-21 19:58)
 	✔ Browser: Treeview context menu functionality: hud descriptions @done(23-08-20 22:59)
 	✔ Browser: Disable multiple instances for the gui descriptions gui @done(23-08-20 22:40) made it a singleton
 	✔ Bug: Hud Descriptions Gui: Remove default options for controls @done(23-08-20 22:38)

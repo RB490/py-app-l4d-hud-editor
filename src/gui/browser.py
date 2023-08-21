@@ -5,6 +5,7 @@ from datetime import datetime
 from tkinter import ttk
 
 import keyboard
+import send2trash
 import win32gui
 from PIL import Image, ImageTk
 
@@ -422,3 +423,7 @@ class GuiHudBrowser(metaclass=Singleton):
     def treeview_recycle(self):
         "Treeview Handle 'Recycle' option"
         print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
+
+        full_path = self.treeview_get_selected_full_path()
+        send2trash.send2trash(full_path)
+        self.treeview_refresh(self.treeview)
