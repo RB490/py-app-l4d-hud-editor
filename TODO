@@ -1,7 +1,10 @@
 
 
 Current:
-	
+	☐ Create bare bones VDF class
+		☐ Browser: Treeview context menu functionality: VDF: clean
+		☐ Browser: Treeview context menu functionality: VDF: integers
+		☐ Browser: Treeview context menu functionality: VDF: describe
 
 VDF:
 	☐ Cleanup
@@ -10,13 +13,15 @@ VDF:
 		- ? align the values with tabs to the same indent (how the hell did i accomplish this in ahk)
 		- look at my AHK VDF class
 	☐ Adding hud descriptions
+		- Easiest way might be to add custom key:value to each control with the vdf class
+		- GPT says regex replace can do it aswell
 	☐ Modifying integers
+		- With VDF class
 	☐ Try d = vdf.loads(vdf_string, mapper=collections.OrderedDict) vs normal
 		- by default it seems to already remember key order
+
 Features:
-	☐ Browser: Treeview context menu functionality: VDF: integers
-	☐ Browser: Treeview context menu functionality: VDF: clean
-	☐ Browser: Treeview context menu functionality: VDF: describe
+
 
 Bugs:
 	☐ Descriptions: Add print statements
