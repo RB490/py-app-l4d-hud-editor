@@ -3,8 +3,8 @@
 {
 	overview
 	{
-		"fieldname"				"overview"
 		"visible"				"1"
+		"fieldname"				"overview"
 		"enabled"				"1"
 		"xpos"					"0"
 		"ypos"					"480"

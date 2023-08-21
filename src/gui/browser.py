@@ -2,7 +2,7 @@
 import os
 import tkinter as tk
 from datetime import datetime
-from tkinter import ttk
+from tkinter import PhotoImage, ttk
 
 import keyboard
 import send2trash
@@ -129,17 +129,45 @@ class GuiHudBrowser(metaclass=Singleton):
         self.treeview.configure(yscrollcommand=scrollbar.set)
 
         # Create a context menu
+        self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "file.png")).subsample(2, 2)
+        self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "folder.png")).subsample(2, 2)
+        self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
+        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "description.png")).subsample(2, 2)
+        self.integers_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "modify_integers.png")).subsample(2, 2)
+        self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
+        self.clean_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
-        self.context_menu.add_command(label="Open File", command=self.treeview_open_file)
-        self.context_menu.add_command(label="Open Default File", command=self.treeview_open_default_file)
-        self.context_menu.add_command(label="Open Folder", command=self.treeview_open_folder)
-        self.context_menu.add_command(label="Open Game Folder", command=self.treeview_open_game_folder)
+        self.context_menu.add_command(
+            label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_file
+        )
+        self.context_menu.add_command(
+            label="Open Default File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_default_file
+        )
+        self.context_menu.add_command(
+            label="Open Folder", image=self.folder_icon, compound=tk.LEFT, command=self.treeview_open_folder
+        )
+        self.context_menu.add_command(
+            label="Open Game Folder", image=self.folder_icon, compound=tk.LEFT, command=self.treeview_open_game_folder
+        )
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Description", command=self.treeview_description)
-        self.context_menu.add_command(label="Integers", command=self.treeview_integers)
-        self.context_menu.add_command(label="Describe", command=self.treeview_describe)
+        self.context_menu.add_command(
+            label="Clean", image=self.clean_icon, compound=tk.LEFT, command=self.treeview_clean
+        )
+        self.context_menu.add_command(
+            label="Integers", image=self.integers_icon, compound=tk.LEFT, command=self.treeview_integers
+        )
+        self.context_menu.add_command(
+            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.treeview_annotate
+        )
+        self.context_menu.add_command(
+            label="Description", image=self.description_icon, compound=tk.LEFT, command=self.treeview_description
+        )
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Recycle", command=self.treeview_recycle)
+        self.context_menu.add_command(
+            label="Recycle", image=self.delete_icon, compound=tk.LEFT, command=self.treeview_recycle
+        )
+
+        # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)
 
         # Bind the context menu to the right-click event on the treeview
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
@@ -405,6 +433,10 @@ class GuiHudBrowser(metaclass=Singleton):
         else:
             print(f"Game directory unavailable: '{game_directory}'")
 
+    def treeview_clean(self):
+        "Treeview Handle 'Clean' option"
+        print("Method: treeview_clean - TODO: Handle 'Clean' option")
+
     def treeview_description(self):
         "Treeview Handle 'Description' option"
         print("Method: treeview_description - TODO: Handle 'Description' option")
@@ -416,9 +448,9 @@ class GuiHudBrowser(metaclass=Singleton):
         "Treeview Handle 'Integers' option"
         print("Method: treeview_integers - TODO: Handle 'Integers' option")
 
-    def treeview_describe(self):
-        "Treeview Handle 'Describe' option"
-        print("Method: treeview_describe - TODO: Handle 'Describe' option")
+    def treeview_annotate(self):
+        "Treeview Handle 'Annotate' option"
+        print("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
     def treeview_recycle(self):
         "Treeview Handle 'Recycle' option"

@@ -221,20 +221,19 @@ class GuiHudDescriptions(metaclass=Singleton):
         # save changes to disk
         self.hud.desc.save_to_disk()
 
-        # clear the gui
-        self.clear_gui()
-
-        # hide gui
-        self.hide()
-
         # call parent
         self.parent.treeview_refresh(self.parent.treeview)
+
+        self.on_close()
 
     def on_close(self):
         """On gui close"""
 
-        # undo changes by reloading from disk
+        # undo unsaved changes by reloading from disk
         self.hud.desc.read_from_disk()
+
+        # clear the gui
+        self.clear_gui()
 
         # close gui
         self.hide()

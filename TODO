@@ -2,15 +2,32 @@
 
 Current:
 	
-	☐ Browser: Treeview context menu functionality: integers
-	
-Features:		
+
+VDF:
+	☐ Cleanup
+		- Remove splitscreen entries with vdf -> remove lines with [xbox360] with python (important in this order)
+		- sort the keys for every control in the same order
+		- ? align the values with tabs to the same indent (how the hell did i accomplish this in ahk)
+		- look at my AHK VDF class
+	☐ Adding hud descriptions
+	☐ Modifying integers
+	☐ Try d = vdf.loads(vdf_string, mapper=collections.OrderedDict) vs normal
+		- by default it seems to already remember key order
+Features:
+	☐ Browser: Treeview context menu functionality: VDF: integers
+	☐ Browser: Treeview context menu functionality: VDF: clean
+	☐ Browser: Treeview context menu functionality: VDF: describe
+
 Bugs:
+	☐ Descriptions: Add print statements
+	☐ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening
+	☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else
+	☐ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all
+
 GUI:
 
-
 Unit Testing:
-	☐ Unit test: HudDescriptions & add print statements(?)
+	☐ Unit test: HudDescription
 
 Refactoring:
 	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
@@ -66,7 +83,7 @@ Refactoring:
 		☐ Determine what should happen for each instance
 
 Additional Ideas and Considerations:
-	☐ Browser: @icons Treeview context menu icons - fetch from ahk version
+	
 	☐ Menu: @icons  Add icons
 	☐ Global hotkey management: Explore using a global singleton hotkey manager to streamline hotkey handling
 	☐ Editor menu: Add all start GUI functionality. We're almost there already.
@@ -166,6 +183,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Browser: @icons Treeview context menu icons - fetch from ahk version @done(23-08-21 21:15)
 	✔ Browser: Treeview context menu functionality: treeview_recycle @done(23-08-21 19:58)
 	✔ Browser: Treeview context menu functionality: hud descriptions @done(23-08-20 22:59)
 	✔ Browser: Disable multiple instances for the gui descriptions gui @done(23-08-20 22:40) made it a singleton

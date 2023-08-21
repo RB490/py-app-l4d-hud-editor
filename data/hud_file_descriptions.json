@@ -1,6 +1,8 @@
 {
     "addonimage.jpg": {
-        "file_control_descriptions": {},
+        "file_control_descriptions": {
+            "None": ""
+        },
         "file_description": "128x128 image shown in the 'addons' menu",
         "file_name": "addonimage.jpg",
         "file_relative_path": "addonimage.jpg"

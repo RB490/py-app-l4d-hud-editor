@@ -30,12 +30,13 @@ def create_hud_workspace():
     """Debugs the hud syncer class"""
 
     sync_debug_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud")
-    if os.path.isdir(os.path.join(sync_debug_dir, "workspace")):
-        shutil.rmtree(os.path.join(sync_debug_dir, "workspace"))
+    workspace = os.path.join(sync_debug_dir, "workspace")
+    if os.path.isdir(workspace):
+        shutil.rmtree(workspace)
 
     source_dir_template = os.path.join(sync_debug_dir, "samples", "tiny", "debug_hud")
     target_dir_template = os.path.join(sync_debug_dir, "samples", "large", "game_dir")
-    source_dir_workspace = os.path.join(sync_debug_dir, "workspace", "debug_hud")
-    target_dir_workspace = os.path.join(sync_debug_dir, "workspace", "game_dir")
+    source_dir_workspace = os.path.join(workspace, "debug_hud")
+    target_dir_workspace = os.path.join(workspace, "game_dir")
     shutil.copytree(source_dir_template, source_dir_workspace)
     shutil.copytree(target_dir_template, target_dir_workspace)
