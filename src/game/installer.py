@@ -192,7 +192,7 @@ class GameInstaller:
 
         # install
         try:
-            self.__process_installation_steps()
+            self.__process_installation_steps(current_state)
             # finished
             print("Finished installing!")
             return True
@@ -201,9 +201,7 @@ class GameInstaller:
             # since installation state is saved, don't do anything here
             return False
 
-    def __process_installation_steps(self):
-        resume_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
-
+    def __process_installation_steps(self, resume_state):
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
             InstallationState.COPYING_FILES,
@@ -213,12 +211,12 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-
-        # try:
-        # Find the index of the last completed step or -1 if not found
-        last_completed_index = (
-            0 if resume_state is InstallationState.UNKNOWN else installation_steps.index(resume_state)
-        )
+        
+        # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
+        if resume_state not in installation_steps:
+            last_completed_index = 0
+        else:
+            last_completed_index = installation_steps.index(resume_state)
 
         # Perform installation steps starting from the next step after the last completed one
         for _, state in enumerate(installation_steps[last_completed_index:]):
