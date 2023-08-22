@@ -119,13 +119,19 @@ class VDFModifier:
         if not self.vdf_obj:
             raise ValueError("No VDF object loaded")
 
-        modified_vdf_obj = self.vdf_obj.copy()
-        for controls in modified_vdf_obj.values():
-            for control_data in controls.values():
-                for key, value in control_data.items():
+        def recursive_modify(data):
+            if isinstance(data, dict):
+                for key, value in data.items():
                     if key == key_to_modify:
-                        control_data[key] = self.__modify_int_value(value, modifier, amount)
+                        data[key] = self.__modify_int_value(value, modifier, amount)
+                    elif isinstance(value, dict) or isinstance(value, list):
+                        recursive_modify(value)
+            elif isinstance(data, list):
+                for item in data:
+                    recursive_modify(item)
 
+        modified_vdf_obj = self.vdf_obj.copy()
+        recursive_modify(modified_vdf_obj)
         return modified_vdf_obj
 
     def __modify_int_value(self, value, modifier, amount):
@@ -152,7 +158,6 @@ class VDFModifier:
             return modified_value_str
         except ValueError:
             return value
-
 
     def annotate(self):
         if not self.vdf_obj:
@@ -254,7 +259,7 @@ def debug_vdf_class(persistent_data):
     )
 
     modifier = "plus"  # or "minus"
-    amount = 150
+    amount = 15000
     key_to_modify = "xpos"
 
     modifier_instance = VDFModifier(persistent_data, vdf_path)

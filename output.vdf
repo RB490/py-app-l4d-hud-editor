@@ -6,7 +6,7 @@
         "fieldname"          "overview"
         "visible"            "1"
         "enabled"            "1"
-        "xpos"               "150"
+        "xpos"               "15000"
         "ypos"               "480"
         "wide"               "0"
         "tall"               "0"
@@ -17,7 +17,7 @@
         "fieldName"          "HudZombiePanel"
         "visible"            "1"
         "enabled"            "1"
-        "xpos"               "c50"
+        "xpos"               "c14900"
         "ypos"               "c10"
         "wide"               "400"
         "tall"               "155"
@@ -27,15 +27,15 @@
         }
         "if_split_screen_$WIN32"
         {
-            "xpos"               "c-360"
+            "xpos"               "c14640"
         }
         "if_split_screen_left"
         {
-            "xpos"               "c-145"
+            "xpos"               "c14855"
         }
         "if_split_screen_right"
         {
-            "xpos"               "c-100"
+            "xpos"               "c14900"
         }
     }
 }
