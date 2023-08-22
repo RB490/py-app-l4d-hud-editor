@@ -1,38 +1,17 @@
 
 
 Current:
-	☐ Create bare bones VDF class
-		☐ Browser: Treeview context menu functionality: VDF: clean
-		☐ Browser: Treeview context menu functionality: VDF: integers
-		☐ Browser: Treeview context menu functionality: VDF: describe
-
-
-VDF:
 	
-	
-
-	☐ Options
-		☐ Do i automatically want do apply all of these? or optionally enable/disable?
-		☐ Output: Do i want to show a gui with a before and after or just overwrite the file? show a msg to the user a backup is in the recycle bin
-		☐ A gui with before&after could be nice because then i can also notify that certain files shouldn't be handled such as larger files like scheme's
-			☐ annotate (add descriptions)
-			☐ sort (keys)
-			☐ align (values)
-			☐  ---- change integers
-
-	☐ Look into how i want to use the class. probably overwrite the input file by default, but move a backup of the file into the recycle bin
-		☐ Likely enter input&output path right when class is being instanciated
-	
-	☐ Look into which methods should be interal, which methods should be public. which methods should automatically be applied. make a method for applying these
-	☐ Make annotate internal? or atleast also automatically annotate when doing other operations
-
+	☐ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin
+	☐ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning	
 	☐ Refactor. Add method docs, simplify & improve code (naming)
+	☐ Browser: Treeview context menu functionality: VDF: Modify
+
 
 Features:
 
-
 Bugs:
-
+	
 	☐ Descriptions: Add print statements
 	☐ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening
 	☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else
@@ -41,34 +20,23 @@ Bugs:
 GUI:
 
 Unit Testing:
+	
 	☐ Unit test: HudDescription
 
 Refactoring:
+	
 	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
-	
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
-		☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
-	
+	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
-
 	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
-
 	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
 	☐ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it
 	☐ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions?
 		- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
-		# get user directory
-		if not self.game.dir.get(DirectoryMode.USER)
-			try
-				self.game.dir.id.set_id_path(DirectoryMode.USER)
-			except Exception as err_info
-				show_message(f"{err_info}", "error", 'Could not get user directory!')
-				return False
-
-	☐ Refactor: hud class. Some notes: start_editing has confusing checks like:
-		if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
+	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
@@ -86,7 +54,6 @@ Refactoring:
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 	☐ Make the function to create lambda commands a shared utility, and use it in the project
 	☐ Streamline and test HUD editing process for improved code path
-	
 	☐ Explore restructuring options for more efficient code flow
 	☐ Evaluate the use of singleton patterns in GUI management
 	☐ Break up the game commands execute method for better organization
@@ -109,94 +76,18 @@ Additional Ideas and Considerations:
 	☐ Browser: Status bar showing 'custom' & 'added-to-hud' status?
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available self.menu_bar.entryconfig("Hud", state="disabled")
 	☐ Idea: Already tried this for an hour. But a way to retrieve the OS's default icon for a file path to be used in the treeview
-	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible?
+	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible? (note that outside of debugging this more or less isn't an issue)
 		- Seemingly impossible although apparently it is possible: Run a process detached from python
 		- Note: Running the game before starting the editor works fine.
 			- so could use a script to launch it and then the editor
 		- I was able to get it to work with notepad.exe using subprocess start /B notepad.exe,
 		- however that didn't work for the game or steam
-		- this is legitimately around 2 hours of trail and error:
-		# Use subprocess.Popen with DETACHED_PROCESS flag
-        # result = subprocess.Popen(steam_command, shell=True)
-        # result = subprocess.Popen([steam_command], shell=True)
-        # result = subprocess.run(steam_command, shell=True, check=True)
-        # result = subprocess.run([steam_command], shell=True, check=True)
-        # result = subprocess.Popen(steam_command, shell=False, creationflags=subprocess.DETACHED_PROCESS)
-        # result = subprocess.Popen([steam_command], shell=False, creationflags=subprocess.DETACHED_PROCESS)
-        # result = subprocess.Popen(["start", "/B", steam_command], shell=True)
-        # result = subprocess.Popen(["cmd", "/c", steam_command])
-        # os.system(steam_command)
-
-        # detached_process_flag = 0x00000008  # Constant for creating a detached process
-        # subprocess.Popen(
-        #     steam_command,
-        #     shell=True,
-        #     creationflags=detached_process_flag,
-        #     start_new_session=True,  # Required for some platforms
-        # )
-
-        # ahk_script = f"Run cmd.exe /c del {steam_command}"
-        # steam_command_cmd = f'{steam_exe} {steam_args} {" ".join(game_args)}'
-        # steam_command_cmd_quoted = f'"{steam_exe} {steam_args} {" ".join(game_args)}"'
-        # steam_command_quoted = f'"{steam_command}"'
-        # pristine_command = f'{steam_exe}'
-        # print(f"steam command cmd: {steam_command_cmd}")
-        # print(f"steam command cmd quoted: {steam_command_cmd_quoted}")
-        # print(f"steam command: {steam_command}")
-        # print(f"steam command quoted: {steam_command_quoted}")
-        # ahk_script = f"Run cmd.exe /k del {steam_command_cmd_quoted}"
-        # ahk_script = "run cmd /k E:\games\steam\steam.exe -applaunch 550 -novid -console"
-        # ahk_script = f"run cmd /k {pristine_command} {steam_args}"
-        # ahk_script = f"run {pristine_command} {steam_args}"
-        # print(ahk_script)
-        # ahk.run_script(ahk_script, blocking=False)
-
-        # print(self.game.steam.get_exe_path())
-        # subprocess.Popen(["rm", "-r", self.game.steam.get_exe_path()])
-
-        # subprocess.Popen(['python', os.path.realpath(__file__), '0'], close_fds=True)
-        # print(f'file =================================== {os.path.realpath(__file__)}')
-        # subprocess.Popen(["python", self.game.steam.get_exe_path(), "0"], close_fds=True)
-
-        # DETACHED_PROCESS = 0x00000008
-
-        # pid = subprocess.Popen([sys.executable, "longtask.py"], creationflags=DETACHED_PROCESS).pid
-
-        # import subprocess
-
-        # subprocess.Popen(["notepad.exe", "test.txt"])
-
-        # command = "longtask.py &"
-        # subprocess.Popen(command, shell=True)
-
-        # command = "start /B notepad.exe"
-        # subprocess.Popen(command, shell=True)
-
-        # command = f"start /B {self.game.steam.get_exe_path()}"
-        # subprocess.Popen(command, shell=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		- this is legitimately around 2 hours of trail and error: python_process_decouple_testing.py
 
 
 
 --Archive--:
+	
 	✔ Bug: VDF Modify intergers did not recursively modify so split_screen type key:values werent modified @done(23-08-22 22:17)
 	✔ Bug: VDF class didn't handle letter values properly such as "c-150" @done(23-08-22 22:12)
 	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)
