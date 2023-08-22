@@ -1,8 +1,9 @@
 """GUI Class for modifying VDF files."""
+import os
 import tkinter as tk
 from tkinter import scrolledtext
 
-from utils.constants import APP_ICON
+from utils.constants import APP_ICON, IMAGES_DIR
 from utils.vdf import VDFModifier
 
 
@@ -12,7 +13,7 @@ class VDFModifierGUI:
     def __init__(self, persistent_data, vdf_path):
         self.vdf_path = vdf_path
         self.persistent_data = persistent_data
-        self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
+        self.modifier = None  # vdf modifier class
         self.is_hidden = False
         self.root = tk.Tk()
         self.root.minsize(875, 395)
@@ -39,9 +40,16 @@ class VDFModifierGUI:
         self.modify_modifier_var = tk.StringVar(value="plus")
 
         self.create_widgets()
+        self.load_file()
+
+    def load_file(self):
+        self.previous_output = None
+        self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
+        self.process()
 
     def create_widgets(self):
         """Create widgets"""
+        self.reload_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
 
         # Create a main frame to hold everything
         main_frame = tk.Frame(self.root)
@@ -50,12 +58,17 @@ class VDFModifierGUI:
         right_side_frame = tk.Frame(main_frame, relief=tk.SOLID, borderwidth=0)
         right_side_frame.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
 
-        self.process_button = tk.Button(right_side_frame, text="Process", command=self.process)
+        self.process_button = tk.Button(right_side_frame, text="Process", height=32, command=self.process)
         self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
+        self.process_button.config(image=self.reload_img, compound="left", padx=10)
+
+        self.reload_button = tk.Button(right_side_frame, text="Reload", height=16, command=self.load_file)
+        self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
+        self.reload_button.config(image=self.reload_img, compound="left", padx=10)
 
         # Create a frame for integer modifying widgets
         int_mod_frame = tk.Frame(right_side_frame, relief=tk.RIDGE, borderwidth=3)
-        int_mod_frame.pack(fill=tk.X, padx=(0, 10), pady=(30, 10))
+        int_mod_frame.pack(fill=tk.X, padx=(0, 10), pady=(0, 10))
 
         self.modify_int_checkbox = tk.Checkbutton(int_mod_frame, text="Modify Integers", variable=self.modify_int_var)
         self.modify_int_checkbox.pack(anchor="w", padx=(10, 10), pady=(10, 0))
@@ -131,7 +144,7 @@ class VDFModifierGUI:
 
         # Label for "previous" text box
         previous_label = tk.Label(previous_frame, text="Previous:")
-        previous_label.pack(side=tk.TOP)
+        previous_label.pack(side=tk.TOP, pady=(0, 5))
 
         # "previous" text box
         self.previous_text = scrolledtext.ScrolledText(previous_frame, width=40, height=10)
@@ -139,13 +152,11 @@ class VDFModifierGUI:
 
         # Label for "current" text box
         current_label = tk.Label(current_frame, text="Current:")
-        current_label.pack(side=tk.TOP)
+        current_label.pack(side=tk.TOP, pady=(0, 5))
 
         # "current" text box
         self.current_text = scrolledtext.ScrolledText(current_frame, width=40, height=10)
         self.current_text.pack(fill=tk.BOTH, expand=True)
-
-        self.process()
 
     def process(self):
         """Process changes"""
@@ -176,7 +187,7 @@ class VDFModifierGUI:
         self.current_text.insert(tk.END, output)
 
         self.previous_output = output
-        
+
         self.save_settings()
 
     def save_settings(self):
@@ -184,7 +195,6 @@ class VDFModifierGUI:
         self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
         self.persistent_data["VDFGui_annotate"] = self.annotate_var.get()
         self.persistent_data["VDFGui_sort_keys"] = self.sort_control_keys_var.get()
-        
 
     def run(self):
         "Show & start main loop"
