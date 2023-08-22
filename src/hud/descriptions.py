@@ -46,7 +46,7 @@ class HudDescriptions:
 
     def get_control_description(self, relative_path, input_control):
         """Get information"""
-        return self.data[relative_path]["file_control_descriptions"][input_control]
+        return self.data.get(relative_path, {}).get("file_control_descriptions", {}).get(input_control)
 
     def get_description(self, relative_path):
         """

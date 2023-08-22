@@ -8,13 +8,18 @@ Current:
 
 
 VDF:
-	☐ Look at AHK code for notes
+	✔ VDF Feature: Sort keys @done(23-08-22 20:50)
+	
 	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)
-		- loop file line by line. find identifier lines. replace the text between double quotes with DELETE_ME or something like that so the file format remains intact and vdf module can delete these
-	☐ 2. VDF Module: Load vdf into object and make any changes such as changing the integers
+	✔ loop file line by line. find identifier lines. replace the text between double quotes with DELETE_ME or something like that so the file format remains intact and vdf module can delete these @done(23-08-22 17:36)
+	✔ 2. VDF Module: Load vdf into object and make any changes such as changing the integers @done(23-08-22 17:44)
 	☐ 3. String/ VDF Module: Output either with vdf.dump for easiness or as string with added benefits such as properly inserting control descriptions & aligning the key's values on the same indent level
 	
+	☐ Look at AHK code for notes
 	
+	☐ Make annotate internal? or atleast also automatically annotate when doing other operations
+	
+
 	☐ Cleanup
 		- Remove splitscreen entries with vdf -> remove lines with [xbox360] with python (important in this order)
 		- sort the keys for every control in the same order

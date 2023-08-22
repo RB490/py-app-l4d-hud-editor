@@ -1,24 +1,30 @@
-"Resource/HudLayout.res"
+"resource/hudlayout.res"
 {
 	"overview"
 	{
-		"visible" "1"
+		"__description__" "None"
 		"fieldname" "overview"
+		"visible" "1"
 		"enabled" "1"
-		"xpos" "100"
+		"xpos" "10"
 		"ypos" "480"
 		"wide" "0"
 		"tall" "0"
 	}
 	"HudZombiePanel"
 	{
+		"__description__" "Infected Tank approaching / Too far from Survivors"
 		"fieldName" "HudZombiePanel"
 		"visible" "1"
 		"enabled" "1"
-		"xpos" "c-560"
+		"xpos" "c-100"
 		"ypos" "c10"
 		"wide" "400"
 		"tall" "155"
+		"if_split_screen_$WIN32"
+		{
+			"xpos" "c-360"
+		}
 		"if_split_screen_horizontal"
 		{
 			"ypos" "c-45"
@@ -30,22 +36,6 @@
 		"if_split_screen_right"
 		{
 			"xpos" "c-100"
-		}
-		"if_split_screen_$WIN32"
-		{
-			"xpos" "c-360"
-		}
-		"if_split_screen_$X360"
-		{
-			"xpos" "c-360"
-		}
-		"if_split_screen_$X360GUEST"
-		{
-			"xpos" "c-460"
-		}
-		"if_split_screen_!$ENGLISH"
-		{
-			"xpos" "c-560"
 		}
 	}
 }

@@ -32,7 +32,7 @@ def debug_main():
     # result = hud.get_files_dict()
 
     # show_start_gui(persistent_data)
-    debug_vdf_class()
+    debug_vdf_class(persistent_data)
 
     # print(f"result={result}")
 

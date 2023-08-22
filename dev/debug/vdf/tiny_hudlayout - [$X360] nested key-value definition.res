@@ -1,4 +1,4 @@
-"Resource/HudLayout.res"
+"resource/hudlayout.res"
 {
 	overview
 	{
@@ -18,12 +18,6 @@
 		"visible" "1"
 		"enabled" "1"
 		"xpos"			"c-100"
-		"xpos"			"c-360" [$WIN32]
-		"xpos"			"c-360" [$X360]
-		"xpos"			"c-460" [!$ENGLISH]
-		"xpos"			"c-560" [$X360GUEST]
-		"xpos"			"c-560" [$OSX]
-		"xpos"			"c-560" [$LINUX]
 		"ypos"			"c10"
 		"wide"			"400"
 		"tall"			"155"

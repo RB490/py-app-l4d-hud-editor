@@ -3,15 +3,65 @@ import os
 import re
 
 import vdf  # type: ignore
+from requests.structures import CaseInsensitiveDict
 
+from hud.hud import Hud  # type: ignore
 from utils.constants import DEVELOPMENT_DIR
 
 
 class VDFModifier:
-    def __init__(self, vdf_path=None):
+    def __init__(self, persistent_data, vdf_path=None):
+        self.hud = Hud(persistent_data)
+        self.description_key_name = "__description__"
+        self.key_order = [
+            self.description_key_name,
+            "fieldname",
+            "controlName",
+            "visible",
+            "enabled",
+            "xpos",
+            "ypos",
+            "zpos",
+            "wide",
+            "tall",
+            "border",
+            "bgcolor_override",
+            "PaintBackground",
+            "PaintBackgroundType",
+            "font",
+            "NumberFont",
+            "text_font",
+            "digit_xpos",
+            "digit_ypos",
+            "text_xpos",
+            "text_ypos",
+            "wrap",
+            "labelText",
+            "dullText",
+            "brighttext",
+            "textAlignment",
+            "fgcolor_override",
+            "image",
+            "icon",
+            "icon_ypos",
+            "icon_xpos",
+            "icon_tall",
+            "icon_wide",
+            "scaleImage",
+            "inverted",
+            "drawcolor",
+            "IconColor",
+            "FlashColor",
+            "pinCorner",
+            "autoResize",
+            "tabPosition",
+            "usetitlesafe",
+        ]
+        self.key_order = [key.lower() for key in self.key_order]  # Convert key_order to lowercase
         self.vdf_path = vdf_path
         self.vdf_obj = self.load_vdf() if self.vdf_path else None
-        self.print_current_vdf()
+
+        # self.print_current_vdf()
 
     def print_current_vdf(self):
         if self.vdf_obj:
@@ -24,6 +74,8 @@ class VDFModifier:
             cleaned_vdf_content = self.__clean_string(vdf_content)
             cleaned_vdf_obj = vdf.loads(cleaned_vdf_content)
             cleaned_vdf_obj = self.__clean_obj(cleaned_vdf_obj)
+            cleaned_vdf_obj = self.__annotate(cleaned_vdf_obj)
+            cleaned_vdf_obj = self.__sort_all_controls(cleaned_vdf_obj)
             return cleaned_vdf_obj
         return None
 
@@ -31,9 +83,6 @@ class VDFModifier:
         result = vdf.dumps(vdf_obj, pretty=True)
         with open(output_path, "w", encoding="utf-8") as output_file:
             output_file.write(result)
-
-    def modify_controls(self):
-        pass  # To be implemented in subclasses
 
     def __clean_string(self, vdf_text):
         cleaned_lines = []
@@ -48,7 +97,6 @@ class VDFModifier:
 
     def __clean_obj(self, vdf_obj):
         modified_vdf_obj = vdf_obj.copy()
-        keys_to_delete = []
 
         for controls in modified_vdf_obj.values():
             for control_data in controls.values():
@@ -61,75 +109,93 @@ class VDFModifier:
 
         return modified_vdf_obj
 
-    def annotate(self):
-        pass  # To be implemented in subclasses
+    def modify_integers(self, modifier, amount, key_to_modify):
+        if modifier not in ["plus", "minus"]:
+            raise ValueError("Invalid modifier")
 
-
-class IntModifier(VDFModifier):
-    def __init__(self, vdf_path=None, modifier=None, amount=None, key_to_modify=None):
-        super().__init__(vdf_path)
-        self.key_to_modify = key_to_modify or "xpos"
-        self.modifier = modifier
-        self.amount = amount
-
-    def modify_controls(self):
-        if not self.vdf_obj or not self.modifier or self.amount is None:
-            raise ValueError("Incomplete configuration for modification")
+        if not self.vdf_obj:
+            raise ValueError("No VDF object loaded")
 
         modified_vdf_obj = self.vdf_obj.copy()
         for controls in modified_vdf_obj.values():
             for control_data in controls.values():
                 for key, value in control_data.items():
-                    if key == self.key_to_modify:
-                        control_data[key] = self.modify_integers(value)
+                    if key == key_to_modify:
+                        control_data[key] = self.modify_int_value(value, modifier, amount)
+
         return modified_vdf_obj
 
-    def modify_integers(self, value):
+    def modify_int_value(self, value, modifier, amount):
         try:
             int_value = int(value)
-            if self.modifier == "plus":
-                modified_value = int_value + self.amount
-            elif self.modifier == "minus":
-                modified_value = int_value - self.amount
+            if modifier == "plus":
+                modified_value = int_value + amount
+            elif modifier == "minus":
+                modified_value = int_value - amount
             else:
                 modified_value = int_value  # No modification if invalid modifier
             return str(modified_value)
         except ValueError:
             return value
 
+    def __annotate(self, vdf_obj):
+        # pass  # To be implemented in subclasses
+        # self.hud.get_control_description()
 
-def remove_blocks(lines, block_identifier):
-    filtered_lines = []
-    inside_block = False
+        if not vdf_obj:
+            raise ValueError("No VDF object loaded")
 
-    for line in lines:
-        if "{" in line:
-            if block_identifier in line:
-                inside_block = True
-        elif "}" in line:
-            if inside_block:
-                inside_block = False
-            else:
-                filtered_lines.append(line)
-        elif block_identifier in line and not inside_block:
-            continue
+        modified_vdf_obj = vdf_obj.copy()
+        rel_path = self.__get_relative_path(vdf_obj)
+        print(rel_path)
 
-        if not inside_block:
-            filtered_lines.append(line)
+        for controls in modified_vdf_obj.values():
+            for control_name, control_data in controls.items():
+                control_data[self.description_key_name] = self.hud.desc.get_control_description(rel_path, control_name)
 
-    return filtered_lines
+        return modified_vdf_obj
 
+    def annotate(self):
+        if not self.vdf_obj:
+            raise ValueError("No VDF object loaded")
 
-def print_modified_vdf(vdf_content, block_identifier):
-    try:
-        modified_lines = remove_blocks(vdf_content, block_identifier)
+        self.__annotate(self.vdf_obj)
 
-        # Print the modified content
-        modified_content = "".join(modified_lines)
-        print(modified_content)
-        return modified_content
-    except FileNotFoundError:
-        print("No content available.")
+    def __get_relative_path(self, vdf_obj):
+        if not vdf_obj:
+            raise ValueError("No VDF object loaded")
+
+        first_key = next(iter(vdf_obj))
+
+        modified_string = first_key.replace("/", "\\")
+        if "hudlayout" in modified_string:
+            modified_string = modified_string.replace("resource", "scripts")
+        return modified_string
+
+    def __sort_control_keys(self, control_data):
+        # create a dictionary that maps lower case keys to original keys
+        key_map = {key.lower(): key for key in control_data.keys()}
+        # convert control_data keys to lower case
+        control_data = {key.lower(): value for key, value in control_data.items()}
+        existing_keys = [key for key in self.key_order if key in control_data]
+        remaining_keys = sorted(key for key in control_data.keys() if key not in self.key_order)
+        sorted_keys = existing_keys + remaining_keys
+        # restore the original casing of the keys using the key_map
+        sorted_control_data = {key_map[key]: control_data[key] for key in sorted_keys}
+        return sorted_control_data
+
+    def __sort_all_controls(self, vdf_obj):
+        sorted_vdf_obj = vdf_obj.copy()
+
+        for rel_path, controls in sorted_vdf_obj.items():
+            for control_name, control_data in controls.items():
+                sorted_control_data = self.__sort_control_keys(control_data)
+                controls[control_name] = sorted_control_data
+
+        return sorted_vdf_obj
+
+    def sort_all_controls(self, vdf_obj):
+        return self.__sort_all_controls(vdf_obj)
 
 
 def replace_text_between_quotes(input_string, replacement_text):
@@ -138,46 +204,17 @@ def replace_text_between_quotes(input_string, replacement_text):
     return replaced_string
 
 
-def clean_vdf(data):
-    lines = data.split("\n")
-    output = []
-
-    for line in lines:
-        line = line.strip()
-
-        if ("[$" in line or "[!$ENGLISH]" in line) and "[$WIN32]" not in line:
-            line = replace_text_between_quotes(line, "DELETE_ME")
-
-        output.append(line)
-
-    return "\n".join(output)
-
-
-def debug_vdf_class():
+def debug_vdf_class(persistent_data):
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
 
-    modifier = VDFModifier(vdf_path)
-    # cleaned_vdf_text = modifier.clean()
-    return
+    modifier = "plus"  # or "minus"
+    amount = 10
+    key_to_modify = "xpos"
 
-    modifier = "plus"  # Modifier ("plus", "minus")
-    amount = 100  # Amount to modify with
+    modifier_instance = VDFModifier(persistent_data, vdf_path)
+    modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
 
-    int_modifier = IntModifier(vdf_path, modifier, amount)
-    modified_vdf_obj = int_modifier.modify_controls()
-
-    # Save to an output path if needed
-    output_path = "output.vdf"  # Replace with desired output path or leave None
-    if output_path:
-        int_modifier.save_vdf(modified_vdf_obj, output_path)
-        print(f"Modified VDF saved to '{output_path}':")
-    else:
-        print("Modified VDF (not saved):")
-
-    print(vdf.dumps(modified_vdf_obj, pretty=True))
-
-
-if __name__ == "__main__":
-    debug_vdf_class()
+    modifier_instance.save_vdf(modified_vdf_obj, "output.vdf")
+    modifier_instance.print_current_vdf()
