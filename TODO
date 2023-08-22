@@ -8,25 +8,23 @@ Current:
 
 
 VDF:
-	☐ Look at AHK code for notes
+	
+	☐ Options
+		☐ Do i automatically want do apply all of these? or optionally enable/disable?
+		☐ Output: Do i want to show a gui with a before and after or just overwrite the file? show a msg to the user a backup is in the recycle bin
+		☐ A gui with before&after could be nice because then i can also notify that certain files shouldn't be handled such as larger files like scheme's
+			☐ annotate (add descriptions)
+			☐ sort (keys)
+			☐ align (values)
+			☐  ---- change integers
+
+	☐ Look into how i want to use the class. probably overwrite the input file by default, but move a backup of the file into the recycle bin
+		☐ Likely enter input&output path right when class is being instanciated
 	
 	☐ Look into which methods should be interal, which methods should be public. which methods should automatically be applied. make a method for applying these
 	☐ Make annotate internal? or atleast also automatically annotate when doing other operations
 
 	☐ Refactor. Add method docs, simplify & improve code (naming)
-
-	☐ Cleanup
-		- Remove splitscreen entries with vdf -> remove lines with [xbox360] with python (important in this order)
-		- sort the keys for every control in the same order
-		- ? align the values with tabs to the same indent (how the hell did i accomplish this in ahk)
-		- look at my AHK VDF class
-	☐ Adding hud descriptions
-		- Easiest way might be to add custom key:value to each control with the vdf class
-		- GPT says regex replace can do it aswell
-	☐ Modifying integers
-		- With VDF class
-	☐ Try d = vdf.loads(vdf_string, mapper=collections.OrderedDict) vs normal
-		- by default it seems to already remember key order
 
 Features:
 
@@ -197,6 +195,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Bug: VDF class didn't handle letter values properly such as "c-150" @done(23-08-22 22:12)
 	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)
 	✔ loop file line by line. find identifier lines. replace the text between double quotes with DELETE_ME or something like that so the file format remains intact and vdf module can delete these @done(23-08-22 17:36)
 	✔ 2. VDF Module: Load vdf into object and make any changes such as changing the integers @done(23-08-22 17:44)

@@ -1,6 +1,7 @@
 """Shared utility functions"""
 # pylint: disable=c-extension-no-member, broad-exception-caught
 import os
+import re
 import sys
 import tkinter as tk
 from tkinter import messagebox
@@ -12,6 +13,13 @@ import win32con
 import win32gui
 import win32process
 from ahk import AHK
+
+
+def replace_text_between_quotes(input_string, replacement_text):
+    """Replace text between quotes. Multiple double quotes supported"""
+    pattern = r'"([^"]*)"'
+    replaced_string = re.sub(pattern, f'"{replacement_text}"', input_string)
+    return replaced_string
 
 
 def verify_directory(directory, error_message):

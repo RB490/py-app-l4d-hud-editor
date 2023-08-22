@@ -26,7 +26,7 @@
 
 
 
-		"custom_key_block"
+		"custom_key_block" // "" some more quotes test
  		{
  			"ypos"	"c-45"			
   		}

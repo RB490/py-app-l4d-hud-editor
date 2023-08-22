@@ -135,7 +135,6 @@ class GuiHudBrowser(metaclass=Singleton):
         self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "description.png")).subsample(2, 2)
         self.integers_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "modify_integers.png")).subsample(2, 2)
         self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
-        self.clean_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
             label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_file
@@ -151,13 +150,10 @@ class GuiHudBrowser(metaclass=Singleton):
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
-            label="Clean", image=self.clean_icon, compound=tk.LEFT, command=self.treeview_clean
+            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.treeview_annotate
         )
         self.context_menu.add_command(
             label="Integers", image=self.integers_icon, compound=tk.LEFT, command=self.treeview_integers
-        )
-        self.context_menu.add_command(
-            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.treeview_annotate
         )
         self.context_menu.add_command(
             label="Description", image=self.description_icon, compound=tk.LEFT, command=self.treeview_description
@@ -432,10 +428,6 @@ class GuiHudBrowser(metaclass=Singleton):
             os.startfile(game_directory)
         else:
             print(f"Game directory unavailable: '{game_directory}'")
-
-    def treeview_clean(self):
-        "Treeview Handle 'Clean' option"
-        print("Method: treeview_clean - TODO: Handle 'Clean' option")
 
     def treeview_description(self):
         "Treeview Handle 'Description' option"
