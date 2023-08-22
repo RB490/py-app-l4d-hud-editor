@@ -14,10 +14,10 @@ Current:
 	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)
 	✔ Feature: VDF: With annotation disabled the __description__ keys should be removed @done(23-08-23 00:59)
 	✔ Feature: VDF: Save window geometry @done(23-08-23 01:09)
-	☐ Bug: VDF GUI: When closing the script goes on to do some stuff: Modifying integer values...Save the modified VDF object to a file
+	✔ Bug: VDF GUI: When closing the script goes on to do some stuff: Modifying integer values...Save the modified VDF object to a file @done(23-08-23 01:10)
+	✔ Feature: VDF: Proper widget layout. before&after side by side and the controls nicely layed out. Integer modifying should be a self contained lil group of controls @done(23-08-23 01:13)
+	✔ Feature: VDF: Save certain settings for the vdf gui @done(23-08-23 01:14)
 	☐ Feature: VDF: Undo changes. Either programatically or (more likely) reload from file
-	☐ Feature: VDF: Proper widget layout. before&after side by side and the controls nicely layed out. Integer modifying should be a self contained lil group of controls
-	☐ Feature: VDF: Save certain settings for the vdf gui
 
 Features:
 

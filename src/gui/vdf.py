@@ -31,10 +31,10 @@ class VDFModifierGUI:
         self.selected_control = tk.StringVar(value=self.control_options[0])
         self.previous_output = None
 
-        self.annotate_var = tk.IntVar()
-        self.sot_control_keys_var = tk.IntVar()
-        self.align_values_indent_var = tk.IntVar()
-        self.modify_int_var = tk.IntVar()
+        self.annotate_var = tk.IntVar(value=True)
+        self.sot_control_keys_var = tk.IntVar(value=True)
+        self.align_values_indent_var = tk.IntVar(value=True)
+        self.modify_int_var = tk.IntVar(value=True)
         self.modify_amount_var = tk.IntVar()
         self.modify_modifier_var = tk.StringVar(value="plus")
 
