@@ -65,10 +65,59 @@ class IntModifier(VDFModifier):
             return value
 
 
+def remove_blocks(lines, block_identifier):
+    filtered_lines = []
+    inside_block = False
+
+    for line in lines:
+        if "{" in line:
+            if block_identifier in line:
+                inside_block = True
+        elif "}" in line:
+            if inside_block:
+                inside_block = False
+            else:
+                filtered_lines.append(line)
+        elif block_identifier in line and not inside_block:
+            continue
+
+        if not inside_block:
+            filtered_lines.append(line)
+
+    return filtered_lines
+
+
+def print_modified_vdf(vdf_content, block_identifier):
+    try:
+        modified_lines = remove_blocks(vdf_content, block_identifier)
+
+        # Print the modified content
+        modified_content = "".join(modified_lines)
+        print(modified_content)
+        return modified_content
+    except FileNotFoundError:
+        print("No content available.")
+
+
 def debug_vdf_class():
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
+
+    # List of identifiers to remove
+    # identifiers_to_remove = ["[$X360]", "[$X360GUEST]", "[!$ENGLISH]", "[!$X360GUEST]"]
+
+    # identifiers_to_remove = ["[$X360]", "[$X360GUEST]"]
+    # Replace 'your_file.vdf' and '[XBOX360]' with the actual filename and block identifier
+
+    with open(vdf_path, "r") as file:
+        vdf_content = file.readlines()
+
+    vdf_content = print_modified_vdf(vdf_content, "[$X360]")
+    # vdf_content = print_modified_vdf(vdf_content, "[!$ENGLISH]")
+    # input("press enter to continue")
+    # print(vdf_content)
+    return
 
     modifier = "plus"  # Modifier ("plus", "minus")
     amount = 100  # Amount to modify with

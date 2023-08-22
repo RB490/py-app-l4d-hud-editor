@@ -1,3 +1,4 @@
+//[$X360] nested key-value definition 'if_split_screen_top' under HudGhostPanel
 "Resource/HudLayout.res"
 {
 	overview
@@ -17,8 +18,7 @@
 		"fieldName" "HudZombiePanel"
 		"visible" "1"
 		"enabled" "1"
-		"xpos"			"c-100"
-		"xpos"			"c-360" [$X360]
+		"xpos"			"c-190"
 		"ypos"			"c10"
 		"wide"			"400"
 		"tall"			"155"
@@ -36,27 +36,41 @@
 		
 		"if_split_screen_right"
 		{
-			"xpos"	"c-100"
+			"xpos"	"c-175"
 		}
+	}
 
-		"if_split_screen_$X360" [$X360]
+ 	HudGhostPanel
+	{
+		"fieldName"		"HudGhostPanel"
+		"visible"		"1"
+		"enabled"		"1"
+		"xpos"			"c-180"
+		"ypos"			"c10"
+		"wide"			"400"
+		"tall"			"155"
+		"WhiteText"		"192 192 192 255"
+		"RedText"		"246 5 5 255"
+		"padding"		"4"
+		
+ 		"if_split_screen_horizontal"
+ 		{
+			"ypos"	"c-45"			
+  		}
+  		
+  		"if_split_screen_left"
 		{
-			"xpos"	"c-360"
+			"xpos"	"c-145"
 		}
 		
-		"if_split_screen_$X360GUEST" [$X360GUEST]
+		"if_split_screen_right"
 		{
-			"xpos"	"c-360"
+			"xpos"	"c-205"
 		}
-
-		"if_split_screen_!$ENGLISH" [!$ENGLISH]
+		
+		"if_split_screen_top"	[$X360]
 		{
-			"xpos"	"c-360"
-		}
-
-		"if_split_screen_!$X360GUEST" [!$X360GUEST]
-		{
-			"xpos"	"c-360"
+			"ypos"	"c-70"
 		}
 	}
 }

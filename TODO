@@ -6,7 +6,14 @@ Current:
 		☐ Browser: Treeview context menu functionality: VDF: integers
 		☐ Browser: Treeview context menu functionality: VDF: describe
 
+
 VDF:
+	☐ Look at AHK code for notes
+	☐ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf)
+	☐ 2. VDF Module: Load vdf into object and make any changes such as changing the integers
+	☐ 3. String/ VDF Module: Output either with vdf.dump for easiness or as string with added benefits such as properly inserting control descriptions & aligning the key's values on the same indent level
+	
+	
 	☐ Cleanup
 		- Remove splitscreen entries with vdf -> remove lines with [xbox360] with python (important in this order)
 		- sort the keys for every control in the same order

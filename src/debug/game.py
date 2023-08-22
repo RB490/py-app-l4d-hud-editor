@@ -18,7 +18,7 @@ def debug_game_class(persistent_data):
     ###########################
     # Installer
     ###########################
-    # result = gamez.installer.install()
+    result = gamez.installer.install()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)

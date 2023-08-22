@@ -29,36 +29,7 @@
 		}
 		"if_split_screen_right"
 		{
-			"xpos" "c-175"
-		}
-	}
-	"HudGhostPanel"
-	{
-		"fieldName" "HudGhostPanel"
-		"visible" "1"
-		"enabled" "1"
-		"xpos" "c-180"
-		"ypos" "c10"
-		"wide" "400"
-		"tall" "155"
-		"WhiteText" "192 192 192 255"
-		"RedText" "246 5 5 255"
-		"padding" "4"
-		"if_split_screen_horizontal"
-		{
-			"ypos" "c-45"
-		}
-		"if_split_screen_left"
-		{
-			"xpos" "c-145"
-		}
-		"if_split_screen_right"
-		{
-			"xpos" "c-205"
-		}
-		"if_split_screen_top"
-		{
-			"ypos" "c-70"
+			"xpos" "c-999"
 		}
 	}
 }

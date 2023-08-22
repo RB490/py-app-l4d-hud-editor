@@ -166,12 +166,12 @@ class GameInstaller:
         # get dev directory
         try:
             result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+            print('this is a test123')
             if result:
                 print("Successfully selected the developer directory. Finished installation.")
                 return True
         except Exception as err_info:
-            show_message(f"{err_info}", "error", "Could not get developer directory!")
-            return False
+            print(f"Could not retrieve developer directory: {err_info}")
 
         # confirm start
         if not prompt_start(self.game, "install"):
