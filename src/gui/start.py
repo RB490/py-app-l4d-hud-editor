@@ -186,7 +186,6 @@ class GuiHudStart(metaclass=Singleton):
         if self.root and self.root.winfo_viewable():
             # Get the current position and size of the window
             geometry = self.root.geometry()
-            print(f"geometry: {geometry}")
             self.persistent_data["HudSelectGuiGeometry"] = geometry
         else:
             print("GUI is not loaded or visible. Skipping window geometry save.")

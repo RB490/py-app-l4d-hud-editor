@@ -14,7 +14,7 @@ from gui.start import GuiHudStart, show_start_gui
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR
-from utils.functions import load_data
+from utils.functions import load_data, save_data
 from utils.shared_utils import is_subdirectory
 from utils.vdf import debug_vdf_class
 
@@ -36,6 +36,8 @@ def debug_main():
     # show_start_gui(persistent_data)
 
     # print(f"result={result}")
+
+    save_data(persistent_data)
 
     input("Finished debugging! Press enter to continue..")
 

@@ -1,3 +1,4 @@
+"""GUI Class for modifying VDF files."""
 import tkinter as tk
 from tkinter import scrolledtext
 
@@ -16,7 +17,15 @@ class VDFModifierGUI:
         self.root = tk.Tk()
         self.root.minsize(875, 395)
         self.root.iconbitmap(APP_ICON)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.title("VDF Modifier")
+
+        # load saved geometry
+        try:
+            geometry = self.persistent_data["VDFGuiGeometry"]
+            self.root.geometry(geometry)
+        except KeyError:
+            self.root.geometry("875x395+100+100")
 
         self.control_options = ["xpos", "ypos", "wide", "tall", "visible", "enabled"]
         self.selected_control = tk.StringVar(value=self.control_options[0])
@@ -151,7 +160,7 @@ class VDFModifierGUI:
         if self.annotate_var.get():
             self.modifier.annotate(self.modifier.get_obj())
         else:
-            self.modifier._remove_annotations(self.modifier.get_obj())
+            self.modifier.remove_annotations(self.modifier.get_obj())
 
         if self.sot_control_keys_var.get():
             self.modifier.sort_control_keys(self.modifier.get_obj())
@@ -183,6 +192,25 @@ class VDFModifierGUI:
         """Hide gui"""
         self.root.withdraw()
         self.is_hidden = True
+
+    def save_window_geometry(self):
+        """Save size & position if GUI is loaded and visible"""
+        if self.root and self.root.winfo_viewable():
+            # Get the current position and size of the window
+            geometry = self.root.geometry()
+            self.persistent_data["VDFGuiGeometry"] = geometry
+        else:
+            print("GUI is not loaded or visible. Skipping window geometry save.")
+
+    def destroy_gui(self):
+        "Close & stop main loop"
+        self.save_window_geometry()
+        self.root.destroy()
+
+    def on_close(self):
+        """Runs on close"""
+        self.save_window_geometry()
+        self.destroy_gui()
 
 
 def debug_vdf_gui(persistent_data, vdf_path):

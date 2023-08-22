@@ -215,7 +215,7 @@ class VDFModifier:
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
 
-    def _remove_annotations(self, vdf_obj):
+    def remove_annotations(self, vdf_obj):
         """Remove annotations from the VDF object."""
         if not vdf_obj:
             raise ValueError("No VDF object provided")
@@ -320,5 +320,5 @@ def debug_vdf_class(persistent_data):
 
     modifier_instance = VDFModifier(persistent_data, vdf_path)
     modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
-    modifier_instance.save_vdf(modified_vdf_obj, "output.vdf")
+    modifier_instance.save_vdf(modified_vdf_obj, "output.vdf", align_value_indentation=True)
     # modifier_instance.print_current_vdf()

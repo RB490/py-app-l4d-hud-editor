@@ -28,10 +28,12 @@ from .constants import (
     PERSISTENT_DATA_PATH,
 )
 
+
 def get_backup_path(file_path):
     """Get a backup path by appending '.backup' to the input file path"""
     backup_path = file_path + ".backup"
     return backup_path
+
 
 def get_image_for_file_extension(input_path):
     "Retrieve image for file extension"
@@ -618,12 +620,13 @@ def load_data():
 
 def save_data(data):
     """Save persistent data to disk"""
-    print(f"save_data: {data}")
+    # print(f"Saving data: {json.dumps(data, sort_keys=True, indent=4)}")
     try:
         with open(PERSISTENT_DATA_PATH, "w", encoding="utf-8") as file:
             # json.dump(data, file) # fastest, but doesn't allow formatting - and i use tiny jsons
             pretty_json = json.dumps(data, sort_keys=True, indent=4)
             file.write(pretty_json)
+            print("Wrote data to disk!")
     except (FileNotFoundError, TypeError):
         print(f"Error saving data to {PERSISTENT_DATA_PATH}")
 
