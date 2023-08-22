@@ -3,7 +3,6 @@ import os
 import re
 
 import vdf  # type: ignore
-from requests.structures import CaseInsensitiveDict
 
 from hud.hud import Hud  # type: ignore
 from utils.constants import DEVELOPMENT_DIR
@@ -81,6 +80,7 @@ class VDFModifier:
 
     def save_vdf(self, vdf_obj, output_path):
         result = vdf.dumps(vdf_obj, pretty=True)
+        result = self.__align_values_with_indent(result)
         with open(output_path, "w", encoding="utf-8") as output_file:
             output_file.write(result)
 
@@ -185,6 +185,7 @@ class VDFModifier:
         return sorted_control_data
 
     def __sort_all_controls(self, vdf_obj):
+        # pylint: disable=unused-variable
         sorted_vdf_obj = vdf_obj.copy()
 
         for rel_path, controls in sorted_vdf_obj.items():
@@ -196,6 +197,42 @@ class VDFModifier:
 
     def sort_all_controls(self, vdf_obj):
         return self.__sort_all_controls(vdf_obj)
+
+    @staticmethod
+    def __align_values_with_indent(vdf_obj):
+        lines = vdf_obj.strip().split("\n")
+        result_lines = []
+
+        current_indent = 0
+        in_split_screen_block = False
+
+        for line in lines:
+            stripped_line = line.strip()
+            num_quotes = stripped_line.count('"')
+
+            if stripped_line.endswith("{"):
+                result_lines.append(" " * current_indent + stripped_line)
+                current_indent += 4
+            elif stripped_line == "}":
+                current_indent -= 4
+                result_lines.append(" " * current_indent + stripped_line)
+                if in_split_screen_block:
+                    in_split_screen_block = False
+            else:
+                parts = stripped_line.split(None, 1)
+                if len(parts) == 2:
+                    key, value = parts
+                    if num_quotes == 2:  # Identify split screen lines by the number of quotes
+                        in_split_screen_block = True
+                        result_lines.append(" " * current_indent + stripped_line)
+                    else:
+                        aligned_line = f"{key:<20} {value}"
+                        result_lines.append(" " * current_indent + aligned_line)
+                else:
+                    result_lines.append(" " * current_indent + stripped_line)
+
+        return "\n".join(result_lines)
+
 
 
 def replace_text_between_quotes(input_string, replacement_text):
@@ -217,4 +254,4 @@ def debug_vdf_class(persistent_data):
     modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
 
     modifier_instance.save_vdf(modified_vdf_obj, "output.vdf")
-    modifier_instance.print_current_vdf()
+    # modifier_instance.print_current_vdf()

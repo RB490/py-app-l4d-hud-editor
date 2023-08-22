@@ -23,7 +23,10 @@
 		"tall"			"155"
 		//"PaintBackgroundType"	"2"
 		
-		"if_split_screen_horizontal"
+
+
+
+		"custom_key_block"
  		{
  			"ypos"	"c-45"			
   		}

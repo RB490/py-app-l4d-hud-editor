@@ -1,39 +1,64 @@
+def fix_indent(text):
+    lines = text.split('\n')
+    indent_level = 0
+    fixed_lines = []
 
+    for line in lines:
+        stripped_line = line.strip()
+        if stripped_line.endswith("{"):
+            fixed_lines.append("    " * indent_level + stripped_line)
+            indent_level += 1
+        elif stripped_line.endswith("}"):
+            indent_level -= 1
+            fixed_lines.append("    " * indent_level + stripped_line)
+        else:
+            fixed_lines.append("    " * indent_level + line)
 
+    return '\n'.join(fixed_lines)
 
+input_text = '''
+"resource/hudlayout.res"
+{
+    "overview"
+    {
+        "__description__"    "None"
+        "fieldname"          "overview"
+        "visible"            "1"
+        "enabled"            "1"
+        "xpos"               "10"
+        "ypos"               "480"
+        "wide"               "0"
+        "tall"               "0"
+    }
+    "HudZombiePanel"
+    {
+        "__description__"    "Infected Tank approaching / Too far from Survivors"
+        "fieldName"          "HudZombiePanel"
+        "visible"            "1"
+        "enabled"            "1"
+        "xpos"               "c-100"
+        "ypos"               "c10"
+        "wide"               "400"
+        "tall"               "155"
+        "if_split_screen_$WIN32"
+        {
+            "xpos"               "c-360"
+        }
+        "if_split_screen_horizontal"
+        {
+            "ypos"               "c-45"
+        }
+        "if_split_screen_left"
+        {
+            "xpos"               "c-145"
+        }
+        "if_split_screen_right"
+        {
+            "xpos"               "c-100"
+        }
+    }
+}
+'''
 
-import tkinter as tk
-
-class MyGUI1:
-    def __init__(self, root):
-        self.root = root
-        self.add_image = tk.PhotoImage(file="E:\\Games\\Steam\\steamapps\\common\\SteamVR\\tools\\steamvr_environments\\game\\core\\tools\\images\\common\\add.png")
-        self.add_button = tk.Button(self.root, image=self.add_image, compound="left", command=self.open_gui2)
-        self.add_button.pack()
-
-    def open_gui2(self):
-        gui2 = MyGUI2()  # Create an instance of MyGUI2
-        gui2.show()
-
-class MyGUI2:
-    def __init__(self):
-        # self.root = tk.Toplevel() # this works great!
-        self.root = tk.Tk() # This causes gui1 to be garbage collected and image errors to show up
-        self.root.title("GUI 2")
-        self.add_image = tk.PhotoImage(file="E:\\Games\\Steam\\steamapps\\common\\SteamVR\\tools\\steamvr_environments\\game\\core\\tools\\images\\common\\add.png")
-        self.add_button = tk.Button(self.root, image=self.add_image, compound="left", command=self.some_action)
-        self.add_button.pack()
-
-    def some_action(self):
-        print("Button in GUI 2 clicked!")
-
-    def show(self):
-        self.root.mainloop()
-
-def main():
-    root = tk.Tk()
-    gui1 = MyGUI1(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
+fixed_text = fix_indent(input_text)
+print(fixed_text)

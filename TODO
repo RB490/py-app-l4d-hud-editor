@@ -8,17 +8,12 @@ Current:
 
 
 VDF:
-	✔ VDF Feature: Sort keys @done(23-08-22 20:50)
-	
-	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)
-	✔ loop file line by line. find identifier lines. replace the text between double quotes with DELETE_ME or something like that so the file format remains intact and vdf module can delete these @done(23-08-22 17:36)
-	✔ 2. VDF Module: Load vdf into object and make any changes such as changing the integers @done(23-08-22 17:44)
-	☐ 3. String/ VDF Module: Output either with vdf.dump for easiness or as string with added benefits such as properly inserting control descriptions & aligning the key's values on the same indent level
-	
 	☐ Look at AHK code for notes
 	
+	☐ Look into which methods should be interal, which methods should be public. which methods should automatically be applied. make a method for applying these
 	☐ Make annotate internal? or atleast also automatically annotate when doing other operations
-	
+
+	☐ Refactor. Add method docs, simplify & improve code (naming)
 
 	☐ Cleanup
 		- Remove splitscreen entries with vdf -> remove lines with [xbox360] with python (important in this order)
@@ -202,6 +197,11 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)
+	✔ loop file line by line. find identifier lines. replace the text between double quotes with DELETE_ME or something like that so the file format remains intact and vdf module can delete these @done(23-08-22 17:36)
+	✔ 2. VDF Module: Load vdf into object and make any changes such as changing the integers @done(23-08-22 17:44)
+	✔ 3. String/ VDF Module: Output either with vdf.dump for easiness or as string with added benefits such as properly inserting control descriptions & aligning the key's values on the same indent level @done(23-08-22 21:38)
+	✔ 4. VDF Feature: Sort keys @done(23-08-22 20:50)
 	✔ Browser: @icons Treeview context menu icons - fetch from ahk version @done(23-08-21 21:15)
 	✔ Browser: Treeview context menu functionality: treeview_recycle @done(23-08-21 19:58)
 	✔ Browser: Treeview context menu functionality: hud descriptions @done(23-08-20 22:59)
