@@ -31,10 +31,10 @@ class VDFModifierGUI:
         self.selected_control = tk.StringVar(value=self.control_options[0])
         self.previous_output = None
 
-        self.annotate_var = tk.IntVar(value=True)
-        self.sot_control_keys_var = tk.IntVar(value=True)
-        self.align_values_indent_var = tk.IntVar(value=True)
-        self.modify_int_var = tk.IntVar(value=True)
+        self.annotate_var = tk.IntVar(value=self.persistent_data.get("VDFGui_annotate", True))
+        self.sort_control_keys_var = tk.IntVar(value=self.persistent_data.get("VDFGui_sort_keys", True))
+        self.align_values_indent_var = tk.IntVar(value=self.persistent_data.get("VDFGui_indent_values", True))
+        self.modify_int_var = tk.IntVar(value=self.persistent_data.get("VDFGui_modify_int", True))
         self.modify_amount_var = tk.IntVar()
         self.modify_modifier_var = tk.StringVar(value="plus")
 
@@ -112,10 +112,10 @@ class VDFModifierGUI:
         self.annotate_checkbox = tk.Checkbutton(other_options_frame, text="Annotate", variable=self.annotate_var)
         self.annotate_checkbox.pack(anchor="w", padx=(10, 10), pady=(10, 0))
 
-        self.sot_control_keys_checkbox = tk.Checkbutton(
-            other_options_frame, text="Sort Keys", variable=self.sot_control_keys_var
+        self.sort_control_keys_checkbox = tk.Checkbutton(
+            other_options_frame, text="Sort Keys", variable=self.sort_control_keys_var
         )
-        self.sot_control_keys_checkbox.pack(anchor="w", padx=(10, 10), pady=(0, 0))
+        self.sort_control_keys_checkbox.pack(anchor="w", padx=(10, 10), pady=(0, 0))
 
         self.align_values_indent_checkbox = tk.Checkbutton(
             other_options_frame, text="Align Indentation", variable=self.align_values_indent_var
@@ -162,7 +162,7 @@ class VDFModifierGUI:
         else:
             self.modifier.remove_annotations(self.modifier.get_obj())
 
-        if self.sot_control_keys_var.get():
+        if self.sort_control_keys_var.get():
             self.modifier.sort_control_keys(self.modifier.get_obj())
 
         if self.modify_int_var.get():
@@ -176,6 +176,15 @@ class VDFModifierGUI:
         self.current_text.insert(tk.END, output)
 
         self.previous_output = output
+        
+        self.save_settings()
+
+    def save_settings(self):
+        self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()
+        self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
+        self.persistent_data["VDFGui_annotate"] = self.annotate_var.get()
+        self.persistent_data["VDFGui_sort_keys"] = self.sort_control_keys_var.get()
+        
 
     def run(self):
         "Show & start main loop"
