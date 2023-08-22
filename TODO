@@ -31,6 +31,7 @@ Features:
 
 
 Bugs:
+
 	☐ Descriptions: Add print statements
 	☐ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening
 	☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else

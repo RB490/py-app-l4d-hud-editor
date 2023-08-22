@@ -152,15 +152,17 @@ class GameWindow:
             creationflags=subprocess.DETACHED_PROCESS,
             start_new_session=True,  # Required for some platforms
         )
-
         if not result:
             print("Unable to run game!")
             return False
 
-        # # set hwnd
-        self.__set_hwnd(20)
+        # wait for game to fully open
+        wait_for_process_with_ram_threshold(self.get_exe(), 80)  # account for steam starting up
 
-        # # set position
+        # set hwnd
+        self.__set_hwnd()
+
+        # set position
         self.restore_saved_position()
 
         return True

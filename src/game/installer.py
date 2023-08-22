@@ -16,7 +16,6 @@ from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_ga
 from utils.constants import MODS_DIR
 from utils.functions import (
     copy_directory,
-    wait_for_process_with_ram_threshold,
     wait_process_close,
 )
 from utils.shared_utils import show_message
@@ -436,7 +435,5 @@ class GameInstaller:
         self.game.close()
         self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
 
-        if not wait_for_process_with_ram_threshold(self.game.get_exe(), 60):  # account for steam starting up
-            return False
         if not wait_process_close(self.game.get_exe(), 300):  # account audio rebuilding
             return False
