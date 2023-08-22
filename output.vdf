@@ -15,7 +15,7 @@
 		"fieldName" "HudZombiePanel"
 		"visible" "1"
 		"enabled" "1"
-		"xpos" "c-190"
+		"xpos" "c-560"
 		"ypos" "c10"
 		"wide" "400"
 		"tall" "155"
@@ -29,7 +29,23 @@
 		}
 		"if_split_screen_right"
 		{
-			"xpos" "c-999"
+			"xpos" "c-100"
+		}
+		"if_split_screen_$WIN32"
+		{
+			"xpos" "c-360"
+		}
+		"if_split_screen_$X360"
+		{
+			"xpos" "c-360"
+		}
+		"if_split_screen_$X360GUEST"
+		{
+			"xpos" "c-460"
+		}
+		"if_split_screen_!$ENGLISH"
+		{
+			"xpos" "c-560"
 		}
 	}
 }

@@ -1,5 +1,6 @@
 # pylint: disable=missing-module-docstring, missing-class-docstring, missing-function-docstring
 import os
+import re
 
 import vdf  # type: ignore
 
@@ -10,11 +11,20 @@ class VDFModifier:
     def __init__(self, vdf_path=None):
         self.vdf_path = vdf_path
         self.vdf_obj = self.load_vdf() if self.vdf_path else None
+        self.print_current_vdf()
+
+    def print_current_vdf(self):
+        if self.vdf_obj:
+            print(vdf.dumps(self.vdf_obj, pretty=True))
 
     def load_vdf(self):
         if self.vdf_path:
             with open(self.vdf_path, encoding="utf-8") as vdf_file:
-                return vdf.load(vdf_file)
+                vdf_content = vdf_file.read()
+            cleaned_vdf_content = self.__clean_string(vdf_content)
+            cleaned_vdf_obj = vdf.loads(cleaned_vdf_content)
+            cleaned_vdf_obj = self.__clean_obj(cleaned_vdf_obj)
+            return cleaned_vdf_obj
         return None
 
     def save_vdf(self, vdf_obj, output_path):
@@ -25,8 +35,31 @@ class VDFModifier:
     def modify_controls(self):
         pass  # To be implemented in subclasses
 
-    def clean(self):
-        pass  # To be implemented in subclasses
+    def __clean_string(self, vdf_text):
+        cleaned_lines = []
+        for line in vdf_text.split("\n"):
+            line = line.strip()
+            if ("[$" in line or "[!$ENGLISH]" in line) and "[$WIN32]" not in line:
+                line = replace_text_between_quotes(line, "DELETE_ME")
+            cleaned_lines.append(line)
+
+        cleaned_vdf_text = "\n".join(cleaned_lines)
+        return cleaned_vdf_text
+
+    def __clean_obj(self, vdf_obj):
+        modified_vdf_obj = vdf_obj.copy()
+        keys_to_delete = []
+
+        for controls in modified_vdf_obj.values():
+            for control_data in controls.values():
+                keys_to_remove = []
+                for key, value in control_data.items():
+                    if key == "DELETE_ME" or value == "DELETE_ME":
+                        keys_to_remove.append(key)
+                for key in keys_to_remove:
+                    del control_data[key]
+
+        return modified_vdf_obj
 
     def annotate(self):
         pass  # To be implemented in subclasses
@@ -99,24 +132,34 @@ def print_modified_vdf(vdf_content, block_identifier):
         print("No content available.")
 
 
+def replace_text_between_quotes(input_string, replacement_text):
+    pattern = r'"([^"]*)"'
+    replaced_string = re.sub(pattern, f'"{replacement_text}"', input_string)
+    return replaced_string
+
+
+def clean_vdf(data):
+    lines = data.split("\n")
+    output = []
+
+    for line in lines:
+        line = line.strip()
+
+        if ("[$" in line or "[!$ENGLISH]" in line) and "[$WIN32]" not in line:
+            line = replace_text_between_quotes(line, "DELETE_ME")
+
+        output.append(line)
+
+    return "\n".join(output)
+
+
 def debug_vdf_class():
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
 
-    # List of identifiers to remove
-    # identifiers_to_remove = ["[$X360]", "[$X360GUEST]", "[!$ENGLISH]", "[!$X360GUEST]"]
-
-    # identifiers_to_remove = ["[$X360]", "[$X360GUEST]"]
-    # Replace 'your_file.vdf' and '[XBOX360]' with the actual filename and block identifier
-
-    with open(vdf_path, "r") as file:
-        vdf_content = file.readlines()
-
-    vdf_content = print_modified_vdf(vdf_content, "[$X360]")
-    # vdf_content = print_modified_vdf(vdf_content, "[!$ENGLISH]")
-    # input("press enter to continue")
-    # print(vdf_content)
+    modifier = VDFModifier(vdf_path)
+    # cleaned_vdf_text = modifier.clean()
     return
 
     modifier = "plus"  # Modifier ("plus", "minus")

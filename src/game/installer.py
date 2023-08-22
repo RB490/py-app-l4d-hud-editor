@@ -14,10 +14,7 @@ from game.constants import DirectoryMode, InstallationState
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import (
-    copy_directory,
-    wait_process_close,
-)
+from utils.functions import copy_directory, wait_process_close
 from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
@@ -89,7 +86,7 @@ class GameInstaller:
 
         # perform installation steps
         try:
-            self.__process_installation_steps()
+            self.__process_installation_steps(current_state)
             print("Finished updating!")
             return True
         except Exception as err_info:
@@ -134,7 +131,7 @@ class GameInstaller:
 
         # perform installation steps
         try:
-            self.__process_installation_steps()
+            self.__process_installation_steps(current_state)
             # finished
             print("Finished reparing!")
             return True
@@ -165,7 +162,7 @@ class GameInstaller:
         # get dev directory
         try:
             result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
-            print('this is a test123')
+            print("this is a test123")
             if result:
                 print("Successfully selected the developer directory. Finished installation.")
                 return True
@@ -210,7 +207,7 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-        
+
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
             last_completed_index = 0

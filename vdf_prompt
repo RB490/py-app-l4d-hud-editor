@@ -1,3 +1,25 @@
+FIND:
+
+[$X360]
+[!$ENGLISH]
+[$X360GUEST]
+[$DECK]
+[$LINUX]
+[$OSX]
+[$X360LODEF]
+[$X360HIDEF]
+
+IGNORE: [$WIN32]
+
+
+
+
+python code to loop this data line by line. 
+print out lines containing identifiers that start with [& and also [!&ENGLISH]
+ignore [$WIN32]
+
+
+
 "Resource/HudLayout.res"
 {
 	overview
@@ -18,12 +40,10 @@
 		"visible" "1"
 		"enabled" "1"
 		"xpos"			"c-100"
-		"xpos"			"c-360" [$WIN32]
 		"xpos"			"c-360" [$X360]
 		"xpos"			"c-460" [!$ENGLISH]
 		"xpos"			"c-560" [$X360GUEST]
-		"xpos"			"c-560" [$OSX]
-		"xpos"			"c-560" [$LINUX]
+		"xpos"			"c-660" [!$X360GUEST]
 		"ypos"			"c10"
 		"wide"			"400"
 		"tall"			"155"
@@ -44,11 +64,6 @@
 			"xpos"	"c-100"
 		}
 
-		"if_split_screen_$WIN32" [$WIN32]
-		{
-			"xpos"	"c-360"
-		}
-
 		"if_split_screen_$X360" [$X360]
 		{
 			"xpos"	"c-360"
@@ -62,6 +77,11 @@
 		"if_split_screen_!$ENGLISH" [!$ENGLISH]
 		{
 			"xpos"	"c-560"
+		}
+
+		"if_split_screen_!$X360GUEST" [!$X360GUEST]
+		{
+			"xpos"	"c-660"
 		}
 	}
 }
