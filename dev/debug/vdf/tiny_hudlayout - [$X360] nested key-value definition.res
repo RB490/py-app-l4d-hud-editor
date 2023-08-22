@@ -3,12 +3,12 @@
 	overview
 	{
 		"visible"				"1"
-		"fieldname"				"overview"
+		"fieldname"			"overview"
 		"enabled"				"1"
 		"xpos"					"0"
-		"ypos"					"480"
+		"ypos"			"480"
 		"wide"					"0"
-		"tall"					"0"
+		"tall"							"0"
 	}
 
 	// Tank approaching / Too far from Survivors
@@ -19,7 +19,7 @@
 		"enabled" "1"
 		"xpos"			"c-100"
 		"ypos"			"c10"
-		"wide"			"400"
+		"wide" "400"
 		"tall"			"155"
 		//"PaintBackgroundType"	"2"
 		

@@ -2,11 +2,21 @@
 
 Current:
 	
+
+
 	☐ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin
+		- GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data 
 	☐ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning	
 	☐ Refactor. Add method docs, simplify & improve code (naming)
 	☐ Browser: Treeview context menu functionality: VDF: Modify
 
+
+	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)
+	✔ Feature: VDF: With annotation disabled the __description__ keys should be removed @done(23-08-23 00:59)
+	☐ Feature: VDF: Save window geometry
+	☐ Feature: VDF: Undo changes. Either programatically or (more likely) reload from file
+	☐ Feature: VDF: Proper widget layout. before&after side by side and the controls nicely layed out. Integer modifying should be a self contained lil group of controls
+	☐ Feature: VDF: Save certain settings for the vdf gui
 
 Features:
 

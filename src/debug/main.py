@@ -11,6 +11,7 @@ from gui import descriptions
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopupContextmenu
 from gui.start import GuiHudStart, show_start_gui
+from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import load_data
@@ -26,7 +27,7 @@ def debug_main():
 
     # debug_game_class(persistent_data)
     debug_gui(persistent_data)
-    # debug_vdf_class(persistent_data)
+    debug_vdf_class(persistent_data)
 
     # hud = get_hud_debug_instance(persistent_data)
     # result = hud.get_all_files_dict()
@@ -50,13 +51,20 @@ def debug_gui(persistent_data):
     # show_start_gui(persistent_data)
 
     # browser
-    browse = get_debug_gui_browser_instance(persistent_data)
-    browse.run()
+    # browse = get_debug_gui_browser_instance(persistent_data)
+    # browse.run()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
     # my_editor_menu_gui.run()
     # my_editor_menu_gui.show()
+
+    # vdf gui
+    vdf_path = os.path.join(
+        DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
+    )
+    app = VDFModifierGUI(persistent_data, vdf_path)
+    app.root.mainloop()
 
 
 def get_debug_gui_browser_instance(persistent_data):

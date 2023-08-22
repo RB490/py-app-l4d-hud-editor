@@ -1,4 +1,8 @@
-"""Class for modifying VDF files."""
+can you create a tkinter gui for this class?
+i would like the have the option to toggle the important features that are currently being done by default during loading&saving: annotate, sot controls, align values indent, modify integers.
+the gui should have check boxes for these, and relevant widgets for modifying integers. there should be before and after text widgets that get updated whenever an option is toggled or modified
+the modify integer should have a radio widget for the 'modifier' control aka plus & minus
+
 import os
 
 import send2trash
@@ -10,12 +14,9 @@ from utils.shared_utils import replace_text_between_quotes
 
 
 class VDFModifier:
-    """Class for modifying VDF files."""
-
     def __init__(self, persistent_data, vdf_path=None):
         self.hud = Hud(persistent_data)
         self.description_key_name = "__description__"
-        self.vdf_text_raw = None
         self.key_order = [
             self.description_key_name,
             "fieldname",
@@ -66,61 +67,38 @@ class VDFModifier:
 
         # self.print_current_vdf()
 
-    def get_pretty_printed_vdf(self, align_value_indentation):
-        """Return a pretty-printed VDF representation of the object."""
-        if self.vdf_obj:
-            result = vdf.dumps(self.vdf_obj, pretty=True)
-            if align_value_indentation:
-                result = self.__obj_align_values_with_indent_to_text(result)
-            return result
-        return ""
-
-    def get_source_raw_text(self):
-        """Return the original raw unmodified vdf text."""
-        print("Returning raw text")
-        return self.vdf_text_raw
-
-    def get_obj(self):
-        """Return the loaded VDF object."""
-        if not self.vdf_obj:
-            raise ValueError("No VDF object loaded")
-        else:
-            return self.vdf_obj
-
     def print_current_vdf(self):
-        """Print the current VDF object."""
         if self.vdf_obj:
             print(vdf.dumps(self.vdf_obj, pretty=True))
 
+    def get_pretty_printed_vdf(self):
+        if self.vdf_obj:
+            result = vdf.dumps(self.vdf_obj, pretty=True)
+            return self.__obj_align_values_with_indent_to_text(result)
+        return ""
+
     def __load_vdf(self):
-        """Load and preprocess the VDF file."""
-        print("Loading and preprocess the VDF file")
         if self.vdf_path:
             with open(self.vdf_path, encoding="utf-8") as vdf_file:
                 vdf_text = vdf_file.read()
-            self.vdf_text_raw = vdf_text
-            cleaned_vdf_text = self.__preprocess_text(vdf_text)
+            cleaned_vdf_text = self.__cleanup_text(vdf_text)
             cleaned_vdf_obj = vdf.loads(cleaned_vdf_text)
-            cleaned_vdf_obj = self.__preprocess_obj(cleaned_vdf_obj)
-            # cleaned_vdf_obj = self.annotate(cleaned_vdf_obj)
-            # cleaned_vdf_obj = self.sort_controls(cleaned_vdf_obj)
+            cleaned_vdf_obj = self.__cleanup_obj(cleaned_vdf_obj)
+            cleaned_vdf_obj = self.__annotate(cleaned_vdf_obj)
+            cleaned_vdf_obj = self.sort_controls(cleaned_vdf_obj)
             return cleaned_vdf_obj
         return None
 
-    def save_vdf(self, vdf_obj, output_path, align_value_indentation):
-        """Save the modified VDF object to a file."""
-        print("Save the modified VDF object to a file")
+    def save_vdf(self, vdf_obj, output_path):
         if os.path.exists(output_path):
             send2trash.send2trash(output_path)  # Move the existing file to the recycle bin
 
         result = vdf.dumps(vdf_obj, pretty=True)
-        if align_value_indentation:
-            result = self.__obj_align_values_with_indent_to_text(result)
+        result = self.__obj_align_values_with_indent_to_text(result)
         with open(output_path, "w", encoding="utf-8") as output_file:
             output_file.write(result)
 
-    def __preprocess_text(self, vdf_text):
-        """Clean up VDF text."""
+    def __cleanup_text(self, vdf_text):
         cleaned_lines = []
         for line in vdf_text.split("\n"):
             line = line.strip()
@@ -131,7 +109,7 @@ class VDFModifier:
         cleaned_vdf_text = "\n".join(cleaned_lines)
         return cleaned_vdf_text
 
-    def __preprocess_obj(self, vdf_obj):
+    def __cleanup_obj(self, vdf_obj):
         modified_vdf_obj = vdf_obj.copy()
 
         for controls in modified_vdf_obj.values():
@@ -146,9 +124,6 @@ class VDFModifier:
         return modified_vdf_obj
 
     def modify_integers(self, modifier, amount, key_to_modify):
-        """Modify integer values in the VDF object."""
-        print("Modifying integer values...")
-
         if modifier not in ["plus", "minus"]:
             raise ValueError("Invalid modifier")
 
@@ -168,7 +143,6 @@ class VDFModifier:
 
         modified_vdf_obj = self.vdf_obj.copy()
         recursive_modify(modified_vdf_obj)
-        self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
 
     def __modify_int_value(self, value, modifier, amount):
@@ -197,7 +171,6 @@ class VDFModifier:
             return value
 
     def annotate(self, vdf_obj):
-        """Annotate file by adding descriptions"""
         # pass  # To be implemented in subclasses
         # self.hud.get_control_description()
 
@@ -212,25 +185,9 @@ class VDFModifier:
             for control_name, control_data in controls.items():
                 control_data[self.description_key_name] = self.hud.desc.get_control_description(rel_path, control_name)
 
-        self.vdf_obj = modified_vdf_obj
-        return modified_vdf_obj
-
-    def _remove_annotations(self, vdf_obj):
-        """Remove annotations from the VDF object."""
-        if not vdf_obj:
-            raise ValueError("No VDF object provided")
-
-        modified_vdf_obj = vdf_obj.copy()
-
-        for controls in modified_vdf_obj.values():
-            for control_data in controls.values():
-                if self.description_key_name in control_data:
-                    del control_data[self.description_key_name]
-
         return modified_vdf_obj
 
     def __get_relative_path(self, vdf_obj):
-        """Get relative file path. Aka the file header for every resource file"""
         if not vdf_obj:
             raise ValueError("No VDF object loaded")
 
@@ -241,10 +198,7 @@ class VDFModifier:
             modified_string = modified_string.replace("resource", "scripts")
         return modified_string
 
-    def sort_control_keys(self, vdf_obj):
-        """Sort control keys in the VDF object."""
-        print("Sorting control keys...")
-
+    def sort_controls(self, vdf_obj):
         # pylint: disable=unused-variable
         sorted_vdf_obj = vdf_obj.copy()
 
@@ -253,12 +207,9 @@ class VDFModifier:
                 sorted_control_data = self.__sort_control_keys(control_data)
                 controls[control_name] = sorted_control_data
 
-        self.vdf_obj = sorted_vdf_obj
         return sorted_vdf_obj
 
     def __sort_control_keys(self, control_data):
-        """Sort control keys in the controlt."""
-
         # create a dictionary that maps lower case keys to original keys
         key_map = {key.lower(): key for key in control_data.keys()}
         # convert control_data keys to lower case
@@ -272,7 +223,6 @@ class VDFModifier:
 
     @staticmethod
     def __obj_align_values_with_indent_to_text(vdf_obj):
-        """Align values with indent in the VDF object."""
         lines = vdf_obj.strip().split("\n")
         result_lines = []
 
@@ -309,7 +259,6 @@ class VDFModifier:
 
 
 def debug_vdf_class(persistent_data):
-    """Debug the VDFModifier class."""
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
