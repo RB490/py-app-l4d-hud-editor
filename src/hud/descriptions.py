@@ -1,5 +1,7 @@
 """Subclass of the hud class. Manages everything related to hud file descriptions"""
 import json
+import os
+from game.game import Game
 
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
@@ -7,36 +9,64 @@ from utils.constants import HUD_DESCRIPTIONS_PATH
 class HudDescriptions:
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
 
-    def __init__(self):
+    def __init__(self, persistent_data):
         self.data = None
+        self.game = Game(persistent_data)
         self.read_from_disk()
         print("Initialized HudDescriptions instance")
 
     def add_control(self, relative_path, input_control):
         """Set information"""
-        self.data[relative_path]["file_control_descriptions"][input_control] = ""
-        print(f"Added control '{input_control}' for relative path '{relative_path}'")
+        if input_control is not None:  # Add this condition to exclude None
+            self._add_entry(relative_path)
+            self.data[relative_path]["file_control_descriptions"][input_control] = ""
+            self.save_to_disk()
+            print(f"Added control '{input_control}' for relative path '{relative_path}'")
+        else:
+            print("Cannot add control with None name")
 
     def remove_control(self, relative_path, input_control):
         """Set information"""
         del self.data[relative_path]["file_control_descriptions"][input_control]
+        self.save_to_disk()
         print(f"Removed control '{input_control}' for relative path '{relative_path}'")
+
+    def remove_entry(self, relative_path):
+        """Remove an entire entry based on the provided relative path"""
+        if relative_path in self.data:
+            del self.data[relative_path]
+            self.save_to_disk()
+            print(f"Removed entry for relative path '{relative_path}'")
+        else:
+            print(f"No entry found for relative path '{relative_path}'")
+
+    def _add_entry(self, relative_path):
+        """Create a new entry in data if relative_path doesn't exist"""
+        if relative_path not in self.data:
+            self.data[relative_path] = {
+                "file_control_descriptions": {},
+                "file_description": "",
+                "file_name": os.path.basename(relative_path),
+                "file_relative_path": relative_path,
+                "file_is_custom": bool(self.game.dir.is_custom_file(relative_path))
+            }
+            print(f'Added new description entry:\n{self.data[relative_path]}')
+            self.save_to_disk()
 
     def set_control_description(self, relative_path, input_control, control_desc):
         """Save control description for a given relative path and control"""
-        if relative_path not in self.data:
-            self.data[relative_path] = {"file_description": "", "file_control_descriptions": {}}
-
-        self.data[relative_path]["file_control_descriptions"][input_control] = control_desc
-        self.save_to_disk()
-        print(f"Saved description for control '{input_control}' in relative path '{relative_path}'")
+        if control_desc:  # Add this condition to exclude empty descriptions
+            self._add_entry(relative_path)
+            self.data[relative_path]["file_control_descriptions"][input_control] = control_desc
+            self.save_to_disk()
+            print(f"Saved description for control '{input_control}' in relative path '{relative_path}'")
+        else:
+            print("Cannot save an empty control description")
 
     def set_file_description(self, relative_path, file_desc):
         """Set file description for a given relative path"""
-        if relative_path in self.data:
-            self.data[relative_path]["file_description"] = file_desc
-        else:
-            self.data[relative_path] = {"file_description": file_desc, "file_control_descriptions": {}}
+        self._add_entry(relative_path)
+        self.data[relative_path]["file_description"] = file_desc
         self.save_to_disk()
         print(f"Saved file description for relative path '{relative_path}'")
 

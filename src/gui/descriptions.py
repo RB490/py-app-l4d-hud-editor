@@ -233,9 +233,6 @@ class GuiHudDescriptions(metaclass=Singleton):
         # save currently loaded control
         self.save_control_description()
 
-        # save changes to disk
-        self.hud.desc.save_to_disk()
-
         # call parent
         self.parent.treeview_refresh(self.parent.treeview)
 

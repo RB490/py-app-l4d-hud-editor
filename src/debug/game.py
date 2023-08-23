@@ -55,7 +55,8 @@ def debug_game_class(persistent_data):
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.USER)
 
-    result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
+    result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
+    # result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
 
     ###########################
     # Result

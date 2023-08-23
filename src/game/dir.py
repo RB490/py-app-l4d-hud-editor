@@ -1,5 +1,6 @@
 "Game class directory methods"
 # pylint: disable=protected-access, broad-exception-caught, broad-exception-raised
+from genericpath import isfile
 import os
 import shutil
 
@@ -73,22 +74,33 @@ class GameDir:
         return True
 
     def is_custom_file(self, relative_file_path):
-        # create a list of the directories to search in aka the main dir &dlc main dirs & main backup folder
+        """Search all game directories including the backup folder to find the file"""
 
+        # variables
+        game_file_directories = []
         game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        print(relative_file_path)
-        print(game_dir)
-        print(os.listdir(game_dir))
 
-
-
+        # retrieve game folders to check
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
-            # print(subdir_name)
-            # print(f"is_dlc_dir = {self.is_dlc_dir(subdir_path)}")
-            if self.is_game_files_dir_return_pak01(subdir_path):
+            is_game_files_dir = self.get_pak01_vpk_in(subdir_path)
+            if is_game_files_dir:
+                game_file_directories.append(subdir_path)
+        # add backup directory last so it's searched last so the code preferably returns file in the main directory
+        game_file_directories.append(self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER))
 
-    def is_game_files_dir_return_pak01(self, directory):
+        # search game folders for relative file path
+        for game_dir in game_file_directories:
+            file_path = os.path.join(game_dir, relative_file_path)
+            if os.path.isfile(file_path):
+                print(f"Not a custom file: '{relative_file_path}'")
+                return False
+
+        # could not find file path in game folders. is a custom file
+        print(f"Is a custom file: '{relative_file_path}'")
+        return True
+
+    def get_pak01_vpk_in(self, directory):
         "Verify if this is a game files directory by checking if it contains a pak01_dir.vpk file"
         pak01_filename = "pak01_dir.vpk"
         backup_pak01_filename = get_backup_filename(pak01_filename)

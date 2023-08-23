@@ -287,9 +287,9 @@ class GameInstaller:
     def __find_pak01_files(self, game_dir, callback):
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
-            pak01_path = self.game.dir.is_game_files_dir_return_pak01(subdir_path)
+            pak01_path = self.game.dir.get_pak01_vpk_in(subdir_path)
 
-            if os.path.isfile(pak01_path):
+            if pak01_path:
                 callback(pak01_path, subdir_path)
 
     def __extract_paks(self):

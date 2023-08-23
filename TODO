@@ -15,14 +15,20 @@ Bugs:
 
 	✔ Refactor: Installer: Use new is_game_files_dir_return_pak01 method @done(23-08-23 14:27)
 
-	☐ Modify descriptions class to keep track of whether a file is custom. This is useful so i have the option to not show thene when showing 'not added yet' files in the browser
-		- Can use the game (backup) folders to verify if it's custom
+	✔ Modify descriptions class to keep track of whether a file is custom. This is useful so i have the option to not show thene when showing 'not added yet' files in the browser @done(23-08-23 15:19)
+		✔ Can use the game (backup) folders to verify if it's custom @done(23-08-23 15:19)
 	
 	☐ Feature: Description GUI: Option to remove this file entirely from the description data
 	
 	☐ Feature: Description GUI: Show whether this is a custom file or not
 
 	☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else
+
+	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
+
+	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
+
+	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
 
 
 GUI:
