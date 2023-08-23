@@ -9,17 +9,12 @@ import filecmp
 import os
 import shutil
 
-from game.constants import DirectoryMode, InstallationState
+from game.constants import DirectoryMode, InstallationError, InstallationState
 
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import (
-    copy_directory,
-    get_backup_filename,
-    get_backup_path,
-    wait_process_close,
-)
+from utils.functions import copy_directory, get_backup_path, wait_process_close
 from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
@@ -97,7 +92,6 @@ class GameInstaller:
             return True
         except Exception as err_info:
             print(f"Update error: {err_info}")
-            # since installation state is saved, don't do anything here
             return False
 
     def repair(self):
@@ -144,7 +138,6 @@ class GameInstaller:
             return True
         except Exception as err_info:
             print(f"Repair error: {err_info}")
-            # since installation state is saved, don't do anything here
             return False
 
     def install(self):
@@ -200,7 +193,6 @@ class GameInstaller:
             return True
         except Exception as err_info:
             print(f"Installation error: {err_info}")
-            # since installation state is saved, don't do anything here
             return False
 
     def __process_installation_steps(self, resume_state):
@@ -220,15 +212,16 @@ class GameInstaller:
         else:
             last_completed_index = installation_steps.index(resume_state)
 
-        # Perform installation steps starting from the next step after the last completed one
-        for _, state in enumerate(installation_steps[last_completed_index:]):
-            self.__perform_installation_step(state)
-            self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
-        # except Exception as err_info:
-        #     print(f"step process error: {err_info}")
-        #     return False
+        try:
+            # Perform installation steps starting from the next step after the last completed one
+            for _, state in enumerate(installation_steps[last_completed_index:]):
+                self.__perform_installation_step(state)
+                self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
+        except Exception as err_info:
+            print(f"Installation step error: {err_info}")
+            return False
 
-        # Update installation state to completed or repaired based on process type
+        # Update installation state to completed
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
         return True
 
@@ -435,7 +428,6 @@ class GameInstaller:
 
         # run game to rebuild audio
         self.game.close()
-        self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
-
-        if not wait_process_close(self.game.get_exe(), 300):  # account audio rebuilding
-            return False
+        result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
+        if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
+            raise InstallationError("Failed to run the game and rebuild audio cache!")

@@ -8,12 +8,17 @@ Bugs:
 	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
 	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
 	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state
-	
 	✔ Bug: game.dir.Set() cancelled because vanilla game dir didn't exist. but that doesnt mattter @done(23-08-23 16:57)
+	✔ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever) @done(23-08-23 16:58)
+	
+	✔ Bug: Installer would ignore exceptions and always report the installation as successfull
+	✔ Bug: Installer rebuild_audio couldn't run game (because of fixed bug) but it didn't detect that shit at all! @done(23-08-23 17:27)
 
-	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
-	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
-	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code
+	☐ Bug: Why does VSCode not highlight class in some places but does in others // looks like this is because of me passing game_class to installer manually
+	- for example hud/descriptions/self.game.dir.is_custom_file() works fine
+	- but in some locations it wouldnt get highlighted such as: installer: self.game.dir.get_main_dir_backup
+		- ^ okay, so, gpt says it's deue to the nature of VSCode's static analysises tool and using type hints could fix it. but i need to import the game class
+		- into the installer which isn't possible. gpt suggested various solutions which seemed maybe possible but seems like something i would leave for later
 
 
 GUI:
@@ -29,6 +34,7 @@ Refactoring:
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 	☐ Refactor: Installer has some unused methods. should i use or remove them? eg: __extract_outdated_paks
 
+	☐ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	
@@ -82,13 +88,14 @@ Additional Ideas and Considerations:
 	☐ Browser: Status bar showing 'custom' & 'added-to-hud' status?
 	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available self.menu_bar.entryconfig("Hud", state="disabled")
 	☐ Idea: Already tried this for an hour. But a way to retrieve the OS's default icon for a file path to be used in the treeview
-	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible? (note that outside of debugging this more or less isn't an issue)
+	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible? (note that outside of debugging this more or less isn't an issue, or maybe even a feature)
 		- Seemingly impossible although apparently it is possible: Run a process detached from python
 		- Note: Running the game before starting the editor works fine.
 			- so could use a script to launch it and then the editor
 		- I was able to get it to work with notepad.exe using subprocess start /B notepad.exe,
 		- however that didn't work for the game or steam
 		- this is legitimately around 2 hours of trail and error: python_process_decouple_testing.py
+	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)? might have decided to not bother because asyncio and threading was kinda aids
 
 
 

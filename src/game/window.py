@@ -1,12 +1,8 @@
 # pylint: disable=broad-exception-caught, c-extension-no-member
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
-import os
 import subprocess
-import sys
-import time
 
-import ahk
 import win32gui
 
 from utils.constants import GAME_POSITIONS
@@ -160,12 +156,14 @@ class GameWindow:
         wait_for_process_with_ram_threshold(self.get_exe(), 80)  # account for steam starting up
 
         # set hwnd
-        self.__set_hwnd()
+        hwnd = self.__set_hwnd()
+        if hwnd:
+            # set position
+            self.restore_saved_position()
 
-        # set position
-        self.restore_saved_position()
-
-        return True
+            return True
+        else:
+            return False
 
     def is_running(self):
         """Checks if the game is running"""

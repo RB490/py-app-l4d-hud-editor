@@ -31,12 +31,13 @@ from .constants import (
 
 
 def get_backup_path(file_path):
-    """Get a backup path by appending '.backup' to the input file path"""
+    """Get a backup path by appending 'append backup string' to the input file path"""
     backup_path = file_path + BACKUP_APPEND_STRING
     return backup_path
 
 
 def get_backup_filename(file_name):
+    """Get a backup file name by appending 'append backup string' to the input file path"""
     backup_file_name = file_name + BACKUP_APPEND_STRING
     return backup_file_name
 
@@ -310,7 +311,7 @@ def wait_process_close(executable, timeout=None):
     processes = [p for p in psutil.process_iter() if p.name() == executable]
     # If no processes are found, return immediately
     if not processes:
-        # print(f"{executable} to not running!")
+        print(f"{executable} is not running!")
         return False
 
     # Otherwise, wait for the processes to terminate or until timeout is reached
