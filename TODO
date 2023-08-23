@@ -4,6 +4,8 @@ Current:
 
 
 Features:
+	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
+
 	
 	☐ Start GUI: Context menu icons
 	☐ Start GUI: Specific button icons rather than all identical
@@ -42,7 +44,6 @@ Refactoring:
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt
 	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
-	☐ Private and internal classes dont need param checking, only public
 	☐ Handle VPK class failing to extract specific files during installation
 	☐ Make internal class methods protected by adding underscores. And internal with double __
 	☐ Add dir_mode enum checks to game class?
@@ -50,8 +51,6 @@ Refactoring:
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Enums. For example for steam_info object (?) or make it into a class
 	☐ Replace assert statements with proper error handling using try/catch
-	☐ Use Super(). This can elimiate the need to for example define self.persistent_data again in subclasses
-	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 	☐ Make the function to create lambda commands a shared utility, and use it in the project
 	☐ Streamline and test HUD editing process for improved code path
 	☐ Explore restructuring options for more efficient code flow
@@ -88,6 +87,8 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✘ Refactor: Private and internal classes dont need param checking, only public @cancelled(23-08-24 00:33)
+	✘ Use Super(). This can elimiate the need to for example define self.persistent_data again in subclasses @cancelled(23-08-24 00:32)
 	✔ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class @done(23-08-24 00:31)
 	✔ Refactor: GUI: Base GUI class with common functionality for all other gui's to use @done(23-08-23 23:44)
 	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)

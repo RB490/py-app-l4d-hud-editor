@@ -90,7 +90,7 @@ class GameInstaller:
             print("Finished updating!")
             return True
         except Exception as err_info:
-            print(f"Update error: {err_info}")
+            show_message(f"Update error: {err_info}", "error")
             return False
 
     def repair(self):
@@ -136,7 +136,7 @@ class GameInstaller:
             print("Finished reparing!")
             return True
         except Exception as err_info:
-            print(f"Repair error: {err_info}")
+            show_message(f"Repair error: {err_info}", "error")
             return False
 
     def install(self):
@@ -191,7 +191,7 @@ class GameInstaller:
             print("Finished installing!")
             return True
         except Exception as err_info:
-            print(f"Installation error: {err_info}")
+            show_message(f"Installation error: {err_info}", "error")
             return False
 
     def __process_installation_steps(self, resume_state):
