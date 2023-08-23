@@ -21,7 +21,8 @@ from gui.start import GuiHudStart, show_start_gui
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR, HUD_DESCRIPTIONS_PATH
-from utils.functions import load_data, save_data
+from utils.functions import load_data
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import is_subdirectory
 from utils.vdf import debug_vdf_class
 
@@ -30,40 +31,44 @@ def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
-    persistent_data = load_data()
 
-    # debug_game_class(persistent_data)
-    debug_gui(persistent_data)
-    # debug_vdf_class(persistent_data)
+    # data_manager = PersistentDataManager()
+    # PersistentDataManager().save()
+    # result = data_manager.data
+    # result = data_manager.print()
+    # result = data_manager.get("game_mode")
 
-    # hud = get_hud_debug_instance(persistent_data)
+    # debug_game_class()
+    # debug_vdf_class()
+    debug_gui()
+
+    # hud = get_hud_debug_instance()
     # result = hud.get_all_files_dict()
     # result = hud.get_files_dict()
 
+    # save_data()
     # print(f"result={result}")
-
-    # save_data(persistent_data)
 
     input("Finished debugging! Press enter to exit...")
 
 
-def debug_gui(persistent_data):
+def debug_gui():
     "debug gui"
 
     # browser
-    # browse = get_debug_gui_browser_instance(persistent_data)
-    # browse.run()
+    browse = get_debug_gui_browser_instance()
+    browse.run()
 
     # descriptions
-    # debug_descriptions_gui(persistent_data)
+    # debug_descriptions_gui()
 
     # start
-    show_start_gui(persistent_data)
+    # show_start_gui()
 
     # editor menu gui
-    # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
+    # my_editor_menu_gui = GuiEditorMenuPopupContextmenu()
     # my_editor_menu_gui.run()
     # my_editor_menu_gui.show()
 
     # vdf gui
-    # debug_vdf_gui(persistent_data)
+    # debug_vdf_gui()

@@ -5,6 +5,7 @@ import tkinter as tk
 from game.game import Game
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
+from utils.persistent_data import PersistentDataManager
 
 
 class GuiEditorMenuPopupContextmenu:
@@ -23,7 +24,7 @@ class GuiEditorMenuPopupContextmenu:
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, persistent_data):
+    def __init__(self):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
@@ -33,10 +34,10 @@ class GuiEditorMenuPopupContextmenu:
         # self.root.geometry("300x200")
         self.root.title("Hud Editor")
         # self.root.withdraw()
-        self.persistent_data = persistent_data
-        self.game = Game(persistent_data)
-        self.hud = Hud(persistent_data)
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
+        self.data_manager = PersistentDataManager()
+        self.game = Game()
+        self.hud = Hud()
+        self.my_editor_menu = EditorMenuClass(self, self.root)
         self.my_editor_menu.create_and_refresh_menu()
         # keyboard.add_hotkey("F4", self.show_menu, suppress=True) # doesn't work nice - stays open when it loses focus
         # keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
@@ -97,7 +98,7 @@ class GuiEditorMenuPopupContextmenu:
         self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
 
-def debug_gui_editor_menu(persistent_data):
+def debug_gui_editor_menu():
     """Debug gui class"""
     # pylint: disable=unused-variable
-    app = GuiEditorMenuPopupContextmenu(persistent_data)
+    app = GuiEditorMenuPopupContextmenu()

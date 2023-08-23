@@ -10,8 +10,11 @@ import win32api
 import win32con
 import win32gui
 
+from game.constants import DirectoryMode
+from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
 from utils.functions import click_at, focus_hwnd
+from utils.persistent_data import PersistentDataManager
 
 
 class GameCommands:
@@ -23,7 +26,7 @@ class GameCommands:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.persistent_data = self.game.persistent_data
+        self.data_manager = PersistentDataManager()
 
         self.show_ui_panel = None
         self.previous_ui_panel = None
@@ -60,12 +63,12 @@ class GameCommands:
         print(f"Executed command: '{output_command}'")
 
         # perform mouse clicks
-        if self.persistent_data["reload_mouse_clicks_enabled"]:
-            click_at(self.persistent_data["reload_mouse_clicks_coord_1"])
-            click_at(self.persistent_data["reload_mouse_clicks_coord_2"])
+        if self.data_manager.get("reload_mouse_clicks_enabled"):
+            click_at(self.data_manager.get("reload_mouse_clicks_coord_1"))
+            click_at(self.data_manager.get("reload_mouse_clicks_coord_2"))
 
         # reopen menu
-        if self.persistent_data["reload_reopen_menu_on_reload"]:
+        if self.data_manager.get("reload_reopen_menu_on_reload"):
             time.sleep(0.25)  # wait until completely finished
             pyautogui.press("esc")
             time.sleep(0.025)  # ensure the key presses are both detected

@@ -41,8 +41,8 @@ def get_subdirectories_names(directory):
 class HudSyncer(metaclass=Singleton):
     """functions providing hud syncing/unsyncing capability from the source to game dir"""
 
-    def __init__(self, persistent_data):
-        self.game = Game(persistent_data)
+    def __init__(self):
+        self.game = Game()
 
         if self.game.installed(DirectoryMode.DEVELOPER):
             self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)

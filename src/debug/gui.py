@@ -10,25 +10,23 @@ from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
 
 
-def get_debug_gui_browser_instance(persistent_data):
+def get_debug_gui_browser_instance():
     "debug_gui_browser"
     print("debug_browser")
-    hud_inc = get_hud_debug_instance(persistent_data)  # set active debug hud to load files into browser
+    hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
-    return GuiHudBrowser(persistent_data)
+    return GuiHudBrowser()
 
 
-def debug_descriptions_gui(persistent_data):
-    descriptions_gui = descriptions.GuiHudDescriptions(
-        persistent_data, get_debug_gui_browser_instance(persistent_data)
-    )
+def debug_descriptions_gui():
+    descriptions_gui = descriptions.GuiHudDescriptions(get_debug_gui_browser_instance())
     descriptions_gui.load_file("scripts\\hudlayout.res")
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
     descriptions_gui.run()
 
 
-def debug_vdf_gui(persistent_data):
+def debug_vdf_gui():
     """Debug GUI"""
 
     # vdf file
@@ -41,5 +39,5 @@ def debug_vdf_gui(persistent_data):
     vdf_path_backup = get_backup_path(vdf_path)
     shutil.copy2(vdf_path, vdf_path_backup)
 
-    app = VDFModifierGUI(persistent_data, vdf_path_backup)
+    app = VDFModifierGUI(vdf_path_backup)
     app.run()

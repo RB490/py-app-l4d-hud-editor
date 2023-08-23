@@ -11,6 +11,7 @@ from game.installer import GameInstaller
 from game.video_settings_modifier import VideoSettingsModifier
 from game.window import GameWindow
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
 
@@ -18,12 +19,12 @@ from utils.steam_info_retriever import SteamInfoRetriever
 class Game(metaclass=Singleton):
     """Singleton that handles anything related to the game. such as running and installation the dev/user versions"""
 
-    def __init__(self, persistent_data):
-        self.persistent_data = persistent_data
+    def __init__(self):
+        self.data_manager = PersistentDataManager()
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)
         self.command = GameCommands(self)
-        self.steam = SteamInfoRetriever(persistent_data)
+        self.steam = SteamInfoRetriever()
         self.dir = GameDir(self)
 
         print("Game Class Init")
@@ -78,7 +79,7 @@ class Game(metaclass=Singleton):
 
         # append user settings to autoexec
         with open(autoexec_path, "a", encoding="utf-8") as file:
-            if self.persistent_data["game_mute"]:
+            if self.data_manager.get("game_mute"):
                 file.write("\nvolume 0")  # adds the desired text to the file on a new line
             else:
                 file.write("\nvolume 1")  # adds the desired text to the file on a new line

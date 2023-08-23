@@ -1,17 +1,17 @@
 """Subclass of the hud class. Manages everything related to hud file descriptions"""
 import json
 import os
-from game.game import Game
 
+from game.game import Game
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
 
 class HudDescriptions:
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
 
-    def __init__(self, persistent_data):
+    def __init__(self):
         self.data = None
-        self.game = Game(persistent_data)
+        self.game = Game()
         self.read_from_disk()
         print("Initialized HudDescriptions instance")
 
@@ -48,9 +48,9 @@ class HudDescriptions:
                 "file_description": "",
                 "file_name": os.path.basename(relative_path),
                 "file_relative_path": relative_path,
-                "file_is_custom": bool(self.game.dir.is_custom_file(relative_path))
+                "file_is_custom": bool(self.game.dir.is_custom_file(relative_path)),
             }
-            print(f'Added new description entry:\n{self.data[relative_path]}')
+            print(f"Added new description entry:\n{self.data[relative_path]}")
             self.save_to_disk()
 
     def set_control_description(self, relative_path, input_control, control_desc):

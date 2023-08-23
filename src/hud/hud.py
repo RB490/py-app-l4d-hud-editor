@@ -14,6 +14,7 @@ from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
 from utils.functions import copy_directory
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
@@ -21,11 +22,12 @@ from utils.vpk import VPKClass
 class Hud(metaclass=Singleton):
     """Class to manage hud editing"""
 
-    def __init__(self, persistent_data) -> None:
-        self.game = Game(persistent_data)
-        self.persistent_data = persistent_data
-        self.syncer = HudSyncer(persistent_data)
-        self.desc = HudDescriptions(persistent_data)
+    def __init__(self) -> None:
+        self.data_manager = PersistentDataManager()
+
+        self.game = Game()
+        self.syncer = HudSyncer()
+        self.desc = HudDescriptions()
         self.hud_dir = None
         self.threaded_timer_game_exit = None
         self.browser = None
@@ -44,7 +46,7 @@ class Hud(metaclass=Singleton):
         if DEBUG_MODE:
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
             if not result:
-                show_start_gui(self.persistent_data)
+                show_start_gui()
                 return False
 
         # is developer mode installed? - also checks for user directory
@@ -66,7 +68,7 @@ class Hud(metaclass=Singleton):
         result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if not result:
             print("Could not activate developer mode")
-            show_start_gui(self.persistent_data)
+            show_start_gui()
             return False
 
         # sync the hud to the game folder
@@ -90,7 +92,7 @@ class Hud(metaclass=Singleton):
 
         # Open browser
         if not isinstance(self.browser, GuiHudBrowser):
-            self.browser = GuiHudBrowser(self.persistent_data)
+            self.browser = GuiHudBrowser()
             self.browser.run()
         else:
             self.browser.show()
@@ -125,7 +127,7 @@ class Hud(metaclass=Singleton):
 
         # callback to the gui
         if open_start_gui:
-            show_start_gui(self.persistent_data)
+            show_start_gui()
 
     def sync(self):
         """Sync hud"""

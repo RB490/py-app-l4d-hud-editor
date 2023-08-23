@@ -6,21 +6,21 @@ from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR
 
 
-def get_hud_debug_instance(persistent_data):
+def get_hud_debug_instance():
     """Debug the hud class"""
     # pylint: disable=unused-variable
 
     debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
-    i = Hud(persistent_data)
+    i = Hud()
     i.hud_dir = debug_hud_dir
     return i
 
 
-def debug_hud(persistent_data):
+def debug_hud():
     """Debug the hud class"""
     print("debug_hud")
 
-    my_hud_instanc = get_hud_debug_instance(persistent_data)
+    my_hud_instanc = get_hud_debug_instance()
     my_hud_instanc.save_as_folder()
     # my_hud_instanc.start_editing(my_hud_instanc.get_dir())
 

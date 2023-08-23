@@ -1,4 +1,5 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
+# pylint: disable=broad-exception-caught
 import os
 import sys
 from tkinter import messagebox
@@ -16,24 +17,26 @@ from utils.functions import (
     remove_temp_hud,
 )
 from utils.get_user_input import get_user_input
+from utils.persistent_data import PersistentDataManager
+from utils.shared_utils import show_message
 
 
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
-    def __init__(self, editor_menu_instance, persistent_data):
+    def __init__(self, editor_menu_instance):
+        self.data_manager = PersistentDataManager()
         self.editor_menu = editor_menu_instance
-        self.persistent_data = persistent_data
-        self.game = Game(persistent_data)
+        self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from hud.hud import Hud
 
-        self.hud = Hud(persistent_data)
+        self.hud = Hud()
 
     def editor_menu_game_mode(self, mode):
         """Method to handle the selected game mode in the menu."""
         print(f"The selected option is: {mode}")
-        self.persistent_data["game_mode"] = mode
+        self.data_manager.set("game_mode", "mode")
         self.game.command.execute(f"map {UNIVERSAL_GAME_MAP}")
         self.editor_menu.create_and_refresh_menu()
 
@@ -50,7 +53,7 @@ class EditorMenuHandler:
 
         # save new resolution
         width, height = map(int, string_resolution.split("x"))
-        self.persistent_data["game_res"] = (width, height)
+        self.data_manager.set("game_res", (width, height))
 
         # retrieve window settings
         video_settings_modifier = VideoSettingsModifier(config_dir)
@@ -65,8 +68,8 @@ class EditorMenuHandler:
             is_fullscreen = 1
 
         # set new resolution
-        res_w = self.persistent_data["game_res"][0]
-        res_h = self.persistent_data["game_res"][1]
+        res_w = self.data_manager.get("game_res")[0]
+        res_h = self.data_manager.get("game_res")[1]
         res_command = (
             f"mat_setvideomode 1 1 1 0; mat_setvideomode {res_w} {res_h} {int(is_fullscreen)} {int(has_border)}"
         )
@@ -91,11 +94,11 @@ class EditorMenuHandler:
         print("editor_menu_game_security")
 
         # toggle setting
-        if self.persistent_data["game_insecure"] is True:
-            self.persistent_data["game_insecure"] = False
+        if self.data_manager.get("game_insecure") is True:
+            self.data_manager.set("game_insecure", False)
             self.editor_menu.editor_menu_game_insecure_checkmark.set(0)
         else:
-            self.persistent_data["game_insecure"] = True
+            self.data_manager.set("game_insecure", True)
             self.editor_menu.editor_menu_game_insecure_checkmark.set(1)
 
         # refresh menu
@@ -119,12 +122,12 @@ class EditorMenuHandler:
 
     def editor_menu_game_toggle_mute(self):
         """Method to handle the selected secure/insecure option in the menu."""
-        if self.persistent_data["game_mute"] is True:
-            self.persistent_data["game_mute"] = False
+        if self.data_manager.get("game_mute") is True:
+            self.data_manager.set("game_mute", False)
             self.game.command.execute("volume 1")
         else:
-            self.persistent_data["game_mute"] = True
             self.game.command.execute("volume 0")
+            self.data_manager.set("game_mute", True)
 
         # refresh menu
         self.editor_menu.create_and_refresh_menu()
@@ -141,7 +144,7 @@ class EditorMenuHandler:
 
         # set selected panel
         self.game.command.set_ui_panel(panel)
-        self.game.command.execute(self.persistent_data["editor_reload_mode"])
+        self.game.command.execute(self.data_manager.get("editor_reload_mode"))
 
     def editor_menu_execute_game_command(self, execute_command):
         """Execute selected command ingame"""
@@ -154,23 +157,23 @@ class EditorMenuHandler:
 
     def editor_add_existing_hud(self):
         """Add exiting hud to the menu"""
-        prompt_add_existing_hud(self.persistent_data)
+        prompt_add_existing_hud()
         self.editor_menu.create_and_refresh_menu()
 
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
-        remove_stored_hud(self.persistent_data, hud_dir)
+        remove_stored_hud(hud_dir)
         self.editor_menu.create_and_refresh_menu()
 
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
         print(f"editor_remove_temp_hud: {hud_dir}")
-        remove_temp_hud(self.persistent_data, hud_dir)
+        remove_temp_hud(hud_dir)
         self.editor_menu.create_and_refresh_menu()
 
     def editor_open_temp_hud(self):
         """Open temporary hud in the menu"""
-        prompt_open_temp_hud(self.persistent_data)
+        prompt_open_temp_hud()
         self.editor_menu.create_and_refresh_menu()
 
     def editor_edit_hud(self, hud_dir):
@@ -189,7 +192,7 @@ class EditorMenuHandler:
     def editor_open_hud_select(self):
         """Open hud select gui"""
         print("editor_open_hud_select")
-        show_start_gui(self.persistent_data)
+        show_start_gui()
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
@@ -252,21 +255,19 @@ class EditorMenuHandler:
 
     def editor_menu_reload_reopen_menu(self):
         """Repen menu on reload setting"""
-        self.persistent_data["reload_reopen_menu_on_reload"] = not self.persistent_data["reload_reopen_menu_on_reload"]
-        self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(
-            self.persistent_data["reload_reopen_menu_on_reload"]
-        )
+        reload_reopen_menu_on_reload = self.data_manager.get("reload_reopen_menu_on_reload")
+        self.data_manager.set("reload_reopen_menu_on_reload", not reload_reopen_menu_on_reload)
+        self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(not reload_reopen_menu_on_reload)
         self.editor_menu.create_and_refresh_menu()
-        print(self.persistent_data["reload_reopen_menu_on_reload"])
+        print(not reload_reopen_menu_on_reload)
 
     def editor_menu_reload_click(self):
         """Toggle reload click coordinate"""
-        self.persistent_data["reload_mouse_clicks_enabled"] = not self.persistent_data["reload_mouse_clicks_enabled"]
-        self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(
-            self.persistent_data["reload_mouse_clicks_enabled"]
-        )
+        reload_mouse_clicks_enabled = self.data_manager.get("reload_mouse_clicks_enabled")
+        self.data_manager.set("reload_mouse_clicks_enabled", not reload_mouse_clicks_enabled)
+        self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(not reload_mouse_clicks_enabled)
         self.editor_menu.create_and_refresh_menu()
-        print(self.persistent_data["reload_mouse_clicks_enabled"])
+        print(not reload_mouse_clicks_enabled)
 
     def editor_menu_reload_click_coord1(self):
         # pylint: disable=invalid-name
@@ -275,11 +276,12 @@ class EditorMenuHandler:
         def xy_coord_callback(x, y):
             if x is not None and y is not None:
                 print(f"The mouse was clicked at ({x}, {y})")
-                self.persistent_data["reload_mouse_clicks_coord_1"] = ((x), (y))
+                coord_1 = (x, y)
+                self.data_manager.set("reload_mouse_clicks_coord_1", coord_1)
             else:
                 print("The operation was cancelled or the window was closed")
 
-            print(self.persistent_data["reload_mouse_clicks_coord_1"])
+            print(self.data_manager.get("reload_mouse_clicks_coord_1"))
 
         get_mouse_position_on_click(xy_coord_callback)
 
@@ -290,11 +292,12 @@ class EditorMenuHandler:
         def xy_coord_callback(x, y):
             if x is not None and y is not None:
                 print(f"The mouse was clicked at ({x}, {y})")
-                self.persistent_data["reload_mouse_clicks_coord_2"] = ((x), (y))
+                coord_2 = (x, y)
+                self.data_manager.set("reload_mouse_clicks_coord_2", coord_2)
             else:
                 print("The operation was cancelled or the window was closed")
 
-            print(self.persistent_data["reload_mouse_clicks_coord_2"])
+            print(self.data_manager.get("reload_mouse_clicks_coord_2"))
 
         get_mouse_position_on_click(xy_coord_callback)
 

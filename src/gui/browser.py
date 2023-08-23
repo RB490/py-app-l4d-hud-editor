@@ -21,31 +21,33 @@ from utils.functions import (
     get_image_for_file_extension,
     save_and_exit_script,
 )
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
 
 
 class GuiHudBrowser(metaclass=Singleton):
     """Class for the hud browser gui"""
 
-    def __init__(self, persistent_data):
+    def __init__(self):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
+
+        self.data_manager = PersistentDataManager()
 
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from hud.hud import Hud
 
         # set variables
         self.is_hidden = None
-        self.hud = Hud(persistent_data)
-        self.game = Game(persistent_data)
+        self.hud = Hud()
+        self.game = Game()
         self.root = tk.Tk()
         self.hide()
-        self.persistent_data = persistent_data
         self.root.title("Browser")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
-        self.descriptions_gui = GuiHudDescriptions(self.persistent_data, self)
+        self.descriptions_gui = GuiHudDescriptions(self)
         # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
 
         # Store PhotoImage objects in a list to prevent garbage collection
@@ -53,7 +55,7 @@ class GuiHudBrowser(metaclass=Singleton):
 
         # load saved geometry
         try:
-            geometry = self.persistent_data["BrowserGuiGeometry"]
+            geometry = self.data_manager.get("BrowserGuiGeometry")
             self.root.geometry(geometry)
         except KeyError:
             self.root.geometry("1000x1000+100+100")
@@ -167,7 +169,7 @@ class GuiHudBrowser(metaclass=Singleton):
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
+        self.my_editor_menu = EditorMenuClass(self, self.root)
         self.my_editor_menu.create_and_refresh_menu()
 
         # set hwnd
@@ -364,7 +366,7 @@ class GuiHudBrowser(metaclass=Singleton):
         if self.root and self.root.winfo_viewable():
             # Get the current position and size of the window
             geometry = self.root.geometry()
-            self.persistent_data["BrowserGuiGeometry"] = geometry
+            self.data_manager.set("BrowserGuiGeometry", geometry)
         else:
             print("GUI is not loaded or visible. Skipping window geometry save.")
 
@@ -378,7 +380,7 @@ class GuiHudBrowser(metaclass=Singleton):
         """Runs on close"""
         self.descriptions_gui.on_close()
         self.save_window_geometry()
-        save_and_exit_script(self.persistent_data)
+        save_and_exit_script()
 
     def treeview_open_file(self):
         "Treeview Handle 'Open File' option"
@@ -438,7 +440,7 @@ class GuiHudBrowser(metaclass=Singleton):
         print("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
         try:
-            app = VDFModifierGUI(self.persistent_data, self.treeview_get_selected_full_path())
+            app = VDFModifierGUI(self.treeview_get_selected_full_path())
             app.run()
         except Exception:
             print("Browser: Can't load VDF GUI!")

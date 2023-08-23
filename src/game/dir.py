@@ -3,8 +3,6 @@
 import os
 import shutil
 
-from genericpath import isfile
-
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
 from utils.functions import (
@@ -21,7 +19,6 @@ class GameDir:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.persistent_data = self.game.persistent_data
         # pylint: disable=invalid-name
         self.id = GameIDHandler(self.game)
 
@@ -148,6 +145,7 @@ class GameDir:
             return None
 
     def get_main_dir_name(self):
+        "Retrieve main directory name. eg: 'left4dead2'"
         main_dir_name = self.game.get_title().replace(" ", "")
         # python is case sensitive; convert to Left4Dead2 -> left4dead2
         main_dir_name = main_dir_name.lower()

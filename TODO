@@ -1,24 +1,17 @@
 
 
 Current:
+	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)
+	☐ Refactor: Loading&Saving JSON data. Create class & use throughout the program
+
+	☐ Refactor: Rename data manager to persistent data?
 
 Features:
+	☐ Start GUI: Context menu icons
+	☐ Start GUI: Specific button icons rather than all identical
 
 Bugs:
-	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
-	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
-	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state
-	✔ Bug: game.dir.Set() cancelled because vanilla game dir didn't exist. but that doesnt mattter @done(23-08-23 16:57)
-	✔ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever) @done(23-08-23 16:58)
-	
-	✔ Bug: Installer would ignore exceptions and always report the installation as successfull
-	✔ Bug: Installer rebuild_audio couldn't run game (because of fixed bug) but it didn't detect that shit at all! @done(23-08-23 17:27)
 
-	☐ Bug: Why does VSCode not highlight class in some places but does in others // looks like this is because of me passing game_class to installer manually
-	- for example hud/descriptions/self.game.dir.is_custom_file() works fine
-	- but in some locations it wouldnt get highlighted such as: installer: self.game.dir.get_main_dir_backup
-		- ^ okay, so, gpt says it's deue to the nature of VSCode's static analysises tool and using type hints could fix it. but i need to import the game class
-		- into the installer which isn't possible. gpt suggested various solutions which seemed maybe possible but seems like something i would leave for later
 
 
 GUI:
@@ -29,8 +22,6 @@ Unit Testing:
 
 Refactoring:
 	
-	☐ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead
-	☐ Refactor: Loading&Saving JSON data. Create class & use throughout the program
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 	☐ Refactor: Installer has some unused methods. should i use or remove them? eg: __extract_outdated_paks
 
@@ -38,6 +29,7 @@ Refactoring:
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	
+	☐ Refactor: VPK class
 	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
@@ -100,6 +92,21 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
+	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
+	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state
+	✔ Bug: game.dir.Set() cancelled because vanilla game dir didn't exist. but that doesnt mattter @done(23-08-23 16:57)
+	✔ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever) @done(23-08-23 16:58)
+	
+	✔ Bug: Installer would ignore exceptions and always report the installation as successfull
+	✔ Bug: Installer rebuild_audio couldn't run game (because of fixed bug) but it didn't detect that shit at all! @done(23-08-23 17:27)
+
+	✔ Bug: Why does VSCode not highlight class in some places but does in others // looks like this is because of me passing game_class to installer manually @done(23-08-23 20:50)
+	- for example hud/descriptions/self.game.dir.is_custom_file() works fine
+	- but in some locations it wouldnt get highlighted such as: installer: self.game.dir.get_main_dir_backup
+		☐ ^ okay, so, gpt says it's deue to the nature of VSCode's static analysises tool and using type hints could fix it. but i need to import the game class
+		☐ into the installer which isn't possible. gpt suggested various solutions which seemed maybe possible but seems like something i would leave for later
+		✔ ^ use pycharm. it does support it @done(23-08-23 20:50)
 	✔ Descriptions: Add print statements @done(23-08-23 13:17)
 	✔ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all @done(23-08-23 13:24)
 	✔ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening @done(23-08-23 13:38)

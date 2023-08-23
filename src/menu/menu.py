@@ -20,7 +20,8 @@ from utils.constants import (
     SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
-from utils.functions import retrieve_hud_name_for_dir, save_data
+from utils.functions import retrieve_hud_name_for_dir
+from utils.persistent_data import PersistentDataManager
 
 
 class EditorMenuClass:
@@ -28,16 +29,16 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(self, child_instance, root, persistent_data, only_dev_menu=None):
-        self.handler = EditorMenuHandler(self, persistent_data)
+    def __init__(self, child_instance, root):
+        self.data_manager = PersistentDataManager()
+        self.handler = EditorMenuHandler(self)
         self.root = root
         self.child_instance = child_instance
-        self.persistent_data = persistent_data
-        self.game = Game(persistent_data)
+        self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from hud.hud import Hud
 
-        self.hud = Hud(persistent_data)
+        self.hud = Hud()
 
         self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
 
@@ -255,7 +256,8 @@ class EditorMenuClass:
                 offvalue=False,
                 command=lambda pos=pos: self.handler.editor_menu_game_pos(pos),
             )
-        self.game_pos_vars[self.persistent_data["game_pos"]].set(True)
+        game_pos = self.data_manager.get("game_pos")
+        self.game_pos_vars[game_pos].set(True)
 
     def create_game_mode_menu(self, menubar):
         """Create game mode menu"""
@@ -272,7 +274,8 @@ class EditorMenuClass:
                 offvalue=False,
                 command=lambda mode=game_mode: self.handler.editor_menu_game_mode(mode),
             )
-        self.game_mode_vars[self.persistent_data["game_mode"]].set(True)
+        game_mode = self.data_manager.get("game_mode")
+        self.game_mode_vars[game_mode].set(True)
 
     def create_game_menu(self, menubar):
         """Create game menu"""
@@ -320,7 +323,7 @@ class EditorMenuClass:
 
         # stored huds - root
         self.load_hud_menu.add_separator()
-        for hud_dir in self.persistent_data["stored_huds"]:
+        for hud_dir in self.data_manager.get("stored_huds"):
             hud_name = retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
@@ -333,7 +336,7 @@ class EditorMenuClass:
         stored_huds_submenu.add_command(label="Add", command=self.handler.editor_add_existing_hud)
         # stored huds - submenu - remove stored hud
         stored_huds_submenu.add_cascade(label="Remove", menu=remove_stored_hud_menu)
-        if not self.persistent_data["stored_huds"]:
+        if not self.data_manager.get("stored_huds"):
             stored_huds_submenu.entryconfigure("Remove", state="disabled")
         self.load_hud_menu.add_separator()
 
@@ -344,7 +347,7 @@ class EditorMenuClass:
 
         # stored huds - root
         self.load_hud_menu.add_separator()
-        for hud_dir in self.persistent_data["stored_temp_huds"]:
+        for hud_dir in self.data_manager.get("stored_temp_huds"):
             hud_name = retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
@@ -357,7 +360,7 @@ class EditorMenuClass:
         temp_huds_submenu.add_command(label="Open", command=self.handler.editor_open_temp_hud)
         # stored huds - submenu - remove temp hud
         temp_huds_submenu.add_cascade(label="Remove", menu=remove_temp_hud_menu)
-        if not self.persistent_data["stored_temp_huds"]:
+        if not self.data_manager.get("stored_temp_huds"):
             temp_huds_submenu.entryconfigure("Remove", state="disabled")
 
         self.load_hud_menu.add_separator()
@@ -635,12 +638,12 @@ class EditorMenuClass:
             variable=self.reload_mode_menu_coord_clicks_checkmark,
             command=self.handler.editor_menu_reload_click,
         )
-        self.reload_mode_menu_coord_clicks_checkmark.set(self.persistent_data["reload_mouse_clicks_enabled"])
+        self.reload_mode_menu_coord_clicks_checkmark.set(self.data_manager.get("reload_mouse_clicks_enabled"))
         self.reload_mode_menu.add_command(label="Coord 1", command=self.handler.editor_menu_reload_click_coord1)
         self.reload_mode_menu.add_command(label="Coord 2", command=self.handler.editor_menu_reload_click_coord2)
 
         self.reload_mode_menu_reopen_menu_checkmark = tk.BooleanVar()
-        self.reload_mode_menu_reopen_menu_checkmark.set(self.persistent_data["reload_reopen_menu_on_reload"])
+        self.reload_mode_menu_reopen_menu_checkmark.set(self.data_manager.get("reload_reopen_menu_on_reload"))
         self.reload_mode_menu.add_checkbutton(
             label="Reopen menu on reload",
             variable=self.reload_mode_menu_reopen_menu_checkmark,
@@ -699,7 +702,7 @@ class EditorMenuClass:
         """
         Creates the menu bar for the application geared towards only developer options
         """
-        save_data(self.persistent_data)
+        self.data_manager.save()
 
         self.menu_bar = Menu(self.root, tearoff=False)
 
@@ -713,7 +716,7 @@ class EditorMenuClass:
         """
         Creates the menu bar for the application
         """
-        save_data(self.persistent_data)
+        self.data_manager.save()
 
         self.menu_bar = Menu(self.root, tearoff=False)
 
@@ -813,7 +816,7 @@ class EditorMenuClass:
             variable=self.editor_menu_game_mute_checkmark,
             command=self.handler.editor_menu_game_toggle_mute,
         )
-        if self.persistent_data["game_mute"]:
+        if self.data_manager.get("game_mute"):
             self.editor_menu_game_mute_checkmark.set(1)
         else:
             self.editor_menu_game_mute_checkmark.set(0)

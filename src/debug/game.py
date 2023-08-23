@@ -3,11 +3,11 @@ from game.constants import DirectoryMode
 from game.game import Game
 
 
-def debug_game_class(persistent_data):
+def debug_game_class():
     "debug game class"
     print("debug game class")
 
-    gamez = Game(persistent_data)
+    gamez = Game()
 
     ###########################
     # Game

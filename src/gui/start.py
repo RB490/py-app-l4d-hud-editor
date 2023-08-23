@@ -21,15 +21,14 @@ from utils.vpk import VPKClass
 class GuiHudStart(metaclass=Singleton):
     """Class for the hud select gui"""
 
-    def __init__(self, persistent_data):
+    def __init__(self):
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        self.persistent_data = persistent_data
-        self.game = Game(persistent_data)
+        self.game = Game()
 
         from hud.hud import Hud  # avoid recursive import
 
         self.is_hidden = None
-        self.hud = Hud(persistent_data)
+        self.hud = Hud()
         self.root = tk.Tk()
         self.hide()
         self.root.title("Select")
@@ -40,7 +39,7 @@ class GuiHudStart(metaclass=Singleton):
 
         # load saved geometry
         try:
-            geometry = self.persistent_data["HudSelectGuiGeometry"]
+            geometry = self.data_manager.get("HudSelectGuiGeometry")
             self.root.geometry(geometry)
         except KeyError:
             self.root.geometry("1000x1000+100+100")
@@ -114,7 +113,7 @@ class GuiHudStart(metaclass=Singleton):
 
         from menu.menu import EditorMenuClass
 
-        self.my_editor_menu = EditorMenuClass(self, self.root, persistent_data)
+        self.my_editor_menu = EditorMenuClass(self, self.root)
         self.my_editor_menu.create_and_refresh_menu_developer_installer()
 
         # Configure the root window with the menubar
@@ -174,7 +173,7 @@ class GuiHudStart(metaclass=Singleton):
         """Remove the selected hud."""
         print("Remove tree item")
 
-        self.persistent_data["stored_huds"].remove(self.selected_hud_dir.replace("\\", "/"))  # convert path to json
+        self.data_manager.get("stored_huds").remove(self.selected_hud_dir.replace("\\", "/"))  # convert path to json
         self.selected_hud_dir = ""
         self.selected_hud_name = ""
 
@@ -185,7 +184,7 @@ class GuiHudStart(metaclass=Singleton):
         if self.root and self.root.winfo_viewable():
             # Get the current position and size of the window
             geometry = self.root.geometry()
-            self.persistent_data["HudSelectGuiGeometry"] = geometry
+            self.data_manager.set("HudSelectGuiGeometry", geometry)
         else:
             print("GUI is not loaded or visible. Skipping window geometry save.")
 
@@ -196,7 +195,7 @@ class GuiHudStart(metaclass=Singleton):
         self.treeview.delete(*self.treeview.get_children())
 
         # Insert the new items from the list into the Treeview
-        for stored_hud_dir in self.persistent_data["stored_huds"]:
+        for stored_hud_dir in self.data_manager.get("stored_huds"):
             # retrieve hud name (from addoninfo.txt if available)
             hud_name = retrieve_hud_name_for_dir(stored_hud_dir)
 
@@ -253,12 +252,12 @@ class GuiHudStart(metaclass=Singleton):
 
     def prompt_add_hud_btn(self):
         """Prompt user for hud folder to add"""
-        if prompt_add_existing_hud(self.persistent_data):
+        if prompt_add_existing_hud():
             self.update_treeview()
 
     def prompt_new_hud_btn(self):
         """Prompt user for hud folder to create a new hud in"""
-        if prompt_create_new_hud(self.persistent_data):
+        if prompt_create_new_hud():
             self.update_treeview()
 
     def edit_selected_hud(self):
@@ -296,7 +295,7 @@ class GuiHudStart(metaclass=Singleton):
         self.hide()
 
 
-def show_start_gui(persistent_data):
+def show_start_gui():
     "Show start gui"
-    start_instance = GuiHudStart(persistent_data)
+    start_instance = GuiHudStart()
     start_instance.run()

@@ -12,10 +12,10 @@ from utils.shared_utils import replace_text_between_quotes, show_message
 class VDFModifier:
     """Class for modifying VDF files."""
 
-    def __init__(self, persistent_data, vdf_path=None):
+    def __init__(self, vdf_path=None):
         from hud.hud import Hud  # type: ignore
 
-        self.hud = Hud(persistent_data)
+        self.hud = Hud()
         self.description_key_name = "__description__"
         self.vdf_text_raw = None
         self.key_order = [
@@ -352,7 +352,7 @@ class VDFModifier:
         return "\n".join(result_lines)
 
 
-def debug_vdf_class(persistent_data):
+def debug_vdf_class():
     """Debug the VDFModifier class."""
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
@@ -365,7 +365,7 @@ def debug_vdf_class(persistent_data):
     amount = 15000
     key_to_modify = "xpos"
 
-    modifier_instance = VDFModifier(persistent_data, vdf_path)
+    modifier_instance = VDFModifier(vdf_path)
     modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
     modifier_instance.save_vdf(modified_vdf_obj, "output.vdf", align_value_indentation=True)
     # modifier_instance.print_current_vdf()

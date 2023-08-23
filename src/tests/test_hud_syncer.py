@@ -63,8 +63,7 @@ class TestHudSyncer(unittest.TestCase):
     @patch("game.game.Game")  # Patch the instantiation of Game class: mock_game_class
     @patch("builtins.print")  # Mock the print function: mock_print
     def setUp(self, mock_game_class, mock_print):
-        persistent_data = load_data()
-        self.syncer = HudSyncer(persistent_data)
+        self.syncer = HudSyncer()
 
         # Create a temporary directory to use as source and target
         self.test_dir = tempfile.mkdtemp()

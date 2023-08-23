@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.functions import save_data
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import show_message
 from utils.vdf import VDFModifier
 
@@ -13,15 +13,15 @@ from utils.vdf import VDFModifier
 class VDFModifierGUI:
     """GUI Class for modifying VDF files."""
 
-    def __init__(self, persistent_data, vdf_path):
+    def __init__(self, vdf_path):
         self.vdf_path = vdf_path
-        self.persistent_data = persistent_data
+        self.data_manager = PersistentDataManager()
         self.modifier = None  # vdf modifier class
         self.is_hidden = False
-        self.root = None # load_file() uses this to check if the gui was loaded
+        self.root = None  # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
         self.root = tk.Toplevel()
-        self.hide() # prevent lil TopLevel gui from popping up
+        self.hide()  # prevent lil TopLevel gui from popping up
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -29,7 +29,7 @@ class VDFModifierGUI:
 
         # load saved geometry
         try:
-            geometry = self.persistent_data["VDFGuiGeometry"]
+            geometry = self.data_manager.get("VDFGuiGeometry")
             self.root.geometry(geometry)
         except KeyError:
             self.root.geometry("875x425+100+100")
@@ -38,21 +38,21 @@ class VDFModifierGUI:
         self.selected_control = tk.StringVar(value=self.control_options[0])
         self.previous_output = None
 
-        self.annotate_var = tk.IntVar(value=self.persistent_data.get("VDFGui_annotate", True))
-        self.sort_control_keys_var = tk.IntVar(value=self.persistent_data.get("VDFGui_sort_keys", True))
-        self.align_values_indent_var = tk.IntVar(value=self.persistent_data.get("VDFGui_indent_values", True))
-        self.modify_int_var = tk.IntVar(value=self.persistent_data.get("VDFGui_modify_int", True))
+        self.annotate_var = tk.IntVar(value=self.data_manager.get("VDFGui_annotate"))
+        self.sort_control_keys_var = tk.IntVar(value=self.data_manager.get("VDFGui_sort_keys"))
+        self.align_values_indent_var = tk.IntVar(value=self.data_manager.get("VDFGui_indent_values"))
+        self.modify_int_var = tk.IntVar(value=self.data_manager.get("VDFGui_modify_int"))
         self.modify_amount_var = tk.IntVar()
         self.modify_modifier_var = tk.StringVar(value="plus")
 
         self.create_widgets()
-        self.load_file() # load file into gui
+        self.load_file()  # load file into gui
 
     def load_file(self):
         "Load VDF file"
         self.previous_output = None
         try:
-            self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
+            self.modifier = VDFModifier(self.vdf_path)
         except Exception as err_info:
             show_message(f"Unable to load VDF file! {err_info}", "error")
             self.destroy_gui()
@@ -229,28 +229,29 @@ class VDFModifierGUI:
         self.save_settings_to_disk()
 
         self.modifier.save_vdf(
-            self.modifier.get_obj(), self.modifier.get_path(), self.persistent_data.get("VDFGui_indent_values", True)
+            self.modifier.get_obj(), self.modifier.get_path(), self.data_manager.get("VDFGui_indent_values")
         )
 
     def save_settings_to_disk(self):
         "Save all settings"
         self.save_window_settings()
         self.save_window_geometry()
-        save_data(self.persistent_data)
+        self.data_manager.save()
 
     def save_window_settings(self):
         "Save gui settings"
-        self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()
-        self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
-        self.persistent_data["VDFGui_annotate"] = self.annotate_var.get()
-        self.persistent_data["VDFGui_sort_keys"] = self.sort_control_keys_var.get()
+        self.data_manager.set("VDFGui_indent_values", self.align_values_indent_var.get())
+        self.data_manager.set("VDFGui_modify_int", self.modify_int_var.get())
+        self.data_manager.set("VDFGui_annotate", self.annotate_var.get())
+        self.data_manager.set("VDFGui_sort_keys", self.sort_control_keys_var.get())
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         if self.root and self.root.winfo_viewable():
             # Get the current position and size of the window
             geometry = self.root.geometry()
-            self.persistent_data["VDFGuiGeometry"] = geometry
+            self.data_manager.set("VDFGuiGeometry", geometry)
+
         else:
             print("GUI is not loaded or visible. Skipping window geometry save.")
 

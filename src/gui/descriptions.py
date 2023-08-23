@@ -12,7 +12,7 @@ from utils.shared_utils import Singleton, show_message
 class GuiHudDescriptions(metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, persistent_data, parent_gui):
+    def __init__(self, parent_gui):
         if not parent_gui.root:
             raise ValueError("parent_gui is not a tkinter gui class!")
 
@@ -25,8 +25,8 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         from hud.hud import Hud
 
-        self.game = Game(persistent_data)
-        self.hud = Hud(persistent_data)
+        self.game = Game()
+        self.hud = Hud()
         self.parent = parent_gui
         self.relative_path = None
         self.unsaved_changes = False
@@ -118,6 +118,7 @@ class GuiHudDescriptions(metaclass=Singleton):
         remove_file_entry_button.config(image=self.delete_image, compound="left", padx=pad_x)
         remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
+    # pylint: disable=unused-argument
     def on_file_desc_modified(self, event):
         "Register unsaved changes if content has actually changed"
         new_content = self.file_desc_text.get("1.0", "end-1c")
@@ -134,6 +135,7 @@ class GuiHudDescriptions(metaclass=Singleton):
             self.prev_ctrl_desc_content = new_content
 
     def set_unsaved_changes(self, unsaved_changes_bool):
+        "Set unsaved changes variables"
         if unsaved_changes_bool:
             self.unsaved_changes = True
             self.file_desc_text.edit_modified(True)

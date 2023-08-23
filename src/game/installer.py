@@ -24,7 +24,6 @@ class GameInstaller:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.persistent_data = self.game.persistent_data
 
     def uninstall(self):
         "Uninstall"

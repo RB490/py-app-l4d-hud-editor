@@ -4,6 +4,7 @@ import tkinter as tk
 import winreg
 from tkinter import filedialog
 
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
 
 
@@ -18,15 +19,16 @@ class SteamInfoRetriever(metaclass=Singleton):
     ]
     STEAM_EXECUTABLE = "steam.exe"
 
-    def __init__(self, persistent_data):
+    def __init__(self):
         """
         Initialize the SteamInfoRetriever.
 
         Args:
             persistent_data (dict): A dictionary to store persistent data.
         """
+        self.data_manager = PersistentDataManager()
+
         self.steam_info = {}
-        self.persistent_data = persistent_data
         self.print_debug_messages = False
 
     def __print_if_debug(self, message):
@@ -167,26 +169,19 @@ class SteamInfoRetriever(metaclass=Singleton):
         """
         self.__print_if_debug("Getting Steam root directory...")
 
-        # Check if the root directory is already saved in persistent_data
-        if "steam_root_dir" in self.persistent_data:
-            saved_root_dir = self.persistent_data["steam_root_dir"]
-            saved_root_dir = os.path.normpath(saved_root_dir)
-            if self._check_path(saved_root_dir, self.STEAM_EXECUTABLE):
-                self.__print_if_debug(f"Using saved Steam root directory: {saved_root_dir}")
-                return saved_root_dir
-            else:
-                self.__print_if_debug("Saved Steam root directory is not valid.")
+        root_dir = self.data_manager.get("steam_root_dir")
+        if root_dir and self._check_path(root_dir, self.STEAM_EXECUTABLE):
+            self.__print_if_debug(f"Using saved Steam root directory: {root_dir}")
+            return root_dir
 
-        # If not saved or saved directory is invalid, proceed to find it
         root_dir = self.get_info("root_dir", self.find_steam_directory)
-        root_dir = os.path.normpath(root_dir)  # Normalize the root_dir path
-        self.__print_if_debug(f"Steam root directory: {root_dir}")
-
-        # Save the root directory if found
         if root_dir:
+            root_dir = os.path.normpath(root_dir)
+            self.__print_if_debug(f"Steam root directory: {root_dir}")
             self.__save_root_directory(root_dir)
+            return root_dir
 
-        return root_dir
+        return None
 
     def get_games_dir(self):
         """
@@ -225,5 +220,5 @@ class SteamInfoRetriever(metaclass=Singleton):
             The saved Steam root directory.
         """
         self.__print_if_debug("Saving Steam root directory to persistent_data...")
-        self.persistent_data["steam_root_dir"] = root_dir
+        self.data_manager.set("steam_root_dir", root_dir)
         self.__print_if_debug(f"Steam root directory saved: {root_dir}")

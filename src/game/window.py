@@ -12,6 +12,7 @@ from utils.functions import (
     is_valid_window,
     wait_for_process_with_ram_threshold,
 )
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import move_hwnd_to_position
 
 
@@ -20,7 +21,7 @@ class GameWindow:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.persistent_data = self.game.persistent_data
+        self.data_manager = PersistentDataManager()
 
         self.hwnd = None
         self.exe = "left4dead2.exe"
@@ -43,7 +44,7 @@ class GameWindow:
 
     def restore_saved_position(self):
         "Restore saved position"
-        self.set_position(self.persistent_data["game_pos"])
+        self.set_position(self.data_manager.get("game_pos"))
 
     def save_position(self):
         "Save custom position"
@@ -57,8 +58,8 @@ class GameWindow:
             custom_position_tuple = (x_coordinate, y_coordinate)
 
             # Store the custom coordinate tuple in the persistent data dictionary
-            self.persistent_data["game_pos"] = "Custom (Save)"
-            self.persistent_data["game_pos_custom_coord"] = custom_position_tuple
+            self.data_manager.set("game_pos", "Custom (Save)")
+            self.data_manager.set("game_pos_custom_coord", custom_position_tuple)
 
             print("Stored Custom Position Tuple:", custom_position_tuple)
             return custom_position_tuple
@@ -72,14 +73,14 @@ class GameWindow:
             raise Exception("Invalid position")
 
         # save position
-        self.persistent_data["game_pos"] = position
+        self.data_manager.set("game_pos", position)
 
         if "custom" in position.lower():
             # Use custom location
             print("Restoring position:", position)
 
             # restore
-            custom_position_tuple = self.persistent_data.get("game_pos_custom_coord")
+            custom_position_tuple = self.data_manager.get("game_pos_custom_coord")
             if (  # verify tuple legitimacy
                 isinstance(custom_position_tuple, tuple)
                 and len(custom_position_tuple) == 2

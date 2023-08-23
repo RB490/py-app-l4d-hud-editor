@@ -10,7 +10,6 @@ import sys
 import tempfile
 import time
 import tkinter as tk
-import winreg
 from tkinter import filedialog
 
 import psutil
@@ -19,6 +18,8 @@ import vdf  # type: ignore
 import win32con  # type: ignore
 import win32gui
 import win32process
+
+from utils.persistent_data import PersistentDataManager
 
 from .constants import (
     BACKUP_APPEND_STRING,
@@ -175,52 +176,57 @@ def prompt_for_folder(title):
     return filedialog.askdirectory(title=title)
 
 
-def prompt_add_existing_hud(persistent_data):
+def prompt_add_existing_hud():
     """Prompt user for hud folder to add"""
+    data_manager = PersistentDataManager()
+
     folder_path = prompt_for_folder("Add HUD: Select folder")
     if folder_path:
-        persistent_data["stored_huds"].append(folder_path)
-        print(f'stored_huds: {persistent_data["stored_huds"]}')
+        data_manager.append("stored_huds", folder_path)
         return True
     else:
         return False
 
 
-def prompt_open_temp_hud(persistent_data):
+def prompt_open_temp_hud():
     """Prompt user for temp hud folder to add"""
+    data_manager = PersistentDataManager()
+
     folder_path = prompt_for_folder("Add HUD: Select folder")
     if folder_path:
-        persistent_data["stored_temp_huds"].append(folder_path)
-        print(f'stored_temp_huds: {persistent_data["stored_temp_huds"]}')
+        data_manager.append("stored_temp_huds", folder_path)
         return True
     else:
         return False
 
 
-def prompt_create_new_hud(persistent_data):
+def prompt_create_new_hud():
     """Prompt user for hud folder to create a new hud in"""
+    data_manager = PersistentDataManager()
+
     folder_path = prompt_for_folder("New HUD: Select folder")
     if folder_path:
-        persistent_data["stored_huds"].append(folder_path)
+        data_manager.append("stored_huds", folder_path)
         copy_directory(NEW_HUD_DIR, folder_path)
-        print(f'stored_huds: {persistent_data["stored_huds"]}')
         return True
     else:
         return False
 
 
-def remove_stored_hud(persistent_data, hud_dir):
+def remove_stored_hud(hud_dir):
     """Remove stored hud"""
-    if hud_dir in persistent_data["stored_huds"]:
-        persistent_data["stored_huds"].remove(hud_dir)
-        print(f"Removed '{hud_dir}'")
+    data_manager = PersistentDataManager()
+
+    if hud_dir in data_manager.get("stored_huds"):
+        data_manager.remove_item_from_list("stored_huds", hud_dir)
 
 
-def remove_temp_hud(persistent_data, hud_dir):
+def remove_temp_hud(hud_dir):
     """Remove temp hud"""
-    if hud_dir in persistent_data["stored_temp_huds"]:
-        persistent_data["stored_temp_huds"].remove(hud_dir)
-        print(f"Removed '{hud_dir}'")
+    data_manager = PersistentDataManager()
+
+    if hud_dir in data_manager.get("stored_temp_huds"):
+        data_manager.remove_item_from_list("stored_temp_huds", hud_dir)
 
 
 def retrieve_hud_name_for_dir(hud_dir):
@@ -481,48 +487,6 @@ def get_dir_size_in_gb(path):
     return output
 
 
-def get_steam_info(persistent_data=None):
-    """Retrieve steam information object"""
-    steam_info = {}
-    default_steam_path_1 = "C:\\Program Files (x86)\\Steam"
-    default_steam_path_2 = "E:\\Games\\Steam"
-
-    # Check if Steam directory exists at default location
-    if persistent_data.get("steam_root_dir") and os.path.isfile(
-        os.path.join(persistent_data["steam_root_dir"], "steam.exe")
-    ):
-        steam_info["root_dir"] = persistent_data["steam_root_dir"]
-    if os.path.isfile(os.path.join(default_steam_path_1, "steam.exe")):
-        steam_info["root_dir"] = default_steam_path_1
-    elif os.path.isfile(os.path.join(default_steam_path_2, "steam.exe")):
-        steam_info["root_dir"] = default_steam_path_2
-    else:
-        # Search the registry for Steam installation path
-        try:
-            key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\Valve\\Steam")
-            steam_path = winreg.QueryValueEx(key, "SteamPath")[0]
-            if os.path.isfile(os.path.join(steam_path, "steam.exe")):
-                steam_info["root_dir"] = steam_path
-            else:
-                raise NotADirectoryError("Steam directory not found")
-        except WindowsError as exc:
-            # Ask user to specify Steam directory location with file dialog
-            root = tk.Tk()
-            root.withdraw()
-            steam_path = filedialog.askdirectory(title="Select Steam directory")
-            if os.path.isfile(os.path.join(steam_path, "steam.exe")):
-                steam_info["root_dir"] = steam_path
-            else:
-                raise NotADirectoryError("Steam directory not found") from exc
-
-    steam_info["game_dir"] = os.path.join(steam_info["root_dir"], "steamapps", "common")
-    steam_info["steam_exe"] = os.path.join(steam_info["root_dir"], "steam.exe")
-
-    # save root directory
-    persistent_data["steam_root_dir"] = steam_info["root_dir"]
-    return steam_info
-
-
 def move_cursor_to(coordinates):
     # pylint: disable=invalid-name
     """
@@ -573,9 +537,8 @@ def get_mouse_position_on_click(callback):
 
 def load_data():
     """Read persistent data from disk"""
-    file_path = PERSISTENT_DATA_PATH
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(PERSISTENT_DATA_PATH, "r", encoding="utf-8") as file:
             data = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         # print(f"Error loading data from {file_path}")
@@ -626,24 +589,12 @@ def load_data():
     return data
 
 
-def save_data(data):
-    """Save persistent data to disk"""
-    # print(f"Saving data: {json.dumps(data, sort_keys=True, indent=4)}")
-    try:
-        with open(PERSISTENT_DATA_PATH, "w", encoding="utf-8") as file:
-            # json.dump(data, file) # fastest, but doesn't allow formatting - and i use tiny jsons
-            pretty_json = json.dumps(data, sort_keys=True, indent=4)
-            file.write(pretty_json)
-            print("Wrote data to disk!")
-    except (FileNotFoundError, TypeError):
-        print(f"Error saving data to {PERSISTENT_DATA_PATH}")
-
-
-def save_and_exit_script(persistent_data):
+def save_and_exit_script():
     """Exit the script"""
     # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
     from hud.hud import Hud
 
-    Hud(persistent_data).finish_editing(open_start_gui=False)
-    save_data(persistent_data)
+    hud_instance = Hud()
+    hud_instance.finish_editing(open_start_gui=False)
+    PersistentDataManager().save()
     sys.exit()
