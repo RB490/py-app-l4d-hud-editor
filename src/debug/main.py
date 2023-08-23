@@ -7,7 +7,11 @@ import os
 import vdf  # type: ignore
 
 from debug.game import debug_game_class
-from debug.gui import debug_descriptions_gui, debug_vdf_gui
+from debug.gui import (
+    debug_descriptions_gui,
+    debug_vdf_gui,
+    get_debug_gui_browser_instance,
+)
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from gui import descriptions
@@ -22,17 +26,12 @@ from utils.shared_utils import is_subdirectory
 from utils.vdf import debug_vdf_class
 
 
-
-
-
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
     persistent_data = load_data()
 
-
-    
     # debug_game_class(persistent_data)
     debug_gui(persistent_data)
     # debug_vdf_class(persistent_data)
@@ -52,11 +51,11 @@ def debug_gui(persistent_data):
     "debug gui"
 
     # browser
-    # browse = get_debug_gui_browser_instance(persistent_data)
-    # browse.run()
+    browse = get_debug_gui_browser_instance(persistent_data)
+    browse.run()
 
     # descriptions
-    debug_descriptions_gui(persistent_data)
+    # debug_descriptions_gui(persistent_data)
 
     # start
     # show_start_gui(persistent_data)

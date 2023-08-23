@@ -29,6 +29,9 @@ class GuiHudDescriptions(metaclass=Singleton):
         self.hud = Hud(persistent_data)
         self.parent = parent_gui
         self.relative_path = None
+        self.unsaved_changes = False
+        self.prev_file_desc_content = None
+        self.prev_ctrl_desc_content = None
 
         # self.root.minsize(450, 400)
 
@@ -53,6 +56,7 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         self.file_desc_text = tk.Text(file_desc_frame, height=6, width=ctrl_w, yscrollcommand=file_desc_scrollbar.set)
         self.file_desc_text.pack(side="top", fill="both", expand=True, padx=pad_x, pady=0)
+        self.file_desc_text.bind("<KeyPress>", self.on_file_desc_modified)
 
         file_desc_scrollbar.config(command=self.file_desc_text.yview)
 
@@ -89,6 +93,7 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         self.ctrl_desc_text = tk.Text(ctrl_desc_frame, height=4, width=ctrl_w, yscrollcommand=ctrl_desc_scrollbar.set)
         self.ctrl_desc_text.pack(side="bottom", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
+        self.ctrl_desc_text.bind("<KeyPress>", self.on_ctrl_desc_modified)
 
         ctrl_desc_scrollbar.config(command=self.ctrl_desc_text.yview)
 
@@ -113,6 +118,33 @@ class GuiHudDescriptions(metaclass=Singleton):
         remove_file_entry_button.config(image=self.delete_image, compound="left", padx=pad_x)
         remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
+    def on_file_desc_modified(self, event):
+        "Register unsaved changes if content has actually changed"
+        new_content = self.file_desc_text.get("1.0", "end-1c")
+        if new_content != self.prev_file_desc_content:
+            self.set_unsaved_changes(True)
+            self.prev_file_desc_content = new_content
+
+    # pylint: disable=unused-argument
+    def on_ctrl_desc_modified(self, event):
+        "Register unsaved changes if content has actually changed"
+        new_content = self.ctrl_desc_text.get("1.0", "end-1c")
+        if new_content != self.prev_ctrl_desc_content:
+            self.set_unsaved_changes(True)
+            self.prev_ctrl_desc_content = new_content
+
+    def set_unsaved_changes(self, unsaved_changes_bool):
+        if unsaved_changes_bool:
+            self.unsaved_changes = True
+            self.file_desc_text.edit_modified(True)
+            self.ctrl_desc_text.edit_modified(True)
+            print("Set unsaved changes to true!")
+        else:
+            self.unsaved_changes = False
+            self.file_desc_text.edit_modified(False)
+            self.ctrl_desc_text.edit_modified(False)
+            print("Set unsaved changes to false!")
+
     def run(self):
         "Show & start main loop"
 
@@ -132,11 +164,14 @@ class GuiHudDescriptions(metaclass=Singleton):
     def load_file(self, relative_path):
         """Load description for hud file into the gui"""
 
+        # prompt to save unsaved changes
+        self.prompt_to_save_unsaved_changes()
+
         # save relative path
         self.relative_path = relative_path
 
         # Check if the file has a custom status using the self.game.dir.is_custom_file function
-        is_custom = self.game.dir.is_custom_file(relative_path)
+        is_custom = self.hud.desc.get_is_file_custom(relative_path)
 
         # Set gui title with custom status if applicable
         if is_custom:
@@ -151,6 +186,9 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         # load controls
         self.load_controls()
+
+        # Modifying the controls through code will trigger the unsaved changes
+        self.set_unsaved_changes(False)
 
         # run mainloop
         self.run()
@@ -194,13 +232,11 @@ class GuiHudDescriptions(metaclass=Singleton):
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
         self.hud.desc.set_control_description(self.relative_path, selected_control, control_desc)
-        print(control_desc)
 
     def save_file_description(self):
         """Save file description"""
         file_description = self.file_desc_text.get("1.0", "end-1c")
         self.hud.desc.set_file_description(self.relative_path, file_description)
-        print(file_description)
 
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
@@ -241,22 +277,47 @@ class GuiHudDescriptions(metaclass=Singleton):
             self.hud.desc.remove_control(self.relative_path, selected_control)
             self.load_controls()
 
-    def submit_gui_save_changes(self):
-        """Submit gui"""
-
+    def save_changes(self):
+        "Save changes"
         # save file description
         self.save_file_description()
 
         # save currently loaded control
         self.save_control_description()
 
+        # Reset unsaved_changes flag
+        self.set_unsaved_changes(False)
+
+        print(f"Saved descriptions for '{self.relative_path}'")
+
+    def submit_gui_save_changes(self):
+        """Submit gui"""
+
+        # save changes
+        self.save_changes()
+
         # call parent
         self.parent.treeview_refresh(self.parent.treeview)
 
         self.on_close()
 
+    def prompt_to_save_unsaved_changes(self):
+        "Ask user whether to save unsaved changes"
+        if self.unsaved_changes:
+            response = show_message(
+                f"Do you want to save the unsaved changes made to '{self.relative_path}'?", "yesno", "Unsaved Changes"
+            )
+
+            if response:
+                self.save_changes()
+            else:
+                self.set_unsaved_changes(False)
+
     def on_close(self):
         """On gui close"""
+
+        # prompt to save unsaved changes
+        self.prompt_to_save_unsaved_changes()
 
         # undo unsaved changes by reloading from disk
         self.hud.desc.read_from_disk()

@@ -12,7 +12,7 @@
         "file_control_descriptions": {
             "None": ""
         },
-        "file_description": "VDF with information about the addon that gets shown in the 'addons' menu",
+        "file_description": "VDF with information about the addon that gets shown in the 'addons' menu.",
         "file_is_custom": true,
         "file_name": "addoninfo.txt",
         "file_relative_path": "addoninfo.txt"
@@ -1028,6 +1028,13 @@
         "file_is_custom": false,
         "file_name": "zombiepanel.res",
         "file_relative_path": "resource\\ui\\zombiepanel.res"
+    },
+    "scripts\\customHudSubFolder\\customHudFile.txt": {
+        "file_control_descriptions": {},
+        "file_description": "",
+        "file_is_custom": true,
+        "file_name": "customHudFile.txt",
+        "file_relative_path": "scripts\\customHudSubFolder\\customHudFile.txt"
     },
     "scripts\\hudanimations.txt": {
         "file_control_descriptions": {},
