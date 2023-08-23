@@ -2,9 +2,9 @@
 # pylint: disable=import-outside-toplevel
 import os
 import tkinter as tk
-import tkinter.messagebox as messagebox
 from tkinter import simpledialog
 
+from game.game import Game
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.shared_utils import Singleton, show_message
 
@@ -25,6 +25,7 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         from hud.hud import Hud
 
+        self.game = Game(persistent_data)
         self.hud = Hud(persistent_data)
         self.parent = parent_gui
         self.relative_path = None
@@ -134,8 +135,15 @@ class GuiHudDescriptions(metaclass=Singleton):
         # save relative path
         self.relative_path = relative_path
 
-        # set gui title
-        self.root.title(relative_path)
+        # Check if the file has a custom status using the self.game.dir.is_custom_file function
+        is_custom = self.game.dir.is_custom_file(relative_path)
+
+        # Set gui title with custom status if applicable
+        if is_custom:
+            custom_status = "Custom File"
+        else:
+            custom_status = "Vanilla File"
+        self.root.title(f"{relative_path} ({custom_status})")
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text

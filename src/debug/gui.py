@@ -22,9 +22,9 @@ def debug_descriptions_gui(persistent_data):
     descriptions_gui = descriptions.GuiHudDescriptions(
         persistent_data, get_debug_gui_browser_instance(persistent_data)
     )
-    # descriptions_gui.load_file("scripts\\hudlayout.res")
+    descriptions_gui.load_file("scripts\\hudlayout.res")
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
-    descriptions_gui.load_file("scripts\\custom_hudlayout.res")
+    # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
     descriptions_gui.run()
 
 
