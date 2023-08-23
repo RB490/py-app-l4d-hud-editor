@@ -190,7 +190,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.set_unsaved_changes(False)
 
         # run mainloop
-        self.run()
+        self.show()
 
     def clear_gui(self):
         """Clear input from all controls"""

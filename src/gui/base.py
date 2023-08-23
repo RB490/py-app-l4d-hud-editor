@@ -15,11 +15,7 @@ class BaseGUI:
         self.hide()
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 200)
-
-    def run(self):
-        self.show()
-        self.root.mainloop()
-
+    
     def hide(self):
         self.root.withdraw()
         self.is_hidden = True
@@ -31,6 +27,7 @@ class BaseGUI:
     def show(self):
         self.root.deiconify()
         self.is_hidden = False
+        self.root.mainloop()
 
     def destroy(self):
         self.root.destroy()
@@ -75,15 +72,17 @@ class BaseGUI:
         else:
             self.hide()
 
-    def set_hotkey(self, key_combination, callback):
+    def set_hotkey(self, key_combination, callback, widget=None):
         """
         Set a hotkey that triggers a callback function when the specified key combination is pressed.
 
         Args:
             key_combination (str): A string representing the key combination (e.g., "Ctrl+C").
             callback (function): The callback function to be triggered when the hotkey is pressed.
+            widget: The widget to which the hotkey should be bound. If None, binds to self.root.
         """
-        self.root.bind(key_combination, callback)
+        target_widget = widget or self.root
+        target_widget.bind(key_combination, callback)
 
     def remove_hotkey(self, key_combination):
         """

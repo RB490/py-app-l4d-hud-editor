@@ -252,4 +252,4 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 def show_start_gui():
     "Show start gui"
     start_instance = GuiHudStart()
-    start_instance.run()
+    start_instance.show()

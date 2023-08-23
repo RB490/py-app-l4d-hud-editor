@@ -27,6 +27,7 @@ class HudEditor:
         self.game = Game()
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
+        self.browser = GuiHudBrowser()
         self.hud_dir = None
         self.threaded_timer_game_exit = None
         self.browser = None
@@ -90,11 +91,7 @@ class HudEditor:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        if not isinstance(self.browser, GuiHudBrowser):
-            self.browser = GuiHudBrowser()
-            self.browser.run()
-        else:
-            self.browser.show()
+        self.browser.show()
 
         return True
 

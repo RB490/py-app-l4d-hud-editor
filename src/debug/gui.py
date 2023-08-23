@@ -8,6 +8,7 @@ from gui.browser import GuiHudBrowser
 from gui.vdf import VDFModifierGUI
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
+from utils.get_user_input import get_user_input
 
 
 def get_debug_gui_browser_instance():
@@ -17,13 +18,20 @@ def get_debug_gui_browser_instance():
 
     return GuiHudBrowser()
 
+def debug_get_user_input():
+    def handle_user_input(result):
+        """Handle user input"""
+        print("User entered:", result)
+        # Your code here
+
+    get_user_input("Enter Name", "What is your name?", handle_user_input)
 
 def debug_descriptions_gui():
     descriptions_gui = descriptions.GuiHudDescriptions(get_debug_gui_browser_instance())
     descriptions_gui.load_file("scripts\\hudlayout.res")
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
-    descriptions_gui.run()
+    descriptions_gui.show()
 
 
 def debug_vdf_gui():
@@ -40,4 +48,4 @@ def debug_vdf_gui():
     shutil.copy2(vdf_path, vdf_path_backup)
 
     app = VDFModifierGUI(vdf_path_backup)
-    app.run()
+    app.show()

@@ -4,9 +4,13 @@ Current:
 
 
 Features:
+	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
+	
+	☐ Refactor: VPK class
+	☐ Handle VPK class failing to extract specific files during installation
+	
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 
-	
 	☐ Start GUI: Context menu icons
 	☐ Start GUI: Specific button icons rather than all identical
 
@@ -15,7 +19,17 @@ Features:
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
+
 	
+	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
+
+	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
+
+	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
+
+	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
+
+
 Bugs:
 
 
@@ -27,29 +41,22 @@ Unit Testing:
 	☐ Unit test: HudDescription
 
 Refactoring:
-	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 	
-	☐ Refactor: VPK class
-	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
 	
-	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	
-	☐ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it
-	☐ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions?
-	- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
-	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
-	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
-	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
-	☐ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt
-	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
-	☐ Handle VPK class failing to extract specific files during installation
-	☐ Make internal class methods protected by adding underscores. And internal with double __
-	☐ Add dir_mode enum checks to game class?
-	☐ Utilize exception handling for specific cases like AssertionError and ValueError
-	☐ Simplify manager class, improve 'get_dir' function and other enhancements
-	☐ Enums. For example for steam_info object (?) or make it into a class
+	✔ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run() @done(23-08-24 01:10)
+	✔ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it @done(23-08-24 00:56)
+	✘ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions? @cancelled(23-08-24 00:56)
+		✘ That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle? @cancelled(23-08-24 00:56)	
+	✔ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data @done(23-08-24 00:55)
+	✔ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt @done(23-08-24 00:55)
+	✔ Make internal class methods protected by adding underscores. And internal with double __ @done(23-08-24 00:54)
+	✔ Add dir_mode enum checks to game class? @done(23-08-24 00:54)
+	✔ Utilize exception handling for specific cases like AssertionError and ValueError @done(23-08-24 00:54)
+	✔ Simplify manager class, improve 'get_dir' function and other enhancements @done(23-08-24 00:54)
+	✔ Enums. For example for steam_info object (?) or make it into a class @done(23-08-24 00:53)
 	
 	
 

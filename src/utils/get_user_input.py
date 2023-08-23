@@ -2,8 +2,10 @@
 import tkinter as tk
 from tkinter import font
 
+from gui.base import BaseGUI
 
-class UserInputWindow:
+
+class UserInputWindow(BaseGUI):
     """
     A window for the user to input text.
 
@@ -22,9 +24,8 @@ class UserInputWindow:
             title: The title to display at the top of the window.
             prompt: The prompt to display to the user.
         """
-        self.root = tk.Toplevel()
-        self.root.withdraw() # prevent lil TopLevel gui from popping up
-        self.root.title(title)
+        BaseGUI.__init__(self, is_toplevel_gui=True)
+        self.root.title = title
         self.prompt = prompt
         # self.input_box = None
         self.callback = None
@@ -46,7 +47,7 @@ class UserInputWindow:
         self.input_box.pack(pady=5, padx=5)
 
         # Bind Enter key to submit input
-        self.input_box.bind("<Return>", self.submit_input)
+        self.set_hotkey("<Return>", self.submit_input)
 
         # Create button to submit input
         submit_button_font = font.Font(size=10)
@@ -65,15 +66,6 @@ class UserInputWindow:
         if self.callback:
             self.callback(command)
 
-    def destroy(self) -> None:
-        """Destroy the window and unblock code that comes after the `run()` call."""
-        self.root.destroy()
-        self.root.quit()
-
-    def run(self) -> None:
-        """Run the mainloop for the Tkinter window."""
-        self.root.mainloop()
-
 
 def get_user_input(title: str, prompt: str, callback=None) -> None:
     """
@@ -88,14 +80,4 @@ def get_user_input(title: str, prompt: str, callback=None) -> None:
     root.withdraw()  # Hide parent window
     command_window = UserInputWindow(title, prompt)
     command_window.callback = callback
-    command_window.run()
-
-
-if __name__ == "__main__":
-
-    def handle_user_input(result):
-        """Handle user input"""
-        print("User entered:", result)
-        # Your code here
-
-    get_user_input("Enter Name", "What is your name?", handle_user_input)
+    command_window.show()

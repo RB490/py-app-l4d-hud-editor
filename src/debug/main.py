@@ -9,6 +9,7 @@ import vdf  # type: ignore
 from debug.game import debug_game_class
 from debug.gui import (
     debug_descriptions_gui,
+    debug_get_user_input,
     debug_vdf_gui,
     get_debug_gui_browser_instance,
 )
@@ -57,18 +58,21 @@ def debug_gui():
 
     # browser
     # browse = get_debug_gui_browser_instance()
-    # browse.run()
+    # browse.show()
 
     # descriptions
     # debug_descriptions_gui()
 
     # start
-    show_start_gui()
+    # show_start_gui()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu()
-    # my_editor_menu_gui.run()
+    # my_editor_menu_gui.show()
     # my_editor_menu_gui.show()
 
     # vdf gui
     # debug_vdf_gui()
+
+    # user input (used to retrieve game command)
+    debug_get_user_input()

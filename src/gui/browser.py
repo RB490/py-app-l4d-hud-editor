@@ -392,7 +392,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         try:
             app = VDFModifierGUI(self.treeview_get_selected_full_path())
-            app.run()
+            app.show()
         except Exception:
             print("Browser: Can't load VDF GUI!")
 
