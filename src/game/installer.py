@@ -167,7 +167,6 @@ class GameInstaller:
         # get dev directory
         try:
             result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
-            print("this is a test123")
             if result:
                 print("Successfully selected the developer directory. Finished installation.")
                 return True

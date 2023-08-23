@@ -6,7 +6,7 @@ import tkinter.messagebox as messagebox
 from tkinter import simpledialog
 
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.shared_utils import Singleton
+from utils.shared_utils import Singleton, show_message
 
 
 class GuiHudDescriptions(metaclass=Singleton):
@@ -95,10 +95,22 @@ class GuiHudDescriptions(metaclass=Singleton):
         save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
 
         save_button = tk.Button(
-            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.submit_gui_save_changes
+            save_button_frame,
+            text="Save",
+            justify="center",
+            height=25,
+            width=ctrl_w,
+            command=self.submit_gui_save_changes,
         )
-        save_button.config(image=self.save_image, compound="center")
-        save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
+        save_button.config(image=self.save_image, compound="left", padx=pad_x)
+        save_button.pack(side="right", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
+
+        remove_file_entry_button = tk.Button(
+            save_button_frame, text="Remove", justify="center", command=self.remove_file_entry
+        )
+        remove_file_entry_button.config(width=70, height=25)
+        remove_file_entry_button.config(image=self.delete_image, compound="left", padx=pad_x)
+        remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
     def run(self):
         "Show & start main loop"
@@ -128,8 +140,6 @@ class GuiHudDescriptions(metaclass=Singleton):
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
         self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(relative_path))
-
-        print("this is a test123123")
 
         # load controls
         self.load_controls()
@@ -210,17 +220,16 @@ class GuiHudDescriptions(metaclass=Singleton):
             self.load_control(new_control)
             print(f"Added {new_control}")
 
+    def remove_file_entry(self):
+        """Remove control"""
+        if show_message(f"Are you sure you want to remove '{self.relative_path}'?", "yesno"):
+            self.hud.desc.remove_entry(self.relative_path)
+            self.load_controls()
+
     def remove_control(self):
         """Remove control"""
         selected_control = self.ctrl_menu_variable.get()
-
-        # Show a message box to confirm removal
-        if messagebox.askyesno("Remove Control", f"Are you sure you want to remove {selected_control}?"):
-            # save currently loaded control
-            self.save_control_description()
-
-            # User clicked Yes, so remove the control
-            print(f"Removed {selected_control}")
+        if show_message("Remove Control", f"Are you sure you want to remove '{selected_control}'?", "yesno"):
             self.hud.desc.remove_control(self.relative_path, selected_control)
             self.load_controls()
 
