@@ -14,7 +14,12 @@ from game.constants import DirectoryMode, InstallationState
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import copy_directory, get_backup_filename, get_backup_path, wait_process_close
+from utils.functions import (
+    copy_directory,
+    get_backup_filename,
+    get_backup_path,
+    wait_process_close,
+)
 from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
@@ -279,14 +284,13 @@ class GameInstaller:
         print("Prompting user to verify game")
         prompt_verify_game(self.game)
 
-    def __find_pak_files(self, game_dir, callback):
+    def __find_pak01_files(self, game_dir, callback):
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
-            if os.path.isdir(subdir_path):
-                for filename in os.listdir(subdir_path):
-                    if filename == "pak01_dir.vpk" or filename == get_backup_filename("pak01_dir.vpk"):
-                        filepath = os.path.join(subdir_path, filename)
-                        callback(filepath, subdir_path)
+            pak01_path = self.game.dir.is_game_files_dir_return_pak01(subdir_path)
+
+            if os.path.isfile(pak01_path):
+                callback(pak01_path, subdir_path)
 
     def __extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
@@ -299,7 +303,7 @@ class GameInstaller:
             vpk_class = VPKClass()
             vpk_class.extract(filepath, output_dir)
 
-        self.__find_pak_files(dev_dir, extract_callback)
+        self.__find_pak01_files(dev_dir, extract_callback)
 
     def __extract_outdated_paks(self):
         """1. Confirm which pak01_dir.vpk files are outdated by checking for differences between the user & dev modes
@@ -325,8 +329,8 @@ class GameInstaller:
             pak_tuple = (filepath, output_dir)
             dev_paks.append(pak_tuple)
 
-        self.__find_pak_files(user_dir, get_user_paks_callback)
-        self.__find_pak_files(dev_dir, get_dev_paks_callback)
+        self.__find_pak01_files(user_dir, get_user_paks_callback)
+        self.__find_pak01_files(dev_dir, get_dev_paks_callback)
 
         # extract any paks that are not identical between the user & dev folders
         i = 0
@@ -351,7 +355,7 @@ class GameInstaller:
             os.rename(source_filepath, target_filepath)
             print("Renaming file from", source_filepath, "to", target_filepath)
 
-        self.__find_pak_files(dev_dir, enable_callback)
+        self.__find_pak01_files(dev_dir, enable_callback)
 
     def __disable_paks(self):
         print("Disabling pak01.vpk's")
@@ -362,7 +366,7 @@ class GameInstaller:
             target_filepath = get_backup_path(os.path.join(subdir_path, "pak01_dir.vpk"))
             os.rename(source_filepath, target_filepath)
 
-        self.__find_pak_files(dev_dir, disable_callback)
+        self.__find_pak01_files(dev_dir, disable_callback)
 
     def _main_dir_backup(self):
         print("Copying main directory to create a backup for the sync class")

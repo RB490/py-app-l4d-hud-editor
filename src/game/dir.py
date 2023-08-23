@@ -5,7 +5,12 @@ import shutil
 
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
-from utils.functions import copy_directory, generate_random_string, rename_with_timeout
+from utils.functions import (
+    copy_directory,
+    generate_random_string,
+    get_backup_filename,
+    rename_with_timeout,
+)
 from utils.shared_utils import verify_directory
 
 
@@ -68,8 +73,33 @@ class GameDir:
         return True
 
     def is_custom_file(self, relative_file_path):
-        
+        # create a list of the directories to search in aka the main dir &dlc main dirs & main backup folder
+
+        game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         print(relative_file_path)
+        print(game_dir)
+        print(os.listdir(game_dir))
+
+
+
+        for subdir_name in os.listdir(game_dir):
+            subdir_path = os.path.join(game_dir, subdir_name)
+            # print(subdir_name)
+            # print(f"is_dlc_dir = {self.is_dlc_dir(subdir_path)}")
+            if self.is_game_files_dir_return_pak01(subdir_path):
+
+    def is_game_files_dir_return_pak01(self, directory):
+        "Verify if this is a game files directory by checking if it contains a pak01_dir.vpk file"
+        pak01_filename = "pak01_dir.vpk"
+        backup_pak01_filename = get_backup_filename(pak01_filename)
+        required_files = [pak01_filename, backup_pak01_filename]
+
+        for file in required_files:
+            file_path = os.path.join(directory, file)
+            if os.path.isfile(file_path):
+                return file_path
+
+        return False
 
     def get(self, dir_mode):
         "Get directory"
@@ -105,6 +135,12 @@ class GameDir:
             print("No active mode found")
             return None
 
+    def get_main_dir_name(self):
+        main_dir_name = self.game.get_title().replace(" ", "")
+        # python is case sensitive; convert to Left4Dead2 -> left4dead2
+        main_dir_name = main_dir_name.lower()
+        return main_dir_name
+
     def get_main_dir(self, dir_mode):
         "Get the full path to the main dir eg. 'Left 4 Dead 2\\left4dead2'"
 
@@ -112,9 +148,8 @@ class GameDir:
         if not os.path.isdir(root_dir):
             print(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
             return None
-        
-        main_dir_name = self.game.get_title().replace(" ", "")
-        main_dir_name = main_dir_name.lower()  # python is case sensitive; convert to Left4Dead2 -> left4dead2
+
+        main_dir_name = self.get_main_dir_name()
         main_dir = os.path.join(root_dir, main_dir_name)
 
         print(f"Get {dir_mode.name} main dir: {main_dir}")
