@@ -5,31 +5,10 @@ Current:
 Features:
 
 Bugs:
-	
-	✔ Descriptions: Add print statements @done(23-08-23 13:17)
-	✔ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all @done(23-08-23 13:24)
-	✔ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening @done(23-08-23 13:38)
-	
-
-	✔ Refactor: Installer __find_pak_files manually uses pak01_dir.disabled -- the installer class should use the get backup path function @done(23-08-23 13:52)
-
-	✔ Refactor: Installer: Use new is_game_files_dir_return_pak01 method @done(23-08-23 14:27)
-
-	✔ Modify descriptions class to keep track of whether a file is custom. This is useful so i have the option to not show thene when showing 'not added yet' files in the browser @done(23-08-23 15:19)
-		✔ Can use the game (backup) folders to verify if it's custom @done(23-08-23 15:19)
-	
-	✔ Feature: Description GUI: Option to remove this file entirely from the description data @done(23-08-23 15:35)
-	✔ Feature: Description GUI: Show whether this is a custom file or not @done(23-08-23 15:39)
-
-	✔ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else @done(23-08-23 16:31)
-
-	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
-
+	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
+	☐ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui
 	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
-
 	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
-
-	☐ Bug: VDF gui not loading for hudlayout.res
 
 
 GUI:
@@ -44,6 +23,9 @@ Refactoring:
 	☐ Refactor: Loading&Saving JSON data. Create class & use throughout the program
 	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
 	☐ Refactor: Installer has some unused methods. should i use or remove them? eg: __extract_outdated_paks
+
+	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
+
 	
 	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
@@ -106,6 +88,15 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Descriptions: Add print statements @done(23-08-23 13:17)
+	✔ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all @done(23-08-23 13:24)
+	✔ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening @done(23-08-23 13:38)
+	✔ Refactor: Installer __find_pak_files manually uses pak01_dir.disabled -- the installer class should use the get backup path function @done(23-08-23 13:52)
+	✔ Refactor: Installer: Use new is_game_files_dir_return_pak01 method @done(23-08-23 14:27)
+	✔ Modify descriptions class to keep track of whether a file is custom. This is useful so i have the option to not show thene when showing 'not added yet' files in the browser @done(23-08-23 15:19)
+	✔ Feature: Description GUI: Option to remove this file entirely from the description data @done(23-08-23 15:35)
+	✔ Feature: Description GUI: Show whether this is a custom file or not @done(23-08-23 15:39)
+	✔ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else @done(23-08-23 16:31)
 	✔ Refactor. Add method docs @done(23-08-23 01:48)
 	✔ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin @done(23-08-23 01:55)
 		✔ GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data @done(23-08-23 01:55)

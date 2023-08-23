@@ -18,6 +18,7 @@ class VDFModifierGUI:
         self.persistent_data = persistent_data
         self.modifier = None  # vdf modifier class
         self.is_hidden = False
+        self.root = None # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
         self.root = tk.Toplevel()
         self.root.minsize(875, 425)
