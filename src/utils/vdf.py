@@ -215,6 +215,7 @@ class VDFModifier:
         return modified_vdf_obj
 
     def __modify_int_value(self, value, modifier, amount):
+        """Modify integer value. Including formats such as "c-150"""
         try:
             if value[0].isalpha():
                 letter = value[0]

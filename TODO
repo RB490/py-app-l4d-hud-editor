@@ -1,37 +1,15 @@
 
 
 Current:
-	
-
-
-	✔ Refactor. Add method docs @done(23-08-23 01:48)
-	✔ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin @done(23-08-23 01:55)
-		✔ GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data @done(23-08-23 01:55)
-	✔ Feature: VDF: Save option @done(23-08-23 02:29)
-	✔ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning @done(23-08-23 02:29)
-	✔ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown? @done(23-08-23 03:04)
-	✔ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd @done(23-08-23 03:04)
-	✔ Browser: Treeview context menu functionality: VDF: Modify @done(23-08-23 03:08)
-	✔ Bug: VDF: Confirm file was able to be read properly, if not return @done(23-08-23 03:16)
-	☐ Refactor: simplify & improve code (naming)
-
-
-	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)
-	✔ Feature: VDF: With annotation disabled the __description__ keys should be removed @done(23-08-23 00:59)
-	✔ Feature: VDF: Save window geometry @done(23-08-23 01:09)
-	✔ Bug: VDF GUI: When closing the script goes on to do some stuff: Modifying integer values...Save the modified VDF object to a file @done(23-08-23 01:10)
-	✔ Feature: VDF: Proper widget layout. before&after side by side and the controls nicely layed out. Integer modifying should be a self contained lil group of controls @done(23-08-23 01:13)
-	✔ Feature: VDF: Save certain settings for the vdf gui @done(23-08-23 01:14)
-	✔ Feature: VDF: Undo changes. Either programatically or (more likely) reload from file @done(23-08-23 01:47)
 
 Features:
 
 Bugs:
 	
-	☐ Descriptions: Add print statements
-	☐ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening
-	☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else
-	☐ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all
+	✔ Descriptions: Add print statements @done(23-08-23 13:17)
+		☐ Bug: Descriptions GUI: Saving contents for a custom hud file causes an error. either allow saving somehow, or disallow them from opening
+		☐ Bug: Descriptions GUI: Have a file loaded -> open another file -> contents are discarded. should probably  not allow this or do something else
+		☐ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all
 
 GUI:
 
@@ -103,7 +81,23 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
-	
+	✔ Refactor. Add method docs @done(23-08-23 01:48)
+	✔ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin @done(23-08-23 01:55)
+		✔ GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data @done(23-08-23 01:55)
+	✔ Feature: VDF: Save option @done(23-08-23 02:29)
+	✔ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning @done(23-08-23 02:29)
+	✔ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown? @done(23-08-23 03:04)
+	✔ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd @done(23-08-23 03:04)
+	✔ Browser: Treeview context menu functionality: VDF: Modify @done(23-08-23 03:08)
+	✔ Bug: VDF: Confirm file was able to be read properly, if not return @done(23-08-23 03:16)
+	✔ Refactor: simplify & improve code (naming) @done(23-08-23 03:17)
+	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)
+	✔ Feature: VDF: With annotation disabled the __description__ keys should be removed @done(23-08-23 00:59)
+	✔ Feature: VDF: Save window geometry @done(23-08-23 01:09)
+	✔ Bug: VDF GUI: When closing the script goes on to do some stuff: Modifying integer values...Save the modified VDF object to a file @done(23-08-23 01:10)
+	✔ Feature: VDF: Proper widget layout. before&after side by side and the controls nicely layed out. Integer modifying should be a self contained lil group of controls @done(23-08-23 01:13)
+	✔ Feature: VDF: Save certain settings for the vdf gui @done(23-08-23 01:14)
+	✔ Feature: VDF: Undo changes. Either programatically or (more likely) reload from file @done(23-08-23 01:47)
 	✔ Bug: VDF Modify intergers did not recursively modify so split_screen type key:values werent modified @done(23-08-22 22:17)
 	✔ Bug: VDF class didn't handle letter values properly such as "c-150" @done(23-08-22 22:12)
 	✔ 1. String: Preprocessing of the file (properly removing xbox360 entries and such, can possibly be quite easy, test removing splitscreen key and then loading into vdf) @done(23-08-22 17:35)

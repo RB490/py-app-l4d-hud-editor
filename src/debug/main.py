@@ -6,8 +6,8 @@ import os
 import vdf  # type: ignore
 
 from debug.game import debug_game_class
+from debug.gui import debug_descriptions_gui, debug_vdf_gui
 from debug.hud import get_hud_debug_instance
-from debug.vdf_gui import debug_vdf_gui
 from gui import descriptions
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopupContextmenu
@@ -23,7 +23,7 @@ from utils.vdf import debug_vdf_class
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
-    print("debug_main")
+    print("Started debugging!")
     persistent_data = load_data()
 
     # debug_game_class(persistent_data)
@@ -34,28 +34,25 @@ def debug_main():
     # result = hud.get_all_files_dict()
     # result = hud.get_files_dict()
 
-    # show_start_gui(persistent_data)
-
     # print(f"result={result}")
 
     # save_data(persistent_data)
 
-    input("Finished debugging! Press enter to continue..")
+    input("Finished debugging! Press enter to exit...")
 
 
 def debug_gui(persistent_data):
     "debug gui"
 
+    # browser
+    # browse = get_debug_gui_browser_instance(persistent_data)
+    # browse.run()
+
     # descriptions
-    # descriptions_gui = descriptions.GuiHudDescriptions(persistent_data, "scripts\\hudlayout.res")
-    # descriptions_gui.run()
+    debug_descriptions_gui(persistent_data)
 
     # start
     # show_start_gui(persistent_data)
-
-    # browser
-    browse = get_debug_gui_browser_instance(persistent_data)
-    browse.run()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
@@ -64,11 +61,3 @@ def debug_gui(persistent_data):
 
     # vdf gui
     # debug_vdf_gui(persistent_data)
-
-
-def get_debug_gui_browser_instance(persistent_data):
-    "debug_gui_browser"
-    print("debug_browser")
-    hud_inc = get_hud_debug_instance(persistent_data)  # set active debug hud to load files into browser
-
-    return GuiHudBrowser(persistent_data)

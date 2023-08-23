@@ -13,6 +13,9 @@ class GuiHudDescriptions(metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self, persistent_data, parent_gui):
+        if not parent_gui.root:
+            ValueError('parent_gui is not a tkinter gui class!')
+        
         self.is_hidden = None
         self.root = tk.Toplevel()
         self.hide()
