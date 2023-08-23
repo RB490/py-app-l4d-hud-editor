@@ -14,7 +14,7 @@ class GuiHudDescriptions(metaclass=Singleton):
 
     def __init__(self, persistent_data, parent_gui):
         if not parent_gui.root:
-            ValueError("parent_gui is not a tkinter gui class!")
+            raise ValueError("parent_gui is not a tkinter gui class!")
 
         self.is_hidden = None
         self.root = tk.Toplevel()
@@ -127,7 +127,9 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.file_desc_text.insert(tk.END, self.hud.desc.get_description(relative_path))
+        self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(relative_path))
+
+        print("this is a test123123")
 
         # load controls
         self.load_controls()
@@ -136,6 +138,7 @@ class GuiHudDescriptions(metaclass=Singleton):
         self.run()
 
     def clear_gui(self):
+        """Clear input from all controls"""
         self.ctrl_menu_variable.set(None)
         self.ctrl_menu["menu"].delete(0, "end")  # Delete all existing options
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
@@ -172,13 +175,13 @@ class GuiHudDescriptions(metaclass=Singleton):
         """Save control description"""
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
-        self.hud.desc.save_control_description(self.relative_path, selected_control, control_desc)
+        self.hud.desc.set_control_description(self.relative_path, selected_control, control_desc)
         print(control_desc)
 
     def save_file_description(self):
         """Save file description"""
         file_description = self.file_desc_text.get("1.0", "end-1c")
-        self.hud.desc.save_file_description(self.relative_path, file_description)
+        self.hud.desc.set_file_description(self.relative_path, file_description)
         print(file_description)
 
     def selected_ctrl(self, input_ctrl):

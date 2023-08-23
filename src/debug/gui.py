@@ -1,12 +1,14 @@
+# pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long
 import os
 import shutil
+
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
 from gui.browser import GuiHudBrowser
-
 from gui.vdf import VDFModifierGUI
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
+
 
 def get_debug_gui_browser_instance(persistent_data):
     "debug_gui_browser"
@@ -15,10 +17,15 @@ def get_debug_gui_browser_instance(persistent_data):
 
     return GuiHudBrowser(persistent_data)
 
+
 def debug_descriptions_gui(persistent_data):
-    descriptions_gui = descriptions.GuiHudDescriptions(persistent_data, get_debug_gui_browser_instance(persistent_data))
-    descriptions_gui.load_file("scripts\\hudlayout.res")
+    descriptions_gui = descriptions.GuiHudDescriptions(
+        persistent_data, get_debug_gui_browser_instance(persistent_data)
+    )
+    # descriptions_gui.load_file("scripts\\hudlayout.res")
+    descriptions_gui.load_file("scripts\\custom_hudlayout.res")
     descriptions_gui.run()
+
 
 def debug_vdf_gui(persistent_data):
     """Debug GUI"""

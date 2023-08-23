@@ -26,8 +26,8 @@ def debug_main():
     print("Started debugging!")
     persistent_data = load_data()
 
-    # debug_game_class(persistent_data)
-    debug_gui(persistent_data)
+    debug_game_class(persistent_data)
+    # debug_gui(persistent_data)
     # debug_vdf_class(persistent_data)
 
     # hud = get_hud_debug_instance(persistent_data)

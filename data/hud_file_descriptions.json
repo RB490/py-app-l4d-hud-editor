@@ -885,6 +885,12 @@
         "file_name": "zombiepanel.res",
         "file_relative_path": "resource\\ui\\zombiepanel.res"
     },
+    "scripts\\custom_hudlayout.res": {
+        "file_control_descriptions": {
+            "None": ""
+        },
+        "file_description": "test?"
+    },
     "scripts\\hudanimations.txt": {
         "file_control_descriptions": {},
         "file_description": "Defines some hud animations such as the item pickup icons though most are hard coded\r\n\r\n---Confirmed working:\r\nMisc:\r\n- 'PulsePickedUpWeaponSlot'\r\n\r\nItems:\r\n- 'StartItemPickup1', 2 and 3\r\n- 'CleanupItemPickup'\r\n\r\nVoting:\r\n- 'PulseYesVote'\r\n- 'PulseNoVote'\r\n- 'HideVoteBackgrounds'",

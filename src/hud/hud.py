@@ -186,7 +186,7 @@ class Hud(metaclass=Singleton):
             for filename in filenames:
                 full_path = os.path.join(dirpath, filename)
                 relative_path = os.path.relpath(full_path, root_folder)
-                file_desc = self.desc.get_description(relative_path)
+                file_desc = self.desc.get_file_description(relative_path)
                 files_dict[filename] = (file_desc, relative_path)
         return files_dict
 

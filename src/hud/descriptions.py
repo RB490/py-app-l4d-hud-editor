@@ -1,3 +1,4 @@
+"""Subclass of the hud class. Manages everything related to hud file descriptions"""
 import json
 
 from utils.constants import HUD_DESCRIPTIONS_PATH
@@ -21,14 +22,22 @@ class HudDescriptions:
         del self.data[relative_path]["file_control_descriptions"][input_control]
         print(f"Removed control '{input_control}' for relative path '{relative_path}'")
 
-    def save_control_description(self, relative_path, input_control, control_desc):
-        """Set information"""
+    def set_control_description(self, relative_path, input_control, control_desc):
+        """Save control description for a given relative path and control"""
+        if relative_path not in self.data:
+            self.data[relative_path] = {"file_description": "", "file_control_descriptions": {}}
+
         self.data[relative_path]["file_control_descriptions"][input_control] = control_desc
+        self.save_to_disk()
         print(f"Saved description for control '{input_control}' in relative path '{relative_path}'")
 
-    def save_file_description(self, relative_path, file_desc):
-        """Set information"""
-        self.data[relative_path]["file_description"] = file_desc
+    def set_file_description(self, relative_path, file_desc):
+        """Set file description for a given relative path"""
+        if relative_path in self.data:
+            self.data[relative_path]["file_description"] = file_desc
+        else:
+            self.data[relative_path] = {"file_description": file_desc, "file_control_descriptions": {}}
+        self.save_to_disk()
         print(f"Saved file description for relative path '{relative_path}'")
 
     def get_all_descriptions(self):
@@ -53,7 +62,7 @@ class HudDescriptions:
         print(f"Retrieved description for control '{input_control}' in relative path '{relative_path}': {description}")
         return description
 
-    def get_description(self, relative_path):
+    def get_file_description(self, relative_path):
         """
         Get file description for given relative path.
         If the relative path doesn't exist in the data dictionary, return an empty string.
