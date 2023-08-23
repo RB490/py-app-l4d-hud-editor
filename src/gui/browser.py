@@ -230,7 +230,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def treeview_get_selected_full_path(self):
         """Retrieve selected treeview row path"""
         relative_path = self.treeview_get_selected_relative_path()
-        full_path = os.path.join(self.hud.get_dir(), relative_path)
+        full_path = os.path.join(self.hud.edit.get_dir(), relative_path)
         return full_path if full_path else "No item selected"
 
     def treeview_get_selected_relative_path(self):
@@ -251,16 +251,16 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def treeview_refresh(self, treeview, search_term=None):
         """Clear treeview & load up-to-date content"""
 
-        hud_dir = self.hud.get_dir()
+        hud_dir = self.hud.edit.get_dir()
 
         print(f"Treeview: Refreshing directory: '{hud_dir}'")
 
         print(f"display choice: '{self.display_choice.get()}'")
         display_choice = self.display_choice.get().lower()
         if display_choice == "all":
-            data_dict = self.hud.get_all_files_dict()
+            data_dict = self.hud.edit.get_all_files_dict()
         else:
-            data_dict = self.hud.get_files_dict()
+            data_dict = self.hud.edit.get_files_dict()
 
         # check if there is anything to refresh
         if not data_dict:
@@ -279,7 +279,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             file_path = os.path.join(hud_dir, file_relative_path)
 
             # custom file?
-            if self.game.installed(DirectoryMode.DEVELOPER) and self.hud.synced():
+            if self.game.installed(DirectoryMode.DEVELOPER) and self.hud.edit.synced():
                 main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
                 file_path_backup = get_backup_path(os.path.join(main_dir, file_relative_path))
 

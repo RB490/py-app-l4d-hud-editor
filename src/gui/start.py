@@ -10,11 +10,6 @@ from PIL import Image, ImageTk
 from game.game import Game
 from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.functions import (
-    prompt_add_existing_hud,
-    prompt_create_new_hud,
-    retrieve_hud_name_for_dir,
-)
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
 from utils.vpk import VPKClass
@@ -179,7 +174,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Insert the new items from the list into the Treeview
         for stored_hud_dir in self.data_manager.get("stored_huds"):
             # retrieve hud name (from addoninfo.txt if available)
-            hud_name = retrieve_hud_name_for_dir(stored_hud_dir)
+            hud_name = self.hud.manager.retrieve_hud_name_for_dir(stored_hud_dir)
 
             self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
 
@@ -234,12 +229,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def prompt_add_hud_btn(self):
         """Prompt user for hud folder to add"""
-        if prompt_add_existing_hud():
+        if self.hud.manager.prompt_add_existing_hud():
             self.update_treeview()
 
     def prompt_new_hud_btn(self):
         """Prompt user for hud folder to create a new hud in"""
-        if prompt_create_new_hud():
+        if self.hud.manager.prompt_create_new_hud():
             self.update_treeview()
 
     def edit_selected_hud(self):
@@ -251,7 +246,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # self.destroy_gui()
 
         # edit hud
-        self.hud.start_editing(self.selected_hud_dir)
+        self.hud.edit.start_editing(self.selected_hud_dir)
 
 
 def show_start_gui():

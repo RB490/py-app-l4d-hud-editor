@@ -43,8 +43,8 @@ def debug_main():
     debug_gui()
 
     # hud = get_hud_debug_instance()
-    # result = hud.get_all_files_dict()
-    # result = hud.get_files_dict()
+    # result = hud.edit.get_all_files_dict()
+    # result = hud.edit.get_files_dict()
 
     # save_data()
     # print(f"result={result}")

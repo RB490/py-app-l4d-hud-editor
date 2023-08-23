@@ -9,13 +9,7 @@ import pyperclip  # type: ignore
 from game.game import DirectoryMode, Game, VideoSettingsModifier  # type: ignore
 from gui.start import show_start_gui
 from utils.constants import UNIVERSAL_GAME_MAP
-from utils.functions import (
-    get_mouse_position_on_click,
-    prompt_add_existing_hud,
-    prompt_open_temp_hud,
-    remove_stored_hud,
-    remove_temp_hud,
-)
+from utils.functions import get_mouse_position_on_click
 from utils.get_user_input import get_user_input
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import show_message
@@ -115,10 +109,10 @@ class EditorMenuHandler:
 
     def editor_menu_game_restart(self):
         """Method to handle the selected secure/insecure option in the menu."""
-        self.hud.stop_game_exit_check()
+        self.hud.edit.stop_game_exit_check()
         self.game.close()
         self.game.window.run(DirectoryMode.DEVELOPER)
-        self.hud.start_game_exit_check()
+        self.hud.edit.start_game_exit_check()
 
     def editor_menu_game_toggle_mute(self):
         """Method to handle the selected secure/insecure option in the menu."""
@@ -157,28 +151,28 @@ class EditorMenuHandler:
 
     def editor_add_existing_hud(self):
         """Add exiting hud to the menu"""
-        prompt_add_existing_hud()
+        self.hud.manager.prompt_add_existing_hud()
         self.editor_menu.create_and_refresh_menu()
 
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
-        remove_stored_hud(hud_dir)
+        self.hud.manager.remove_stored_hud(hud_dir)
         self.editor_menu.create_and_refresh_menu()
 
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
         print(f"editor_remove_temp_hud: {hud_dir}")
-        remove_temp_hud(hud_dir)
+        self.hud.manager.remove_temp_hud(hud_dir)
         self.editor_menu.create_and_refresh_menu()
 
     def editor_open_temp_hud(self):
         """Open temporary hud in the menu"""
-        prompt_open_temp_hud()
+        self.hud.manager.prompt_open_temp_hud()
         self.editor_menu.create_and_refresh_menu()
 
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
-        self.hud.start_editing(hud_dir)
+        self.hud.edit.start_editing(hud_dir)
 
         # refresh menu (selected hud)
         self.editor_menu.create_and_refresh_menu()
@@ -186,7 +180,7 @@ class EditorMenuHandler:
     def editor_exit_script(self):
         """Exit script"""
 
-        self.hud.finish_editing(open_start_gui=False)
+        self.hud.edit.finish_editing(open_start_gui=False)
         sys.exit()
 
     def editor_open_hud_select(self):
@@ -197,7 +191,7 @@ class EditorMenuHandler:
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
         print("editor_finish_editing")
-        self.hud.finish_editing(open_start_gui=True)
+        self.hud.edit.finish_editing(open_start_gui=True)
 
     def editor_open_folder(self, input_dir):
         """Open folder"""
@@ -247,11 +241,11 @@ class EditorMenuHandler:
 
     def editor_save_as_vpk(self):
         """Export hud as vpk"""
-        self.hud.save_vpk_file()
+        self.hud.edit.save_vpk_file()
 
     def editor_save_as_folder(self):
         """Export hud as folder"""
-        self.hud.save_as_folder()
+        self.hud.edit.save_as_folder()
 
     def editor_menu_reload_reopen_menu(self):
         """Repen menu on reload setting"""

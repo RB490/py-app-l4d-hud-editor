@@ -4,8 +4,13 @@ Current:
 
 
 Features:
+	
 	☐ Start GUI: Context menu icons
 	☐ Start GUI: Specific button icons rather than all identical
+
+	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
+		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
+			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
 Bugs:
 
@@ -18,13 +23,7 @@ Unit Testing:
 	☐ Unit test: HudDescription
 
 Refactoring:
-	
-	✔ Refactor: GUI: Base GUI class with common functionality for all other gui's to use @done(23-08-23 23:44)
-	☐ Refactor: Installer has some unused methods. should i use or remove them? eg: __extract_outdated_paks
-
-	☐ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
-
 	
 	☐ Refactor: VPK class
 	☐ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run()
@@ -89,6 +88,8 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class @done(23-08-24 00:31)
+	✔ Refactor: GUI: Base GUI class with common functionality for all other gui's to use @done(23-08-23 23:44)
 	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)
 	✘ Refactor: Loading&Saving JSON data. Create class & use throughout the program @cancelled(23-08-23 22:41)
 	✘ Refactor: Rename data manager to persistent data? @cancelled(23-08-23 22:42)

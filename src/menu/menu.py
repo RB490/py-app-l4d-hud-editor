@@ -20,7 +20,6 @@ from utils.constants import (
     SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
-from utils.functions import retrieve_hud_name_for_dir
 from utils.persistent_data import PersistentDataManager
 
 
@@ -291,23 +290,23 @@ class EditorMenuClass:
 
         self.hud_menu = tk.Menu(menubar, tearoff=0)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
-        if self.hud.is_loaded():
-            self.hud_menu.entryconfigure(0, label=retrieve_hud_name_for_dir(self.hud.get_dir()))
+        if self.hud.edit.is_loaded():
+            self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
         self.hud_menu.add_command(label="Unsync", command=self.handler.editor_unsync_hud)
         self.hud_menu.add_command(label="Save", state="disabled")
         self.hud_menu.add_command(label="VPK", command=self.handler.editor_save_as_vpk)
         self.hud_menu.add_command(label="Folder", command=self.handler.editor_save_as_folder)
         self.hud_menu.add_command(label="Open", state="disabled", columnbreak=True)
         self.hud_menu.add_command(
-            label="Hud", command=self.create_lambda_command(self.handler.editor_open_folder, self.hud.get_dir())
+            label="Hud", command=self.create_lambda_command(self.handler.editor_open_folder, self.hud.edit.get_dir())
         )
         self.hud_menu.add_command(
             label="Hud (VS)",
-            command=self.create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.get_dir()),
+            command=self.create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
         )
 
         # disable items when no hud is loaded
-        if not self.hud.is_loaded():
+        if not self.hud.edit.is_loaded():
             for i in range(self.hud_menu.index("end") + 1):
                 self.hud_menu.entryconfigure(i, state="disabled")
 
@@ -324,7 +323,7 @@ class EditorMenuClass:
         # stored huds - root
         self.load_hud_menu.add_separator()
         for hud_dir in self.data_manager.get("stored_huds"):
-            hud_name = retrieve_hud_name_for_dir(hud_dir)
+            hud_name = self.hud.manager.retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
                 command=self.create_lambda_command(self.handler.editor_edit_hud, hud_dir),
@@ -348,7 +347,7 @@ class EditorMenuClass:
         # stored huds - root
         self.load_hud_menu.add_separator()
         for hud_dir in self.data_manager.get("stored_temp_huds"):
-            hud_name = retrieve_hud_name_for_dir(hud_dir)
+            hud_name = self.hud.manager.retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
                 command=self.create_lambda_command(self.handler.editor_edit_hud, hud_dir),
@@ -835,7 +834,7 @@ class EditorMenuClass:
         self.menu_bar.add_cascade(label="Installer", menu=self.dev_install_menu)
         # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying menu as popup
 
-        if not self.hud.get_dir():
+        if not self.hud.edit.get_dir():
             self.menu_bar.entryconfig("Hud", state="disabled")
 
         self.root.config(menu=self.menu_bar)

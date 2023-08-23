@@ -14,8 +14,7 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
-import vdf  # type: ignore
-import win32con  # type: ignore
+import win32con
 import win32gui
 import win32process
 
@@ -26,7 +25,6 @@ from .constants import (
     FILE_EXT_FOLDER_ICON,
     FILE_EXT_IMAGES,
     FILE_EXT_WARNING_ICON,
-    NEW_HUD_DIR,
     PERSISTENT_DATA_PATH,
 )
 
@@ -174,83 +172,6 @@ def prompt_for_folder(title):
     root = tk.Tk()
     root.withdraw()
     return filedialog.askdirectory(title=title)
-
-
-def prompt_add_existing_hud():
-    """Prompt user for hud folder to add"""
-    data_manager = PersistentDataManager()
-
-    folder_path = prompt_for_folder("Add HUD: Select folder")
-    if folder_path:
-        data_manager.append("stored_huds", folder_path)
-        return True
-    else:
-        return False
-
-
-def prompt_open_temp_hud():
-    """Prompt user for temp hud folder to add"""
-    data_manager = PersistentDataManager()
-
-    folder_path = prompt_for_folder("Add HUD: Select folder")
-    if folder_path:
-        data_manager.append("stored_temp_huds", folder_path)
-        return True
-    else:
-        return False
-
-
-def prompt_create_new_hud():
-    """Prompt user for hud folder to create a new hud in"""
-    data_manager = PersistentDataManager()
-
-    folder_path = prompt_for_folder("New HUD: Select folder")
-    if folder_path:
-        data_manager.append("stored_huds", folder_path)
-        copy_directory(NEW_HUD_DIR, folder_path)
-        return True
-    else:
-        return False
-
-
-def remove_stored_hud(hud_dir):
-    """Remove stored hud"""
-    data_manager = PersistentDataManager()
-
-    if hud_dir in data_manager.get("stored_huds"):
-        data_manager.remove_item_from_list("stored_huds", hud_dir)
-
-
-def remove_temp_hud(hud_dir):
-    """Remove temp hud"""
-    data_manager = PersistentDataManager()
-
-    if hud_dir in data_manager.get("stored_temp_huds"):
-        data_manager.remove_item_from_list("stored_temp_huds", hud_dir)
-
-
-def retrieve_hud_name_for_dir(hud_dir):
-    """Retrieve hud name for a directory. Either directory name or from addoninfo.txt"""
-    # verify input
-    if not os.path.isdir(hud_dir):
-        raise ValueError(f"Invalid hud_dir directory path: '{hud_dir}'")
-
-    # retrieve hud name (from addoninfo.txt if available)
-    # hud_name = os.path.basename(os.path.dirname(hud_dir)) # retrieve name from parent folder
-    hud_name = os.path.basename(hud_dir)  # retrieve name from root folder
-    addoninfo_path = os.path.normpath(os.path.join(hud_dir, "addoninfo.txt"))
-
-    if os.path.exists(addoninfo_path):
-        addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
-
-        if addon_info.get("AddonInfo", {}).get("addontitle"):
-            hud_name = addon_info["AddonInfo"]["addontitle"]
-            print(f"Hud name: Retrieved '{hud_name}' @ '{addoninfo_path}'")
-        else:
-            print(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
-    else:
-        print(f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
-    return hud_name
 
 
 def wait_for_process(exe, timeout=None):
