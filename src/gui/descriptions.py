@@ -5,22 +5,20 @@ import tkinter as tk
 from tkinter import simpledialog
 
 from game.game import Game
+from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.shared_utils import Singleton, show_message
 
 
-class GuiHudDescriptions(metaclass=Singleton):
+class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self, parent_gui):
         if not parent_gui.root:
             raise ValueError("parent_gui is not a tkinter gui class!")
 
-        self.is_hidden = None
-        self.root = tk.Toplevel()
-        self.hide()  # prevent lil TopLevel gui from popping up
-        self.root.title("File")
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        BaseGUI.__init__(self, is_toplevel_gui=True)
+        self.root.title = "File"
         self.root.iconbitmap(APP_ICON)
 
         from hud.hud import Hud
@@ -118,6 +116,21 @@ class GuiHudDescriptions(metaclass=Singleton):
         remove_file_entry_button.config(image=self.delete_image, compound="left", padx=pad_x)
         remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
+    def on_close(self):
+        """On gui close"""
+
+        # prompt to save unsaved changes
+        self.prompt_to_save_unsaved_changes()
+
+        # undo unsaved changes by reloading from disk
+        self.hud.desc.read_from_disk()
+
+        # clear the gui
+        self.clear_gui()
+
+        # close gui
+        self.hide()
+
     # pylint: disable=unused-argument
     def on_file_desc_modified(self, event):
         "Register unsaved changes if content has actually changed"
@@ -147,22 +160,6 @@ class GuiHudDescriptions(metaclass=Singleton):
             self.ctrl_desc_text.edit_modified(False)
             print("Set unsaved changes to false!")
 
-    def run(self):
-        "Show & start main loop"
-
-        self.show()
-        self.root.mainloop()
-
-    def show(self):
-        """Show gui"""
-        self.root.deiconify()
-        self.is_hidden = False
-
-    def hide(self):
-        """Hide gui"""
-        self.root.withdraw()
-        self.is_hidden = True
-
     def load_file(self, relative_path):
         """Load description for hud file into the gui"""
 
@@ -180,7 +177,7 @@ class GuiHudDescriptions(metaclass=Singleton):
             custom_status = "Custom File"
         else:
             custom_status = "Vanilla File"
-        self.root.title(f"{relative_path} ({custom_status})")
+        self.root.title = f"{relative_path} ({custom_status})"
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
@@ -314,18 +311,3 @@ class GuiHudDescriptions(metaclass=Singleton):
                 self.save_changes()
             else:
                 self.set_unsaved_changes(False)
-
-    def on_close(self):
-        """On gui close"""
-
-        # prompt to save unsaved changes
-        self.prompt_to_save_unsaved_changes()
-
-        # undo unsaved changes by reloading from disk
-        self.hud.desc.read_from_disk()
-
-        # clear the gui
-        self.clear_gui()
-
-        # close gui
-        self.hide()

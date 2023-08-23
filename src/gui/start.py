@@ -8,41 +8,34 @@ from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 
 from game.game import Game
+from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.functions import (
     prompt_add_existing_hud,
     prompt_create_new_hud,
     retrieve_hud_name_for_dir,
 )
+from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
 from utils.vpk import VPKClass
 
 
-class GuiHudStart(metaclass=Singleton):
+class GuiHudStart(BaseGUI, metaclass=Singleton):
     """Class for the hud select gui"""
 
     def __init__(self):
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
+        BaseGUI.__init__(self)
+        self.data_manager = PersistentDataManager()
         self.game = Game()
 
         from hud.hud import Hud  # avoid recursive import
 
-        self.is_hidden = None
         self.hud = Hud()
-        self.root = tk.Tk()
-        self.hide()
-        self.root.title("Select")
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.title = "Select"
         self.root.iconbitmap(APP_ICON)
-        # self.root.geometry("865x390")
         self.root.minsize(865, 375)
-
-        # load saved geometry
-        try:
-            geometry = self.data_manager.get("HudSelectGuiGeometry")
-            self.root.geometry(geometry)
-        except KeyError:
-            self.root.geometry("1000x1000+100+100")
+        self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
 
         # initialize variables
         self.picture_canvas_photo = None
@@ -122,11 +115,9 @@ class GuiHudStart(metaclass=Singleton):
 
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
-    def run(self):
-        "Show & start main loop"
-        print("start: run")
-        self.show()
-        self.root.mainloop()  # neccessary for the gui to fully work. for example changing the img in a widget
+    def save_window_geometry(self):
+        """Save size & position if GUI is loaded and visible"""
+        self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry)
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -178,15 +169,6 @@ class GuiHudStart(metaclass=Singleton):
         self.selected_hud_name = ""
 
         self.update_treeview()
-
-    def save_window_geometry(self):
-        """Save size & position if GUI is loaded and visible"""
-        if self.root and self.root.winfo_viewable():
-            # Get the current position and size of the window
-            geometry = self.root.geometry()
-            self.data_manager.set("HudSelectGuiGeometry", geometry)
-        else:
-            print("GUI is not loaded or visible. Skipping window geometry save.")
 
     def update_treeview(self):
         """Clear treeview & load up-to-date content"""
@@ -270,29 +252,6 @@ class GuiHudStart(metaclass=Singleton):
 
         # edit hud
         self.hud.start_editing(self.selected_hud_dir)
-
-    def hide(self):
-        """Hide gui"""
-        # Hide the root window instead of closing it
-        self.root.withdraw()
-        self.is_hidden = True
-
-    def show(self):
-        """Show gui"""
-        # Show the window again
-        self.is_hidden = False
-        self.root.deiconify()
-
-    def destroy_gui(self):
-        "Close & start main loop"
-        self.save_window_geometry()
-        self.root.destroy()
-
-    def on_close(self):
-        """Exit script"""
-        self.save_window_geometry()
-        # self.root.destroy()
-        self.hide()
 
 
 def show_start_gui():

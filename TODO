@@ -1,10 +1,7 @@
 
 
 Current:
-	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)
-	☐ Refactor: Loading&Saving JSON data. Create class & use throughout the program
 
-	☐ Refactor: Rename data manager to persistent data?
 
 Features:
 	☐ Start GUI: Context menu icons
@@ -22,7 +19,7 @@ Unit Testing:
 
 Refactoring:
 	
-	☐ Refactor: GUI: Base GUI class with common functionality for all other gui's to use
+	✔ Refactor: GUI: Base GUI class with common functionality for all other gui's to use @done(23-08-23 23:44)
 	☐ Refactor: Installer has some unused methods. should i use or remove them? eg: __extract_outdated_paks
 
 	☐ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class
@@ -92,6 +89,9 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)
+	✘ Refactor: Loading&Saving JSON data. Create class & use throughout the program @cancelled(23-08-23 22:41)
+	✘ Refactor: Rename data manager to persistent data? @cancelled(23-08-23 22:42)
 	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
 	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
 	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state

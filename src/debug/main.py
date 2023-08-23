@@ -56,14 +56,14 @@ def debug_gui():
     "debug gui"
 
     # browser
-    browse = get_debug_gui_browser_instance()
-    browse.run()
+    # browse = get_debug_gui_browser_instance()
+    # browse.run()
 
     # descriptions
     # debug_descriptions_gui()
 
     # start
-    # show_start_gui()
+    show_start_gui()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu()

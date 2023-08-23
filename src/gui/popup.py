@@ -1,14 +1,13 @@
 """Module for the editor menu"""
-
-import tkinter as tk
-
 from game.game import Game
+from gui.base import BaseGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from utils.persistent_data import PersistentDataManager
+from utils.shared_utils import Singleton
 
 
-class GuiEditorMenuPopupContextmenu:
+class GuiEditorMenuPopupContextmenu(BaseGUI, metaclass=Singleton):
     """
     A class representing a toggle window with hotkey functionality and a menu bar.
 
@@ -28,12 +27,8 @@ class GuiEditorMenuPopupContextmenu:
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
-        self.is_hidden = None
-        self.root = tk.Tk()
-        self.hide()
-        # self.root.geometry("300x200")
-        self.root.title("Hud Editor")
-        # self.root.withdraw()
+        BaseGUI.__init__(self)
+        self.root.title = "Hud Editor"
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
@@ -43,54 +38,6 @@ class GuiEditorMenuPopupContextmenu:
         # keyboard.add_hotkey("F5", self.toggle_visibility, suppress=True)
 
         # self.show_menu()
-
-    def run(self):
-        "Show & start main loop"
-
-        self.show()
-        self.root.mainloop()
-
-    def show(self):
-        """Show gui"""
-        self.root.deiconify()
-        self.is_hidden = False
-
-    def hide(self):
-        """Hide gui"""
-        self.root.withdraw()
-        self.is_hidden = True
-
-    def toggle_visibility(self):
-        """
-        Toggles the visibility of the window between visible and hidden.
-
-        If the window is not currently activated and focused, it will get focused before toggling visibility.
-        Otherwise, if the window is currently hidden, it will be shown. If it is visible, it will be hidden.
-        """
-        print("toggle_visibility")
-
-        # if not self.root.focus_get():
-        # self.root.attributes("-topmost", True)
-        # self.root.attributes("-topmost", False)
-        # self.root.focus_force()
-        # self.my_editor_menu.root.focus_force()
-        # self.root.lift()  # bring the window to the front
-
-        # window_title = self.root.title()
-        # win = gw.getWindowsWithTitle(window_title)[0]
-        # win.activate()
-
-        # window_id = self.root.winfo_id()
-        # hwnd = win32gui.GetParent(window_id)
-        # print(hwnd)
-        # bring_window_to_front(hwnd)
-        # print("Focused Editor Gui")
-        if self.is_hidden:
-            self.root.deiconify()
-            self.is_hidden = False
-        else:
-            self.root.withdraw()
-            self.is_hidden = True
 
     def show_menu(self):
         """Show menu at mouse cursor"""

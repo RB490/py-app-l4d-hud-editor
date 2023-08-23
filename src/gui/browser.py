@@ -12,6 +12,7 @@ from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
 from game.game import Game
+from gui.base import BaseGUI
 from gui.descriptions import GuiHudDescriptions
 from gui.vdf import VDFModifierGUI
 from menu.menu import EditorMenuClass
@@ -25,40 +26,29 @@ from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
 
 
-class GuiHudBrowser(metaclass=Singleton):
+class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
     def __init__(self):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
-
+        BaseGUI.__init__(self)
         self.data_manager = PersistentDataManager()
 
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         from hud.hud import Hud
 
         # set variables
-        self.is_hidden = None
         self.hud = Hud()
         self.game = Game()
-        self.root = tk.Tk()
-        self.hide()
-        self.root.title("Browser")
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.title = "Browser"
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
         self.descriptions_gui = GuiHudDescriptions(self)
-        # self.root.wm_attributes("-topmost", 1)  # python can't focus windows so always on top it is
+        self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
         # Store PhotoImage objects in a list to prevent garbage collection
         self.treeview_photo_images = []
-
-        # load saved geometry
-        try:
-            geometry = self.data_manager.get("BrowserGuiGeometry")
-            self.root.geometry(geometry)
-        except KeyError:
-            self.root.geometry("1000x1000+100+100")
 
         # draw controls
         # create a frame for all widgets
@@ -181,35 +171,6 @@ class GuiHudBrowser(metaclass=Singleton):
     def dummy_handler(self):
         "Dummy method"
         print("dummy")
-
-    def run(self):
-        "Show & start main loop"
-        # hotkeys
-        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
-
-        self.show()
-        self.root.mainloop()
-
-    def show(self):
-        """Show gui"""
-        self.root.deiconify()
-        self.is_hidden = False
-
-    def hide(self):
-        """Hide gui"""
-        self.root.withdraw()
-        self.is_hidden = True
-
-    def toggle_visibility(self):
-        """
-        Toggles the visibility of the window between visible and hidden.
-
-        Because python can't focus windows (win32 has a function but it doesn't work, wow.) set it to always on top
-        """
-        if self.is_hidden:
-            self.show()
-        else:
-            self.hide()
 
     def handle_radio_click(self):
         """Handle clicks on radio buttons."""
@@ -359,22 +320,12 @@ class GuiHudBrowser(metaclass=Singleton):
             )
             # treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path)) # legacy
 
+        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
         print("Treeview: Refreshed")
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        if self.root and self.root.winfo_viewable():
-            # Get the current position and size of the window
-            geometry = self.root.geometry()
-            self.data_manager.set("BrowserGuiGeometry", geometry)
-        else:
-            print("GUI is not loaded or visible. Skipping window geometry save.")
-
-    def destroy_gui(self):
-        "Close & stop main loop"
-        keyboard.remove_hotkey(HOTKEY_TOGGLE_BROWSER)
-        self.save_window_geometry()
-        self.root.destroy()
+        self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry)
 
     def on_close(self):
         """Runs on close"""

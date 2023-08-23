@@ -4,28 +4,29 @@ import os
 import tkinter as tk
 from tkinter import scrolledtext
 
+from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import show_message
 from utils.vdf import VDFModifier
 
 
-class VDFModifierGUI:
+class VDFModifierGUI(BaseGUI):
     """GUI Class for modifying VDF files."""
 
     def __init__(self, vdf_path):
+        # verify input
         self.vdf_path = vdf_path
-        self.data_manager = PersistentDataManager()
-        self.modifier = None  # vdf modifier class
-        self.is_hidden = False
         self.root = None  # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
-        self.root = tk.Toplevel()
-        self.hide()  # prevent lil TopLevel gui from popping up
+
+        # setup gui
+        BaseGUI.__init__(self, is_toplevel_gui=True)
+        self.data_manager = PersistentDataManager()
+        self.modifier = None  # vdf modifier class
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.root.title("VDF Modifier")
+        self.root.title = "VDF Modifier"
 
         # load saved geometry
         try:
@@ -55,7 +56,7 @@ class VDFModifierGUI:
             self.modifier = VDFModifier(self.vdf_path)
         except Exception as err_info:
             show_message(f"Unable to load VDF file! {err_info}", "error")
-            self.destroy_gui()
+            self.destroy()
             return False
         self.process()
         return True
@@ -247,35 +248,4 @@ class VDFModifierGUI:
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        if self.root and self.root.winfo_viewable():
-            # Get the current position and size of the window
-            geometry = self.root.geometry()
-            self.data_manager.set("VDFGuiGeometry", geometry)
-
-        else:
-            print("GUI is not loaded or visible. Skipping window geometry save.")
-
-    def run(self):
-        "Show & start main loop"
-
-        self.show()
-        self.root.mainloop()
-
-    def show(self):
-        """Show gui"""
-        self.root.deiconify()
-        self.is_hidden = False
-
-    def hide(self):
-        """Hide gui"""
-        self.root.withdraw()
-        self.is_hidden = True
-
-    def destroy_gui(self):
-        "Close & stop main loop"
-        self.root.destroy()
-
-    def on_close(self):
-        """Runs on close"""
-        self.save_window_geometry()
-        self.destroy_gui()
+        self.data_manager.set("VDFGuiGeometry", self.get_window_geometry)
