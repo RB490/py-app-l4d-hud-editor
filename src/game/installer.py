@@ -87,11 +87,12 @@ class GameInstaller:
         self.__enable_paks()
 
         # set resume state
-        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.VERIFYING_GAME)
+        install_resume_state = InstallationState.VERIFYING_GAME
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, install_resume_state)
 
         # perform installation steps
         try:
-            self.__process_installation_steps(current_state)
+            self.__process_installation_steps(install_resume_state)
             print("Finished updating!")
             return True
         except Exception as err_info:
@@ -132,11 +133,12 @@ class GameInstaller:
         self.__enable_paks()
 
         # set resume state
-        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.EXTRACTING_PAKS)
+        install_resume_state = InstallationState.EXTRACTING_PAKS
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, install_resume_state)
 
         # perform installation steps
         try:
-            self.__process_installation_steps(current_state)
+            self.__process_installation_steps(install_resume_state)
             # finished
             print("Finished reparing!")
             return True

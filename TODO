@@ -7,6 +7,8 @@ Features:
 Bugs:
 	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
 	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
+	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state
+	
 	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
 	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
 
@@ -42,7 +44,7 @@ Refactoring:
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt
-	☐ Refactor: installer's install() repair() update() have a lot of duplicate code
+	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
 	☐ Private and internal classes dont need param checking, only public
 	☐ Handle VPK class failing to extract specific files during installation
 	☐ Make internal class methods protected by adding underscores. And internal with double __

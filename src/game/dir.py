@@ -1,8 +1,9 @@
 "Game class directory methods"
 # pylint: disable=protected-access, broad-exception-caught, broad-exception-raised
-from genericpath import isfile
 import os
 import shutil
+
+from genericpath import isfile
 
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
@@ -37,7 +38,7 @@ class GameDir:
         print(f"Setting mode: {dir_mode.name}")
 
         # retrieving source & target dir with self.get also already checks whether they are installed
-        rename_timeout = 3
+        rename_timeout = 6
         # variables - source
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
         source_dir = self.get(source_mode)
