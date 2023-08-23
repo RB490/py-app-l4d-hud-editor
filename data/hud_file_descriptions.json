@@ -922,7 +922,7 @@
             "PZEndGamePanel": "Infected rematch voting hud",
             "PlayerLabel": "Survivor Player Label floating above their head. Everything is hard coded, however the 'alpha' key works"
         },
-        "file_description": "Defines the positions of a variety of hud controls",
+        "file_description": "Defines the positions of a variety of hud controls.",
         "file_name": "hudlayout.res",
         "file_relative_path": "scripts\\hudlayout.res"
     },

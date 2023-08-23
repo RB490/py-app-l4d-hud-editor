@@ -14,8 +14,8 @@ class GuiHudDescriptions(metaclass=Singleton):
 
     def __init__(self, persistent_data, parent_gui):
         if not parent_gui.root:
-            ValueError('parent_gui is not a tkinter gui class!')
-        
+            ValueError("parent_gui is not a tkinter gui class!")
+
         self.is_hidden = None
         self.root = tk.Toplevel()
         self.hide()
@@ -95,7 +95,7 @@ class GuiHudDescriptions(metaclass=Singleton):
         save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
 
         save_button = tk.Button(
-            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.save_gui
+            save_button_frame, text="", justify="center", height=25, width=ctrl_w, command=self.submit_gui_save_changes
         )
         save_button.config(image=self.save_image, compound="center")
         save_button.pack(side="bottom", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
@@ -168,18 +168,24 @@ class GuiHudDescriptions(metaclass=Singleton):
         self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
         self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.relative_path, input_ctrl))
 
-    def save_control_desc(self):
+    def save_control_description(self):
         """Save control description"""
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
-        self.hud.desc.save_control_desc(self.relative_path, selected_control, control_desc)
+        self.hud.desc.save_control_description(self.relative_path, selected_control, control_desc)
         print(control_desc)
+
+    def save_file_description(self):
+        """Save file description"""
+        file_description = self.file_desc_text.get("1.0", "end-1c")
+        self.hud.desc.save_file_description(self.relative_path, file_description)
+        print(file_description)
 
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
 
         # save currently loaded control
-        self.save_control_desc()
+        self.save_control_description()
 
         # load selected control
         print("You selected:", input_ctrl)
@@ -193,7 +199,7 @@ class GuiHudDescriptions(metaclass=Singleton):
         # If user entered a name and clicked OK, add the control
         if new_control:
             # save currently loaded control
-            self.save_control_desc()
+            self.save_control_description()
 
             # Add control
             self.hud.desc.add_control(self.relative_path, new_control)
@@ -208,18 +214,21 @@ class GuiHudDescriptions(metaclass=Singleton):
         # Show a message box to confirm removal
         if messagebox.askyesno("Remove Control", f"Are you sure you want to remove {selected_control}?"):
             # save currently loaded control
-            self.save_control_desc()
+            self.save_control_description()
 
             # User clicked Yes, so remove the control
             print(f"Removed {selected_control}")
             self.hud.desc.remove_control(self.relative_path, selected_control)
             self.load_controls()
 
-    def save_gui(self):
+    def submit_gui_save_changes(self):
         """Submit gui"""
 
+        # save file description
+        self.save_file_description()
+
         # save currently loaded control
-        self.save_control_desc()
+        self.save_control_description()
 
         # save changes to disk
         self.hud.desc.save_to_disk()
