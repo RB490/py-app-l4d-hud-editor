@@ -35,9 +35,11 @@ def get_backup_path(file_path):
     backup_path = file_path + BACKUP_APPEND_STRING
     return backup_path
 
+
 def get_backup_filename(file_name):
     backup_file_name = file_name + BACKUP_APPEND_STRING
     return backup_file_name
+
 
 def get_image_for_file_extension(input_path):
     "Retrieve image for file extension"
@@ -303,15 +305,16 @@ def wait_for_process_with_ram_threshold(exe, timeout=None):
 
 def wait_process_close(executable, timeout=None):
     "Wait for a process to close (if it exists)"
-    print(f"Waiting for {executable} to close")
 
     # Get the list of processes with the same name as the executable
     processes = [p for p in psutil.process_iter() if p.name() == executable]
     # If no processes are found, return immediately
     if not processes:
-        print(f"{executable} to not running!")
+        # print(f"{executable} to not running!")
         return False
+
     # Otherwise, wait for the processes to terminate or until timeout is reached
+    print(f"Waiting for {executable} to close")
     start = time.time()
     while True:
         # Check if any process is still alive

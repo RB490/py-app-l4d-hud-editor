@@ -9,8 +9,11 @@ Bugs:
 	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
 	✔ Bug: Installer: Dev was fully installed -> repair dev install -> install created another dev folder? causing issues @done(23-08-23 16:49) they were incorrectly using the current install state
 	
+	✔ Bug: game.dir.Set() cancelled because vanilla game dir didn't exist. but that doesnt mattter @done(23-08-23 16:57)
+
 	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
 	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
+	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code
 
 
 GUI:

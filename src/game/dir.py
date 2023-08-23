@@ -52,8 +52,7 @@ class GameDir:
             return False
         if not verify_directory(target_dir, "Could not retrieve target directory!"):
             return False
-        if not verify_directory(vanilla_dir, "Could not retrieve vanilla directory!"):
-            return False
+        # not checking vanilla_dir because it might very well not exist if both of the modes are custom renamed
 
         # do we need to swap?
         if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
