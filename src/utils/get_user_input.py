@@ -23,6 +23,7 @@ class UserInputWindow:
             prompt: The prompt to display to the user.
         """
         self.root = tk.Toplevel()
+        self.root.withdraw() # prevent lil TopLevel gui from popping up
         self.root.title(title)
         self.prompt = prompt
         # self.input_box = None

@@ -18,7 +18,7 @@ class GuiHudDescriptions(metaclass=Singleton):
 
         self.is_hidden = None
         self.root = tk.Toplevel()
-        self.hide()
+        self.hide()  # prevent lil TopLevel gui from popping up
         self.root.title("File")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.iconbitmap(APP_ICON)

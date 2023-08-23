@@ -6,7 +6,7 @@ Features:
 
 Bugs:
 	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
-	☐ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui
+	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
 	☐ Test: Installer: New is_game_files_dir_return_pak01 method (install, repair or whatever)
 	☐ Bug: Why does VSCode not highlight class in some places but does in others. for example hud/descriptions/self.game.dir.is_custom_file() works fine but in some locations it wouldnt get highlighted
 

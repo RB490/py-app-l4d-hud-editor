@@ -21,6 +21,7 @@ class VDFModifierGUI:
         self.root = None # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
         self.root = tk.Toplevel()
+        self.hide() # prevent lil TopLevel gui from popping up
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
