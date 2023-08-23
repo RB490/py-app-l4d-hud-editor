@@ -4,11 +4,15 @@ Current:
 	
 
 
-	☐ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin
-		- GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data 
-	☐ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning	
-	☐ Refactor. Add method docs, simplify & improve code (naming)
+	✔ Refactor. Add method docs @done(23-08-23 01:48)
+	✔ VDF: A single gui for modifying the VDF files. All the options such as annotate, integers + text fields with a before & after. + warning about larger (scheme) files + backup in recycle bin @done(23-08-23 01:55)
+		✔ GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data @done(23-08-23 01:55)
+	✔ Feature: VDF: Save option @done(23-08-23 02:29)
+	✔ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning @done(23-08-23 02:29)
+	☐ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown?
+	☐ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd
 	☐ Browser: Treeview context menu functionality: VDF: Modify
+	☐ Refactor: simplify & improve code (naming)
 
 
 	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)

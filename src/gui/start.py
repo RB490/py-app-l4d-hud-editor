@@ -7,7 +7,6 @@ from tkinter import filedialog, ttk
 
 from PIL import Image, ImageTk
 
-from game.constants import DirectoryMode
 from game.game import Game
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.functions import (
@@ -15,7 +14,7 @@ from utils.functions import (
     prompt_create_new_hud,
     retrieve_hud_name_for_dir,
 )
-from utils.shared_utils import Singleton, show_message
+from utils.shared_utils import Singleton
 from utils.vpk import VPKClass
 
 

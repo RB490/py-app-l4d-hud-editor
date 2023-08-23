@@ -16,7 +16,7 @@ class VDFModifierGUI:
         self.modifier = None  # vdf modifier class
         self.is_hidden = False
         self.root = tk.Tk()
-        self.root.minsize(875, 395)
+        self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.title("VDF Modifier")
@@ -26,7 +26,7 @@ class VDFModifierGUI:
             geometry = self.persistent_data["VDFGuiGeometry"]
             self.root.geometry(geometry)
         except KeyError:
-            self.root.geometry("875x395+100+100")
+            self.root.geometry("875x425+100+100")
 
         self.control_options = ["xpos", "ypos", "wide", "tall", "visible", "enabled"]
         self.selected_control = tk.StringVar(value=self.control_options[0])
@@ -43,6 +43,7 @@ class VDFModifierGUI:
         self.load_file()
 
     def load_file(self):
+        "Load VDF file"
         self.previous_output = None
         self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
         self.process()
@@ -50,21 +51,31 @@ class VDFModifierGUI:
     def create_widgets(self):
         """Create widgets"""
         self.reload_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
+        self.process_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
+        self.save_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save.png")).subsample(2, 2)
 
         # Create a main frame to hold everything
         main_frame = tk.Frame(self.root)
         main_frame.pack(fill=tk.BOTH, expand=True)
 
+        info_msg = "Expect incorrect results on larger and/or more complex VDF files like sourcescheme.res!"
+        self.info_label = tk.Label(main_frame, text=info_msg)
+        self.info_label.pack(side=tk.BOTTOM, pady=(0, 5))
+
         right_side_frame = tk.Frame(main_frame, relief=tk.SOLID, borderwidth=0)
         right_side_frame.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
-
-        self.process_button = tk.Button(right_side_frame, text="Process", height=32, command=self.process)
-        self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.process_button.config(image=self.reload_img, compound="left", padx=10)
 
         self.reload_button = tk.Button(right_side_frame, text="Reload", height=16, command=self.load_file)
         self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
         self.reload_button.config(image=self.reload_img, compound="left", padx=10)
+
+        self.save_to_file_button = tk.Button(right_side_frame, text="Save", height=16, command=self.save_vdf)
+        self.save_to_file_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
+        self.save_to_file_button.config(image=self.save_img, compound="left", padx=10)
+
+        self.process_button = tk.Button(right_side_frame, text="Modify", height=32, command=self.process)
+        self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
+        self.process_button.config(image=self.process_img, compound="left", padx=10)
 
         # Create a frame for integer modifying widgets
         int_mod_frame = tk.Frame(right_side_frame, relief=tk.RIDGE, borderwidth=3)
@@ -144,7 +155,7 @@ class VDFModifierGUI:
 
         # Label for "previous" text box
         previous_label = tk.Label(previous_frame, text="Previous:")
-        previous_label.pack(side=tk.TOP, pady=(0, 5))
+        previous_label.pack(side=tk.TOP, pady=(0, 0))
 
         # "previous" text box
         self.previous_text = scrolledtext.ScrolledText(previous_frame, width=40, height=10)
@@ -152,7 +163,7 @@ class VDFModifierGUI:
 
         # Label for "current" text box
         current_label = tk.Label(current_frame, text="Current:")
-        current_label.pack(side=tk.TOP, pady=(0, 5))
+        current_label.pack(side=tk.TOP, pady=(0, 0))
 
         # "current" text box
         self.current_text = scrolledtext.ScrolledText(current_frame, width=40, height=10)
@@ -160,6 +171,9 @@ class VDFModifierGUI:
 
     def process(self):
         """Process changes"""
+        self.previous_text.configure(state="normal")
+        self.current_text.configure(state="normal")
+
         is_align_values_indentation = self.align_values_indent_var.get()
 
         self.previous_text.delete(1.0, tk.END)
@@ -190,7 +204,18 @@ class VDFModifierGUI:
 
         self.save_settings()
 
+        self.previous_text.configure(state="disabled")
+        self.current_text.configure(state="disabled")
+
+    def save_vdf(self):
+        "Save vdf to disk"
+        
+        self.save_settings()
+        
+        self.modifier.save_vdf(self.modifier.get_obj(), self.modifier.get_path(), self.persistent_data.get("VDFGui_indent_values", True))
+        
     def save_settings(self):
+        "Save gui settings"
         self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()
         self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
         self.persistent_data["VDFGui_annotate"] = self.annotate_var.get()

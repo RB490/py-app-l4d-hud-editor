@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught
 """Class for modifying VDF files."""
 import os
 
@@ -6,7 +7,7 @@ import vdf  # type: ignore
 
 from hud.hud import Hud  # type: ignore
 from utils.constants import DEVELOPMENT_DIR
-from utils.shared_utils import replace_text_between_quotes
+from utils.shared_utils import replace_text_between_quotes, show_message
 
 
 class VDFModifier:
@@ -87,6 +88,10 @@ class VDFModifier:
         else:
             return self.vdf_obj
 
+    def get_path(self):
+        """Return the source VDF path."""
+        return self.vdf_path
+
     def print_current_vdf(self):
         """Print the current VDF object."""
         if self.vdf_obj:
@@ -113,9 +118,20 @@ class VDFModifier:
         if os.path.exists(output_path):
             send2trash.send2trash(output_path)  # Move the existing file to the recycle bin
 
-        result = vdf.dumps(vdf_obj, pretty=True)
+        # align indentation?
+        result = vdf.dumps(vdf_obj, pretty=True)  # Re-dump the loaded data
         if align_value_indentation:
             result = self.__obj_align_values_with_indent_to_text(result)
+        
+        # Verify the validity of the data format by loading it
+        try:
+            vdf.loads(result)  # Attempt to load the VDF object
+        except Exception as err_info:
+            # print(f"Invalid VDF format. Cannot save: {err_info}")
+            show_message(f"Invalid VDF format. Cannot save: {err_info}", "error")
+            return
+        
+        # write to disk
         with open(output_path, "w", encoding="utf-8") as output_file:
             output_file.write(result)
 
@@ -313,6 +329,9 @@ def debug_vdf_class(persistent_data):
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
+    # vdf_path = os.path.join(
+    #     DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res"
+    # )
 
     modifier = "plus"  # or "minus"
     amount = 15000

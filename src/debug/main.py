@@ -65,6 +65,7 @@ def debug_gui(persistent_data):
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
     )
+    # vdf_path = os.path.join(DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res")
     app = VDFModifierGUI(persistent_data, vdf_path)
     app.root.mainloop()
 
