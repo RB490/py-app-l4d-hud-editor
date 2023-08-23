@@ -18,7 +18,7 @@ def debug_game_class(persistent_data):
     ###########################
     # Installer
     ###########################
-    result = gamez.installer.install()
+    # result = gamez.installer.install()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
@@ -55,7 +55,9 @@ def debug_game_class(persistent_data):
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.USER)
 
+    result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
+
     ###########################
     # Result
     ###########################
-    print(f"install result = {result}")
+    print(f"result = {result}")

@@ -67,6 +67,10 @@ class GameDir:
         print(f"Set mode: {dir_mode.name} successfully!")
         return True
 
+    def is_custom_file(self, relative_file_path):
+        
+        print(relative_file_path)
+
     def get(self, dir_mode):
         "Get directory"
         # set variables

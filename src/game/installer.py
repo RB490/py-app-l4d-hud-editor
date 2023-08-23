@@ -14,7 +14,7 @@ from game.constants import DirectoryMode, InstallationState
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import copy_directory, wait_process_close
+from utils.functions import copy_directory, get_backup_filename, get_backup_path, wait_process_close
 from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
@@ -284,7 +284,7 @@ class GameInstaller:
             subdir_path = os.path.join(game_dir, subdir_name)
             if os.path.isdir(subdir_path):
                 for filename in os.listdir(subdir_path):
-                    if filename == "pak01_dir.vpk" or filename == "pak01_dir.vpk.disabled":
+                    if filename == "pak01_dir.vpk" or filename == get_backup_filename("pak01_dir.vpk"):
                         filepath = os.path.join(subdir_path, filename)
                         callback(filepath, subdir_path)
 
@@ -359,7 +359,7 @@ class GameInstaller:
 
         def disable_callback(filepath, subdir_path):
             source_filepath = filepath
-            target_filepath = os.path.join(subdir_path, "pak01_dir.vpk.disabled")
+            target_filepath = get_backup_path(os.path.join(subdir_path, "pak01_dir.vpk"))
             os.rename(source_filepath, target_filepath)
 
         self.__find_pak_files(dev_dir, disable_callback)

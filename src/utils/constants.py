@@ -2,6 +2,10 @@
 import os
 from enum import Enum, auto
 
+#####################################################
+# Path
+#####################################################
+
 # core
 DEBUG_MODE = True
 SCRIPT_NAME = "L4D Hud Editor"
@@ -32,7 +36,6 @@ FILE_EXT_WARNING_ICON = (
 )
 FILE_EXT_IMAGES = os.path.join(IMAGES_DIR, "file_extensions")
 
-
 # data
 SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")
 NEW_HUD_DIR = os.path.join(DATA_DIR, "new_hud_template")
@@ -41,7 +44,11 @@ DUMMY_ADDON_VPK_PATH = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
 PERSISTENT_DATA_PATH = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
 HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 
-# misc
+#####################################################
+# General
+#####################################################
+
+BACKUP_APPEND_STRING = ".hud_dev_backup"
 UNIVERSAL_GAME_MAP = "hud_dev_map"
 HOTKEY_SYNC_HUD = "ctrl+s"
 HOTKEY_TOGGLE_BROWSER = "F4"

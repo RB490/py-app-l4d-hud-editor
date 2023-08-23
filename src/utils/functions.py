@@ -21,6 +21,7 @@ import win32gui
 import win32process
 
 from .constants import (
+    BACKUP_APPEND_STRING,
     FILE_EXT_FOLDER_ICON,
     FILE_EXT_IMAGES,
     FILE_EXT_WARNING_ICON,
@@ -31,9 +32,12 @@ from .constants import (
 
 def get_backup_path(file_path):
     """Get a backup path by appending '.backup' to the input file path"""
-    backup_path = file_path + ".backup"
+    backup_path = file_path + BACKUP_APPEND_STRING
     return backup_path
 
+def get_backup_filename(file_name):
+    backup_file_name = file_name + BACKUP_APPEND_STRING
+    return backup_file_name
 
 def get_image_for_file_extension(input_path):
     "Retrieve image for file extension"
