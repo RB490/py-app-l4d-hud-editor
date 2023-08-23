@@ -14,6 +14,8 @@ Features:
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
+	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
+	
 Bugs:
 
 
@@ -32,14 +34,12 @@ Refactoring:
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
 	
-	☐ Sync: Refactor(?)
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
-	☐ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase
+	
 	☐ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it
 	☐ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions?
-		- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
+	- That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle?
 	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
-	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 	☐ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data
 	☐ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt
@@ -50,17 +50,8 @@ Refactoring:
 	☐ Utilize exception handling for specific cases like AssertionError and ValueError
 	☐ Simplify manager class, improve 'get_dir' function and other enhancements
 	☐ Enums. For example for steam_info object (?) or make it into a class
-	☐ Replace assert statements with proper error handling using try/catch
-	☐ Make the function to create lambda commands a shared utility, and use it in the project
-	☐ Streamline and test HUD editing process for improved code path
-	☐ Explore restructuring options for more efficient code flow
-	☐ Evaluate the use of singleton patterns in GUI management
-	☐ Break up the game commands execute method for better organization
-	☐ Consider alternatives for using subclasses and direct referencing
-	☐ Reevaluate the use of persistent_data in classes, possibly with a dedicated class or alternative approach
-	☐ Optimize and improve functions, methods, and overall structure based on GPT suggestions
-	☐ Installer: Add try&except for validate_mode_parameter calls with custom invalid mode param exception to catch
-		☐ Determine what should happen for each instance
+	
+	
 
 Additional Ideas and Considerations:
 	
@@ -83,10 +74,21 @@ Additional Ideas and Considerations:
 		- however that didn't work for the game or steam
 		- this is legitimately around 2 hours of trail and error: python_process_decouple_testing.py
 	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)? might have decided to not bother because asyncio and threading was kinda aids
+	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
 
 
 
 --Archive--:
+	✔ Replace assert statements with proper error handling using try/catch @done(23-08-24 00:52)
+	✔ Make the function to create lambda commands a shared utility, and use it in the project @done(23-08-24 00:51)
+	✔ Streamline and test HUD editing process for improved code path @done(23-08-24 00:46)
+	✔ Explore restructuring options for more efficient code flow @done(23-08-24 00:45)
+	✔ Evaluate the use of singleton patterns in GUI management @done(23-08-24 00:45)
+	✘ Break up the game commands execute method for better organization @cancelled(23-08-24 00:45)
+	✘ Installer: Add try&except for validate_mode_parameter calls with custom invalid mode param exception to catch @cancelled(23-08-24 00:38)
+	✔ Reevaluate the use of persistent_data in classes, possibly with a dedicated class or alternative approach @done(23-08-24 00:37)
+	✔ Refactor GameDir: Ensure functions like get_main_dir_backup, get_main_dir_backup_materials are used throughout the codebase @done(23-08-24 00:35)
+	✔ Added clear messageboxes to installer failures @done(23-08-24 00:35)
 	✘ Refactor: Private and internal classes dont need param checking, only public @cancelled(23-08-24 00:33)
 	✘ Use Super(). This can elimiate the need to for example define self.persistent_data again in subclasses @cancelled(23-08-24 00:32)
 	✔ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class @done(23-08-24 00:31)
@@ -128,6 +130,7 @@ Additional Ideas and Considerations:
 	✔ Browser: Treeview context menu functionality: VDF: Modify @done(23-08-23 03:08)
 	✔ Bug: VDF: Confirm file was able to be read properly, if not return @done(23-08-23 03:16)
 	✔ Refactor: simplify & improve code (naming) @done(23-08-23 03:17)
+	✔ Sync: Refactor(?) @done(23-08-24 00:36)
 	✔ Feature: VDF: Proper before & after comparison @done(23-08-23 00:55)
 	✔ Feature: VDF: With annotation disabled the __description__ keys should be removed @done(23-08-23 00:59)
 	✔ Feature: VDF: Save window geometry @done(23-08-23 01:09)

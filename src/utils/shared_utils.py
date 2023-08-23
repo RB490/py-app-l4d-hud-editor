@@ -14,6 +14,35 @@ import win32gui
 import win32process
 from ahk import AHK
 
+def create_lambda_command(func, *args):
+    # pylint: disable=line-too-long
+    """
+    The `create_lambda_command` method takes in a function `func`
+    and any number of positional arguments `*args`
+    and returns a lambda function that, when called,
+    will execute the given function with the supplied arguments.
+
+    :param self: the instance of the class that the method belongs to.
+    :param func: the function that will be executed by the lambda command returned from this method.
+    :param *args: any number of positional arguments that will be passed to the function when
+        called through the returned lambda command.
+
+    :return: A lambda function that executes the input function `func` with its corresponding arguments `args`.
+
+    #Example:
+        campaign_submenu.add_command(
+            label=map_name, command=self.create_lambda_command(self.handler.load_map, map_name, map_code)
+        )
+        > so when this menu entry is selected self.handler.load_map gets called with map_name and map_code
+
+    This method is useful for creating a function on-the-fly that takes no arguments
+    but still needs to execute some code with certain values or variables.
+    By using a lambda function created by `create_lambda_function`,
+    you can defer binding the arguments until later when needed.
+    This technique is also known as partial evaluation or currying,
+    and it is commonly used in functional programming.
+    """
+    return lambda: func(*args)
 
 def replace_text_between_quotes(input_string, replacement_text):
     """Replace text between quotes. Multiple double quotes supported"""

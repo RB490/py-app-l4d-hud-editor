@@ -21,6 +21,7 @@ from utils.constants import (
     TUTORIALS_DIR,
 )
 from utils.persistent_data import PersistentDataManager
+from utils.shared_utils import create_lambda_command
 
 
 class EditorMenuClass:
@@ -56,36 +57,6 @@ class EditorMenuClass:
         A dummy function that does nothing.
         """
         print("Do nothing with:", args)
-
-    def create_lambda_command(self, func, *args):
-        # pylint: disable=line-too-long
-        """
-        The `create_lambda_command` method takes in a function `func`
-        and any number of positional arguments `*args`
-        and returns a lambda function that, when called,
-        will execute the given function with the supplied arguments.
-
-        :param self: the instance of the class that the method belongs to.
-        :param func: the function that will be executed by the lambda command returned from this method.
-        :param *args: any number of positional arguments that will be passed to the function when
-            called through the returned lambda command.
-
-        :return: A lambda function that executes the input function `func` with its corresponding arguments `args`.
-
-        #Example:
-            campaign_submenu.add_command(
-                label=map_name, command=self.create_lambda_command(self.handler.load_map, map_name, map_code)
-            )
-            > so when this menu entry is selected self.handler.load_map gets called with map_name and map_code
-
-        This method is useful for creating a function on-the-fly that takes no arguments
-        but still needs to execute some code with certain values or variables.
-        By using a lambda function created by `create_lambda_function`,
-        you can defer binding the arguments until later when needed.
-        This technique is also known as partial evaluation or currying,
-        and it is commonly used in functional programming.
-        """
-        return lambda: func(*args)
 
     def create_game_map_menu(self, menubar):
         """Create game map menu"""
@@ -185,7 +156,7 @@ class EditorMenuClass:
                 map_code = map_info["code"]
                 campaign_submenu.add_command(
                     label=map_name,
-                    command=self.create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code),
+                    command=create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code),
                 )
 
     def create_game_res_menu(self, menubar):
@@ -298,11 +269,11 @@ class EditorMenuClass:
         self.hud_menu.add_command(label="Folder", command=self.handler.editor_save_as_folder)
         self.hud_menu.add_command(label="Open", state="disabled", columnbreak=True)
         self.hud_menu.add_command(
-            label="Hud", command=self.create_lambda_command(self.handler.editor_open_folder, self.hud.edit.get_dir())
+            label="Hud", command=create_lambda_command(self.handler.editor_open_folder, self.hud.edit.get_dir())
         )
         self.hud_menu.add_command(
             label="Hud (VS)",
-            command=self.create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
+            command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
         )
 
         # disable items when no hud is loaded
@@ -326,10 +297,10 @@ class EditorMenuClass:
             hud_name = self.hud.manager.retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
-                command=self.create_lambda_command(self.handler.editor_edit_hud, hud_dir),
+                command=create_lambda_command(self.handler.editor_edit_hud, hud_dir),
             )
             remove_stored_hud_menu.add_command(
-                label=hud_name, command=self.create_lambda_command(self.handler.editor_remove_stored_hud, hud_dir)
+                label=hud_name, command=create_lambda_command(self.handler.editor_remove_stored_hud, hud_dir)
             )
         # stored huds - submenu - add stored hud
         stored_huds_submenu.add_command(label="Add", command=self.handler.editor_add_existing_hud)
@@ -350,10 +321,10 @@ class EditorMenuClass:
             hud_name = self.hud.manager.retrieve_hud_name_for_dir(hud_dir)
             self.load_hud_menu.add_command(
                 label=hud_name,
-                command=self.create_lambda_command(self.handler.editor_edit_hud, hud_dir),
+                command=create_lambda_command(self.handler.editor_edit_hud, hud_dir),
             )
             remove_temp_hud_menu.add_command(
-                label=hud_name, command=self.create_lambda_command(self.handler.editor_remove_temp_hud, hud_dir)
+                label=hud_name, command=create_lambda_command(self.handler.editor_remove_temp_hud, hud_dir)
             )
         # stored huds - submenu - add temp hud
         temp_huds_submenu.add_command(label="Open", command=self.handler.editor_open_temp_hud)
@@ -499,7 +470,7 @@ class EditorMenuClass:
         self.show_panel_menu = tk.Menu(menubar, tearoff=0)
         for key, value in show_panel_dict["general"].items():
             self.show_panel_menu.add_command(
-                label=key, command=self.create_lambda_command(self.handler.editor_menu_show_panel, value)
+                label=key, command=create_lambda_command(self.handler.editor_menu_show_panel, value)
             )
 
         # Check GAME_VERSION to determine which L4D-specific options to add
@@ -513,7 +484,7 @@ class EditorMenuClass:
         # Add L4D-specific options to general menu
         for key, value in show_panel_game_version_data.items():
             self.show_panel_menu.add_command(
-                label=key, command=self.create_lambda_command(self.handler.editor_menu_show_panel, value)
+                label=key, command=create_lambda_command(self.handler.editor_menu_show_panel, value)
             )
 
     def create_switch_team_menu(self, menubar):
@@ -617,7 +588,7 @@ class EditorMenuClass:
         # reload mode setting
         for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             self.reload_mode_menu.add_command(
-                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
+                label=reload_mode, command=create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
             )
 
         self.reload_mode_menu.add_command(label="Options", state="disabled", columnbreak=True)
@@ -626,7 +597,7 @@ class EditorMenuClass:
         # reload once menu
         for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             reload_once_menu.add_command(
-                label=reload_mode, command=self.create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
+                label=reload_mode, command=create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}")
             )
 
         # reload options
@@ -660,7 +631,7 @@ class EditorMenuClass:
                 menu_name = os.path.splitext(file_name)[0]
                 self.clipboard_menu.add_command(
                     label=menu_name,
-                    command=self.create_lambda_command(self.handler.editor_menu_copy_snippet, file_path),
+                    command=create_lambda_command(self.handler.editor_menu_copy_snippet, file_path),
                 )
 
     def create_give_items_menu(self, menubar):
@@ -771,12 +742,10 @@ class EditorMenuClass:
         self.file_menu.add_separator()
         self.file_menu.add_command(
             label="Game",
-            command=self.create_lambda_command(
-                self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)
-            ),
+            command=create_lambda_command(self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)),
         )
         self.file_menu.add_command(
-            label="Script", command=self.create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT)
+            label="Script", command=create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT)
         )
         self.file_menu.add_cascade(label="Hud", menu=self.load_hud_menu)
 

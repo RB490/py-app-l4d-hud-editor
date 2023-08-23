@@ -231,7 +231,8 @@ class HudEditor:
         """Save hud as vpk file"""
 
         # verify directory
-        assert os.path.isdir(self.get_dir())
+        if not os.path.isdir(self.get_dir()):
+            raise AssertionError("Directory does not exist.")
 
         # Prompt the user to select a file location to save the VPK file
         file_path = asksaveasfilename(

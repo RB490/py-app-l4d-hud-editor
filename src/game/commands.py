@@ -78,6 +78,7 @@ class GameCommands:
         self.previous_ui_panel = self.show_ui_panel
 
     def _get_mapped_command(self, input_command):
+        """Map the input command to its corresponding game command."""
         give_all_guns = (
             "give pistol; give pistol_magnum; give autoshotgun; give shotgun_chrome; "
             + "give pumpshotgun; give shotgun_spas; give smg; give smg_mp5; give smg_silenced; "
