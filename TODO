@@ -9,7 +9,7 @@ Current:
 		✔ GPT did a great job. looks like i should modify how the class works some to fully support this. for example return data @done(23-08-23 01:55)
 	✔ Feature: VDF: Save option @done(23-08-23 02:29)
 	✔ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning @done(23-08-23 02:29)
-	☐ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown?
+	✔ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown? @done(23-08-23 03:04)
 	☐ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd
 	☐ Browser: Treeview context menu functionality: VDF: Modify
 	☐ Refactor: simplify & improve code (naming)

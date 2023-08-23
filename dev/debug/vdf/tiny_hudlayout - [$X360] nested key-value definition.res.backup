@@ -1,11 +1,36 @@
 "resource/hudlayout.res"
 {
-	overview [$X360]
+	overview_X360_no_quotes [$X360]
 	{
 		"visible"				"1"
 		"fieldname"			"overview"
 		"enabled"				"1"
 		"xpos"					"0"
+		"ypos"			"480"
+		"wide"					"0"
+		"tall"							"0"
+	}
+
+	"overview_deck_quoted" [$DECK]
+	{
+		"visible"				"1"
+		"fieldname"			"overview"
+		"enabled"				"1"
+		"xpos"					"0"
+		"ypos"			"480"
+		"wide"					"0"
+		"tall"							"0"
+	}
+
+	overview_vanilla
+	{
+		"visible"				"1"
+		"fieldname"			"overview"
+		"enabled"				"1"
+		"xpos"					"100"
+		"xpos"					"360" [$X360]
+		"xpos"					"460" [$DECK]
+		"xpos"					"560" [$LINUX]
 		"ypos"			"480"
 		"wide"					"0"
 		"tall"							"0"

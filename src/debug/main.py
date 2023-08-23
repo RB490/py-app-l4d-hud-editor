@@ -7,6 +7,7 @@ import vdf  # type: ignore
 
 from debug.game import debug_game_class
 from debug.hud import get_hud_debug_instance
+from debug.vdf_gui import debug_vdf_gui
 from gui import descriptions
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopupContextmenu
@@ -37,7 +38,7 @@ def debug_main():
 
     # print(f"result={result}")
 
-    save_data(persistent_data)
+    # save_data(persistent_data)
 
     input("Finished debugging! Press enter to continue..")
 
@@ -62,12 +63,7 @@ def debug_gui(persistent_data):
     # my_editor_menu_gui.show()
 
     # vdf gui
-    vdf_path = os.path.join(
-        DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
-    )
-    # vdf_path = os.path.join(DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res")
-    app = VDFModifierGUI(persistent_data, vdf_path)
-    app.root.mainloop()
+    debug_vdf_gui(persistent_data)
 
 
 def get_debug_gui_browser_instance(persistent_data):

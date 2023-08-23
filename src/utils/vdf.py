@@ -122,7 +122,7 @@ class VDFModifier:
         result = vdf.dumps(vdf_obj, pretty=True)  # Re-dump the loaded data
         if align_value_indentation:
             result = self.__obj_align_values_with_indent_to_text(result)
-        
+
         # Verify the validity of the data format by loading it
         try:
             vdf.loads(result)  # Attempt to load the VDF object
@@ -130,7 +130,7 @@ class VDFModifier:
             # print(f"Invalid VDF format. Cannot save: {err_info}")
             show_message(f"Invalid VDF format. Cannot save: {err_info}", "error")
             return
-        
+
         # write to disk
         with open(output_path, "w", encoding="utf-8") as output_file:
             output_file.write(result)
@@ -139,17 +139,43 @@ class VDFModifier:
         """Clean up VDF text."""
         cleaned_lines = []
         for line in vdf_text.split("\n"):
+            line = line.split("//", 1)[0].strip()  # Ignore text after // to handle comments
             line = line.strip()
+
+            # eg. "if_split_screen_$WIN32" [$WIN32] or
             if ("[$" in line or "[!$ENGLISH]" in line) and "[$WIN32]" not in line:
                 line = replace_text_between_quotes(line, "DELETE_ME")
+
+            # eg. overview [$X360]
+            if (
+                "{" not in line
+                and "}" not in line
+                and '"' not in line
+                and ("[$" in line or "[!$ENGLISH]" in line)
+                and "[$WIN32]" not in line
+            ):
+                line = "DELETE_ME\n"
+
             cleaned_lines.append(line)
 
         cleaned_vdf_text = "\n".join(cleaned_lines)
+        print(cleaned_vdf_text)
         return cleaned_vdf_text
 
     def __preprocess_obj(self, vdf_obj):
         modified_vdf_obj = vdf_obj.copy()
 
+        # Remove entire controls with name "DELETE_ME"
+        controls_to_remove = []
+        controls = modified_vdf_obj[next(iter(vdf_obj))]
+        for control_name in controls:
+            print(f"control name = {control_name}")
+            if control_name == "DELETE_ME":
+                controls_to_remove.append(control_name)
+        for control_name in controls_to_remove:
+            del controls[control_name]
+
+        # Remove keys or values with value "DELETE_ME"
         for controls in modified_vdf_obj.values():
             for control_data in controls.values():
                 keys_to_remove = []

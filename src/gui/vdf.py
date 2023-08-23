@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 
 from utils.constants import APP_ICON, IMAGES_DIR
+from utils.functions import save_data
 from utils.vdf import VDFModifier
 
 
@@ -155,7 +156,7 @@ class VDFModifierGUI:
 
         # Label for "previous" text box
         previous_label = tk.Label(previous_frame, text="Previous:")
-        previous_label.pack(side=tk.TOP, pady=(0, 0))
+        previous_label.pack(side=tk.TOP, pady=(0, 5))
 
         # "previous" text box
         self.previous_text = scrolledtext.ScrolledText(previous_frame, width=40, height=10)
@@ -163,7 +164,7 @@ class VDFModifierGUI:
 
         # Label for "current" text box
         current_label = tk.Label(current_frame, text="Current:")
-        current_label.pack(side=tk.TOP, pady=(0, 0))
+        current_label.pack(side=tk.TOP, pady=(0, 5))
 
         # "current" text box
         self.current_text = scrolledtext.ScrolledText(current_frame, width=40, height=10)
@@ -202,24 +203,40 @@ class VDFModifierGUI:
 
         self.previous_output = output
 
-        self.save_settings()
+        self.save_all_settings()
 
         self.previous_text.configure(state="disabled")
         self.current_text.configure(state="disabled")
 
     def save_vdf(self):
         "Save vdf to disk"
+
+        self.save_all_settings()
+
+        self.modifier.save_vdf(
+            self.modifier.get_obj(), self.modifier.get_path(), self.persistent_data.get("VDFGui_indent_values", True)
+        )
+
+    def save_all_settings(self):
+        self.save_gui_settings()
+        self.save_window_geometry()
+        save_data(self.persistent_data)
         
-        self.save_settings()
-        
-        self.modifier.save_vdf(self.modifier.get_obj(), self.modifier.get_path(), self.persistent_data.get("VDFGui_indent_values", True))
-        
-    def save_settings(self):
+    def save_gui_settings(self):
         "Save gui settings"
         self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()
         self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
         self.persistent_data["VDFGui_annotate"] = self.annotate_var.get()
         self.persistent_data["VDFGui_sort_keys"] = self.sort_control_keys_var.get()
+
+    def save_window_geometry(self):
+        """Save size & position if GUI is loaded and visible"""
+        if self.root and self.root.winfo_viewable():
+            # Get the current position and size of the window
+            geometry = self.root.geometry()
+            self.persistent_data["VDFGuiGeometry"] = geometry
+        else:
+            print("GUI is not loaded or visible. Skipping window geometry save.")
 
     def run(self):
         "Show & start main loop"
@@ -237,15 +254,6 @@ class VDFModifierGUI:
         self.root.withdraw()
         self.is_hidden = True
 
-    def save_window_geometry(self):
-        """Save size & position if GUI is loaded and visible"""
-        if self.root and self.root.winfo_viewable():
-            # Get the current position and size of the window
-            geometry = self.root.geometry()
-            self.persistent_data["VDFGuiGeometry"] = geometry
-        else:
-            print("GUI is not loaded or visible. Skipping window geometry save.")
-
     def destroy_gui(self):
         "Close & stop main loop"
         self.save_window_geometry()
@@ -255,9 +263,3 @@ class VDFModifierGUI:
         """Runs on close"""
         self.save_window_geometry()
         self.destroy_gui()
-
-
-def debug_vdf_gui(persistent_data, vdf_path):
-    """Debug GUI"""
-    app = VDFModifierGUI(persistent_data, vdf_path)
-    app.run()
