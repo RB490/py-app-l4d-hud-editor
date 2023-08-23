@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught
 """Module for the hud browser gui class"""
 import os
 import tkinter as tk
@@ -436,8 +437,11 @@ class GuiHudBrowser(metaclass=Singleton):
         "Treeview Handle 'Annotate' option"
         print("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
-        app = VDFModifierGUI(self.persistent_data, self.treeview_get_selected_full_path())
-        app.run()
+        try:
+            app = VDFModifierGUI(self.persistent_data, self.treeview_get_selected_full_path())
+            app.run()
+        except Exception:
+            print("Browser: Can't load VDF GUI!")
 
     def treeview_recycle(self):
         "Treeview Handle 'Recycle' option"

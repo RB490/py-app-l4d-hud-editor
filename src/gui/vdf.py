@@ -1,10 +1,12 @@
 """GUI Class for modifying VDF files."""
+# pylint: disable=broad-exception-caught
 import os
 import tkinter as tk
 from tkinter import scrolledtext
 
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.functions import save_data
+from utils.shared_utils import show_message
 from utils.vdf import VDFModifier
 
 
@@ -16,6 +18,7 @@ class VDFModifierGUI:
         self.persistent_data = persistent_data
         self.modifier = None  # vdf modifier class
         self.is_hidden = False
+        self.load_file()  # confirm whether the file is valid
         self.root = tk.Toplevel()
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
@@ -41,13 +44,19 @@ class VDFModifierGUI:
         self.modify_modifier_var = tk.StringVar(value="plus")
 
         self.create_widgets()
-        self.load_file()
+        self.load_file() # load file into gui
 
     def load_file(self):
         "Load VDF file"
         self.previous_output = None
-        self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
+        try:
+            self.modifier = VDFModifier(self.persistent_data, self.vdf_path)
+        except Exception as err_info:
+            show_message(f"Unable to load VDF file! {err_info}", "error")
+            self.destroy_gui()
+            return False
         self.process()
+        return True
 
     def create_widgets(self):
         """Create widgets"""
@@ -172,6 +181,10 @@ class VDFModifierGUI:
 
     def process(self):
         """Process changes"""
+        # if gui not loaded yet
+        if not self.root:
+            return
+
         self.previous_text.configure(state="normal")
         self.current_text.configure(state="normal")
 
@@ -203,7 +216,7 @@ class VDFModifierGUI:
 
         self.previous_output = output
 
-        self.save_all_settings()
+        self.save_settings_to_disk()
 
         self.previous_text.configure(state="disabled")
         self.current_text.configure(state="disabled")
@@ -211,18 +224,19 @@ class VDFModifierGUI:
     def save_vdf(self):
         "Save vdf to disk"
 
-        self.save_all_settings()
+        self.save_settings_to_disk()
 
         self.modifier.save_vdf(
             self.modifier.get_obj(), self.modifier.get_path(), self.persistent_data.get("VDFGui_indent_values", True)
         )
 
-    def save_all_settings(self):
-        self.save_gui_settings()
+    def save_settings_to_disk(self):
+        "Save all settings"
+        self.save_window_settings()
         self.save_window_geometry()
         save_data(self.persistent_data)
 
-    def save_gui_settings(self):
+    def save_window_settings(self):
         "Save gui settings"
         self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()
         self.persistent_data["VDFGui_modify_int"] = self.modify_int_var.get()
@@ -256,7 +270,6 @@ class VDFModifierGUI:
 
     def destroy_gui(self):
         "Close & stop main loop"
-        self.save_window_geometry()
         self.root.destroy()
 
     def on_close(self):

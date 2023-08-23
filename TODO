@@ -12,7 +12,7 @@ Current:
 	✔ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown? @done(23-08-23 03:04)
 	✔ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd @done(23-08-23 03:04)
 	✔ Browser: Treeview context menu functionality: VDF: Modify @done(23-08-23 03:08)
-	☐ Bug: VDF: Confirm file was able to be read properly, if not return
+	✔ Bug: VDF: Confirm file was able to be read properly, if not return @done(23-08-23 03:16)
 	☐ Refactor: simplify & improve code (naming)
 
 
