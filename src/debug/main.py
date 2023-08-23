@@ -54,8 +54,8 @@ def debug_gui(persistent_data):
     # show_start_gui(persistent_data)
 
     # browser
-    # browse = get_debug_gui_browser_instance(persistent_data)
-    # browse.run()
+    browse = get_debug_gui_browser_instance(persistent_data)
+    browse.run()
 
     # editor menu gui
     # my_editor_menu_gui = GuiEditorMenuPopupContextmenu(persistent_data)
@@ -63,7 +63,7 @@ def debug_gui(persistent_data):
     # my_editor_menu_gui.show()
 
     # vdf gui
-    debug_vdf_gui(persistent_data)
+    # debug_vdf_gui(persistent_data)
 
 
 def get_debug_gui_browser_instance(persistent_data):

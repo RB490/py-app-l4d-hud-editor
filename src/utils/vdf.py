@@ -1,11 +1,10 @@
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, import-outside-toplevel
 """Class for modifying VDF files."""
 import os
 
 import send2trash
 import vdf  # type: ignore
 
-from hud.hud import Hud  # type: ignore
 from utils.constants import DEVELOPMENT_DIR
 from utils.shared_utils import replace_text_between_quotes, show_message
 
@@ -14,6 +13,8 @@ class VDFModifier:
     """Class for modifying VDF files."""
 
     def __init__(self, persistent_data, vdf_path=None):
+        from hud.hud import Hud  # type: ignore
+
         self.hud = Hud(persistent_data)
         self.description_key_name = "__description__"
         self.vdf_text_raw = None

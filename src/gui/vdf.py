@@ -16,7 +16,7 @@ class VDFModifierGUI:
         self.persistent_data = persistent_data
         self.modifier = None  # vdf modifier class
         self.is_hidden = False
-        self.root = tk.Tk()
+        self.root = tk.Toplevel()
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -221,7 +221,7 @@ class VDFModifierGUI:
         self.save_gui_settings()
         self.save_window_geometry()
         save_data(self.persistent_data)
-        
+
     def save_gui_settings(self):
         "Save gui settings"
         self.persistent_data["VDFGui_indent_values"] = self.align_values_indent_var.get()

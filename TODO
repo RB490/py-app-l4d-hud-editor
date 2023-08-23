@@ -10,8 +10,9 @@ Current:
 	✔ Feature: VDF: Save option @done(23-08-23 02:29)
 	✔ Feature: VDF: Verify output validity by using the vdf module to load it before saving/returning @done(23-08-23 02:29)
 	✔ Feature: VDF: Bug: Reset -> DELETE_ME entry is shown? @done(23-08-23 03:04)
-	☐ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd
-	☐ Browser: Treeview context menu functionality: VDF: Modify
+	✔ Feature: VDF: Add support for also deleting entire controls, not just keys as they can also be identifiere'd @done(23-08-23 03:04)
+	✔ Browser: Treeview context menu functionality: VDF: Modify @done(23-08-23 03:08)
+	☐ Bug: VDF: Confirm file was able to be read properly, if not return
 	☐ Refactor: simplify & improve code (naming)
 
 

@@ -12,6 +12,7 @@ from PIL import Image, ImageTk
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.descriptions import GuiHudDescriptions
+from gui.vdf import VDFModifierGUI
 from menu.menu import EditorMenuClass
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
 from utils.functions import (
@@ -133,7 +134,6 @@ class GuiHudBrowser(metaclass=Singleton):
         self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "folder.png")).subsample(2, 2)
         self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
         self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "description.png")).subsample(2, 2)
-        self.integers_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "modify_integers.png")).subsample(2, 2)
         self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
@@ -151,9 +151,6 @@ class GuiHudBrowser(metaclass=Singleton):
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.treeview_annotate
-        )
-        self.context_menu.add_command(
-            label="Integers", image=self.integers_icon, compound=tk.LEFT, command=self.treeview_integers
         )
         self.context_menu.add_command(
             label="Description", image=self.description_icon, compound=tk.LEFT, command=self.treeview_description
@@ -435,13 +432,12 @@ class GuiHudBrowser(metaclass=Singleton):
         rel_path = self.treeview_get_selected_relative_path()
         self.descriptions_gui.load_file(rel_path)
 
-    def treeview_integers(self):
-        "Treeview Handle 'Integers' option"
-        print("Method: treeview_integers - TODO: Handle 'Integers' option")
-
     def treeview_annotate(self):
         "Treeview Handle 'Annotate' option"
         print("Method: treeview_describe - TODO: Handle 'Annotate' option")
+
+        app = VDFModifierGUI(self.persistent_data, self.treeview_get_selected_full_path())
+        app.run()
 
     def treeview_recycle(self):
         "Treeview Handle 'Recycle' option"
