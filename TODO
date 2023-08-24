@@ -4,11 +4,10 @@ Current:
 	✔ Feature: Installer: Considering directory deletion takes a while, i should  update installation state to prending_deletion or some such and use that in the script @done(23-08-24 22:09)
 	✔ Feature: Installer: I should use uninstall() in the other place in the installer where it deletes the dev dir. actually; create a separate method for deleting a folder and use that for uninstall() and in common_installation_logic @done(23-08-24 22:12)
 	✔ Bug: Installer updates step after completing it instead of before @done(23-08-24 22:27)
-
 	✔ Bug: Installation step error: GameDir._get_main_subdir() missing 1 required positional argument: 'subdir_name' @done(23-08-24 22:31)
-
 	✔ Bug: When resuming installation state the GUI still contains total_steps as if starting for 0. either modify total steps or count which step i'm on in total probably the second @done(23-08-24 22:45)
 
+	✔ Bug: Installation cancelled because of error -> bug only prints in console, but should be a message @done(23-08-24 22:50)
 	☐ Bug: Installation cancelled because of a bug -> terminal says finished installing!
 
 	☐ self.game.dir.dev_out_of_date()

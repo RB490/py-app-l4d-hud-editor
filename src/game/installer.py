@@ -177,7 +177,6 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-
         gui = ProgressGUI(len(installation_steps))  # Create the GUI instance
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
@@ -190,24 +189,23 @@ class GameInstaller:
         for _ in range(last_completed_index):
             gui.update_progress(None)
 
-        # Perform installation steps starting from the next step after the last completed one
         try:
+            # Perform installation steps starting from the next step after the last completed one
             for _, state in enumerate(installation_steps[last_completed_index:]):
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
                 gui.update_progress(state.name)
                 self.__perform_installation_step(state)
                 time.sleep(2)  # artifically was some amount of time so very short steps are still visible in gui
-        except Exception as err_info:
-            print(f"Installation step error: {err_info}")
+
+            # close progress gui
             gui.close()
-            return False
 
-        # close progress gui
-        gui.close()
-
-        # Update installation state to completed
-        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
-        return True
+            # Update installation state to completed
+            self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
+            return True
+        except Exception as err_info:
+            gui.close()
+            raise InstallationError(f"Installation step error: {err_info}") from err_info
 
     def __perform_installation_step(self, state):
         "perform"
