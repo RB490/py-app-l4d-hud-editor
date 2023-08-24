@@ -7,6 +7,10 @@ Current:
 
 	✔ Bug: Installation step error: GameDir._get_main_subdir() missing 1 required positional argument: 'subdir_name' @done(23-08-24 22:31)
 
+	✔ Bug: When resuming installation state the GUI still contains total_steps as if starting for 0. either modify total steps or count which step i'm on in total probably the second @done(23-08-24 22:45)
+
+	☐ Bug: Installation cancelled because of a bug -> terminal says finished installing!
+
 	☐ self.game.dir.dev_out_of_date()
 
 	☐ Feature: Installer: Hide start gui during installation/uninstall procedures, confirm that doesn't cause an issue with the progress gui

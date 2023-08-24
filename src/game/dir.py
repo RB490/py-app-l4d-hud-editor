@@ -186,13 +186,11 @@ class GameDir:
         return subdir_path
 
     def _get_main_subdir_backup(self, dir_mode, subdir_name):
-        "Get the full path to a subdirectory within the main dir backup: 'Left 4 Dead 2\\left4dead2.backup\\materials'"
+        """Get the full path to a subdirectory within the main dir backup:'Left 4 Dead 2\\left4dead2.backup\\materials'
+        Not throwing an expection because installer uses this to create the backup folder"""
 
         main_dir_backup = self.get_main_dir_backup(dir_mode)
         subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
-
-        if not os.path.exists(subdir_backup_path):
-            raise FileNotFoundError(f"{subdir_backup_path} directory not found for {dir_mode.name} mode")
 
         print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
         return subdir_backup_path
@@ -238,7 +236,7 @@ class GameDir:
             # copy files
             copy_directory(main_dir_backup, main_dir)
 
-            print("Restored develoer game files!")
+            print("Restored developer game files!")
             return True
         except Exception as err_info:
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info

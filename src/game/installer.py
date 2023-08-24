@@ -8,6 +8,7 @@ Notes:
 import filecmp
 import os
 import shutil
+import time
 
 from game.constants import DirectoryMode, InstallationError, InstallationState
 
@@ -185,12 +186,17 @@ class GameInstaller:
         else:
             last_completed_index = installation_steps.index(resume_state)
 
+        # set gui completed steps
+        for _ in range(last_completed_index):
+            gui.update_progress(None)
+
         # Perform installation steps starting from the next step after the last completed one
         try:
             for _, state in enumerate(installation_steps[last_completed_index:]):
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
                 gui.update_progress(state.name)
                 self.__perform_installation_step(state)
+                time.sleep(2)  # artifically was some amount of time so very short steps are still visible in gui
         except Exception as err_info:
             print(f"Installation step error: {err_info}")
             gui.close()
