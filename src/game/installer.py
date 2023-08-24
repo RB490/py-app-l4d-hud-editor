@@ -35,7 +35,7 @@ class GameInstaller:
             return True
 
         # prompt user
-        if not prompt_delete(self.game):
+        if not prompt_delete():
             return False
 
         # close the game
@@ -83,7 +83,7 @@ class GameInstaller:
             print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        if not prompt_start(self.game, action, f"This will {action_description.lower()}"):
+        if not prompt_start(action, f"This will {action_description.lower()}"):
             return False
 
         # close game
@@ -95,7 +95,7 @@ class GameInstaller:
 
             if invalid_dev_dir:
                 extra_message = "Consider if you want to try to repair the installation instead of deleting it"
-                if not prompt_delete(self.game, extra_message):
+                if not prompt_delete(extra_message):
                     return False
                 shutil.rmtree(invalid_dev_dir)
 
@@ -212,7 +212,7 @@ class GameInstaller:
 
     def __prompt_verify_game(self):
         print("Prompting user to verify game")
-        prompt_verify_game(self.game)
+        prompt_verify_game()
 
     def __find_pak01_files(self, game_dir, callback):
         for subdir_name in os.listdir(game_dir):

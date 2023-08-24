@@ -6,8 +6,7 @@ Current:
 	✔ Installer: Onl y prompt to select dev directory, if it wasnt found @done(23-08-24 16:44)
 	✔ Installer message boxes for unstalling, repairing, updating installing @done(23-08-24 16:46)
 	✔ Bug: Finished installinging! when finished installing @done(23-08-24 16:47)
-
-	☐ Refactor: remove game_class passing to prompts? by creating an instance in the func
+	✔ Refactor: remove game_class passing to prompts? by creating an instance in the func @done(23-08-24 16:50)
 
 	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
 	

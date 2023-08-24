@@ -13,6 +13,8 @@ from debug.gui import (
     get_debug_gui_browser_instance,
 )
 from debug.hud import get_hud_debug_instance
+from game.game import Game
+from game.installer_prompts import prompt_start
 from gui.start import show_start_gui
 from tests.test_hud_syncer import unit_test_hud_syncer
 
@@ -32,7 +34,9 @@ def debug_main():
 
     # debug_game_class()
     # debug_vdf_class()
-    debug_gui()
+    # debug_gui()
+
+    prompt_start("install", "extra_message")
 
     # hud = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()

@@ -1,11 +1,13 @@
 "Installer prompts"
 from game.constants import DirectoryMode
+from game.game import Game
 from utils.functions import get_dir_size_in_gb
 from utils.shared_utils import show_message
 
 
-def prompt_start(game_class, install_type, message_extra=""):
+def prompt_start(install_type, message_extra=""):
     "Installer prompts"
+    game_class = Game()
     install_type = install_type.lower()  # Convert to lowercase
 
     # verify install type
@@ -33,8 +35,10 @@ def prompt_start(game_class, install_type, message_extra=""):
     return response
 
 
-def prompt_delete(game_class, message_extra=""):
+def prompt_delete(message_extra=""):
     "Installer prompts"
+
+    game_class = Game()
 
     # create message
     title = f"Delete developer directory for {game_class.get_title()}?"
@@ -49,10 +53,11 @@ def prompt_delete(game_class, message_extra=""):
     return response
 
 
-def prompt_verify_game(game_class):
+def prompt_verify_game():
     "Prompt user to verify game"
     print("Prompting user to verify game")
 
+    game_class = Game()
     game_title = game_class.get_title()
     title = "Verify game files"
 
