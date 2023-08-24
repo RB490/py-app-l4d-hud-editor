@@ -4,6 +4,7 @@
 
 import os
 import sys
+from debug.game import debug_game_class
 
 from debug.gui import (
     debug_descriptions_gui,
@@ -27,9 +28,9 @@ def debug_main():
     # result = data_manager.print()
     # result = data_manager.get("game_mode")
 
-    unit_test_hud_syncer()
+    # unit_test_hud_syncer()
 
-    # debug_game_class()
+    debug_game_class()
     # debug_vdf_class()
     # debug_gui()
 

@@ -364,10 +364,10 @@ class GameInstaller:
     def _main_dir_backup(self):
         print("Copying main directory to create a backup for the sync class")
 
-        resource_dir = os.path.join(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "resource")
-        resource_backup_dir = self.game.dir.get_main_dir_backup_resource(DirectoryMode.DEVELOPER)
-        materials_dir = os.path.join(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER), "materials")
-        materials_backup_dir = self.game.dir.get_main_dir_backup_materials(DirectoryMode.DEVELOPER)
+        resource_dir = os.path.join(self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER), "resource")
+        resource_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "resource")
+        materials_dir = os.path.join(self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER), "materials")
+        materials_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "materials")
         backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 
         # create backup dir from scratch

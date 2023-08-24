@@ -9,6 +9,7 @@ from utils.functions import (
     copy_directory,
     generate_random_string,
     get_backup_filename,
+    get_backup_path,
     rename_with_timeout,
 )
 from utils.shared_utils import verify_directory
@@ -147,7 +148,6 @@ class GameDir:
     def get_main_dir_name(self):
         "Retrieve main directory name. eg: 'left4dead2'"
         main_dir_name = self.game.get_title().replace(" ", "")
-        # python is case sensitive; convert to Left4Dead2 -> left4dead2
         main_dir_name = main_dir_name.lower()
         return main_dir_name
 
@@ -165,58 +165,44 @@ class GameDir:
         print(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
-    def get_main_dir_resource(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2\\resource'"
-        main_dir_resource = os.path.join(self.get_main_dir(dir_mode), "resource")
-        print(f"Resource main directory: '{main_dir_resource}'")
-        return main_dir_resource
-
-    def get_main_dir_materials(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2\\materials'"
-        main_dir_materials = os.path.join(self.get_main_dir(dir_mode), "materials")
-        print(f"materials main directory: '{main_dir_materials}'")
-        return main_dir_materials
-
     def get_main_dir_backup(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_'"
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
         main_dir = self.get_main_dir(dir_mode)
-        main_dir_name = os.path.basename(main_dir)
-        main_dir_backup_name = f"_hud_dev_backup_{main_dir_name}"
-        main_dir_backup = os.path.join(self.get(dir_mode), main_dir_backup_name)
+        main_dir_backup = get_backup_path(main_dir)
         print(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 
-    def get_main_dir_backup_resource(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\resource'"
-        main_dir_backup_resource = os.path.join(self.get_main_dir_backup(dir_mode), "resource")
-        print(f"Resource backup directory: '{main_dir_backup_resource}'")
-        return main_dir_backup_resource
-
-    def get_main_dir_backup_materials(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\_backup_left4dead2_\\materials'"
-        main_dir_backup_materials = os.path.join(self.get_main_dir_backup(dir_mode), "materials")
-        print(f"Materials backup directory: '{main_dir_backup_materials}'")
-        return main_dir_backup_materials
-
-    def __get_main_sub_dir(self, dir_mode, subdirectory):
-        "Get the full path to the specified subdirectory (cfg or addons)"
+    def _get_main_subdir(self, dir_mode, subdir_name):
+        "Get the full path to a subdirectory within the main dir"
 
         main_dir = self.get_main_dir(dir_mode)
-        dir_path = os.path.join(main_dir, subdirectory)
+        subdir_path = os.path.join(main_dir, subdir_name)
 
-        if not os.path.exists(dir_path):
-            raise FileNotFoundError(f"{subdirectory} directory not found for {dir_mode.name} mode")
+        if not os.path.exists(subdir_path):
+            raise FileNotFoundError(f"{subdir_path} directory not found for {dir_mode.name} mode")
 
-        print(f"Get {dir_mode.name} {subdirectory} dir: {dir_path}")
-        return dir_path
+        print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
+        return subdir_path
+
+    def _get_main_subdir_backup(self, dir_mode, subdir_name):
+        "Get the full path to a subdirectory within the main dir backup: 'Left 4 Dead 2\\left4dead2.backup\\materials'"
+
+        main_dir_backup = self.get_main_dir_backup(dir_mode)
+        subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
+
+        if not os.path.exists(subdir_backup_path):
+            raise FileNotFoundError(f"{subdir_backup_path} directory not found for {dir_mode.name} mode")
+
+        print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
+        return subdir_backup_path
 
     def get_cfg_dir(self, dir_mode):
-        "Get the full path to the config dir eg. 'Left 4 Dead 2\\cfg'"
-        return self.__get_main_sub_dir(dir_mode, "cfg")
+        "Get the full path to the config dir eg. 'Left 4 Dead 2\\left4dead2\\cfg'"
+        return self._get_main_subdir(dir_mode, "cfg")
 
     def _get_addons_dir(self, dir_mode):
-        "Get the full path to the addons dir eg. 'Left 4 Dead 2\\addons'"
-        return self.__get_main_sub_dir(dir_mode, "addons")
+        "Get the full path to the addons dir eg. 'Left 4 Dead 2\\left4dead2\\addons'"
+        return self._get_main_subdir(dir_mode, "addons")
 
     def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
@@ -241,8 +227,8 @@ class GameDir:
             main_dir_backup = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
             main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
 
-            main_dir_resource = self.game.dir.get_main_dir_resource(DirectoryMode.DEVELOPER)
-            main_dir_materials = self.game.dir.get_main_dir_materials(DirectoryMode.DEVELOPER)
+            main_dir_resource = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "resource")
+            main_dir_materials = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
 
             # delete potentially beschmirched game directories
             shutil.rmtree(main_dir_resource)

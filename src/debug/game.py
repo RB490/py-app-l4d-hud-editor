@@ -54,8 +54,11 @@ def debug_game_class():
 
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.USER)
+    
+    result = gamez.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
+    # result = gamez.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 
-    result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
+    # result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
     # result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
 
     ###########################

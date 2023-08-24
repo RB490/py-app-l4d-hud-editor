@@ -8,7 +8,7 @@ Features:
 
 	✔ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with set_dir method @done(23-08-24 11:50)
 
-	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
+	✔ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials @done(23-08-24 12:12)
 	
 	☐ Refactor: VPK class
 
