@@ -89,10 +89,10 @@ class GameInstaller:
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # confirm action is possible
-        if action == "repair" or action == "update" and current_state is not InstallationState.COMPLETED:
+        if action == "repair" or action == "update" and current_state != InstallationState.COMPLETED:
             show_message(f"Can't {action}! Developer mode is not installed", "error", action_description)
             return False
-        elif action == "install" and current_state is InstallationState.COMPLETED:
+        elif action == "install" and current_state == InstallationState.COMPLETED:
             show_message(f"Can't {action}! Developer mode is already installed!", "error", action_description)
             return False
 
@@ -109,8 +109,10 @@ class GameInstaller:
             try:
                 result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
                 if result:
-                    print("Successfully selected the developer directory. Finished installation.")
-                    return True
+                    current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
+                    if current_state == InstallationState.COMPLETED:
+                        print(f"Successfully selected the developer directory. Finished {action_description}.")
+                        return True
             except Exception as err_info:
                 print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
