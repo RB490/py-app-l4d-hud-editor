@@ -4,6 +4,25 @@ Current:
 
 
 Features:
+	✔ Fixed a wide variety of BaseGui & infinite recursion import bugs @done(23-08-24 11:06)
+	
+	☐ HudDescriptions is failling because it's importing GuiBrowser & GuiBrowser is failing because? it imports GuiHudDescriptions? recursive?
+
+	☐ Modify syntax from self.hud.sync self.hud.desc -> self.hud.editor.syncer
+	    - self.syncer = HudSyncer()
+        - self.desc = HudDescriptions()
+	
+	☐ Re-enable self.root.title lines
+
+	☐ Bug: Addon images are not in the center of StartGui
+
+	☐ Bug: VDF modifier causing infinite loop: GUI VDFModifier > load_file > VDFModifier > loop starts with hud and shit
+	
+	☐ Bug: I'm currently manually setting the hud_dir, but this should definetly be done with a method
+	    - debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
+    	- i = Hud()
+    	- i.edit.hud_dir = debug_hud_dir
+
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	
 	☐ Refactor: VPK class
@@ -20,7 +39,6 @@ Features:
 
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 
-	
 	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
 
 	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
@@ -29,10 +47,11 @@ Features:
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
+	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
+
+	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
 
 Bugs:
-
-
 
 GUI:
 
@@ -41,29 +60,10 @@ Unit Testing:
 	☐ Unit test: HudDescription
 
 Refactoring:
-	
-	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
-	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
-	
-	
-	✔ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run() @done(23-08-24 01:10)
-	✔ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it @done(23-08-24 00:56)
-	✘ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions? @cancelled(23-08-24 00:56)
-		✘ That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle? @cancelled(23-08-24 00:56)	
-	✔ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data @done(23-08-24 00:55)
-	✔ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt @done(23-08-24 00:55)
-	✔ Make internal class methods protected by adding underscores. And internal with double __ @done(23-08-24 00:54)
-	✔ Add dir_mode enum checks to game class? @done(23-08-24 00:54)
-	✔ Utilize exception handling for specific cases like AssertionError and ValueError @done(23-08-24 00:54)
-	✔ Simplify manager class, improve 'get_dir' function and other enhancements @done(23-08-24 00:54)
-	✔ Enums. For example for steam_info object (?) or make it into a class @done(23-08-24 00:53)
-	
-	
 
 Additional Ideas and Considerations:
 	
 	☐ Menu: @icons  Add icons
-	☐ Global hotkey management: Explore using a global singleton hotkey manager to streamline hotkey handling
 	☐ Editor menu: Add all start GUI functionality. We're almost there already.
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 	☐ Multi-game support: Explore multi-game support feasibility
@@ -86,6 +86,18 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✘ Global hotkey management: Explore using a global singleton hotkey manager to streamline hotkey handling @cancelled(23-08-24 01:11)
+	✔ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run() @done(23-08-24 01:10)
+	✔ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it @done(23-08-24 00:56)
+	✘ Refactor ID handler: Should i combine the manual selecting of ID path into the get/set functions? @cancelled(23-08-24 00:56)
+		✘ That would simplify some code paths: -- although it seems like that would maybe defeat the single purpose principle? @cancelled(23-08-24 00:56)	
+	✔ Refactor: descriptions: Pretty sure it could/should use my general functions for loading/saving data @done(23-08-24 00:55)
+	✔ Refactor: use the same two functions for loading/saving data? might cause unnecesary class cluttering. ask gpt @done(23-08-24 00:55)
+	✔ Make internal class methods protected by adding underscores. And internal with double __ @done(23-08-24 00:54)
+	✔ Add dir_mode enum checks to game class? @done(23-08-24 00:54)
+	✔ Utilize exception handling for specific cases like AssertionError and ValueError @done(23-08-24 00:54)
+	✔ Simplify manager class, improve 'get_dir' function and other enhancements @done(23-08-24 00:54)
+	✔ Enums. For example for steam_info object (?) or make it into a class @done(23-08-24 00:53)
 	✔ Replace assert statements with proper error handling using try/catch @done(23-08-24 00:52)
 	✔ Make the function to create lambda commands a shared utility, and use it in the project @done(23-08-24 00:51)
 	✔ Streamline and test HUD editing process for improved code path @done(23-08-24 00:46)
@@ -101,7 +113,7 @@ Additional Ideas and Considerations:
 	✔ Refactor: In functions.py there are a lot of functions (somewhat vaguely) related to hud stuff it seems like that should could be a class @done(23-08-24 00:31)
 	✔ Refactor: GUI: Base GUI class with common functionality for all other gui's to use @done(23-08-23 23:44)
 	✔ Refactor: I'm passing my persistent_data object absolutely everywhere. Create a persistent_data class singleton instead @started(23-08-23 21:34) @done(23-08-23 22:40) @lasted(1h6m54s)
-	✘ Refactor: Loading&Saving JSON data. Create class & use throughout the program @cancelled(23-08-23 22:41)
+	✔ Refactor: Loading&Saving JSON data. Create class & use throughout the program @done(23-08-24 01:11)
 	✘ Refactor: Rename data manager to persistent data? @cancelled(23-08-23 22:42)
 	✔ Bug: VDF gui not loading for hudlayout.res @done(23-08-23 16:36)
 	✔ Bug: VDF GUI: The little tk.toplevel() subgui opens real quick when loading the gui @done(23-08-23 16:38)
@@ -113,10 +125,10 @@ Additional Ideas and Considerations:
 	✔ Bug: Installer rebuild_audio couldn't run game (because of fixed bug) but it didn't detect that shit at all! @done(23-08-23 17:27)
 
 	✔ Bug: Why does VSCode not highlight class in some places but does in others // looks like this is because of me passing game_class to installer manually @done(23-08-23 20:50)
-	- for example hud/descriptions/self.game.dir.is_custom_file() works fine
-	- but in some locations it wouldnt get highlighted such as: installer: self.game.dir.get_main_dir_backup
-		☐ ^ okay, so, gpt says it's deue to the nature of VSCode's static analysises tool and using type hints could fix it. but i need to import the game class
-		☐ into the installer which isn't possible. gpt suggested various solutions which seemed maybe possible but seems like something i would leave for later
+	✔ for example hud/descriptions/self.game.dir.is_custom_file() works fine @done(23-08-24 01:10)
+	✔ but in some locations it wouldnt get highlighted such as: installer: self.game.dir.get_main_dir_backup @done(23-08-24 01:10)
+		✔ ^ okay, so, gpt says it's deue to the nature of VSCode's static analysises tool and using type hints could fix it. but i need to import the game class @done(23-08-24 01:10)
+		✔ into the installer which isn't possible. gpt suggested various solutions which seemed maybe possible but seems like something i would leave for later @done(23-08-24 01:10)
 		✔ ^ use pycharm. it does support it @done(23-08-23 20:50)
 	✔ Descriptions: Add print statements @done(23-08-23 13:17)
 	✔ Bug: Descriptions GUI: Modify file description -> save -> load same file -> changes weren't actually saved at all @done(23-08-23 13:24)
@@ -190,7 +202,7 @@ Additional Ideas and Considerations:
 	✘ Bug: ID handler: Calling ID handler without a dir_mode doesn't raise an error! also check for sync and other methods 'gamez.dir.id.get_installation_state' @cancelled(23-08-20 09:40) (Can't actually do anything with this. Just fix invalid method call)	
 	✔ Retrieving installation state for mode that isn't installed returns UNKNOWN should it be UNAVAILABLE or just None instead? @done(23-08-20 09:38)	
 	✔ Bug: ID handler: User dev mode is installed -> Get installation state -> Exception has occurred: KeyError @started(23-08-20 08:53) @done(23-08-20 09:10) @lasted(17m53s)
-		- Get installation state was using the SyncState enum!
+		✔ Get installation state was using the SyncState enum! @done(23-08-24 01:10)
 	✔ Test: Sync: restore_developer_directory @done(23-08-20 00:20)
 	✔ Sync: Make use of the SyncState enum in the sync class. and in the rest of the script if relevant + modify test @high @done(23-08-19 23:00)
 	✔ Sync: Refine error handling strategy in sync class @done(23-08-20 00:18)

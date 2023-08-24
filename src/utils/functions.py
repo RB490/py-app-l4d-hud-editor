@@ -456,60 +456,6 @@ def get_mouse_position_on_click(callback):
     root.mainloop()
 
 
-def load_data():
-    """Read persistent data from disk"""
-    try:
-        with open(PERSISTENT_DATA_PATH, "r", encoding="utf-8") as file:
-            data = json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        # print(f"Error loading data from {file_path}")
-        data = {}
-
-    # if needed set default lists so they can be added to
-    if "stored_huds" not in data:
-        data["stored_huds"] = []
-
-    # if needed set default lists so they can be added to
-    if "stored_temp_huds" not in data:
-        data["stored_temp_huds"] = []
-
-    if "game_mute" not in data:
-        data["game_mute"] = False
-
-    if "game_insecure" not in data:
-        data["game_insecure"] = False
-
-    if "game_pos" not in data:
-        data["game_pos"] = "Center"
-
-    if "game_pos_custom_coord" not in data:
-        data["game_pos_custom_coord"] = None
-
-    if "game_mode" not in data:
-        data["game_mode"] = "Coop"
-
-    if "game_res" not in data:
-        data["game_res"] = (1600, 900)
-
-    if "reload_reopen_menu_on_reload" not in data:
-        data["reload_reopen_menu_on_reload"] = False
-
-    if "reload_mouse_clicks_enabled" not in data:
-        data["reload_mouse_clicks_enabled"] = False
-
-    if "reload_mouse_clicks_coord_1" not in data:
-        data["reload_mouse_clicks_coord_1"] = None
-
-    if "reload_mouse_clicks_coord_2" not in data:
-        data["reload_mouse_clicks_coord_2"] = None
-
-    if "editor_reload_mode" not in data:
-        data["editor_reload_mode"] = "reload_hud"
-
-    # print(f"load_data: \n{json.dumps(data, sort_keys=True, indent=4)}")
-    return data
-
-
 def save_and_exit_script():
     """Exit the script"""
     # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports

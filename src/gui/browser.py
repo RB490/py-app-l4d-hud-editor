@@ -13,8 +13,8 @@ from PIL import Image, ImageTk
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.base import BaseGUI
-from gui.descriptions import GuiHudDescriptions
 from gui.vdf import VDFModifierGUI
+from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
 from utils.functions import (
@@ -32,19 +32,18 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def __init__(self):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
-        BaseGUI.__init__(self)
+        super().__init__()
         self.data_manager = PersistentDataManager()
-
-        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        from hud.hud import Hud
 
         # set variables
         self.hud = Hud()
         self.game = Game()
-        self.root.title = "Browser"
+        self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
-        self.descriptions_gui = GuiHudDescriptions(self)
+        from gui.descriptions import GuiHudDescriptions
+
+        self.descriptions_gui = GuiHudDescriptions()
         self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
         # Store PhotoImage objects in a list to prevent garbage collection
@@ -334,13 +333,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         save_and_exit_script()
 
     def treeview_open_file(self):
-        "Treeview Handle 'Open File' option"
+        """Treeview Handle 'Open File' option"""
         print("Method: treeview_open_file - Handle 'Open File' option")
         full_path = self.treeview_get_selected_full_path()
         os.startfile(full_path)
 
     def treeview_open_default_file(self):
-        "Treeview handle Open Default File' option"
+        """Treeview handle Open Default File' option"""
         print("Method: treeview_open_default_file - handle 'Open Default File' option")
         full_path = self.treeview_get_selected_full_path()
         backup_path = get_backup_path(full_path)

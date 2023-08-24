@@ -1,11 +1,11 @@
 """Module for the hud file descriptions gui"""
-# pylint: disable=import-outside-toplevel
 import os
 import tkinter as tk
 from tkinter import simpledialog
 
 from game.game import Game
 from gui.base import BaseGUI
+from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.shared_utils import Singleton, show_message
 
@@ -13,19 +13,14 @@ from utils.shared_utils import Singleton, show_message
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, parent_gui):
-        if not parent_gui.root:
-            raise ValueError("parent_gui is not a tkinter gui class!")
-
-        BaseGUI.__init__(self, is_toplevel_gui=True)
-        self.root.title = "File"
+    def __init__(self):
+        super().__init__(is_toplevel_gui=True)
+        self.root.title("File")
         self.root.iconbitmap(APP_ICON)
-
-        from hud.hud import Hud
 
         self.game = Game()
         self.hud = Hud()
-        self.parent = parent_gui
+
         self.relative_path = None
         self.unsaved_changes = False
         self.prev_file_desc_content = None
@@ -123,7 +118,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.prompt_to_save_unsaved_changes()
 
         # undo unsaved changes by reloading from disk
-        self.hud.desc.read_from_disk()
+        self.hud.edit.desc.read_from_disk()
 
         # clear the gui
         self.clear_gui()
@@ -170,18 +165,18 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.relative_path = relative_path
 
         # Check if the file has a custom status using the self.game.dir.is_custom_file function
-        is_custom = self.hud.desc.get_is_file_custom(relative_path)
+        is_custom = self.hud.edit.desc.get_is_file_custom(relative_path)
 
         # Set gui title with custom status if applicable
         if is_custom:
             custom_status = "Custom File"
         else:
             custom_status = "Vanilla File"
-        self.root.title = f"{relative_path} ({custom_status})"
+        self.root.title(f"{relative_path} ({custom_status})")
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(relative_path))
+        self.file_desc_text.insert(tk.END, self.hud.edit.desc.get_file_description(relative_path))
 
         # load controls
         self.load_controls()
@@ -203,7 +198,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         """Load controls into option menu & load the first one"""
 
         # update the controls list and OptionMenu with new values
-        controls_list = self.hud.desc.get_controls(self.relative_path)
+        controls_list = self.hud.edit.desc.get_controls(self.relative_path)
 
         # controls available at all?
         if not controls_list:
@@ -224,18 +219,18 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # set control description
         self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.relative_path, input_ctrl))
+        self.ctrl_desc_text.insert(tk.END, self.hud.edit.desc.get_control_description(self.relative_path, input_ctrl))
 
     def save_control_description(self):
         """Save control description"""
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
-        self.hud.desc.set_control_description(self.relative_path, selected_control, control_desc)
+        self.hud.edit.desc.set_control_description(self.relative_path, selected_control, control_desc)
 
     def save_file_description(self):
         """Save file description"""
         file_description = self.file_desc_text.get("1.0", "end-1c")
-        self.hud.desc.set_file_description(self.relative_path, file_description)
+        self.hud.edit.desc.set_file_description(self.relative_path, file_description)
 
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
@@ -258,7 +253,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.save_control_description()
 
             # Add control
-            self.hud.desc.add_control(self.relative_path, new_control)
+            self.hud.edit.desc.add_control(self.relative_path, new_control)
             self.load_controls()
             self.load_control(new_control)
             print(f"Added {new_control}")
@@ -266,14 +261,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     def remove_file_entry(self):
         """Remove control"""
         if show_message(f"Are you sure you want to remove '{self.relative_path}'?", "yesno"):
-            self.hud.desc.remove_entry(self.relative_path)
+            self.hud.edit.desc.remove_entry(self.relative_path)
             self.load_controls()
 
     def remove_control(self):
         """Remove control"""
         selected_control = self.ctrl_menu_variable.get()
         if show_message("Remove Control", f"Are you sure you want to remove '{selected_control}'?", "yesno"):
-            self.hud.desc.remove_control(self.relative_path, selected_control)
+            self.hud.edit.desc.remove_control(self.relative_path, selected_control)
             self.load_controls()
 
     def save_changes(self):
@@ -295,8 +290,13 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # save changes
         self.save_changes()
 
-        # call parent
-        self.parent.treeview_refresh(self.parent.treeview)
+        # import browser here to avoid infinite recursion loop because it also imports this (descriptions gui) module
+        # pylint: disable=import-outside-toplevel
+        from gui.browser import GuiHudBrowser
+
+        # call browser refresh
+        browser = GuiHudBrowser()
+        browser.treeview_refresh(browser.treeview)
 
         self.on_close()
 

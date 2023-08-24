@@ -1,4 +1,5 @@
-# pylint: disable=protected-access, unspecified-encoding, missing-module-docstring, missing-class-docstring, missing-function-docstring, invalid-name, unused-argument, unused-import, arguments-differ
+# pylint: disable=protected-access, unspecified-encoding, missing-module-docstring, missing-class-docstring
+# pylint: disable=missing-function-docstring, invalid-name, unused-argument, unused-import, arguments-differ
 import hashlib
 import os
 import random
@@ -15,7 +16,7 @@ from hud.syncer import (
     get_subdirectories_names,
 )
 from utils.constants import SyncState
-from utils.functions import get_backup_path, load_data
+from utils.functions import get_backup_path
 
 
 class TestHudSyncer(unittest.TestCase):

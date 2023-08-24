@@ -18,6 +18,7 @@ def get_debug_gui_browser_instance():
 
     return GuiHudBrowser()
 
+
 def debug_get_user_input():
     def handle_user_input(result):
         """Handle user input"""
@@ -26,12 +27,13 @@ def debug_get_user_input():
 
     get_user_input("Enter Name", "What is your name?", handle_user_input)
 
+
 def debug_descriptions_gui():
-    descriptions_gui = descriptions.GuiHudDescriptions(get_debug_gui_browser_instance())
+    descriptions_gui = descriptions.GuiHudDescriptions()
     descriptions_gui.load_file("scripts\\hudlayout.res")
+    descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
-    descriptions_gui.show()
 
 
 def debug_vdf_gui():

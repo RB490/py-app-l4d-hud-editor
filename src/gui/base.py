@@ -7,15 +7,17 @@ class BaseGUI:
         self.is_hidden = None
         self.is_resizable = True
 
+        # self.root = tk.Tk()
+        # self.root = tk.Toplevel()
         if is_toplevel_gui:
             self.root = tk.Toplevel()
         else:
             self.root = tk.Tk()
-        self.root.title = "BaseGUI"
+        self.root.title("BaseGUI")
         self.hide()
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 200)
-    
+
     def hide(self):
         self.root.withdraw()
         self.is_hidden = True

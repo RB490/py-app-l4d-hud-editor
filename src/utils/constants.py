@@ -74,7 +74,7 @@ EDITOR_HUD_RELOAD_MODES = {
 
 # Object of preset game positions
 GAME_POSITIONS = {
-    "Custom (Save)": (None),
+    "Custom (Save)": None,
     "Center": (0.5, 0.5),
     "Top Left": (0, 0),
     "Top Right": (1, 0),

@@ -12,7 +12,7 @@ def get_hud_debug_instance():
 
     debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
     i = Hud()
-    i.hud_dir = debug_hud_dir
+    i.edit.hud_dir = debug_hud_dir
     return i
 
 

@@ -14,6 +14,7 @@ import win32gui
 import win32process
 from ahk import AHK
 
+
 def create_lambda_command(func, *args):
     # pylint: disable=line-too-long
     """
@@ -43,6 +44,7 @@ def create_lambda_command(func, *args):
     and it is commonly used in functional programming.
     """
     return lambda: func(*args)
+
 
 def replace_text_between_quotes(input_string, replacement_text):
     """Replace text between quotes. Multiple double quotes supported"""

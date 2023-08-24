@@ -27,8 +27,8 @@ class GuiEditorMenuPopupContextmenu(BaseGUI, metaclass=Singleton):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
-        BaseGUI.__init__(self)
-        self.root.title = "Hud Editor"
+        super().__init__()
+        self.root.title("Hud Editor")
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()

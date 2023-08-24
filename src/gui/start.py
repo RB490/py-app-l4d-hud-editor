@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 
 from game.game import Game
 from gui.base import BaseGUI
+from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton
@@ -20,14 +21,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def __init__(self):
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        BaseGUI.__init__(self)
+        super().__init__()
         self.data_manager = PersistentDataManager()
         self.game = Game()
-
-        from hud.hud import Hud  # avoid recursive import
-
         self.hud = Hud()
-        self.root.title = "Select"
+        self.root.title("Select")
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 375)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
@@ -105,10 +103,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.my_editor_menu.create_and_refresh_menu_developer_installer()
 
         # Configure the root window with the menubar
-        # self.root.config(menu=menu_bar)
         self.update_treeview()
 
-        # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""

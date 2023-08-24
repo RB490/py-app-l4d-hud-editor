@@ -36,6 +36,7 @@ class EditorMenuClass:
         self.child_instance = child_instance
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
+
         from hud.hud import Hud
 
         self.hud = Hud()

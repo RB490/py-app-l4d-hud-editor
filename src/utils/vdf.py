@@ -13,7 +13,7 @@ class VDFModifier:
     """Class for modifying VDF files."""
 
     def __init__(self, vdf_path=None):
-        from hud.hud import Hud  # type: ignore
+        from hud.hud import Hud
 
         self.hud = Hud()
         self.description_key_name = "__description__"
@@ -254,7 +254,9 @@ class VDFModifier:
 
         for controls in modified_vdf_obj.values():
             for control_name, control_data in controls.items():
-                control_data[self.description_key_name] = self.hud.desc.get_control_description(rel_path, control_name)
+                control_data[self.description_key_name] = self.hud.edit.desc.get_control_description(
+                    rel_path, control_name
+                )
 
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj

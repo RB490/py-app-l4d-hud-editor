@@ -2,14 +2,11 @@
 # pylint: disable=wrong-import-position, ungrouped-imports, protected-access
 import os
 import shutil
+from game.constants import DirModeError, DirectoryMode, TitleRetrievalError
+from game.video_settings_modifier import VideoSettingsModifier
 
 # importing after the above enums and exceptions becaus they are needed for the subclasses
-from game.commands import GameCommands
-from game.constants import DirectoryMode, DirModeError, TitleRetrievalError
-from game.dir import GameDir
-from game.installer import GameInstaller
-from game.video_settings_modifier import VideoSettingsModifier
-from game.window import GameWindow
+
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton, close_process_executable
@@ -21,6 +18,10 @@ class Game(metaclass=Singleton):
 
     def __init__(self):
         self.data_manager = PersistentDataManager()
+        from game.commands import GameCommands
+        from game.window import GameWindow
+        from game.dir import GameDir
+        from game.installer import GameInstaller
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)
         self.command = GameCommands(self)
@@ -105,9 +106,9 @@ class Game(metaclass=Singleton):
             for root, dirs, files in os.walk(loop_dir):
                 for file in files:
                     file_path = os.path.join(root, file)
-                    if file.endswith((".dll")):
+                    if file.endswith(".dll"):
                         open(file_path, "w", encoding="utf-8").close()
-                    if file.endswith((".vpk")):
+                    if file.endswith(".vpk"):
                         shutil.copy(DUMMY_ADDON_VPK_PATH, file_path)
                         print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
 

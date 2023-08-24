@@ -1,5 +1,5 @@
 """Class to manage hud editing"""
-# pylint: disable=broad-exception-raised, broad-exception-caught
+# pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel
 import os
 import threading
 from tkinter import filedialog
@@ -7,7 +7,8 @@ from tkinter.filedialog import asksaveasfilename
 
 import keyboard
 
-from game.game import DirectoryMode, Game
+from game.constants import DirectoryMode
+from game.game import Game
 from gui.browser import GuiHudBrowser
 from gui.start import show_start_gui
 from hud.descriptions import HudDescriptions
@@ -27,15 +28,15 @@ class HudEditor:
         self.game = Game()
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
-        self.browser = GuiHudBrowser()
         self.hud_dir = None
         self.threaded_timer_game_exit = None
-        self.browser = None
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
 
         print(f"Start editing: ({hud_dir})")
+
+        self.browser = GuiHudBrowser()  # create browser instance here to avoid infinite recursion
 
         # verify parameters
         if not os.path.isdir(hud_dir):
@@ -175,7 +176,7 @@ class HudEditor:
 
         # verify variables
         if not self.get_dir() or not os.path.exists(self.get_dir()):
-            # if hasattr(self, "hud_dir") and not os.path.exists(self.get_dir()):
+            print(f"Could not retrieve files dictionary. Directory does not exist: {self.get_dir()}")
             return None
 
         root_folder = self.get_dir()

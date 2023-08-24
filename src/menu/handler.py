@@ -6,7 +6,7 @@ from tkinter import messagebox
 
 import pyperclip  # type: ignore
 
-from game.game import DirectoryMode, Game, VideoSettingsModifier  # type: ignore
+from game.game import DirectoryMode, Game, VideoSettingsModifier
 from gui.start import show_start_gui
 from utils.constants import UNIVERSAL_GAME_MAP
 from utils.functions import get_mouse_position_on_click

@@ -21,12 +21,15 @@ class VDFModifierGUI(BaseGUI):
         self.load_file()  # confirm whether the file is valid
 
         # setup gui
-        BaseGUI.__init__(self, is_toplevel_gui=True)
+        super().__init__()
+        # super().__init__(is_toplevel_gui=False)
+        # super().__init__(is_toplevel_gui=True)
+        # BaseGUI.__init__(self, is_toplevel_gui=True)
         self.data_manager = PersistentDataManager()
         self.modifier = None  # vdf modifier class
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
-        self.root.title = "VDF Modifier"
+        self.root.title("VDF Modifier")
 
         # load saved geometry
         try:
