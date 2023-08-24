@@ -1,7 +1,6 @@
 # pylint: disable=broad-exception-caught
 """Functions used throughout the program"""
 import ctypes
-import json
 import os
 import random
 import shutil
@@ -25,7 +24,6 @@ from .constants import (
     FILE_EXT_FOLDER_ICON,
     FILE_EXT_IMAGES,
     FILE_EXT_WARNING_ICON,
-    PERSISTENT_DATA_PATH,
 )
 
 
@@ -337,7 +335,12 @@ def is_process_running_from_hwnd(hwnd: int) -> bool:
 
 
 def copy_directory(src_dir, dest_dir, ignore_file=None):
-    "Copy the files in asource directory to a destination directory, overwriting if necessary."
+    """Copy the files in asource directory to a destination directory, overwriting if necessary.
+
+    Benefits of using this function as opposed to shutil.copytree:
+    - shutil.copytree needs the destination directory to not exist, while this function merges them
+    - i can see individual files printed out in console
+    - i can supply a file to be ignored"""
     # pylint: disable=broad-exception-raised, broad-exception-caught
 
     try:
@@ -362,6 +365,8 @@ def copy_directory(src_dir, dest_dir, ignore_file=None):
         # Raise exception if no source files found
         if not src_files:
             raise Exception(f"No files in the source directory: {src_dir}")
+
+        print(f"Copying files '{src_dir}' -> '{dest_dir}'")
 
         # Copy each source file to the destination
         for src_path in src_files:

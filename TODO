@@ -1,21 +1,18 @@
 
 
 Current:
-
-
-	✔ Installer: Onl y prompt to select dev directory, if it wasnt found @done(23-08-24 16:44)
-	✔ Installer message boxes for unstalling, repairing, updating installing @done(23-08-24 16:46)
-	✔ Bug: Finished installinging! when finished installing @done(23-08-24 16:47)
-	✔ Refactor: remove game_class passing to prompts? by creating an instance in the func @done(23-08-24 16:50)
-	✔ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options @done(23-08-24 16:50)
 	
+	✔ Bug: Cancelled installation halfway through for example 'VERIFYING_GAME' -> id file exists -> install dev -> asks to select id file when though id file exists @done(23-08-24 17:48)
 	
+	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
+		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
+			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
-	
-	☐ Copy_dir considerations: 
-		- I'm only using the copy_dir function because i made it be able to ignore files but i cant just use copytree & then delete the file
-		- So Copytree is probably faster. Then again if i want a copy file progress bar it could be useful
-		- Does shutil.copytree support progress bars?
+	☐ Installer: Incorporate progress GUI for the installer class. __process_installation_steps: just easy peasy each step
+	☐ Installer: Incorporate progress GUI for the installer class: unstalling: individual files (only if feasible, depends on gpt)
+
+	☐ Bug: Installer: Closing  the gui continuis the installation
+	☐ Feature: Closing the installer progress gui should cancel installation? reset installation state?
 
 	☐ Refactor: VPK class
 
@@ -24,13 +21,6 @@ Current:
 	☐ Start GUI: Context menu icons
 
 	☐ Start GUI: Specific button icons rather than all identical
-
-	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
-		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
-			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
-
-	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
-
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
@@ -74,6 +64,12 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Copy_dir considerations: @done(23-08-24 17:02) result: shutil.copytree needs the destination directory to not exist so it is useful
+	✔ Installer: Onl y prompt to select dev directory, if it wasnt found @done(23-08-24 16:44)
+	✔ Installer message boxes for unstalling, repairing, updating installing @done(23-08-24 16:46)
+	✔ Bug: Finished installinging! when finished installing @done(23-08-24 16:47)
+	✔ Refactor: remove game_class passing to prompts? by creating an instance in the func @done(23-08-24 16:50)
+	✔ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options @done(23-08-24 16:50)
 	✔ install_update_repair_duplicate_code_refactor_draft.py @done(23-08-24 16:26)
 	✔ Refactor: editor class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud @done(23-08-24 12:19)
 	✔ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set() @done(23-08-24 12:17)

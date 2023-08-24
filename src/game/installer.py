@@ -13,6 +13,7 @@ from game.constants import DirectoryMode, InstallationError, InstallationState
 
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
+from gui.progress import ProgressGUI
 from utils.constants import MODS_DIR
 from utils.functions import copy_directory, get_backup_path, wait_process_close
 from utils.shared_utils import show_message
@@ -49,6 +50,7 @@ class GameInstaller:
         show_message("Finished uninstalling!", "info")
 
     def common_installation_logic(self, action, resume_state, action_description):
+        "Installation logic for repair/update/install"
         print(f"{action_description}...")
 
         # confirm params
@@ -74,13 +76,14 @@ class GameInstaller:
                 return False
 
         # prompt to select potentially existing dev directory (for example incase broken id file)
-        try:
-            result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
-            if result:
-                print("Successfully selected the developer directory. Finished installation.")
-                return True
-        except Exception as err_info:
-            print(f"User did not select developer installation directory! Continuing... ({err_info})")
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+            try:
+                result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
+                if result:
+                    print("Successfully selected the developer directory. Finished installation.")
+                    return True
+            except Exception as err_info:
+                print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
         if not prompt_start(action, f"This will {action_description.lower()}"):
@@ -142,20 +145,27 @@ class GameInstaller:
             InstallationState.REBUILDING_AUDIO,
         ]
 
+        gui = ProgressGUI(len(installation_steps))  # Create the GUI instance
+
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
             last_completed_index = 0
         else:
             last_completed_index = installation_steps.index(resume_state)
 
+        # Perform installation steps starting from the next step after the last completed one
         try:
-            # Perform installation steps starting from the next step after the last completed one
             for _, state in enumerate(installation_steps[last_completed_index:]):
                 self.__perform_installation_step(state)
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
+                gui.update_progress(state.name)
         except Exception as err_info:
             print(f"Installation step error: {err_info}")
+            gui.close()
             return False
+        
+        # close progress gui
+        gui.close()
 
         # Update installation state to completed
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)

@@ -1,10 +1,12 @@
 # pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long
 import os
 import shutil
+import time
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
 from gui.browser import GuiHudBrowser
+from gui.progress import ProgressGUI
 from gui.vdf import VDFModifierGUI
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
@@ -34,6 +36,26 @@ def debug_descriptions_gui():
     descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
+
+
+def debug_progress_gui():
+    "debug installer gui"
+
+    # total_steps = len(installation_steps)
+    total_steps = 10
+    gui = ProgressGUI(total_steps)  # Create the GUI instance
+
+    # for step in range(total_steps):
+    #     print(f"Current step: {step}")
+    #     gui.update_progress(f"step: {step+1}")
+    #     time.sleep(2)
+
+    # gui.update_progress("this is!")
+    # input("enter to cintieeiej")
+    gui.update_progress(
+        "this is some text explaining the current stepthis is some text explaining the current stepthis is some text explaining the current step!"
+    )
+    # gui.update_progress("this is some text explaining the current step!")
 
 
 def debug_vdf_gui():

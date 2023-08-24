@@ -4,11 +4,11 @@
 
 import os
 import sys
-from debug.game import debug_game_class
 
 from debug.gui import (
     debug_descriptions_gui,
     debug_get_user_input,
+    debug_progress_gui,
     debug_vdf_gui,
     get_debug_gui_browser_instance,
 )
@@ -34,9 +34,7 @@ def debug_main():
 
     # debug_game_class()
     # debug_vdf_class()
-    # debug_gui()
-
-    prompt_start("install", "extra_message")
+    debug_gui()
 
     # hud = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()
@@ -71,3 +69,6 @@ def debug_gui():
 
     # user input (used to retrieve game command)
     # debug_get_user_input()
+
+    # installer
+    # debug_progress_gui()
