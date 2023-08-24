@@ -5,7 +5,7 @@ import subprocess
 
 import win32gui
 
-from game.constants import InstallationState
+from game.constants import DirectoryMode, InstallationState
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
     get_hwnd_for_exe,
@@ -112,9 +112,8 @@ class GameWindow:
             return False
 
     def run(self, dir_mode, write_config=True):
-        """Start game
-
-        write_config is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
+        """Start the game
+        'write_config' param is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
 
         self.game._validate_dir_mode(dir_mode)
 
@@ -129,6 +128,12 @@ class GameWindow:
         result = self.game.dir.set(dir_mode)
         if not result:
             return False
+
+        # dev: cancel if out of date
+        if dir_mode == DirectoryMode.DEVELOPER:
+            if self.game.dir.dev_out_of_date():
+                show_message(f"{dir_mode} is out of date!\n\nRe-install before running", "error")
+                return False
 
         # run game
         if self.is_running():
