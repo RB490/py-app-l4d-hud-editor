@@ -27,6 +27,7 @@ class InstallationState(Enum):
     UNKNOWN = auto()
     NOT_INSTALLED = auto()
     COMPLETED = auto()
+    PENDING_DELETION = auto()
     # NOT_STARTED = auto()  # hud dev folder created
     # PAUSED = auto()
     # CANCELLED = auto()

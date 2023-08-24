@@ -44,6 +44,9 @@ class GameInstaller:
         if not prompt_delete():
             return False
 
+        # set deletion state
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.PENDING_DELETION)
+
         # close the game
         self.game.close()
 
@@ -115,7 +118,11 @@ class GameInstaller:
         self.game.close()
 
         # install: delete dev folder if needed
-        if action == "install" and current_state == InstallationState.UNKNOWN:
+        if (
+            action == "install"
+            and current_state == InstallationState.UNKNOWN
+            or current_state == InstallationState.PENDING_DELETION
+        ):
             invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
             if invalid_dev_dir:

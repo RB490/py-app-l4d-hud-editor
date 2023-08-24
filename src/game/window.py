@@ -4,6 +4,7 @@
 import subprocess
 
 import win32gui
+from game.constants import DirectoryMode, InstallationState
 
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
@@ -13,7 +14,7 @@ from utils.functions import (
     wait_for_process_with_ram_threshold,
 )
 from utils.persistent_data import PersistentDataManager
-from utils.shared_utils import move_hwnd_to_position
+from utils.shared_utils import move_hwnd_to_position, show_message
 
 
 class GameWindow:
@@ -118,6 +119,11 @@ class GameWindow:
         self.game._validate_dir_mode(dir_mode)
 
         print(f"directory mode: {dir_mode.name}")
+
+        # confirm dir mode isn't being deleted
+        if self.game.dir.id.get_installation_state(dir_mode) == InstallationState.PENDING_DELETION:
+            show_message(f"{dir_mode} is partially deleted!\n\nRe-install before running", "error")
+            return False
 
         # activate selected dir_mode
         result = self.game.dir.set(dir_mode)
