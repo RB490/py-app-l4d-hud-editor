@@ -3,10 +3,10 @@
 Current:
 
 
-	Features:	
+	✔ Installer: Onl y prompt to select dev directory, if it wasnt found @done(23-08-24 16:44)
+	✔ Installer message boxes for unstalling, repairing, updating installing @done(23-08-24 16:46)
 	
 
-	☐ Installer: Only prompt to select dev directory, if it wasnt found
 	
 	☐ Bug: Finished installinging! when finished installing
 
@@ -16,9 +16,6 @@ Current:
 	
 	
 
-	☐ Installer message boxes:
-		☐ Finished uninstalling
-		☐ Finished installing/repairing/updating
 	
 	☐ Copy_dir considerations: 
 		- I'm only using the copy_dir function because i made it be able to ignore files but i cant just use copytree & then delete the file

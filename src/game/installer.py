@@ -46,7 +46,7 @@ class GameInstaller:
         shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
 
         # finished
-        print("Uninstalled!")
+        show_message("Finished uninstalling!", "info")
 
     def common_installation_logic(self, action, resume_state, action_description):
         print(f"{action_description}...")
@@ -112,7 +112,7 @@ class GameInstaller:
         # perform installation steps
         try:
             self.__process_installation_steps(resume_state)
-            print(f"Finished {action_description.lower()}ing!")
+            show_message(f"Finished {action_description.lower()}!", "info")
             return True
         except Exception as err_info:
             show_message(f"{action_description} error: {err_info}", "error")
