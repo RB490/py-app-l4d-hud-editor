@@ -6,21 +6,19 @@ Current:
 	✔ Bug: Installer updates step after completing it instead of before @done(23-08-24 22:27)
 	✔ Bug: Installation step error: GameDir._get_main_subdir() missing 1 required positional argument: 'subdir_name' @done(23-08-24 22:31)
 	✔ Bug: When resuming installation state the GUI still contains total_steps as if starting for 0. either modify total steps or count which step i'm on in total probably the second @done(23-08-24 22:45)
-
 	✔ Bug: Installation cancelled because of error -> bug only prints in console, but should be a message @done(23-08-24 22:50)
-	☐ Bug: Installation cancelled because of a bug -> terminal says finished installing!
-
 	✔ Installer: Minor logic improvement @done(23-08-24 22:55)
-
-	☐ self.game.dir.dev_out_of_date()
-
-	☐ Feature: Installer: Hide start gui during installation/uninstall procedures, confirm that doesn't cause an issue with the progress gui
+	✔ Bug: Installation cancelled because of a bug -> terminal says finished installing! @done(23-08-24 22:57)
+	✔ Refactor: Clean duplicate code for looping game folder. in is_custom_file & out_of_date check @done(23-08-24 23:14)
 
 	☐ Feature: Installer: Check whether the developer directory is out of date by comparing the (some) pak files
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
-	☐ Refactor: Clean duplicate code for looping game folder. in is_custom_file & out_of_date check
+	☐ Feature: Installer: Hide start gui during installation/uninstall procedures, confirm that doesn't cause an issue with the progress gui
+
+	☐ Refactor: Duplicate code: game.dir has code related to finding pak01's but the installer does aswell
+
 
 	☐ Bug: When deleting game dev installation the gui gets resized a lot by the different length paths causing it to flicker and visually glitch out some
 

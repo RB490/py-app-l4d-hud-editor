@@ -108,6 +108,7 @@ class GameInstaller:
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
             try:
                 result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
+                # if developer directory was located, check if installation is already completed
                 if result:
                     current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
                     if current_state == InstallationState.COMPLETED:

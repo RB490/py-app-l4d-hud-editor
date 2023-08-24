@@ -76,15 +76,9 @@ class GameDir:
         """Search all game directories including the backup folder to find the file"""
 
         # variables
-        game_file_directories = []
-        game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-
         # retrieve game folders to check
-        for subdir_name in os.listdir(game_dir):
-            subdir_path = os.path.join(game_dir, subdir_name)
-            is_game_files_dir = self.get_pak01_vpk_in(subdir_path)
-            if is_game_files_dir:
-                game_file_directories.append(subdir_path)
+        game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        game_file_directories = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
         # add backup directory last so it's searched last so the code preferably returns file in the main directory
         game_file_directories.append(self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER))
 
@@ -243,26 +237,39 @@ class GameDir:
 
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"
-        print("hi there!")
-
-        # Retrieve all pak01's and compare them between the dev & user directories, possibly even all paks although not needed & i should i have funcs to do this already
+        print("Checking if developer directory is outdated...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            print("Developer mode is not out of date because it's not installed!")
+            print("Unable to check outdated state: Developer mode is not installed!")
             return False
 
+        user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
+        dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+        pak01_file_name = "pak01_dir.vpk"
+
+        for user_subdir, dev_subdir in zip(user_pak01_subdirs, dev_pak01_subdirs):
+            user_pak01 = os.path.join(user_subdir, pak01_file_name)
+            dev_pak01 = os.path.join(dev_subdir, pak01_file_name)
+
+            if files_differ(user_pak01, dev_pak01):
+                print("Developer directory is outdated!")
+                return True
+        print("Developer directory is up-to-date!")
+        return False
+
+    def __get_pak01_vpk_subdirs(self, dir_mode):
+        "Retrieve subdirs with pak01's in them. Eg: left4dead2, left4dead2_dlc1, update"
+
         # variables
-        game_file_directories = []
-        game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        pak01_subdirs = []
+        game_dir = self.game.dir.get(dir_mode)
 
         # retrieve game folders to check
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
             is_game_files_dir = self.get_pak01_vpk_in(subdir_path)
 
-            print(is_game_files_dir)
-
             if is_game_files_dir:
-                game_file_directories.append(subdir_path)
+                pak01_subdirs.append(subdir_path)
 
-        # return files_differ(file1, file2)
+        return pak01_subdirs
