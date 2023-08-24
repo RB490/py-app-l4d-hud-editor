@@ -48,15 +48,21 @@ class GameInstaller:
         # finished
         print("Uninstalled!")
 
-    def update(self):
-        "Update"
-        print("Updating...")
+    def common_installation_logic(self, action, resume_state, action_description):
+        print(f"{action_description}...")
+
+        # confirm params
+        if action not in ["install", "update", "repair"]:
+            raise ValueError(f"Invalid action specified: {action}")
 
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
-        # is installed?
-        if current_state is not InstallationState.COMPLETED:
-            print("Not installed!")
+        # confirm action is possible
+        if action == "repair" or action == "update" and current_state is not InstallationState.COMPLETED:
+            show_message(f"Can't {action}! Developer mode is not installed", "error", action_description)
+            return False
+        elif action == "install" and current_state is InstallationState.COMPLETED:
+            show_message(f"Can't {action}! Developer mode is already installed!", "error", action_description)
             return False
 
         # get user directory
@@ -67,115 +73,24 @@ class GameInstaller:
                 show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
 
-        # confirm start
-        if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):
-            return False
-
-        # close game
-        self.game.close()
-
-        # acativate developer mode
-        self.game.dir.set(DirectoryMode.DEVELOPER)
-
-        # enable paks
-        self.__enable_paks()
-
-        # set resume state
-        install_resume_state = InstallationState.VERIFYING_GAME
-        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, install_resume_state)
-
-        # perform installation steps
-        try:
-            self.__process_installation_steps(install_resume_state)
-            print("Finished updating!")
-            return True
-        except Exception as err_info:
-            show_message(f"Update error: {err_info}", "error")
-            return False
-
-    def repair(self):
-        "Repair"
-        print("Repairing...")
-
-        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
-
-        # is installed?
-        if current_state is not InstallationState.COMPLETED:
-            print("Not installed!")
-            return False
-
-        # get user directory
-        if not self.game.installed(DirectoryMode.USER):
-            try:
-                self.game.dir.id.set_path(DirectoryMode.USER)
-            except Exception as err_info:
-                show_message(f"{err_info}", "error", "Could not get user directory!")
-                return False
-
-        # confirm start
-        if not prompt_start(self.game, "repair", "This will re-extract every pak01_dir in the dev folder"):
-            return False
-
-        # close game
-        self.game.close()
-
-        # acativate developer mode
-        self.game.dir.set(DirectoryMode.DEVELOPER)
-
-        # enable paks
-        self.__enable_paks()
-
-        # set resume state
-        install_resume_state = InstallationState.EXTRACTING_PAKS
-        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, install_resume_state)
-
-        # perform installation steps
-        try:
-            self.__process_installation_steps(install_resume_state)
-            # finished
-            print("Finished reparing!")
-            return True
-        except Exception as err_info:
-            show_message(f"Repair error: {err_info}", "error")
-            return False
-
-    def install(self):
-        "Install"
-        print("Installing..")
-
-        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
-
-        # already installed?
-        if current_state is InstallationState.COMPLETED:
-            print("Already installed!")
-            return True
-
-        # get user directory
-        if not self.game.installed(DirectoryMode.USER):
-            try:
-                self.game.dir.id.set_path(DirectoryMode.USER)
-            except Exception as err_info:
-                show_message(f"{err_info}", "error", "Could not get user directory!")
-                return False
-
-        # get dev directory
+        # prompt to select potentially existing dev directory (for example incase broken id file)
         try:
             result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
             if result:
                 print("Successfully selected the developer directory. Finished installation.")
                 return True
         except Exception as err_info:
-            print(f"Could not retrieve developer directory: {err_info}")
+            print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        if not prompt_start(self.game, "install"):
+        if not prompt_start(self.game, action, f"This will {action_description.lower()}"):
             return False
 
         # close game
         self.game.close()
 
-        # delete dev folder if needed
-        if current_state == InstallationState.UNKNOWN:
+        # install: delete dev folder if needed
+        if action == "install" and current_state == InstallationState.UNKNOWN:
             invalid_dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
             if invalid_dev_dir:
@@ -184,15 +99,37 @@ class GameInstaller:
                     return False
                 shutil.rmtree(invalid_dev_dir)
 
-        # install
+        # activate developer mode
+        if self.game.installed(DirectoryMode.DEVELOPER):
+            self.game.dir.set(DirectoryMode.DEVELOPER)
+
+        # enable paks
+        self.__enable_paks()
+
+        # set resume state
+        self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, resume_state)
+
+        # perform installation steps
         try:
-            self.__process_installation_steps(current_state)
-            # finished
-            print("Finished installing!")
+            self.__process_installation_steps(resume_state)
+            print(f"Finished {action_description.lower()}ing!")
             return True
         except Exception as err_info:
-            show_message(f"Installation error: {err_info}", "error")
+            show_message(f"{action_description} error: {err_info}", "error")
             return False
+
+    def update(self):
+        "Update"
+        return self.common_installation_logic("update", InstallationState.VERIFYING_GAME, "Updating")
+
+    def repair(self):
+        "Repair"
+        return self.common_installation_logic("repair", InstallationState.EXTRACTING_PAKS, "Repairing")
+
+    def install(self):
+        "Install"
+        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
+        return self.common_installation_logic("install", current_state, "Installing")
 
     def __process_installation_steps(self, resume_state):
         installation_steps = [
@@ -341,6 +278,11 @@ class GameInstaller:
     def __enable_paks(self):
         print("Enabling pak01.vpk's")
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+
+        # this check ensures repair() & update() can use this method. and install() ignores it if needed
+        if not dev_dir:
+            print("Enable paks: Developer directory not retrieved.")
+            return
 
         def enable_callback(filepath, subdir_path):
             source_filepath = filepath

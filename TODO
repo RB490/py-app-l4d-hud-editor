@@ -4,16 +4,25 @@ Current:
 
 
 	Features:	
-	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
-		
-		- install_update_repair_duplicate_code_refactor_draft.py
-			- manually compare and confirm that the code correct
-				- prompt_start is being send some additional params. is this useful, maybe keep or remove
-				- dev directory is not currently retrieved at all. probably do it every time or just for install()
-				- # delete dev folder if needed is not being done. do it every time just for install()
-				- it's setting resume state, which only repair() and update() do currently
-
+	☐ Installer: Only prompt to select dev directory, if it wasnt found
 	
+	☐ Bug: Finished installinging! when finished installing
+
+	☐ Refactor: remove game_class passing to prompts? by creating an instance in the func
+
+	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
+	
+	
+
+	☐ Installer message boxes:
+		☐ Finished uninstalling
+		☐ Finished installing/repairing/updating
+	
+	☐ Copy_dir considerations: 
+		- I'm only using the copy_dir function because i made it be able to ignore files but i cant just use copytree & then delete the file
+		- So Copytree is probably faster. Then again if i want a copy file progress bar it could be useful
+		- Does shutil.copytree support progress bars?
+
 	☐ Refactor: VPK class
 
 	☐ Handle VPK class failing to extract specific files during installation
@@ -71,6 +80,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ install_update_repair_duplicate_code_refactor_draft.py @done(23-08-24 16:26)
 	✔ Refactor: editor class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud @done(23-08-24 12:19)
 	✔ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set() @done(23-08-24 12:17)
 	✔ Bug: Addon images are not in the center of StartGui. Fixed by removing: self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all")) @done(23-08-24 11:42)
