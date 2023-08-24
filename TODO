@@ -4,21 +4,9 @@ Current:
 
 
 Features:
-	✔ Fixed a wide variety of BaseGui & infinite recursion import bugs @done(23-08-24 11:06)
-	
-	☐ HudDescriptions is failling because it's importing GuiBrowser & GuiBrowser is failing because? it imports GuiHudDescriptions? recursive?
-
-	☐ Modify syntax from self.hud.sync self.hud.desc -> self.hud.editor.syncer
-	    - self.syncer = HudSyncer()
-        - self.desc = HudDescriptions()
-	
-	☐ Re-enable self.root.title lines
-
 	☐ Bug: Addon images are not in the center of StartGui
 
-	☐ Bug: VDF modifier causing infinite loop: GUI VDFModifier > load_file > VDFModifier > loop starts with hud and shit
-	
-	☐ Bug: I'm currently manually setting the hud_dir, but this should definetly be done with a method
+	☐ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with a method
 	    - debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
     	- i = Hud()
     	- i.edit.hud_dir = debug_hud_dir
@@ -26,11 +14,13 @@ Features:
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	
 	☐ Refactor: VPK class
+
 	☐ Handle VPK class failing to extract specific files during installation
 	
 	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 
 	☐ Start GUI: Context menu icons
+
 	☐ Start GUI: Specific button icons rather than all identical
 
 	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
@@ -86,6 +76,11 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Fixed a wide variety of BaseGui & infinite recursion import bugs @done(23-08-24 11:06)
+	✔ HudDescriptions is failling because it's importing GuiBrowser & GuiBrowser is failing because? it imports GuiHudDescriptions? recursive? @done(23-08-24 11:08)
+	✔ Modify syntax from self.hud.sync self.hud.desc -> self.hud.editor.syncer @done(23-08-24 11:08)
+	✔ Re-enable self.root.title lines @done(23-08-24 11:08)
+	✔ Bug: VDF modifier causing infinite loop: GUI VDFModifier > load_file > VDFModifier > loop starts with hud and shit @done(23-08-24 11:08)
 	✘ Global hotkey management: Explore using a global singleton hotkey manager to streamline hotkey handling @cancelled(23-08-24 01:11)
 	✔ Bug: GUI: I can use show() method for my gui without first having ran the gui's mainloop with run() @done(23-08-24 01:10)
 	✔ Refactor GameDir: should get_main_dir_backup check if the directory is valid? or in the code that uses it @done(23-08-24 00:56)
