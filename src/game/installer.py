@@ -52,7 +52,7 @@ class GameInstaller:
     def __perform_uninstall(self):
         # set deletion state
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.PENDING_DELETION)
-        
+
         # close the game
         self.game.close()
 
@@ -348,9 +348,9 @@ class GameInstaller:
     def _main_dir_backup(self):
         print("Copying main directory to create a backup for the sync class")
 
-        resource_dir = os.path.join(self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER), "resource")
+        resource_dir = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "resource")
         resource_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "resource")
-        materials_dir = os.path.join(self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER), "materials")
+        materials_dir = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
         materials_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "materials")
         backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 

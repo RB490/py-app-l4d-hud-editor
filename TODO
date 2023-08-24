@@ -5,8 +5,11 @@ Current:
 	✔ Feature: Installer: I should use uninstall() in the other place in the installer where it deletes the dev dir. actually; create a separate method for deleting a folder and use that for uninstall() and in common_installation_logic @done(23-08-24 22:12)
 	✔ Bug: Installer updates step after completing it instead of before @done(23-08-24 22:27)
 
+	✔ Bug: Installation step error: GameDir._get_main_subdir() missing 1 required positional argument: 'subdir_name' @done(23-08-24 22:31)
+
 	☐ self.game.dir.dev_out_of_date()
 
+	☐ Feature: Installer: Hide start gui during installation/uninstall procedures, confirm that doesn't cause an issue with the progress gui
 
 	☐ Feature: Installer: Check whether the developer directory is out of date by comparing the (some) pak files
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
