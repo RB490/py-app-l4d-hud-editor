@@ -26,15 +26,18 @@ from .constants import (
     FILE_EXT_WARNING_ICON,
 )
 
+
 def count_files_and_dirs(path):
+    "Count files and directories"
     total_files = 0
     total_subdirs = 0
 
-    for root, dirs, files in os.walk(path):
+    for _, dirs, files in os.walk(path):
         total_subdirs += len(dirs)
         total_files += len(files)
 
     return total_files, total_subdirs
+
 
 def get_backup_path(file_path):
     """Get a backup path by appending 'append backup string' to the input file path"""

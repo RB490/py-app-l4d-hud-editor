@@ -8,7 +8,6 @@ Notes:
 import filecmp
 import os
 import shutil
-import threading
 
 from game.constants import DirectoryMode, InstallationError, InstallationState
 
@@ -66,6 +65,8 @@ class GameInstaller:
                 dir_path = os.path.join(root, dir_name)
                 gui.update_progress(f"Deleting directory: '{dir_path}'")
                 os.rmdir(dir_path)
+
+        gui.close()
 
         # finished
         show_message("Finished uninstalling!", "info")

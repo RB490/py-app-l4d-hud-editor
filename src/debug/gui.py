@@ -1,7 +1,6 @@
 # pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long
 import os
 import shutil
-import time
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions

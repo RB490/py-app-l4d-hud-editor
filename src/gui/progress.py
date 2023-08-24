@@ -1,11 +1,14 @@
+"A progress GUI window."
 import tkinter as tk
-from tkinter import ttk
 
 from utils.constants import APP_ICON
 
 
 class ProgressGUI:
+    "A progress GUI window."
+
     def __init__(self, total_steps):
+        "Initialize a progress GUI window."
         self.root = tk.Tk()
         self.root.title("Installation Progress")
         self.root.minsize(400, 0)
@@ -29,6 +32,7 @@ class ProgressGUI:
         self.steps_remaining_label.pack(padx=10, pady=(0, 10))
 
     def update_progress(self, step_information):
+        "Update the progress GUI with the current step's information."
         self.current_step += 1
         # self.progress_var.set(self.current_step)
         self.step_info_label.config(text=step_information)  # Update step information
@@ -36,4 +40,5 @@ class ProgressGUI:
         self.root.update()
 
     def close(self):
+        """Close the progress GUI window."""
         self.root.destroy()

@@ -1,23 +1,13 @@
 
 
 Current:
-	
-	✔ Bug: Cancelled installation halfway through for example 'VERIFYING_GAME' -> id file exists -> install dev -> asks to select id file when though id file exists @done(23-08-24 17:48)
-	✔ Feature: Closing the installer progress gui should cancel installation? reset installation state? @done(23-08-24 17:50)
-	✔ Installer: Incorporate progress GUI for the installer class. __process_installation_steps: just easy peasy each step @done(23-08-24 17:50)
-	✘ Bug: Installer gui Progressbar doesn't update without mainloop() if mainloop() is used for another gui @cancelled(23-08-24 18:19) <- Tried threading but that doesn't work just not using progressbar	
-	✔ Installer: Incorporate progress GUI for the installer class: unstalling: individual files (only if feasible, depends on gpt) @done(23-08-24 18:20)
-
-	☐ Installer: also update individual files that get processed into GUI? could be nice if it's easy enough to do. might want to create progress as a class instance, maybe
-
-
 
 	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
-
-
+	☐ Feature: Considering directory deletion takes a while, i should  update installation state to prending_deletion or some such and use that in the script
+	☐ Feature: I should use uninstall() in the other place in the installer where it deletes the dev dir. actually; create a separate method for deleting a folder and use that for uninstall() and in common_installation_logic
 
 	☐ Refactor: VPK class
 
@@ -75,6 +65,12 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Bug: Cancelled installation halfway through for example 'VERIFYING_GAME' -> id file exists -> install dev -> asks to select id file when though id file exists @done(23-08-24 17:48)
+	✔ Feature: Closing the installer progress gui should cancel installation? reset installation state? @done(23-08-24 17:50)
+	✔ Installer: Incorporate progress GUI for the installer class. __process_installation_steps: just easy peasy each step @done(23-08-24 17:50)
+	✘ Bug: Installer gui Progressbar doesn't update without mainloop() if mainloop() is used for another gui @cancelled(23-08-24 18:19) <- Tried threading but that doesn't work just not using progressbar	
+	✔ Installer: Incorporate progress GUI for the installer class: unstalling: individual files (only if feasible, depends on gpt) @done(23-08-24 18:20)
+	✘ Installer: also update individual files that get processed into GUI? could be nice if it's easy enough to do. might want to create progress as a class instance, maybe @cancelled(23-08-24 18:20)
 	✔ Copy_dir considerations: @done(23-08-24 17:02) result: shutil.copytree needs the destination directory to not exist so it is useful
 	✔ Installer: Onl y prompt to select dev directory, if it wasnt found @done(23-08-24 16:44)
 	✔ Installer message boxes for unstalling, repairing, updating installing @done(23-08-24 16:46)

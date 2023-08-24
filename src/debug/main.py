@@ -33,7 +33,7 @@ def debug_main():
 
     # unit_test_hud_syncer()
 
-    debug_game_class()
+    # debug_game_class()
     # debug_vdf_class()
     # debug_gui()
 

@@ -20,7 +20,7 @@ def debug_game_class():
     # Installer
     ###########################
     # result = gamez.installer.install()
-    result = gamez.installer.uninstall()
+    # result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
