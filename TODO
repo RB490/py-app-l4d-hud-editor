@@ -6,10 +6,7 @@ Current:
 Features:
 	✔ Bug: Addon images are not in the center of StartGui. Fixed by removing: self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all")) @done(23-08-24 11:42)
 
-	☐ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with a method
-	    - debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
-    	- i = Hud()
-    	- i.edit.hud_dir = debug_hud_dir
+	✔ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with set_dir method @done(23-08-24 11:50)
 
 	☐ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials
 	

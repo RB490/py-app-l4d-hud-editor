@@ -13,13 +13,12 @@ from debug.gui import (
 )
 from debug.hud import get_hud_debug_instance
 from gui.start import show_start_gui
+from tests.test_hud_syncer import unit_test_hud_syncer
 
 
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
-
-    sys.setrecursionlimit(100)
     print("Started debugging!")
 
     # data_manager = PersistentDataManager()
@@ -28,9 +27,11 @@ def debug_main():
     # result = data_manager.print()
     # result = data_manager.get("game_mode")
 
+    unit_test_hud_syncer()
+
     # debug_game_class()
     # debug_vdf_class()
-    debug_gui()
+    # debug_gui()
 
     # hud = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()

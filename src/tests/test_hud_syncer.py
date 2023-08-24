@@ -221,11 +221,7 @@ class TestHudSyncer(unittest.TestCase):
         self.assertIn("test_dir", result)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
-def debug_hud_syncer():
+def unit_test_hud_syncer():
     # pylint: disable=line-too-long
     """Debugs the hud syncer class"""
 

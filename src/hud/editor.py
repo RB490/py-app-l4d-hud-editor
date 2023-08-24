@@ -30,6 +30,7 @@ class HudEditor:
         self.desc = HudDescriptions()
         self.hud_dir = None
         self.threaded_timer_game_exit = None
+        self.browser = None
 
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
@@ -39,9 +40,9 @@ class HudEditor:
         self.browser = GuiHudBrowser()  # create browser instance here to avoid infinite recursion
 
         # verify parameters
-        if not os.path.isdir(hud_dir):
+        result = self.set_dir(hud_dir)
+        if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
-        self.hud_dir = hud_dir
 
         # prompt to start game during debug mode
         if DEBUG_MODE:
@@ -56,7 +57,7 @@ class HudEditor:
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.is_synced() and self.syncer.get_source_dir() == self.hud_dir:
+        if self.syncer.is_synced() and self.syncer.get_source_dir() == self.get_dir():
             return False
 
         # unsync previous hud
@@ -74,7 +75,7 @@ class HudEditor:
 
         # sync the hud to the game folder
         self.syncer.sync(
-            self.hud_dir,
+            self.get_dir(),
             self.game.dir.get(DirectoryMode.DEVELOPER),
             os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
         )
@@ -117,7 +118,7 @@ class HudEditor:
             keyboard.remove_hotkey(self.sync)
 
         # clear variables
-        self.hud_dir = None
+        self.set_dir(None)
 
         # enable user mode
         self.game.dir.set(DirectoryMode.DEVELOPER)
@@ -129,7 +130,7 @@ class HudEditor:
     def sync(self):
         """Sync hud"""
 
-        hud_dir = self.hud_dir
+        hud_dir = self.get_dir()
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
 
@@ -149,7 +150,7 @@ class HudEditor:
         self.syncer.unsync()
 
         # clear variables
-        self.hud_dir = None
+        self.set_dir(None)
 
     def synced(self):
         "Verify if hud is loaded"
@@ -157,10 +158,19 @@ class HudEditor:
 
     def is_loaded(self):
         "Verify if hud is loaded"
-        if self.hud_dir:
+        if self.get_dir():
             return True
         else:
             return False
+
+    def set_dir(self, directory):
+        """Get information"""
+        if not os.path.isdir(directory):
+            print(f"Could not set HUD directory to edit because it does not exist: {directory}")
+            return False
+
+        self.hud_dir = directory
+        return True
 
     def get_dir(self):
         """Get information"""
