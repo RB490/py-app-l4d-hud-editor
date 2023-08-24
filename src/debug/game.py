@@ -62,6 +62,8 @@ def debug_game_class():
 
     # result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
     # result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
+    
+    result = gamez.dir.dev_out_of_date()
 
     ###########################
     # Result

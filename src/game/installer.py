@@ -188,9 +188,9 @@ class GameInstaller:
         # Perform installation steps starting from the next step after the last completed one
         try:
             for _, state in enumerate(installation_steps[last_completed_index:]):
-                self.__perform_installation_step(state)
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
                 gui.update_progress(state.name)
+                self.__perform_installation_step(state)
         except Exception as err_info:
             print(f"Installation step error: {err_info}")
             gui.close()

@@ -5,6 +5,7 @@ import shutil
 
 from game.constants import DirectoryMode
 from game.dir_id_handler import GameIDHandler
+from hud.syncer import files_differ
 from utils.functions import (
     copy_directory,
     generate_random_string,
@@ -241,3 +242,29 @@ class GameDir:
             return True
         except Exception as err_info:
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info
+
+    def dev_out_of_date(self):
+        "Check if the developer directory is out of date by comparing it agains the user directory"
+        print("hi there!")
+
+        # Retrieve all pak01's and compare them between the dev & user directories, possibly even all paks although not needed & i should i have funcs to do this already
+
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+            print("Developer mode is not out of date because it's not installed!")
+            return False
+
+        # variables
+        game_file_directories = []
+        game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+
+        # retrieve game folders to check
+        for subdir_name in os.listdir(game_dir):
+            subdir_path = os.path.join(game_dir, subdir_name)
+            is_game_files_dir = self.get_pak01_vpk_in(subdir_path)
+
+            print(is_game_files_dir)
+
+            if is_game_files_dir:
+                game_file_directories.append(subdir_path)
+
+        # return files_differ(file1, file2)
