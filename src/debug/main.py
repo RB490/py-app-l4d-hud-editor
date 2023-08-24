@@ -46,11 +46,11 @@ def debug_gui():
     "debug gui"
 
     # browser
-    browse = get_debug_gui_browser_instance()
-    browse.show()
+    # browse = get_debug_gui_browser_instance()
+    # browse.show()
 
     # start
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

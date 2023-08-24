@@ -177,37 +177,15 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""
-        # if not os.path.isfile(path):
-        #     print(f"change_addon_image: File does not exist: {path}")
-        #     return
-
-        # # Load the second image
-        # raw_img_handle = Image.open(path)
-        # img_handle = ImageTk.PhotoImage(raw_img_handle)
-        # # Keep a reference to the new image to prevent it from being garbage collected
-        # self.picture_canvas.image = img_handle
-
-        # # Change the image displayed in the label
-        # print(path)
-        # # self.picture_viewport.configure(image=img_handle)
-        # # self.picture_viewport.configure(image=self.picture_viewport.image)
-        # self.picture_canvas.create_image(0, 0, anchor="nw", image=self.picture_canvas.image)
-
-        image = Image.open(path)  # Replace with your image file path
+        image = Image.open(path)
         self.picture_canvas_photo = ImageTk.PhotoImage(image)
 
-        # Calculate the center coordinates to place the image
+        # Calculate the center coordinates based on the canvas size
         center_x = self.picture_canvas.winfo_reqwidth() // 2
         center_y = self.picture_canvas.winfo_reqheight() // 2
 
         # Configure the canvas to display the image
         self.picture_canvas.create_image(center_x, center_y, anchor="center", image=self.picture_canvas_photo)
-
-        # Adjust the canvas size to match the image size
-        # self.picture_canvas.config(width=self.photo.width(), height=self.photo.height())
-
-        # Adjust the canvas's scrollable region to fit the image
-        self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all"))
 
     # pylint: disable=unused-argument
     def tree_get_selected_item(self, event):
