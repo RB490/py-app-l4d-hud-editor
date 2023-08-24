@@ -3,18 +3,10 @@
 Current:
 
 
-Features:
-	✔ Bug: Addon images are not in the center of StartGui. Fixed by removing: self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all")) @done(23-08-24 11:42)
-
-	✔ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with set_dir method @done(23-08-24 11:50)
-
-	✔ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials @done(23-08-24 12:12)
-	
+Features:	
 	☐ Refactor: VPK class
 
 	☐ Handle VPK class failing to extract specific files during installation
-	
-	☐ self.game.run("dev", "wait on close") -> wait_on_close=True/False
 
 	☐ Start GUI: Context menu icons
 
@@ -27,8 +19,6 @@ Features:
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 
 	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
-
-	☐ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set()
 
 	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
 
@@ -45,6 +35,7 @@ GUI:
 Unit Testing:
 	
 	☐ Unit test: HudDescription
+	☐ Unit test: ID File Handler
 
 Refactoring:
 
@@ -73,6 +64,10 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set() @done(23-08-24 12:17)
+	✔ Bug: Addon images are not in the center of StartGui. Fixed by removing: self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all")) @done(23-08-24 11:42)
+	✔ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with set_dir method @done(23-08-24 11:50)
+	✔ Refactor GameDir: A bunch of duplicate code related to methods like: get_main_dir_backup, get_main_dir_backup_materials @done(23-08-24 12:12)
 	✔ Fixed a wide variety of BaseGui & infinite recursion import bugs @done(23-08-24 11:06)
 	✔ HudDescriptions is failling because it's importing GuiBrowser & GuiBrowser is failing because? it imports GuiHudDescriptions? recursive? @done(23-08-24 11:08)
 	✔ Modify syntax from self.hud.sync self.hud.desc -> self.hud.editor.syncer @done(23-08-24 11:08)

@@ -21,22 +21,22 @@ class GameIDHandler:
             DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
         }
 
-    def _get_id_filename(self, dir_mode):
+    def _get_filename(self, dir_mode):
         self.game._validate_dir_mode(dir_mode)
         return self.id_file_names[dir_mode]
 
-    def __get_id_path(self, dir_mode):
+    def __get_path(self, dir_mode):
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
             print(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
-        id_path = os.path.join(mode_dir, self._get_id_filename(dir_mode))
+        id_path = os.path.join(mode_dir, self._get_filename(dir_mode))
         # print("ID Path:", id_path)
         return id_path
 
-    def set_id_path(self, dir_mode):
+    def set_path(self, dir_mode):
         """Manually set the directory for a given directory mode."""
 
         print(f"Manually setting directory for: {dir_mode.name}")
@@ -88,8 +88,8 @@ class GameIDHandler:
                 "sync_state": SyncState.UNKNOWN.name,
             }
 
-            self.__create_id_file(dir_mode, id_dir)
-            self.__write_id_content(dir_mode, initial_state_data)
+            self.__create_file(dir_mode, id_dir)
+            self.__write_content(dir_mode, initial_state_data)
             return True
         except Exception as err_info:
             raise RuntimeError(f"Could not set {dir_mode.name} ID location! \n\n{err_info}") from err_info
@@ -120,13 +120,13 @@ class GameIDHandler:
 
     def __get_state_value(self, dir_mode, state_key, default_value):
         """Get a specific state value from the ID file with a default value if not present."""
-        id_path = self.__get_id_path(dir_mode)
+        id_path = self.__get_path(dir_mode)
 
         if id_path is None:
             print(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
             return default_value
 
-        state_data = self.__read_id_content(id_path)
+        state_data = self.__read_content(id_path)
         state_value = state_data.get(state_key)
 
         if state_value is None:
@@ -138,16 +138,16 @@ class GameIDHandler:
 
     def __set_state(self, dir_mode, state_key, state_value):
         """Set a specific state value in the ID file."""
-        id_path = self.__get_id_path(dir_mode)
+        id_path = self.__get_path(dir_mode)
         if id_path is None:
             return None
 
-        state_data = self.__read_id_content(id_path)
+        state_data = self.__read_content(id_path)
         state_data[state_key] = state_value.name if state_value is not None else None
-        self.__write_id_content(dir_mode, state_data)
+        self.__write_content(dir_mode, state_data)
         print(f"Updated {state_key} state to: '{state_value.name}'")
 
-    def __read_id_content(self, id_path):
+    def __read_content(self, id_path):
         """Read and return the content of the ID file."""
         try:
             if os.path.isfile(id_path):
@@ -157,9 +157,9 @@ class GameIDHandler:
             print(f"Error reading ID content: {err}")
         return {}  # Fallback to empty json
 
-    def __write_id_content(self, dir_mode, state_data):
+    def __write_content(self, dir_mode, state_data):
         """Write the state data to the ID file."""
-        id_path = self.__get_id_path(dir_mode)
+        id_path = self.__get_path(dir_mode)
 
         state_data["directory_mode"] = dir_mode.name
         state_data["game_directory"] = self.game.dir.get(dir_mode)
@@ -172,11 +172,11 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
 
-    def __create_id_file(self, dir_mode, directory):
+    def __create_file(self, dir_mode, directory):
         """Create an ID file in the specified directory."""
 
         try:
-            id_path = os.path.join(directory, self._get_id_filename(dir_mode))
+            id_path = os.path.join(directory, self._get_filename(dir_mode))
 
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump({}, file_handle, indent=4)
@@ -187,11 +187,11 @@ class GameIDHandler:
 def debug_id_handler(game_class):
     "Debug"
     game_id_handler = game_class.dir.id
-    # game_class.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+    # game_class.dir.id.set_path(DirectoryMode.DEVELOPER)
 
     # Set the ID location for developer directory
     dir_mode = DirectoryMode.DEVELOPER
-    game_id_handler.set_id_path(dir_mode)
+    game_id_handler.set_path(dir_mode)
 
     # Set installation state for developer directory
     installation_state = InstallationState.COMPLETED

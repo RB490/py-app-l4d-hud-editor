@@ -62,7 +62,7 @@ class GameInstaller:
         # get user directory
         if not self.game.installed(DirectoryMode.USER):
             try:
-                self.game.dir.id.set_id_path(DirectoryMode.USER)
+                self.game.dir.id.set_path(DirectoryMode.USER)
             except Exception as err_info:
                 show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
@@ -107,7 +107,7 @@ class GameInstaller:
         # get user directory
         if not self.game.installed(DirectoryMode.USER):
             try:
-                self.game.dir.id.set_id_path(DirectoryMode.USER)
+                self.game.dir.id.set_path(DirectoryMode.USER)
             except Exception as err_info:
                 show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
@@ -153,14 +153,14 @@ class GameInstaller:
         # get user directory
         if not self.game.installed(DirectoryMode.USER):
             try:
-                self.game.dir.id.set_id_path(DirectoryMode.USER)
+                self.game.dir.id.set_path(DirectoryMode.USER)
             except Exception as err_info:
                 show_message(f"{err_info}", "error", "Could not get user directory!")
                 return False
 
         # get dev directory
         try:
-            result = self.game.dir.id.set_id_path(DirectoryMode.DEVELOPER)
+            result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
             if result:
                 print("Successfully selected the developer directory. Finished installation.")
                 return True
@@ -252,7 +252,7 @@ class GameInstaller:
         os.mkdir(dev_dir)
 
         # write id file
-        id_path = os.path.join(dev_dir, self.game.dir.id._get_id_filename(DirectoryMode.DEVELOPER))
+        id_path = os.path.join(dev_dir, self.game.dir.id._get_filename(DirectoryMode.DEVELOPER))
         with open(id_path, "w", encoding="utf-8"):
             pass
 
@@ -270,7 +270,7 @@ class GameInstaller:
         copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
-            self.game.dir.id._get_id_filename(DirectoryMode.USER),
+            self.game.dir.id._get_filename(DirectoryMode.USER),
         )
 
     def __prompt_verify_game(self):

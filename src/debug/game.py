@@ -1,4 +1,5 @@
 "debug game class"
+# pylint: disable=protected-access
 from game.constants import DirectoryMode
 from game.game import Game
 
@@ -39,7 +40,7 @@ def debug_game_class():
     # ID
     ###########################
     # result = gamez.dir.id.get_installation_state
-    # result = gamez.installed("invalid input")
+    result = gamez.dir.id._get_filename(DirectoryMode.USER)
 
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
@@ -54,8 +55,8 @@ def debug_game_class():
 
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.USER)
-    
-    result = gamez.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
+
+    # result = gamez.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
     # result = gamez.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
 
     # result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
