@@ -1,6 +1,9 @@
 # pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long
 import os
+import random
 import shutil
+import string
+import time
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
@@ -42,17 +45,20 @@ def debug_progress_gui():
 
     # total_steps = len(installation_steps)
     total_steps = 150000
-    gui = ProgressGUI(total_steps)  # Create the GUI instance
+    gui = ProgressGUI(total_steps, 25, 60)  # Create the GUI instance
 
     for step in range(total_steps):
-        gui.update_progress(f"step: {step+1}")
-        # time.sleep(2)
+        random_length = random.randint(1, 100)
+        # random_length = random.randint(1, 500)
+        random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
+        gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
+        time.sleep(0.4)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")
-    gui.update_progress(
-        "this is some text explaining the current stepthis is some text explaining the current stepthis is some text explaining the current step!"
-    )
+    # gui.update_progress(
+    #     "this is some text explaining the current stepthis is some text explaining the current stepthis is some text explaining the current step!"
+    # )
     # gui.update_progress("this is some text explaining the current step!")
 
 

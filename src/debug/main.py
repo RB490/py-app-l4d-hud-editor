@@ -33,9 +33,9 @@ def debug_main():
 
     # unit_test_hud_syncer()
 
-    debug_game_class()
+    # debug_game_class()
     # debug_vdf_class()
-    # debug_gui()
+    debug_gui()
 
     # hud = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()
@@ -55,7 +55,7 @@ def debug_gui():
     # browse.show()
 
     # start
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
