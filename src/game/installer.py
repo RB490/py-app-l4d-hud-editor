@@ -8,6 +8,7 @@ Notes:
 import filecmp
 import os
 import shutil
+import threading
 
 from game.constants import DirectoryMode, InstallationError, InstallationState
 
@@ -15,7 +16,12 @@ from game.constants import DirectoryMode, InstallationError, InstallationState
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from gui.progress import ProgressGUI
 from utils.constants import MODS_DIR
-from utils.functions import copy_directory, get_backup_path, wait_process_close
+from utils.functions import (
+    copy_directory,
+    count_files_and_dirs,
+    get_backup_path,
+    wait_process_close,
+)
 from utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
@@ -44,7 +50,22 @@ class GameInstaller:
 
         # remove directory
         print("Deleting game directory...")
-        shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
+        # shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
+        path = self.game.dir.get(DirectoryMode.DEVELOPER)
+
+        total_files, total_subdirs = count_files_and_dirs(path)
+        gui = ProgressGUI(total_files + total_subdirs)
+
+        for root, dirs, files in os.walk(path, topdown=False):
+            for file_name in files:
+                file_path = os.path.join(root, file_name)
+                gui.update_progress(f"Deleting: '{file_path}'")
+                os.remove(file_path)
+
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                gui.update_progress(f"Deleting directory: '{dir_path}'")
+                os.rmdir(dir_path)
 
         # finished
         show_message("Finished uninstalling!", "info")
@@ -163,7 +184,7 @@ class GameInstaller:
             print(f"Installation step error: {err_info}")
             gui.close()
             return False
-        
+
         # close progress gui
         gui.close()
 

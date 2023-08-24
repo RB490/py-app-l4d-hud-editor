@@ -42,13 +42,12 @@ def debug_progress_gui():
     "debug installer gui"
 
     # total_steps = len(installation_steps)
-    total_steps = 10
+    total_steps = 150000
     gui = ProgressGUI(total_steps)  # Create the GUI instance
 
-    # for step in range(total_steps):
-    #     print(f"Current step: {step}")
-    #     gui.update_progress(f"step: {step+1}")
-    #     time.sleep(2)
+    for step in range(total_steps):
+        gui.update_progress(f"step: {step+1}")
+        # time.sleep(2)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")

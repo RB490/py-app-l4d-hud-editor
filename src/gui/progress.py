@@ -21,16 +21,16 @@ class ProgressGUI:
         )  # Adjust wraplength as needed
         self.step_info_label.pack(padx=10, pady=(10, 0))
 
-        self.progress_var = tk.DoubleVar()
-        self.progress = ttk.Progressbar(self.root, variable=self.progress_var, maximum=total_steps)
-        self.progress.pack(padx=10, pady=10)
+        # self.progress_var = tk.DoubleVar()
+        # self.progress = ttk.Progressbar(self.root, variable=self.progress_var, maximum=total_steps)
+        # self.progress.pack(padx=10, pady=10)
 
         self.steps_remaining_label = tk.Label(self.root, text="")
         self.steps_remaining_label.pack(padx=10, pady=(0, 10))
 
     def update_progress(self, step_information):
         self.current_step += 1
-        self.progress_var.set(self.current_step)
+        # self.progress_var.set(self.current_step)
         self.step_info_label.config(text=step_information)  # Update step information
         self.steps_remaining_label.config(text=f"Step {self.current_step} of {self.total_steps}")
         self.root.update()

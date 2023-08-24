@@ -20,6 +20,7 @@ def debug_game_class():
     # Installer
     ###########################
     # result = gamez.installer.install()
+    result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
@@ -40,7 +41,7 @@ def debug_game_class():
     # ID
     ###########################
     # result = gamez.dir.id.get_installation_state
-    result = gamez.dir.id._get_filename(DirectoryMode.USER)
+    # result = gamez.dir.id._get_filename(DirectoryMode.USER)
 
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)

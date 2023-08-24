@@ -3,16 +3,21 @@
 Current:
 	
 	✔ Bug: Cancelled installation halfway through for example 'VERIFYING_GAME' -> id file exists -> install dev -> asks to select id file when though id file exists @done(23-08-24 17:48)
-	
+	✔ Feature: Closing the installer progress gui should cancel installation? reset installation state? @done(23-08-24 17:50)
+	✔ Installer: Incorporate progress GUI for the installer class. __process_installation_steps: just easy peasy each step @done(23-08-24 17:50)
+	✘ Bug: Installer gui Progressbar doesn't update without mainloop() if mainloop() is used for another gui @cancelled(23-08-24 18:19) <- Tried threading but that doesn't work just not using progressbar	
+	✔ Installer: Incorporate progress GUI for the installer class: unstalling: individual files (only if feasible, depends on gpt) @done(23-08-24 18:20)
+
+	☐ Installer: also update individual files that get processed into GUI? could be nice if it's easy enough to do. might want to create progress as a class instance, maybe
+
+
+
 	☐ Feature: Check whether the developer directory is out of date by comparing the (some) pak files
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
 
-	☐ Installer: Incorporate progress GUI for the installer class. __process_installation_steps: just easy peasy each step
-	☐ Installer: Incorporate progress GUI for the installer class: unstalling: individual files (only if feasible, depends on gpt)
 
-	☐ Bug: Installer: Closing  the gui continuis the installation
-	☐ Feature: Closing the installer progress gui should cancel installation? reset installation state?
+
 
 	☐ Refactor: VPK class
 
@@ -58,7 +63,13 @@ Additional Ideas and Considerations:
 		- I was able to get it to work with notepad.exe using subprocess start /B notepad.exe,
 		- however that didn't work for the game or steam
 		- this is legitimately around 2 hours of trail and error: python_process_decouple_testing.py
-	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)? might have decided to not bother because asyncio and threading was kinda aids
+	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)?
+		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
+
+
+
+
+		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
 	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
 
 
