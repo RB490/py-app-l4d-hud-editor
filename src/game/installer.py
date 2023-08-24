@@ -44,9 +44,15 @@ class GameInstaller:
         if not prompt_delete():
             return False
 
+        self.__perform_uninstall()
+
+        # finished
+        show_message("Finished uninstalling!", "info")
+
+    def __perform_uninstall(self):
         # set deletion state
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.PENDING_DELETION)
-
+        
         # close the game
         self.game.close()
 
@@ -70,9 +76,6 @@ class GameInstaller:
                 os.rmdir(dir_path)
 
         gui.close()
-
-        # finished
-        show_message("Finished uninstalling!", "info")
 
     def common_installation_logic(self, action, resume_state, action_description):
         "Installation logic for repair/update/install"
@@ -129,7 +132,7 @@ class GameInstaller:
                 extra_message = "Consider if you want to try to repair the installation instead of deleting it"
                 if not prompt_delete(extra_message):
                     return False
-                shutil.rmtree(invalid_dev_dir)
+                self.__perform_uninstall()
 
         # activate developer mode
         if self.game.installation_exists(DirectoryMode.DEVELOPER):

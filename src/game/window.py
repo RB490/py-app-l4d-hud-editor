@@ -4,8 +4,8 @@
 import subprocess
 
 import win32gui
-from game.constants import DirectoryMode, InstallationState
 
+from game.constants import InstallationState
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
     get_hwnd_for_exe,

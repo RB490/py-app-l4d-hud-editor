@@ -1,13 +1,15 @@
 
 
 Current:
-	☐ Feature: Installer: I should use uninstall() in the other place in the installer where it deletes the dev dir. actually; create a separate method for deleting a folder and use that for uninstall() and in common_installation_logic
-
 	✔ Feature: Installer: Considering directory deletion takes a while, i should  update installation state to prending_deletion or some such and use that in the script @done(23-08-24 22:09)
+	✔ Feature: Installer: I should use uninstall() in the other place in the installer where it deletes the dev dir. actually; create a separate method for deleting a folder and use that for uninstall() and in common_installation_logic @done(23-08-24 22:12)
+
 
 	☐ Feature: Installer: Check whether the developer directory is out of date by comparing the (some) pak files
 		☐ Refactor: Installer has __extract_outdated_paks. i need to use (some of this code) this to automatically check if dev installation is out of date
 			☐ Eextracting outdated paks doesn't make sense because if the dev folder is outdated it any way i would want to verify the installation
+
+	☐ Bug: When deleting game dev installation the gui gets resized a lot by the different length paths causing it to flicker and visually glitch out some
 
 	☐ Refactor: VPK: VPK class
 
