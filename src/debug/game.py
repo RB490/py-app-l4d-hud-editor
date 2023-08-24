@@ -14,7 +14,7 @@ def debug_game_class():
     # Game
     ###########################
 
-    result = gamez.installed(DirectoryMode.DEVELOPER)
+    result = gamez.installation_completed(DirectoryMode.DEVELOPER)
 
     ###########################
     # Installer

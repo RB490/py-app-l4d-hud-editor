@@ -278,7 +278,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             file_path = os.path.join(hud_dir, file_relative_path)
 
             # custom file?
-            if self.game.installed(DirectoryMode.DEVELOPER) and self.hud.edit.synced():
+            if self.game.installation_exists(DirectoryMode.DEVELOPER) and self.hud.edit.synced():
                 main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
                 file_path_backup = get_backup_path(os.path.join(main_dir, file_relative_path))
 
@@ -364,7 +364,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         "Treeview Handle 'Open Game Folder' option"
         print("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
 
-        if not self.game.installed(DirectoryMode.DEVELOPER):
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
             print("Unable to open game directory. Developer directory is not installed.")
             return
 

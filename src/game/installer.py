@@ -30,7 +30,7 @@ class GameInstaller:
         print("Uninstalling..")
 
         # is dev installed?
-        if not self.game.installed(DirectoryMode.DEVELOPER):
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
             print("Not installed!")
             return True
 
@@ -66,7 +66,7 @@ class GameInstaller:
             return False
 
         # get user directory
-        if not self.game.installed(DirectoryMode.USER):
+        if not self.game.installation_exists(DirectoryMode.USER):
             try:
                 self.game.dir.id.set_path(DirectoryMode.USER)
             except Exception as err_info:
@@ -100,7 +100,7 @@ class GameInstaller:
                 shutil.rmtree(invalid_dev_dir)
 
         # activate developer mode
-        if self.game.installed(DirectoryMode.DEVELOPER):
+        if self.game.installation_exists(DirectoryMode.DEVELOPER):
             self.game.dir.set(DirectoryMode.DEVELOPER)
 
         # enable paks

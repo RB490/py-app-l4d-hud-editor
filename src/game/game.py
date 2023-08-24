@@ -2,15 +2,20 @@
 # pylint: disable=wrong-import-position, ungrouped-imports, protected-access
 import os
 import shutil
-from game.constants import DirModeError, DirectoryMode, TitleRetrievalError
+
+from game.constants import (
+    DirectoryMode,
+    DirModeError,
+    InstallationState,
+    TitleRetrievalError,
+)
 from game.video_settings_modifier import VideoSettingsModifier
-
-# importing after the above enums and exceptions becaus they are needed for the subclasses
-
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.persistent_data import PersistentDataManager
 from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
+
+# importing after the above enums and exceptions becaus they are needed for the subclasses
 
 
 class Game(metaclass=Singleton):
@@ -19,9 +24,10 @@ class Game(metaclass=Singleton):
     def __init__(self):
         self.data_manager = PersistentDataManager()
         from game.commands import GameCommands
-        from game.window import GameWindow
         from game.dir import GameDir
         from game.installer import GameInstaller
+        from game.window import GameWindow
+
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)
         self.command = GameCommands(self)
@@ -117,12 +123,25 @@ class Game(metaclass=Singleton):
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
-    def installed(self, dir_mode):
+    def installation_completed(self, dir_mode):
         "Is mode installed?"
-        if self.dir.get(dir_mode):
+
+        if self.dir.id.get_installation_state(dir_mode) == InstallationState.COMPLETED:
+            print(f"{dir_mode.name} is fully installed!")
             return True
         else:
+            print(f"{dir_mode.name} is not fully installed!")
             return False
+
+    def installation_exists(self, dir_mode):
+        "Is mode installed?"
+
+        if self.dir.id.get_installation_state(dir_mode) == InstallationState.NOT_INSTALLED:
+            print(f"{dir_mode.name} installation does not exist!")
+            return False
+        else:
+            print(f"{dir_mode.name} installation exists!")
+            return True
 
     def close(self):
         "Close"

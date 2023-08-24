@@ -52,8 +52,8 @@ class HudEditor:
                 return False
 
         # is developer mode installed? - also checks for user directory
-        if not self.game.installed(DirectoryMode.DEVELOPER):
-            show_message("Development mode not installed!", "error")
+        if not self.game.installation_completed(DirectoryMode.DEVELOPER):
+            show_message("Development mode not fully installed!", "error")
             return False
 
         # cancel if this hud is already being edited
