@@ -3,7 +3,17 @@
 Current:
 
 
-Features:	
+	Features:	
+	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
+		
+		- install_update_repair_duplicate_code_refactor_draft.py
+			- manually compare and confirm that the code correct
+				- prompt_start is being send some additional params. is this useful, maybe keep or remove
+				- dev directory is not currently retrieved at all. probably do it every time or just for install()
+				- # delete dev folder if needed is not being done. do it every time just for install()
+				- it's setting resume state, which only repair() and update() do currently
+
+	
 	☐ Refactor: VPK class
 
 	☐ Handle VPK class failing to extract specific files during installation
@@ -18,7 +28,6 @@ Features:
 
 	☐ Installer: Incorporate progress GUI for the installer class. Install/update/repair/delete
 
-	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
