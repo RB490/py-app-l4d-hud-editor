@@ -20,8 +20,6 @@ Features:
 
 	☐ Refactor: installer's install() repair() update() have a lot of duplicate code. consider my options
 
-	☐ Refactor: hud class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud
-
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
@@ -64,6 +62,7 @@ Additional Ideas and Considerations:
 
 
 --Archive--:
+	✔ Refactor: editor class. Some notes: start_editing has confusing checks like: if self.syncer.get_sync_status() and self.syncer.get_source_dir() == self.hud_dir and sync_hud @done(23-08-24 12:19)
 	✔ Refactor: ID handler: Consider simpler names? eg: game.dir.id.set_id_path could maybe be just id.set() @done(23-08-24 12:17)
 	✔ Bug: Addon images are not in the center of StartGui. Fixed by removing: self.picture_canvas.config(scrollregion=self.picture_canvas.bbox("all")) @done(23-08-24 11:42)
 	✔ Feature/Refactor/Bug: I'm currently manually setting the hud_dir, but this should definetly be done with set_dir method @done(23-08-24 11:50)

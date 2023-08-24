@@ -57,7 +57,7 @@ class HudEditor:
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.is_synced() and self.syncer.get_source_dir() == self.get_dir():
+        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.get_dir()):
             return False
 
         # unsync previous hud
