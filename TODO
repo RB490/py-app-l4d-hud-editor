@@ -5,8 +5,6 @@ Current:
 	✔ Bug: When deleting game dev installation the gui gets resized a lot by the different length paths causing it to flicker and visually glitch out some @done(23-08-25 00:14)
 	
 	✔ Refactor: VPK: VPK class @done(23-08-25 15:31)
-
-	☐ Feature: VPK: Handle VPK class failing to extract specific files during installation
 	
 	☐ Feature: Start GUI: Context menu icons
 
@@ -54,9 +52,11 @@ Additional Ideas and Considerations:
 		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
 		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
 	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
+	
 
 
 --Archive--:
+	✘ Feature: VPK: Handle VPK class failing to extract specific files during installation. Right now they are just printed. @cancelled(23-08-25 15:34) Not doing this because it's not important. maybe 1 or 2 very minor files will fail to extract
 	✘ progress gui: can i stop automatic resizing when i manually resize? + at that point change minimum width to a smaller size to allow resizing @cancelled(23-08-25 15:24)
 		 ✘ Tried this for a lil while. doesn't seem possible. gpt came up with binding <Configure> which hits when user resizes, but also when root.update() resizes, @cancelled(23-08-25 15:24)
 		 ✘ it then suggested removing the <configure> bind during updating. but because update triggers so often that doesn't work @cancelled(23-08-25 15:24)

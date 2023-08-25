@@ -3,7 +3,6 @@ import os
 import random
 import shutil
 import string
-import time
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions

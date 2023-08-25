@@ -63,7 +63,7 @@ class GameInstaller:
         path = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         total_files, total_subdirs = count_files_and_dirs(path)
-        gui = ProgressGUI(total_files + total_subdirs)
+        gui = ProgressGUI(total_files + total_subdirs, 25, 60)
 
         for root, dirs, files in os.walk(path, topdown=False):
             for file_name in files:
@@ -180,7 +180,7 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-        gui = ProgressGUI(len(installation_steps))  # Create the GUI instance
+        gui = ProgressGUI(len(installation_steps), 25, 60)  # Create the GUI instance
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
