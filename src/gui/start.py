@@ -30,6 +30,10 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.root.minsize(865, 375)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
 
+        # gui variables
+        pad_x = 10
+        pad_y = 10
+
         # initialize variables
         self.picture_canvas_photo = None
         self.selected_hud_name = ""
@@ -55,22 +59,29 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
 
-        # create a frame for all widgets
-        self.button_frame = tk.Frame(self.frame)
-        self.button_frame.pack(fill="both", anchor="nw", expand=True)
+        # create a frame for the right panel
+        self.right_panel = tk.Frame(self.frame)
+        self.right_panel.pack(fill="both", anchor="nw", expand=True)
+
+        # De
+        developer_menu_button = tk.Button(self.right_panel, text="Developer", justify="center")
+        developer_menu_button.config(width=70, height=25)
+        developer_menu_button.config(image=self.add_image, compound="left", padx=pad_x)
+        developer_menu_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+        developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
         # create a button above the picture frame
-        self.add_button = tk.Button(self.button_frame, text="Add", height=25, command=self.prompt_add_hud_btn)
+        self.add_button = tk.Button(self.right_panel, text="Add", height=25, command=self.prompt_add_hud_btn)
         self.add_button.pack(fill=tk.X, pady=5, padx=5)
         self.add_button.config(image=self.add_image, compound="left", padx=10)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.button_frame, text="New", height=25, command=self.prompt_new_hud_btn)
+        self.new_button = tk.Button(self.right_panel, text="New", height=25, command=self.prompt_new_hud_btn)
         self.new_button.pack(fill=tk.X, pady=5, padx=5)
         self.new_button.config(image=self.add_image, compound="left", padx=10)
 
         # create a picture frame on the right side
-        self.picture_frame = tk.Frame(self.button_frame, bg="black")
+        self.picture_frame = tk.Frame(self.right_panel, bg="black")
         self.picture_frame.pack(fill=tk.X, pady=5, padx=5)
 
         # Add the image viewport, display it in the picture frame and set the initial image
@@ -81,7 +92,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.button_frame, text="Edit", height=25, command=self.edit_selected_hud)
+        self.edit_button = tk.Button(self.right_panel, text="Edit", height=25, command=self.edit_selected_hud)
         self.edit_button.pack(fill=tk.X, pady=5, padx=5)
         self.edit_button.config(image=self.add_image, compound="left", padx=10)
 
@@ -100,7 +111,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
-        self.my_editor_menu.create_and_refresh_menu_developer_installer()
+        # self.my_editor_menu.create_and_refresh_menu_developer_installer() # add to the menubar
+        self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)  # add as context menu
 
         # Configure the root window with the menubar
         self.update_treeview()
@@ -110,6 +122,10 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry)
+
+    def show_developer_menu(self, event):
+        print("dev context menu!")
+        self.dev_context_menu.post(event.x_root, event.y_root)
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -130,13 +146,15 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Open the directory of the selected hud."""
         print("Opening selected tree item directory")
 
+        hud_dir = self.selected_hud_dir
+
         # Check if the source directory exists
-        if os.path.exists(self.selected_hud_dir):
+        if os.path.exists(hud_dir):
             # Open the source directory in the file explorer
-            subprocess.Popen(["explorer", self.selected_hud_dir])
-            print(f"Opened directory '{self.selected_hud_dir}'")
+            subprocess.Popen(["explorer", hud_dir])
+            print(f"Opened directory '{hud_dir}'")
         else:
-            print(f"Directory '{self.selected_hud_dir}' does not exist.")
+            print(f"Directory '{hud_dir}' does not exist.")
 
     def tree_export_vpk(self):
         """Export the selected hud as a vpk file."""

@@ -683,6 +683,10 @@ class EditorMenuClass:
 
         self.root.config(menu=self.menu_bar)
 
+    def get_developer_installer_menu(self, menu):
+        self.create_developer_installer_menu(menu)
+        return self.dev_install_menu
+
     def create_and_refresh_menu(self):
         """
         Creates the menu bar for the application

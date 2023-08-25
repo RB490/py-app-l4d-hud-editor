@@ -8,11 +8,17 @@ Current:
 	
 	✔ Refactor: Duplicate code: game.dir has code related to finding pak01's but the installer does aswell @done(23-08-25 15:47)
 	
-	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
+	✔ Refactor: Start GUI: Class @done(23-08-25 15:50)
+	
+	✔ Feature: Start GUI: Remove menu bar -- button should open that context menu instead @done(23-08-25 16:17)
+	☐ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui
+	☐ Feature: Start GUI: Niceieties
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
+
+	☐ Refactor: menu.py(). I don't like how 
 
 	☐ Feature: Start GUI: Context menu icons
 

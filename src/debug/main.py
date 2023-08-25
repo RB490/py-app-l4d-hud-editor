@@ -55,7 +55,7 @@ def debug_gui():
     # browse.show()
 
     # start
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
@@ -72,4 +72,4 @@ def debug_gui():
     # debug_get_user_input()
 
     # installer
-    debug_progress_gui()
+    # debug_progress_gui()
