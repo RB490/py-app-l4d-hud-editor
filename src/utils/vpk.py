@@ -1,4 +1,5 @@
-"""Creating & extracting VPK files"""
+"""A class representing a VPK (Valve Package) file."""
+# pylint: disable=broad-exception-caught
 import os
 import shutil
 
@@ -17,82 +18,80 @@ class VPKClass:
     creating a new VPK file from a directory of files.
     """
 
-    def __init__(self):
-        """
-        Initialize a new VPK object with the given filename.
-
-        :param filename: The filename of the VPK file to operate on.
-        """
-
-    def extract(self, input_file, output_dir):
+    def extract(self, input_file: str, output_dir: str) -> None:
         """
         Extract all files from the VPK file to the specified output directory.
 
+        :param input_file: The path to the VPK file.
         :param output_dir: The directory to extract the files to.
         """
-        # Check if self.filename exists and is a VPK file
+        # Check if input_file exists and is a VPK file
         if not os.path.exists(input_file) or not input_file.endswith(".vpk"):
-            raise ValueError("File does not exist or is not a VPK file")
+            raise ValueError("Input file does not exist or is not a VPK file")
 
-        # create output directory if it doesn't exist
+        # Create output directory if it doesn't exist
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        # open VPK file
+        # Extract VPK file
         with vpk.open(input_file) as vpk_file:
-            # pylint: disable=broad-exception-caught
-            # iterate over all files in the VPK
-            try:
-                for file_path in vpk_file:
-                    # create directories if necessary
-                    full_path = os.path.join(output_dir, file_path)
-                    os.makedirs(os.path.dirname(full_path), exist_ok=True)
-
-                    # extract the file
+            for file_path in vpk_file:
+                full_path = os.path.join(output_dir, file_path)
+                os.makedirs(os.path.dirname(full_path), exist_ok=True)
+                try:
                     with open(full_path, "wb") as output_file:
-                        # print(f'writing file: {full_path} -> output_file: {output_file}')
                         output_file.write(vpk_file[file_path].read())
-            except Exception as err_info:
-                # tk.messagebox.showerror("Error", str(e))
-                print(f"Extract error for file '{file_path}': {str(err_info)}")
+                except Exception as extract_err:
+                    print(f"Error extracting file '{file_path}': {str(extract_err)}")
 
-    def create(self, input_dir, output_dir, output_file_name):
+    def create(self, input_dir: str, output_dir: str, output_file_name: str) -> None:
         """
         Create a new VPK file from the specified input directory.
 
-        :param input_directory: The directory containing the files to add to the new VPK file.
-        :param output_directory: The directory where the new VPK file will be saved.
+        :param input_dir: The directory containing the files to add to the new VPK file.
+        :param output_dir: The directory where the new VPK file will be saved.
         :param output_file_name: The name of the new VPK file.
         """
-        # verify input parameters
+        # Verify input parameters
         if not os.path.exists(input_dir):
-            raise ValueError(f"input_directory does not exist: {input_dir}")
+            raise ValueError(f"Input directory does not exist: {input_dir}")
         elif not os.path.exists(output_dir):
-            raise ValueError(f"output_directory does not exist: {output_dir}")
+            raise ValueError(f"Output directory does not exist: {output_dir}")
 
-        # exclude files without extensions as they are not supported
+        # Exclude files without extensions as they are not supported
         vpk_dir = create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir)
 
-        # create new VPK
-        new_vpk = vpk.new(vpk_dir)
+        try:
+            # Create new VPK
+            new_vpk = vpk.new(vpk_dir)
 
-        # save the VPK
-        output_file_name = os.path.splitext(output_file_name)[0] + ".vpk"
-        output_path = os.path.normpath(os.path.join(output_dir, output_file_name))
-        new_vpk.save(output_path)
-        print(f"Created VPK: {output_path}")
+            # Set the output file name with .vpk extension
+            output_file_name = os.path.splitext(output_file_name)[0] + ".vpk"
+            output_path = os.path.join(output_dir, output_file_name)
 
-        # clean temporary dir
-        shutil.rmtree(vpk_dir)
+            # Save the VPK
+            new_vpk.save(output_path)
+            print(f"Created VPK: {output_path}")
+        except Exception as err:
+            print(f"Error creating VPK: {err}")
+        finally:
+            # Clean temporary directory
+            shutil.rmtree(vpk_dir)
 
 
-if __name__ == "__main__":
-    # Extracting a file
+def debug_vpk_class():
+    "Debug"
     vpk_file_class = VPKClass()
-    # vpk_file_class.extract()
 
-    # Creating a file
-    vpk_file_class = VPKClass()
-    # vpk_file_class.create()
+    # Example usage: Extracting files from a VPK
+    input_file = "input.vpk"
+    output_dir = "extracted_files"
+    vpk_file_class.extract(input_file, output_dir)
 
-    print("finished")
+    # Example usage: Creating a new VPK
+    input_dir = "input_folder"
+    output_dir = "output_folder"
+    output_file_name = "output.vpk"
+    vpk_file_class.create(input_dir, output_dir, output_file_name)
+
+    print("Finished")

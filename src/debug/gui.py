@@ -52,7 +52,7 @@ def debug_progress_gui():
         # random_length = random.randint(1, 500)
         random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
         gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
-        time.sleep(0.4)
+        # time.sleep(0.4)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")
