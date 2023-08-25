@@ -245,11 +245,10 @@ class GameDir:
 
         user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
         dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
-        pak01_file_name = "pak01_dir.vpk"
 
         for user_subdir, dev_subdir in zip(user_pak01_subdirs, dev_pak01_subdirs):
-            user_pak01 = os.path.join(user_subdir, pak01_file_name)
-            dev_pak01 = os.path.join(dev_subdir, pak01_file_name)
+            user_pak01 = self.get_pak01_vpk_in(user_subdir)
+            dev_pak01 = self.get_pak01_vpk_in(dev_subdir)
 
             if files_differ(user_pak01, dev_pak01):
                 print("Developer directory is outdated!")

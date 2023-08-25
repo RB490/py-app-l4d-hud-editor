@@ -6,17 +6,18 @@ Current:
 	
 	✔ Refactor: VPK: VPK class @done(23-08-25 15:31)
 	
-	☐ Feature: Start GUI: Context menu icons
-
-	☐ Feature: Start GUI: Specific button icons rather than all identical
+	✔ Refactor: Duplicate code: game.dir has code related to finding pak01's but the installer does aswell @done(23-08-25 15:47)
 	
-	☐ Refactor: Duplicate code: game.dir has code related to finding pak01's but the installer does aswell
+	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 
-	☐ Refactor: Start GUI. Messageboxes for dev menu results // Remove menu bar -- button should open that context menu
+	☐ Feature: Start GUI: Context menu icons
+
+	☐ Feature: Start GUI: Specific button icons rather than all identical
+	
 
 Bugs:
 
