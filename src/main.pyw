@@ -9,6 +9,7 @@
 # ====================================================================================================
 
 import os
+from utils.functions import perform_checks_before_starting_program
 
 from utils.persistent_data import PersistentDataManager
 
@@ -30,6 +31,8 @@ data_manager = PersistentDataManager()
 # ----------------------------------
 #     Do stuff
 # ----------------------------------
+
+perform_checks_before_starting_program()
 
 # create initial singleton game class
 # game_instance = Game(persistent_data)

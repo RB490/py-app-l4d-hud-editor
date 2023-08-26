@@ -1,6 +1,5 @@
 "debug game class"
 # pylint: disable=protected-access
-from game.constants import DirectoryMode
 from game.game import Game
 
 

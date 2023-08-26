@@ -5,7 +5,7 @@ import subprocess
 
 import win32gui
 
-from game.constants import DirectoryMode, InstallationState
+from game.constants import InstallationState
 from shared_utils.shared_utils import move_hwnd_to_position, show_message
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
@@ -119,12 +119,6 @@ class GameWindow:
 
         print(f"directory mode: {dir_mode.name}")
 
-        try:
-            self.game.dir.check_for_invalid_id_file_structure()
-        except Exception as e_info:
-            show_message(f"Couldnt run game! {e_info}")
-            return False
-
         # confirm dir mode isn't being deleted
         if self.game.dir.id.get_installation_state(dir_mode) == InstallationState.PENDING_DELETION:
             show_message(f"{dir_mode} is partially deleted!\n\nRe-install before running", "error")
@@ -134,12 +128,6 @@ class GameWindow:
         result = self.game.dir.set(dir_mode)
         if not result:
             return False
-
-        # dev: cancel if out of date
-        if dir_mode == DirectoryMode.DEVELOPER:
-            if self.game.dir.dev_out_of_date():
-                show_message(f"{dir_mode} is out of date!\n\nRe-install before running", "error")
-                return False
 
         # run game
         if self.is_running():

@@ -1,10 +1,5 @@
 Current:
 
-	☐ Refactor: Add certain check during script startup so they don't have to be done anywhere else
-		- check_for_invalid_id_file_structure
-		- dev_out_of_date
-		- more?
-
 	☐ Feature: Start GUI: Context menu icons. Test: Do toggleable menu options support icons in any way or state
 
 	☐ Feature: Start GUI: Specific button icons rather than all identical
@@ -21,23 +16,14 @@ Current:
 	☐ Refactor: app-icons repo. delete unnecesary dimensions & all other things
 	☐ Refactor: IMAGES directory
 
-
 	☐ ☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
 
 	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
-
-
-
-Bugs:
-
-GUI:
 
 Unit Testing:
 	
 	☐ Unit test: HudDescription
 	☐ Unit test: ID File Handler
-
-Refactoring:
 
 Additional Ideas and Considerations:
 	

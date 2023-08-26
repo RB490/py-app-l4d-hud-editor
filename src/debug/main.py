@@ -20,12 +20,14 @@ from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser, show_browser_gui
 from gui.start import GuiHudStart
 from tests.test_hud_syncer import unit_test_hud_syncer
+from utils.functions import perform_checks_before_starting_program
 from utils.persistent_data_manager import PersistentDataManager
 
 
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
+    perform_checks_before_starting_program()
     print("Started debugging!")
 
     # data_manager = PersistentDataManager()
@@ -40,6 +42,7 @@ def debug_main():
     # result = h.edit.get_all_files_dict()
 
     debug_game_class()
+
     # debug_vdf_class()
     # debug_gui()
     # custom_prompt_example_usage()

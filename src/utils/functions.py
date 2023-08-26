@@ -17,6 +17,8 @@ import win32con
 import win32gui
 import win32process
 
+from game.game import Game
+from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import (
@@ -471,6 +473,21 @@ def get_mouse_position_on_click(callback):
 
     root.bind("<ButtonPress>", on_click)
     root.mainloop()
+
+
+def perform_checks_before_starting_program():
+    """Run vital checks before starting program so i don't need to add them everywhere"""
+    game = Game()
+
+    # warn about dev being out of date
+    if game.dir.dev_out_of_date():
+        show_message("Developer directory is out of date!\nConsider updating it", "warning")
+
+    # verify validity of ID file structure
+    try:
+        game.dir.check_for_invalid_id_file_structure()
+    except Exception as e_info:
+        raise ValueError("Invalid ID file structure! Fix it before running program: {e_info}") from e_info
 
 
 def save_and_exit_script():
