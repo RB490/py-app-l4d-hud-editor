@@ -40,6 +40,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.selected_hud_dir = ""
 
         # Create image buttons
+        self.open_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "arrow_redo.png")).subsample(2, 2)
+        self.saveas_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save_as.png")).subsample(2, 2)
+        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
         self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "plus.png")).subsample(2, 2)
         self.new_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "star.png")).subsample(2, 2)
         self.settings_image = tk.PhotoImage(
@@ -74,13 +77,37 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         developer_menu_button.pack(padx=pad_x, pady=(pad_y, pad_y))
         developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
+        # Remove
+        remove_button = tk.Button(
+            self.right_panel, text="Remove", justify="center", command=self.selected_hud_remove_or_delete
+        )
+        remove_button.config(image=self.delete_image, compound="left", padx=pad_x)
+        remove_button.config(width=70, height=25)
+        remove_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+
+        # open dir
+        open_dir_button = tk.Button(
+            self.right_panel, text="Open Directory", justify="center", command=self.selected_hud_open_dir
+        )
+        open_dir_button.config(image=self.open_image, compound="left", padx=pad_x)
+        open_dir_button.config(width=100, height=25)  # Adjust the width as needed
+        open_dir_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+
+        # export vpk
+        export_vpk_button = tk.Button(
+            self.right_panel, text="Export", justify="center", command=self.selected_hud_export_vpk
+        )
+        export_vpk_button.config(image=self.saveas_image, compound="left", padx=pad_x)
+        export_vpk_button.config(width=70, height=25)
+        export_vpk_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+
         # create a button above the picture frame
-        self.add_button = tk.Button(self.right_panel, text="Add", height=25, command=self.prompt_add_hud_btn)
+        self.add_button = tk.Button(self.right_panel, text="Add", height=25, command=self.prompt_add_hud)
         self.add_button.pack(fill=tk.X, pady=5, padx=5)
         self.add_button.config(image=self.add_image, compound="left", padx=10)
 
         # create a button above the picture frame
-        self.new_button = tk.Button(self.right_panel, text="New", height=25, command=self.prompt_new_hud_btn)
+        self.new_button = tk.Button(self.right_panel, text="New", height=25, command=self.prompt_new_hud)
         self.new_button.pack(fill=tk.X, pady=5, padx=5)
         self.new_button.config(image=self.new_image, compound="left", padx=10)
 
@@ -106,12 +133,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Create a context menu for the treeview
         self.context_menu = tk.Menu(self.treeview, tearoff=0)
-        self.context_menu.add_command(label="Edit", command=self.tree_edit_item)
+        self.context_menu.add_command(label="Edit", command=self.selected_hud_start_editing)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Open dir", command=self.tree_open_dir)
-        self.context_menu.add_command(label="Export VPK", command=self.tree_export_vpk)
+        self.context_menu.add_command(label="Open dir", command=self.selected_hud_open_dir)
+        self.context_menu.add_command(label="Export VPK", command=self.selected_hud_export_vpk)
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Remove", command=self.tree_remove_item)
+        self.context_menu.add_command(label="Remove", command=self.selected_hud_remove_or_delete)
 
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)
@@ -157,11 +184,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         self.context_menu.post(event.x_root, event.y_root)
 
-    def tree_edit_item(self):
+    def selected_hud_start_editing(self):
         """Edit the selected hud."""
         self.edit_selected_hud()
 
-    def tree_open_dir(self):
+    def selected_hud_open_dir(self):
         """Open the directory of the selected hud."""
         print("Opening selected tree item directory")
 
@@ -175,7 +202,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         else:
             print(f"Directory '{hud_dir}' does not exist.")
 
-    def tree_export_vpk(self):
+    def selected_hud_export_vpk(self):
         """Export the selected hud as a vpk file."""
         print("Exporting selected tree item as vpk")
 
@@ -189,7 +216,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
             # vpk_class.create(self, input_dir, output_dir, output_file_name):
 
-    def tree_remove_item(self):
+    def selected_hud_remove_or_delete(self):
         """Remove the selected hud."""
         print("Remove tree item")
 
@@ -239,12 +266,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
             self.change_addon_image(image)
 
-    def prompt_add_hud_btn(self):
+    def prompt_add_hud(self):
         """Prompt user for hud folder to add"""
         if self.hud.manager.prompt_add_existing_hud():
             self.update_treeview()
 
-    def prompt_new_hud_btn(self):
+    def prompt_new_hud(self):
         """Prompt user for hud folder to create a new hud in"""
         if self.hud.manager.prompt_create_new_hud():
             self.update_treeview()

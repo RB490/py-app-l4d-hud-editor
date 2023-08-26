@@ -23,10 +23,10 @@ Current:
 	✔ Bug: Progress gui step 1 seems to be cut off with three dots "..." then step 2 resizes the gui to where it should be @done(23-08-26 14:44)
 
 	✔ Feature: installer progress gui close confirmation box. Could be achieved by making the progressGU into a baseProgressGUI which extend from baseGUI and then create another gui to extend from BaseProgress @done(23-08-26 14:57)
-	☐ Feature: catch specific exception of the progress gui closing during installation -> display a nicer infobox message
+	✔ Feature: catch specific exception of the progress gui closing during installation -> display a nicer infobox message @done(23-08-26 14:58)
 
 
-	☐ Feature: Start GUI: Add buttons for all context menu options(?) remove/open_dir/save_as_vpk // would have to check/change status on whether a hud is selected + edit button should, too
+	✔ Feature: Start GUI: Add buttons for all context menu options(?) remove/open_dir/save_as_vpk // would have to check/change status on whether a hud is selected + edit button should, too @done(23-08-26 15:14)
 	☐ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui
 	☐ Feature: Start GUI: Niceieties
 	☐ Feature: Start GUI: The add button should be called open instead and change the Icon to the open Icon Arrow
