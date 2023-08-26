@@ -65,6 +65,11 @@ Current:
 
 	☐ ☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
 
+	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
+
+	✔ Refactor: is_custom_file should probably take into account whether a hud is synced? or disable it if a hud is synced as i intend to only use it when adding new files? @done(23-08-26 20:17)
+		✔ The reason is that when a custom hud file is synced it could currently get reported as default. if synced i would need to check if a .backup version exists, if not its custom @done(23-08-26 20:17)
+
 
 Bugs:
 

@@ -1,8 +1,11 @@
+"""BaseGUI"""
 # pylint: disable=broad-exception-caught
 import tkinter as tk
 
 
 class BaseGUI:
+    """BaseGUI"""
+
     def __init__(self, is_modal_dialog=False):
         """
         Initialize the BaseGUI.

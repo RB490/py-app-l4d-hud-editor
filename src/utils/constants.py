@@ -1,6 +1,5 @@
 """Global constant variables"""
 import os
-from enum import Enum, auto
 
 #####################################################
 # Path
@@ -53,15 +52,6 @@ UNIVERSAL_GAME_MAP = "hud_dev_map"
 HOTKEY_SYNC_HUD = "ctrl+s"
 HOTKEY_TOGGLE_BROWSER = "F4"
 HOTKEY_EXECUTE_AUTOEXEC = "F11"
-
-
-# data structures
-class SyncState(Enum):
-    """Enumeration representing sync states"""
-
-    FULLY_SYNCED = auto()
-    NOT_SYNCED = auto()
-    UNKNOWN = auto()
 
 
 EDITOR_HUD_RELOAD_MODES = {

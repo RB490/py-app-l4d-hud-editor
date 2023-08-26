@@ -6,7 +6,7 @@ import shutil
 
 from game.constants import DirectoryMode
 from game.game import Game
-from utils.constants import SyncState
+from game.constants import SyncState
 from utils.functions import get_backup_path
 from shared_utils.shared_utils import Singleton
 

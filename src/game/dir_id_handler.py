@@ -4,8 +4,7 @@ import json
 import os
 from tkinter import filedialog
 
-from game.constants import DirectoryMode, InstallationState
-from utils.constants import SyncState
+from game.constants import DirectoryMode, InstallationState, SyncState
 from shared_utils.shared_utils import is_subdirectory, show_message
 
 

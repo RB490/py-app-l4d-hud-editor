@@ -15,7 +15,7 @@ from hud.syncer import (
     get_all_files_and_dirs,
     get_subdirectories_names,
 )
-from utils.constants import SyncState
+from game.constants import SyncState
 from utils.functions import get_backup_path
 
 

@@ -17,10 +17,10 @@ from debug.gui import (
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
-from gui.browser import GuiHudBrowser
+from gui.browser import GuiHudBrowser, show_browser_gui
 from gui.start import GuiHudStart
-from utils.persistent_data_manager import PersistentDataManager
 from tests.test_hud_syncer import unit_test_hud_syncer
+from utils.persistent_data_manager import PersistentDataManager
 
 
 def debug_main():
@@ -62,11 +62,10 @@ def debug_gui():
     "debug gui"
 
     # browser
-    # browse = get_debug_gui_browser_instance()
-    # browse.show()
+    show_browser_gui()
 
     # start
-    debug_start_gui()
+    # debug_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

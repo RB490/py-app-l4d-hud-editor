@@ -21,6 +21,15 @@ class DirectoryMode(Enum):
     DEVELOPER = auto()
 
 
+# data structures
+class SyncState(Enum):
+    """Enumeration representing sync states"""
+
+    FULLY_SYNCED = auto()
+    NOT_SYNCED = auto()
+    UNKNOWN = auto()
+
+
 class InstallationState(Enum):
     """Enumeration representing installation states"""
 
