@@ -6,15 +6,15 @@ from tkinter import simpledialog
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
-from utils.constants import APP_ICON, IMAGES_DIR
 from shared_utils.shared_utils import Singleton, show_message
+from utils.constants import APP_ICON, IMAGES_DIR
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self):
-        super().__init__(is_toplevel_gui=True)
+        super().__init__(is_modal_dialog=True)
         self.root.title("File")
         self.root.iconbitmap(APP_ICON)
 

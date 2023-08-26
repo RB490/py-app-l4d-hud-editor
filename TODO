@@ -38,7 +38,7 @@ Current:
 
 	✔ Feature: Start GUI: Export as directory option @done(23-08-26 18:04)
 
-	☐ Refactor: @idea My GUIS should maybe have a top level parameter for debugging and just generally makes it a bit clear what is happening?
+	✔ Refactor: @idea My GUIS should maybe have a top level parameter for debugging and just generally makes it a bit clear what is happening? @done(23-08-26 20:01)
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 

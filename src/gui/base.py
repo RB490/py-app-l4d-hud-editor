@@ -3,13 +3,19 @@ import tkinter as tk
 
 
 class BaseGUI:
-    def __init__(self, is_toplevel_gui=False):
+    def __init__(self, is_modal_dialog=False):
+        """
+        Initialize the BaseGUI.
+
+        Args:
+            is_modal_dialog (bool, optional): True if the GUI is a modal dialog, False otherwise.
+        """
         self.is_hidden = None
         self.is_resizable = True
 
         # self.root = tk.Tk()
         # self.root = tk.Toplevel()
-        if is_toplevel_gui:
+        if is_modal_dialog:
             self.root = tk.Toplevel()
         else:
             self.root = tk.Tk()
@@ -19,6 +25,7 @@ class BaseGUI:
         self.root.minsize(300, 200)
 
     def hide(self):
+        """Hide the window."""
         self.root.withdraw()
         self.is_hidden = True
 
@@ -27,14 +34,22 @@ class BaseGUI:
         self.root.iconify()
 
     def show(self):
+        """Show the window."""
         self.root.deiconify()
         self.is_hidden = False
         self.root.mainloop()
 
     def destroy(self):
+        """Destroy the window."""
         self.root.destroy()
 
     def set_window_geometry(self, geometry):
+        """
+        Set the window geometry.
+
+        Args:
+            geometry (str): The geometry string (e.g., "800x600+100+100").
+        """
         try:
             self.root.geometry(geometry)
         except Exception:
@@ -61,14 +76,12 @@ class BaseGUI:
             print("GUI is not loaded.")
 
     def toggle_resizability(self):
-        """Toggle the resizability of the window."""
+        """Toggle window resizability."""
         self.is_resizable = not self.is_resizable
         self.root.resizable(self.is_resizable, self.is_resizable)
 
     def toggle_visibility(self):
-        """
-        Toggles the visibility of the window between visible and hidden.
-        """
+        """Toggle window visibility between visible and hidden."""
         if self.is_hidden:
             self.show()
         else:
@@ -76,19 +89,19 @@ class BaseGUI:
 
     def set_hotkey(self, key_combination, callback, widget=None):
         """
-        Set a hotkey that triggers a callback function when the specified key combination is pressed.
+        Set a hotkey that triggers a callback function.
 
         Args:
-            key_combination (str): A string representing the key combination (e.g., "Ctrl+C").
-            callback (function): The callback function to be triggered when the hotkey is pressed.
-            widget: The widget to which the hotkey should be bound. If None, binds to self.root.
+            key_combination (str): The key combination (e.g., "Ctrl+C").
+            callback (function): The callback function.
+            widget: The widget to bind the hotkey to (default: self.root).
         """
         target_widget = widget or self.root
         target_widget.bind(key_combination, callback)
 
     def remove_hotkey(self, key_combination):
         """
-        Remove the hotkey associated with the specified key combination.
+        Remove a hotkey associated with a key combination.
 
         Args:
             key_combination (str): The key combination to remove (e.g., "Ctrl+C").
@@ -96,6 +109,7 @@ class BaseGUI:
         self.root.unbind(key_combination)
 
     def on_close(self):
+        """Callback function before the window is closed."""
         # pylint: disable=no-member
         self.save_window_geometry()
         self.hide()
