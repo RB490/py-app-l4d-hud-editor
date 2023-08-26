@@ -99,6 +99,7 @@ class PersistentDataManager(metaclass=Singleton):
         else:
             print(f"Key '{key}' not found in data.")
 
+    # pretty redundant because you can do self.data_manager.get("stored_huds").remove(hud)
     def remove_item_from_list(self, key, item):
         """Remove item from a list in data."""
         if key in self.data and isinstance(self.data[key], list):

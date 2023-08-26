@@ -5,6 +5,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, ttk
 
+import send2trash
 from PIL import Image, ImageTk
 
 from game.game import Game
@@ -12,7 +13,7 @@ from gui.base import BaseGUI
 from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import Singleton
+from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
 
@@ -260,11 +261,25 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Remove the selected hud."""
         print("Remove tree item")
 
-        self.data_manager.get("stored_huds").remove(self.selected_hud_dir.replace("\\", "/"))  # convert path to json
+        # set variables
+        hud_name = self.selected_hud_name
+        hud_dir_json_format = self.selected_hud_dir.replace("\\", "/")  # convert path to json
+
+        # prompt remove
+        result = show_message(f"Remove {hud_name} from the list?", "yesno")
+        if not result:
+            return
+
+        # remove from data
+        self.data_manager.remove_item_from_list("stored_huds", hud_dir_json_format)
         self.selected_hud_dir = ""
         self.selected_hud_name = ""
-
         self.update_treeview()
+
+        # prompt move to trash
+        result = show_message(f"Also move {hud_name} directory into the trash?", "yesno")
+        if result:
+            send2trash.send2trash(self.selected_hud_dir)
 
     def update_treeview(self):
         """Clear treeview & load up-to-date content"""
