@@ -72,7 +72,7 @@ class GameDir:
         print(f"Set mode: {dir_mode.name} successfully!")
         return True
 
-    def get_custom_file(self, relative_file_path):
+    def get_vanilla_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
 
         is_synced = False
@@ -93,12 +93,25 @@ class GameDir:
                 file_path = get_backup_path(file_path)
 
             if os.path.isfile(file_path):
-                print(f"Not a custom file: '{relative_file_path}'")
-                return False
+                print(f"Get vanilla file: '{relative_file_path}'")
+                return file_path
 
         # could not find file path in game folders. is a custom file
-        print(f"Is a custom file: '{relative_file_path}'")
+        print(f"No vanilla file available, custom file: '{relative_file_path}'")
         return True
+
+    def _is_custom_file(self, relative_file_path):
+        """Search all game directories including the backup folder to find the file
+        
+        Note: use description's get_custom_file_status for cached result. Should be a lot faster"""
+
+        vanilla_file = self.get_vanilla_file(relative_file_path)
+        if vanilla_file:
+            print(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
+            return True
+        else:
+            print(f"Vanilla file is not available. Ccustom file: '{relative_file_path}'")
+            return False
 
     def get_pak01_vpk_in(self, directory):
         "Verify if this is a game files directory by checking if it contains a pak01_dir.vpk file"

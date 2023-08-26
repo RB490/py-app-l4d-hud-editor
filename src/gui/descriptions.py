@@ -165,7 +165,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.relative_path = relative_path
 
         # Check if the file has a custom status using the self.game.dir.is_custom_file function
-        is_custom = self.hud.edit.desc.get_is_file_custom(relative_path)
+        is_custom = self.hud.edit.desc.get_custom_file_status(relative_path)
 
         # Set gui title with custom status if applicable
         if is_custom:

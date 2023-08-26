@@ -11,9 +11,9 @@ def get_hud_debug_instance():
     # pylint: disable=unused-variable
 
     debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
-    i = Hud()
-    i.set_dir(debug_hud_dir)
-    return i
+    h = Hud()
+    h.edit.set_dir(debug_hud_dir)
+    return h
 
 
 def debug_hud():

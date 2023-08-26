@@ -7,12 +7,12 @@ import sys
 
 from debug.game import debug_game_class
 from debug.gui import (
+    debug_browser_gui,
     debug_descriptions_gui,
     debug_get_user_input,
     debug_progress_gui,
     debug_start_gui,
     debug_vdf_gui,
-    get_debug_gui_browser_instance,
 )
 from debug.hud import get_hud_debug_instance
 from game.game import Game
@@ -36,9 +36,12 @@ def debug_main():
 
     # unit_test_hud_syncer()
 
+    h = get_hud_debug_instance()
+    result = h.edit.get_all_files_dict()
+
     # debug_game_class()
     # debug_vdf_class()
-    debug_gui()
+    # debug_gui()
     # custom_prompt_example_usage()
 
     # data_manager = PersistentDataManager()
@@ -53,7 +56,7 @@ def debug_main():
     # result = hud.edit.get_files_dict()
 
     # save_data()
-    # print(f"result={result}")
+    print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 
@@ -62,7 +65,8 @@ def debug_gui():
     "debug gui"
 
     # browser
-    show_browser_gui()
+    debug_browser_gui()
+    # show_browser_gui()
 
     # start
     # debug_start_gui()

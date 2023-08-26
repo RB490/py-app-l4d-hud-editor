@@ -18,7 +18,11 @@ from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
-from utils.functions import get_backup_path, get_image_for_file_extension, save_and_exit_script
+from utils.functions import (
+    get_backup_path,
+    get_image_for_file_extension,
+    save_and_exit_script,
+)
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -128,7 +132,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_file
         )
         self.context_menu.add_command(
-            label="Open Default File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_default_file
+            label="Open vanilla File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_vanilla_file
         )
         self.context_menu.add_command(
             label="Open Folder", image=self.folder_icon, compound=tk.LEFT, command=self.treeview_open_folder
@@ -345,16 +349,16 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         full_path = self.treeview_get_selected_full_path()
         os.startfile(full_path)
 
-    def treeview_open_default_file(self):
-        """Treeview handle Open Default File' option"""
-        print("Method: treeview_open_default_file - handle 'Open Default File' option")
+    def treeview_open_vanilla_file(self):
+        """Treeview handle Open vanilla File' option"""
+        print("Method: treeview_open_default_file - handle 'Open vanilla File' option")
 
-        full_path = self.game.dir.get_custom_file()
+        full_path = self.game.dir.get_vanilla_file()
         if full_path:
-            print(f"Opening default file: '{full_path}'")
+            print(f"Opening vanilla file: '{full_path}'")
             os.startfile(full_path)
         else:
-            print(f"Default file unavailable: '{full_path}'")
+            print(f"vanilla file unavailable: '{full_path}'")
 
     def treeview_open_folder(self):
         "Treeview Handle 'Open Folder' option"

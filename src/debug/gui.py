@@ -16,12 +16,15 @@ from utils.functions import get_backup_path
 from utils.get_user_input import get_user_input
 
 
-def get_debug_gui_browser_instance():
+def debug_browser_gui():
     "debug_gui_browser"
     print("debug_browser")
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
-    return GuiHudBrowser()
+    browser = GuiHudBrowser()
+    browser.show()
+
+    return
 
 
 def debug_get_user_input():

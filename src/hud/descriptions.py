@@ -48,7 +48,7 @@ class HudDescriptions:
                 "file_description": "",
                 "file_name": os.path.basename(relative_path),
                 "file_relative_path": relative_path,
-                "file_is_custom": bool(self.game.dir.get_custom_file(relative_path)),
+                "file_is_custom": bool(self.game.dir._is_custom_file(relative_path)),
             }
             print(f"Added new description entry:\n{self.data[relative_path]}")
             self.save_to_disk()
@@ -101,7 +101,7 @@ class HudDescriptions:
         print(f"Retrieved description for relative path '{relative_path}': {description}")
         return description
 
-    def get_is_file_custom(self, relative_path):
+    def get_custom_file_status(self, relative_path):
         """
         Check if a file has a custom status based on the given relative path.
         Return True if the relative path has a custom status, otherwise return None.
