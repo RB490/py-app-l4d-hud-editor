@@ -15,8 +15,8 @@ from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
 from utils.functions import copy_directory
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import show_message
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
 

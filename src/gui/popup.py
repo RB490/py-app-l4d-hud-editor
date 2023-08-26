@@ -3,8 +3,8 @@ from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import Singleton
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import Singleton
 
 
 class GuiEditorMenuPopupContextmenu(BaseGUI, metaclass=Singleton):

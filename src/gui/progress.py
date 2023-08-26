@@ -3,7 +3,7 @@
 import tkinter as tk
 
 from utils.constants import APP_ICON
-from utils.shared_utils import show_message
+from shared_utils.shared_utils import show_message
 
 
 class ProgressGUI:

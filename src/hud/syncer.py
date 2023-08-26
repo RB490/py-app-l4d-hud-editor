@@ -8,7 +8,7 @@ from game.constants import DirectoryMode
 from game.game import Game
 from utils.constants import SyncState
 from utils.functions import get_backup_path
-from utils.shared_utils import Singleton
+from shared_utils.shared_utils import Singleton
 
 
 def calculate_md5_hash(file_path):

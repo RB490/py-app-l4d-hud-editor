@@ -20,8 +20,8 @@ from utils.constants import (
     SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import create_lambda_command
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import create_lambda_command
 
 
 class EditorMenuClass:

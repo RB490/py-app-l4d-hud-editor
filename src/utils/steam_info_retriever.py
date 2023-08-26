@@ -4,8 +4,8 @@ import tkinter as tk
 import winreg
 from tkinter import filedialog
 
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import Singleton
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import Singleton
 
 
 class SteamInfoRetriever(metaclass=Singleton):

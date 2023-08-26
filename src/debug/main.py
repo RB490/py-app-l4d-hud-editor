@@ -19,7 +19,7 @@ from game.game import Game
 from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.start import GuiHudStart
-from shared_utils.persistent_data_manager import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 from tests.test_hud_syncer import unit_test_hud_syncer
 
 

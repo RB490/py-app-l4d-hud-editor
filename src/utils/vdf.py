@@ -6,7 +6,7 @@ import send2trash
 import vdf  # type: ignore
 
 from utils.constants import DEVELOPMENT_DIR
-from utils.shared_utils import replace_text_between_quotes, show_message
+from shared_utils.shared_utils import replace_text_between_quotes, show_message
 
 
 class VDFModifier:

@@ -6,8 +6,8 @@ from tkinter import scrolledtext
 
 from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import show_message
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import show_message
 from utils.vdf import VDFModifier
 
 

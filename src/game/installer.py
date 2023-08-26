@@ -22,7 +22,7 @@ from utils.functions import (
     get_backup_path,
     wait_process_close,
 )
-from utils.shared_utils import show_message
+from shared_utils.shared_utils import show_message
 from utils.vpk import VPKClass
 
 

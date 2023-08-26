@@ -3,7 +3,7 @@
 import json
 
 from utils.constants import PERSISTENT_DATA_PATH
-from utils.shared_utils import Singleton, show_message
+from shared_utils.shared_utils import Singleton, show_message
 
 
 class PersistentDataManager(metaclass=Singleton):

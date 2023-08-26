@@ -13,7 +13,7 @@ from utils.functions import (
     get_backup_path,
     rename_with_timeout,
 )
-from utils.shared_utils import verify_directory
+from shared_utils.shared_utils import verify_directory
 
 
 class GameDir:

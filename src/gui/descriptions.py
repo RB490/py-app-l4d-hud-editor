@@ -7,7 +7,7 @@ from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.shared_utils import Singleton, show_message
+from shared_utils.shared_utils import Singleton, show_message
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):

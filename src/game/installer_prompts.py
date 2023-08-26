@@ -2,7 +2,7 @@
 from game.constants import DirectoryMode
 from game.game import Game
 from utils.functions import get_dir_size_in_gb
-from utils.shared_utils import show_message
+from shared_utils.shared_utils import show_message
 
 
 def prompt_start(install_type, message_extra=""):

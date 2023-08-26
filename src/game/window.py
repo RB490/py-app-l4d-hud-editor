@@ -13,8 +13,8 @@ from utils.functions import (
     is_valid_window,
     wait_for_process_with_ram_threshold,
 )
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import move_hwnd_to_position, show_message
+from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import move_hwnd_to_position, show_message
 
 
 class GameWindow:

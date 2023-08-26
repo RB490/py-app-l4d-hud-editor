@@ -5,7 +5,7 @@ import vdf  # type: ignore
 
 from utils.constants import NEW_HUD_DIR
 from utils.functions import copy_directory, prompt_for_folder
-from shared_utils.persistent_data_manager import (
+from utils.persistent_data_manager import (
     PersistentDataManager,  # Assuming you have vdf library imported
 )
 

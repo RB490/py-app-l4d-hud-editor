@@ -16,14 +16,10 @@ from gui.base import BaseGUI
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
+from shared_utils.shared_utils import Singleton
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
-from utils.functions import (
-    get_backup_path,
-    get_image_for_file_extension,
-    save_and_exit_script,
-)
-from shared_utils.persistent_data_manager import PersistentDataManager
-from utils.shared_utils import Singleton
+from utils.functions import get_backup_path, get_image_for_file_extension, save_and_exit_script
+from utils.persistent_data_manager import PersistentDataManager
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
