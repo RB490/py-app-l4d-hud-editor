@@ -5,8 +5,8 @@ import os
 import send2trash
 import vdf  # type: ignore
 
-from utils.constants import DEVELOPMENT_DIR
 from shared_utils.shared_utils import replace_text_between_quotes, show_message
+from utils.constants import DEVELOPMENT_DIR
 
 
 class VDFModifier:
@@ -254,9 +254,7 @@ class VDFModifier:
 
         for controls in modified_vdf_obj.values():
             for control_name, control_data in controls.items():
-                control_data[self.description_key_name] = self.hud.edit.desc.get_control_description(
-                    rel_path, control_name
-                )
+                control_data[self.description_key_name] = self.hud.desc.get_control_description(rel_path, control_name)
 
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj

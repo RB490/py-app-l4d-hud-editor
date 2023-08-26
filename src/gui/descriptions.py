@@ -118,7 +118,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.prompt_to_save_unsaved_changes()
 
         # undo unsaved changes by reloading from disk
-        self.hud.edit.desc.read_from_disk()
+        self.hud.desc.read_from_disk()
 
         # clear the gui
         self.clear_gui()
@@ -165,7 +165,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.relative_path = relative_path
 
         # Check if the file has a custom status using the self.game.dir.is_custom_file function
-        is_custom = self.hud.edit.desc.get_custom_file_status(relative_path)
+        is_custom = self.hud.desc.get_custom_file_status(relative_path)
 
         # Set gui title with custom status if applicable
         if is_custom:
@@ -176,7 +176,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.file_desc_text.insert(tk.END, self.hud.edit.desc.get_file_description(relative_path))
+        self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(relative_path))
 
         # load controls
         self.load_controls()
@@ -198,7 +198,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         """Load controls into option menu & load the first one"""
 
         # update the controls list and OptionMenu with new values
-        controls_list = self.hud.edit.desc.get_controls(self.relative_path)
+        controls_list = self.hud.desc.get_controls(self.relative_path)
 
         # controls available at all?
         if not controls_list:
@@ -219,18 +219,18 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # set control description
         self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.ctrl_desc_text.insert(tk.END, self.hud.edit.desc.get_control_description(self.relative_path, input_ctrl))
+        self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.relative_path, input_ctrl))
 
     def save_control_description(self):
         """Save control description"""
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
-        self.hud.edit.desc.set_control_description(self.relative_path, selected_control, control_desc)
+        self.hud.desc.set_control_description(self.relative_path, selected_control, control_desc)
 
     def save_file_description(self):
         """Save file description"""
         file_description = self.file_desc_text.get("1.0", "end-1c")
-        self.hud.edit.desc.set_file_description(self.relative_path, file_description)
+        self.hud.desc.set_file_description(self.relative_path, file_description)
 
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
@@ -253,7 +253,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.save_control_description()
 
             # Add control
-            self.hud.edit.desc.add_control(self.relative_path, new_control)
+            self.hud.desc.add_control(self.relative_path, new_control)
             self.load_controls()
             self.load_control(new_control)
             print(f"Added {new_control}")
@@ -261,14 +261,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     def remove_file_entry(self):
         """Remove control"""
         if show_message(f"Are you sure you want to remove '{self.relative_path}'?", "yesno"):
-            self.hud.edit.desc.remove_entry(self.relative_path)
+            self.hud.desc.remove_entry(self.relative_path)
             self.load_controls()
 
     def remove_control(self):
         """Remove control"""
         selected_control = self.ctrl_menu_variable.get()
         if show_message("Remove Control", f"Are you sure you want to remove '{selected_control}'?", "yesno"):
-            self.hud.edit.desc.remove_control(self.relative_path, selected_control)
+            self.hud.desc.remove_control(self.relative_path, selected_control)
             self.load_controls()
 
     def save_changes(self):

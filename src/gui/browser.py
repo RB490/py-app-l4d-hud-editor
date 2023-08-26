@@ -18,11 +18,7 @@ from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
-from utils.functions import (
-    get_backup_path,
-    get_image_for_file_extension,
-    save_and_exit_script,
-)
+from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -264,20 +260,22 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             os.startfile(file_path)
 
     def treeview_refresh(self, treeview, search_term=None):
-        """Clear treeview & load up-to-date content"""
+        """
+        Refreshes the provided Treeview with up-to-date content.
 
+        Args:
+            treeview (tkinter.Treeview): The Treeview widget to refresh.
+            search_term (str, optional): A search term to filter items in the Treeview.
+
+        Returns:
+            None
+        """
+        # Get HUD directory and display choice
         hud_dir = self.hud.edit.get_dir()
-
-        print(f"Treeview: Refreshing directory: '{hud_dir}'")
-
-        print(f"display choice: '{self.display_choice.get()}'")
         display_choice = self.display_choice.get().lower()
-        if display_choice == "all":
-            data_dict = self.hud.edit.get_all_files_dict()
-        else:
-            data_dict = self.hud.edit.get_files_dict()
 
-        # check if there is anything to refresh
+        # Retrieve data based on display choice
+        data_dict = self.hud.edit.get_all_files_dict() if display_choice == "all" else self.hud.edit.get_files_dict()
         if not data_dict:
             print("Treeview: No data to display")
             return
@@ -285,56 +283,53 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Clear existing items in the Treeview
         treeview.delete(*treeview.get_children())
 
-        # Add items from the data_dict to the Treeview
-        for file_name, desc_relpath_tuple in data_dict.items():
-            file_desc = desc_relpath_tuple[0]
+        # Determine if game is in developer mode
+        search_term_lower = search_term.lower() if search_term else None
 
-            # path
-            file_relative_path = desc_relpath_tuple[1]
+        insert_items = []
+
+        for file_name, (file_desc, file_relative_path) in data_dict.items():
+            # Calculate file path
             file_path = os.path.join(hud_dir, file_relative_path)
+            # Determine if file is custom based on developer mode
+            is_custom = "Y" if self.hud.desc.get_custom_file_status(file_relative_path) else "N"
 
-            # custom file?
-            if self.game.installation_exists(DirectoryMode.DEVELOPER) and self.hud.edit.synced():
-                main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
-                file_path_backup = get_backup_path(os.path.join(main_dir, file_relative_path))
-
-                is_custom = "N" if os.path.isfile(file_path_backup) else "Y"
-            else:
-                is_custom = "-"
-
-            # modified
+            # Calculate last modified timestamp and image path
+            last_modified = "not_added"
+            image_path = os.path.join(IMAGES_DIR, "cross128.png")
             if os.path.isfile(file_path):
                 timestamp = os.path.getmtime(file_path)
                 last_modified = datetime.fromtimestamp(timestamp).strftime("%Y.%m.%d @ %H:%M:%S")
-            else:
-                last_modified = "not_added"
-
-            # image
-            if os.path.isfile(file_path):
                 image_path = get_image_for_file_extension(file_path)
-            else:
-                image_path = os.path.join(IMAGES_DIR, "cross128.png")
-            image = Image.open(image_path)
-            image = image.resize((16, 16), Image.LANCZOS)
-            photo = ImageTk.PhotoImage(image)
-            self.treeview_photo_images.append(photo)  # Store the PhotoImage object
 
-            # search
-            if (
-                search_term
-                and search_term.lower() not in str(file_name).lower()
-                and search_term.lower() not in str(file_desc).lower()
-                and search_term.lower() not in str(file_relative_path).lower()
+            # Check if the search term matches any value
+            if search_term_lower and not any(
+                search_term_lower in str(value).lower() for value in (file_name, file_desc, file_relative_path)
             ):
-                # Skip this item if search term is provided and not found in key or value
                 continue
 
-            # add item
-            treeview.insert(
-                "", "end", values=(file_name, file_desc, is_custom, last_modified, file_relative_path), image=photo
-            )
-            # treeview.insert("", "end", values=(file_name, file_desc, "", file_relative_path)) # legacy
+            # Prepare item for insertion
+            insert_items.append((file_name, file_desc, is_custom, last_modified, file_relative_path, image_path))
 
+        # Store PhotoImage objects to prevent them from being garbage collected
+        self.treeview_photo_images = []
+
+        # Insert items into the Treeview
+        for item in insert_items:
+            file_name, file_desc, is_custom, last_modified, file_relative_path, image_path = item
+            image = Image.open(image_path).resize((16, 16), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(image)
+            self.treeview_photo_images.append(photo)
+
+            # Insert the item into the Treeview
+            treeview.insert(
+                "",
+                "end",
+                values=(file_name, file_desc, is_custom, last_modified, file_relative_path),
+                image=photo,
+            )
+
+        # Add a hotkey and print refresh completion
         keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
         print("Treeview: Refreshed")
 
