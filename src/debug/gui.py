@@ -1,4 +1,4 @@
-# pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long
+# pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long, unused-import
 import os
 import random
 import shutil
@@ -56,7 +56,6 @@ def debug_progress_gui():
 
     # gui.update_progress("asdf asdf asdf asdf ")
     # gui.update_progress("asdf asdf asdf asdf ")
-    return
 
     for step in range(total_steps):
         random_length = random.randint(1, 10)
@@ -65,7 +64,7 @@ def debug_progress_gui():
         random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
         gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
         # time.sleep(0.4)
-        time.sleep(2)
+        # time.sleep(2)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")

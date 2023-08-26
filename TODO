@@ -22,7 +22,7 @@ Current:
 	
 	✔ Bug: Progress gui step 1 seems to be cut off with three dots "..." then step 2 resizes the gui to where it should be @done(23-08-26 14:44)
 
-	☐ Feature: installer progress gui close confirmation box. Could be achieved by making the progressGU into a baseProgressGUI which extend from baseGUI and then create another gui to extend from BaseProgress 
+	✔ Feature: installer progress gui close confirmation box. Could be achieved by making the progressGU into a baseProgressGUI which extend from baseGUI and then create another gui to extend from BaseProgress @done(23-08-26 14:57)
 	☐ Feature: catch specific exception of the progress gui closing during installation -> display a nicer infobox message
 
 

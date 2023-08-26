@@ -1,4 +1,5 @@
 """A progress GUI window for installation."""
+# pylint: disable=broad-exception-raised
 import tkinter as tk
 
 from utils.constants import APP_ICON
@@ -19,6 +20,7 @@ class ProgressGUI:
         self.root = tk.Tk()
         self.root.title(action_description)
         self.root.iconbitmap(APP_ICON)
+        self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.height = 125
         self.root.geometry(f"{initial_width}x{self.height}")
         self.root.resizable(True, False)  # resizable in width but not in height
@@ -87,6 +89,13 @@ class ProgressGUI:
         Args:
             step_information (str): The information about the current step.
         """
+        # GUI has been closed, so return without updating (2x check=self.root.winfo_exists fails when it doesn't exist)
+        try:
+            if not self.root.winfo_exists():
+                raise Exception(f"{self.action_description} cancelled!")
+        except Exception as e_inf:
+            raise Exception(f"{self.action_description} cancelled!") from e_inf
+
         self.current_step += 1
 
         # Update longest_step_info if the current step_information is longer
@@ -118,5 +127,7 @@ class ProgressGUI:
 
     def close(self):
         """Close the progress GUI window."""
-        result = show_message(f"Are you sure you want to stop {self.action_description.lower()}")
+        result = show_message(f"Are you sure you want to stop {self.action_description.lower()}", "yesno")
+        if not result:
+            return
         self.root.destroy()
