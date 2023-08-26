@@ -262,12 +262,18 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         return self.selected_full_path
 
     def treeview_on_double_click(self, event):
-        """Handle user clicks"""
-        # pylint: disable=unused-argument
+        """Handle user double-clicks"""
+        region = self.treeview.identify_region(event.x, event.y)
 
-        file_path = self.get_selected_full_path()
-        if os.path.isfile(file_path):
-            os.startfile(file_path)
+        print(region)
+
+        if region == "cell":
+            cell = self.treeview.identify_row(event.y)
+            print("Double-clicked on row:", cell)
+            # Perform your desired action here, e.g., open a file
+            self.tree_set_selected_item(cell)
+            if os.path.isfile(self.selected_full_path):
+                os.startfile(self.selected_full_path)
 
     def tree_set_selected_item(self, event):
         """Get select item from treeview"""
