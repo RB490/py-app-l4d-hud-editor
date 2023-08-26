@@ -28,7 +28,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.hud = Hud()
         self.root.title("Select")
         self.root.iconbitmap(APP_ICON)
-        self.root.minsize(865, 375)
+        self.root.minsize(865, 450)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
 
         # gui variables
@@ -44,8 +44,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Create image buttons
         self.edit_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "paintbrush.png")).subsample(2, 2)
         self.open_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "arrow_redo.png")).subsample(2, 2)
-        self.saveas_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save_as.png")).subsample(2, 2)
-        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
+        self.export_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save_as.png")).subsample(2, 2)
+        self.remove_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
         self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "plus.png")).subsample(2, 2)
         self.new_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "star.png")).subsample(2, 2)
         self.settings_image = tk.PhotoImage(
@@ -131,7 +131,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         export_vpk_button = tk.Button(
             self.rem_op_ex_frame, text="Export", justify="center", command=self.selected_hud_export_vpk
         )
-        export_vpk_button.config(image=self.saveas_image, compound="left", padx=pad_x)
+        export_vpk_button.config(image=self.export_image, compound="left", padx=pad_x)
         export_vpk_button.config(width=55, height=25)
         export_vpk_button.pack(padx=0, pady=0, side="left")
 
@@ -147,7 +147,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         remove_button = tk.Button(
             self.rem_op_ex_frame, text="Remove", justify="center", command=self.selected_hud_remove_or_delete
         )
-        remove_button.config(image=self.delete_image, compound="left", padx=pad_x)
+        remove_button.config(image=self.remove_image, compound="left", padx=pad_x)
         remove_button.config(width=55, height=25)
         remove_button.pack(padx=0, pady=0, side="left")
 
@@ -177,12 +177,20 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Create a context menu for the treeview
         self.context_menu = tk.Menu(self.treeview, tearoff=0)
-        self.context_menu.add_command(label="Edit", command=self.selected_hud_start_editing)
+        self.context_menu.add_command(
+            label="Edit", command=self.selected_hud_start_editing, image=self.edit_image, compound="left"
+        )
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Open dir", command=self.selected_hud_open_dir)
-        self.context_menu.add_command(label="Export VPK", command=self.selected_hud_export_vpk)
+        self.context_menu.add_command(
+            label="Open directory", command=self.selected_hud_open_dir, image=self.open_image, compound="left"
+        )
+        self.context_menu.add_command(
+            label="Export as VPK", command=self.selected_hud_export_vpk, image=self.export_image, compound="left"
+        )
         self.context_menu.add_separator()
-        self.context_menu.add_command(label="Remove", command=self.selected_hud_remove_or_delete)
+        self.context_menu.add_command(
+            label="Remove", command=self.selected_hud_remove_or_delete, image=self.remove_image, compound="left"
+        )
 
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)

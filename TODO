@@ -34,7 +34,9 @@ Current:
 
 	✔ Feature: Start GUI: The remove button should have a confirmation dialog weather to remove it from the disk as well @done(23-08-26 17:01)
 	
-	☐ Feature: Start GUI: Also use images for the context menu
+	✔ Feature: Start GUI: Also use images for the context menu @done(23-08-26 17:07)
+
+	☐ Feature: Start GUI: Export as directory option
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
