@@ -348,13 +348,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def treeview_open_default_file(self):
         """Treeview handle Open Default File' option"""
         print("Method: treeview_open_default_file - handle 'Open Default File' option")
-        full_path = self.treeview_get_selected_full_path()
-        backup_path = get_backup_path(full_path)
-        if os.path.isfile(backup_path):
-            print(f"Opening default file: '{backup_path}'")
-            os.startfile(backup_path)
+
+        full_path = self.game.dir.get_custom_file()
+        if full_path:
+            print(f"Opening default file: '{full_path}'")
+            os.startfile(full_path)
         else:
-            print(f"Default file unavailable: '{backup_path}'")
+            print(f"Default file unavailable: '{full_path}'")
 
     def treeview_open_folder(self):
         "Treeview Handle 'Open Folder' option"

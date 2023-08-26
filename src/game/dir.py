@@ -6,6 +6,7 @@ import shutil
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
+from shared_utils.shared_utils import verify_directory
 from utils.functions import (
     copy_directory,
     generate_random_string,
@@ -13,7 +14,6 @@ from utils.functions import (
     get_backup_path,
     rename_with_timeout,
 )
-from shared_utils.shared_utils import verify_directory
 
 
 class GameDir:
@@ -72,7 +72,7 @@ class GameDir:
         print(f"Set mode: {dir_mode.name} successfully!")
         return True
 
-    def is_custom_file(self, relative_file_path):
+    def get_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
 
         is_synced = False
@@ -91,7 +91,7 @@ class GameDir:
             file_path = os.path.join(game_dir, relative_file_path)
             if is_synced:
                 file_path = get_backup_path(file_path)
-            
+
             if os.path.isfile(file_path):
                 print(f"Not a custom file: '{relative_file_path}'")
                 return False

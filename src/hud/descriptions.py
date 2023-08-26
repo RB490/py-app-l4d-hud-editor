@@ -48,7 +48,7 @@ class HudDescriptions:
                 "file_description": "",
                 "file_name": os.path.basename(relative_path),
                 "file_relative_path": relative_path,
-                "file_is_custom": bool(self.game.dir.is_custom_file(relative_path)),
+                "file_is_custom": bool(self.game.dir.get_custom_file(relative_path)),
             }
             print(f"Added new description entry:\n{self.data[relative_path]}")
             self.save_to_disk()

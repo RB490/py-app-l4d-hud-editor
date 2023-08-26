@@ -40,7 +40,7 @@ Current:
 
 	✔ Refactor: @idea My GUIS should maybe have a top level parameter for debugging and just generally makes it a bit clear what is happening? @done(23-08-26 20:01)
 
-	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
+	✔ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly @done(23-08-26 20:19)
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 
