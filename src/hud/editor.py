@@ -42,6 +42,14 @@ class HudEditor:
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
+        # verify ID files
+        try:
+            self.game.dir.check_for_invalid_id_file_structure()
+        except Exception as e_info:
+            show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}")
+            show_start_gui()
+            return False
+
         # prompt to start game during debug mode
         if DEBUG_MODE:
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")

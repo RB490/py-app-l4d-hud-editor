@@ -6,6 +6,7 @@ import subprocess
 import win32gui
 
 from game.constants import DirectoryMode, InstallationState
+from shared_utils.shared_utils import move_hwnd_to_position, show_message
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
     get_hwnd_for_exe,
@@ -14,7 +15,6 @@ from utils.functions import (
     wait_for_process_with_ram_threshold,
 )
 from utils.persistent_data_manager import PersistentDataManager
-from shared_utils.shared_utils import move_hwnd_to_position, show_message
 
 
 class GameWindow:
@@ -118,6 +118,12 @@ class GameWindow:
         self.game._validate_dir_mode(dir_mode)
 
         print(f"directory mode: {dir_mode.name}")
+
+        try:
+            self.game.dir.check_for_invalid_id_file_structure()
+        except Exception as e_info:
+            show_message(f"Couldnt run game! {e_info}")
+            return False
 
         # confirm dir mode isn't being deleted
         if self.game.dir.id.get_installation_state(dir_mode) == InstallationState.PENDING_DELETION:

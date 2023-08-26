@@ -4,11 +4,10 @@ import hashlib
 import os
 import shutil
 
-from game.constants import DirectoryMode
+from game.constants import DirectoryMode, SyncState
 from game.game import Game
-from game.constants import SyncState
-from utils.functions import get_backup_path
 from shared_utils.shared_utils import Singleton
+from utils.functions import get_backup_path
 
 
 def calculate_md5_hash(file_path):
@@ -131,18 +130,20 @@ class HudSyncer(metaclass=Singleton):
 
         # Validate input
         if source_dir is None or not os.path.isdir(source_dir):
-            raise ValueError(f"Invalid source directory: '{source_dir}'")
+            raise NotADirectoryError(f"Invalid source directory: '{source_dir}'")
         if target_dir is None or not os.path.isdir(target_dir):
-            raise ValueError(f"Invalid target directory: '{target_dir}'")
+            raise NotADirectoryError(f"Invalid target directory: '{target_dir}'")
         if target_dir_main_name not in self.target_sub_dir_names:
-            raise ValueError(f"Main directory name '{target_dir}' is not a subdirectory '{self.target_sub_dir_names}")
+            raise NotADirectoryError(
+                f"Main directory name '{target_dir}' is not a subdirectory '{self.target_sub_dir_names}"
+            )
         no_materials_subdir_msg = (
             f"Main directory name '{target_dir}' is not a valid subdirectory\n"
             "because it doesn't have a materials subdirectory!"
         )
 
         if not os.path.isdir(os.path.join(target_dir, target_dir_main_name, "materials")):
-            raise ValueError(f"{no_materials_subdir_msg}")
+            raise NotADirectoryError(f"{no_materials_subdir_msg}")
 
         # input
         print()

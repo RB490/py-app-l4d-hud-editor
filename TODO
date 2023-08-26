@@ -1,8 +1,9 @@
-
-
 Current:
-	
-	☐ Feature: Have a method to check validity of the installation directories by verifying that they exist and only have version aka id file in the entire steam directory
+
+	☐ Refactor: Add certain check during script startup so they don't have to be done anywhere else
+		- check_for_invalid_id_file_structure
+		- dev_out_of_date
+		- more?
 
 	☐ Feature: Start GUI: Context menu icons. Test: Do toggleable menu options support icons in any way or state
 
@@ -67,6 +68,3 @@ Post:
 	☐ Post: Enable type checking? "python.analysis.typeCheckingMode": "off"
 	☐ Post: Use types for variables and params and such? "python.analysis.typeCheckingMode": "off"
 	☐ Post: decouple classes as much as possible by passing parameters instead of directly referencing other classes
-	
-
---Archive--:

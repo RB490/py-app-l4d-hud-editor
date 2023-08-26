@@ -54,7 +54,7 @@ class HudManager:
     def retrieve_hud_name_for_dir(self, hud_dir):
         """Retrieve hud name for a directory. Either directory name or from addoninfo.txt"""
         if not os.path.isdir(hud_dir):
-            raise ValueError(f"Invalid hud_dir directory path: '{hud_dir}'")
+            raise NotADirectoryError(f"Invalid hud_dir directory path: '{hud_dir}'")
 
         hud_name = os.path.basename(hud_dir)
         addoninfo_path = os.path.normpath(os.path.join(hud_dir, "addoninfo.txt"))

@@ -39,9 +39,9 @@ def debug_main():
     # h = get_hud_debug_instance()
     # result = h.edit.get_all_files_dict()
 
-    # debug_game_class()
+    debug_game_class()
     # debug_vdf_class()
-    debug_gui()
+    # debug_gui()
     # custom_prompt_example_usage()
 
     # data_manager = PersistentDataManager()

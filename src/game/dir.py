@@ -6,7 +6,7 @@ import shutil
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
-from shared_utils.shared_utils import verify_directory
+from shared_utils.shared_utils import show_message, verify_directory
 from utils.functions import (
     copy_directory,
     generate_random_string,
@@ -14,6 +14,7 @@ from utils.functions import (
     get_backup_path,
     rename_with_timeout,
 )
+from utils.steam_info_retriever import SteamInfoRetriever
 
 
 class GameDir:
@@ -23,6 +24,7 @@ class GameDir:
         self.game = game_class
         # pylint: disable=invalid-name
         self.id = GameIDHandler(self.game)
+        self.steam = SteamInfoRetriever()
 
     def _get_dir_backup_name(self, dir_mode):
         random_string = generate_random_string()
@@ -34,6 +36,7 @@ class GameDir:
     def set(self, dir_mode):
         "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
+        
         print(f"Setting mode: {dir_mode.name}")
 
         # retrieving source & target dir with self.get also already checks whether they are installed
@@ -102,7 +105,7 @@ class GameDir:
 
     def _is_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file
-        
+
         Note: use description's get_custom_file_status for cached result. Should be a lot faster"""
 
         vanilla_file = self.get_vanilla_file(relative_file_path)
@@ -254,6 +257,65 @@ class GameDir:
             return True
         except Exception as err_info:
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info
+
+
+    def check_for_invalid_id_file_structure(self):
+        """
+        Check for invalid ID file structures in the Steam game directory.
+
+        This method searches for ID files (user and developer) within subdirectories of
+        the Steam game directory and performs checks for invalid file structures.
+
+        Raises:
+            Exception: If two ID files are found in the same folder.
+            Exception: If more than one of the same ID file is found in different folders.
+        """
+        print("Checking for invalid ID file structures...")
+        steam_game_dir = self.steam.get_games_dir()
+        
+        user_id_file_name = self.game.dir.id._get_filename(DirectoryMode.USER)
+        dev_id_file_name = self.game.dir.id._get_filename(DirectoryMode.DEVELOPER)
+        
+        id_files_in_folders = {}  # Dictionary to store ID files in each folder
+        
+        for game_dir in os.listdir(steam_game_dir):
+            game_dir_path = os.path.join(steam_game_dir, game_dir)
+            
+            if os.path.isdir(game_dir_path):
+                id_files_in_game_dir = []
+                
+                # Search for user and dev ID files in the current game directory
+                for subdir_item in os.listdir(game_dir_path):
+                    subdir_item_path = os.path.join(game_dir_path, subdir_item)
+                    
+                    if os.path.isfile(subdir_item_path):
+                        if subdir_item == user_id_file_name or subdir_item == dev_id_file_name:
+                            id_files_in_game_dir.append(subdir_item)
+                
+                if id_files_in_game_dir:
+                    id_files_in_folders[game_dir] = id_files_in_game_dir
+        
+        # Check for two ID files in the same folder
+        for folder, id_files in id_files_in_folders.items():
+            if len(id_files) > 1:
+                raise Exception(f"Multiple ID files found in folder '{folder}': {', '.join(id_files)}")
+            
+        # Check for more than one of the same ID file in any folder
+        id_counts = {}
+        for id_files in id_files_in_folders.values():
+            for id_file in id_files:
+                if id_file not in id_counts:
+                    id_counts[id_file] = 1
+                else:
+                    id_counts[id_file] += 1
+                    if id_counts[id_file] > 1:
+                        raise Exception(f"More than one '{id_file}' file found in different folders")
+
+        print("ID file structure check completed.")
+
+
+            
+        
 
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"
