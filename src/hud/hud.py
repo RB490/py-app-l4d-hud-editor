@@ -2,7 +2,7 @@
 # pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel
 
 
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import Singleton
 
 

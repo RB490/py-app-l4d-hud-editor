@@ -19,8 +19,8 @@ from game.game import Game
 from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.start import GuiHudStart
+from shared_utils.persistent_data_manager import PersistentDataManager
 from tests.test_hud_syncer import unit_test_hud_syncer
-from utils.persistent_data_manager import PersistentDataManager
 
 
 def debug_main():
@@ -39,6 +39,7 @@ def debug_main():
     # debug_game_class()
     # debug_vdf_class()
     debug_gui()
+    # custom_prompt_example_usage()
 
     # data_manager = PersistentDataManager()
     # data_manager.set("game_mute", 0)

@@ -11,8 +11,10 @@ from PIL import Image, ImageTk
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
+from shared_utils.persistent_data_manager import PersistentDataManager
+from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.persistent_data_manager import PersistentDataManager
+from utils.functions import copy_directory
 from utils.shared_utils import Singleton, show_message
 from utils.vpk import VPKClass
 
@@ -28,7 +30,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.hud = Hud()
         self.root.title("Select")
         self.root.iconbitmap(APP_ICON)
-        self.root.minsize(865, 450)
+        self.root.minsize(865, 500)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
 
         # gui variables
@@ -128,28 +130,40 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.rem_op_ex_frame.pack()
 
         # export vpk
-        export_vpk_button = tk.Button(
-            self.rem_op_ex_frame, text="Export", justify="center", command=self.selected_hud_export_vpk
+        self.export_vpk_button = tk.Button(
+            self.rem_op_ex_frame,
+            text="Export",
+            justify="center",
+            command=self.selected_hud_export_vpk_or_folder,
+            state="disabled",  # Disable the remove button
         )
-        export_vpk_button.config(image=self.export_image, compound="left", padx=pad_x)
-        export_vpk_button.config(width=55, height=25)
-        export_vpk_button.pack(padx=0, pady=0, side="left")
+        self.export_vpk_button.config(image=self.export_image, compound="left", padx=pad_x)
+        self.export_vpk_button.config(width=55, height=25)
+        self.export_vpk_button.pack(padx=0, pady=0, side="left")
 
         # open dir
-        open_dir_button = tk.Button(
-            self.rem_op_ex_frame, text="Open", justify="center", command=self.selected_hud_open_dir
+        self.open_dir_button = tk.Button(
+            self.rem_op_ex_frame,
+            text="Open",
+            justify="center",
+            command=self.selected_hud_open_dir,
+            state="disabled",  # Disable the remove button
         )
-        open_dir_button.config(image=self.open_image, compound="left", padx=pad_x)
-        open_dir_button.config(width=55, height=25)  # Adjust the width as needed
-        open_dir_button.pack(padx=(5, 5), pady=0, side="left")
+        self.open_dir_button.config(image=self.open_image, compound="left", padx=pad_x)
+        self.open_dir_button.config(width=55, height=25)  # Adjust the width as needed
+        self.open_dir_button.pack(padx=(5, 5), pady=0, side="left")
 
         # Remove
-        remove_button = tk.Button(
-            self.rem_op_ex_frame, text="Remove", justify="center", command=self.selected_hud_remove_or_delete
+        self.remove_button = tk.Button(
+            self.rem_op_ex_frame,
+            text="Remove",
+            justify="center",
+            command=self.selected_hud_remove_or_delete,
+            state="disabled",  # Disable the remove button
         )
-        remove_button.config(image=self.remove_image, compound="left", padx=pad_x)
-        remove_button.config(width=55, height=25)
-        remove_button.pack(padx=0, pady=0, side="left")
+        self.remove_button.config(image=self.remove_image, compound="left", padx=pad_x)
+        self.remove_button.config(width=55, height=25)
+        self.remove_button.pack(padx=0, pady=0, side="left")
 
         # create a picture frame on the right side
         self.picture_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")  # bg="black"
@@ -171,7 +185,13 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.bottom_frame, text="Edit", height=25, command=self.edit_selected_hud)
+        self.edit_button = tk.Button(
+            self.bottom_frame,
+            text="Edit",
+            height=25,
+            command=self.edit_selected_hud,
+            state="disabled",  # Disable the remove button
+        )
         self.edit_button.config(image=self.edit_image, compound="left", padx=10)
         self.edit_button.pack(fill=tk.X, padx=0, pady=0)
 
@@ -186,6 +206,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         )
         self.context_menu.add_command(
             label="Export as VPK", command=self.selected_hud_export_vpk, image=self.export_image, compound="left"
+        )
+        self.context_menu.add_command(
+            label="Export as Folder",
+            command=self.selected_hud_export_directory,
+            image=self.export_image,
+            compound="left",
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
@@ -216,6 +242,18 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
+
+    def enable_buttons(self):
+        # Enable the following buttons: edit, export, open, remove
+
+        # Enable the export button
+        self.export_vpk_button.config(state="normal")
+        # Enable the open button
+        self.open_dir_button.config(state="normal")
+        # Enable the remove button
+        self.remove_button.config(state="normal")
+        # Enable the edit button
+        self.edit_button.config(state="normal")
 
     def show_developer_menu(self, event):
         """Open the developer context menu"""
@@ -250,6 +288,29 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             print(f"Opened directory '{hud_dir}'")
         else:
             print(f"Directory '{hud_dir}' does not exist.")
+
+    def selected_hud_export_vpk_or_folder(self):
+        """Export the selected hud as a vpk file or directory"""
+        options = ["VPK", "Folder"]
+        result = show_custom_prompt(options)
+        if not result:
+            print("User did not select an export method!")
+            return
+        if result == "VPK":
+            self.selected_hud_export_vpk()
+        if result == "Folder":
+            self.selected_hud_export_directory()
+
+    def selected_hud_export_directory(self):
+        print("selected_hud_export_directory")
+
+        if not self.selected_hud_dir:
+            print("No HUD selected!")
+            return
+
+        target_dir = filedialog.askdirectory(title="Select a target folder to copy contents into")
+        if target_dir:
+            copy_directory(self.selected_hud_dir, target_dir)
 
     def selected_hud_export_vpk(self):
         """Export the selected hud as a vpk file."""
@@ -328,6 +389,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             print(self.selected_hud_name)
 
             self.change_addon_image(image)
+            self.enable_buttons()
 
     def prompt_add_hud(self):
         """Prompt user for hud folder to add"""

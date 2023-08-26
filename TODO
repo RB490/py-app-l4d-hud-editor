@@ -36,7 +36,7 @@ Current:
 	
 	✔ Feature: Start GUI: Also use images for the context menu @done(23-08-26 17:07)
 
-	☐ Feature: Start GUI: Export as directory option
+	✔ Feature: Start GUI: Export as directory option @done(23-08-26 18:04)
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 

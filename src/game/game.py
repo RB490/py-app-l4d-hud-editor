@@ -11,7 +11,7 @@ from game.constants import (
 )
 from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
 

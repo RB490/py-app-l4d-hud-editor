@@ -11,7 +11,7 @@ from gui.start import show_start_gui
 from utils.constants import UNIVERSAL_GAME_MAP
 from utils.functions import get_mouse_position_on_click
 from utils.get_user_input import get_user_input
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import show_message
 
 

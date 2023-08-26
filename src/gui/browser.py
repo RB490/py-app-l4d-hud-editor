@@ -22,7 +22,7 @@ from utils.functions import (
     get_image_for_file_extension,
     save_and_exit_script,
 )
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import Singleton
 
 

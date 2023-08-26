@@ -4,7 +4,7 @@ import tkinter as tk
 import winreg
 from tkinter import filedialog
 
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import Singleton
 
 
