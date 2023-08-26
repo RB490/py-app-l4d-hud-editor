@@ -100,12 +100,15 @@ class ProgressGUI:
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
+        print()
+        print(f"Step #{self.current_step}")
         print(f"self.longest_step_info() = {self.longest_label_length}")
         print(f"self.root.winfo_width() = {self.root.winfo_width()}")
         print(f"len(step_information) = {len(step_information)}")
         print(f"max_chars = {max_chars}")
         print(f"available_width = {available_width}")
         print(f"displayed_text = {displayed_text}")
+        print()
 
         # update the gui
         self.step_info_label.config(text=displayed_text)

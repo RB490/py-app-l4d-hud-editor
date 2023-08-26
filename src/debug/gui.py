@@ -52,7 +52,10 @@ def debug_progress_gui():
 
     # total_steps = len(installation_steps)
     total_steps = 150000
-    gui = ProgressGUI("Debugging", 25, 60, total_steps)  # Create the GUI instance
+    gui = ProgressGUI("Debugging", 600, 60, total_steps)  # Create the GUI instance
+
+    # gui.update_progress("asdf asdf asdf asdf ")
+    # gui.update_progress("asdf asdf asdf asdf ")
     return
 
     for step in range(total_steps):
