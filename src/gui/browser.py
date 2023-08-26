@@ -16,7 +16,7 @@ from gui.base import BaseGUI
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
-from shared_utils.shared_utils import Singleton
+from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
 from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
@@ -118,11 +118,15 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Link the Scrollbar to the Treeview widget
         self.treeview.configure(yscrollcommand=scrollbar.set)
 
+        # Bind the function to the selection event
+        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
+
         # Create a context menu
         self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "file.png")).subsample(2, 2)
         self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "folder.png")).subsample(2, 2)
         self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
         self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "description.png")).subsample(2, 2)
+        self.refresh_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
         self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
@@ -145,6 +149,12 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             label="Description", image=self.description_icon, compound=tk.LEFT, command=self.action_description
         )
         self.context_menu.add_separator()
+        self.context_menu.add_command(
+            label="Refresh",
+            image=self.refresh_icon,
+            compound=tk.LEFT,
+            command=lambda: self.treeview_refresh(self.treeview),
+        )
         self.context_menu.add_command(
             label="Recycle", image=self.delete_icon, compound=tk.LEFT, command=self.action_recycle
         )
@@ -258,6 +268,16 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         file_path = self.get_selected_full_path()
         if os.path.isfile(file_path):
             os.startfile(file_path)
+
+    def tree_set_selected_item(self, event):
+        """Get select item from treeview"""
+        selected_item = self.treeview.selection()
+        for item in selected_item:
+            # item_values = self.treeview.item(item)["values"]
+            # print(item_values)
+            rel_path = self.treeview.item(item)["values"][4]
+            self.selected_full_path = os.path.join(self.hud.edit.get_dir(), rel_path)
+            print(f"Selected full path: {self.selected_full_path}")
 
     def treeview_refresh(self, treeview, search_term=None):
         """
@@ -411,6 +431,12 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
 
         full_path = self.get_selected_full_path()
+
+        # prompt remove
+        result = show_message(f"Move '{os.path.basename(full_path)}' to the recycle bin?", "yesno")
+        if not result:
+            return
+
         send2trash.send2trash(full_path)
         self.treeview_refresh(self.treeview)
 

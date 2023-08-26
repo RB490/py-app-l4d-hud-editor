@@ -69,7 +69,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.pack(side="left", expand=True, fill="both", padx=pad_x, pady=(pad_y, pad_y))
 
         # Bind the function to the selection event
-        self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
+        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
         # create a frame for the right panel
         self.right_panel = tk.Frame(self.frame, bd=0, relief="solid")
@@ -377,7 +377,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.picture_canvas.create_image(center_x, center_y, anchor="center", image=self.picture_canvas_photo)
 
     # pylint: disable=unused-argument
-    def tree_get_selected_item(self, event):
+    def tree_set_selected_item(self, event):
         """Get select item from treeview"""
         selected_item = self.treeview.selection()
         for item in selected_item:

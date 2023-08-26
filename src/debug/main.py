@@ -40,13 +40,13 @@ def debug_main():
 
     # h = get_hud_debug_instance()
     # result = h.edit.get_all_files_dict()
+    # result = h.desc.get_custom_file_status("scripts\\hudlayout2.res")
 
     # debug_game_class()
 
-
-
     # debug_vdf_class()
     debug_gui()
+    # result = "Y" if h.desc.get_custom_file_status("scripts\\hudlayout2.res") else "N"
     # custom_prompt_example_usage()
 
     # data_manager = PersistentDataManager()
@@ -61,7 +61,7 @@ def debug_main():
     # result = hud.edit.get_files_dict()
 
     # save_data()
-    # print(f"result={result}")
+    print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 
@@ -70,11 +70,11 @@ def debug_gui():
     "debug gui"
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # show_browser_gui()
 
     # start
-    debug_start_gui()
+    # debug_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

@@ -5,12 +5,13 @@ Archive:
 ✔ Bug -> Break the json -> start program -> dialog resetting settings -> pyimage10 doesn't exist error inside of start gui @done(23-08-27 00:10)
 ✔ Feature: Settings: Add default values for settings. Do this in such a way that if Get() fails to retrieve value, look it up from the default value data & load() uses it as a default @done(23-08-27 00:10)
 ✔ Bug: todo plugin not finding embedded todo's? TODO @done(23-08-27 00:13)
+✔ Refactor: Indicate that deleting files through the browser sends them into the trash @done(23-08-27 00:14)
+✔ Bug: Browser: Every file is reported as not a custom file @done(23-08-27 00:32)
 
 Current:
 
-	
+	☐ Bug: Browser: Double clicking anywhere registers, including the header!
 
-	☐ Refactor: Indicate that deleting files through the browser sends them into the trash
 
 	☐ Refactor: app-icons repo. delete unnecesary dimensions & all other things
 	☐ Refactor: IMAGES directory

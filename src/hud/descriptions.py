@@ -107,7 +107,7 @@ class HudDescriptions:
         Check if a file has a custom status based on the given relative path.
         Return True if the relative path has a custom status, otherwise return None.
         """
-        is_custom = self.data.get(relative_path, {}).get("is_custom", None)
+        is_custom = self.data.get(relative_path, {}).get("file_is_custom", None)
         print(f"Retrieved custom status for relative path '{relative_path}': {is_custom}")
         return is_custom
 

@@ -496,6 +496,6 @@ def save_and_exit_script():
     from hud.hud import Hud
 
     hud_instance = Hud()
-    hud_instance.finish_editing(open_start_gui=False)
+    hud_instance.edit.finish_editing(open_start_gui=False)
     PersistentDataManager().save()
     sys.exit()
