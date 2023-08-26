@@ -55,7 +55,9 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
+            print(f"Set {self.root.title} to '{geometry}'!")
         except Exception:
+            print(f"Set {self.root.title} to default '1000x1000+100+100'!")
             self.root.geometry("1000x1000+100+100")
 
     def get_window_geometry(self):

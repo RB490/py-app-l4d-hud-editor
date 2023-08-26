@@ -2,8 +2,8 @@
 # pylint: disable=broad-exception-caught
 import json
 
-from utils.constants import PERSISTENT_DATA_PATH
 from shared_utils.shared_utils import Singleton, show_message
+from utils.constants import PERSISTENT_DATA_PATH
 
 
 class PersistentDataManager(metaclass=Singleton):
@@ -14,44 +14,48 @@ class PersistentDataManager(metaclass=Singleton):
     def __init__(self):
         """Initialize the PersistentDataManager."""
         self.file_path = PERSISTENT_DATA_PATH
+        self.default_data = {
+            "BrowserGuiGeometry": "828x517+114+776",
+            "HudSelectGuiGeometry": "865x528+100+100",
+            "VDFGuiGeometry": "875x425+159+110",
+            "VDFGui_annotate": 1,
+            "VDFGui_indent_values": 1,
+            "VDFGui_modify_int": 1,
+            "VDFGui_sort_keys": 0,
+            "editor_reload_mode": "reload_hud",
+            "game_insecure": False,
+            "game_mode": "Coop",
+            "game_mute": True,
+            "game_pos": "Top Left",
+            "game_pos_custom_coord": None,
+            "game_res": [1600, 900],
+            "reload_mouse_clicks_coord_1": None,
+            "reload_mouse_clicks_coord_2": None,
+            "reload_mouse_clicks_enabled": False,
+            "reload_reopen_menu_on_reload": False,
+            "steam_root_dir": "E:/games/steam",
+            "stored_huds": ["D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"],
+            "stored_temp_huds": [],
+        }
         self.data = self.load()
 
     def load(self):
         """Load data from disk or create defaults if missing."""
         try:
             with open(self.file_path, "r", encoding="utf-8") as file:
-                data = json.load(file)
+                loaded_data = json.load(file)
+                data = {**self.default_data, **loaded_data}
         except Exception:
             show_message("Resetting settings file!", "error")
-            data = {
-                "BrowserGuiGeometry": "828x517+114+776",
-                "HudSelectGuiGeometry": "865x528+100+100",
-                "VDFGuiGeometry": "875x425+159+110",
-                "VDFGui_annotate": 1,
-                "VDFGui_indent_values": 1,
-                "VDFGui_modify_int": 1,
-                "VDFGui_sort_keys": 0,
-                "editor_reload_mode": "reload_hud",
-                "game_insecure": False,
-                "game_mode": "Coop",
-                "game_mute": True,
-                "game_pos": "Top Left",
-                "game_pos_custom_coord": None,
-                "game_res": [
-                    1600,
-                    900
-                ],
-                "reload_mouse_clicks_coord_1": None,
-                "reload_mouse_clicks_coord_2": None,
-                "reload_mouse_clicks_enabled": False,
-                "reload_reopen_menu_on_reload": False,
-                "steam_root_dir": "E:/games/steam",
-                "stored_huds": [
-                    "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"
-                ],
-                "stored_temp_huds": []
-            }
+            data = self.__reset()
+            self.save()
         return data
+
+    def __reset(self):
+        """Reset data to default values and save to disk."""
+        self.data = self.default_data
+        self.save()
+        return self.data
 
     def print(self):
         """Print formatted JSON data."""
@@ -73,7 +77,7 @@ class PersistentDataManager(metaclass=Singleton):
 
     def get(self, key):
         """Get data value by key."""
-        return self.data.get(key)
+        return self.data.get(key, self.default_data.get(key))
 
     def set(self, key, value):
         """Set data value for key."""

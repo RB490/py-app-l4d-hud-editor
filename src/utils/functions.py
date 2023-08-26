@@ -487,7 +487,7 @@ def perform_checks_before_starting_program():
     try:
         game.dir.check_for_invalid_id_file_structure()
     except Exception as e_info:
-        raise ValueError("Invalid ID file structure! Fix it before running program: {e_info}") from e_info
+        raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
 
 
 def save_and_exit_script():
