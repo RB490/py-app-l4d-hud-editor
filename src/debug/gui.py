@@ -8,6 +8,7 @@ from debug.hud import get_hud_debug_instance
 from gui import descriptions
 from gui.browser import GuiHudBrowser
 from gui.progress import ProgressGUI
+from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
@@ -37,6 +38,11 @@ def debug_descriptions_gui():
     descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
+
+def debug_start_gui():
+    "Show start gui"
+    start_instance = GuiHudStart()
+    start_instance.show()
 
 
 def debug_progress_gui():

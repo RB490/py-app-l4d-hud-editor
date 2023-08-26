@@ -97,6 +97,5 @@ class BaseGUI:
 
     def on_close(self):
         # pylint: disable=no-member
-        input("this is a test")
         self.save_window_geometry()
         self.hide()

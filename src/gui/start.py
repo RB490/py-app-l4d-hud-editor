@@ -1,5 +1,5 @@
 """Module for the hud select gui class"""
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, import-outside-toplevel
 import os
 import subprocess
 import tkinter as tk
@@ -142,8 +142,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
 
     def show_developer_menu(self, event):
-        print("dev context menu!")
+        """Open the developer context menu"""
         self.dev_context_menu.post(event.x_root, event.y_root)
+        print("Opened the developer context menu!")
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -254,13 +255,21 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # hide gui
         self.hide()
         self.save_window_geometry()
-        # self.destroy_gui()
 
         # edit hud
         self.hud.edit.start_editing(self.selected_hud_dir)
 
 
-def debug_start_gui():
-    "Show start gui"
-    start_instance = GuiHudStart()
-    start_instance.show()
+def show_start_gui():
+    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+    from gui.browser import GuiHudBrowser
+
+    # destroy other main gui
+    browser_gui = GuiHudBrowser()
+    browser_gui.destroy()
+
+    start_gui = GuiHudStart()
+    start_gui.show()
+
+    print("Opened the Start GUI!")
+    return start_gui

@@ -16,6 +16,8 @@ Current:
 
 	✔ Bug -> full settings json -> open start gui by opening it with debug_start_gui() -> close start -> json is compltely empty @done(23-08-26 13:49) issue was using self.get_window_geometry without the ()
 
+	✔ Bug: Error when the start gui opens the browser gui @done(23-08-26 14:07)
+
 	☐ Bug -> start gui -> edit hud -> gui image error. to do with two full tkinter gui's clashing. one should be destroyed, or the other needs to use tk.toplevel()
 		- though i'm not sure what would happen if i use tktoplevel() for the browser and then do another layer of tktoplevel() in the browser
 		- guess i'll have to destroy the start gui, if it exists, before showing the browser, and vice versa
@@ -55,6 +57,7 @@ Current:
 	- reload_mouse_clicks_enabled
 	- probably everything
 	
+	☐ Bug: plugin not finding embedded todo's? TODO
 
 Bugs:
 

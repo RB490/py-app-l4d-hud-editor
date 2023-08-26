@@ -1,4 +1,4 @@
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, import-outside-toplevel
 """Module for the hud browser gui class"""
 import os
 import tkinter as tk
@@ -413,3 +413,17 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         full_path = self.treeview_get_selected_full_path()
         send2trash.send2trash(full_path)
         self.treeview_refresh(self.treeview)
+
+
+def show_browser_gui():
+    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+    from gui.start import GuiHudStart
+
+    # destroy other main gui
+    start_gui = GuiHudStart()
+    start_gui.destroy()
+
+    browser_gui = GuiHudBrowser()
+    browser_gui.show()
+    print("Opened the Browser GUI!")
+    return browser_gui
