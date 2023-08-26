@@ -14,7 +14,7 @@ from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
 from utils.functions import click_at, focus_hwnd
-from utils.persistent_data import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 
 
 class GameCommands:

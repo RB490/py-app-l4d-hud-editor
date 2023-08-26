@@ -24,7 +24,32 @@ class PersistentDataManager(metaclass=Singleton):
         except Exception:
             show_message("Resetting settings file!", "error")
             data = {
-                # Default data...
+                "BrowserGuiGeometry": "828x517+114+776",
+                "HudSelectGuiGeometry": "865x528+100+100",
+                "VDFGuiGeometry": "875x425+159+110",
+                "VDFGui_annotate": 1,
+                "VDFGui_indent_values": 1,
+                "VDFGui_modify_int": 1,
+                "VDFGui_sort_keys": 0,
+                "editor_reload_mode": "reload_hud",
+                "game_insecure": False,
+                "game_mode": "Coop",
+                "game_mute": True,
+                "game_pos": "Top Left",
+                "game_pos_custom_coord": None,
+                "game_res": [
+                    1600,
+                    900
+                ],
+                "reload_mouse_clicks_coord_1": None,
+                "reload_mouse_clicks_coord_2": None,
+                "reload_mouse_clicks_enabled": False,
+                "reload_reopen_menu_on_reload": False,
+                "steam_root_dir": "E:/games/steam",
+                "stored_huds": [
+                    "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"
+                ],
+                "stored_temp_huds": []
             }
         return data
 

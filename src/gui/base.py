@@ -45,7 +45,7 @@ class BaseGUI:
         if self.root and self.root.winfo_viewable():
             geometry = self.root.geometry()
             print(f"{self.root.title} geometry: {geometry}")
-            return self.root.geometry()
+            return geometry
         else:
             print("GUI is not loaded or visible. Returning default geometry.")
             return "1000x1000+100+100"
@@ -97,5 +97,6 @@ class BaseGUI:
 
     def on_close(self):
         # pylint: disable=no-member
+        input("this is a test")
         self.save_window_geometry()
         self.hide()

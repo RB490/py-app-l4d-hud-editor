@@ -17,7 +17,7 @@ import win32con
 import win32gui
 import win32process
 
-from utils.persistent_data import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import (
     BACKUP_APPEND_STRING,

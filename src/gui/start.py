@@ -11,7 +11,7 @@ from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.persistent_data import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import Singleton
 from utils.vpk import VPKClass
 
@@ -132,14 +132,14 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # from gui.browser import GuiHudBrowser
         # browser_gui = GuiHudBrowser()
         # browser_gui.destroy()
-        
+
         self.root.deiconify()
         self.is_hidden = False
         self.root.mainloop()
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry)
+        self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
 
     def show_developer_menu(self, event):
         print("dev context menu!")
@@ -205,12 +205,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.delete(*self.treeview.get_children())
 
         # Insert the new items from the list into the Treeview
-        if self.data_manager.get("stored_huds"):
-            for stored_hud_dir in self.data_manager.get("stored_huds"):
-                # retrieve hud name (from addoninfo.txt if available)
-                hud_name = self.hud.manager.retrieve_hud_name_for_dir(stored_hud_dir)
+        for stored_hud_dir in self.data_manager.get("stored_huds"):
+            # retrieve hud name (from addoninfo.txt if available)
+            hud_name = self.hud.manager.retrieve_hud_name_for_dir(stored_hud_dir)
 
-                self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
+            self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""

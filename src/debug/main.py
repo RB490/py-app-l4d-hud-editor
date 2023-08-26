@@ -19,7 +19,7 @@ from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.start import GuiHudStart, debug_start_gui
 from tests.test_hud_syncer import unit_test_hud_syncer
-from utils.persistent_data import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 
 
 def show_browser_gui():
@@ -58,9 +58,13 @@ def debug_main():
 
     # debug_game_class()
     # debug_vdf_class()
-    debug_gui()
-    
-    # show_start_gui()
+    # debug_gui()
+
+    # data_manager = PersistentDataManager()
+    # data_manager.set("game_mute", 0)
+    # data_manager.get("stored_huds")
+
+    show_start_gui()
     # show_browser_gui()
 
     # hud = get_hud_debug_instance()

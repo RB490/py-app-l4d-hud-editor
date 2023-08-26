@@ -14,9 +14,7 @@ Current:
 
 	✔ Bug: Empty settings -> load start -> error because no huds are available @done(23-08-26 13:34)
 
-	
-	☐ Bug -> full settings json -> open start gui by opening it with debug_start_gui() -> close start -> json is compltely empty
-	☐ Bug -> full settings json -> select edit hud (code fails) -> json is now empty
+	✔ Bug -> full settings json -> open start gui by opening it with debug_start_gui() -> close start -> json is compltely empty @done(23-08-26 13:49) issue was using self.get_window_geometry without the ()
 
 	☐ Bug -> start gui -> edit hud -> gui image error. to do with two full tkinter gui's clashing. one should be destroyed, or the other needs to use tk.toplevel()
 		- though i'm not sure what would happen if i use tktoplevel() for the browser and then do another layer of tktoplevel() in the browser
@@ -53,6 +51,9 @@ Current:
 	☐ Feature: Start GUI: Specific button icons rather than all identical
 
 	☐ Feature: Settings: Add default values for settings. Do this in such a way that if Get() fails to retrieve value, look it up from the default value data & load() uses it as a default
+	- stored_huds set to empty object
+	- reload_mouse_clicks_enabled
+	- probably everything
 	
 
 Bugs:

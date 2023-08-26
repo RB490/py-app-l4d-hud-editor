@@ -6,7 +6,7 @@ from tkinter import scrolledtext
 
 from gui.base import BaseGUI
 from utils.constants import APP_ICON, IMAGES_DIR
-from utils.persistent_data import PersistentDataManager
+from utils.persistent_data_manager import PersistentDataManager
 from utils.shared_utils import show_message
 from utils.vdf import VDFModifier
 
@@ -251,4 +251,4 @@ class VDFModifierGUI(BaseGUI):
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        self.data_manager.set("VDFGuiGeometry", self.get_window_geometry)
+        self.data_manager.set("VDFGuiGeometry", self.get_window_geometry())
