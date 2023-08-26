@@ -3,7 +3,7 @@
 import json
 
 from utils.constants import PERSISTENT_DATA_PATH
-from utils.shared_utils import Singleton
+from utils.shared_utils import Singleton, show_message
 
 
 class PersistentDataManager(metaclass=Singleton):
@@ -22,6 +22,7 @@ class PersistentDataManager(metaclass=Singleton):
             with open(self.file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
         except Exception:
+            show_message("Resetting settings file!", "error")
             data = {
                 # Default data...
             }

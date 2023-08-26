@@ -10,7 +10,7 @@ import keyboard
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.browser import GuiHudBrowser
-from gui.start import show_start_gui
+from gui.start import debug_start_gui
 from hud.descriptions import HudDescriptions
 from hud.syncer import HudSyncer
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
@@ -48,7 +48,7 @@ class HudEditor:
         if DEBUG_MODE:
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
             if not result:
-                show_start_gui()
+                debug_start_gui()
                 return False
 
         # is developer mode installed? - also checks for user directory
@@ -70,7 +70,7 @@ class HudEditor:
         result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if not result:
             print("Could not activate developer mode")
-            show_start_gui()
+            debug_start_gui()
             return False
 
         # sync the hud to the game folder
@@ -125,7 +125,7 @@ class HudEditor:
 
         # callback to the gui
         if open_start_gui:
-            show_start_gui()
+            debug_start_gui()
 
     def sync(self):
         """Sync hud"""

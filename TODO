@@ -11,18 +11,48 @@ Current:
 	✔ Refactor: Start GUI: Class @done(23-08-25 15:50)
 	
 	✔ Feature: Start GUI: Remove menu bar -- button should open that context menu instead @done(23-08-25 16:17)
+
+	✔ Bug: Empty settings -> load start -> error because no huds are available @done(23-08-26 13:34)
+
+	
+	☐ Bug -> full settings json -> open start gui by opening it with debug_start_gui() -> close start -> json is compltely empty
+	☐ Bug -> full settings json -> select edit hud (code fails) -> json is now empty
+
+	☐ Bug -> start gui -> edit hud -> gui image error. to do with two full tkinter gui's clashing. one should be destroyed, or the other needs to use tk.toplevel()
+		- though i'm not sure what would happen if i use tktoplevel() for the browser and then do another layer of tktoplevel() in the browser
+		- guess i'll have to destroy the start gui, if it exists, before showing the browser, and vice versa
+			- I should create two functions. show_start_gui and show_browser_gui which handle the required logic
+
+		- My solution: Destroy the other in their show() methods. i do have to decouple gui controls loading to prevent overwriting
+
+
+		☐ #py Browser&start conflict issue ask GPT about it // really comes down to destroying or making browser a toplevel aswell
+		☐ #py Browser&start conflict issue look into destroying and rebuilding jewel graphical user interface
+	
+	☐ Feature: installer progress gui close confirmation box. Could be achieved by making the progressGU into a baseProgressGUI which extend from baseGUI and then create another gui to extend from BaseProgress 
+	☐ Feature: catch specific exception of the progress gui closing during installation -> display a nicer infobox message
+
+	☐ Feature: Start GUI: Add buttons for all context menu options(?) remove/open_dir/save_as_vpk // would have to check/change status on whether a hud is selected + edit button should, too
 	☐ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui
 	☐ Feature: Start GUI: Niceieties
+	☐ Feature: Start GUI: The add button should be called open instead and change the Icon to the open Icon Arrow
+	☐ Feature: Start GUI: The remove button should have a confirmation dialog weather to remove it from the disk as well
+	☐ Feature: Start GUI: Use the exact same variables voor de context menu and The Buttons for the images
+
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
 
 	☐ Refactor: Browser: Show all hud files -> a shit ton of calls to look up various info causing unnecesary slowdown
 
-	☐ Refactor: menu.py(). I don't like how 
+	☐ Refactor: @idea My GUIS should maybe have a top level parameter for debugging and just generally makes it a bit clear what is happening?
 
-	☐ Feature: Start GUI: Context menu icons
+	☐ Feature: Have a method to check validity of the installation directories by verifying that they exist and only have version aka id file in the entire steam directory
+
+	☐ Feature: Start GUI: Context menu icons. Test: Do toggleable menu options support icons in any way or state
 
 	☐ Feature: Start GUI: Specific button icons rather than all identical
+
+	☐ Feature: Settings: Add default values for settings. Do this in such a way that if Get() fails to retrieve value, look it up from the default value data & load() uses it as a default
 	
 
 Bugs:
@@ -58,9 +88,12 @@ Additional Ideas and Considerations:
 	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)?
 		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
 		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
-	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
-	
+	☐ Feature: Can i find a way to show a context menu which closes then losing focus using python? Can try to get Tkinter to work & maybe other frameworks
 
+Post:
+	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
+	☐ Post: decouple classes as much as possible by passing parameters instead of directly referencing other classes
+	
 
 --Archive--:
 	✘ Feature: VPK: Handle VPK class failing to extract specific files during installation. Right now they are just printed. @cancelled(23-08-25 15:34) Not doing this because it's not important. maybe 1 or 2 very minor files will fail to extract

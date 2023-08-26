@@ -10,6 +10,8 @@
 
 import os
 
+from utils.persistent_data import PersistentDataManager
+
 # from packages.game.game import Game
 # from packages.utils.functions import load_data
 
@@ -23,7 +25,7 @@ os.system("cls")  # clear terminal
 #     Load persistent data
 # ----------------------------------
 
-# persistent_data = load_data()
+data_manager = PersistentDataManager()
 
 # ----------------------------------
 #     Do stuff

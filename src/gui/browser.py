@@ -167,6 +167,17 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
 
+    def show(self):
+        # destroy other main gui to prevent tkinter issues
+        # from gui.start import GuiHudStart
+
+        # start_gui = GuiHudStart()
+        # start_gui.destroy()
+
+        self.root.deiconify()
+        self.is_hidden = False
+        self.root.mainloop()
+
     def dummy_handler(self):
         "Dummy method"
         print("dummy")

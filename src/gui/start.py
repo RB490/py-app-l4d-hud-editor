@@ -40,7 +40,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.selected_hud_dir = ""
 
         # Create image buttons
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "plus.png")).subsample(2, 2)
+        self.new_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "star.png")).subsample(2, 2)
+        self.settings_image = tk.PhotoImage(
+            file=os.path.join(IMAGES_DIR, "medium", "settings_hamburger.png")
+        ).subsample(2, 2)
 
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
@@ -63,10 +67,10 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.right_panel = tk.Frame(self.frame)
         self.right_panel.pack(fill="both", anchor="nw", expand=True)
 
-        # De
+        # Developer menu
         developer_menu_button = tk.Button(self.right_panel, text="Developer", justify="center")
         developer_menu_button.config(width=70, height=25)
-        developer_menu_button.config(image=self.add_image, compound="left", padx=pad_x)
+        developer_menu_button.config(image=self.settings_image, compound="left", padx=pad_x)
         developer_menu_button.pack(padx=pad_x, pady=(pad_y, pad_y))
         developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
@@ -78,10 +82,14 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # create a button above the picture frame
         self.new_button = tk.Button(self.right_panel, text="New", height=25, command=self.prompt_new_hud_btn)
         self.new_button.pack(fill=tk.X, pady=5, padx=5)
-        self.new_button.config(image=self.add_image, compound="left", padx=10)
+        self.new_button.config(image=self.new_image, compound="left", padx=10)
+
+        # create a frame for the edit controls
+        self.edit_panel = tk.Frame(self.right_panel)
+        self.edit_panel.pack(side="bottom", fill="both", anchor="se", expand=False)
 
         # create a picture frame on the right side
-        self.picture_frame = tk.Frame(self.right_panel, bg="black")
+        self.picture_frame = tk.Frame(self.edit_panel, bg="black")
         self.picture_frame.pack(fill=tk.X, pady=5, padx=5)
 
         # Add the image viewport, display it in the picture frame and set the initial image
@@ -92,7 +100,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.right_panel, text="Edit", height=25, command=self.edit_selected_hud)
+        self.edit_button = tk.Button(self.edit_panel, text="Edit", height=25, command=self.edit_selected_hud)
         self.edit_button.pack(fill=tk.X, pady=5, padx=5)
         self.edit_button.config(image=self.add_image, compound="left", padx=10)
 
@@ -118,6 +126,16 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.update_treeview()
 
         self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+
+    def show(self):
+        # destroy other main gui to prevent tkinter issues
+        # from gui.browser import GuiHudBrowser
+        # browser_gui = GuiHudBrowser()
+        # browser_gui.destroy()
+        
+        self.root.deiconify()
+        self.is_hidden = False
+        self.root.mainloop()
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
@@ -187,11 +205,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.delete(*self.treeview.get_children())
 
         # Insert the new items from the list into the Treeview
-        for stored_hud_dir in self.data_manager.get("stored_huds"):
-            # retrieve hud name (from addoninfo.txt if available)
-            hud_name = self.hud.manager.retrieve_hud_name_for_dir(stored_hud_dir)
+        if self.data_manager.get("stored_huds"):
+            for stored_hud_dir in self.data_manager.get("stored_huds"):
+                # retrieve hud name (from addoninfo.txt if available)
+                hud_name = self.hud.manager.retrieve_hud_name_for_dir(stored_hud_dir)
 
-            self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
+                self.treeview.insert("", "end", values=(hud_name, os.path.normpath(stored_hud_dir)))
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""
@@ -242,7 +261,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.hud.edit.start_editing(self.selected_hud_dir)
 
 
-def show_start_gui():
+def debug_start_gui():
     "Show start gui"
     start_instance = GuiHudStart()
     start_instance.show()

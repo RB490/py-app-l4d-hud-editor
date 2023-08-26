@@ -7,7 +7,7 @@ from tkinter import messagebox
 import pyperclip  # type: ignore
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
-from gui.start import show_start_gui
+from gui.start import debug_start_gui
 from utils.constants import UNIVERSAL_GAME_MAP
 from utils.functions import get_mouse_position_on_click
 from utils.get_user_input import get_user_input
@@ -186,7 +186,7 @@ class EditorMenuHandler:
     def editor_open_hud_select(self):
         """Open hud select gui"""
         print("editor_open_hud_select")
-        show_start_gui()
+        debug_start_gui()
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
