@@ -1,5 +1,5 @@
 """Module for debugging"""
-# pylint: disable=unused-import, unused-variable, unused-argument, undefined-variable
+# pylint: disable=unused-import, unused-variable, unused-argument, undefined-variable, invalid-name
 
 
 import os

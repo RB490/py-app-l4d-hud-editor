@@ -11,11 +11,11 @@ from PIL import Image, ImageTk
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
-from utils.persistent_data_manager import PersistentDataManager
+from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR
 from utils.functions import copy_directory
-from shared_utils.shared_utils import Singleton, show_message
+from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
 
@@ -244,7 +244,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
 
     def enable_buttons(self):
-        # Enable the following buttons: edit, export, open, remove
+        """Enable the following buttons: edit, export, open, remove"""
 
         # Enable the export button
         self.export_vpk_button.config(state="normal")
@@ -302,6 +302,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             self.selected_hud_export_directory()
 
     def selected_hud_export_directory(self):
+        """Export hud as folder"""
         print("selected_hud_export_directory")
 
         if not self.selected_hud_dir:

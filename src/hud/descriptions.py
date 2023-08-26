@@ -1,4 +1,5 @@
 """Subclass of the hud class. Manages everything related to hud file descriptions"""
+# pylint: disable=protected-access
 import json
 import os
 

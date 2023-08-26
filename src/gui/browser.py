@@ -43,6 +43,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.iconbitmap(APP_ICON)
         from gui.descriptions import GuiHudDescriptions
 
+        self.selected_full_path = None
         self.descriptions_gui = GuiHudDescriptions()
         self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
@@ -129,27 +130,27 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
-            label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_file
+            label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.action_open_file
         )
         self.context_menu.add_command(
-            label="Open vanilla File", image=self.file_icon, compound=tk.LEFT, command=self.treeview_open_vanilla_file
+            label="Open vanilla File", image=self.file_icon, compound=tk.LEFT, command=self.action_open_vanilla_file
         )
         self.context_menu.add_command(
-            label="Open Folder", image=self.folder_icon, compound=tk.LEFT, command=self.treeview_open_folder
+            label="Open Folder", image=self.folder_icon, compound=tk.LEFT, command=self.action_open_folder
         )
         self.context_menu.add_command(
-            label="Open Game Folder", image=self.folder_icon, compound=tk.LEFT, command=self.treeview_open_game_folder
-        )
-        self.context_menu.add_separator()
-        self.context_menu.add_command(
-            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.treeview_annotate
-        )
-        self.context_menu.add_command(
-            label="Description", image=self.description_icon, compound=tk.LEFT, command=self.treeview_description
+            label="Open Game Folder", image=self.folder_icon, compound=tk.LEFT, command=self.action_open_game_folder
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
-            label="Recycle", image=self.delete_icon, compound=tk.LEFT, command=self.treeview_recycle
+            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.action_annotate
+        )
+        self.context_menu.add_command(
+            label="Description", image=self.description_icon, compound=tk.LEFT, command=self.action_description
+        )
+        self.context_menu.add_separator()
+        self.context_menu.add_command(
+            label="Recycle", image=self.delete_icon, compound=tk.LEFT, command=self.action_recycle
         )
 
         # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)
@@ -237,11 +238,11 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         return values
 
-    def treeview_get_selected_full_path(self):
+    def treeview_set_selected_full_path(self):
         """Retrieve selected treeview row path"""
         relative_path = self.treeview_get_selected_relative_path()
         full_path = os.path.join(self.hud.edit.get_dir(), relative_path)
-        return full_path if full_path else "No item selected"
+        self.selected_full_path = full_path if full_path else "No item selected"
 
     def treeview_get_selected_relative_path(self):
         "Treeview get info"
@@ -250,11 +251,15 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             return values[4]
         return None
 
+    def get_selected_full_path(self):
+        """Retrieve selected full path"""
+        return self.selected_full_path
+
     def treeview_on_double_click(self, event):
         """Handle user clicks"""
         # pylint: disable=unused-argument
 
-        file_path = self.treeview_get_selected_full_path()
+        file_path = self.get_selected_full_path()
         if os.path.isfile(file_path):
             os.startfile(file_path)
 
@@ -343,13 +348,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.save_window_geometry()
         save_and_exit_script()
 
-    def treeview_open_file(self):
+    def action_open_file(self):
         """Treeview Handle 'Open File' option"""
         print("Method: treeview_open_file - Handle 'Open File' option")
-        full_path = self.treeview_get_selected_full_path()
+        full_path = self.get_selected_full_path()
         os.startfile(full_path)
 
-    def treeview_open_vanilla_file(self):
+    def action_open_vanilla_file(self):
         """Treeview handle Open vanilla File' option"""
         print("Method: treeview_open_default_file - handle 'Open vanilla File' option")
 
@@ -360,10 +365,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         else:
             print(f"vanilla file unavailable: '{full_path}'")
 
-    def treeview_open_folder(self):
+    def action_open_folder(self):
         "Treeview Handle 'Open Folder' option"
         print("Method: treeview_open_folder - Handle 'Open Folder' option")
-        full_path = self.treeview_get_selected_full_path()
+        full_path = self.get_selected_full_path()
         directory = os.path.dirname(full_path)
         if os.path.isdir(directory):
             print(f"Opening directory: '{directory}'")
@@ -371,7 +376,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         else:
             print(f"Directory unavailable: '{directory}'")
 
-    def treeview_open_game_folder(self):
+    def action_open_game_folder(self):
         "Treeview Handle 'Open Game Folder' option"
         print("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
 
@@ -389,28 +394,28 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         else:
             print(f"Game directory unavailable: '{game_directory}'")
 
-    def treeview_description(self):
+    def action_description(self):
         "Treeview Handle 'Description' option"
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
         rel_path = self.treeview_get_selected_relative_path()
         self.descriptions_gui.load_file(rel_path)
 
-    def treeview_annotate(self):
+    def action_annotate(self):
         "Treeview Handle 'Annotate' option"
         print("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
         try:
-            app = VDFModifierGUI(self.treeview_get_selected_full_path())
+            app = VDFModifierGUI(self.selected_full_path)
             app.show()
         except Exception:
             print("Browser: Can't load VDF GUI!")
 
-    def treeview_recycle(self):
+    def action_recycle(self):
         "Treeview Handle 'Recycle' option"
         print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
 
-        full_path = self.treeview_get_selected_full_path()
+        full_path = self.get_selected_full_path()
         send2trash.send2trash(full_path)
         self.treeview_refresh(self.treeview)
 
