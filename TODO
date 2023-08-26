@@ -27,11 +27,11 @@ Current:
 
 
 	✔ Feature: Start GUI: Add buttons for all context menu options(?) remove/open_dir/save_as_vpk // would have to check/change status on whether a hud is selected + edit button should, too @done(23-08-26 15:14)
-	☐ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui
-	☐ Feature: Start GUI: Niceieties
-	☐ Feature: Start GUI: The add button should be called open instead and change the Icon to the open Icon Arrow
+	✔ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui @done(23-08-26 15:14)
+	✘ Feature: Start GUI: The add button should be called open instead and change the Icon to the open Icon Arrow @cancelled(23-08-26 15:15)
 	☐ Feature: Start GUI: The remove button should have a confirmation dialog weather to remove it from the disk as well
-	☐ Feature: Start GUI: Use the exact same variables voor de context menu and The Buttons for the images
+	✔ Feature: Start GUI: Use the exact same variables voor de context menu and The Buttons for the images @done(23-08-26 16:40)
+	✔ Feature: Start GUI: Niceify @done(23-08-26 16:40)
 
 
 	☐ Refactor: is_custom_file finds the first possible match of the default file in the dev folder. use this throughout the script (probably just for the browser open default file) & rename method accordingly
@@ -52,6 +52,9 @@ Current:
 	- probably everything
 	
 	☐ Bug: plugin not finding embedded todo's? TODO
+
+	☐ Refactor: app-icons repo. delete unnecesary dimensions & all other things
+	☐ Refactor: IMAGES directory
 
 Bugs:
 

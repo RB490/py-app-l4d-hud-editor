@@ -33,6 +33,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # gui variables
         pad_x = 10
         pad_y = 10
+        right_panel_width = 204
 
         # initialize variables
         self.picture_canvas_photo = None
@@ -40,6 +41,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.selected_hud_dir = ""
 
         # Create image buttons
+        self.edit_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "paintbrush.png")).subsample(2, 2)
         self.open_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "arrow_redo.png")).subsample(2, 2)
         self.saveas_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save_as.png")).subsample(2, 2)
         self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
@@ -61,75 +63,116 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.column("#0", width=10, stretch=False)
         self.treeview.column("name", width=125, stretch=False)
         self.treeview.column("directory", width=400)
-        self.treeview.pack(side="left", expand=True, fill="both", padx=5, pady=5)
+        self.treeview.pack(side="left", expand=True, fill="both", padx=pad_x, pady=(pad_y, pad_y))
 
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_get_selected_item)
 
         # create a frame for the right panel
-        self.right_panel = tk.Frame(self.frame)
-        self.right_panel.pack(fill="both", anchor="nw", expand=True)
+        self.right_panel = tk.Frame(self.frame, bd=0, relief="solid")
+        self.right_panel.pack(padx=(0, pad_x), pady=(pad_y, pad_y), fill="both", expand=True)
 
-        # Developer menu
-        developer_menu_button = tk.Button(self.right_panel, text="Developer", justify="center")
-        developer_menu_button.config(width=70, height=25)
-        developer_menu_button.config(image=self.settings_image, compound="left", padx=pad_x)
-        developer_menu_button.pack(padx=pad_x, pady=(pad_y, pad_y))
-        developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
+        # treeview button frame
+        self.tree_btn_frame = tk.Frame(self.right_panel)
+        self.tree_btn_frame.pack(fill="both", expand=True)
 
-        # Remove
-        remove_button = tk.Button(
-            self.right_panel, text="Remove", justify="center", command=self.selected_hud_remove_or_delete
+        # new or add label
+        self.new_or_add_label = tk.Label(
+            self.tree_btn_frame,
+            text="Management",
+            font=("Helvetica", 18),
+            wraplength=99999999,
+            padx=0,
+            pady=0,  # Use a single value for padding at the top
+            # relief="solid",
+            # bd=1,
         )
-        remove_button.config(image=self.delete_image, compound="left", padx=pad_x)
-        remove_button.config(width=70, height=25)
-        remove_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+        self.new_or_add_label.pack(fill="both")
 
-        # open dir
-        open_dir_button = tk.Button(
-            self.right_panel, text="Open Directory", justify="center", command=self.selected_hud_open_dir
+        # treeview button frame
+        self.new_or_add_frame = tk.Frame(self.tree_btn_frame, bd=0, relief="solid")
+        self.new_or_add_frame.pack(pady=(5, 0))
+
+        # create a button above the picture frame
+        self.add_button = tk.Button(self.new_or_add_frame, text="Add", height=25, command=self.prompt_add_hud)
+        self.add_button.config(image=self.add_image, compound="left", padx=10)
+        self.add_button.config(width=(right_panel_width / 2) - 5, height=25)
+        self.add_button.pack(padx=(0, 0), pady=(0, pad_y), side="right")
+
+        # create a button above the picture frame
+        self.new_button = tk.Button(self.new_or_add_frame, text="New", height=25, command=self.prompt_new_hud)
+        self.new_button.config(image=self.new_image, compound="left", padx=10)
+        self.new_button.config(width=(right_panel_width / 2), height=25)
+        self.new_button.pack(padx=(0, 5), pady=(0, pad_y), side="left")
+
+        # create a frame for the edit controls
+        self.bottom_frame = tk.Frame(self.tree_btn_frame)
+        self.bottom_frame.pack(side="bottom", fill="both", anchor="se", expand=False)
+
+        # new or add label
+        self.rem_op_ex_label = tk.Label(
+            self.bottom_frame,
+            text="Actions",
+            font=("Helvetica", 18),
+            wraplength=99999999,
+            padx=0,
+            pady=0,  # Use a single value for padding at the top
+            # relief="solid",
+            # bd=1,
         )
-        open_dir_button.config(image=self.open_image, compound="left", padx=pad_x)
-        open_dir_button.config(width=100, height=25)  # Adjust the width as needed
-        open_dir_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+        self.rem_op_ex_label.pack(fill="both", pady=pad_y)
+
+        # remove, open & export buttons frame
+        self.rem_op_ex_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")
+        self.rem_op_ex_frame.pack()
 
         # export vpk
         export_vpk_button = tk.Button(
-            self.right_panel, text="Export", justify="center", command=self.selected_hud_export_vpk
+            self.rem_op_ex_frame, text="Export", justify="center", command=self.selected_hud_export_vpk
         )
         export_vpk_button.config(image=self.saveas_image, compound="left", padx=pad_x)
-        export_vpk_button.config(width=70, height=25)
-        export_vpk_button.pack(padx=pad_x, pady=(pad_y, pad_y))
+        export_vpk_button.config(width=55, height=25)
+        export_vpk_button.pack(padx=0, pady=0, side="left")
 
-        # create a button above the picture frame
-        self.add_button = tk.Button(self.right_panel, text="Add", height=25, command=self.prompt_add_hud)
-        self.add_button.pack(fill=tk.X, pady=5, padx=5)
-        self.add_button.config(image=self.add_image, compound="left", padx=10)
+        # open dir
+        open_dir_button = tk.Button(
+            self.rem_op_ex_frame, text="Open", justify="center", command=self.selected_hud_open_dir
+        )
+        open_dir_button.config(image=self.open_image, compound="left", padx=pad_x)
+        open_dir_button.config(width=55, height=25)  # Adjust the width as needed
+        open_dir_button.pack(padx=(5, 5), pady=0, side="left")
 
-        # create a button above the picture frame
-        self.new_button = tk.Button(self.right_panel, text="New", height=25, command=self.prompt_new_hud)
-        self.new_button.pack(fill=tk.X, pady=5, padx=5)
-        self.new_button.config(image=self.new_image, compound="left", padx=10)
-
-        # create a frame for the edit controls
-        self.edit_panel = tk.Frame(self.right_panel)
-        self.edit_panel.pack(side="bottom", fill="both", anchor="se", expand=False)
+        # Remove
+        remove_button = tk.Button(
+            self.rem_op_ex_frame, text="Remove", justify="center", command=self.selected_hud_remove_or_delete
+        )
+        remove_button.config(image=self.delete_image, compound="left", padx=pad_x)
+        remove_button.config(width=55, height=25)
+        remove_button.pack(padx=0, pady=0, side="left")
 
         # create a picture frame on the right side
-        self.picture_frame = tk.Frame(self.edit_panel, bg="black")
-        self.picture_frame.pack(fill=tk.X, pady=5, padx=5)
+        self.picture_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")  # bg="black"
+        self.picture_frame.pack(fill=tk.X, padx=0, pady=(pad_y, pad_y))
 
         # Add the image viewport, display it in the picture frame and set the initial image
         self.picture_canvas = tk.Canvas(self.picture_frame, relief="groove", bd=3)
+        # width + 16 because otherwise black bars around the canvas. possibly caused by the relief/border options
+        self.picture_canvas.config(width=right_panel_width + 45, height=right_panel_width + 45)
         self.picture_canvas.pack()
-        self.picture_canvas.config(width=250, height=200)
-        # setting the image isn't possible before calling mainloop()
-        # self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+
+        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+
+        # Developer menu
+        developer_menu_button = tk.Button(self.bottom_frame, text="Developer", justify="center")
+        developer_menu_button.config(width=85, height=25)
+        developer_menu_button.config(image=self.settings_image, compound="left", padx=pad_x)
+        developer_menu_button.pack(padx=(0, 5), pady=0, side="left")
+        developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
         # create a button above the picture frame
-        self.edit_button = tk.Button(self.edit_panel, text="Edit", height=25, command=self.edit_selected_hud)
-        self.edit_button.pack(fill=tk.X, pady=5, padx=5)
-        self.edit_button.config(image=self.add_image, compound="left", padx=10)
+        self.edit_button = tk.Button(self.bottom_frame, text="Edit", height=25, command=self.edit_selected_hud)
+        self.edit_button.config(image=self.edit_image, compound="left", padx=10)
+        self.edit_button.pack(fill=tk.X, padx=0, pady=0)
 
         # Create a context menu for the treeview
         self.context_menu = tk.Menu(self.treeview, tearoff=0)
@@ -142,7 +185,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)
-
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
@@ -151,8 +193,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Configure the root window with the menubar
         self.update_treeview()
-
-        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
 
     def show(self):
         # destroy other main gui to prevent tkinter issues
