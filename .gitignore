@@ -4,7 +4,6 @@ development/debug/hud_debug/workspace/
 
 # General
 __pycache__/
-.vscode
 .mypy_cache
 .idea
 

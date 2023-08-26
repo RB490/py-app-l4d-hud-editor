@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.*": true,
+        "**/__*": true,
+        "__pycache__": true,
+        "dev/debug": true,
+        "assets/mods": true,
+    },
+    "search.exclude": {
+        "**/.git": true,
+        "**/.*": true,
+        "**/__*": true,
+        "__pycache__": true,
+        "dev/debug": true,
+        "assets/mods": true
+    }
+}
