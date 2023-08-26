@@ -18,19 +18,13 @@ Current:
 
 	✔ Bug: Error when the start gui opens the browser gui @done(23-08-26 14:07)
 
-	☐ Bug -> start gui -> edit hud -> gui image error. to do with two full tkinter gui's clashing. one should be destroyed, or the other needs to use tk.toplevel()
-		- though i'm not sure what would happen if i use tktoplevel() for the browser and then do another layer of tktoplevel() in the browser
-		- guess i'll have to destroy the start gui, if it exists, before showing the browser, and vice versa
-			- I should create two functions. show_start_gui and show_browser_gui which handle the required logic
+	✔ Bug: Progress gui is being side to wide as fuck by default. seemingly ignoring initial_width @done(23-08-26 14:38)
+	☐ Bug: Progress gui step 1 seems to be cut off with three dots "..." then step 2 resizes the gui to where it should be
+		- This is because max_chars is set to 8 by update_progress(). and thats because the gui width is being set to too smalle
 
-		- My solution: Destroy the other in their show() methods. i do have to decouple gui controls loading to prevent overwriting
-
-
-		☐ #py Browser&start conflict issue ask GPT about it // really comes down to destroying or making browser a toplevel aswell
-		☐ #py Browser&start conflict issue look into destroying and rebuilding jewel graphical user interface
-	
 	☐ Feature: installer progress gui close confirmation box. Could be achieved by making the progressGU into a baseProgressGUI which extend from baseGUI and then create another gui to extend from BaseProgress 
 	☐ Feature: catch specific exception of the progress gui closing during installation -> display a nicer infobox message
+
 
 	☐ Feature: Start GUI: Add buttons for all context menu options(?) remove/open_dir/save_as_vpk // would have to check/change status on whether a hud is selected + edit button should, too
 	☐ Feature: Start GUI: Make edit&addonimage into a panel that sits in the bottom right of the gui

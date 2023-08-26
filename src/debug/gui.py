@@ -3,6 +3,7 @@ import os
 import random
 import shutil
 import string
+import time
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
@@ -39,6 +40,7 @@ def debug_descriptions_gui():
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
 
+
 def debug_start_gui():
     "Show start gui"
     start_instance = GuiHudStart()
@@ -50,14 +52,17 @@ def debug_progress_gui():
 
     # total_steps = len(installation_steps)
     total_steps = 150000
-    gui = ProgressGUI(total_steps, 25, 60)  # Create the GUI instance
+    gui = ProgressGUI("Debugging", 25, 60, total_steps)  # Create the GUI instance
+    return
 
     for step in range(total_steps):
-        random_length = random.randint(1, 100)
+        random_length = random.randint(1, 10)
+        # random_length = random.randint(1, 100)
         # random_length = random.randint(1, 500)
         random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
         gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
         # time.sleep(0.4)
+        time.sleep(2)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")

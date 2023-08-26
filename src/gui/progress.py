@@ -2,12 +2,13 @@
 import tkinter as tk
 
 from utils.constants import APP_ICON
+from utils.shared_utils import show_message
 
 
 class ProgressGUI:
     """A class representing a progress GUI window for installation."""
 
-    def __init__(self, total_steps, initial_width, maximum_width):
+    def __init__(self, action_description, initial_width, maximum_width, total_steps):
         """Initialize the progress GUI with the specified parameters.
 
         Args:
@@ -16,29 +17,41 @@ class ProgressGUI:
             maximum_width (int): The maximum width the GUI window can have.
         """
         self.root = tk.Tk()
-        self.root.title("Installation Progress")
+        self.root.title(action_description)
         self.root.iconbitmap(APP_ICON)
-        self.height = 70
+        self.height = 125
         self.root.geometry(f"{initial_width}x{self.height}")
         self.root.resizable(True, False)  # resizable in width but not in height
 
+        self.action_description = action_description
         self.total_steps = total_steps
         self.current_step = 0
         self.step_info_label_xpadding = 15
         self.max_label_length = maximum_width
+        self.longest_label_length = 10
         self.avg_char_width = None
 
         self._init_gui()
 
     def _init_gui(self):
         """Initialize the GUI elements and layout."""
+        self.action_description_label = tk.Label(
+            self.root,
+            text=self.action_description,
+            font=("Helvetica", 20),
+            wraplength=99999999,
+            padx=self.step_info_label_xpadding,
+            pady=10,  # Use a single value for padding at the top
+        )
+        self.action_description_label.pack(fill="both", expand=True)
+
         self.step_info_label = tk.Label(
             self.root,
             text="",
             font=("Helvetica", 14),
             wraplength=99999999,
         )
-        self.step_info_label.pack(padx=self.step_info_label_xpadding, pady=(10, 0))
+        self.step_info_label.pack(fill="both", expand=True, padx=self.step_info_label_xpadding, pady=(10, 0))
 
         self.steps_remaining_label = tk.Label(self.root, text="")
         self.steps_remaining_label.pack(padx=10, pady=(0, 10))
@@ -57,7 +70,10 @@ class ProgressGUI:
 
     def _update_minimum_width(self):
         """Update the minimum width of the GUI window."""
-        minimum_width = int(self.max_label_length * 20)
+        if self.longest_label_length > self.max_label_length:
+            minimum_width = int(self.longest_label_length * self.avg_char_width)
+        else:
+            minimum_width = int(self.longest_label_length * 20)
         current_width = self.root.winfo_width()
 
         if current_width < minimum_width:
@@ -73,6 +89,10 @@ class ProgressGUI:
         """
         self.current_step += 1
 
+        # Update longest_step_info if the current step_information is longer
+        if len(step_information) > self.longest_label_length:
+            self.longest_label_length = len(step_information)
+
         # visually cutoff text longer than would fit in the gui by adding '...'
         available_width = self.root.winfo_width() - (self.step_info_label_xpadding * 2)
         max_chars = int(available_width / self.avg_char_width)
@@ -80,10 +100,12 @@ class ProgressGUI:
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
-        # print(f"len(step_information) = {len(step_information)}")
-        # print(f"max_chars = {max_chars}")
-        # print(f"available_width = {available_width}")
-        # print(f"displayed_text = {displayed_text}")
+        print(f"self.longest_step_info() = {self.longest_label_length}")
+        print(f"self.root.winfo_width() = {self.root.winfo_width()}")
+        print(f"len(step_information) = {len(step_information)}")
+        print(f"max_chars = {max_chars}")
+        print(f"available_width = {available_width}")
+        print(f"displayed_text = {displayed_text}")
 
         # update the gui
         self.step_info_label.config(text=displayed_text)
@@ -93,4 +115,5 @@ class ProgressGUI:
 
     def close(self):
         """Close the progress GUI window."""
+        result = show_message(f"Are you sure you want to stop {self.action_description.lower()}")
         self.root.destroy()
