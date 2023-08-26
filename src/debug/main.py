@@ -70,11 +70,11 @@ def debug_gui():
     "debug gui"
 
     # browser
-    debug_browser_gui()
+    # debug_browser_gui()
     # show_browser_gui()
 
     # start
-    # debug_start_gui()
+    debug_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

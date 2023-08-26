@@ -21,12 +21,7 @@ from game.game import Game
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
 
-from .constants import (
-    BACKUP_APPEND_STRING,
-    FILE_EXT_FOLDER_ICON,
-    FILE_EXT_IMAGES,
-    FILE_EXT_WARNING_ICON,
-)
+from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 
 def count_files_and_dirs(path):
@@ -60,22 +55,21 @@ def get_image_for_file_extension(input_path):
     file_extension = os.path.splitext(input_path)[1]
 
     if not file_extension:
-        print(f"Retrieved image for directory {input_path} {FILE_EXT_FOLDER_ICON}")
-        return FILE_EXT_FOLDER_ICON
+        return os.path.join(IMAGES_DIR_EXT, "folder.ico")
 
     # Define the file types and their corresponding icons
     file_types = {
-        ".txt": os.path.join(FILE_EXT_IMAGES, "text.ico"),
-        ".res": os.path.join(FILE_EXT_IMAGES, "resource.ico"),
-        ".cfg": os.path.join(FILE_EXT_IMAGES, "config.ico"),
-        ".jpg": os.path.join(FILE_EXT_IMAGES, "image.ico"),
-        ".png": os.path.join(FILE_EXT_IMAGES, "image.ico"),
-        ".vmt": os.path.join(FILE_EXT_IMAGES, "resource.ico"),
-        ".vtf": os.path.join(FILE_EXT_IMAGES, "image.ico"),
+        ".txt": os.path.join(IMAGES_DIR_EXT, "text.ico"),
+        ".res": os.path.join(IMAGES_DIR_EXT, "resource.ico"),
+        ".cfg": os.path.join(IMAGES_DIR_EXT, "config.ico"),
+        ".jpg": os.path.join(IMAGES_DIR_EXT, "image.ico"),
+        ".png": os.path.join(IMAGES_DIR_EXT, "image.ico"),
+        ".vmt": os.path.join(IMAGES_DIR_EXT, "resource.ico"),
+        ".vtf": os.path.join(IMAGES_DIR_EXT, "image.ico"),
     }
 
     # Get the corresponding image path or return "warning.png"
-    output_image_path = file_types.get(file_extension, FILE_EXT_WARNING_ICON)
+    output_image_path = file_types.get(file_extension, "warning.ico")
 
     print(f"Retrieved image for {input_path} -> {output_image_path}")
     return output_image_path

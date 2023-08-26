@@ -13,7 +13,7 @@ from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
-from utils.constants import APP_ICON, IMAGES_DIR
+from utils.constants import APP_ICON, IMAGES_DIR, IMAGES_DIR_32, IMAGES_DIR_128
 from utils.functions import copy_directory
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -44,15 +44,13 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.selected_hud_dir = ""
 
         # Create image buttons
-        self.edit_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "paintbrush.png")).subsample(2, 2)
-        self.open_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "arrow_redo.png")).subsample(2, 2)
-        self.export_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save_as.png")).subsample(2, 2)
-        self.remove_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "plus.png")).subsample(2, 2)
-        self.new_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "star.png")).subsample(2, 2)
-        self.settings_image = tk.PhotoImage(
-            file=os.path.join(IMAGES_DIR, "medium", "settings_hamburger.png")
-        ).subsample(2, 2)
+        self.edit_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "paintbrush.png")).subsample(2, 2)
+        self.open_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
+        self.export_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "save.png")).subsample(2, 2)
+        self.remove_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png")).subsample(2, 2)
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "plus.png")).subsample(2, 2)
+        self.new_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "star.png")).subsample(2, 2)
+        self.settings_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "settings_wrench.png")).subsample(2, 2)
 
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
@@ -175,7 +173,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.picture_canvas.config(width=right_panel_width + 45, height=right_panel_width + 45)
         self.picture_canvas.pack()
 
-        self.change_addon_image(os.path.join(IMAGES_DIR, "cross128.png"))
+        self.change_addon_image(os.path.join(IMAGES_DIR_128, "cross.png"))
 
         # Developer menu
         developer_menu_button = tk.Button(self.bottom_frame, text="Developer", justify="center")

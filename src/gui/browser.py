@@ -17,7 +17,7 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR
+from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR, IMAGES_DIR_32
 from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -122,12 +122,12 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
         # Create a context menu
-        self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "file.png")).subsample(2, 2)
-        self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "folder.png")).subsample(2, 2)
-        self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "trash.png")).subsample(2, 2)
-        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "description.png")).subsample(2, 2)
-        self.refresh_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
-        self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
+        self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "file.png")).subsample(2, 2)
+        self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
+        self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png")).subsample(2, 2)
+        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "open_2.png")).subsample(2, 2)
+        self.refresh_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "reload.png")).subsample(2, 2)
+        self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "pen.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
             label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.action_open_file

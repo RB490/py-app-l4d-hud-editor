@@ -9,19 +9,21 @@ from tkinter import Menu, PhotoImage
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
+from shared_utils.shared_utils import create_lambda_command
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
     IMAGES_DIR,
+    IMAGES_DIR_32,
+    IMAGES_DIR_MISC,
     MAP_CODES,
     PROJECT_ROOT,
     SNIPPETS_DIR,
     TUTORIALS_DIR,
 )
 from utils.persistent_data_manager import PersistentDataManager
-from shared_utils.shared_utils import create_lambda_command
 
 
 class EditorMenuClass:
@@ -41,7 +43,7 @@ class EditorMenuClass:
 
         self.hud = Hud()
 
-        self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "folder.png")).subsample(2, 2)
+        self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
 
     def open_file(self, path):
         """Open file"""
@@ -71,14 +73,14 @@ class EditorMenuClass:
             print("The directory path does not exist or is invalid.")
 
         self.map_menu_l4d1_icon = PhotoImage(
-            # file=os.path.join(IMAGES_DIR, "cross128.png")
-            file=os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")
+            # file=os.path.join(IMAGES_DIR, "png_128x128", "cross128.png")
+            file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_small_grayscale.png")
         ).subsample(1, 1)
         # self.map_menu_l4d2_icon = PhotoImage(
         #     file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
         # ).subsample(1, 1)
 
-        self.map_menu_l4d2_icon = PhotoImage(file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png"))
+        self.map_menu_l4d2_icon = PhotoImage(file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_2_small_grayscale.png"))
 
         # main menu
         self.game_map_menu.add_command(
@@ -684,6 +686,7 @@ class EditorMenuClass:
         self.root.config(menu=self.menu_bar)
 
     def get_developer_installer_menu(self, menu):
+        """Retrieve developer installer menu (for adding it to a context menu for example)"""
         self.create_developer_installer_menu(menu)
         return self.dev_install_menu
 

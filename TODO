@@ -9,11 +9,11 @@ Archive:
 ✔ Bug: Browser: Every file is reported as not a custom file @done(23-08-27 00:32)
 ✔ Bug: Browser: Double clicking anywhere registers, including the header! @done(23-08-27 00:42)
 ✔ Refactor: app-icons repo. delete unnecesary dimensions & all other things @done(23-08-27 01:14)
+✔ Refactor: IMAGES directory @done(23-08-27 01:50)
 
 Current:
 
 
-	☐ Refactor: IMAGES directory
 
 	☐ ☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
 

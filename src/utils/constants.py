@@ -22,18 +22,14 @@ MODS_DIR = os.path.join(ASSETS_DIR, "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
-
+# images
+IMAGES_DIR_EXT = os.path.join(IMAGES_DIR, "tree_file_extensions")
+IMAGES_DIR_128 = os.path.join(IMAGES_DIR, "png_128x128")
+IMAGES_DIR_32 = os.path.join(IMAGES_DIR, "png_32x32")
+IMAGES_DIR_MISC = os.path.join(IMAGES_DIR, "misc")
 # asset files
 APP_ICON = os.path.join(ASSETS_DIR, "app.ico")
 
-# images
-FILE_EXT_FOLDER_ICON = (
-    "D:\\Programming and projects\\py-app-l4d-hud-editor\\assets\\images\\file_extensions\\folder.ico"
-)
-FILE_EXT_WARNING_ICON = (
-    "D:\\Programming and projects\\py-app-l4d-hud-editor\\assets\\images\\file_extensions\\error.ico"
-)
-FILE_EXT_IMAGES = os.path.join(IMAGES_DIR, "file_extensions")
 
 # data
 SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")

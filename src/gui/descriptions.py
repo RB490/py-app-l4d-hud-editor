@@ -7,7 +7,7 @@ from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import APP_ICON, IMAGES_DIR
+from utils.constants import APP_ICON, IMAGES_DIR, IMAGES_DIR_32
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
@@ -29,9 +29,9 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # self.root.minsize(450, 400)
 
         # Create image buttons
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "plus.png"))
-        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "delete.png"))
-        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "saveas.png"))
+        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "plus.png"))
+        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png"))
+        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "save.png"))
 
         # define constants for padding and sizing
         pad_x = 10
