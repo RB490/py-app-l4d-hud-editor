@@ -46,7 +46,7 @@ class PersistentDataManager(metaclass=Singleton):
                 loaded_data = json.load(file)
                 data = {**self.default_data, **loaded_data}
         except Exception:
-            print("Resetting settings file")  # note: show_message right here causes an error when opening tkinter gui
+            print("Resetting settings file")  # show_message right here causes an error when opening tkinter gui
             data = self.__reset()
             self.save()
         return data

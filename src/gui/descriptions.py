@@ -106,7 +106,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         remove_file_entry_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=pad_x)
         remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
-    def on_close(self):
+    def __on_close(self):
         """On gui close"""
 
         # prompt to save unsaved changes
@@ -293,7 +293,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         browser = GuiHudBrowser()
         browser.treeview_refresh(browser.treeview)
 
-        self.on_close()
+        self.__on_close()
 
     def prompt_to_save_unsaved_changes(self):
         "Ask user whether to save unsaved changes"

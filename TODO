@@ -1,5 +1,7 @@
 Current:
-	☐ Bug: todo extension (once again?) looks through a bunch of folders it shouldnt
+	
+	
+	✔ Bug: The program is saving GUI position when it's coordinates couldn't be retrieved. Start but probably others // seems to happen when starting up the program? @done(23-08-27 22:33)
 
 	☐ Testing: Test the program by using it to edit HUD's
 	

@@ -250,8 +250,4 @@ class VDFModifierGUI(BaseGUI):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         
-        if self.is_hidden:
-            print(f"Not saving {self.root.title()} geometry because window is hidden!")
-            return
-        
         self.data_manager.set("VDFGuiGeometry", self.get_window_geometry())

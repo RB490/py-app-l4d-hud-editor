@@ -190,17 +190,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
 
-    def show(self):
-        # destroy other main gui to prevent tkinter issues
-        # from gui.start import GuiHudStart
-
-        # start_gui = GuiHudStart()
-        # start_gui.destroy()
-
-        self.root.deiconify()
-        self.is_hidden = False
-        self.root.mainloop()
-
     def dummy_handler(self):
         "Dummy method"
         print("dummy")
@@ -380,9 +369,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry())
 
-    def on_close(self):
+    def __on_close(self):
         """Runs on close"""
-        self.descriptions_gui.on_close()
+        self.descriptions_gui.__on_close()
         self.save_window_geometry()
         save_and_exit_script()
 
@@ -469,8 +458,12 @@ def show_browser_gui():
     from gui.start import GuiHudStart
 
     # destroy other main gui
-    start_gui = GuiHudStart()
-    start_gui.destroy()
+    try:
+        start_gui = GuiHudStart()
+        start_gui.destroy()
+    except Exception:
+        print("Couldn't destroy browser GUI. Probably already destroyed!")
+        pass
 
     browser_gui = GuiHudBrowser()
     browser_gui.show()

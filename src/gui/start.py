@@ -1,5 +1,5 @@
 """Module for the hud select gui class"""
-# pylint: disable=broad-exception-caught, import-outside-toplevel, arguments-differ
+# pylint: disable=broad-exception-caught, import-outside-toplevel, arguments-differ, broad-exception-raised
 import os
 import subprocess
 import tkinter as tk
@@ -231,17 +231,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Configure the root window with the menubar
         self.update_treeview()
 
-    def show(self):
-        # destroy other main gui to prevent tkinter issues
-        # from gui.browser import GuiHudBrowser
-        # browser_gui = GuiHudBrowser()
-        # browser_gui.destroy()
-
-        # self.create_widgets()
-        self.root.deiconify()
-        self.is_hidden = False
-        self.root.mainloop()
-
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
@@ -410,7 +399,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # hide gui
         self.hide()
-        self.save_window_geometry()
 
         # edit hud
         self.hud.edit.start_editing(self.selected_hud_dir)
@@ -421,8 +409,12 @@ def show_start_gui():
     from gui.browser import GuiHudBrowser
 
     # destroy other main gui
-    browser_gui = GuiHudBrowser()
-    browser_gui.destroy()
+    try:
+        browser_gui = GuiHudBrowser()
+        browser_gui.destroy()
+    except Exception:
+        print("Couldn't destroy browser GUI. Probably already destroyed!")
+        pass
 
     start_gui = GuiHudStart()
     start_gui.show()

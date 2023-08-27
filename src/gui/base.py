@@ -15,6 +15,7 @@ class BaseGUI:
         """
         self.is_hidden = None
         self.is_resizable = True
+        self.is_running = False
 
         if is_modal_dialog:
             # tkinter will create a root window and NOT hide it if this isn't done if creating Toplevel without one
@@ -26,16 +27,18 @@ class BaseGUI:
 
         self.root.title("BaseGUI")
         self.hide()
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.protocol("WM_DELETE_WINDOW", self.__on_close)
         self.root.minsize(300, 200)
 
     def hide(self):
         """Hide the window."""
+        self.__call_save_window_geometry()
         self.root.withdraw()
         self.is_hidden = True
 
     def minimize(self):
         """Minimize the window (iconify)."""
+        self.__call_save_window_geometry()
         self.root.iconify()
 
     def show(self, hidden=False):
@@ -44,10 +47,12 @@ class BaseGUI:
         self.is_hidden = False
         if hidden:
             self.hide()
+        self.is_running = True
         self.root.mainloop()
 
     def destroy(self):
         """Destroy the window."""
+        self.__call_save_window_geometry()
         self.root.update()  # fixes can't invoke "event" command: application has been destroyed error
         self.root.destroy()
 
@@ -59,7 +64,7 @@ class BaseGUI:
             transparency (float): The transparency value (0.0 to 1.0).
         """
         self.root.attributes("-alpha", transparency)
-        print(f"{self.root.title()} Transparency set to {transparency}")
+        print(f"{self.root.title()} GUI Transparency set to {transparency}")
 
     def set_decorations(self, show_decorations):
         """
@@ -71,9 +76,9 @@ class BaseGUI:
         self.root.overrideredirect(not show_decorations)
         if show_decorations:
             self.root.attributes("-fullscreen", False)
-            print(f"{self.root.title()} Window decorations are now visible.")
+            print(f"{self.root.title()} GUI Window decorations are now visible.")
         else:
-            print(f"{self.root.title()} Window decorations are now hidden.")
+            print(f"{self.root.title()} GUI Window decorations are now hidden.")
 
     def set_window_geometry(self, geometry):
         """
@@ -84,19 +89,20 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
-            print(f"Set {self.root.title()} to '{geometry}'!")
+            print(f"Set {self.root.title()} GUI to '{geometry}'!")
         except Exception:
-            print(f"Set {self.root.title()} to default '1000x1000+100+100'!")
+            print(f"Set {self.root.title()} GUI to default '1000x1000+100+100'!")
             self.root.geometry("1000x1000+100+100")
 
     def get_window_geometry(self):
         """Get window geometry if GUI is loaded and visible"""
-        if self.root and self.root.winfo_viewable():
+
+        if self.is_running:
             geometry = self.root.geometry()
-            print(f"{self.root.title()} geometry: {geometry}")
+            print(f"{self.root.title()} GUI geometry: {geometry}")
             return geometry
         else:
-            print("GUI is not loaded or visible. Returning default geometry.")
+            print(f"{self.root.title()} GUI is running. Returning default geometry.")
             return "1000x1000+100+100"
 
     def set_always_on_top(self, status):
@@ -142,11 +148,24 @@ class BaseGUI:
         """
         self.root.unbind(key_combination)
 
-    def on_close(self):
+    def __call_save_window_geometry(self):
+        try:
+            if self.is_running:
+                if hasattr(self, "save_window_geometry") and callable(getattr(self, "save_window_geometry")):
+                    self.save_window_geometry()
+                else:
+                    print(f"GUI {self.root.title()} GUI does not have a save_window_geometry method to call!")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def __on_close(self):
         """Callback function before the window is closed."""
         # pylint: disable=no-member
-        try:
-            self.save_window_geometry()
-        except Exception:
-            print(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
+        self.__call_save_window_geometry()
         self.hide()
+
+        # call the on_close method of the child gui
+        if hasattr(self, "on_close") and callable(getattr(self, "on_close")):
+            self.on_close()
+        else:
+            print(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")

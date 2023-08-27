@@ -51,7 +51,7 @@ class HudEditor:
             return False
 
         # prompt to start game during debug mode
-        if DEBUG_MODE:
+        if DEBUG_MODE and not self.game.window.is_running():
             result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
             if not result:
                 show_start_gui()
