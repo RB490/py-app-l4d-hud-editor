@@ -1019,8 +1019,7 @@ class EditorMenuClass:
     def get_developer_installer_menu(self, menu):
         """Retrieve developer installer menu (for adding it to a context menu for example)"""
         self.create_developer_installer_menu(menu)
-        if not is_context_menu:
-            return self.dev_install_menu
+        return self.dev_install_menu
 
     def create_and_refresh_menu(self, is_context_menu=False):
         """
