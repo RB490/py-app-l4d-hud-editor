@@ -3,7 +3,7 @@
 import os
 import tkinter as tk
 from datetime import datetime
-from tkinter import PhotoImage, ttk
+from tkinter import ttk
 
 import keyboard
 import send2trash
@@ -17,13 +17,7 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import (
-    APP_ICON,
-    HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR,
-    IMAGES_DIR_32,
-    ImageConstants,
-)
+from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR, ImageConstants
 from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -291,6 +285,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             if os.path.isfile(self.selected_full_path):
                 os.startfile(self.selected_full_path)
 
+    # pylint: disable=unused-argument
     def tree_set_selected_item(self, event):
         """Get select item from treeview"""
         selected_item = self.treeview.selection()

@@ -7,7 +7,7 @@ Archive:
 Current:
 	
 	✔ Bug: VDF gui doesn't load. atleast for hudlayout.res @done(23-08-27 14:21)
-	☐ Bug: VDF GUI always defaulting geometry when loaded through browser
+	✔ Bug: VDF GUI always defaulting geometry when loaded through browser @done(23-08-27 14:29)
 
 	☐ Menu: @icons  Add icons
 	☐ Menu: @icons  Test: Do toggleable menu options support icons in any way or state?

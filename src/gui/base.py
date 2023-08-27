@@ -55,16 +55,16 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
-            print(f"Set {self.root.title} to '{geometry}'!")
+            print(f"Set {self.root.title()} to '{geometry}'!")
         except Exception:
-            print(f"Set {self.root.title} to default '1000x1000+100+100'!")
+            print(f"Set {self.root.title()} to default '1000x1000+100+100'!")
             self.root.geometry("1000x1000+100+100")
 
     def get_window_geometry(self):
         """Get window geometry if GUI is loaded and visible"""
         if self.root and self.root.winfo_viewable():
             geometry = self.root.geometry()
-            print(f"{self.root.title} geometry: {geometry}")
+            print(f"{self.root.title()} geometry: {geometry}")
             return geometry
         else:
             print("GUI is not loaded or visible. Returning default geometry.")
@@ -118,7 +118,6 @@ class BaseGUI:
         # pylint: disable=no-member
         try:
             self.save_window_geometry()
-        except:
-            print(f"GUI {self.root.title} does not have a save_window_geometry method to call!")
-            pass
+        except Exception:
+            print(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
         self.hide()

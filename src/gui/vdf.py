@@ -1,12 +1,11 @@
 """GUI Class for modifying VDF files."""
 # pylint: disable=broad-exception-caught
-import os
 import tkinter as tk
 from tkinter import scrolledtext
 
 from gui.base import BaseGUI
 from shared_utils.shared_utils import show_message
-from utils.constants import APP_ICON, IMAGES_DIR, ImageConstants
+from utils.constants import APP_ICON, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vdf import VDFModifier
 
@@ -250,4 +249,9 @@ class VDFModifierGUI(BaseGUI):
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
+        
+        if self.is_hidden:
+            print(f"Not saving {self.root.title()} geometry because window is hidden!")
+            return
+        
         self.data_manager.set("VDFGuiGeometry", self.get_window_geometry())
