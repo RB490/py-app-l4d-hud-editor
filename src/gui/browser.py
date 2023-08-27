@@ -252,7 +252,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def treeview_set_selected_full_path(self):
         """Retrieve selected treeview row path"""
         relative_path = self.treeview_get_selected_relative_path()
-        full_path = os.path.join(self.hud.edit.__get_dir(), relative_path)
+        full_path = os.path.join(self.hud.edit.get_dir(), relative_path)
         self.selected_full_path = full_path if full_path else "No item selected"
 
     def treeview_get_selected_relative_path(self):
@@ -288,7 +288,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             # item_values = self.treeview.item(item)["values"]
             # print(item_values)
             rel_path = self.treeview.item(item)["values"][4]
-            self.selected_full_path = os.path.join(self.hud.edit.__get_dir(), rel_path)
+            self.selected_full_path = os.path.join(self.hud.edit.get_dir(), rel_path)
             print(f"Selected full path: {self.selected_full_path}")
 
     def treeview_refresh(self, treeview, search_term=None):
@@ -303,7 +303,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             None
         """
         # Get HUD directory and display choice
-        hud_dir = self.hud.edit.__get_dir()
+        hud_dir = self.hud.edit.get_dir()
         display_choice = self.display_choice.get().lower()
 
         # Retrieve data based on display choice

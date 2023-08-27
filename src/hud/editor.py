@@ -71,7 +71,7 @@ class HudEditor:
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.__get_dir()):
+        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.get_dir()):
             show_start_gui()
             return False
 
@@ -90,7 +90,7 @@ class HudEditor:
 
         # sync the hud to the game folder
         self.syncer.sync(
-            self.__get_dir(),
+            self.get_dir(),
             self.game.dir.get(DirectoryMode.DEVELOPER),
             os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
         )
@@ -133,7 +133,7 @@ class HudEditor:
             keyboard.remove_hotkey(self.sync)
 
         # clear variables
-        self.__set_hud_info(None)
+        self.__clear_hud_info()
 
         # enable user mode
         self.game.dir.set(DirectoryMode.DEVELOPER)
@@ -145,7 +145,7 @@ class HudEditor:
     def sync(self):
         """Sync hud"""
 
-        hud_dir = self.__get_dir()
+        hud_dir = self.get_dir()
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
 
@@ -173,26 +173,31 @@ class HudEditor:
 
     def is_synced(self):
         "Verify if hud is loaded"
-        if self.__get_dir():
+        if self.get_dir():
             return True
         else:
             return False
 
     def __set_hud_info(self, directory):
         """Get information"""
-        if not os.path.isdir(directory):
-            print(f"Could not set HUD directory to edit because it does not exist: {directory}")
+        self.hud_dir = directory
+        result = self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
+        if result:
+            return True
+        else:
             return False
 
-        self.hud_dir = directory
-        self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
+    def __clear_hud_info(self, directory):
+        """Get information"""
+        self.hud_dir = None
+        self.hud_name = None
         return True
 
     def get_name(self):
         """Get information"""
         return self.hud_name
 
-    def __get_dir(self):
+    def get_dir(self):
         """Get information"""
         return self.hud_dir
 
@@ -205,11 +210,11 @@ class HudEditor:
         # pylint: disable=unused-variable
 
         # verify variables
-        if not self.__get_dir() or not os.path.exists(self.__get_dir()):
-            print(f"Could not retrieve files dictionary. Directory does not exist: {self.__get_dir()}")
+        if not self.get_dir() or not os.path.exists(self.get_dir()):
+            print(f"Could not retrieve files dictionary. Directory does not exist: {self.get_dir()}")
             return None
 
-        root_folder = self.__get_dir()
+        root_folder = self.get_dir()
         files_dict = {}
         for dirpath, dirnames, filenames in os.walk(root_folder):
             for filename in filenames:
@@ -222,7 +227,7 @@ class HudEditor:
     def save_as_folder(self):
         """Save hud as folder"""
 
-        source_dir = self.__get_dir()
+        source_dir = self.get_dir()
 
         # Validate source directory
         if not os.path.isdir(source_dir):
@@ -259,7 +264,7 @@ class HudEditor:
         """Save hud as vpk file"""
 
         # verify directory
-        if not os.path.isdir(self.__get_dir()):
+        if not os.path.isdir(self.get_dir()):
             raise AssertionError("Directory does not exist.")
 
         # Prompt the user to select a file location to save the VPK file
@@ -272,7 +277,7 @@ class HudEditor:
             # You can use the chosen file_path variable to save the file
 
             vpk_file_class = VPKClass()
-            vpk_file_class.create(self.__get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
+            vpk_file_class.create(self.get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
 
             print(f"VPK file saved at: {file_path}")
         else:

@@ -3,6 +3,12 @@
 
 Current:
 
+	☐ Bug: Start editing -> Hotkey for showing editor menu isn't working
+	☐ Bug: Start editing -> sHotkey for showing browsers
+	- ^ because the program closed?
+
+	☐ Bug: Start eiditing -> Close game -> editor.__set_hud_info() error: NoneType
+
 	☐ Testing: Test the program by using it to edit HUD's
 	
 	☐ Testing: Get the AHK version working and check it out to confirm feature parity
