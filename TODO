@@ -1,23 +1,11 @@
 Archive:
-	✔ Feature: Fixed weird little gui from showing up when creating BaseGUI tktoplevel without a gui opened already @done(23-08-27 20:35)
-	✔ Feature: Made HudDescriptions gui a singleton @done(23-08-27 20:37)
-	✔ Feature: Add hotkey for contexte menu popup gui to help menu @done(23-08-27 20:54)
-	✔ Feature: Create hotkey for showing the context menu @done(23-08-27 20:54)
-	✘ Feature: Browser: Status bar showing 'custom' & 'added-to-hud' status? @cancelled(23-08-27 21:03)
 
 Current:
 
 
 Additional Ideas and Considerations:
-	☐ Idea: Use threading GUI during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
-	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
-		- doesn't happen when showing start (so destroying browser)
-		- doesn't happen when delayed by input()
-		- not even an issue
-		- could maybe separate creating widgets from init, and creat them when showing (only once)
-	☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
-		☐ Bing says PYTHONPATH or making a package. so i can include it like any other package?
-		☐ Added D:\Programming and projects\python-files\shared_modules . just needs a restart
+	☐ Idea: Use threading (GUI) during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
+
 	☐ Refactor: too-many-lines in menu.py
 
 

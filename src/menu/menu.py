@@ -11,7 +11,6 @@ from game.game import Game
 from menu.handler import EditorMenuHandler
 from shared_utils.shared_utils import create_lambda_command
 from utils.constants import (
-    BIG_CROSS_ICON,
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
     HOTKEY_EDITOR_MENU,
@@ -206,7 +205,7 @@ class EditorMenuClass:
                 label=res,
                 image=self.img.monitor_black_tool,
                 compound="left",
-                command=lambda r=res: self.handler.editor_menu_game_resolution(r),
+                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
 
         res_16_9_list = [
@@ -224,7 +223,7 @@ class EditorMenuClass:
                 label=res,
                 image=self.img.monitor_black_tool,
                 compound="left",
-                command=lambda r=res: self.handler.editor_menu_game_resolution(r),
+                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
 
         res_16_10_list = [
@@ -244,7 +243,7 @@ class EditorMenuClass:
                 label=res,
                 image=self.img.monitor_black_tool,
                 compound="left",
-                command=lambda r=res: self.handler.editor_menu_game_resolution(r),
+                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
 
         self.game_res_menu.add_cascade(
@@ -268,7 +267,7 @@ class EditorMenuClass:
                 variable=self.game_pos_vars[pos],
                 onvalue=True,
                 offvalue=False,
-                command=lambda pos=pos: self.handler.editor_menu_game_pos(pos),
+                command=create_lambda_command(self.handler.editor_menu_game_pos, pos),
                 image=self.img.two_opposite_diagonal_arrows_in_black_square,
                 compound="left",
             )
@@ -288,7 +287,7 @@ class EditorMenuClass:
                 variable=self.game_mode_vars[game_mode],
                 onvalue=True,
                 offvalue=False,
-                command=lambda mode=game_mode: self.handler.editor_menu_game_mode(mode),
+                command=create_lambda_command(self.handler.editor_menu_game_mode, game_mode),
                 image=self.img.switch_black_solid_symbol,
                 compound="left",
             )
@@ -562,12 +561,12 @@ class EditorMenuClass:
                         label=display_name,
                         image=selected_image,  # Use the selected image for all items
                         compound="left",  # Set the image on the left side
-                        command=lambda v=vote_command: self.handler.editor_menu_execute_game_command(v),
+                        command=create_lambda_command(self.handler.editor_menu_execute_game_command, vote_command),
                     )
                 else:
                     remove_temp_hud_menu.add_command(
                         label=display_name,
-                        command=lambda v=vote_command: self.handler.editor_menu_execute_game_command(v),
+                        command=create_lambda_command(self.handler.editor_menu_execute_game_command, vote_command),
                     )
 
     def create_show_panel_menu(self, menubar):
@@ -690,7 +689,7 @@ class EditorMenuClass:
             for character, value in options.items():
                 self.switch_menu.add_cascade(
                     label=character,
-                    command=lambda v=value: self.handler.editor_menu_execute_game_command(v),
+                    command=create_lambda_command(self.handler.editor_menu_execute_game_command, value),
                     image=self.img.switch_black_solid_symbol,  # Set the selected image for the cascade label
                     compound="left",  # Set the image on the left side
                 )
@@ -934,7 +933,8 @@ class EditorMenuClass:
         self.give_items_menu = tk.Menu(menubar, tearoff=False)
         for label, action in give_items_dict.items():
             self.give_items_menu.add_command(
-                label=label, command=lambda action=action: self.handler.editor_give_items(action)
+                label=label,
+                command=create_lambda_command(self.handler.editor_give_items, action),
             )
 
     def create_developer_installer_menu(self, menubar):

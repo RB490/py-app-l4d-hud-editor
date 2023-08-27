@@ -1,5 +1,5 @@
 """Module for the hud select gui class"""
-# pylint: disable=broad-exception-caught, import-outside-toplevel
+# pylint: disable=broad-exception-caught, import-outside-toplevel, arguments-differ
 import os
 import subprocess
 import tkinter as tk
