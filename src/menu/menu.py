@@ -11,6 +11,7 @@ from game.game import Game
 from menu.handler import EditorMenuHandler
 from shared_utils.shared_utils import create_lambda_command
 from utils.constants import (
+    BIG_CROSS_ICON,
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
     HOTKEY_EDITOR_MENU,
@@ -73,7 +74,7 @@ class EditorMenuClass:
             print("The directory path does not exist or is invalid.")
 
         self.map_menu_l4d1_icon = PhotoImage(
-            # file=os.path.join(IMAGES_DIR, "png_128x128", "cross128.png")
+            # file=BIG_CROSS_ICON
             file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_small_grayscale.png")
         ).subsample(1, 1)
         # self.map_menu_l4d2_icon = PhotoImage(

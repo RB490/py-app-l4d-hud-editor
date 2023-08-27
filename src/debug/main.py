@@ -6,7 +6,7 @@ import os
 import sys
 
 from debug.game import debug_game_class
-from debug.gui import debug_popup_gui
+from debug.gui import debug_browser_gui, debug_popup_gui
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
@@ -67,10 +67,10 @@ def debug_gui():
     "debug gui"
 
     # popup
-    debug_popup_gui()
+    # debug_popup_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # show_browser_gui()
 
     # start

@@ -17,7 +17,13 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR, ImageConstants
+from utils.constants import (
+    APP_ICON,
+    BIG_CROSS_ICON,
+    HOTKEY_TOGGLE_BROWSER,
+    IMAGES_DIR,
+    ImageConstants,
+)
 from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -105,7 +111,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
         self.treeview.column("#0", width=40, minwidth=40, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
-        self.treeview.column("description", width=50)
+        self.treeview.column("description", width=70)
         self.treeview.column("custom", width=25, stretch=False)
         self.treeview.column("modified", width=140, stretch=False)
         self.treeview.column("path", width=50)
@@ -333,7 +339,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
             # Calculate last modified timestamp and image path
             last_modified = "not_added"
-            image_path = os.path.join(IMAGES_DIR, "cross128.png")
+            image_path = BIG_CROSS_ICON
             if os.path.isfile(file_path):
                 timestamp = os.path.getmtime(file_path)
                 last_modified = datetime.fromtimestamp(timestamp).strftime("%Y.%m.%d @ %H:%M:%S")

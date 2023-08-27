@@ -23,13 +23,18 @@ MODS_DIR = os.path.join(ASSETS_DIR, "mods")
 MISC_DIR = os.path.join(ASSETS_DIR, "misc")
 TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
 IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
-# images
+
+# image_dirs
 IMAGES_DIR_EXT = os.path.join(IMAGES_DIR, "tree_file_extensions")
 IMAGES_DIR_128 = os.path.join(IMAGES_DIR, "png_128x128")
 IMAGES_DIR_32 = os.path.join(IMAGES_DIR, "png_32x32")
 IMAGES_DIR_MISC = os.path.join(IMAGES_DIR, "misc")
+
 # asset files
 APP_ICON = os.path.join(ASSETS_DIR, "app.ico")
+
+# image files
+BIG_CROSS_ICON = os.path.join(IMAGES_DIR, "png_128x128", "cross.png")
 
 
 # data

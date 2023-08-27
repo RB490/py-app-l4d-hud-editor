@@ -1,10 +1,9 @@
 Archive:
 	✔ Feature: Fixed weird little gui from showing up when creating BaseGUI tktoplevel without a gui opened already @done(23-08-27 20:35)
 	✔ Feature: Made HudDescriptions gui a singleton @done(23-08-27 20:37)
-
 	✔ Feature: Add hotkey for contexte menu popup gui to help menu @done(23-08-27 20:54)
 	✔ Feature: Create hotkey for showing the context menu @done(23-08-27 20:54)
-	☐ Feature: Browser: Status bar showing 'custom' & 'added-to-hud' status?
+	✘ Feature: Browser: Status bar showing 'custom' & 'added-to-hud' status? @cancelled(23-08-27 21:03)
 
 Current:
 
