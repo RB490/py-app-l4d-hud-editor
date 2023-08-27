@@ -25,7 +25,7 @@
         591
     ],
     "reload_mouse_clicks_enabled": false,
-    "reload_reopen_menu_on_reload": false,
+    "reload_reopen_menu_on_reload": true,
     "steam_root_dir": "E:/games/steam",
     "stored_huds": [
         "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"

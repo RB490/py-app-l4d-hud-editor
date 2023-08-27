@@ -116,5 +116,9 @@ class BaseGUI:
     def on_close(self):
         """Callback function before the window is closed."""
         # pylint: disable=no-member
-        self.save_window_geometry()
+        try:
+            self.save_window_geometry()
+        except:
+            print(f"GUI {self.root.title} does not have a save_window_geometry method to call!")
+            pass
         self.hide()

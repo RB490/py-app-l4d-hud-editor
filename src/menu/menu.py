@@ -438,6 +438,7 @@ class EditorMenuClass:
 
         show_panel_dict = {
             "general": {
+                "None": "None",
                 "Sacrifice Failed": "info_window",
                 "Tab Scoreboard": "scores",
                 "Spectating Hud": "Specgui",
@@ -616,7 +617,6 @@ class EditorMenuClass:
         # label_coord_2 = "Coord 2" + str(self.data_manager.get("reload_mouse_clicks_coord_2"))
         coords_1 = self.data_manager.get("reload_mouse_clicks_coord_1")
         label_coord_1 = f"Coord 1 - X: {coords_1[0]}, Y: {coords_1[1]}"
-
         coords_2 = self.data_manager.get("reload_mouse_clicks_coord_2")
         label_coord_2 = f"Coord 2 - X: {coords_2[0]}, Y: {coords_2[1]}"
         self.reload_mode_menu.add_command(label=label_coord_1, command=self.handler.editor_menu_reload_click_coord1)
