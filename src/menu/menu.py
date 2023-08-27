@@ -1019,11 +1019,13 @@ class EditorMenuClass:
     def get_developer_installer_menu(self, menu):
         """Retrieve developer installer menu (for adding it to a context menu for example)"""
         self.create_developer_installer_menu(menu)
-        return self.dev_install_menu
+        if not is_context_menu:
+            return self.dev_install_menu
 
-    def create_and_refresh_menu(self):
+    def create_and_refresh_menu(self, is_context_menu=False):
         """
         Creates the menu bar for the application
+        if not is_context_menu:
         """
         self.data_manager.save()
 
@@ -1089,6 +1091,9 @@ class EditorMenuClass:
             image=self.img.flag_black_cutted_shape,
             compound="left",
             command=self.handler.editor_open_start_gui,
+        )
+        self.file_menu.add_cascade(
+            label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
         )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
@@ -1223,15 +1228,39 @@ class EditorMenuClass:
         #       Parent menu
         # ----------------------------------
 
-        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
-        self.menu_bar.add_cascade(label="Hud", menu=self.hud_menu)
-        self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
-        self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
-        self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
-        self.menu_bar.add_cascade(label="Installer", menu=self.dev_install_menu)
-        # self.menu_bar.add_command(label="Close", command=self.do_nothing) # useful when displaying menu as popup
+        if not is_context_menu:
+            self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+            self.menu_bar.add_cascade(label="Hud", menu=self.hud_menu)
+            self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
+            self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
+            self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
+            self.menu_bar.add_command(label="Close", command=self.do_nothing)  # useful when displaying menu as popup
+        else:
+            self.menu_bar.add_cascade(
+                label="File", image=self.img.file_black_rounded_symbol_1, compound="left", menu=self.file_menu
+            )
+            self.menu_bar.add_cascade(
+                label="Hud",
+                image=self.img.paintbrush_design_tool_interface_symbol,
+                compound="left",
+                menu=self.hud_menu,
+            )
+            self.menu_bar.add_cascade(
+                label="Mode",
+                image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+                compound="left",
+                menu=self.reload_mode_menu,
+            )
+            self.menu_bar.add_cascade(label="Game", image=self.img.game_alt, compound="left", menu=self.game_menu)
+            self.menu_bar.add_cascade(
+                label="Debug", image=self.img.hot_or_burn_interface_symbol, compound="left", menu=self.debug_menu
+            )
+            self.menu_bar.add_command(
+                label="Close", image=self.img.cross, compound="left", command=self.do_nothing
+            )  # useful when displaying menu as popup
 
         if not self.hud.edit.get_dir():
             self.menu_bar.entryconfig("Hud", state="disabled")
 
-        self.root.config(menu=self.menu_bar)
+        if not is_context_menu:
+            self.root.config(menu=self.menu_bar)

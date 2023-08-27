@@ -6,18 +6,12 @@ import os
 import sys
 
 from debug.game import debug_game_class
-from debug.gui import (
-    debug_browser_gui,
-    debug_descriptions_gui,
-    debug_get_user_input,
-    debug_progress_gui,
-    debug_start_gui,
-    debug_vdf_gui,
-)
+from debug.gui import debug_popup_gui
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser, show_browser_gui
+from gui.popup import GuiEditorMenuPopupContextmenu
 from gui.start import GuiHudStart, show_start_gui
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import ImageConstants
@@ -73,8 +67,11 @@ def debug_main():
 def debug_gui():
     "debug gui"
 
+    # popup
+    debug_popup_gui()
+
     # browser
-    debug_browser_gui()
+    # debug_browser_gui()
     # show_browser_gui()
 
     # start
@@ -88,9 +85,7 @@ def debug_gui():
     # debug_descriptions_gui()
 
     # editor menu gui
-    # my_editor_menu_gui = GuiEditorMenuPopupContextmenu()
-    # my_editor_menu_gui.show()
-    # my_editor_menu_gui.show()
+    # debug_gui_editor_menu()
 
     # user input (used to retrieve game command)
     # debug_get_user_input()

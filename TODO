@@ -1,28 +1,12 @@
 Archive:
+	☐ Feature: Create hotkey for showing the context menu. Add it to help menu, too
+	☐ Feature: Browser: Status bar showing 'custom' & 'added-to-hud' status?
 
 Current:
 
 
 Additional Ideas and Considerations:
-	
-	☐ Multi-game support: Explore multi-game support feasibility
-	☐ Command line: Evaluate potential of using command line interface instead of GUI
-	☐ Pull some workshop map off of steam to use for L4D2. And possibly a map for L4D1
 	☐ Idea: Use threading GUI during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
-	☐ Browser: Status bar showing 'custom' & 'added-to-hud' status?
-	☐ Browser: Treeview context menu toggle entries based on availablility? eg. default item might not be available self.menu_bar.entryconfig("Hud", state="disabled")
-	☐ Idea: Already tried this for an hour. But a way to retrieve the OS's default icon for a file path to be used in the treeview
-	☐ Bug: Currently the game gets bound to the python process, and also closes if the script closes @impossible? (note that outside of debugging this more or less isn't an issue, or maybe even a feature)
-		- Seemingly impossible although apparently it is possible: Run a process detached from python
-		- Note: Running the game before starting the editor works fine.
-			- so could use a script to launch it and then the editor
-		- I was able to get it to work with notepad.exe using subprocess start /B notepad.exe,
-		- however that didn't work for the game or steam
-		- this is legitimately around 2 hours of trail and error: python_process_decouple_testing.py
-	☐ Bug: During extracting pak01's the gui freezes up. didn't i find and apply a fix for this elsewhere in the code? or a different project (seems unlikely)?
-		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
-		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
-	☐ Feature: Can i find a way to show a context menu which closes then losing focus using python? Can try to get Tkinter to work & maybe other frameworks
 	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
 		- doesn't happen when showing start (so destroying browser)
 		- doesn't happen when delayed by input()
@@ -40,6 +24,10 @@ Unit Testing:
 	☐ Unit test: ID File Handler
 
 Post:
+	☐ Multi-game support: Explore multi-game support feasibility
+	☐ Command line: Evaluate potential of using command line interface instead of GUI
+
+
 	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
 	☐ Post: Enable type checking? "python.analysis.typeCheckingMode": "off"
 	☐ Post: Use types for variables and params and such? "python.analysis.typeCheckingMode": "off"

@@ -8,6 +8,7 @@ import time
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
 from gui.browser import GuiHudBrowser
+from gui.popup import GuiEditorMenuPopupContextmenu
 from gui.progress import ProgressGUI
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
@@ -25,6 +26,12 @@ def debug_browser_gui():
     browser.show()
 
     return
+
+def debug_popup_gui():
+    """Debug gui class"""
+    # pylint: disable=unused-variable
+    app = GuiEditorMenuPopupContextmenu()
+    app.show(hidden=True)
 
 
 def debug_get_user_input():

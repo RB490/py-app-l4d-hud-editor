@@ -36,15 +36,41 @@ class BaseGUI:
         """Minimize the window (iconify)."""
         self.root.iconify()
 
-    def show(self):
+    def show(self, hidden=False):
         """Show the window."""
         self.root.deiconify()
         self.is_hidden = False
+        if hidden:
+            self.hide()
         self.root.mainloop()
 
     def destroy(self):
         """Destroy the window."""
         self.root.destroy()
+
+    def set_transparency(self, transparency):
+        """
+        Set the window transparency.
+
+        Args:
+            transparency (float): The transparency value (0.0 to 1.0).
+        """
+        self.root.attributes("-alpha", transparency)
+        print(f"{self.root.title()} Transparency set to {transparency}")
+
+    def set_decorations(self, show_decorations):
+        """
+        Set window decorations on or off.
+
+        Args:
+            show_decorations (bool): True to show decorations, False to hide.
+        """
+        self.root.overrideredirect(not show_decorations)
+        if show_decorations:
+            self.root.attributes("-fullscreen", False)
+            print(f"{self.root.title()} Window decorations are now visible.")
+        else:
+            print(f"{self.root.title()} Window decorations are now hidden.")
 
     def set_window_geometry(self, geometry):
         """
