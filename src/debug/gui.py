@@ -55,17 +55,19 @@ def debug_progress_gui():
 
     # total_steps = len(installation_steps)
     total_steps = 150000
-    gui = ProgressGUI("Debugging", 600, 60, total_steps)  # Create the GUI instance
+    gui = ProgressGUI("Debugging", 250, 60, total_steps)  # Create the GUI instance
 
     # gui.update_progress("asdf asdf asdf asdf ")
     # gui.update_progress("asdf asdf asdf asdf ")
 
     for step in range(total_steps):
-        random_length = random.randint(1, 10)
+        random_length = random.randint(1, 3)
+        # random_length = random.randint(1, 10)
         # random_length = random.randint(1, 100)
         # random_length = random.randint(1, 500)
         random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
-        gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
+        # gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
+        gui.update_progress(f"{random_string*10}")
         # time.sleep(0.4)
         # time.sleep(2)
 

@@ -64,7 +64,7 @@ def debug_main():
     # result = hud.edit.get_files_dict()
 
     # save_data()
-    print(f"result={result}")
+    # print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 
@@ -94,4 +94,4 @@ def debug_gui():
     # debug_get_user_input()
 
     # installer
-    # debug_progress_gui()
+    debug_progress_gui()
