@@ -471,11 +471,19 @@ class EditorMenuClass:
         }
 
         # Create general menu and add common options
+        self.show_panel_menu_selected_var = tk.BooleanVar()
         self.show_panel_menu = tk.Menu(menubar, tearoff=0)
         for key, value in show_panel_dict["general"].items():
-            self.show_panel_menu.add_command(
-                label=key, command=create_lambda_command(self.handler.editor_menu_show_panel, value)
-            )
+            command = create_lambda_command(self.handler.editor_menu_show_panel, value)
+
+            print(value)
+            if value == self.game.command.show_ui_panel:
+                print("found value!!!!!!!!!!!!!!!")
+                self.show_panel_menu.add_checkbutton(
+                    label=key, command=command, variable=self.show_panel_menu_selected_var
+                )
+            else:
+                self.show_panel_menu.add_command(label=key, command=command)
 
         # Check GAME_VERSION to determine which L4D-specific options to add
         if self.game.get_version() == "L4D1":
@@ -487,9 +495,15 @@ class EditorMenuClass:
 
         # Add L4D-specific options to general menu
         for key, value in show_panel_game_version_data.items():
-            self.show_panel_menu.add_command(
-                label=key, command=create_lambda_command(self.handler.editor_menu_show_panel, value)
-            )
+            command = create_lambda_command(self.handler.editor_menu_show_panel, value)
+            if value == self.game.command.show_ui_panel:
+                self.show_panel_menu.add_checkbutton(
+                    label=key, command=command, variable=self.show_panel_menu_selected_var
+                )
+            else:
+                self.show_panel_menu.add_command(label=key, command=command)
+
+        self.show_panel_menu_selected_var.set(1)
 
     def create_switch_team_menu(self, menubar):
         """Create switch team menu"""

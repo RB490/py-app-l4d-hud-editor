@@ -6,7 +6,7 @@ Archive:
 	☐ Editor menu: Add all start GUI functionality. We're almost there already.
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 
-	☐ Bug: editor menu -> show panel doesn't seem to take selected panel into account at all? doesnt toggle anything
+	✔ Bug: editor menu -> show panel doesn't seem to take selected panel into account at all? doesnt toggle anything @done(23-08-27 12:22)
 	✔ Feature: editor menu -> Show set coords in the menu @done(23-08-27 11:55)
 
 Current:
