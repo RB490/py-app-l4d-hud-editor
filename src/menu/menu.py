@@ -16,7 +16,6 @@ from utils.constants import (
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
     IMAGES_DIR,
-    IMAGES_DIR_32,
     IMAGES_DIR_MISC,
     MAP_CODES,
     PROJECT_ROOT,
@@ -682,14 +681,14 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="User",
-            image=self.img.folder,  # Using the image from ImageConstants
+            image=self.img.folder_black_interface_symbol,  # Using the image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_user_dir,
         )
 
         self.dev_install_menu.add_command(
             label="Dev",
-            image=self.img.folder,  # Replace with the appropriate image from ImageConstants
+            image=self.img.folder_black_interface_symbol,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_dev_dir,
         )
@@ -698,14 +697,14 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Enable",
-            image=self.img.plus,  # Replace with the appropriate image from ImageConstants
+            image=self.img.addition_sign,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_enable,
         )
 
         self.dev_install_menu.add_command(
             label="Disable",
-            image=self.img.minus,  # Replace with the appropriate image from ImageConstants
+            image=self.img.minus_big_symbol,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_disable,
         )
@@ -714,21 +713,21 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Install",
-            image=self.img.paintbrush,  # Replace with the appropriate image from ImageConstants
+            image=self.img.paintbrush_design_tool_interface_symbol,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_install,
         )
 
         self.dev_install_menu.add_command(
             label="Update",
-            image=self.img.reload,  # Replace with the appropriate image from ImageConstants
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_update,
         )
 
         self.dev_install_menu.add_command(
             label="Repair",
-            image=self.img.pen,  # Replace with the appropriate image from ImageConstants
+            image=self.img.wrench_black_silhouette,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_repair,
         )
@@ -737,7 +736,7 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Remove",
-            image=self.img.trash,  # Replace with the appropriate image from ImageConstants
+            image=self.img.trash_can_black_symbol,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_remove,
         )

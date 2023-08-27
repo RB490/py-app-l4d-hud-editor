@@ -1,7 +1,6 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel
 """Module for the hud browser gui class"""
 import os
-import time
 import tkinter as tk
 from datetime import datetime
 from tkinter import PhotoImage, ttk
@@ -18,7 +17,13 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import APP_ICON, HOTKEY_TOGGLE_BROWSER, IMAGES_DIR, IMAGES_DIR_32
+from utils.constants import (
+    APP_ICON,
+    HOTKEY_TOGGLE_BROWSER,
+    IMAGES_DIR,
+    IMAGES_DIR_32,
+    ImageConstants,
+)
 from utils.functions import get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -38,6 +43,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
+        self.img = ImageConstants()
         from gui.descriptions import GuiHudDescriptions
 
         self.selected_full_path = None
@@ -123,43 +129,50 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
         # Create a context menu
-        self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "file.png")).subsample(2, 2)
-        self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
-        self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png")).subsample(2, 2)
-        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "arrow_upwards_sideways.png")).subsample(
-            2, 2
-        )
-        self.refresh_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "reload.png")).subsample(2, 2)
-        self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "pen.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
-            label="Open File", image=self.file_icon, compound=tk.LEFT, command=self.action_open_file
+            label="Open File",
+            image=self.img.file_black_rounded_symbol,
+            compound=tk.LEFT,
+            command=self.action_open_file,
         )
         self.context_menu.add_command(
-            label="Open vanilla File", image=self.file_icon, compound=tk.LEFT, command=self.action_open_vanilla_file
+            label="Open vanilla File",
+            image=self.img.file_black_rounded_symbol,
+            compound=tk.LEFT,
+            command=self.action_open_vanilla_file,
         )
         self.context_menu.add_command(
-            label="Open Folder", image=self.folder_icon, compound=tk.LEFT, command=self.action_open_folder
+            label="Open Folder",
+            image=self.img.folder_black_interface_symbol,
+            compound=tk.LEFT,
+            command=self.action_open_folder,
         )
         self.context_menu.add_command(
-            label="Open Game Folder", image=self.folder_icon, compound=tk.LEFT, command=self.action_open_game_folder
+            label="Open Game Folder",
+            image=self.img.folder_black_interface_symbol,
+            compound=tk.LEFT,
+            command=self.action_open_game_folder,
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
-            label="Annotate", image=self.annotate_icon, compound=tk.LEFT, command=self.action_annotate
+            label="Annotate", image=self.img.pencil_black_square, compound=tk.LEFT, command=self.action_annotate
         )
         self.context_menu.add_command(
-            label="Description", image=self.description_icon, compound=tk.LEFT, command=self.action_description
+            label="Description",
+            image=self.img.list_symbol_of_three_items_with_dots,
+            compound=tk.LEFT,
+            command=self.action_description,
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Refresh",
-            image=self.refresh_icon,
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
             compound=tk.LEFT,
             command=lambda: self.treeview_refresh(self.treeview),
         )
         self.context_menu.add_command(
-            label="Recycle", image=self.delete_icon, compound=tk.LEFT, command=self.action_recycle
+            label="Recycle", image=self.img.trash_can_black_symbol, compound=tk.LEFT, command=self.action_recycle
         )
 
         # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)

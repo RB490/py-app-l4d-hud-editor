@@ -5,9 +5,9 @@ import tkinter as tk
 from tkinter import scrolledtext
 
 from gui.base import BaseGUI
-from utils.constants import APP_ICON, IMAGES_DIR
-from utils.persistent_data_manager import PersistentDataManager
 from shared_utils.shared_utils import show_message
+from utils.constants import APP_ICON, IMAGES_DIR, ImageConstants
+from utils.persistent_data_manager import PersistentDataManager
 from utils.vdf import VDFModifier
 
 
@@ -21,11 +21,12 @@ class VDFModifierGUI(BaseGUI):
         self.load_file()  # confirm whether the file is valid
 
         # setup gui
-        super().__init__()
+        super().__init__(is_modal_dialog=True)
         # super().__init__(is_toplevel_gui=False)
         # super().__init__(is_toplevel_gui=True)
         # BaseGUI.__init__(self, is_toplevel_gui=True)
         self.data_manager = PersistentDataManager()
+        self.img = ImageConstants()
         self.modifier = None  # vdf modifier class
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
@@ -66,10 +67,6 @@ class VDFModifierGUI(BaseGUI):
 
     def create_widgets(self):
         """Create widgets"""
-        self.reload_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "reload.png")).subsample(2, 2)
-        self.process_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "annotate.png")).subsample(2, 2)
-        self.save_img = tk.PhotoImage(file=os.path.join(IMAGES_DIR, "medium", "save.png")).subsample(2, 2)
-
         # Create a main frame to hold everything
         main_frame = tk.Frame(self.root)
         main_frame.pack(fill=tk.BOTH, expand=True)
@@ -83,15 +80,17 @@ class VDFModifierGUI(BaseGUI):
 
         self.reload_button = tk.Button(right_side_frame, text="Reload", height=16, command=self.load_file)
         self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.reload_button.config(image=self.reload_img, compound="left", padx=10)
+        self.reload_button.config(
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol, compound="left", padx=10
+        )
 
         self.save_to_file_button = tk.Button(right_side_frame, text="Save", height=16, command=self.save_vdf)
         self.save_to_file_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.save_to_file_button.config(image=self.save_img, compound="left", padx=10)
+        self.save_to_file_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=10)
 
         self.process_button = tk.Button(right_side_frame, text="Modify", height=32, command=self.process)
         self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.process_button.config(image=self.process_img, compound="left", padx=10)
+        self.process_button.config(image=self.img.pencil_black_square, compound="left", padx=10)
 
         # Create a frame for integer modifying widgets
         int_mod_frame = tk.Frame(right_side_frame, relief=tk.RIDGE, borderwidth=3)

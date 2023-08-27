@@ -374,8 +374,8 @@ class ImageConstants(metaclass=Singleton):
         )
         self.winds_weather_symbol = self.load_image("winds_weather_symbol.png")
         self.wrench_black_silhouette = self.load_image("wrench_black_silhouette.png")
-        self.writing_tools_symbol_of_interface_with_black_square_paper_note_and_a_pencil = self.load_image(
-            "writing_tools_symbol_of_interface_with_black_square_paper_note_and_a_pencil.png"
+        self.pencil_black_square = self.load_image(
+            "pencil_black_square.png"
         )
         self.zoom_magnifier_with_minus_symbol = self.load_image("zoom_magnifier_with_minus_symbol.png")
 
