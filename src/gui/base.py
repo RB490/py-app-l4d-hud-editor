@@ -27,7 +27,7 @@ class BaseGUI:
 
         self.root.title("BaseGUI")
         self.hide()
-        self.root.protocol("WM_DELETE_WINDOW", self.__on_close)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.minsize(300, 200)
 
     def hide(self):
@@ -155,10 +155,10 @@ class BaseGUI:
                     self.save_window_geometry()
                 else:
                     print(f"GUI {self.root.title()} GUI does not have a save_window_geometry method to call!")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+        except Exception as e_info:
+            print(f"An error occurred: {e_info}")
 
-    def __on_close(self):
+    def on_close(self):
         """Callback function before the window is closed."""
         # pylint: disable=no-member
         self.__call_save_window_geometry()

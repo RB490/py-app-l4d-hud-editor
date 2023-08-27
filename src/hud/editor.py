@@ -133,7 +133,7 @@ class HudEditor:
             keyboard.remove_hotkey(self.sync)
 
         # clear variables
-        self.__clear_hud_info()
+        self.clear_hud_info()
 
         # enable user mode
         self.game.dir.set(DirectoryMode.DEVELOPER)
@@ -178,7 +178,7 @@ class HudEditor:
         else:
             return False
 
-    def __set_hud_info(self, directory):
+    def _set_hud_info(self, directory):
         """Get information"""
         self.hud_dir = directory
         result = self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
@@ -187,7 +187,7 @@ class HudEditor:
         else:
             return False
 
-    def __clear_hud_info(self, directory):
+    def clear_hud_info(self):
         """Get information"""
         self.hud_dir = None
         self.hud_name = None

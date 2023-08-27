@@ -18,7 +18,7 @@ import win32gui
 import win32process
 
 from game.game import Game
-from gui.popup import cteate_editor_menu_popup_gui
+from gui.popup import get_editor_menu_popup_gui
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -470,7 +470,7 @@ def get_mouse_position_on_click(callback):
     root.mainloop()
 
 
-def preform_checks_and_prepare_program_start():
+def preform_checks_to_prepare_program_start():
     """Run vital checks before starting program so i don't need to add them everywhere"""
     game = Game()
 
@@ -483,8 +483,6 @@ def preform_checks_and_prepare_program_start():
         game.dir.check_for_invalid_id_file_structure()
     except Exception as e_info:
         raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
-
-    cteate_editor_menu_popup_gui()
 
 
 def save_and_exit_script():

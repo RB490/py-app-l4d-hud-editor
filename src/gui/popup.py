@@ -64,8 +64,8 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.hide()
 
 
-def cteate_editor_menu_popup_gui():
+def get_editor_menu_popup_gui():
     """Debug gui class"""
     # pylint: disable=unused-variable
     app = GuiEditorMenuPopup()
-    app.show(hidden=True)
+    return app.show(hidden=True)

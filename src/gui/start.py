@@ -414,7 +414,6 @@ def show_start_gui():
         browser_gui.destroy()
     except Exception:
         print("Couldn't destroy browser GUI. Probably already destroyed!")
-        pass
 
     start_gui = GuiHudStart()
     start_gui.show()

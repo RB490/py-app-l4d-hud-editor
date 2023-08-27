@@ -13,6 +13,7 @@ from PIL import Image, ImageTk
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.base import BaseGUI
+from gui.popup import GuiEditorMenuPopup
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
@@ -21,7 +22,6 @@ from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
     HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR,
     ImageConstants,
 )
 from utils.functions import get_image_for_file_extension, save_and_exit_script
@@ -47,6 +47,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         from gui.descriptions import GuiHudDescriptions
 
         self.selected_full_path = None
+        self.popup_gui = GuiEditorMenuPopup()
         self.descriptions_gui = GuiHudDescriptions()
         self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
@@ -363,15 +364,19 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # Add a hotkey and print refresh completion
         keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
+        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.show_popup_gui, suppress=True)
         print("Treeview: Refreshed")
+
+    def show_popup_gui(self):
+        self.popup_gui.show(hidden=True)
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry())
 
-    def __on_close(self):
+    def on_close(self):
         """Runs on close"""
-        self.descriptions_gui.__on_close()
+        self.descriptions_gui.on_close()
         self.save_window_geometry()
         save_and_exit_script()
 
@@ -463,7 +468,6 @@ def show_browser_gui():
         start_gui.destroy()
     except Exception:
         print("Couldn't destroy browser GUI. Probably already destroyed!")
-        pass
 
     browser_gui = GuiHudBrowser()
     browser_gui.show()

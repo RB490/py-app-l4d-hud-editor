@@ -5,18 +5,24 @@
 import os
 import sys
 
+import keyboard
+
 from debug.game import debug_game_class
 from debug.gui import debug_browser_gui, debug_popup_gui
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser, show_browser_gui
-from gui.popup import GuiEditorMenuPopup, cteate_editor_menu_popup_gui
+from gui.popup import GuiEditorMenuPopup, get_editor_menu_popup_gui
 from gui.start import GuiHudStart, show_start_gui
 from tests.test_hud_syncer import unit_test_hud_syncer
-from utils.constants import ImageConstants
-from utils.functions import preform_checks_and_prepare_program_start
+from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
+from utils.functions import preform_checks_to_prepare_program_start
 from utils.persistent_data_manager import PersistentDataManager
+
+
+def dummy_func():
+    print("dummy_func")
 
 
 def debug_main():
@@ -40,12 +46,15 @@ def debug_main():
     # print(sys.path)
     # from shared_modules import my_shared_function
 
+    # keyboard.add_hotkey("F2", dummy_func, suppress=True)
+    # keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, dummy_func, suppress=True)
+
     # my_shared_function()
     # debug_vdf_class()
+    # get_editor_menu_popup_gui()
     debug_gui()
     # result = "Y" if h.desc.get_custom_file_status("scripts\\hudlayout2.res") else "N"
     # custom_prompt_example_usage()
-
     # data_manager = PersistentDataManager()
     # data_manager.set("game_mute", 0)
     # data_manager.get("stored_huds")
@@ -70,12 +79,12 @@ def debug_gui():
     # debug_popup_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # show_browser_gui()
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

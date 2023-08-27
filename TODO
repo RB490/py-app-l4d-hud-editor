@@ -1,13 +1,17 @@
 ✔ Bug: The program is saving GUI position when it's coordinates couldn't be retrieved. Start but probably others // seems to happen when starting up the program? @done(23-08-27 22:33)
+✔ Bug: Popup menu should be part of browser @done(23-08-27 23:28)
+✔ Bug: Hotkey for showing editor menu isn't working // could be that when start/browser is destroyed that shit gets destroyed @done(23-08-27 23:28)
+✔ Bug: Hotkey for toggling browser doesn't work at all @done(23-08-27 23:28)
+✔ Bug: Start eiditing -> Close game -> editor.__set_hud_info() error: NoneType @done(23-08-27 23:28)
 
 
 Current:
 
-	☐ Bug: Start editing -> Hotkey for showing editor menu isn't working
-	☐ Bug: Start editing -> sHotkey for showing browsers
-	- ^ because the program closed?
 
-	☐ Bug: Start eiditing -> Close game -> editor.__set_hud_info() error: NoneType
+
+	☐ Bug: When toggling browser visibility i get a  bunch of errors in my terminal
+
+
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
