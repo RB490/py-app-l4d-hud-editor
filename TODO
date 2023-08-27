@@ -7,8 +7,7 @@ Current:
 
 	✔ Bug -> Browser -> Open start -> Starts debugging the process gui?!. Even funnier. it doesn't happen when debugging step by step @done(23-08-27 17:17) was dueue to some caching issue. fixed by reloading vscode
 
-	☐ Editor menu: Add all start GUI functionality. We're almost there already. for example i can add but not create new huds
-		☐ Use the relevant menu's from the editor menu in start to prevent duplication
+	✔ Editor menu: Add all start GUI functionality. We're almost there already. for example i can add but not create new huds @done(23-08-27 17:23)
 
 	☐ Refactor use the image constants class everywhere
 	

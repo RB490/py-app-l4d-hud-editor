@@ -96,4 +96,4 @@ def debug_gui():
     # debug_get_user_input()
 
     # installer
-    debug_progress_gui()
+    # debug_progress_gui()

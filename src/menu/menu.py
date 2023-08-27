@@ -390,6 +390,13 @@ class EditorMenuClass:
             )
         # stored huds - submenu - add stored hud
         stored_huds_submenu.add_command(
+            label="New",
+            image=self.img.star_black_fivepointed_shape_symbol,
+            compound="left",
+            command=self.handler.editor_create_new_hud,
+        )
+        # stored huds - submenu - create new stored hud
+        stored_huds_submenu.add_command(
             label="Add",
             image=self.img.addition_sign,
             compound="left",

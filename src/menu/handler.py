@@ -155,6 +155,11 @@ class EditorMenuHandler:
         self.hud.manager.prompt_add_existing_hud()
         self.editor_menu.create_and_refresh_menu()
 
+    def editor_create_new_hud(self):
+        """Add exiting hud to the menu"""
+        self.hud.manager.prompt_create_new_hud()
+        self.editor_menu.create_and_refresh_menu()
+
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
         self.hud.manager.remove_stored_hud(hud_dir)
