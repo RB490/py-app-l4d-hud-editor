@@ -13,6 +13,7 @@ from PIL import Image, ImageTk
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.base import BaseGUI
+from gui.descriptions import GuiHudDescriptions
 from gui.popup import GuiEditorMenuPopup
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
@@ -21,6 +22,7 @@ from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
+    HOTKEY_EDITOR_MENU,
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
@@ -44,11 +46,18 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
         self.img = ImageConstants()
-        from gui.descriptions import GuiHudDescriptions
+
+        # toplevel needs to be made in the main thread to prevent 'calling tlc from different apartment'
+        # toplevel popup
+        self.browser_toplevel_root_popup = tk.Toplevel(self.root)
+        self.browser_toplevel_root_popup.withdraw()
+        self.popup_gui = GuiEditorMenuPopup(self.browser_toplevel_root_popup)
+        # toplevel description
+        self.browser_toplevel_root_desc = tk.Toplevel(self.root)
+        self.browser_toplevel_root_desc.withdraw()
+        self.descriptions_gui = GuiHudDescriptions(self.browser_toplevel_root_desc)
 
         self.selected_full_path = None
-        self.popup_gui = GuiEditorMenuPopup()
-        self.descriptions_gui = GuiHudDescriptions()
         self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
         # Store PhotoImage objects in a list to prevent garbage collection
@@ -364,11 +373,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # Add a hotkey and print refresh completion
         keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
-        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.show_popup_gui, suppress=True)
+        keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup_gui, suppress=True)
         print("Treeview: Refreshed")
 
     def show_popup_gui(self):
-        self.popup_gui.show(hidden=True)
+        """Show editor menu as a context menu"""
+
+        self.popup_gui.show(hide=True)
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
@@ -456,20 +467,3 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         send2trash.send2trash(full_path)
         self.treeview_refresh(self.treeview)
-
-
-def show_browser_gui():
-    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
-    from gui.start import GuiHudStart
-
-    # destroy other main gui
-    try:
-        start_gui = GuiHudStart()
-        start_gui.destroy()
-    except Exception:
-        print("Couldn't destroy browser GUI. Probably already destroyed!")
-
-    browser_gui = GuiHudBrowser()
-    browser_gui.show()
-    print("Opened the Browser GUI!")
-    return browser_gui

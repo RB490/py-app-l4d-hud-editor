@@ -1,4 +1,4 @@
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, import-outside-toplevel
 """Functions used throughout the program"""
 import ctypes
 import os
@@ -18,11 +18,47 @@ import win32gui
 import win32process
 
 from game.game import Game
-from gui.popup import get_editor_menu_popup_gui
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
+
+
+def show_browser_gui():
+    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+    from gui.browser import GuiHudBrowser
+    from gui.start import GuiHudStart
+
+    # destroy other main gui
+    try:
+        start_gui = GuiHudStart()
+        start_gui.destroy()
+    except Exception:
+        print("Couldn't destroy browser GUI. Probably already destroyed!")
+
+    browser_gui = GuiHudBrowser()
+    browser_gui.show()
+    print("Opened the Browser GUI!")
+    return browser_gui
+
+
+def show_start_gui():
+    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+    from gui.browser import GuiHudBrowser
+    from gui.start import GuiHudStart
+
+    # destroy other main gui
+    try:
+        browser_gui = GuiHudBrowser()
+        browser_gui.destroy()
+    except Exception:
+        print("Couldn't destroy browser GUI. Probably already destroyed!")
+
+    start_gui = GuiHudStart()
+    start_gui.show()
+
+    print("Opened the Start GUI!")
+    return start_gui
 
 
 def count_files_and_dirs(path):

@@ -26,14 +26,15 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, instantly_show_menu=False):
+    def __init__(self, parent_toplevel_root, instantly_show_menu=False):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
-        super().__init__(is_modal_dialog=True)
+        super().__init__(parent_toplevel_root)
         self.root.title("Editor Context Menu Popup")
         self.set_transparency(0.5)
         self.set_decorations(False)
+        self.set_always_on_top(True)
 
         self.data_manager = PersistentDataManager()
         self.game = Game()
@@ -62,10 +63,3 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
         self.hide()
-
-
-def get_editor_menu_popup_gui():
-    """Debug gui class"""
-    # pylint: disable=unused-variable
-    app = GuiEditorMenuPopup()
-    return app.show(hidden=True)

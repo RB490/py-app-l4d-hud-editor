@@ -9,14 +9,13 @@ import keyboard
 
 from game.constants import DirectoryMode
 from game.game import Game
-from gui.browser import GuiHudBrowser, show_browser_gui
-from gui.start import show_start_gui
+from gui.browser import GuiHudBrowser
 from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.shared_utils import show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import copy_directory
+from utils.functions import copy_directory, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -41,7 +40,7 @@ class HudEditor:
         print(f"Start editing: ({hud_dir})")
 
         # verify parameters
-        result = self.__set_hud_info(hud_dir)
+        result = self._set_hud_info(hud_dir)
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
@@ -165,7 +164,7 @@ class HudEditor:
         self.syncer.unsync()
 
         # clear variables
-        self.__set_hud_info(None)
+        self._set_hud_info(None)
 
     def synced(self):
         "Verify if hud is loaded"

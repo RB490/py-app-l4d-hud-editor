@@ -12,9 +12,9 @@ from debug.gui import debug_browser_gui, debug_popup_gui
 from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
-from gui.browser import GuiHudBrowser, show_browser_gui
-from gui.popup import GuiEditorMenuPopup, get_editor_menu_popup_gui
-from gui.start import GuiHudStart, show_start_gui
+from gui.browser import GuiHudBrowser
+from gui.popup import GuiEditorMenuPopup
+from gui.start import GuiHudStart
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import preform_checks_to_prepare_program_start
@@ -22,6 +22,7 @@ from utils.persistent_data_manager import PersistentDataManager
 
 
 def dummy_func():
+    "debug"
     print("dummy_func")
 
 

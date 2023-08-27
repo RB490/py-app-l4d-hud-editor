@@ -6,22 +6,28 @@ import tkinter as tk
 class BaseGUI:
     """BaseGUI"""
 
-    def __init__(self, is_modal_dialog=False):
+    def __init__(self, parent_toplevel_root=None):
         """
         Initialize the BaseGUI.
 
         Args:
-            is_modal_dialog (bool, optional): True if the GUI is a modal dialog, False otherwise.
+            parent_root (tkinter main gui instance, optional): True if the GUI is a modal dialog, False otherwise.
         """
         self.is_hidden = None
         self.is_resizable = True
         self.is_running = False
+        if parent_toplevel_root:
+            self.parent_toplevel_root = parent_toplevel_root
+        else:
+            self.parent_toplevel_root = None
+            
 
-        if is_modal_dialog:
+        if parent_toplevel_root:
             # tkinter will create a root window and NOT hide it if this isn't done if creating Toplevel without one
-            self.root_throwaway = tk.Tk()
-            self.root_throwaway.withdraw()
-            self.root = tk.Toplevel()
+            # self.root_throwaway = tk.Tk()
+            # self.root_throwaway.withdraw()
+            # self.root = tk.Toplevel(parent_toplevel_root)
+            self.root = parent_toplevel_root
         else:
             self.root = tk.Tk()
 
@@ -41,14 +47,24 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.iconify()
 
-    def show(self, hidden=False):
+    def show(self, hide=False):
         """Show the window."""
         self.root.deiconify()
         self.is_hidden = False
-        if hidden:
+        if hide:
             self.hide()
+        if not self.is_running:
+            self.run()
+
+    def run(self):
+        """Run mainloop()"""
+        if self.is_running:
+            raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
+
         self.is_running = True
-        self.root.mainloop()
+        print(f"Running GUI {self.root.title()}")
+        if not self.parent_toplevel_root:
+            self.root.mainloop()
 
     def destroy(self):
         """Destroy the window."""

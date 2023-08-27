@@ -7,10 +7,23 @@
 
 Current:
 
+	☐ Refactor: Use proper toplevel on UserInputWindow
+	☐ Refactor: Document behaviour about how TopLevel should be used to prevent calling from TLC
+	☐ Refactor: Cleanup BaseGui/Browser related code to topLevel
+	☐ Refactor: Cleanup todo's related code to topLevel
 
+	☐ Refactor: toplevel should receive parent. replace is_modal_window with parent_instance. keep the tk.tk() thing to hide the weird gui but only if parent doesn't exist or something
+		- top_level_window = tk.Toplevel(self.root)
+
+
+	☐ Bug: Browser popup hotkey -> terminal says : Running GUI Editor Context Menu Popup & error shows, every consequent context menu show after that no problem
 
 	☐ Bug: When toggling browser visibility i get a  bunch of errors in my terminal
+		- same with opening the popup menu
+		- basegui.py disabling mainloop() (if hidden/modal) works
 
+
+		- ^ might be that i'm, oh, uh, i'm doing mainloop() on every window show() which is probably not great
 
 
 	☐ Testing: Test the program by using it to edit HUD's

@@ -402,21 +402,3 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # edit hud
         self.hud.edit.start_editing(self.selected_hud_dir)
-
-
-def show_start_gui():
-    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
-    from gui.browser import GuiHudBrowser
-
-    # destroy other main gui
-    try:
-        browser_gui = GuiHudBrowser()
-        browser_gui.destroy()
-    except Exception:
-        print("Couldn't destroy browser GUI. Probably already destroyed!")
-
-    start_gui = GuiHudStart()
-    start_gui.show()
-
-    print("Opened the Start GUI!")
-    return start_gui
