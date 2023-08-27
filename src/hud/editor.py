@@ -162,7 +162,7 @@ class HudEditor:
         "Verify if hud is loaded"
         return self.syncer.is_synced()
 
-    def is_loaded(self):
+    def is_synced(self):
         "Verify if hud is loaded"
         if self.get_dir():
             return True

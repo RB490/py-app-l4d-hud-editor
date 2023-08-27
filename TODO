@@ -1,24 +1,14 @@
 Archive:
 
-	✔ Bug: editor menu -> show panel doesn't seem to take selected panel into account at all? doesnt toggle anything @done(23-08-27 12:22)
-	✔ Feature: editor menu -> Show set coords in the menu @done(23-08-27 11:55)
-	✔ Feature: Added ImageConstants class @done(23-08-27 12:41)
-
 Current:
-	
-	✔ Bug: VDF gui doesn't load. atleast for hudlayout.res @done(23-08-27 14:21)
-	✔ Bug: VDF GUI always defaulting geometry when loaded through browser @done(23-08-27 14:29)
 
-	✔ Menu: @icons  Add icons @done(23-08-27 16:32)
-	☐ Menu: @icons  Test: Do toggleable menu options support icons in any way or state?
-
-	☐ Bug: Browser -> Open start gui -> errors. This is most likely because i only create widgets once. and its a singleton
+	✔ Bug -> If i open browser without loading a hud instance first. i get an error. it's fine when i first do hud_inc = get_hud_debug_instance() @done(23-08-27 17:08)
+	✔ Bug: Browser -> Open start gui -> errors. This is most likely because i only create widgets once. and its a singleton @done(23-08-27 17:08)
 
 	☐ Editor menu: Add all start GUI functionality. We're almost there already. for example i can add but not create new huds
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 
 	☐ Refactor use the image constants class everywhere
-
 
 Additional Ideas and Considerations:
 	

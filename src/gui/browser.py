@@ -10,6 +10,7 @@ import send2trash
 import win32gui
 from PIL import Image, ImageTk
 
+from debug.hud import get_hud_debug_instance
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.base import BaseGUI
@@ -460,11 +461,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
 def show_browser_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
-    from gui.start import GuiHudStart
+    # from gui.start import GuiHudStart
 
-    # destroy other main gui
-    start_gui = GuiHudStart()
-    start_gui.destroy()
+    # # # destroy other main gui
+    # start_gui = GuiHudStart()
+    # start_gui.destroy()
+
+    hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
     browser_gui = GuiHudBrowser()
     browser_gui.show()

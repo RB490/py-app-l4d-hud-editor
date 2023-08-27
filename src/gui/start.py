@@ -13,11 +13,7 @@ from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
-from utils.constants import (
-    APP_ICON,
-    IMAGES_DIR_128,
-    ImageConstants,
-)
+from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
 from utils.functions import copy_directory
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -29,8 +25,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def __init__(self):
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
         super().__init__()
-        self.data_manager = PersistentDataManager()
         self.img = ImageConstants()
+        self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
         self.root.title("Select")
@@ -241,6 +237,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # browser_gui = GuiHudBrowser()
         # browser_gui.destroy()
 
+        # self.create_widgets()
         self.root.deiconify()
         self.is_hidden = False
         self.root.mainloop()

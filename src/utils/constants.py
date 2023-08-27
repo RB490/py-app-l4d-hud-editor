@@ -47,8 +47,28 @@ HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 #####################################################
 
 
-class ImageConstants(metaclass=Singleton):
+class ImageConstants:
     def __init__(self):
+        self._images = {}
+        self.load_images()
+
+    def load_image(self, image_filename):
+        """Keeping storing references inside self._images so they don't get garbage collected
+
+        this class isn't a singleton for the same reason. Because when assigning these images to a gui
+        and then deleting the gui the images will get garbage collected and the next gui will fail"""
+        image = PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
+        self._images[image_filename] = image
+        return image
+
+    # @staticmethod
+    # def load_image(image_filename):
+    #     return PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
+
+    def get_image(self, filename):
+        return self._images.get(filename)
+
+    def load_images(self):
         self.add_black_circular_button = self.load_image("add_black_circular_button.png")
         self.adding_black_square_button_interface_symbol = self.load_image(
             "adding_black_square_button_interface_symbol.png"
@@ -183,7 +203,9 @@ class ImageConstants(metaclass=Singleton):
         self.fork_black_silhouette_of_kitchen_eating_utensil = self.load_image(
             "fork_black_silhouette_of_kitchen_eating_utensil.png"
         )
-        self.four_black_buttons_keyboard_of_rounded_squares = self.load_image("four_black_buttons_keyboard_of_rounded_squares.png")
+        self.four_black_buttons_keyboard_of_rounded_squares = self.load_image(
+            "four_black_buttons_keyboard_of_rounded_squares.png"
+        )
         self.gameAlt = self.load_image("gameAlt.png")
         self.games_machine = self.load_image("games_machine.png")
         self.giftbox = self.load_image("giftbox.png")
@@ -375,10 +397,6 @@ class ImageConstants(metaclass=Singleton):
         self.wrench_black_silhouette = self.load_image("wrench_black_silhouette.png")
         self.pencil_black_square = self.load_image("pencil_black_square.png")
         self.zoom_magnifier_with_minus_symbol = self.load_image("zoom_magnifier_with_minus_symbol.png")
-
-    @staticmethod
-    def load_image(image_filename):
-        return PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
 
 
 #####################################################

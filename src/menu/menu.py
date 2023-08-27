@@ -307,7 +307,7 @@ class EditorMenuClass:
 
         self.hud_menu = tk.Menu(menubar, tearoff=0)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
-        if self.hud.edit.is_loaded():
+        if self.hud.edit.is_synced():
             self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
@@ -347,9 +347,13 @@ class EditorMenuClass:
         )
 
         # disable items when no hud is loaded
-        if not self.hud.edit.is_loaded():
-            for i in range(self.hud_menu.index("end") + 1):
-                self.hud_menu.entryconfigure(i, state="disabled")
+        # added try except incase no hud is loaded TODO do i want to keep this
+        try:
+            if not self.hud.edit.is_synced():
+                for i in range(self.hud_menu.index("end") + 1):
+                    self.hud_menu.entryconfigure(i, state="disabled")
+        except:
+            pass
 
     def create_load_hud_menu(self, menubar):
         """Create load hud menu"""
