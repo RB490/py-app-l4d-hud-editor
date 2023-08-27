@@ -184,7 +184,7 @@ class EditorMenuHandler:
         self.hud.edit.finish_editing(open_start_gui=False)
         sys.exit()
 
-    def editor_open_hud_select(self):
+    def editor_open_start_gui(self):
         """Open hud select gui"""
         print("editor_open_hud_select")
         show_start_gui()

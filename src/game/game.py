@@ -1,5 +1,5 @@
 "Game class"
-# pylint: disable=wrong-import-position, ungrouped-imports, protected-access
+# pylint: disable=wrong-import-position, ungrouped-imports, protected-access, import-outside-toplevel
 import os
 import shutil
 
@@ -10,9 +10,9 @@ from game.constants import (
     TitleRetrievalError,
 )
 from game.video_settings_modifier import VideoSettingsModifier
+from shared_utils.shared_utils import Singleton, close_process_executable
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
 from utils.persistent_data_manager import PersistentDataManager
-from shared_utils.shared_utils import Singleton, close_process_executable
 from utils.steam_info_retriever import SteamInfoRetriever
 
 # importing after the above enums and exceptions becaus they are needed for the subclasses

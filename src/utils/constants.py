@@ -2,8 +2,6 @@
 import os
 from tkinter import PhotoImage
 
-from shared_utils.shared_utils import Singleton
-
 #####################################################
 # Path
 #####################################################
@@ -48,12 +46,17 @@ HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 
 
 class ImageConstants:
+    """Manage loading and storing images for GUI components."""
+
     def __init__(self):
+        """Initialize and load images."""
         self._images = {}
         self.load_images()
 
     def load_image(self, image_filename):
-        """Keeping storing references inside self._images so they don't get garbage collected
+        """Load and store an image.
+
+        Keeping storing references inside self._images so they don't get garbage collected
 
         this class isn't a singleton for the same reason. Because when assigning these images to a gui
         and then deleting the gui the images will get garbage collected and the next gui will fail"""
@@ -66,9 +69,11 @@ class ImageConstants:
     #     return PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
 
     def get_image(self, filename):
+        """Get a stored image."""
         return self._images.get(filename)
 
     def load_images(self):
+        """Load and store various images as attributes."""
         self.add_black_circular_button = self.load_image("add_black_circular_button.png")
         self.adding_black_square_button_interface_symbol = self.load_image(
             "adding_black_square_button_interface_symbol.png"
@@ -206,7 +211,7 @@ class ImageConstants:
         self.four_black_buttons_keyboard_of_rounded_squares = self.load_image(
             "four_black_buttons_keyboard_of_rounded_squares.png"
         )
-        self.gameAlt = self.load_image("gameAlt.png")
+        self.game_alt = self.load_image("game_alt.png")
         self.games_machine = self.load_image("games_machine.png")
         self.giftbox = self.load_image("giftbox.png")
         self.glass_of_cocktail_silhouette = self.load_image("glass_of_cocktail_silhouette.png")

@@ -1,4 +1,4 @@
-# pylint: disable=attribute-defined-outside-init
+# pylint: disable=attribute-defined-outside-init, broad-exception-caught, too-many-lines
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 
 import os
@@ -347,12 +347,12 @@ class EditorMenuClass:
         )
 
         # disable items when no hud is loaded
-        # added try except incase no hud is loaded TODO do i want to keep this
+        # try:except added try except incase no hud is loaded TODO do i want to keep this
         try:
             if not self.hud.edit.is_synced():
                 for i in range(self.hud_menu.index("end") + 1):
                     self.hud_menu.entryconfigure(i, state="disabled")
-        except:
+        except Exception:
             pass
 
     def create_load_hud_menu(self, menubar):
@@ -1081,7 +1081,7 @@ class EditorMenuClass:
             label="Start",
             image=self.img.flag_black_cutted_shape,
             compound="left",
-            command=self.handler.editor_open_hud_select,
+            command=self.handler.editor_open_start_gui,
         )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
@@ -1124,7 +1124,7 @@ class EditorMenuClass:
 
         self.debug_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.debug_menu.add_command(
-            label="Game cmd", command=self.handler.editor_prompt_game_command, image=self.img.gameAlt, compound="left"
+            label="Game cmd", command=self.handler.editor_prompt_game_command, image=self.img.game_alt, compound="left"
         )
         self.debug_menu.add_cascade(
             label="Show panel",
