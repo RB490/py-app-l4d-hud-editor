@@ -309,7 +309,9 @@ class EditorMenuClass:
         self.hud_menu = tk.Menu(menubar, tearoff=0)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
         if self.hud.edit.is_synced():
-            self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
+            self.hud_menu.entryconfigure(
+                0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.__get_dir())
+            )
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
             label="Unsync",
@@ -336,13 +338,13 @@ class EditorMenuClass:
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
             label="Hud",
-            command=create_lambda_command(self.handler.editor_open_folder, self.hud.edit.get_dir()),
+            command=create_lambda_command(self.handler.editor_open_folder, self.hud.edit.__get_dir()),
             image=self.img.folder_black_interface_symbol,
             compound="left",
         )
         self.hud_menu.add_command(
             label="Hud (VS)",
-            command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
+            command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.__get_dir()),
             image=self.img.folder_black_interface_symbol,
             compound="left",
         )
@@ -1260,7 +1262,7 @@ class EditorMenuClass:
                 label="Close", image=self.img.cross, compound="left", command=self.do_nothing
             )  # useful when displaying menu as popup
 
-        if not self.hud.edit.get_dir():
+        if not self.hud.edit.__get_dir():
             self.menu_bar.entryconfig("Hud", state="disabled")
 
         if not is_context_menu:

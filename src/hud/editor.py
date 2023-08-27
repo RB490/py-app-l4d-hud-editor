@@ -12,6 +12,7 @@ from game.game import Game
 from gui.browser import GuiHudBrowser, show_browser_gui
 from gui.start import show_start_gui
 from hud.descriptions import HudDescriptions
+from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.shared_utils import show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
@@ -28,7 +29,9 @@ class HudEditor:
         self.game = Game()
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
+        self.manager = HudManager()
         self.hud_dir = None
+        self.hud_name = None
         self.threaded_timer_game_exit = None
         self.browser = None
 
@@ -38,7 +41,7 @@ class HudEditor:
         print(f"Start editing: ({hud_dir})")
 
         # verify parameters
-        result = self.set_dir(hud_dir)
+        result = self.__set_hud_info(hud_dir)
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
@@ -52,7 +55,11 @@ class HudEditor:
 
         # prompt to start game during debug mode
         if DEBUG_MODE and not self.game.window.is_running():
-            result = show_message("Start editing HUD ingame?", msgbox_type="yesno", title="Start editing HUD?")
+            result = show_message(
+                f"Start editing {self.get_name()} ingame?",
+                msgbox_type="yesno",
+                title="Start editing HUD?",
+            )
             if not result:
                 show_start_gui()
                 return False
@@ -60,10 +67,12 @@ class HudEditor:
         # is developer mode installed? - also checks for user directory
         if not self.game.installation_completed(DirectoryMode.DEVELOPER):
             show_message("Development mode not fully installed!", "error")
+            show_start_gui()
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.get_dir()):
+        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.__get_dir()):
+            show_start_gui()
             return False
 
         # unsync previous hud
@@ -81,7 +90,7 @@ class HudEditor:
 
         # sync the hud to the game folder
         self.syncer.sync(
-            self.get_dir(),
+            self.__get_dir(),
             self.game.dir.get(DirectoryMode.DEVELOPER),
             os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
         )
@@ -124,7 +133,7 @@ class HudEditor:
             keyboard.remove_hotkey(self.sync)
 
         # clear variables
-        self.set_dir(None)
+        self.__set_hud_info(None)
 
         # enable user mode
         self.game.dir.set(DirectoryMode.DEVELOPER)
@@ -136,7 +145,7 @@ class HudEditor:
     def sync(self):
         """Sync hud"""
 
-        hud_dir = self.get_dir()
+        hud_dir = self.__get_dir()
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
 
@@ -156,7 +165,7 @@ class HudEditor:
         self.syncer.unsync()
 
         # clear variables
-        self.set_dir(None)
+        self.__set_hud_info(None)
 
     def synced(self):
         "Verify if hud is loaded"
@@ -164,21 +173,26 @@ class HudEditor:
 
     def is_synced(self):
         "Verify if hud is loaded"
-        if self.get_dir():
+        if self.__get_dir():
             return True
         else:
             return False
 
-    def set_dir(self, directory):
+    def __set_hud_info(self, directory):
         """Get information"""
         if not os.path.isdir(directory):
             print(f"Could not set HUD directory to edit because it does not exist: {directory}")
             return False
 
         self.hud_dir = directory
+        self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
         return True
 
-    def get_dir(self):
+    def get_name(self):
+        """Get information"""
+        return self.hud_name
+
+    def __get_dir(self):
         """Get information"""
         return self.hud_dir
 
@@ -191,11 +205,11 @@ class HudEditor:
         # pylint: disable=unused-variable
 
         # verify variables
-        if not self.get_dir() or not os.path.exists(self.get_dir()):
-            print(f"Could not retrieve files dictionary. Directory does not exist: {self.get_dir()}")
+        if not self.__get_dir() or not os.path.exists(self.__get_dir()):
+            print(f"Could not retrieve files dictionary. Directory does not exist: {self.__get_dir()}")
             return None
 
-        root_folder = self.get_dir()
+        root_folder = self.__get_dir()
         files_dict = {}
         for dirpath, dirnames, filenames in os.walk(root_folder):
             for filename in filenames:
@@ -208,7 +222,7 @@ class HudEditor:
     def save_as_folder(self):
         """Save hud as folder"""
 
-        source_dir = self.get_dir()
+        source_dir = self.__get_dir()
 
         # Validate source directory
         if not os.path.isdir(source_dir):
@@ -245,7 +259,7 @@ class HudEditor:
         """Save hud as vpk file"""
 
         # verify directory
-        if not os.path.isdir(self.get_dir()):
+        if not os.path.isdir(self.__get_dir()):
             raise AssertionError("Directory does not exist.")
 
         # Prompt the user to select a file location to save the VPK file
@@ -258,7 +272,7 @@ class HudEditor:
             # You can use the chosen file_path variable to save the file
 
             vpk_file_class = VPKClass()
-            vpk_file_class.create(self.get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
+            vpk_file_class.create(self.__get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
 
             print(f"VPK file saved at: {file_path}")
         else:

@@ -1,11 +1,16 @@
+✔ Bug: The program is saving GUI position when it's coordinates couldn't be retrieved. Start but probably others // seems to happen when starting up the program? @done(23-08-27 22:33)
+
+
 Current:
-	
-	
-	✔ Bug: The program is saving GUI position when it's coordinates couldn't be retrieved. Start but probably others // seems to happen when starting up the program? @done(23-08-27 22:33)
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
 	☐ Testing: Get the AHK version working and check it out to confirm feature parity
+	
+	☐ Refactor: Editor: start_hud_editing - ask GPT, a lot of duplicate code
+	☐ Refactor: Editor: finishg_hud_editing?
+	☐ Refactor: Make a little class to run the two main GUI's: Start & Browser
+
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 
 Release:
