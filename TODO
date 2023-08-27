@@ -2,16 +2,6 @@ Archive:
 
 Current:
 
-	✔ Bug -> If i open browser without loading a hud instance first. i get an error. it's fine when i first do hud_inc = get_hud_debug_instance() @done(23-08-27 17:08)
-	✔ Bug: Browser -> Open start gui -> errors. This is most likely because i only create widgets once. and its a singleton @done(23-08-27 17:08)
-
-	✔ Bug -> Browser -> Open start -> Starts debugging the process gui?!. Even funnier. it doesn't happen when debugging step by step @done(23-08-27 17:17) was dueue to some caching issue. fixed by reloading vscode
-
-	✔ Editor menu: Add all start GUI functionality. We're almost there already. for example i can add but not create new huds @done(23-08-27 17:23)
-
-	☐ Refactor use the image constants class everywhere
-	
-	☐ Refactor: too-many-lines in menu.py
 
 Additional Ideas and Considerations:
 	
@@ -41,6 +31,8 @@ Additional Ideas and Considerations:
 	☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
 		☐ Bing says PYTHONPATH or making a package. so i can include it like any other package?
 		☐ Added D:\Programming and projects\python-files\shared_modules . just needs a restart
+	☐ Refactor: too-many-lines in menu.py
+
 
 Unit Testing:
 	
