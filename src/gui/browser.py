@@ -126,13 +126,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
             label="Open File",
-            image=self.img.file_black_rounded_symbol,
+            image=self.img.file_black_rounded_symbol_1,
             compound=tk.LEFT,
             command=self.action_open_file,
         )
         self.context_menu.add_command(
             label="Open vanilla File",
-            image=self.img.file_black_rounded_symbol,
+            image=self.img.file_black_rounded_symbol_1,
             compound=tk.LEFT,
             command=self.action_open_vanilla_file,
         )

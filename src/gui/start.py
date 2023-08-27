@@ -15,8 +15,6 @@ from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import (
     APP_ICON,
-    IMAGES_DIR,
-    IMAGES_DIR_32,
     IMAGES_DIR_128,
     ImageConstants,
 )

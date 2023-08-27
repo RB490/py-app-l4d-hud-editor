@@ -9,10 +9,12 @@ Current:
 	✔ Bug: VDF gui doesn't load. atleast for hudlayout.res @done(23-08-27 14:21)
 	✔ Bug: VDF GUI always defaulting geometry when loaded through browser @done(23-08-27 14:29)
 
-	☐ Menu: @icons  Add icons
+	✔ Menu: @icons  Add icons @done(23-08-27 16:32)
 	☐ Menu: @icons  Test: Do toggleable menu options support icons in any way or state?
 
-	☐ Editor menu: Add all start GUI functionality. We're almost there already.
+	☐ Bug: Browser -> Open start gui -> errors. This is most likely because i only create widgets once. and its a singleton
+
+	☐ Editor menu: Add all start GUI functionality. We're almost there already. for example i can add but not create new huds
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 
 	☐ Refactor use the image constants class everywhere

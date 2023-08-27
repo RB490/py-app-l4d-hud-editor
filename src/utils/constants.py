@@ -76,6 +76,7 @@ class ImageConstants(metaclass=Singleton):
         self.black_circular_graphic = self.load_image("black_circular_graphic.png")
         self.black_half_sun = self.load_image("black_half_sun.png")
         self.black_ink_drop_shape = self.load_image("black_ink_drop_shape.png")
+        self.buttons = self.load_image("buttons.png")
         self.black_map_folded_paper_symbol = self.load_image("black_map_folded_paper_symbol.png")
         self.black_oval_speech_bubble = self.load_image("black_oval_speech_bubble.png")
         self.black_placeholder_for_maps = self.load_image("black_placeholder_for_maps.png")
@@ -182,9 +183,7 @@ class ImageConstants(metaclass=Singleton):
         self.fork_black_silhouette_of_kitchen_eating_utensil = self.load_image(
             "fork_black_silhouette_of_kitchen_eating_utensil.png"
         )
-        self.four_black_buttons_keyboard_of_rounded_squares = self.load_image(
-            "four_black_buttons_keyboard_of_rounded_squares.png"
-        )
+        self.four_black_buttons_keyboard_of_rounded_squares = self.load_image("four_black_buttons_keyboard_of_rounded_squares.png")
         self.gameAlt = self.load_image("gameAlt.png")
         self.games_machine = self.load_image("games_machine.png")
         self.giftbox = self.load_image("giftbox.png")
@@ -374,9 +373,7 @@ class ImageConstants(metaclass=Singleton):
         )
         self.winds_weather_symbol = self.load_image("winds_weather_symbol.png")
         self.wrench_black_silhouette = self.load_image("wrench_black_silhouette.png")
-        self.pencil_black_square = self.load_image(
-            "pencil_black_square.png"
-        )
+        self.pencil_black_square = self.load_image("pencil_black_square.png")
         self.zoom_magnifier_with_minus_symbol = self.load_image("zoom_magnifier_with_minus_symbol.png")
 
     @staticmethod
