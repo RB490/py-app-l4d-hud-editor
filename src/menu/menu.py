@@ -681,14 +681,14 @@ class EditorMenuClass:
         self.dev_install_menu = tk.Menu(menubar, tearoff=0)
 
         self.dev_install_menu.add_command(
-            label="User Dir",
+            label="User",
             image=self.img.folder,  # Using the image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_user_dir,
         )
 
         self.dev_install_menu.add_command(
-            label="Dev Dir",
+            label="Dev",
             image=self.img.folder,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_dev_dir,
@@ -705,7 +705,7 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Disable",
-            image=self.img.settings_wrench,  # Replace with the appropriate image from ImageConstants
+            image=self.img.minus,  # Replace with the appropriate image from ImageConstants
             compound=tk.LEFT,
             command=self.handler.installer_disable,
         )

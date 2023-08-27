@@ -7,7 +7,7 @@ from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
-from utils.constants import APP_ICON, IMAGES_DIR, IMAGES_DIR_32
+from utils.constants import APP_ICON, ImageConstants
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
@@ -20,6 +20,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         self.game = Game()
         self.hud = Hud()
+        self.img = ImageConstants()
 
         self.relative_path = None
         self.unsaved_changes = False
@@ -27,11 +28,6 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.prev_ctrl_desc_content = None
 
         # self.root.minsize(450, 400)
-
-        # Create image buttons
-        self.add_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "plus.png"))
-        self.delete_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png"))
-        self.save_image = tk.PhotoImage(file=os.path.join(IMAGES_DIR_32, "save.png"))
 
         # define constants for padding and sizing
         pad_x = 10
@@ -70,12 +66,12 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         add_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.add_control)
         add_ctrl_button.config(width=25, height=23)
-        add_ctrl_button.config(image=self.add_image, compound="center")
+        add_ctrl_button.config(image=self.img.addition_sign, compound="center")
         add_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
         remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
         remove_ctrl_button.config(width=25, height=23)
-        remove_ctrl_button.config(image=self.delete_image, compound="center")
+        remove_ctrl_button.config(image=self.img.trash_can_black_symbol, compound="center")
         remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
 
         ctrl_desc_frame = tk.Frame(ctrl_label_frame)
@@ -101,14 +97,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             width=ctrl_w,
             command=self.submit_gui_save_changes,
         )
-        save_button.config(image=self.save_image, compound="left", padx=pad_x)
+        save_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=pad_x)
         save_button.pack(side="right", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
 
         remove_file_entry_button = tk.Button(
             save_button_frame, text="Remove", justify="center", command=self.remove_file_entry
         )
         remove_file_entry_button.config(width=70, height=25)
-        remove_file_entry_button.config(image=self.delete_image, compound="left", padx=pad_x)
+        remove_file_entry_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=pad_x)
         remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
 
     def on_close(self):
