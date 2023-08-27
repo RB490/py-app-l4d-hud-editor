@@ -274,3 +274,4 @@
 	✘ doesn't happen when delayed by input() @cancelled(23-08-27 21:08)
 	✘ not even an issue @cancelled(23-08-27 21:08)
 	✘ could maybe separate creating widgets from init, and creat them when showing (only once) @cancelled(23-08-27 21:08)
+✘ Refactor: too-many-lines in menu.py @cancelled(23-08-27 21:19)

@@ -9,6 +9,7 @@
 # ====================================================================================================
 
 import os
+from gui.start import show_start_gui
 from utils.functions import preform_checks_and_prepare_program_start
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -34,9 +35,7 @@ data_manager = PersistentDataManager()
 preform_checks_and_prepare_program_start()
 
 # create initial singleton game class
-# game_instance = Game(persistent_data)
-# hud_instance = Hud(game_instance)
-# hud_select = GuiHudSelect(persistent_data, game_instance, hud_instance)
+show_start_gui()
 
 # ----------------------------------
 #     Finish

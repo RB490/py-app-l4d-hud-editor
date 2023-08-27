@@ -48,6 +48,7 @@ class BaseGUI:
 
     def destroy(self):
         """Destroy the window."""
+        self.root.update()  # fixes can't invoke "event" command: application has been destroyed error
         self.root.destroy()
 
     def set_transparency(self, transparency):

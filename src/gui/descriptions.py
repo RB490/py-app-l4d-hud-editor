@@ -1,5 +1,4 @@
 """Module for the hud file descriptions gui"""
-import os
 import tkinter as tk
 from tkinter import simpledialog
 

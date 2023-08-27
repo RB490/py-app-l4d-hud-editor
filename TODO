@@ -1,24 +1,26 @@
-Archive:
-
 Current:
+	☐ Bug: todo extension (once again?) looks through a bunch of folders it shouldnt
 
-
-Additional Ideas and Considerations:
-	☐ Idea: Use threading (GUI) during lengthy operations such as shutil.rmtree during installation  (Adds complexity)
-
-	☐ Refactor: too-many-lines in menu.py
-
-
-Unit Testing:
+	☐ Testing: Test the program by using it to edit HUD's
 	
-	☐ Unit test: HudDescription
-	☐ Unit test: ID File Handler
+	☐ Testing: Get the AHK version working and check it out to confirm feature parity
+	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
+
+Release:
+	- GoaL: Being able to smug the program and have it 100% work for him on first try
+	☐ Version numbers
+	☐ Auto updating
+	☐ Link to the github repo in an 'about' gui
+	☐ A way to test the program in a fresh environment. Maybe a virtual machine
+	☐ Full coverage unit testing? or atleast the important parts like HudDescription/ID FileHandler/more?
+	☐ Ask GPT on how to do this properly
 
 Post:
-	☐ Multi-game support: Explore multi-game support feasibility
-	☐ Command line: Evaluate potential of using command line interface instead of GUI
-
-
+	☐ Post: Unit test: HudDescription
+	☐ Post: Unit test: ID File Handler
+	☐ Post: Multi-game support: Explore multi-game support feasibility
+	☐ Post: Command line: Evaluate potential of using command line interface instead of GUI
+	☐ Post: Idea: Threading (GUI) for lengthy operations such as shutil.rmtree mostly during install (Adds complexity) to prevent GUI's from freezing
 	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
 	☐ Post: Enable type checking? "python.analysis.typeCheckingMode": "off"
 	☐ Post: Use types for variables and params and such? "python.analysis.typeCheckingMode": "off"
