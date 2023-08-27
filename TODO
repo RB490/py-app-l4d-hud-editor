@@ -9,8 +9,11 @@ Current:
 
 	☐ Refactor: Use proper toplevel on UserInputWindow
 	☐ Refactor: Document behaviour about how TopLevel should be used to prevent calling from TLC
+		- It comes down to only one main mainloop() being allowed. other TopLevel mainloops need to be based from of the first one
 	☐ Refactor: Cleanup BaseGui/Browser related code to topLevel
 	☐ Refactor: Cleanup todo's related code to topLevel
+
+	☐ Feature: Scale popup gui to the window's full size on right startup // also where is it being done right now? a bit slow?
 
 	☐ Refactor: toplevel should receive parent. replace is_modal_window with parent_instance. keep the tk.tk() thing to hide the weird gui but only if parent doesn't exist or something
 		- top_level_window = tk.Toplevel(self.root)

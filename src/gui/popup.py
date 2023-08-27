@@ -36,9 +36,15 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.set_decorations(False)
         self.set_always_on_top(True)
 
+        # Set size to entire screen because set_fullscreen has a 0.1 visible delay ;-)
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        self.root.geometry(f"{screen_width}x{screen_height}")
+
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
+
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
@@ -55,7 +61,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         """Show menu at mouse cursor"""
 
         # Resize the GUI to the entire screen
-        self.root.state("zoomed")
+        self.set_fullscreen(True)
 
         self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
 

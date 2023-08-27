@@ -16,18 +16,10 @@ class BaseGUI:
         self.is_hidden = None
         self.is_resizable = True
         self.is_running = False
-        if parent_toplevel_root:
-            self.parent_toplevel_root = parent_toplevel_root
-        else:
-            self.parent_toplevel_root = None
-            
+        self.parent_toplevel_root = parent_toplevel_root if parent_toplevel_root else None
 
-        if parent_toplevel_root:
-            # tkinter will create a root window and NOT hide it if this isn't done if creating Toplevel without one
-            # self.root_throwaway = tk.Tk()
-            # self.root_throwaway.withdraw()
-            # self.root = tk.Toplevel(parent_toplevel_root)
-            self.root = parent_toplevel_root
+        if self.parent_toplevel_root:
+            self.root = self.parent_toplevel_root
         else:
             self.root = tk.Tk()
 
@@ -71,6 +63,24 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.update()  # fixes can't invoke "event" command: application has been destroyed error
         self.root.destroy()
+
+    def set_fullscreen(self, fullscreen):
+        """
+        Set the window to full-screen mode.
+
+        Args:
+            fullscreen (bool): True to enable full-screen, False to disable.
+        """
+        self.is_hidden = False
+        if fullscreen:
+            if not self.parent_toplevel_root:
+                self.root.attributes("-fullscreen", True)
+            self.root.state('zoomed')  # Maximizes the window to full-screen
+            self.root.overrideredirect(True)  # Hide window decorations
+        else:
+            if not self.parent_toplevel_root:
+                self.root.attributes("-fullscreen", False)
+            self.root.overrideredirect(False)  # Restore window decorations
 
     def set_transparency(self, transparency):
         """
