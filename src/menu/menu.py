@@ -22,6 +22,7 @@ from utils.constants import (
     PROJECT_ROOT,
     SNIPPETS_DIR,
     TUTORIALS_DIR,
+    ImageConstants,
 )
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -36,14 +37,13 @@ class EditorMenuClass:
         self.handler = EditorMenuHandler(self)
         self.root = root
         self.child_instance = child_instance
+        self.img = ImageConstants()
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
 
         from hud.hud import Hud
 
         self.hud = Hud()
-
-        self.open_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
 
     def open_file(self, path):
         """Open file"""
@@ -680,17 +680,67 @@ class EditorMenuClass:
 
         self.dev_install_menu = tk.Menu(menubar, tearoff=0)
 
-        self.dev_install_menu.add_command(label="User Dir", command=self.handler.installer_user_dir)
-        self.dev_install_menu.add_command(label="Dev Dir", command=self.handler.installer_dev_dir)
+        self.dev_install_menu.add_command(
+            label="User Dir",
+            image=self.img.folder,  # Using the image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_user_dir,
+        )
+
+        self.dev_install_menu.add_command(
+            label="Dev Dir",
+            image=self.img.folder,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_dev_dir,
+        )
+
         self.dev_install_menu.add_separator()
-        self.dev_install_menu.add_command(label="Enable", command=self.handler.installer_enable)
-        self.dev_install_menu.add_command(label="Disable", command=self.handler.installer_disable)
+
+        self.dev_install_menu.add_command(
+            label="Enable",
+            image=self.img.plus,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_enable,
+        )
+
+        self.dev_install_menu.add_command(
+            label="Disable",
+            image=self.img.settings_wrench,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_disable,
+        )
+
         self.dev_install_menu.add_separator()
-        self.dev_install_menu.add_command(label="Install", command=self.handler.installer_install)
-        self.dev_install_menu.add_command(label="Update", command=self.handler.installer_update)
-        self.dev_install_menu.add_command(label="Repair", command=self.handler.installer_repair)
+
+        self.dev_install_menu.add_command(
+            label="Install",
+            image=self.img.paintbrush,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_install,
+        )
+
+        self.dev_install_menu.add_command(
+            label="Update",
+            image=self.img.reload,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_update,
+        )
+
+        self.dev_install_menu.add_command(
+            label="Repair",
+            image=self.img.pen,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_repair,
+        )
+
         self.dev_install_menu.add_separator()
-        self.dev_install_menu.add_command(label="Remove", command=self.handler.installer_remove)
+
+        self.dev_install_menu.add_command(
+            label="Remove",
+            image=self.img.trash,  # Replace with the appropriate image from ImageConstants
+            compound=tk.LEFT,
+            command=self.handler.installer_remove,
+        )
 
     def create_and_refresh_menu_developer_installer(self):
         """

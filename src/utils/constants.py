@@ -1,5 +1,8 @@
 """Global constant variables"""
 import os
+from tkinter import PhotoImage
+
+from shared_utils.shared_utils import Singleton
 
 #####################################################
 # Path
@@ -38,6 +41,70 @@ EDITOR_AUTOEXEC_PATH = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
 DUMMY_ADDON_VPK_PATH = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
 PERSISTENT_DATA_PATH = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
 HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
+
+#####################################################
+# Image constants
+#####################################################
+
+class ImageConstants(metaclass=Singleton):
+    def __init__(self):
+        self.abstract_mountains = self.load_image("abstract_mountains.png")
+        self.abstract_world_glove = self.load_image("abstract_world_glove.png")
+        self.airplane = self.load_image("airplane.png")
+        self.arrow_left = self.load_image("arrow_left.png")
+        self.arrow_right = self.load_image("arrow_right.png")
+        self.arrow_right_black_box = self.load_image("arrow_right_black_box.png")
+        self.arrow_upwards_sideways = self.load_image("arrow_upwards_sideways.png")
+        self.clipboard = self.load_image("clipboard.png")
+        self.cross = self.load_image("cross.png")
+        self.download = self.load_image("download.png")
+        self.exclamationmark = self.load_image("exclamationmark.png")
+        self.exclamationmark_in_circle = self.load_image("exclamationmark_in_circle.png")
+        self.file = self.load_image("file.png")
+        self.fire = self.load_image("fire.png")
+        self.flag = self.load_image("flag.png")
+        self.folder = self.load_image("folder.png")
+        self.fullscreen = self.load_image("fullscreen.png")
+        self.game = self.load_image("game.png")
+        self.game_2 = self.load_image("game_2.png")
+        self.link = self.load_image("link.png")
+        self.map = self.load_image("map.png")
+        self.minus = self.load_image("minus.png")
+        self.modify = self.load_image("modify.png")
+        self.modify_integers = self.load_image("modify_integers.png")
+        self.mute = self.load_image("mute.png")
+        self.old_television = self.load_image("old_television.png")
+        self.opened_folder = self.load_image("opened_folder.png")
+        self.padlock_locked = self.load_image("padlock_locked.png")
+        self.padlock_unlocked = self.load_image("padlock_unlocked.png")
+        self.paintbrush = self.load_image("paintbrush.png")
+        self.panels = self.load_image("panels.png")
+        self.pen = self.load_image("pen.png")
+        self.person = self.load_image("person.png")
+        self.phone = self.load_image("phone.png")
+        self.play = self.load_image("play.png")
+        self.plus = self.load_image("plus.png")
+        self.questionmark = self.load_image("questionmark.png")
+        self.reload = self.load_image("reload.png")
+        self.save = self.load_image("save.png")
+        self.search = self.load_image("search.png")
+        self.settings_cog = self.load_image("settings_cog.png")
+        self.settings_hamburger = self.load_image("settings_hamburger.png")
+        self.settings_wrench = self.load_image("settings_wrench.png")
+        self.sound = self.load_image("sound.png")
+        self.star = self.load_image("star.png")
+        self.storm = self.load_image("storm.png")
+        self.trash = self.load_image("trash.png")
+        self.two_chat_bubbles = self.load_image("two_chat_bubbles.png")
+        self.verification = self.load_image("verification.png")
+        self.vs_code = self.load_image("vs_code.png")
+        self.zoom = self.load_image("zoom.png")
+
+
+    @staticmethod
+    def load_image(image_filename):
+        return PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
+
 
 #####################################################
 # General
