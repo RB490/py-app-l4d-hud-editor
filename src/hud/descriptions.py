@@ -4,10 +4,11 @@ import json
 import os
 
 from game.game import Game
+from shared_utils.shared_utils import Singleton
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
 
-class HudDescriptions:
+class HudDescriptions(metaclass=Singleton):
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
 
     def __init__(self):
