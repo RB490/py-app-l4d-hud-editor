@@ -13,6 +13,7 @@ from shared_utils.shared_utils import create_lambda_command
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
+    HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
     IMAGES_DIR,
@@ -709,16 +710,16 @@ class EditorMenuClass:
             accelerator=HOTKEY_SYNC_HUD,
         )
         self.hotkeys_menu.add_command(
-            label="Show Menu",
-            image=self.img.buttons,
-            compound="left",
-            accelerator="F4",
-        )
-        self.hotkeys_menu.add_command(
             label="Browse Files",
             image=self.img.buttons,
             compound="left",
             accelerator=HOTKEY_TOGGLE_BROWSER,
+        )
+        self.hotkeys_menu.add_command(
+            label="Editor Menu",
+            image=self.img.buttons,
+            compound="left",
+            accelerator=HOTKEY_EDITOR_MENU,
         )
         self.hotkeys_menu.add_separator()
         self.hotkeys_menu.add_command(label="In-Game")

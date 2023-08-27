@@ -11,18 +11,17 @@ from debug.hud import get_hud_debug_instance
 from game.game import Game
 from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser, show_browser_gui
-from gui.popup import GuiEditorMenuPopupContextmenu
+from gui.popup import GuiEditorMenuPopup, cteate_editor_menu_popup_gui
 from gui.start import GuiHudStart, show_start_gui
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import ImageConstants
-from utils.functions import perform_checks_before_starting_program
+from utils.functions import preform_checks_and_prepare_program_start
 from utils.persistent_data_manager import PersistentDataManager
 
 
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
-    perform_checks_before_starting_program()
     print("Started debugging!")
 
     # data_manager = PersistentDataManager()
