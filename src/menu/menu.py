@@ -612,8 +612,15 @@ class EditorMenuClass:
             command=self.handler.editor_menu_reload_click,
         )
         self.reload_mode_menu_coord_clicks_checkmark.set(self.data_manager.get("reload_mouse_clicks_enabled"))
-        self.reload_mode_menu.add_command(label="Coord 1", command=self.handler.editor_menu_reload_click_coord1)
-        self.reload_mode_menu.add_command(label="Coord 2", command=self.handler.editor_menu_reload_click_coord2)
+        # label_coord_1 = "Coord 1" + str(self.data_manager.get("reload_mouse_clicks_coord_1"))
+        # label_coord_2 = "Coord 2" + str(self.data_manager.get("reload_mouse_clicks_coord_2"))
+        coords_1 = self.data_manager.get("reload_mouse_clicks_coord_1")
+        label_coord_1 = f"Coord 1 - X: {coords_1[0]}, Y: {coords_1[1]}"
+
+        coords_2 = self.data_manager.get("reload_mouse_clicks_coord_2")
+        label_coord_2 = f"Coord 2 - X: {coords_2[0]}, Y: {coords_2[1]}"
+        self.reload_mode_menu.add_command(label=label_coord_1, command=self.handler.editor_menu_reload_click_coord1)
+        self.reload_mode_menu.add_command(label=label_coord_2, command=self.handler.editor_menu_reload_click_coord2)
 
         self.reload_mode_menu_reopen_menu_checkmark = tk.BooleanVar()
         self.reload_mode_menu_reopen_menu_checkmark.set(self.data_manager.get("reload_reopen_menu_on_reload"))

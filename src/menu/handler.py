@@ -8,11 +8,11 @@ import pyperclip  # type: ignore
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from gui.start import show_start_gui
+from shared_utils.shared_utils import show_message
 from utils.constants import UNIVERSAL_GAME_MAP
 from utils.functions import get_mouse_position_on_click
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
-from shared_utils.shared_utils import show_message
 
 
 class EditorMenuHandler:
@@ -275,7 +275,8 @@ class EditorMenuHandler:
             else:
                 print("The operation was cancelled or the window was closed")
 
-            print(self.data_manager.get("reload_mouse_clicks_coord_1"))
+            self.editor_menu.create_and_refresh_menu()
+            print(f"Coord #1 set to: {coord_1}")
 
         get_mouse_position_on_click(xy_coord_callback)
 
@@ -291,7 +292,8 @@ class EditorMenuHandler:
             else:
                 print("The operation was cancelled or the window was closed")
 
-            print(self.data_manager.get("reload_mouse_clicks_coord_2"))
+            self.editor_menu.create_and_refresh_menu()
+            print(f"Coord #2 set to: {coord_2}")
 
         get_mouse_position_on_click(xy_coord_callback)
 

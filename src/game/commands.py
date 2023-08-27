@@ -34,6 +34,11 @@ class GameCommands:
 
     def execute(self, input_command):
         """Execute game commands"""
+
+        if not self.game.window.is_running():
+            print("Not executing command! Game isn't running.")
+            return
+
         output_command = self._get_mapped_command(input_command.lower())
 
         # re-show ui panel if set

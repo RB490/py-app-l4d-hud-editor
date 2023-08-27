@@ -1,11 +1,15 @@
 Archive:
 	
-	☐ Menu: @icons  Add icons Test: Do toggleable menu options support icons in any way or state
+	☐ Menu: @icons  Add icons
+	☐ Menu: @icons  Test: Do toggleable menu options support icons in any way or state?
 
 	☐ Editor menu: Add all start GUI functionality. We're almost there already.
 		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 
-		Current:
+	☐ Bug: editor menu -> show panel doesn't seem to take selected panel into account at all? doesnt toggle anything
+	✔ Feature: editor menu -> Show set coords in the menu @done(23-08-27 11:55)
+
+Current:
 
 
 
@@ -29,7 +33,7 @@ Additional Ideas and Considerations:
 		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
 		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
 	☐ Feature: Can i find a way to show a context menu which closes then losing focus using python? Can try to get Tkinter to work & maybe other frameworks
-	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed @started(23-08-27 02:14)
+	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
 		- doesn't happen when showing start (so destroying browser)
 		- doesn't happen when delayed by input()
 		- not even an issue
