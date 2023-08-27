@@ -43,7 +43,10 @@ def debug_main():
     # result = h.desc.get_custom_file_status("scripts\\hudlayout2.res")
 
     # debug_game_class()
+    # print(sys.path)
+    # from shared_modules import my_shared_function
 
+    # my_shared_function()
     # debug_vdf_class()
     debug_gui()
     # result = "Y" if h.desc.get_custom_file_status("scripts\\hudlayout2.res") else "N"
@@ -71,10 +74,10 @@ def debug_gui():
 
     # browser
     # debug_browser_gui()
-    # show_browser_gui()
+    show_browser_gui()
 
     # start
-    debug_start_gui()
+    # debug_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

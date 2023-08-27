@@ -1,34 +1,16 @@
 Archive:
-	✔ Feature: Start GUI: Context menu icons @done(23-08-26 23:53)
-	✔ Feature: Start GUI: Specific button icons rather than all identical @done(23-08-26 23:53)
-✔ Bug -> break the json -> terminal resetting settings -> failed to save data to file @done(23-08-27 00:08)
-✔ Bug -> Break the json -> start program -> dialog resetting settings -> pyimage10 doesn't exist error inside of start gui @done(23-08-27 00:10)
-✔ Feature: Settings: Add default values for settings. Do this in such a way that if Get() fails to retrieve value, look it up from the default value data & load() uses it as a default @done(23-08-27 00:10)
-✔ Bug: todo plugin not finding embedded todo's? TODO @done(23-08-27 00:13)
-✔ Refactor: Indicate that deleting files through the browser sends them into the trash @done(23-08-27 00:14)
-✔ Bug: Browser: Every file is reported as not a custom file @done(23-08-27 00:32)
-✔ Bug: Browser: Double clicking anywhere registers, including the header! @done(23-08-27 00:42)
-✔ Refactor: app-icons repo. delete unnecesary dimensions & all other things @done(23-08-27 01:14)
-✔ Refactor: IMAGES directory @done(23-08-27 01:50)
-
-Current:
-
-
-
-	☐ ☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
-
-	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed
-
-Unit Testing:
 	
-	☐ Unit test: HudDescription
-	☐ Unit test: ID File Handler
+	☐ Menu: @icons  Add icons Test: Do toggleable menu options support icons in any way or state
+
+	☐ Editor menu: Add all start GUI functionality. We're almost there already.
+		☐ Use the relevant menu's from the editor menu in start to prevent duplication
+
+		Current:
+
+
 
 Additional Ideas and Considerations:
 	
-	☐ Menu: @icons  Add icons Test: Do toggleable menu options support icons in any way or state
-	☐ Editor menu: Add all start GUI functionality. We're almost there already.
-		☐ Use the relevant menu's from the editor menu in start to prevent duplication
 	☐ Multi-game support: Explore multi-game support feasibility
 	☐ Command line: Evaluate potential of using command line interface instead of GUI
 	☐ Pull some workshop map off of steam to use for L4D2. And possibly a map for L4D1
@@ -47,6 +29,19 @@ Additional Ideas and Considerations:
 		- Use after Method for Updating: Instead of running the progress update loop inside uninstall(), you can use the after method to schedule updates at specific intervals. This will ensure that the GUI's main event loop remains responsive and the GUI updates are processed correctly.
 		- might have decided to not bother because asyncio and threading was kinda aids. it would be really nice to have for the installer gui, however
 	☐ Feature: Can i find a way to show a context menu which closes then losing focus using python? Can try to get Tkinter to work & maybe other frameworks
+	☐ Bug: Show_browser_gui() ->  can't invoke "event" command: application has been destroyed @started(23-08-27 02:14)
+		- doesn't happen when showing start (so destroying browser)
+		- doesn't happen when delayed by input()
+		- not even an issue
+		- could maybe separate creating widgets from init, and creat them when showing (only once)
+	☐ make a shared folder for a python modules ask gpt and the solution I came up with is environment variable to a python module directory which gets enforced by The script // een programming en project Python Dash files
+		☐ Bing says PYTHONPATH or making a package. so i can include it like any other package?
+		☐ Added D:\Programming and projects\python-files\shared_modules . just needs a restart
+
+Unit Testing:
+	
+	☐ Unit test: HudDescription
+	☐ Unit test: ID File Handler
 
 Post:
 	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions

@@ -1,6 +1,7 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel
 """Module for the hud browser gui class"""
 import os
+import time
 import tkinter as tk
 from datetime import datetime
 from tkinter import PhotoImage, ttk
@@ -125,7 +126,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.file_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "file.png")).subsample(2, 2)
         self.folder_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "folder.png")).subsample(2, 2)
         self.delete_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "trash.png")).subsample(2, 2)
-        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "open_2.png")).subsample(2, 2)
+        self.description_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "arrow_upwards_sideways.png")).subsample(
+            2, 2
+        )
         self.refresh_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "reload.png")).subsample(2, 2)
         self.annotate_icon = PhotoImage(file=os.path.join(IMAGES_DIR_32, "pen.png")).subsample(2, 2)
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
