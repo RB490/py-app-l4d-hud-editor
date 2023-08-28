@@ -7,6 +7,7 @@ from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, ImageConstants
+from utils.functions import get_browser_gui
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
@@ -23,6 +24,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.hud = Hud()
         self.img = ImageConstants()
 
+        self.parent = parent_root
         self.relative_path = None
         self.unsaved_changes = False
         self.prev_file_desc_content = None
@@ -302,12 +304,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # save changes
         self.save_changes()
 
-        # import browser here to avoid infinite recursion loop because it also imports this (descriptions gui) module
-        # pylint: disable=import-outside-toplevel
-        from gui.browser import GuiHudBrowser
-
-        # call browser refresh
-        browser = GuiHudBrowser()
+        browser = get_browser_gui()
         browser.treeview_refresh(browser.treeview)
 
         self.on_close()

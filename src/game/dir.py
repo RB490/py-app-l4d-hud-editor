@@ -253,6 +253,9 @@ class GameDir:
             # copy files
             copy_directory(main_dir_backup, main_dir)
 
+            # update sync status
+            self.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
+
             print("Restored developer game files!")
             return True
         except Exception as err_info:

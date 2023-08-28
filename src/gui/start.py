@@ -10,6 +10,7 @@ from PIL import Image, ImageTk
 
 from game.game import Game
 from gui.base import BaseGUI
+from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
@@ -33,6 +34,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 500)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
+        self.browser = GuiHudBrowser(self.root)
 
         self.__create_widgets()
         self.__create_context_menu()

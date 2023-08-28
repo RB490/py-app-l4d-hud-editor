@@ -24,19 +24,19 @@ from utils.persistent_data_manager import PersistentDataManager
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 
-def show_browser_gui():
+def get_browser_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
     from gui.browser import GuiHudBrowser
     from gui.start import GuiHudStart
 
     # destroy other main gui
-    try:
-        start_gui = GuiHudStart()
-        start_gui.destroy()
-    except Exception:
-        print("Couldn't destroy browser GUI. Probably already destroyed!")
+    start_gui = GuiHudStart()
 
-    browser_gui = GuiHudBrowser()
+    if not start_gui.get_mainloop_started():
+        raise ValueError("Retrieved browser GUI without having started mainloop() first")
+
+    browser_gui = GuiHudBrowser(start_gui.root)
+    browser_gui.treeview_refresh(browser_gui.treeview)
     browser_gui.show()
     print("Opened the Browser GUI!")
     return browser_gui
@@ -44,15 +44,7 @@ def show_browser_gui():
 
 def show_start_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
-    from gui.browser import GuiHudBrowser
     from gui.start import GuiHudStart
-
-    # destroy other main gui
-    try:
-        browser_gui = GuiHudBrowser()
-        browser_gui.destroy()
-    except Exception:
-        print("Couldn't destroy browser GUI. Probably already destroyed!")
 
     start_gui = GuiHudStart()
     start_gui.show()
@@ -106,7 +98,7 @@ def get_image_for_file_extension(input_path):
     }
 
     # Get the corresponding image path or return "warning.png"
-    output_image_path = file_types.get(file_extension, "warning.ico")
+    output_image_path = file_types.get(file_extension, os.path.join(IMAGES_DIR_EXT, "error.ico"))
 
     print(f"Retrieved image for {input_path} -> {output_image_path}")
     return output_image_path

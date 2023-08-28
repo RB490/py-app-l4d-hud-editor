@@ -33,10 +33,10 @@ from utils.persistent_data_manager import PersistentDataManager
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
-    def __init__(self):
+    def __init__(self, parent_root):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
-        super().__init__()
+        super().__init__(parent_root)
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)

@@ -23,7 +23,9 @@ def debug_browser_gui():
     print("debug_browser")
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
-    browser = GuiHudBrowser()
+    root = tk.Tk()
+
+    browser = GuiHudBrowser(root)
     browser.show()
 
     return
@@ -52,7 +54,7 @@ def debug_descriptions_gui():
     root = tk.Tk()
     descriptions_gui = descriptions.GuiHudDescriptions(root)
     descriptions_gui.load_file("scripts\\hudlayout.res")
-    descriptions_gui.show()
+    # descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
     # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
 

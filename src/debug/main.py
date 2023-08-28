@@ -10,6 +10,7 @@ import keyboard
 from debug.game import debug_game_class
 from debug.gui import (
     debug_browser_gui,
+    debug_descriptions_gui,
     debug_popup_gui,
     debug_progress_gui,
     debug_start_gui,
@@ -23,7 +24,11 @@ from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
-from utils.functions import preform_checks_to_prepare_program_start
+from utils.functions import (
+    get_browser_gui,
+    preform_checks_to_prepare_program_start,
+    show_start_gui,
+)
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -83,15 +88,15 @@ def debug_gui():
     "debug gui"
 
     # popup
-    debug_popup_gui()
+    # debug_popup_gui()
 
     # browser
     # debug_browser_gui()
-    # show_browser_gui()
+    # browser = get_browser_gui()
 
     # start
     # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

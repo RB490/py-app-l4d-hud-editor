@@ -15,7 +15,7 @@ from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.shared_utils import show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import copy_directory, show_browser_gui, show_start_gui
+from utils.functions import copy_directory, get_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -114,7 +114,7 @@ class HudEditor:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        self.browser = show_browser_gui()
+        self.browser = get_browser_gui()
 
         return True
 
@@ -153,7 +153,7 @@ class HudEditor:
 
         hud_dir = self.get_dir()
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        main_dev_dir_basename = os.path.basename(self.game.dirget_main_dir(DirectoryMode.DEVELOPER))
+        main_dev_dir_basename = os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER))
 
         print("hud_dir:", hud_dir)
         print("dev_game_dir:", dev_game_dir)

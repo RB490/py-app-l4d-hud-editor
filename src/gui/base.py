@@ -6,6 +6,8 @@ import tkinter as tk
 class BaseGUI:
     """BaseGUI"""
 
+    program_mainloop_started = False
+
     def __init__(self, parent_root=None):
         """
         Initialize the BaseGUI.
@@ -15,7 +17,7 @@ class BaseGUI:
         """
         self.is_hidden = None
         self.is_resizable = True
-        self.is_running = False
+        self.has_been_run = False
         self.parent_root = parent_root if parent_root else None
 
         if self.parent_root:
@@ -42,7 +44,7 @@ class BaseGUI:
     def maximize(self):
         """Maximize the window."""
         self.__call_save_window_geometry()
-        self.root.state('zoomed')  # Maximizes the window
+        self.root.state("zoomed")  # Maximizes the window
 
     def show(self, hide=False):
         """Show the window."""
@@ -50,19 +52,36 @@ class BaseGUI:
         self.is_hidden = False
         if hide:
             self.hide()
-        if not self.is_running:
+        if not self.has_been_run:
             self.run()
+
+    def has_ran(self):
+        """Check if GUI has been ran once"""
+        if self.has_been_run:
+            return True
+        else:
+            return False
+
+    def get_mainloop_started(self):
+        """Check if mainloop was started"""
+        return BaseGUI.program_mainloop_started
+
+    def set_mainloop_started(self, bool_value):
+        """Check if mainloop was started"""
+        BaseGUI.program_mainloop_started = bool_value
+        return
 
     def run(self):
         """Run mainloop()"""
-        if self.is_running:
+        if self.has_been_run:
             raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
 
-        self.is_running = True
+        self.has_been_run = True
         print(f"Running GUI {self.root.title()}")
 
         # toplevel gui's don't need a mainloop because they get handled by the main mainloop
         if not self.parent_root:
+            self.set_mainloop_started(True)
             self.root.mainloop()
 
     def destroy(self):
@@ -130,7 +149,7 @@ class BaseGUI:
     def get_window_geometry(self):
         """Get window geometry if GUI is loaded and visible"""
 
-        if self.is_running:
+        if self.has_been_run:
             geometry = self.root.geometry()
             print(f"{self.root.title()} GUI geometry: {geometry}")
             return geometry
@@ -183,7 +202,7 @@ class BaseGUI:
 
     def __call_save_window_geometry(self):
         try:
-            if self.is_running:
+            if self.has_been_run:
                 if hasattr(self, "save_window_geometry") and callable(getattr(self, "save_window_geometry")):
                     self.save_window_geometry()
                 else:
