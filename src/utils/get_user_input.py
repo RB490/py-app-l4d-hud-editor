@@ -24,8 +24,7 @@ class UserInputWindow(BaseGUI):
             title: The title to display at the top of the window.
             prompt: The prompt to display to the user.
         """
-        super().__init__(tk.Toplevel(parent_root))
-        # BaseGUI.__init__(self, is_toplevel_gui=True)
+        super().__init__(parent_root)
         self.root.title(title)
         self.prompt = prompt
         # self.input_box = None

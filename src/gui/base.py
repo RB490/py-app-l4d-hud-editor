@@ -6,7 +6,7 @@ import tkinter as tk
 class BaseGUI:
     """BaseGUI"""
 
-    def __init__(self, parent_toplevel_root=None):
+    def __init__(self, parent_root=None):
         """
         Initialize the BaseGUI.
 
@@ -16,10 +16,10 @@ class BaseGUI:
         self.is_hidden = None
         self.is_resizable = True
         self.is_running = False
-        self.parent_toplevel_root = parent_toplevel_root if parent_toplevel_root else None
+        self.parent_root = parent_root if parent_root else None
 
-        if self.parent_toplevel_root:
-            self.root = self.parent_toplevel_root
+        if self.parent_root:
+            self.root = tk.Toplevel(self.parent_root)
         else:
             self.root = tk.Tk()
 
@@ -55,7 +55,9 @@ class BaseGUI:
 
         self.is_running = True
         print(f"Running GUI {self.root.title()}")
-        if not self.parent_toplevel_root:
+
+        # toplevel gui's don't need a mainloop because they get handled by the main mainloop
+        if not self.parent_root:
             self.root.mainloop()
 
     def destroy(self):
@@ -73,12 +75,12 @@ class BaseGUI:
         """
         self.is_hidden = False
         if fullscreen:
-            if not self.parent_toplevel_root:
+            if not self.parent_root:
                 self.root.attributes("-fullscreen", True)
             self.root.state("zoomed")  # Maximizes the window to full-screen
             self.root.overrideredirect(True)  # Hide window decorations
         else:
-            if not self.parent_toplevel_root:
+            if not self.parent_root:
                 self.root.attributes("-fullscreen", False)
             self.root.overrideredirect(False)  # Restore window decorations
 
@@ -128,7 +130,7 @@ class BaseGUI:
             print(f"{self.root.title()} GUI geometry: {geometry}")
             return geometry
         else:
-            print(f"{self.root.title()} GUI is running. Returning default geometry.")
+            print(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
             return "1000x1000+100+100"
 
     def set_always_on_top(self, status):

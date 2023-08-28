@@ -37,37 +37,54 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # pylint: disable=c-extension-no-member
         print("GuiHudBrowser")
         super().__init__()
-        self.data_manager = PersistentDataManager()
-
-        # set variables
-        self.hud = Hud()
-        self.game = Game()
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
-        self.img = ImageConstants()
 
-        # toplevel needs to be made in the main thread to prevent 'calling tlc from different apartment'
-        # toplevel popup
-        self.browser_toplevel_root_popup = tk.Toplevel(self.root)
-        self.browser_toplevel_root_popup.withdraw()
-        self.popup_gui = GuiEditorMenuPopup(self.browser_toplevel_root_popup)
-        # toplevel description
-        self.browser_toplevel_root_desc = tk.Toplevel(self.root)
-        self.browser_toplevel_root_desc.withdraw()
-        self.descriptions_gui = GuiHudDescriptions(self.browser_toplevel_root_desc)
+        # set variables
+        self.data_manager = PersistentDataManager()
+        self.hud = Hud()
+        self.game = Game()
+        self.img = ImageConstants()
+        self.popup_gui = GuiEditorMenuPopup(self.root)
+        self.descriptions_gui = GuiHudDescriptions(self.root)
 
         self.selected_full_path = None
         self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
 
-        # Store PhotoImage objects in a list to prevent garbage collection
-        self.treeview_photo_images = []
+        self.__create_widgets()
+        self.__create_context_menu()
 
-        # draw controls
+        # Bind the function to the selection event
+        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
+
+        # Bind the context menu to the right-click event on the treeview
+        self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
+
+        # editor menu
+        self.my_editor_menu = EditorMenuClass(self, self.root)
+        self.my_editor_menu.create_and_refresh_menu()
+
+        # set hwnd
+        self.hwnd = win32gui.GetParent(self.frame.winfo_id())
+
+        self.treeview_refresh(self.treeview)
+        self.treeview_sort_column("modified", True)
+
+    def __create_widgets(self):
+        """Create widgets"""
+
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
         self.frame.pack(fill="both", anchor="nw", expand=True)
 
+        # draw controls
+        self.__create_search_frame()
+        self.__create_treeview()
+
+    def __create_search_frame(self):
+        """Search frame"""
+        # pylint: disable=attribute-defined-outside-init
         # create a frame for search controls
         self.search_frame = tk.Frame(self.frame)
         self.search_frame.pack(side="top", fill="x", padx=5, pady=5)
@@ -95,6 +112,12 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             self.search_frame, text="All", variable=self.display_choice, value="All", command=self.handle_radio_click
         )
         self.radio_2.pack(side="right", padx=5)
+
+    def __create_treeview(self):
+        """Search treeview"""
+        # pylint: disable=attribute-defined-outside-init
+        # Store PhotoImage objects in a list to prevent garbage collection
+        self.treeview_photo_images = []
 
         # create a treeview with three columns
         self.treeview = ttk.Treeview(
@@ -135,9 +158,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Link the Scrollbar to the Treeview widget
         self.treeview.configure(yscrollcommand=scrollbar.set)
 
-        # Bind the function to the selection event
-        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
-
+    def __create_context_menu(self):
+        """Context menu"""
         # Create a context menu
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
@@ -186,19 +208,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
 
         # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)
-
-        # Bind the context menu to the right-click event on the treeview
-        self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
-
-        # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root)
-        self.my_editor_menu.create_and_refresh_menu()
-
-        # set hwnd
-        self.hwnd = win32gui.GetParent(self.frame.winfo_id())
-
-        self.treeview_refresh(self.treeview)
-        self.treeview_sort_column("modified", True)
 
     def dummy_handler(self):
         "Dummy method"
@@ -385,9 +394,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry())
 
-    def __on_close_internal(self):
+    def on_close(self):
         """Runs on close"""
-        self.descriptions_gui.__on_close_internal()
+        self.descriptions_gui.destroy()
         self.save_window_geometry()
         save_and_exit_script()
 
@@ -449,7 +458,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         print("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
         try:
-            app = VDFModifierGUI(self.selected_full_path)
+            app = VDFModifierGUI(self.root, self.selected_full_path)
             app.show()
         except Exception:
             print("Browser: Can't load VDF GUI!")

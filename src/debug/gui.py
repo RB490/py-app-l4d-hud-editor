@@ -4,6 +4,7 @@ import random
 import shutil
 import string
 import time
+import tkinter as tk
 
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
@@ -45,7 +46,8 @@ def debug_get_user_input():
 
 
 def debug_descriptions_gui():
-    descriptions_gui = descriptions.GuiHudDescriptions()
+    root = tk.Tk()
+    descriptions_gui = descriptions.GuiHudDescriptions(root)
     descriptions_gui.load_file("scripts\\hudlayout.res")
     descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
@@ -100,5 +102,6 @@ def debug_vdf_gui():
     vdf_path_backup = get_backup_path(vdf_path)
     shutil.copy2(vdf_path, vdf_path_backup)
 
-    app = VDFModifierGUI(vdf_path_backup)
+    root = tk.Tk()
+    app = VDFModifierGUI(root, vdf_path_backup)
     app.show()

@@ -13,17 +13,14 @@ from utils.vdf import VDFModifier
 class VDFModifierGUI(BaseGUI):
     """GUI Class for modifying VDF files."""
 
-    def __init__(self, vdf_path):
+    def __init__(self, parent_root, vdf_path):
         # verify input
         self.vdf_path = vdf_path
         self.root = None  # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
 
         # setup gui
-        super().__init__(is_modal_dialog=True)
-        # super().__init__(is_toplevel_gui=False)
-        # super().__init__(is_toplevel_gui=True)
-        # BaseGUI.__init__(self, is_toplevel_gui=True)
+        super().__init__(parent_root)
         self.data_manager = PersistentDataManager()
         self.img = ImageConstants()
         self.modifier = None  # vdf modifier class
@@ -32,11 +29,7 @@ class VDFModifierGUI(BaseGUI):
         self.root.title("VDF Modifier")
 
         # load saved geometry
-        try:
-            geometry = self.data_manager.get("VDFGuiGeometry")
-            self.root.geometry(geometry)
-        except KeyError:
-            self.root.geometry("875x425+100+100")
+        self.set_window_geometry(self.data_manager.get("VDFGuiGeometry"))
 
         self.control_options = ["xpos", "ypos", "wide", "tall", "visible", "enabled"]
         self.selected_control = tk.StringVar(value=self.control_options[0])
@@ -49,7 +42,7 @@ class VDFModifierGUI(BaseGUI):
         self.modify_amount_var = tk.IntVar()
         self.modify_modifier_var = tk.StringVar(value="plus")
 
-        self.create_widgets()
+        self.__create_widgets()
         self.load_file()  # load file into gui
 
     def load_file(self):
@@ -64,35 +57,46 @@ class VDFModifierGUI(BaseGUI):
         self.process()
         return True
 
-    def create_widgets(self):
+    def __create_widgets(self):
         """Create widgets"""
         # Create a main frame to hold everything
-        main_frame = tk.Frame(self.root)
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        self.main_frame = tk.Frame(self.root)
+        self.main_frame.pack(fill=tk.BOTH, expand=True)
 
         info_msg = "Expect incorrect results on larger and/or more complex VDF files like sourcescheme.res!"
-        self.info_label = tk.Label(main_frame, text=info_msg)
+        self.info_label = tk.Label(self.main_frame, text=info_msg)
         self.info_label.pack(side=tk.BOTTOM, pady=(0, 5))
 
-        right_side_frame = tk.Frame(main_frame, relief=tk.SOLID, borderwidth=0)
-        right_side_frame.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
+        self.__create_right_side_frame()
 
-        self.reload_button = tk.Button(right_side_frame, text="Reload", height=16, command=self.load_file)
+    def __create_right_side_frame(self):
+        # pylint: disable=attribute-defined-outside-init
+        self.right_side_frame = tk.Frame(self.main_frame, relief=tk.SOLID, borderwidth=0)
+        self.right_side_frame.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
+
+        self.reload_button = tk.Button(self.right_side_frame, text="Reload", height=16, command=self.load_file)
         self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
         self.reload_button.config(
             image=self.img.arrows_couple_counterclockwise_rotating_symbol, compound="left", padx=10
         )
 
-        self.save_to_file_button = tk.Button(right_side_frame, text="Save", height=16, command=self.save_vdf)
+        self.save_to_file_button = tk.Button(self.right_side_frame, text="Save", height=16, command=self.save_vdf)
         self.save_to_file_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
         self.save_to_file_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=10)
 
-        self.process_button = tk.Button(right_side_frame, text="Modify", height=32, command=self.process)
+        self.process_button = tk.Button(self.right_side_frame, text="Modify", height=32, command=self.process)
         self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
         self.process_button.config(image=self.img.pencil_black_square, compound="left", padx=10)
 
+        self.__create_modify_integers_frame()
+        self.__create_other_options_frame()
+        self.__create_previous_vdf_frame()
+        self.__create_current_vdf_frame()
+
+    def __create_modify_integers_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # Create a frame for integer modifying widgets
-        int_mod_frame = tk.Frame(right_side_frame, relief=tk.RIDGE, borderwidth=3)
+        int_mod_frame = tk.Frame(self.right_side_frame, relief=tk.RIDGE, borderwidth=3)
         int_mod_frame.pack(fill=tk.X, padx=(0, 10), pady=(0, 10))
 
         self.modify_int_checkbox = tk.Checkbutton(int_mod_frame, text="Modify Integers", variable=self.modify_int_var)
@@ -143,8 +147,10 @@ class VDFModifierGUI(BaseGUI):
         )
         self.modify_modifier_minus_radio.pack(anchor="w", padx=(10, 10), pady=(0, 10))
 
+    def __create_other_options_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # Other Options Frame
-        other_options_frame = tk.Frame(right_side_frame, width=550, relief=tk.RIDGE, borderwidth=3)
+        other_options_frame = tk.Frame(self.right_side_frame, width=550, relief=tk.RIDGE, borderwidth=3)
         other_options_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=(0, 10), pady=(0, 10))
 
         self.annotate_checkbox = tk.Checkbutton(other_options_frame, text="Annotate", variable=self.annotate_var)
@@ -160,12 +166,11 @@ class VDFModifierGUI(BaseGUI):
         )
         self.align_values_indent_checkbox.pack(anchor="w", padx=(10, 10), pady=(0, 10))
 
+    def __create_previous_vdf_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # Create frames for text widgets
-        previous_frame = tk.Frame(main_frame)
+        previous_frame = tk.Frame(self.main_frame)
         previous_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(10, 0), pady=(10, 10))
-
-        current_frame = tk.Frame(main_frame)
-        current_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(0, 10), pady=(10, 10))
 
         # Label for "previous" text box
         previous_label = tk.Label(previous_frame, text="Previous:")
@@ -174,6 +179,11 @@ class VDFModifierGUI(BaseGUI):
         # "previous" text box
         self.previous_text = scrolledtext.ScrolledText(previous_frame, width=40, height=10)
         self.previous_text.pack(fill=tk.BOTH, expand=True)
+
+    def __create_current_vdf_frame(self):
+        # pylint: disable=attribute-defined-outside-init
+        current_frame = tk.Frame(self.main_frame)
+        current_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(0, 10), pady=(10, 10))
 
         # Label for "current" text box
         current_label = tk.Label(current_frame, text="Current:")
@@ -220,7 +230,7 @@ class VDFModifierGUI(BaseGUI):
 
         self.previous_output = output
 
-        self.save_settings_to_disk()
+        self.save_window_settings()
 
         self.previous_text.configure(state="disabled")
         self.current_text.configure(state="disabled")
@@ -228,17 +238,11 @@ class VDFModifierGUI(BaseGUI):
     def save_vdf(self):
         "Save vdf to disk"
 
-        self.save_settings_to_disk()
+        self.save_window_settings()
 
         self.modifier.save_vdf(
             self.modifier.get_obj(), self.modifier.get_path(), self.data_manager.get("VDFGui_indent_values")
         )
-
-    def save_settings_to_disk(self):
-        "Save all settings"
-        self.save_window_settings()
-        self.save_window_geometry()
-        self.data_manager.save()
 
     def save_window_settings(self):
         "Save gui settings"
@@ -249,5 +253,5 @@ class VDFModifierGUI(BaseGUI):
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        
+
         self.data_manager.set("VDFGuiGeometry", self.get_window_geometry())

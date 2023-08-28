@@ -34,10 +34,27 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.root.minsize(865, 500)
         self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
 
+        self.__create_widgets()
+        self.__create_context_menu()
+
+        self.change_addon_image(os.path.join(IMAGES_DIR_128, "cross.png"))
+
+        # Bind the right-click event to show the context menu
+        self.treeview.bind("<Button-3>", self.show_tree_context_menu)
+        from menu.menu import EditorMenuClass
+
+        self.my_editor_menu = EditorMenuClass(self, self.root)
+        # self.my_editor_menu.create_and_refresh_menu_developer_installer() # add to the menubar
+        self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)  # add as context menu
+
+        # Configure the root window with the menubar
+        self.update_treeview()
+
+    def __create_widgets(self):
         # gui variables
-        pad_x = 10
-        pad_y = 10
-        right_panel_width = 204
+        self.pad_x = 10
+        self.pad_y = 10
+        self.right_panel_width = 204
 
         # initialize variables
         self.picture_canvas_photo = None
@@ -48,6 +65,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.frame = tk.Frame(self.root)
         self.frame.pack(fill="both", anchor="nw", expand=True)
 
+        self.__create_treeview()
+        self.__create_right_panel()
+
+    def __create_treeview(self):
+        # pylint: disable=attribute-defined-outside-init
         # create a treeview with three columns
         self.treeview = ttk.Treeview(self.frame, columns=("name", "directory"), height=10)
         self.treeview.heading("#0", text="")
@@ -56,19 +78,26 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.column("#0", width=10, stretch=False)
         self.treeview.column("name", width=125, stretch=False)
         self.treeview.column("directory", width=400)
-        self.treeview.pack(side="left", expand=True, fill="both", padx=pad_x, pady=(pad_y, pad_y))
+        self.treeview.pack(side="left", expand=True, fill="both", padx=self.pad_x, pady=(self.pad_y, self.pad_y))
 
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
+    def __create_right_panel(self):
+        # pylint: disable=attribute-defined-outside-init
         # create a frame for the right panel
         self.right_panel = tk.Frame(self.frame, bd=0, relief="solid")
-        self.right_panel.pack(padx=(0, pad_x), pady=(pad_y, pad_y), fill="both", expand=True)
+        self.right_panel.pack(padx=(0, self.pad_x), pady=(self.pad_y, self.pad_y), fill="both", expand=True)
 
         # treeview button frame
         self.tree_btn_frame = tk.Frame(self.right_panel)
         self.tree_btn_frame.pack(fill="both", expand=True)
 
+        self.__create_new_or_add_frame()
+        self.__create_bottom_frame()
+
+    def __create_new_or_add_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # new or add label
         self.new_or_add_label = tk.Label(
             self.tree_btn_frame,
@@ -89,19 +118,26 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # create a button above the picture frame
         self.add_button = tk.Button(self.new_or_add_frame, text="Add", height=25, command=self.prompt_add_hud)
         self.add_button.config(image=self.img.addition_sign, compound="left", padx=10)
-        self.add_button.config(width=(right_panel_width / 2) - 5, height=25)
-        self.add_button.pack(padx=(0, 0), pady=(0, pad_y), side="right")
+        self.add_button.config(width=(self.right_panel_width / 2) - 5, height=25)
+        self.add_button.pack(padx=(0, 0), pady=(0, self.pad_y), side="right")
 
         # create a button above the picture frame
         self.new_button = tk.Button(self.new_or_add_frame, text="New", height=25, command=self.prompt_new_hud)
         self.new_button.config(image=self.img.star_black_fivepointed_shape_symbol, compound="left", padx=10)
-        self.new_button.config(width=(right_panel_width / 2), height=25)
-        self.new_button.pack(padx=(0, 5), pady=(0, pad_y), side="left")
+        self.new_button.config(width=(self.right_panel_width / 2), height=25)
+        self.new_button.pack(padx=(0, 5), pady=(0, self.pad_y), side="left")
 
+    def __create_bottom_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # create a frame for the edit controls
         self.bottom_frame = tk.Frame(self.tree_btn_frame)
         self.bottom_frame.pack(side="bottom", fill="both", anchor="se", expand=False)
+        self.__create_rem_op_ex_frame()
+        self.__create_picture_frame()
+        self.__create_dev_and_edit_frame()
 
+    def __create_rem_op_ex_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # new or add label
         self.rem_op_ex_label = tk.Label(
             self.bottom_frame,
@@ -113,7 +149,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             # relief="solid",
             # bd=1,
         )
-        self.rem_op_ex_label.pack(fill="both", pady=pad_y)
+        self.rem_op_ex_label.pack(fill="both", pady=self.pad_y)
 
         # remove, open & export buttons frame
         self.rem_op_ex_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")
@@ -127,7 +163,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_export_vpk_or_folder,
             state="disabled",  # Disable the remove button
         )
-        self.export_vpk_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=pad_x)
+        self.export_vpk_button.config(
+            image=self.img.save_black_diskette_interface_symbol, compound="left", padx=self.pad_x
+        )
         self.export_vpk_button.config(width=55, height=25)
         self.export_vpk_button.pack(padx=0, pady=0, side="left")
 
@@ -139,7 +177,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_open_dir,
             state="disabled",  # Disable the remove button
         )
-        self.open_dir_button.config(image=self.img.folder_black_interface_symbol, compound="left", padx=pad_x)
+        self.open_dir_button.config(image=self.img.folder_black_interface_symbol, compound="left", padx=self.pad_x)
         self.open_dir_button.config(width=55, height=25)  # Adjust the width as needed
         self.open_dir_button.pack(padx=(5, 5), pady=0, side="left")
 
@@ -151,32 +189,39 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_remove_or_delete,
             state="disabled",  # Disable the remove button
         )
-        self.remove_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=pad_x)
+        self.remove_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=self.pad_x)
         self.remove_button.config(width=55, height=25)
         self.remove_button.pack(padx=0, pady=0, side="left")
 
+    def __create_picture_frame(self):
+        # pylint: disable=attribute-defined-outside-init
         # create a picture frame on the right side
         self.picture_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")  # bg="black"
-        self.picture_frame.pack(fill=tk.X, padx=0, pady=(pad_y, pad_y))
+        self.picture_frame.pack(fill=tk.X, padx=0, pady=(self.pad_y, self.pad_y))
 
         # Add the image viewport, display it in the picture frame and set the initial image
         self.picture_canvas = tk.Canvas(self.picture_frame, relief="groove", bd=3)
         # width + 16 because otherwise black bars around the canvas. possibly caused by the relief/border options
-        self.picture_canvas.config(width=right_panel_width + 45, height=right_panel_width + 45)
+        self.picture_canvas.config(width=self.right_panel_width + 45, height=self.right_panel_width + 45)
         self.picture_canvas.pack()
 
-        self.change_addon_image(os.path.join(IMAGES_DIR_128, "cross.png"))
+    def __create_dev_and_edit_frame(self):
+        # pylint: disable=attribute-defined-outside-init
+
+        # remove, open & export buttons frame
+        self.dev_and_edit_frame = tk.Frame(self.bottom_frame, bd=0, relief="solid")
+        self.dev_and_edit_frame.pack(fill=tk.X, expand=True)
 
         # Developer menu
-        developer_menu_button = tk.Button(self.bottom_frame, text="Developer", justify="center")
+        developer_menu_button = tk.Button(self.dev_and_edit_frame, text="Developer", justify="center")
         developer_menu_button.config(width=85, height=25)
-        developer_menu_button.config(image=self.img.wrench_black_silhouette, compound="left", padx=pad_x)
+        developer_menu_button.config(image=self.img.wrench_black_silhouette, compound="left", padx=self.pad_x)
         developer_menu_button.pack(padx=(0, 5), pady=0, side="left")
         developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
         # create a button above the picture frame
         self.edit_button = tk.Button(
-            self.bottom_frame,
+            self.dev_and_edit_frame,
             text="Edit",
             height=25,
             command=self.edit_selected_hud,
@@ -185,6 +230,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.edit_button.config(image=self.img.paintbrush_design_tool_interface_symbol, compound="left", padx=10)
         self.edit_button.pack(fill=tk.X, padx=0, pady=0)
 
+    def __create_context_menu(self):
         # Create a context menu for the treeview
         self.context_menu = tk.Menu(self.treeview, tearoff=0)
         self.context_menu.add_command(
@@ -219,17 +265,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             image=self.img.trash_can_black_symbol,
             compound="left",
         )
-
-        # Bind the right-click event to show the context menu
-        self.treeview.bind("<Button-3>", self.show_tree_context_menu)
-        from menu.menu import EditorMenuClass
-
-        self.my_editor_menu = EditorMenuClass(self, self.root)
-        # self.my_editor_menu.create_and_refresh_menu_developer_installer() # add to the menubar
-        self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)  # add as context menu
-
-        # Configure the root window with the menubar
-        self.update_treeview()
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
@@ -321,6 +356,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_remove_or_delete(self):
         """Remove the selected hud."""
+        # pylint: disable=attribute-defined-outside-init
         print("Remove tree item")
 
         # set variables
@@ -358,6 +394,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def change_addon_image(self, path):
         """Load specified image into the image control"""
+        # pylint: disable=attribute-defined-outside-init
         image = Image.open(path)
         self.picture_canvas_photo = ImageTk.PhotoImage(image)
 
@@ -371,6 +408,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     # pylint: disable=unused-argument
     def tree_set_selected_item(self, event):
         """Get select item from treeview"""
+        # pylint: disable=attribute-defined-outside-init
         selected_item = self.treeview.selection()
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]

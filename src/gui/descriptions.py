@@ -12,11 +12,12 @@ from utils.constants import APP_ICON, ImageConstants
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
-    def __init__(self, parent_toplevel_root):
-        super().__init__(parent_toplevel_root)
+    def __init__(self, parent_root):
+        super().__init__(parent_root)
         self.root.title("File")
         self.root.iconbitmap(APP_ICON)
         self.set_always_on_top(True)
+        # self.root.minsize(450, 400)
 
         self.game = Game()
         self.hud = Hud()
@@ -27,33 +28,46 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.prev_file_desc_content = None
         self.prev_ctrl_desc_content = None
 
-        # self.root.minsize(450, 400)
+        self.__create_widgets()
 
+    def __create_widgets(self):
+        """Create widgets"""
         # define constants for padding and sizing
-        pad_x = 10
-        pad_y = 10
-        ctrl_w = 40
+        self.pad_x = 10
+        self.pad_y = 10
+        self.ctrl_w = 40
 
+        self.__create_file_widgets()
+        self.__create_control_widgets()
+
+    def __create_file_widgets(self):
+        """Create widgets"""
+        # pylint: disable=attribute-defined-outside-init
         file_desc_frame = tk.Frame(self.root)
-        file_desc_frame.pack(fill="both", expand=True, padx=pad_x, pady=(0, 0))
+        file_desc_frame.pack(fill="both", expand=True, padx=self.pad_x, pady=(0, 0))
 
         file_desc_label = tk.Label(file_desc_frame, text="File description")
-        file_desc_label.pack(side="top", anchor="w", padx=pad_x, pady=pad_y)
+        file_desc_label.pack(side="top", anchor="w", padx=self.pad_x, pady=self.pad_y)
 
         file_desc_scrollbar = tk.Scrollbar(file_desc_frame)
         file_desc_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.file_desc_text = tk.Text(file_desc_frame, height=6, width=ctrl_w, yscrollcommand=file_desc_scrollbar.set)
-        self.file_desc_text.pack(side="top", fill="both", expand=True, padx=pad_x, pady=0)
+        self.file_desc_text = tk.Text(
+            file_desc_frame, height=6, width=self.ctrl_w, yscrollcommand=file_desc_scrollbar.set
+        )
+        self.file_desc_text.pack(side="top", fill="both", expand=True, padx=self.pad_x, pady=0)
         self.file_desc_text.bind("<KeyPress>", self.on_file_desc_modified)
 
         file_desc_scrollbar.config(command=self.file_desc_text.yview)
 
+    def __create_control_widgets(self):
+        """Create widgets"""
+        # pylint: disable=attribute-defined-outside-init
         ctrl_label_frame = tk.LabelFrame(self.root, text="Control descriptions")
-        ctrl_label_frame.pack(fill="both", expand=True, padx=pad_x * 2, pady=pad_y * 2)
+        ctrl_label_frame.pack(fill="both", expand=True, padx=self.pad_x * 2, pady=self.pad_y * 2)
 
         ctrl_button_frame = tk.Frame(ctrl_label_frame)
-        ctrl_button_frame.pack(side="bottom", fill="x", expand=False, padx=pad_x, pady=(0, pad_y))
+        ctrl_button_frame.pack(side="bottom", fill="x", expand=False, padx=self.pad_x, pady=(0, self.pad_y))
 
         self.ctrl_menu_variable = tk.StringVar(self.root)
         self.ctrl_menu_variable.set("None")  # default value
@@ -62,52 +76,54 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             ctrl_button_frame, self.ctrl_menu_variable, *controls_list, command=self.selected_ctrl
         )
         self.ctrl_menu.config(width=25)
-        self.ctrl_menu.pack(side="left", padx=pad_x, pady=pad_y, fill="x", expand=True)
+        self.ctrl_menu.pack(side="left", padx=self.pad_x, pady=self.pad_y, fill="x", expand=True)
 
         add_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.add_control)
         add_ctrl_button.config(width=25, height=23)
         add_ctrl_button.config(image=self.img.addition_sign, compound="center")
-        add_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
+        add_ctrl_button.pack(side="left", padx=self.pad_x, pady=self.pad_y)
 
         remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
         remove_ctrl_button.config(width=25, height=23)
         remove_ctrl_button.config(image=self.img.trash_can_black_symbol, compound="center")
-        remove_ctrl_button.pack(side="left", padx=pad_x, pady=pad_y)
+        remove_ctrl_button.pack(side="left", padx=self.pad_x, pady=self.pad_y)
 
         ctrl_desc_frame = tk.Frame(ctrl_label_frame)
-        ctrl_desc_frame.pack(anchor="nw", side="top", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
+        ctrl_desc_frame.pack(anchor="nw", side="top", fill="both", expand=True, padx=self.pad_x, pady=(self.pad_y, 0))
 
         ctrl_desc_scrollbar = tk.Scrollbar(ctrl_desc_frame)
         ctrl_desc_scrollbar.pack(side="right", fill="y")
 
-        self.ctrl_desc_text = tk.Text(ctrl_desc_frame, height=4, width=ctrl_w, yscrollcommand=ctrl_desc_scrollbar.set)
-        self.ctrl_desc_text.pack(side="bottom", fill="both", expand=True, padx=pad_x, pady=(pad_y, 0))
+        self.ctrl_desc_text = tk.Text(
+            ctrl_desc_frame, height=4, width=self.ctrl_w, yscrollcommand=ctrl_desc_scrollbar.set
+        )
+        self.ctrl_desc_text.pack(side="bottom", fill="both", expand=True, padx=self.pad_x, pady=(self.pad_y, 0))
         self.ctrl_desc_text.bind("<KeyPress>", self.on_ctrl_desc_modified)
 
         ctrl_desc_scrollbar.config(command=self.ctrl_desc_text.yview)
 
         save_button_frame = tk.Frame(self.root)
-        save_button_frame.pack(side="bottom", expand=False, fill="x", padx=pad_x, pady=(0, pad_y))
+        save_button_frame.pack(side="bottom", expand=False, fill="x", padx=self.pad_x, pady=(0, self.pad_y))
 
         save_button = tk.Button(
             save_button_frame,
             text="Save",
             justify="center",
             height=25,
-            width=ctrl_w,
+            width=self.ctrl_w,
             command=self.submit_gui_save_changes,
         )
-        save_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=pad_x)
-        save_button.pack(side="right", expand=True, fill="x", padx=pad_x, pady=(0, pad_y))
+        save_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=self.pad_x)
+        save_button.pack(side="right", expand=True, fill="x", padx=self.pad_x, pady=(0, self.pad_y))
 
         remove_file_entry_button = tk.Button(
             save_button_frame, text="Remove", justify="center", command=self.remove_file_entry
         )
         remove_file_entry_button.config(width=70, height=25)
-        remove_file_entry_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=pad_x)
-        remove_file_entry_button.pack(side="left", padx=pad_x, pady=(0, pad_y))
+        remove_file_entry_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=self.pad_x)
+        remove_file_entry_button.pack(side="left", padx=self.pad_x, pady=(0, self.pad_y))
 
-    def __on_close_internal(self):
+    def on_close(self):
         """On gui close"""
 
         # prompt to save unsaved changes
@@ -294,7 +310,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         browser = GuiHudBrowser()
         browser.treeview_refresh(browser.treeview)
 
-        self.__on_close_internal()
+        self.on_close()
 
     def prompt_to_save_unsaved_changes(self):
         "Ask user whether to save unsaved changes"

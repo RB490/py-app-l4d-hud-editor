@@ -26,11 +26,11 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, parent_toplevel_root, instantly_show_menu=False):
+    def __init__(self, parent_root, instantly_show_menu=False):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
         """
-        super().__init__(parent_toplevel_root)
+        super().__init__(parent_root)
         self.root.title("Editor Context Menu Popup")
         self.set_transparency(0.5)
         self.set_decorations(False)

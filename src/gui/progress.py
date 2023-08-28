@@ -33,9 +33,9 @@ class ProgressGUI:
         self.longest_label_length = 10
         self.avg_char_width = None
 
-        self._init_gui()
+        self.__create_widgets()
 
-    def _init_gui(self):
+    def __create_widgets(self):
         """Initialize the GUI elements and layout."""
         self.action_description_label = tk.Label(
             self.root,

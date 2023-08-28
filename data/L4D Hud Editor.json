@@ -1,7 +1,7 @@
 {
-    "BrowserGuiGeometry": "710x318+17+402",
+    "BrowserGuiGeometry": "710x258+17+402",
     "HudSelectGuiGeometry": "865x607+64+538",
-    "VDFGuiGeometry": "938x533+85+238",
+    "VDFGuiGeometry": "903x472+376+407",
     "VDFGui_annotate": 1,
     "VDFGui_indent_values": 1,
     "VDFGui_modify_int": 1,
