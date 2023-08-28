@@ -5,6 +5,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, ttk
 
+import keyboard
 import send2trash
 from PIL import Image, ImageTk
 
@@ -51,6 +52,13 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Configure the root window with the menubar
         self.update_treeview()
+
+        # Debug hotkeys
+        keyboard.add_hotkey("F9", self.start_debug_method, suppress=True)  # TODO disable debug hotkey
+
+    def start_debug_method(self):
+        print("start_debug_method")
+        # get_browser_gui()
 
     def __create_widgets(self):
         # gui variables

@@ -34,8 +34,6 @@ class Game(metaclass=Singleton):
         self.steam = SteamInfoRetriever()
         self.dir = GameDir(self)
 
-        print("Game Class Init")
-
         self.title = "Left 4 Dead 2"
         self.exe = "left4dead2.exe"
         self.app_id = "550"
@@ -137,10 +135,8 @@ class Game(metaclass=Singleton):
         "Is mode installed?"
 
         if self.dir.id.get_installation_state(dir_mode) == InstallationState.NOT_INSTALLED:
-            print(f"{dir_mode.name} installation does not exist!")
             return False
         else:
-            print(f"{dir_mode.name} installation exists!")
             return True
 
     def close(self):

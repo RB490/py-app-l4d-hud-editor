@@ -1,11 +1,13 @@
 "Game class directory methods"
-# pylint: disable=protected-access, broad-exception-caught, broad-exception-raised
+# pylint: disable=protected-access, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
+import logging
 import os
 import shutil
 
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
+from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import verify_directory
 from utils.functions import (
     copy_directory,
@@ -15,6 +17,10 @@ from utils.functions import (
     rename_with_timeout,
 )
 from utils.steam_info_retriever import SteamInfoRetriever
+
+logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger = logger_manager.get_logger()  # Get the logger instance
 
 
 class GameDir:
@@ -142,7 +148,7 @@ class GameDir:
             if os.path.isdir(folder_path):
                 id_path = os.path.join(folder_path, id_filename)
                 if os.path.isfile(id_path):
-                    print(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
+                    logger.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
                     return folder_path
 
         print(f"No installation directory found for mode '{dir_mode}'.")
@@ -180,14 +186,14 @@ class GameDir:
         main_dir_name = self.get_main_dir_name()
         main_dir = os.path.join(root_dir, main_dir_name)
 
-        print(f"Get {dir_mode.name} main dir: {main_dir}")
+        # print(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
     def get_main_dir_backup(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
         main_dir = self.get_main_dir(dir_mode)
         main_dir_backup = get_backup_path(main_dir)
-        print(f"Main directory backup: '{main_dir_backup}'")
+        # print(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 
     def _get_main_subdir(self, dir_mode, subdir_name):
@@ -199,7 +205,7 @@ class GameDir:
         if not os.path.exists(subdir_path):
             raise FileNotFoundError(f"{subdir_path} directory not found for {dir_mode.name} mode")
 
-        print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
+        # print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
         return subdir_path
 
     def _get_main_subdir_backup(self, dir_mode, subdir_name):
@@ -209,7 +215,7 @@ class GameDir:
         main_dir_backup = self.get_main_dir_backup(dir_mode)
         subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
 
-        print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
+        # print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
         return subdir_backup_path
 
     def get_cfg_dir(self, dir_mode):
@@ -231,7 +237,7 @@ class GameDir:
 
         # Construct and return the vanilla directory path
         vanilla_dir = os.path.join(games_dir, title)
-        print(f"Vanilla directory: {vanilla_dir}")
+        # print(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
 
     def restore_developer_directory(self):

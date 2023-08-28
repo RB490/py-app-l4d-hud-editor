@@ -217,7 +217,7 @@ class HudEditor:
 
         # verify variables
         if not self.get_dir() or not os.path.exists(self.get_dir()):
-            print(f"Could not retrieve files dictionary. Directory does not exist: {self.get_dir()}")
+            print(f"Can't retrieve files dictionary. Directory does not exist: {self.get_dir()}")
             return None
 
         root_folder = self.get_dir()

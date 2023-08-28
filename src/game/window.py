@@ -40,8 +40,27 @@ class GameWindow:
         if not self.hwnd:
             print("No window handle to get!")
         else:
-            print(f"Get {self.get_exe()} hwnd '{self.hwnd}'")
+            # print(f"Get {self.get_exe()} hwnd '{self.hwnd}'")
             return self.hwnd
+
+    def __set_hwnd(self, timeout_seconds=0):
+        """Retrieve game hwnd"""
+
+        # exception because we need the window handle
+        try:
+            # wait until game is running
+            wait_for_process_with_ram_threshold(self.get_exe(), timeout_seconds)
+
+            # retrieve hwnd
+            self.hwnd = get_hwnd_for_exe(self.get_exe())
+            if not self.hwnd:
+                raise Exception("Could not set window handle!")
+            else:
+                print(f"Set {self.get_exe()} hwnd '{self.hwnd}'")
+                return self.hwnd
+        except Exception as err_info:
+            print(f"An error occurred retrieving window handle: {err_info}")
+            return False
 
     def restore_saved_position(self):
         "Restore saved position"
@@ -91,25 +110,6 @@ class GameWindow:
 
         # move game
         move_hwnd_to_position(self.game.window.get_hwnd(), position)
-
-    def __set_hwnd(self, timeout_seconds=0):
-        """Retrieve game hwnd"""
-
-        # exception because we need the window handle
-        try:
-            # wait until game is running
-            wait_for_process_with_ram_threshold(self.get_exe(), timeout_seconds)
-
-            # retrieve hwnd
-            self.hwnd = get_hwnd_for_exe(self.get_exe())
-            if not self.hwnd:
-                raise Exception("Could not set window handle!")
-            else:
-                print(f"Set {self.get_exe()} hwnd '{self.hwnd}'")
-                return self.hwnd
-        except Exception as err_info:
-            print(f"An error occurred retrieving window handle: {err_info}")
-            return False
 
     def run(self, dir_mode, write_config=True):
         """Start the game

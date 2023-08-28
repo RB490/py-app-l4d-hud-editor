@@ -68,11 +68,6 @@ class EditorMenuClass:
         self.game_map_menu = tk.Menu(menubar, tearoff=0)
         # self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
 
-        if os.path.exists(os.path.join(IMAGES_DIR, "Left 4 Dead small grayscale.png")):
-            print("The directory path exists.")
-        else:
-            print("The directory path does not exist or is invalid.")
-
         self.map_menu_l4d1_icon = PhotoImage(
             # file=BIG_CROSS_ICON
             file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_small_grayscale.png")

@@ -53,37 +53,14 @@ def debug_main():
 
     # unit_test_hud_syncer()
 
-    # h = get_hud_debug_instance()
-    # result = h.edit.get_all_files_dict()
-    # result = h.desc.get_custom_file_status("scripts\\hudlayout2.res")
-
-    # debug_game_class()
-    # print(sys.path)
-    # from shared_modules import my_shared_function
-
     # keyboard.add_hotkey("F2", dummy_func, suppress=True)
     # keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, dummy_func, suppress=True)
 
     # logging_class_usage_example()
 
-    logger_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
-    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
-    logger = logger_manager.get_logger()  # Get the logger instance
-    logger.info("my message")
-    # logger.critical("my message")
-
-    # my_shared_function()
-    # debug_vdf_class()
-    # get_editor_menu_popup_gui()
-    # debug_gui()
-    # result = "Y" if h.desc.get_custom_file_status("scripts\\hudlayout2.res") else "N"
-    # custom_prompt_example_usage()
-    # data_manager = PersistentDataManager()
-    # data_manager.set("game_mute", 0)
-    # data_manager.get("stored_huds")
-
     # show_start_gui()
     # show_browser_gui()
+    debug_gui()
 
     # hud = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()

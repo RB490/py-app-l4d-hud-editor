@@ -1,6 +1,13 @@
 """BaseGUI"""
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, logging-fstring-interpolation
+import logging
 import tkinter as tk
+
+from shared_utils.logging_manager import LoggerManager
+
+logger_manager = LoggerManager(__name__, level=logging.WARNING)
+# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger = logger_manager.get_logger()
 
 
 class BaseGUI:
@@ -77,7 +84,7 @@ class BaseGUI:
             raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
 
         self.has_been_run = True
-        print(f"Running GUI {self.root.title()}")
+        logger.info(f"Running GUI {self.root.title()}")
 
         # toplevel gui's don't need a mainloop because they get handled by the main mainloop
         if not self.parent_root:
@@ -116,7 +123,7 @@ class BaseGUI:
             transparency (float): The transparency value (0.0 to 1.0).
         """
         self.root.attributes("-alpha", transparency)
-        print(f"{self.root.title()} GUI Transparency set to {transparency}")
+        logger.info(f"{self.root.title()} GUI Transparency set to {transparency}")
 
     def set_decorations(self, show_decorations):
         """
@@ -128,9 +135,9 @@ class BaseGUI:
         self.root.overrideredirect(not show_decorations)
         if show_decorations:
             self.root.attributes("-fullscreen", False)
-            print(f"{self.root.title()} GUI Window decorations are now visible.")
+            logger.info(f"{self.root.title()} GUI Window decorations are now visible.")
         else:
-            print(f"{self.root.title()} GUI Window decorations are now hidden.")
+            logger.info(f"{self.root.title()} GUI Window decorations are now hidden.")
 
     def set_window_geometry(self, geometry):
         """
@@ -141,9 +148,9 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
-            print(f"Set {self.root.title()} GUI to '{geometry}'!")
+            logger.info(f"Set {self.root.title()} GUI to '{geometry}'!")
         except Exception:
-            print(f"Set {self.root.title()} GUI to default '1000x1000+100+100'!")
+            logger.exception(f"Error setting {self.root.title()} GUI geometry")
             self.root.geometry("1000x1000+100+100")
 
     def get_window_geometry(self):
@@ -178,6 +185,7 @@ class BaseGUI:
             self.show()
         else:
             self.hide()
+        logger.info(f"{self.root.title()} GUI visibility toggled.")
 
     def set_hotkey(self, key_combination, callback, widget=None):
         """
@@ -205,19 +213,18 @@ class BaseGUI:
             if self.has_been_run:
                 if hasattr(self, "save_window_geometry") and callable(getattr(self, "save_window_geometry")):
                     self.save_window_geometry()
+                    logger.info(f"Called save_window_geometry for {self.root.title()} GUI.")
                 else:
-                    print(f"GUI {self.root.title()} GUI does not have a save_window_geometry method to call!")
+                    logger.warning(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
         except Exception as e_info:
-            print(f"An error occurred: {e_info}")
+            logger.error(f"Error occurred while calling save_window_geometry for {self.root.title()} GUI: {e_info}")
 
     def __on_close_internal(self):
         """Callback function before the window is closed."""
         # pylint: disable=no-member
         self.__call_save_window_geometry()
         self.hide()
-
-        # call the on_close method of the child gui
         if hasattr(self, "on_close") and callable(getattr(self, "on_close")):
             self.on_close()
         else:
-            print(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")
+            logger.warning(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")

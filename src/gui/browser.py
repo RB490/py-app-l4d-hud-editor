@@ -1,4 +1,4 @@
-# pylint: disable=broad-exception-caught, import-outside-toplevel
+# pylint: disable=broad-exception-caught, import-outside-toplevel, c-extension-no-member
 """Module for the hud browser gui class"""
 import os
 import tkinter as tk
@@ -34,8 +34,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
     def __init__(self, parent_root):
-        # pylint: disable=c-extension-no-member
-        print("GuiHudBrowser")
         super().__init__(parent_root)
         self.root.title("Browser")
         self.root.minsize(300, 100)
@@ -289,8 +287,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Handle user double-clicks"""
         region = self.treeview.identify_region(event.x, event.y)
 
-        print(region)
-
         if region == "cell":
             cell = self.treeview.identify_row(event.y)
             print("Double-clicked on row:", cell)
@@ -321,6 +317,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         Returns:
             None
         """
+        # don't update tree until has been run
+        if not self.get_mainloop_started():
+            return
+
         # Get HUD directory and display choice
         hud_dir = self.hud.edit.get_dir()
         display_choice = self.display_choice.get().lower()
@@ -328,7 +328,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Retrieve data based on display choice
         data_dict = self.hud.edit.get_all_files_dict() if display_choice == "all" else self.hud.edit.get_files_dict()
         if not data_dict:
-            print("Treeview: No data to display")
             return
 
         # Clear existing items in the Treeview

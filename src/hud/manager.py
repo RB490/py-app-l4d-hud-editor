@@ -9,7 +9,6 @@ from utils.persistent_data_manager import (
     PersistentDataManager,  # Assuming you have vdf library imported
 )
 
-
 class HudManager:
     """Handles storage, retrieval, and management of HUD-related data and folders."""
 
@@ -63,7 +62,7 @@ class HudManager:
             addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
             if addon_info.get("AddonInfo", {}).get("addontitle"):
                 hud_name = addon_info["AddonInfo"]["addontitle"]
-                print(f"Hud name: Retrieved '{hud_name}' @ '{addoninfo_path}'")
+                # print(f"Hud name: Retrieved '{hud_name}' @ '{addoninfo_path}'")
             else:
                 print(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
         else:

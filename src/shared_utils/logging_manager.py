@@ -1,3 +1,4 @@
+# pylint: disable= line-too-long, missing-module-docstring
 import logging
 
 
@@ -22,7 +23,16 @@ class LoggerManager:
         self.logger.setLevel(level)
         console_handler = logging.StreamHandler()
         console_handler.setLevel(level)
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+        formatter = logging.Formatter("%(name)s (%(levelname)s): %(message)s")
+        # game.dir_id_handler (DEBUG): ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
+
+        # formatter = logging.Formatter("%(asctime)s - %(name)s (%(levelname)s): %(message)s")
+        # 2023-08-28 23:38:12,040 - game.dir_id_handler (DEBUG): ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
+
+        # formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        # 2023-08-28 23:38:59,448 - game.dir_id_handler - DEBUG - ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
+
         console_handler.setFormatter(formatter)
         self.logger.addHandler(console_handler)
 
@@ -35,7 +45,10 @@ def logging_class_usage_example():
     """
     Example of using the LoggerManager to log messages.
     """
-    logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+    # logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+    logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
+    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
     logger = logger_manager.get_logger()  # Get the logger instance
 
     # Log messages at different levels

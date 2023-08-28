@@ -100,7 +100,7 @@ def get_image_for_file_extension(input_path):
     # Get the corresponding image path or return "warning.png"
     output_image_path = file_types.get(file_extension, os.path.join(IMAGES_DIR_EXT, "error.ico"))
 
-    print(f"Retrieved image for {input_path} -> {output_image_path}")
+    # print(f"Retrieved image for {input_path} -> {output_image_path}")
     return output_image_path
 
 
