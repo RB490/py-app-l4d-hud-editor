@@ -103,7 +103,7 @@ class GameDir:
         print(f"No vanilla file available, custom file: '{relative_file_path}'")
         return True
 
-    def _is_custom_file(self, relative_file_path):
+    def is_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file
 
         Note: use description's get_custom_file_status for cached result. Should be a lot faster"""
@@ -261,7 +261,6 @@ class GameDir:
         except Exception as err_info:
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info
 
-
     def check_for_invalid_id_file_structure(self):
         """
         Check for invalid ID file structures in the Steam game directory.
@@ -274,7 +273,6 @@ class GameDir:
             Exception: If more than one of the same ID file is found in different folders.
         """
         print("Checking for invalid ID file structures...")
-
 
         steam_game_dir = self.steam.get_games_dir()
 

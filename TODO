@@ -6,7 +6,7 @@ Current:
 
 	☐ Bug: Descriptions gui -> save -> image errors. could be garbage collection or otherwise?
 
-	☐ Refactor: Toggle most/all print statements in a class eg: hud descriptions
+	☐ Refactor: Toggle most/all print statements in a class eg: hud descriptions. Can be done with logging.
 
 	☐ Refactor: Make start gui the main gui and browser a subgui? apparently it really is best practice to have 1 main gui
 		☐ OR: Refactor: Make a little class to run the two main GUI's: Start & Browser
@@ -20,6 +20,8 @@ Current:
 	☐ Testing: Get the AHK version working and check it out to confirm feature parity
 
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
+
+	☐ Refactor: Cleanup redundant print statements
 
 Release:
 	- GoaL: Being able to smug the program and have it 100% work for him on first try

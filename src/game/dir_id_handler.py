@@ -2,11 +2,15 @@
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught
 import json
 import os
+import logging
 from tkinter import filedialog
 
 from game.constants import DirectoryMode, InstallationState, SyncState
 from shared_utils.shared_utils import is_subdirectory, show_message
 
+# Set logging configuration
+logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.CRITICAL + 1)  # turns off logging
 
 class GameIDHandler:
     """Handles game ID and state information for different directory modes."""
@@ -28,17 +32,17 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
-            print(f"Could not retrieve ID path for {dir_mode.name}.")
+            logging.info(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
         id_path = os.path.join(mode_dir, self._get_filename(dir_mode))
-        # print("ID Path:", id_path)
+        logging.debug(f"ID Path: {id_path}")
         return id_path
 
     def set_path(self, dir_mode):
         """Manually set the directory for a given directory mode."""
 
-        print(f"Manually setting directory for: {dir_mode.name}")
+        logging.info(f"Manually setting directory for: {dir_mode.name}")
 
         try:
             self.game._validate_dir_mode(dir_mode)
@@ -122,17 +126,17 @@ class GameIDHandler:
         id_path = self.__get_path(dir_mode)
 
         if id_path is None:
-            print(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
+            logging.debug(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
             return default_value
 
         state_data = self.__read_content(id_path)
         state_value = state_data.get(state_key)
 
         if state_value is None:
-            print(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
+            logging.debug(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
             return default_value
 
-        print(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
+        logging.debug(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
         return state_value
 
     def __set_state(self, dir_mode, state_key, state_value):
@@ -144,7 +148,7 @@ class GameIDHandler:
         state_data = self.__read_content(id_path)
         state_data[state_key] = state_value.name if state_value is not None else None
         self.__write_content(dir_mode, state_data)
-        print(f"Updated {state_key} state to: '{state_value.name}'")
+        logging.debug(f"Updated {state_key} state to: '{state_value.name}'")
 
     def __read_content(self, id_path):
         """Read and return the content of the ID file."""
@@ -153,7 +157,7 @@ class GameIDHandler:
                 with open(id_path, "r", encoding="utf-8") as file_handle:
                     return json.load(file_handle)
         except Exception as err:
-            print(f"Error reading ID content: {err}")
+            logging.error(f"Error reading ID content: {err}")
         return {}  # Fallback to empty json
 
     def __write_content(self, dir_mode, state_data):
@@ -166,7 +170,7 @@ class GameIDHandler:
         try:
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump(state_data, file_handle, indent=4)
-                print(f"Set ID content in: {id_path}")
+                logging.debug(f"Set ID content in: {id_path}")
                 return True
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
@@ -181,35 +185,3 @@ class GameIDHandler:
                 json.dump({}, file_handle, indent=4)
         except Exception as err_info:
             raise Exception(f"Unable to create ID file: {err_info}") from err_info
-
-
-def debug_id_handler(game_class):
-    "Debug"
-    game_id_handler = game_class.dir.id
-    # game_class.dir.id.set_path(DirectoryMode.DEVELOPER)
-
-    # Set the ID location for developer directory
-    dir_mode = DirectoryMode.DEVELOPER
-    game_id_handler.set_path(dir_mode)
-
-    # Set installation state for developer directory
-    installation_state = InstallationState.COMPLETED
-    game_id_handler.set_installation_state(dir_mode, installation_state)
-
-    # Set sync state for developer directory
-    sync_state = SyncState.FULLY_SYNCED
-    game_id_handler.set_sync_state(dir_mode, sync_state)
-
-    # Get installation state for developer directory
-    retrieved_installation_state = game_id_handler.get_installation_state(dir_mode)
-    if retrieved_installation_state:
-        print("Retrieved Installation State:", retrieved_installation_state.name)
-    else:
-        print("Installation State not found.")
-
-    # Get sync state for developer directory
-    retrieved_sync_state = game_id_handler.get_sync_state(dir_mode)
-    if retrieved_sync_state:
-        print("Retrieved Sync State:", retrieved_sync_state.name)
-    else:
-        print("Sync State not found.")

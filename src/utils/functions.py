@@ -418,7 +418,7 @@ def copy_directory(src_dir, dest_dir, ignore_file=None):
             # Attempt to copy the file, handle errors
             try:
                 shutil.copy2(src_path, dest_path)
-                print(f"Copied {src_path} -> {dest_path}")
+                # print(f"Copied {src_path} -> {dest_path}")
             except shutil.Error as copy_error:
                 print(f"Copy error: {copy_error}")
             except Exception as general_error:

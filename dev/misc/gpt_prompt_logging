@@ -1,0 +1,12 @@
+replace print statements with logging
+
+rules:
+- keep all of my comments
+- keep all of my class and method docs
+- keep all of my code
+- use f-strings in the logging statements
+- consider which logging level each print statement should be
+- set logging to: logging.basicConfig(level=logging.INFO)
+- also print line to set  logging to: logging.basicConfig(level=logging.CRITICAL + 1)  # turns off logging
+
+here is my code:
