@@ -36,11 +36,11 @@ from utils.functions import (
 from utils.persistent_data_manager import PersistentDataManager
 
 
-def unsync_hud_func():
+def debug_unsync_hud_func():
     "debug"
     hud_ins = Hud()
     hud_ins.edit.syncer.unsync()
-    print("finished: unsync_hud_func")
+    print("finished: debug_unsync_hud_func")
 
 
 def debug_main():
@@ -49,7 +49,7 @@ def debug_main():
     print("Started debugging!")
 
     # hotkeys
-    keyboard.add_hotkey("F12", unsync_hud_func, suppress=True)
+    keyboard.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
 
     # data_manager = PersistentDataManager()
     # PersistentDataManager().save()

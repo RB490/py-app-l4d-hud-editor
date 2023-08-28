@@ -26,7 +26,7 @@ from utils.constants import (
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
-from utils.functions import get_image_for_file_extension, save_and_exit_script
+from utils.functions import get_browser_gui, get_image_for_file_extension, save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -394,6 +394,11 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def on_close(self):
         """Runs on close"""
+        result = show_message("Are you sure you want to exit?", "yesno")
+        if not result:
+            get_browser_gui()
+            return
+        
         self.descriptions_gui.destroy()
         self.save_window_geometry()
         save_and_exit_script()

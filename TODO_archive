@@ -322,3 +322,4 @@
 	✔ Executed command: 'hud_reloadscheme; ui_reloadscheme; mat_reloadallmaterials; mat_setvideomode 1 1 1 0;mat_setvideomode 640 480 1 0; wait; showpanel None' @done(23-08-29 00:59)
 ✔ Bug?: F7 to toggle browser visibility works when used during start gui being open. but when editing it doesn't @done(23-08-29 00:59)
 ✔ Bug?: Browser & editor menu hotkeys work right away. not only while browser is visible @done(23-08-29 00:59)
+✔ Feature: Browser closing should have a confirmation dialog about are you sure @done(23-08-29 01:05)

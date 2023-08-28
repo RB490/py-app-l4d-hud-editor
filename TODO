@@ -1,6 +1,5 @@
 Current:
-	☐ Feature: Browser closing should have a confirmation dialog about are you sure
-
+	
 	☐ Feature: Global hotkey manager: Method to set up global (debug) hotkeys seems pretty useful right now to say the least. 
 
 	☐ Testing: Test the program by using it to edit HUD's
