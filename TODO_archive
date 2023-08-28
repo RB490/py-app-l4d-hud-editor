@@ -318,3 +318,7 @@
 	✔ OR: Refactor: Make a little class to run the two main GUI's: Start & Browser @done(23-08-29 00:25)
 ✘ Modify browser on_close to go back to the start gui @cancelled(23-08-29 00:26)
 ✔ Bug: Seemingly, the backup files are restored every single time on game start right nows @done(23-08-29 00:26)
+✔ Bug: Execute Reload fonts game command -> Game sits in middle of desktop again & is not restored to its saved position @done(23-08-29 00:59)
+	✔ Executed command: 'hud_reloadscheme; ui_reloadscheme; mat_reloadallmaterials; mat_setvideomode 1 1 1 0;mat_setvideomode 640 480 1 0; wait; showpanel None' @done(23-08-29 00:59)
+✔ Bug?: F7 to toggle browser visibility works when used during start gui being open. but when editing it doesn't @done(23-08-29 00:59)
+✔ Bug?: Browser & editor menu hotkeys work right away. not only while browser is visible @done(23-08-29 00:59)

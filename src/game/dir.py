@@ -43,7 +43,7 @@ class GameDir:
         "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
 
-        print(f"Setting mode: {dir_mode.name}")
+        logger.debug(f"Setting mode: {dir_mode.name}")
 
         # retrieving source & target dir with self.get also already checks whether they are installed
         rename_timeout = 6
@@ -64,7 +64,7 @@ class GameDir:
 
         # do we need to swap?
         if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
-            print(f"{target_mode.name} already active!")
+            logger.debug(f"{target_mode.name} already active!")
             return True
 
         # close game
@@ -228,8 +228,7 @@ class GameDir:
 
     def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
-        print("Getting vanilla directory path...")
-
+        
         # Get the games directory from the steam object of the game
         games_dir = self.game.steam.get_games_dir()
         # Get the title of the game
@@ -278,8 +277,6 @@ class GameDir:
             Exception: If two ID files are found in the same folder.
             Exception: If more than one of the same ID file is found in different folders.
         """
-        print("Checking for invalid ID file structures...")
-
         steam_game_dir = self.steam.get_games_dir()
 
         user_id_file_name = self.game.dir.id._get_filename(DirectoryMode.USER)
@@ -320,7 +317,7 @@ class GameDir:
                     if id_counts[id_file] > 1:
                         raise Exception(f"More than one '{id_file}' file found in different folders")
 
-        print("ID file structure check completed.")
+        print("Verified ID file structure!")
 
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"

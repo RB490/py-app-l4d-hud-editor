@@ -35,7 +35,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         super().__init__(parent_root)
         self.root.title("Editor Context Menu Popup")
         self.debug_instantly_show_menu = debug_instantly_show_menu
-        self.set_transparency(0.0)
+        self.set_transparency(0.3)  # fully transparent makes it less reliable somehow
         self.set_decorations(False)
         self.set_always_on_top(False)  # not setting this because it causes prompts to be behind the gui
 

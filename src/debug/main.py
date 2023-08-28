@@ -24,6 +24,7 @@ from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
+from hud.hud import Hud
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
@@ -35,15 +36,20 @@ from utils.functions import (
 from utils.persistent_data_manager import PersistentDataManager
 
 
-def dummy_func():
+def unsync_hud_func():
     "debug"
-    print("dummy_func")
+    hud_ins = Hud()
+    hud_ins.edit.syncer.unsync()
+    print("finished: unsync_hud_func")
 
 
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
+
+    # hotkeys
+    keyboard.add_hotkey("F12", unsync_hud_func, suppress=True)
 
     # data_manager = PersistentDataManager()
     # PersistentDataManager().save()
@@ -52,9 +58,6 @@ def debug_main():
     # result = data_manager.get("game_mode")
 
     # unit_test_hud_syncer()
-
-    # keyboard.add_hotkey("F2", dummy_func, suppress=True)
-    # keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, dummy_func, suppress=True)
 
     # logging_class_usage_example()
 

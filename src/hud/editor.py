@@ -135,7 +135,6 @@ class HudEditor:
         # remove hotkey
         hotkeys = keyboard.get_hotkey_name()
         if HOTKEY_SYNC_HUD in hotkeys:
-            print("Hotkey exists")
             keyboard.remove_hotkey(self.sync)
 
         # clear variables
@@ -155,9 +154,9 @@ class HudEditor:
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         main_dev_dir_basename = os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER))
 
-        print("hud_dir:", hud_dir)
-        print("dev_game_dir:", dev_game_dir)
-        print("main_dev_dir_basename:", main_dev_dir_basename)
+        # print("hud_dir:", hud_dir)
+        # print("dev_game_dir:", dev_game_dir)
+        # print("main_dev_dir_basename:", main_dev_dir_basename)
 
         # pylint: disable=broad-exception-caught
         try:

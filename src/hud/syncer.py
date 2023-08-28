@@ -12,8 +12,9 @@ from shared_utils.shared_utils import Singleton
 from utils.functions import get_backup_path
 
 # configure logging
-logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+# logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
 logger = logger_manager.get_logger()  # Get the logger instance
 
 
@@ -163,7 +164,7 @@ class HudSyncer(metaclass=Singleton):
         logger.info(f"Sync target_dir_root: {self.target_dir_root}")
         logger.info(f"Sync target_dir_main_name: {self.target_dir_main_name}")
         logger.info(f"Sync target_sub_dir_names: {self.target_sub_dir_names}")
-        logger.info(f"Sync hud_items: {self.hud_items}")
+        # logger.info(f"Sync hud_items: {self.hud_items}")
 
         # Backup game files
         self.__backup_target()
@@ -176,8 +177,7 @@ class HudSyncer(metaclass=Singleton):
 
         self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
 
-        logger.info("Synced!")
-        # input("end of sync()")
+        logger.critical("Synced!")
 
     def __backup_target(self):
         for target_sub_dir_name in self.target_sub_dir_names:

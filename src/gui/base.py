@@ -158,10 +158,10 @@ class BaseGUI:
 
         if self.has_been_run:
             geometry = self.root.geometry()
-            print(f"{self.root.title()} GUI geometry: {geometry}")
+            logger.info(f"{self.root.title()} GUI geometry: {geometry}")
             return geometry
         else:
-            print(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
+            logger.warning(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
             return "1000x1000+100+100"
 
     def set_always_on_top(self, status):
@@ -215,7 +215,7 @@ class BaseGUI:
                     self.save_window_geometry()
                     logger.info(f"Called save_window_geometry for {self.root.title()} GUI.")
                 else:
-                    logger.warning(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
+                    logger.debug(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
         except Exception as e_info:
             logger.error(f"Error occurred while calling save_window_geometry for {self.root.title()} GUI: {e_info}")
 
@@ -227,4 +227,4 @@ class BaseGUI:
         if hasattr(self, "on_close") and callable(getattr(self, "on_close")):
             self.on_close()
         else:
-            logger.warning(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")
+            logger.debug(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")

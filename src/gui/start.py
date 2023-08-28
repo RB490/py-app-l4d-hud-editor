@@ -44,6 +44,10 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Bind the right-click event to show the context menu
         self.treeview.bind("<Button-3>", self.show_tree_context_menu)
+
+        # Bind the function to the selection event
+        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
+
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
@@ -89,9 +93,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview.column("name", width=125, stretch=False)
         self.treeview.column("directory", width=400)
         self.treeview.pack(side="left", expand=True, fill="both", padx=self.pad_x, pady=(self.pad_y, self.pad_y))
-
-        # Bind the function to the selection event
-        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
     def __create_right_panel(self):
         # pylint: disable=attribute-defined-outside-init
@@ -295,7 +296,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def show_developer_menu(self, event):
         """Open the developer context menu"""
         self.dev_context_menu.post(event.x_root, event.y_root)
-        print("Opened the developer context menu!")
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
@@ -422,12 +422,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         selected_item = self.treeview.selection()
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
-            print(item_values)
             self.selected_hud_name = self.treeview.item(item)["values"][0]
             self.selected_hud_dir = os.path.normpath(self.treeview.item(item)["values"][1])
             image = os.path.join(self.selected_hud_dir, "addonimage.jpg")
-            print(self.selected_hud_dir)
-            print(self.selected_hud_name)
 
             self.change_addon_image(image)
             self.enable_buttons()

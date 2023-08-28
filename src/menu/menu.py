@@ -60,7 +60,7 @@ class EditorMenuClass:
         """
         A dummy function that does nothing.
         """
-        print("Do nothing with:", args)
+        pass
 
     def create_game_map_menu(self, menubar):
         """Create game map menu"""

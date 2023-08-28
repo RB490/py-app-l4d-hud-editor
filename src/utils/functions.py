@@ -38,7 +38,6 @@ def get_browser_gui():
     browser_gui = GuiHudBrowser(start_gui.root)
     browser_gui.treeview_refresh(browser_gui.treeview)
     browser_gui.show()
-    print("Opened the Browser GUI!")
     return browser_gui
 
 
@@ -49,7 +48,6 @@ def show_start_gui():
     start_gui = GuiHudStart()
     start_gui.show()
 
-    print("Opened the Start GUI!")
     return start_gui
 
 

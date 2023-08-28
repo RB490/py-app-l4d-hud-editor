@@ -66,6 +66,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
+        # setup hotkeys
+        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
+        keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup_gui, suppress=True)
+
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
 
@@ -378,11 +382,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 values=(file_name, file_desc, is_custom, last_modified, file_relative_path),
                 image=photo,
             )
-
-        # Add a hotkey and print refresh completion
-        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
-        keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup_gui, suppress=True)
-        print("Treeview: Refreshed")
 
     def show_popup_gui(self):
         """Show editor menu as a context menu"""

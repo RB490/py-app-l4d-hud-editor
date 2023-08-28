@@ -10,8 +10,8 @@ from shared_utils.shared_utils import Singleton
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
 # Configure the logging settings
-logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
 logger = logger_manager.get_logger()  # Get the logger instance
 
 

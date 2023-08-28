@@ -81,6 +81,9 @@ class GameCommands:
 
         # save previous panel to perform actions
         self.previous_ui_panel = self.show_ui_panel
+        
+        # resetore game position
+        self.game.window.restore_saved_position()
 
     def _get_mapped_command(self, input_command):
         """Map the input command to its corresponding game command."""
