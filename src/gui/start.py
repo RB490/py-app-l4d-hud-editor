@@ -296,7 +296,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             # mouse pointer over item
             self.treeview.selection_set(iid)
 
-        self.context_menu.post(event.x_root, event.y_root)
+            self.context_menu.post(event.x_root, event.y_root)
 
     def selected_hud_start_editing(self):
         """Edit the selected hud."""

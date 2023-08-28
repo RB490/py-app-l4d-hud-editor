@@ -2,9 +2,10 @@ Current:
 	✔ Refactor: Split GUI creation into smaller methods like create_widgets>create_treeview&create_context_menu @done(23-08-28 15:51)
 	✔ Refactor: Editor: start_hud_editing - ask GPT, a lot of duplicate code @done(23-08-28 15:57)
 	✔ Refactor: Editor: finishg_hud_editing? @done(23-08-28 15:57)
-	☐ Refactor: Make a little class to run the two main GUI's: Start & Browser
+	✔ Bug: Use browser context menu option without anything selected. Could be modified by not showing the context menu if nothing selected @done(23-08-28 16:05)
 
-	☐ Bug: Use browser context menu option without anything selected. Could be modified by not showing the context menu if nothing selected
+	☐ Refactor: Make start gui the main gui and browser a subgui?  OR:
+		☐ Refactor: Make a little class to run the two main GUI's: Start & Browser
 
 	☐ Testing: Test the program by using it to edit HUD's
 	

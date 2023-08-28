@@ -253,8 +253,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         if item:
             self.treeview.selection_set(item)
 
-        # Show the context menu at the event's coordinates
-        self.context_menu.post(event.x_root, event.y_root)
+            # Show the context menu at the event's coordinates
+            self.context_menu.post(event.x_root, event.y_root)
 
     def treeview_get_selected_values(self):
         """Get a list of the values of the selected treeview row"""
