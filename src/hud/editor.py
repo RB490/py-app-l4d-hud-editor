@@ -34,6 +34,13 @@ class HudEditor:
         self.threaded_timer_game_exit = None
         self.browser = None
 
+    def _is_already_being_edited(self):
+        """Check if the current HUD is already being edited."""
+
+        if self.syncer.is_synced() and self.syncer.get_source_dir() == self.get_dir():
+            return True
+        return False
+
     def start_editing(self, hud_dir):
         """Perform all the actions needed to start hud editing"""
 
@@ -70,7 +77,7 @@ class HudEditor:
             return False
 
         # cancel if this hud is already being edited
-        if self.syncer.is_synced() and (self.syncer.get_source_dir() == self.get_dir()):
+        if self._is_already_being_edited():
             show_start_gui()
             return False
 
