@@ -16,7 +16,7 @@ class UserInputWindow(BaseGUI):
         callback (callable): The function to call with the user's input after it has been submitted.
     """
 
-    def __init__(self, title: str, prompt: str) -> None:
+    def __init__(self, parent_root, title: str, prompt: str) -> None:
         """
         Initialize a new UserInputWindow.
 
@@ -24,7 +24,7 @@ class UserInputWindow(BaseGUI):
             title: The title to display at the top of the window.
             prompt: The prompt to display to the user.
         """
-        super().__init__(is_modal_dialog=True)
+        super().__init__(tk.Toplevel(parent_root))
         # BaseGUI.__init__(self, is_toplevel_gui=True)
         self.root.title(title)
         self.prompt = prompt
@@ -68,7 +68,7 @@ class UserInputWindow(BaseGUI):
             self.callback(command)
 
 
-def get_user_input(title: str, prompt: str, callback=None) -> None:
+def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     """
     Open a window to allow the user to enter text.
 
@@ -77,8 +77,8 @@ def get_user_input(title: str, prompt: str, callback=None) -> None:
         prompt: The prompt to display to the user.
         callback: A function to call with the user's input after it has been submitted (optional).
     """
-    root = tk.Tk()
-    root.withdraw()  # Hide parent window
-    command_window = UserInputWindow(title, prompt)
+    # root = tk.Tk()
+    # root.withdraw()  # Hide parent window
+    command_window = UserInputWindow(parent_root, title, prompt)
     command_window.callback = callback
     command_window.show()

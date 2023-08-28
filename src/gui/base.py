@@ -25,7 +25,7 @@ class BaseGUI:
 
         self.root.title("BaseGUI")
         self.hide()
-        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.root.protocol("WM_DELETE_WINDOW", self.__on_close_internal)
         self.root.minsize(300, 200)
 
     def hide(self):
@@ -75,7 +75,7 @@ class BaseGUI:
         if fullscreen:
             if not self.parent_toplevel_root:
                 self.root.attributes("-fullscreen", True)
-            self.root.state('zoomed')  # Maximizes the window to full-screen
+            self.root.state("zoomed")  # Maximizes the window to full-screen
             self.root.overrideredirect(True)  # Hide window decorations
         else:
             if not self.parent_toplevel_root:
@@ -184,7 +184,7 @@ class BaseGUI:
         except Exception as e_info:
             print(f"An error occurred: {e_info}")
 
-    def on_close(self):
+    def __on_close_internal(self):
         """Callback function before the window is closed."""
         # pylint: disable=no-member
         self.__call_save_window_geometry()

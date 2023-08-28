@@ -3,6 +3,12 @@
 ✔ Bug: Hotkey for showing editor menu isn't working // could be that when start/browser is destroyed that shit gets destroyed @done(23-08-27 23:28)
 ✔ Bug: Hotkey for toggling browser doesn't work at all @done(23-08-27 23:28)
 ✔ Bug: Start eiditing -> Close game -> editor.__set_hud_info() error: NoneType @done(23-08-27 23:28)
+✘ #py BaseGui should could probably have mandatory root param root_or_toplevel? @cancelled(23-08-28 13:46)
+✘ #Py Could should i make browser a child of start gui? @cancelled(23-08-28 13:51)
+	✘ Pros: You can create multiple windows in your application, each with its own widgets and options. You can also control the appearance and behavior of each window separately, such as title, icon, geometry, etc. @cancelled(23-08-28 13:51)
+	✘ Cons: You need to manage the communication between the windows, such as passing data or events. You also need to handle the cases when the user closes one window but not the other. @cancelled(23-08-28 13:51)
+	✘ ^ not doing this because added complexity and barely if any benefits @cancelled(23-08-28 13:51)
+✘ #Py Look up some professional tkinter base guis @cancelled(23-08-28 14:09)
 
 
 Current:
@@ -13,10 +19,14 @@ Current:
 	☐ Refactor: Cleanup BaseGui/Browser related code to topLevel
 	☐ Refactor: Cleanup todo's related code to topLevel
 
+	☐ Toplevel windows don't need their own mainloop() because they are managed by the main application's event loop
+
 	☐ Feature: Scale popup gui to the window's full size on right startup // also where is it being done right now? a bit slow?
 
 	☐ Refactor: toplevel should receive parent. replace is_modal_window with parent_instance. keep the tk.tk() thing to hide the weird gui but only if parent doesn't exist or something
 		- top_level_window = tk.Toplevel(self.root)
+
+	☐ Refactor: create_widgets method & submethods for individual frames and/orwidgets
 
 
 	☐ Bug: Browser popup hotkey -> terminal says : Running GUI Editor Context Menu Popup & error shows, every consequent context menu show after that no problem

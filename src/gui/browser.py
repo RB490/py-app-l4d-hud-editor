@@ -385,9 +385,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry())
 
-    def on_close(self):
+    def __on_close_internal(self):
         """Runs on close"""
-        self.descriptions_gui.on_close()
+        self.descriptions_gui.__on_close_internal()
         self.save_window_geometry()
         save_and_exit_script()
 

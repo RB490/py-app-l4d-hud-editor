@@ -216,11 +216,12 @@ class EditorMenuHandler:
         """Prompt & execute game command"""
 
         def handle_user_input(result):
-            print(f"user_command: {result}")
-            if result:
-                self.game.command.execute(result)
+            pass
+            # print(f"user_command: {result}")
+            # if result:
+            #     self.game.command.execute(result)
 
-        get_user_input("Execute game command", "Enter game command:", handle_user_input)
+        get_user_input(self.editor_menu.root, "Execute game command", "Enter game command:", handle_user_input)
 
     def editor_inspect_hud(self):
         """Show inspect hud gui (vgui_drawtree)"""

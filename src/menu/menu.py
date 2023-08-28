@@ -32,11 +32,11 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(self, child_instance, root):
+    def __init__(self, parent_instance, parent_root):
         self.data_manager = PersistentDataManager()
         self.handler = EditorMenuHandler(self)
-        self.root = root
-        self.child_instance = child_instance
+        self.root = parent_root
+        self.parent = parent_instance
         self.img = ImageConstants()
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
