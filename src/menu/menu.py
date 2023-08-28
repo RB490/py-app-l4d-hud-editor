@@ -946,14 +946,14 @@ class EditorMenuClass:
             label="User",
             image=self.img.folder_black_interface_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_user_dir,
+            command=self.handler.editor_installer_open_user_dir,
         )
 
         self.dev_install_menu.add_command(
             label="Dev",
             image=self.img.folder_black_interface_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_dev_dir,
+            command=self.handler.editor_installer_open_dev_dir,
         )
 
         self.dev_install_menu.add_separator()
@@ -962,14 +962,14 @@ class EditorMenuClass:
             label="Enable",
             image=self.img.addition_sign,
             compound=tk.LEFT,
-            command=self.handler.installer_enable,
+            command=self.handler.editor_installer_enable_dev_mode,
         )
 
         self.dev_install_menu.add_command(
             label="Disable",
             image=self.img.minus_big_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_disable,
+            command=self.handler.editor_installer_disable_dev_mode,
         )
 
         self.dev_install_menu.add_separator()
@@ -978,21 +978,21 @@ class EditorMenuClass:
             label="Install",
             image=self.img.paintbrush_design_tool_interface_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_install,
+            command=self.handler.editor_installer_install,
         )
 
         self.dev_install_menu.add_command(
             label="Update",
             image=self.img.arrows_couple_counterclockwise_rotating_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_update,
+            command=self.handler.editor_installer_update,
         )
 
         self.dev_install_menu.add_command(
             label="Repair",
             image=self.img.wrench_black_silhouette,
             compound=tk.LEFT,
-            command=self.handler.installer_repair,
+            command=self.handler.editor_installer_repair,
         )
 
         self.dev_install_menu.add_separator()
@@ -1001,7 +1001,7 @@ class EditorMenuClass:
             label="Remove",
             image=self.img.trash_can_black_symbol,
             compound=tk.LEFT,
-            command=self.handler.installer_remove,
+            command=self.handler.editor_installer_uninstall,
         )
 
     def create_and_refresh_menu_developer_installer(self):

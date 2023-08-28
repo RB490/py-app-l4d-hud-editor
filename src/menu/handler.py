@@ -307,7 +307,7 @@ class EditorMenuHandler:
         """Send input keys to game"""
         self.game.command.send_keys_in_background("f11")
 
-    def installer_user_dir(self):
+    def editor_installer_open_user_dir(self):
         """This method returns the user directory."""
         print("Opening user directory")
         try:
@@ -317,7 +317,7 @@ class EditorMenuHandler:
             print(f"Could not open user directory: {err_info}")
             show_message("Directory does not exist!", "error")
 
-    def installer_dev_dir(self):
+    def editor_installer_open_dev_dir(self):
         """
         This method returns the developer directory.
         """
@@ -329,42 +329,50 @@ class EditorMenuHandler:
             print(f"Could not open developer directory: {err_info}")
             show_message("Directory does not exist!", "error")
 
-    def installer_enable(self):
+    def editor_installer_enable_dev_mode(self):
         """
         This method enables developer mode.
         """
         print("Enabling developer mode")
-        self.game.dir.set(DirectoryMode.DEVELOPER)
+        result = self.game.dir.set(DirectoryMode.DEVELOPER)
+        if result:
+            show_message(f"Enabled {DirectoryMode.DEVELOPER.name} mode!", "info")
+        else:
+            show_message(f"Failed to set {DirectoryMode.DEVELOPER.name} mode!", "info")
 
-    def installer_disable(self):
+    def editor_installer_disable_dev_mode(self):
         """
         This method disables developer mode.
         """
         print("Disabling developer mode")
-        self.game.dir.set(DirectoryMode.USER)
+        result = self.game.dir.set(DirectoryMode.USER)
+        if result:
+            show_message(f"Enabled {DirectoryMode.USER.name} mode!", "info")
+        else:
+            show_message(f"Failed to set {DirectoryMode.USER.name} mode!", "info")
 
-    def installer_install(self):
+    def editor_installer_install(self):
         """
         This method installs developer mode.
         """
         print("Install developer mode")
         self.game.installer.install()
 
-    def installer_update(self):
+    def editor_installer_update(self):
         """
         This method updates developer mode.
         """
         print("Updating developer mode")
         self.game.installer.update()
 
-    def installer_repair(self):
+    def editor_installer_repair(self):
         """
         This method repairs developer mode.
         """
         print("Repairing developer mode")
         self.game.installer.repair()
 
-    def installer_remove(self):
+    def editor_installer_uninstall(self):
         """
         This method removes developer mode.
         """

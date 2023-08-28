@@ -1,7 +1,7 @@
 ✔ Bug: main.pyw doesn't seem to do anything when running through normal file explorerer @done(23-08-28 20:15)
 
 Current:
-	☐ Feature: developer menu: add confirmation for enable/disable aswell.
+	✔ Feature: developer menu: add confirmation for enable/disable aswell. @done(23-08-28 20:20)
 	☐ Feature: developer menu: add text labels explaining more information
 	☐ Feature: on script exit disable dev mode
 	☐ Feature: developer menu: instead rename enable/disable to maybe more descriptive and/or increase understandability with label so: user mode: dev mode
