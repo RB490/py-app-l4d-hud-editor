@@ -1,13 +1,20 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
-# pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised
+# pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
 import hashlib
+import logging
 import os
 import shutil
 
 from game.constants import DirectoryMode, SyncState
 from game.game import Game
+from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import Singleton
 from utils.functions import get_backup_path
+
+# configure logging
+logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger = logger_manager.get_logger()  # Get the logger instance
 
 
 def calculate_md5_hash(file_path):
@@ -82,28 +89,28 @@ class HudSyncer(metaclass=Singleton):
 
     def unsync(self):
         """Unsync the hud"""
-        print("Unsyncing...")
+        logger.info("Unsyncing...")
 
         # verify we can unsync
         if not self.is_synced():
-            print("Unsync: No hud to unsync!")
+            logger.info("Unsync: No hud to unsync!")
             return
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")
 
-        print(f"Unsyncing hud: {self.hud_items}")
+        logger.info(f"Unsyncing hud: {self.hud_items}")
 
         # Copy list to avoid causing issues with the loop
         hud_items_copy = self.hud_items.copy()
 
         # unsync every item
         for item in hud_items_copy:
-            print(f"Unsyncing: {item}")
+            logger.info(f"Unsyncing: {item}")
             self.__unsync_item(item)
 
         # finished
         self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-        print("Unsynced!")
+        logger.info("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         # pylint: disable=anomalous-backslash-in-string
@@ -117,10 +124,10 @@ class HudSyncer(metaclass=Singleton):
             certain actions on the main directory. EG: 'Left 4 Dead 2'
         """
 
-        print("Synching...")
-        print(f"Source: {source_dir}")
-        print(f"Target: {target_dir}")
-        # print(f"target_dir_main_name: {target_dir_main_name}")
+        logger.info("Synching...")
+        logger.info(f"Source: {source_dir}")
+        logger.info(f"Target: {target_dir}")
+        # logger.info(f"target_dir_main_name: {target_dir_main_name}")
 
         # Unsync the previous hud (if syncing different hud)
         if self.is_synced() and self.source_dir != source_dir:
@@ -151,12 +158,12 @@ class HudSyncer(metaclass=Singleton):
             raise NotADirectoryError(f"{no_materials_subdir_msg}")
 
         # input
-        print()
-        print(f"Sync source_dir: {self.source_dir}")
-        print(f"Sync target_dir_root: {self.target_dir_root}")
-        print(f"Sync target_dir_main_name: {self.target_dir_main_name}")
-        print(f"Sync target_sub_dir_names: {self.target_sub_dir_names}")
-        print(f"Sync hud_items: {self.hud_items}")
+        logger.info("")
+        logger.info(f"Sync source_dir: {self.source_dir}")
+        logger.info(f"Sync target_dir_root: {self.target_dir_root}")
+        logger.info(f"Sync target_dir_main_name: {self.target_dir_main_name}")
+        logger.info(f"Sync target_sub_dir_names: {self.target_sub_dir_names}")
+        logger.info(f"Sync hud_items: {self.hud_items}")
 
         # Backup game files
         self.__backup_target()
@@ -169,7 +176,7 @@ class HudSyncer(metaclass=Singleton):
 
         self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
 
-        print("Synced!")
+        logger.info("Synced!")
         # input("end of sync()")
 
     def __backup_target(self):
@@ -184,10 +191,10 @@ class HudSyncer(metaclass=Singleton):
                 if target_sub_dir_name == self.target_dir_main_name:
                     if not os.path.exists(target_item) and target_item not in self.hud_items_custom:
                         self.hud_items_custom.append(target_item)
-                        print(f"adding custom file: {target_item}")
+                        logger.info(f"Adding custom file: {target_item}")
 
                 # backup existing file
-                # print(f"loop hud item: {item}")
+                # logger.info(f"loop hud item: {item}")
                 if (
                     os.path.exists(target_item)
                     and not os.path.exists(target_item_backup)
@@ -196,12 +203,12 @@ class HudSyncer(metaclass=Singleton):
                 ):
                     try:
                         os.rename(target_item, target_item_backup)
-                        print(f"Backup: {target_item} -> {target_item_backup}")
+                        logger.info(f"Backup: {target_item} -> {target_item_backup}")
                     except Exception as e:
-                        # print(f"Error backing up {target_item}: {e}")
+                        # logger.info(f"Error backing up {target_item}: {e}")
                         raise Exception(f"Error backing up {target_item}: {e}") from e
 
-        # print(f"custom items: {self.hud_items_custom}")
+        # logger.info(f"custom items: {self.hud_items_custom}")
 
     def __overwrite_target(self):
         for target_sub_dir_name in self.target_sub_dir_names:
@@ -219,7 +226,7 @@ class HudSyncer(metaclass=Singleton):
                     # create custom folder if needed
                     if not os.path.isdir(target_item):
                         os.makedirs(target_item)
-                        print(f"Creating: {target_item}")
+                        logger.info(f"Creating: {target_item}")
                     continue
 
                 overwrite_target = False
@@ -235,9 +242,9 @@ class HudSyncer(metaclass=Singleton):
                 if overwrite_target:
                     try:
                         shutil.copy(item, target_item)
-                        print(f"Copying: {item} -> {target_item}")
+                        logger.info(f"Copying: {item} -> {target_item}")
                     except Exception as e:
-                        # print(f"Error copying {item} to {target_item}: {e}")
+                        # logger.info(f"Error copying {item} to {target_item}: {e}")
                         raise Exception(f"Error copying {item} to {target_item}: {e}") from e
 
     def __remove_deleted_source_items(self):
@@ -247,34 +254,34 @@ class HudSyncer(metaclass=Singleton):
         self.hud_items_previous = self.hud_items
 
     def __unsync_item(self, item):
-        print(f"Unsyncing: {item}")
+        logger.info(f"Unsyncing: {item}")
 
         for target_sub_dir_name in self.target_sub_dir_names:
             target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
             target_item = item.replace(self.source_dir, target_sub_dir)
             target_item_backup = get_backup_path(target_item)
 
-            print(f"Unsync directory: {target_sub_dir}")
-            print(f"& target_item_backup: {target_item_backup}")
+            logger.info(f"Unsync directory: {target_sub_dir}")
+            logger.info(f"& target_item_backup: {target_item_backup}")
 
             # delete custom directory
             if os.path.isdir(target_item) and target_item in self.hud_items_custom:
                 shutil.rmtree(target_item)
-                print(f"Deleting custom directory: {target_item}")
+                logger.info(f"Deleting custom directory: {target_item}")
                 self.hud_items_custom.remove(target_item)
                 continue
 
             # delete custom item
             if os.path.isfile(target_item) and target_item in self.hud_items_custom:
                 os.remove(target_item)
-                print(f"Deleting custom file: {target_item}")
+                logger.info(f"Deleting custom file: {target_item}")
                 self.hud_items_custom.remove(target_item)
                 continue
 
             # restore file to original state
             if os.path.isfile(target_item_backup):
                 shutil.move(target_item_backup, target_item)
-                print(f"Restoring: {target_item_backup} -> {target_item}")
+                logger.info(f"Restoring: {target_item_backup} -> {target_item}")
 
         # remove file from lists
         if target_item in self.hud_items_custom:

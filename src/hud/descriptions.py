@@ -1,15 +1,19 @@
+"""Subclass of the hud class. Manages everything related to hud file descriptions"""
 # pylint: disable=logging-fstring-interpolation
 import json
 import logging
 import os
 
 from game.game import Game
+from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import Singleton
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
 # Configure the logging settings
-logging.basicConfig(level=logging.INFO)
-# logging.basicConfig(level=logging.CRITICAL + 1)  # turns off logging
+logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger = logger_manager.get_logger()  # Get the logger instance
+
 
 class HudDescriptions(metaclass=Singleton):
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
@@ -18,7 +22,7 @@ class HudDescriptions(metaclass=Singleton):
         self.data = None
         self.game = Game()
         self.read_from_disk()
-        logging.info("Initialized HudDescriptions instance")
+        logger.info("Initialized HudDescriptions instance")
 
     def add_control(self, relative_path, input_control):
         """Set information"""
@@ -26,24 +30,24 @@ class HudDescriptions(metaclass=Singleton):
             self._add_entry(relative_path)
             self.data[relative_path]["file_control_descriptions"][input_control] = ""
             self.save_to_disk()
-            logging.info(f"Added control '{input_control}' for relative path '{relative_path}'")
+            logger.info(f"Added control '{input_control}' for relative path '{relative_path}'")
         else:
-            logging.warning("Cannot add control with None name")
+            logger.warning("Cannot add control with None name")
 
     def remove_control(self, relative_path, input_control):
         """Set information"""
         del self.data[relative_path]["file_control_descriptions"][input_control]
         self.save_to_disk()
-        logging.info(f"Removed control '{input_control}' for relative path '{relative_path}'")
+        logger.info(f"Removed control '{input_control}' for relative path '{relative_path}'")
 
     def remove_entry(self, relative_path):
         """Remove an entire entry based on the provided relative path"""
         if relative_path in self.data:
             del self.data[relative_path]
             self.save_to_disk()
-            logging.info(f"Removed entry for relative path '{relative_path}'")
+            logger.info(f"Removed entry for relative path '{relative_path}'")
         else:
-            logging.info(f"No entry found for relative path '{relative_path}'")
+            logger.info(f"No entry found for relative path '{relative_path}'")
 
     def _add_entry(self, relative_path):
         """Create a new entry in data if relative_path doesn't exist"""
@@ -53,9 +57,9 @@ class HudDescriptions(metaclass=Singleton):
                 "file_description": "",
                 "file_name": os.path.basename(relative_path),
                 "file_relative_path": relative_path,
-                "file_is_custom": bool(self.game.dir._is_custom_file(relative_path)),
+                "file_is_custom": bool(self.game.dir.is_custom_file(relative_path)),
             }
-            logging.info(f"Added new description entry:\n{self.data[relative_path]}")
+            logger.info(f"Added new description entry:\n{self.data[relative_path]}")
             self.save_to_disk()
 
     def set_control_description(self, relative_path, input_control, control_desc):
@@ -64,16 +68,16 @@ class HudDescriptions(metaclass=Singleton):
             self._add_entry(relative_path)
             self.data[relative_path]["file_control_descriptions"][input_control] = control_desc
             self.save_to_disk()
-            logging.info(f"Saved description for control '{input_control}' in relative path '{relative_path}'")
+            logger.info(f"Saved description for control '{input_control}' in relative path '{relative_path}'")
         else:
-            logging.warning("Cannot save an empty control description")
+            logger.warning("Cannot save an empty control description")
 
     def set_file_description(self, relative_path, file_desc):
         """Set file description for a given relative path"""
         self._add_entry(relative_path)
         self.data[relative_path]["file_description"] = file_desc
         self.save_to_disk()
-        logging.info(f"Saved file description for relative path '{relative_path}'")
+        logger.info(f"Saved file description for relative path '{relative_path}'")
 
     def get_all_descriptions(self):
         """
@@ -88,13 +92,13 @@ class HudDescriptions(metaclass=Singleton):
             values["file_name"]: (values["file_description"], values["file_relative_path"])
             for rel_path, values in self.data.items()
         }
-        logging.info("Retrieved all file descriptions")
+        logger.info("Retrieved all file descriptions")
         return all_descriptions
 
     def get_control_description(self, relative_path, input_control):
         """Get information"""
         description = self.data.get(relative_path, {}).get("file_control_descriptions", {}).get(input_control)
-        logging.info(
+        logger.info(
             f"Retrieved description for control '{input_control}' in relative path '{relative_path}': {description}"
         )
         return description
@@ -105,7 +109,7 @@ class HudDescriptions(metaclass=Singleton):
         If the relative path doesn't exist in the data dictionary, return an empty string.
         """
         description = self.data.get(relative_path, {}).get("file_description", "")
-        logging.info(f"Retrieved description for relative path '{relative_path}': {description}")
+        logger.info(f"Retrieved description for relative path '{relative_path}': {description}")
         return description
 
     def get_custom_file_status(self, relative_path):
@@ -114,7 +118,7 @@ class HudDescriptions(metaclass=Singleton):
         Return True if the relative path has a custom status, otherwise return None.
         """
         is_custom = self.data.get(relative_path, {}).get("file_is_custom", None)
-        logging.info(f"Retrieved custom status for relative path '{relative_path}': {is_custom}")
+        logger.info(f"Retrieved custom status for relative path '{relative_path}': {is_custom}")
         return is_custom
 
     def get_controls(self, relative_path):
@@ -123,7 +127,7 @@ class HudDescriptions(metaclass=Singleton):
         If the relative path doesn't exist in the data dictionary, return an empty list.
         """
         file_controls = list(self.data.get(relative_path, {}).get("file_control_descriptions", {}))
-        logging.info(f"Retrieved controls for relative path '{relative_path}': {file_controls}")
+        logger.info(f"Retrieved controls for relative path '{relative_path}': {file_controls}")
         return file_controls
 
     def read_from_disk(self):
@@ -131,10 +135,10 @@ class HudDescriptions(metaclass=Singleton):
         try:
             with open(HUD_DESCRIPTIONS_PATH, "r", encoding="utf-8") as file:
                 data = json.load(file)
-                logging.info("Read data from disk")
+                logger.info("Read data from disk")
         except (FileNotFoundError, json.JSONDecodeError):
             data = {}
-            logging.warning("No data found on disk")
+            logger.warning("No data found on disk")
         self.data = data
 
     def save_to_disk(self):
@@ -144,6 +148,6 @@ class HudDescriptions(metaclass=Singleton):
             with open(HUD_DESCRIPTIONS_PATH, "w", encoding="utf-8") as file:
                 pretty_json = json.dumps(data, sort_keys=True, indent=4)
                 file.write(pretty_json)
-                logging.info(f"Saved data to {HUD_DESCRIPTIONS_PATH}")
+                logger.info(f"Saved data to {HUD_DESCRIPTIONS_PATH}")
         except (FileNotFoundError, TypeError):
-            logging.error(f"Error saving data to {HUD_DESCRIPTIONS_PATH}")
+            logger.error(f"Error saving data to {HUD_DESCRIPTIONS_PATH}")

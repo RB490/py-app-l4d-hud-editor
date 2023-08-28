@@ -1,12 +1,14 @@
 replace print statements with logging
 
-rules:
-- keep all of my comments
-- keep all of my class and method docs
-- keep all of my code
+rules for your response:
+- keep all comments. don't remove any comments
+- keep all documentation like method docs
+- keep all lines of code
+- print out every single line of my code, so don't use abbrevations like: # ... (other methods unchanged), # ... (other methods and docstrings unchanged). i want to be able to copy your response and replace my entire code 
 - use f-strings in the logging statements
 - consider which logging level each print statement should be
 - set logging to: logging.basicConfig(level=logging.INFO)
 - also print line to set  logging to: logging.basicConfig(level=logging.CRITICAL + 1)  # turns off logging
+- disable pylint warning 'logging-fstring-interpolation' modify existing statement if availabe. else create a new one
 
 here is my code:

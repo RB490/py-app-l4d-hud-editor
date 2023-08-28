@@ -2,6 +2,7 @@
 # pylint: disable=unused-import, unused-variable, unused-argument, undefined-variable, invalid-name
 
 
+import logging
 import os
 import sys
 
@@ -23,6 +24,7 @@ from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
+from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
@@ -62,10 +64,18 @@ def debug_main():
     # keyboard.add_hotkey("F2", dummy_func, suppress=True)
     # keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, dummy_func, suppress=True)
 
+    # logging_class_usage_example()
+
+    logger_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
+    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+    logger = logger_manager.get_logger()  # Get the logger instance
+    logger.info("my message")
+    # logger.critical("my message")
+
     # my_shared_function()
     # debug_vdf_class()
     # get_editor_menu_popup_gui()
-    debug_gui()
+    # debug_gui()
     # result = "Y" if h.desc.get_custom_file_status("scripts\\hudlayout2.res") else "N"
     # custom_prompt_example_usage()
     # data_manager = PersistentDataManager()
@@ -113,6 +123,7 @@ def debug_gui():
 
     # installer
     # debug_progress_gui()
+
 
 def debug_id_handler(game_class):
     "Debug"

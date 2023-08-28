@@ -1,3 +1,4 @@
+# pylint: disable=all
 can you create a tkinter gui for this class?
 i would like the have the option to toggle the important features that are currently being done by default during loading&saving: annotate, sot controls, align values indent, modify integers.
 the gui should have check boxes for these, and relevant widgets for modifying integers. there should be before and after text widgets that get updated whenever an option is toggled or modified
