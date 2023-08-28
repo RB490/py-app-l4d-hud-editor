@@ -300,3 +300,7 @@
 	✔ same with opening the popup menu @done(23-08-28 15:07)
 	✔ basegui.py disabling mainloop() (if hidden/modal) works @done(23-08-28 15:07)
 	✔ ^ might be that i'm, oh, uh, i'm doing mainloop() on every window show() which is probably not great @done(23-08-28 15:07)
+✔ Refactor: Split GUI creation into smaller methods like create_widgets>create_treeview&create_context_menu @done(23-08-28 15:51)
+✔ Refactor: Editor: start_hud_editing - ask GPT, a lot of duplicate code @done(23-08-28 15:57)
+✔ Refactor: Editor: finishg_hud_editing? @done(23-08-28 15:57)
+✔ Bug: Use browser context menu option without anything selected. Could be modified by not showing the context menu if nothing selected @done(23-08-28 16:05)

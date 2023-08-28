@@ -9,8 +9,7 @@
 # ====================================================================================================
 
 import os
-from gui.start import show_start_gui
-from utils.functions import preform_checks_and_prepare_program_start
+from utils.functions import preform_checks_to_prepare_program_start, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 
 # from packages.game.game import Game
@@ -32,7 +31,7 @@ data_manager = PersistentDataManager()
 #     Do stuff
 # ----------------------------------
 
-preform_checks_and_prepare_program_start()
+preform_checks_to_prepare_program_start()
 
 # create initial singleton game class
 show_start_gui()
