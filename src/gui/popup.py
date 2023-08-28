@@ -26,15 +26,18 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         do_nothing(self): A dummy function that does nothing.
     """
 
-    def __init__(self, parent_root, instantly_show_menu=False):
+    def __init__(self, parent_root, debug_instantly_show_menu=False):
         """
         Initializes a new instance of the ToggleWindow class and runs the main event loop.
+
+        Create a fully transparent GUI the size of the entire screen so clicking out of the context menu closes it
         """
         super().__init__(parent_root)
         self.root.title("Editor Context Menu Popup")
-        self.set_transparency(0.5)
+        self.debug_instantly_show_menu = debug_instantly_show_menu
+        self.set_transparency(0.0)
         self.set_decorations(False)
-        self.set_always_on_top(True)
+        self.set_always_on_top(False)  # not setting this because it causes prompts to be behind the gui
 
         # Set size to entire screen because set_fullscreen has a 0.1 visible delay ;-)
         screen_width = self.root.winfo_screenwidth()
@@ -48,24 +51,29 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
-        # self.my_editor_menu.create_and_refresh_menu()
 
         keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_menu, suppress=True)
         # keyboard.add_hotkey("F8", self.toggle_visibility, suppress=True)
 
-        print(f"instantly_show_menu={instantly_show_menu}")
-        if instantly_show_menu:
+        if self.debug_instantly_show_menu:
             self.show_menu()
 
     def show_menu(self):
         """Show menu at mouse cursor"""
 
-        # Resize the GUI to the entire screen
-        self.set_fullscreen(True)
+        # Show gui so context menu can be closed by clicking out & Resize the GUI to the entire screen
+        self.maximize()  # not setting fullscreen because it disables alt=tab
 
-        self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-
+        # get coordinates
         pos_x, pos_y = self.root.winfo_pointerxy()
-        self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
+        # show menu
+        if self.debug_instantly_show_menu:
+            self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
+            self.dev_context_menu.post(pos_x, pos_y)
+        else:
+            self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
+            self.my_editor_menu.menu_bar.post(pos_x, pos_y)
+
+        # hide gui after context menu closed
         self.hide()

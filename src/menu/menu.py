@@ -4,12 +4,13 @@
 import os
 import tkinter as tk
 import webbrowser
+from msilib import Directory
 from tkinter import Menu, PhotoImage
 
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
-from shared_utils.shared_utils import create_lambda_command
+from shared_utils.shared_utils import add_empty_menu_separator, create_lambda_command
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
@@ -938,9 +939,15 @@ class EditorMenuClass:
             )
 
     def create_developer_installer_menu(self, menubar):
-        """Create give items menu"""
+        """Create developer installer menu"""
 
+        # Create the menu
         self.dev_install_menu = tk.Menu(menubar, tearoff=0)
+
+        # Directory Actions
+        # -----------------
+        self.dev_install_menu.add_command(label="Open Directory", state=tk.DISABLED, command=lambda: None)
+        self.dev_install_menu.add_separator()
 
         self.dev_install_menu.add_command(
             label="User",
@@ -956,22 +963,34 @@ class EditorMenuClass:
             command=self.handler.editor_installer_open_dev_dir,
         )
 
+        # Empty Separator
+        add_empty_menu_separator(self.dev_install_menu)
+
+        # Mode Actions
+        # -------------
+        self.dev_install_menu.add_command(label="Activate Mode", state=tk.DISABLED, command=lambda: None)
         self.dev_install_menu.add_separator()
 
         self.dev_install_menu.add_command(
-            label="Enable",
-            image=self.img.addition_sign,
+            label=DirectoryMode.DEVELOPER.name,
+            image=self.img.paintbrush_design_tool_interface_symbol,
             compound=tk.LEFT,
             command=self.handler.editor_installer_enable_dev_mode,
         )
 
         self.dev_install_menu.add_command(
-            label="Disable",
-            image=self.img.minus_big_symbol,
+            label=DirectoryMode.USER.name,
+            image=self.img.cup_trophy_silhouette,
             compound=tk.LEFT,
             command=self.handler.editor_installer_disable_dev_mode,
         )
 
+        # Empty Separator
+        add_empty_menu_separator(self.dev_install_menu)
+
+        # Installation Actions
+        # ---------------------
+        self.dev_install_menu.add_command(label="Installation", state=tk.DISABLED, command=lambda: None)
         self.dev_install_menu.add_separator()
 
         self.dev_install_menu.add_command(
@@ -1257,7 +1276,7 @@ class EditorMenuClass:
                 label="Debug", image=self.img.hot_or_burn_interface_symbol, compound="left", menu=self.debug_menu
             )
             self.menu_bar.add_command(
-                label="Close", image=self.img.cross, compound="left", command=self.do_nothing
+                label="Close (ESC)", image=self.img.cross, compound="left", command=self.do_nothing
             )  # useful when displaying menu as popup
 
         if not self.hud.edit.get_dir():

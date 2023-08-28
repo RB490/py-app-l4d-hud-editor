@@ -2,7 +2,8 @@
 
 Current:
 	✔ Feature: developer menu: add confirmation for enable/disable aswell. @done(23-08-28 20:20)
-	☐ Feature: developer menu: add text labels explaining more information
+	✔ Feature: developer menu: add text labels explaining more information @done(23-08-28 20:49)
+	✔ Bug: Context menu popup -> Show installer menu -> Enable user/dev mode -> infobox shows behind the gui @done(23-08-28 20:49)
 	☐ Feature: on script exit disable dev mode
 	☐ Feature: developer menu: instead rename enable/disable to maybe more descriptive and/or increase understandability with label so: user mode: dev mode
 	

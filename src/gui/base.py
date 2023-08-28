@@ -39,6 +39,11 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.iconify()
 
+    def maximize(self):
+        """Maximize the window."""
+        self.__call_save_window_geometry()
+        self.root.state('zoomed')  # Maximizes the window
+
     def show(self, hide=False):
         """Show the window."""
         self.root.deiconify()
@@ -68,7 +73,7 @@ class BaseGUI:
 
     def set_fullscreen(self, fullscreen):
         """
-        Set the window to full-screen mode.
+        Set the window to full-screen mode. Will/might disable alt+tab
 
         Args:
             fullscreen (bool): True to enable full-screen, False to disable.

@@ -9,6 +9,7 @@ import tkinter as tk
 from debug.hud import get_hud_debug_instance
 from gui import descriptions
 from gui.browser import GuiHudBrowser
+from gui.popup import GuiEditorMenuPopup
 from gui.progress import ProgressGUI
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
@@ -31,8 +32,10 @@ def debug_browser_gui():
 def debug_popup_gui():
     """Debug gui class"""
     # pylint: disable=unused-variable
-    # app = GuiEditorMenuPopup(instantly_show_menu=True)
-    # app.show(hide=True)
+    root = tk.Tk()
+    # app = GuiEditorMenuPopup(root)
+    app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
+    app.show(hide=True)
     # app.show(hidden=True)
 
 

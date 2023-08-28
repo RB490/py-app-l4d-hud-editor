@@ -15,6 +15,11 @@ import win32process
 from ahk import AHK
 
 
+def add_empty_menu_separator(menu):
+    empty_separator_label = " "  # Space as the label
+    menu.add_command(label=empty_separator_label, state=tk.DISABLED, font=("Helvetica", 1))  # Small font size
+
+
 def create_lambda_command(func, *args):
     # pylint: disable=line-too-long
     """
