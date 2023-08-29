@@ -17,6 +17,7 @@ from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
 from utils.functions import copy_directory
+from utils.hotkey_manager import hotkey_manager_example
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -63,6 +64,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def start_debug_method(self):
         print("start_debug_method")
         # get_browser_gui()
+        hotkey_manager_example()
 
     def __create_widgets(self):
         # gui variables

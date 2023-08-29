@@ -323,3 +323,4 @@
 ✔ Bug?: F7 to toggle browser visibility works when used during start gui being open. but when editing it doesn't @done(23-08-29 00:59)
 ✔ Bug?: Browser & editor menu hotkeys work right away. not only while browser is visible @done(23-08-29 00:59)
 ✔ Feature: Browser closing should have a confirmation dialog about are you sure @done(23-08-29 01:05)
+✘ Feature: Global hotkey manager: Method to set up global (debug) hotkeys seems pretty useful right now to say the least. @cancelled(23-08-29 17:32) tried some hotkey manager solution seemed confusing and unnecesary

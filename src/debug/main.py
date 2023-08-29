@@ -33,6 +33,7 @@ from utils.functions import (
     preform_checks_to_prepare_program_start,
     show_start_gui,
 )
+from utils.hotkey_manager import hotkey_manager_example
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -51,29 +52,29 @@ def debug_main():
     # hotkeys
     keyboard.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
 
-    # data_manager = PersistentDataManager()
-    # PersistentDataManager().save()
-    # result = data_manager.data
-    # result = data_manager.print()
-    # result = data_manager.get("game_mode")
-
+    # unit tests
     # unit_test_hud_syncer()
-
-    # logging_class_usage_example()
-
-    # show_start_gui()
-    # show_browser_gui()
+    
     debug_gui()
-
-    # hud = get_hud_debug_instance()
-    # result = hud.edit.get_all_files_dict()
-    # result = hud.edit.get_files_dict()
-
+    
     # save_data()
     # print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 
+def def_debug_hud_class():
+    hud = get_hud_debug_instance()
+    result = hud.edit.get_all_files_dict()
+    result = hud.edit.get_files_dict()
+    
+
+def debug_data_manager():
+    data_manager = PersistentDataManager()
+    PersistentDataManager().save()
+    result = data_manager.data
+    result = data_manager.print()
+    result = data_manager.get("game_mode")
+    print(f"result={result}")
 
 def debug_gui():
     "debug gui"
