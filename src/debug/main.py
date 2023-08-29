@@ -26,6 +26,7 @@ from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
 from hud.hud import Hud
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
+from shared_utils.window_focus_manager import manage_focus_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
@@ -54,8 +55,10 @@ def debug_main():
     # unit tests
     # unit_test_hud_syncer()
 
-    game_class = Game()
-    game_class.command.execute("reload_fonts")
+    manage_focus_example()
+
+    # game_class = Game()
+    # game_class.command.execute("reload_fonts")
     # game_class.window.restore_saved_position()
 
     # debug_gui()

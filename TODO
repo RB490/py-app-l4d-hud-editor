@@ -16,10 +16,12 @@
 	✔ HUH turns out focus is being set correctly. it's just the game bugging out and still having focus of the mouse input. window focus is set perfectly @done(23-08-29 19:42)
 	✔ Game is also acting buggy. When i alt-tab it says focused. only when i manually focus the game window and then alt tab it finally loses mouse focus @done(23-08-29 19:42)
 	✔ Solution: first manually focus the game. and then the saved focused_hwnd @done(23-08-29 19:42)
+✔ Feature: class to save mouse position & focus hwnd & restore it @done(23-08-29 19:57)
 
 Current:
 
-	☐ Feature: class to save mouse position & focus hwnd & restore it
+
+	☐ Refactor: Class to work with hwnds. Make it a shared util. All the current methods for working hwnds. Including focus saving&restoring
 
 	☐ Feature: Menu: Reload modes menu should have checkboxes on them for which mode is currently selected
 

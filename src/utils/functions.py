@@ -1,4 +1,4 @@
-# pylint: disable=broad-exception-caught, import-outside-toplevel, no-member, bare-except
+# pylint: disable=broad-exception-caught, import-outside-toplevel, no-member, c-extension-no-member, bare-except
 """Functions used throughout the program"""
 import ctypes
 import os
@@ -13,8 +13,6 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
-import pygetwindow as gw
-import win32com  # type: ignore
 import win32con
 import win32gui
 import win32process
@@ -154,6 +152,7 @@ def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
 
 
 def get_focused_hwnd():
+    """Retrieve hwnd from focused window"""
     hwnd = win32gui.GetForegroundWindow()
     print(f"Focused hwnd = {hwnd}")
     return hwnd
