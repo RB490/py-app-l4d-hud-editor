@@ -6,12 +6,11 @@ import subprocess
 import win32gui
 
 from game.constants import InstallationState
-from shared_utils.shared_utils import move_hwnd_to_position, show_message
+from shared_utils.hwnd_window_manager import HwndWindowUtils
+from shared_utils.shared_utils import show_message
 from utils.constants import GAME_POSITIONS
 from utils.functions import (
-    get_hwnd_for_exe,
     is_process_running,
-    is_valid_window,
     wait_for_process_with_ram_threshold,
 )
 from utils.persistent_data_manager import PersistentDataManager
@@ -34,7 +33,8 @@ class GameWindow:
     def get_hwnd(self):
         """Retrieve information"""
 
-        if self.hwnd is None or not is_valid_window(self.hwnd):
+        hwnd_utils = HwndWindowUtils()
+        if self.hwnd is None or not hwnd_utils.running(self.hwnd):
             self.__set_hwnd()
 
         if not self.hwnd:
@@ -45,14 +45,14 @@ class GameWindow:
 
     def __set_hwnd(self, timeout_seconds=0):
         """Retrieve game hwnd"""
-
+        hwnd_utils = HwndWindowUtils()
         # exception because we need the window handle
         try:
             # wait until game is running
             wait_for_process_with_ram_threshold(self.get_exe(), timeout_seconds)
 
             # retrieve hwnd
-            self.hwnd = get_hwnd_for_exe(self.get_exe())
+            self.hwnd = hwnd_utils.get_hwnd_from_executable(self.get_exe())
             if not self.hwnd:
                 raise Exception("Could not set window handle!")
             else:
@@ -98,7 +98,7 @@ class GameWindow:
         if "custom" in position.lower():
             # restore
             custom_position_tuple = self.data_manager.get("game_pos_custom_coord")
-            custom_position_tuple = tuple(custom_position_tuple) # load it back into a tuple to work with the coords
+            custom_position_tuple = tuple(custom_position_tuple)  # load it back into a tuple to work with the coords
             if (  # verify tuple legitimacy
                 isinstance(custom_position_tuple, tuple)
                 and len(custom_position_tuple) == 2
@@ -109,7 +109,8 @@ class GameWindow:
                 raise ValueError(f"Invalid custom_position_tuple: {custom_position_tuple}")
 
         # move game
-        move_hwnd_to_position(self.game.window.get_hwnd(), position)
+        hwnd_utils = HwndWindowUtils()
+        hwnd_utils.move(self.game.window.get_hwnd(), position)
 
     def run(self, dir_mode, write_config=True):
         """Start the game

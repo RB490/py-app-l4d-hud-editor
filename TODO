@@ -1,12 +1,4 @@
-✔ Bug: built-in todo app doesn't detect this in shared_utils.py: print(f"FIXME TODO move_hwnd_to_position: position={position}") @done(23-08-29 21:17)
-✔ Feature: Create a way to sync without restoring the developer directory @done(23-08-29 21:18) write sync status id file
-✔ Feature: Menu: Reload modes menu should have checkboxes on them for which mode is currently selected @done(23-08-29 21:39)
-
 Current:
-
-
-	☐ Refactor: Class to work with hwnds. Make it a shared util. All the current methods for working hwnds. Including focus saving&restoring
-
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
@@ -15,7 +7,7 @@ Current:
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 
 Release:
-	- GoaL: Being able to smug the program and have it 100% work for him on first try
+	- Goal: Being able to smug the program and have it 100% work for him on first try
 	☐ Version numbers
 	☐ Auto updating
 	☐ Link to the github repo in an 'about' gui

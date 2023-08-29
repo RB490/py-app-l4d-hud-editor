@@ -12,9 +12,9 @@ import win32gui
 
 from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
-from shared_utils.window_focus_manager import WindowFocusManager
+from shared_utils.hwnd_window_manager import HwndWindowUtils
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
-from utils.functions import click_at, focus_hwnd
+from utils.functions import click_at
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -28,6 +28,7 @@ class GameCommands:
     def __init__(self, game_class):
         self.game = game_class
         self.data_manager = PersistentDataManager()
+        self.hwnd_utils = HwndWindowUtils()
 
         self.show_ui_panel = None
         self.previous_ui_panel = None
@@ -43,8 +44,7 @@ class GameCommands:
             raise ValueError("No input command available!")
 
         # Save the handle of the currently focused window
-        focus_manager = WindowFocusManager()
-        focused_hwnd = focus_manager.save_focus_state()
+        focused_hwnd = self.hwnd_utils.save_focus_state()
 
         output_command = self._get_mapped_command(input_command.lower())
 
@@ -99,9 +99,9 @@ class GameCommands:
             if game_hwnd is not focused_hwnd:
                 # focus the game first. because else it bugs out and focus will be set correctly to focused_hwnd,
                 # but game will still have focus of the mouse.
-                focus_hwnd(game_hwnd)
+                self.hwnd_utils.focus(game_hwnd)
                 # Restoring the saved focus state
-                focus_manager.restore_focus_state()
+                self.hwnd_utils.restore_focus_state()
 
     def _get_mapped_command(self, input_command):
         """Map the input command to its corresponding game command."""
@@ -215,10 +215,9 @@ class GameCommands:
             return
 
         # Save the handle of the currently focused window
-        focus_manager = WindowFocusManager()
-        focused_hwnd = focus_manager.save_focus_state()
+        focused_hwnd = self.hwnd_utils.save_focus_state()
 
-        focus_hwnd(game_hwnd)
+        self.hwnd_utils.focus(game_hwnd)
         for key in keys:
             win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
             # print(f"Holding down key: {KEY_MAP[key.lower()]}")
@@ -228,7 +227,7 @@ class GameCommands:
 
         # Restore focus to the previously focused window
         if game_hwnd is not focused_hwnd:
-            focus_manager.save_focus_state()
+            self.hwnd_utils.save_focus_state()
 
     def send_keys_in_background(self, keys):
         # pylint: disable=c-extension-no-member

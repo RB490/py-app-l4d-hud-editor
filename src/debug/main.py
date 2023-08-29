@@ -5,6 +5,7 @@
 import logging
 import os
 import sys
+import time
 
 import keyboard
 
@@ -25,8 +26,11 @@ from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
 from hud.hud import Hud
+from shared_utils.hwnd_window_manager import (
+    HwndWindowUtils,
+    showcase_hwnd_window_manager,
+)
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
-from shared_utils.window_focus_manager import manage_focus_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
@@ -44,12 +48,18 @@ def debug_unsync_hud_func():
     print("finished: debug_unsync_hud_func")
 
 
+def hotkey_debugging_method():
+    "debug hotkey"
+    print("hotkey_debugging_method!")
+
+
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
 
     # hotkeys
+    keyboard.add_hotkey("F10", hotkey_debugging_method, suppress=True)
     keyboard.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
 
     # unit tests
@@ -64,7 +74,9 @@ def debug_main():
     # game_class.command.execute("reload_fonts")
     # game_class.window.restore_saved_position()
 
-    debug_gui()
+    showcase_hwnd_window_manager()
+
+    # debug_gui()
     # debug_hud_class()
 
     # save_data()

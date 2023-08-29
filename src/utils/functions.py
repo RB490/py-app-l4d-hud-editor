@@ -1,6 +1,5 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, no-member, c-extension-no-member, bare-except
 """Functions used throughout the program"""
-import ctypes
 import os
 import random
 import shutil
@@ -13,9 +12,6 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
-import win32con
-import win32gui
-import win32process
 
 from game.game import Game
 from shared_utils.shared_utils import show_message
@@ -151,64 +147,6 @@ def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
     return temp_dir
 
 
-def get_focused_hwnd():
-    """Retrieve hwnd from focused window"""
-    hwnd = win32gui.GetForegroundWindow()
-    print(f"Focused hwnd = {hwnd}")
-    return hwnd
-
-
-def focus_hwnd(hwnd):
-    # pylint: disable=c-extension-no-member
-    """
-    Function to focus a window.
-
-    Alternate way to do this:
-        # use pywinauto to get around SetForegroundWindow error/limitation: https://stackoverflow.com/a/30314197
-        # be aware that pywinauto moves the cursor. which has a side effect of
-        # for example moving the camera in source games
-        from pywinauto import Application
-        game_app = Application().connect(handle=game_hwnd)
-        game_app.top_window().set_focus()
-    """
-
-    # Check if the window handle is valid
-    if not win32gui.IsWindow(hwnd):
-        return
-
-    try:
-        # Set the window to the foreground
-        win32gui.SetForegroundWindow(hwnd)
-
-        # # If the window is minimized, restore it
-        if win32gui.IsIconic(hwnd):
-            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-
-        # # Bring the window to the top
-        win32gui.BringWindowToTop(hwnd)
-
-        # # Set the window's position and size to the foreground
-        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-
-        # Set the window to topmost
-        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-
-        # Disable topmost
-        win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-
-        # # Activate the window
-        win32gui.SetActiveWindow(hwnd)  # <- this works for tkinter gui's in combination with topmost
-
-        print(f"Focused hwnd: {hwnd}!")
-    except ValueError:
-        print("Could not focus window")
-
-
-def is_valid_window(hwnd):
-    "Verify window"
-    return ctypes.windll.user32.IsWindow(hwnd)
-
-
 def prompt_for_folder(title):
     """Prompt user for a folder"""
     root = tk.Tk()
@@ -304,26 +242,6 @@ def wait_process_close(executable, timeout=None):
         time.sleep(0.1)
 
 
-def get_hwnd_for_exe(executable_name):
-    # pylint: disable=c-extension-no-member
-    """
-    Retrieves the window handle for a process based on its executable name.
-    """
-    for proc in psutil.process_iter(["name"]):
-        if proc.info["name"] == executable_name:
-            pid = proc.pid
-            handle_list = []
-
-            def callback(handle, handle_list):
-                handle_list.append(handle)
-
-            win32gui.EnumWindows(callback, handle_list)
-            for handle in handle_list:
-                if win32process.GetWindowThreadProcessId(handle)[1] == pid:
-                    return handle
-    return None
-
-
 def is_process_running(process_name: str) -> bool:
     """
     Check if a process with the specified name is currently running on the system.
@@ -351,31 +269,6 @@ def is_process_running(process_name: str) -> bool:
     #     print(f"{process_name} is not running")
 
     return process_running
-
-
-def is_process_running_from_hwnd(hwnd: int) -> bool:
-    # pylint: disable=unpacking-non-sequence
-    # pylint: disable=c-extension-no-member
-    """
-    Check if a process is running based on its window handle.
-
-    :param hwnd: The window handle.
-    :type hwnd: int
-    :return: True if the process is running, False otherwise.
-    :rtype: bool
-    """
-    try:
-        if not win32gui.IsWindow(hwnd):
-            print("Invalid window handle")
-            return False
-        _, pid = win32process.GetWindowThreadProcessId(hwnd)
-        process = psutil.Process(pid)
-        is_running = psutil.pid_exists(pid)
-        print(f"Process {process.name()} is {'running' if is_running else 'not running'}")
-        return is_running
-    except psutil.NoSuchProcess:
-        print("Process not found")
-        return False
 
 
 def copy_directory(src_dir, dest_dir, ignore_file=None):

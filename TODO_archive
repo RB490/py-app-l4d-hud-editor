@@ -343,3 +343,10 @@
 	✔ Game is also acting buggy. When i alt-tab it says focused. only when i manually focus the game window and then alt tab it finally loses mouse focus @done(23-08-29 19:42)
 	✔ Solution: first manually focus the game. and then the saved focused_hwnd @done(23-08-29 19:42)
 ✔ Feature: class to save mouse position & focus hwnd & restore it @done(23-08-29 19:57)
+✔ Bug: built-in todo app doesn't detect this in shared_utils.py: print(f"FIXME TODO move_hwnd_to_position: position={position}") @done(23-08-29 21:17)
+✔ Feature: Create a way to sync without restoring the developer directory @done(23-08-29 21:18) write sync status id file
+✔ Feature: Menu: Reload modes menu should have checkboxes on them for which mode is currently selected @done(23-08-29 21:39)
+✔ Refactor: Class to work with hwnds. Make it a shared util. All the current methods for working hwnds. Including focus saving&restoring @done(23-08-29 22:59)
+	✔ move_hwnd_to_position @done(23-08-29 22:35)
+	✔ is_process_running_from_hwnd @done(23-08-29 22:56)
+	✔ focus_hwnd @done(23-08-29 22:59)
