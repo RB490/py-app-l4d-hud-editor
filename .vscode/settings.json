@@ -14,5 +14,5 @@
         "__pycache__": true,
         "dev/debug": true,
         "assets/mods": true
-    }
+    },
 }

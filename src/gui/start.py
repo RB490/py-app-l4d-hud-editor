@@ -57,8 +57,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Configure the root window with the menubar
         self.update_treeview()
 
-        # Debug hotkeys
-        keyboard.add_hotkey("F9", self.start_debug_method, suppress=True)  # TODO disable debug hotkey
+        # Dbg hotkeys
+        # keyboard.add_hotkey("F9", self.start_debug_method, suppress=True)  #  debg hotkey
 
     def start_debug_method(self):
         "debug"
