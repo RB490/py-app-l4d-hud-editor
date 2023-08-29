@@ -9,7 +9,7 @@ from shared_utils.shared_utils import show_message
 class ProgressGUI:
     """A class representing a progress GUI window for installation."""
 
-    def __init__(self, action_description, initial_width, maximum_width, total_steps):
+    def __init__(self, action_description, initial_width, max_label_length, total_steps):
         """Initialize the progress GUI with the specified parameters.
 
         Args:
@@ -29,7 +29,7 @@ class ProgressGUI:
         self.total_steps = total_steps
         self.current_step = 0
         self.step_info_label_xpadding = 15
-        self.max_label_length = maximum_width
+        self.max_label_length = max_label_length
         self.longest_label_length = 10
         self.avg_char_width = None
 
@@ -127,7 +127,7 @@ class ProgressGUI:
 
     def close(self):
         """Close the progress GUI window."""
-        result = show_message(f"Are you sure you want to stop {self.action_description.lower()}", "yesno")
+        result = show_message(f"Are you sure you want to stop {self.action_description.lower()}?", "yesno")
         if not result:
             return
         self.root.destroy()

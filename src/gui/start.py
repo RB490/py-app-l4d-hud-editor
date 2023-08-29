@@ -17,7 +17,6 @@ from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
 from utils.functions import copy_directory
-from utils.hotkey_manager import hotkey_manager_example
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -62,9 +61,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         keyboard.add_hotkey("F9", self.start_debug_method, suppress=True)  # TODO disable debug hotkey
 
     def start_debug_method(self):
+        "debug"
         print("start_debug_method")
         # get_browser_gui()
-        hotkey_manager_example()
 
     def __create_widgets(self):
         # gui variables
@@ -424,8 +423,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         selected_item = self.treeview.selection()
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
-            self.selected_hud_name = self.treeview.item(item)["values"][0]
-            self.selected_hud_dir = os.path.normpath(self.treeview.item(item)["values"][1])
+            self.selected_hud_name = item_values[0]
+            self.selected_hud_dir = os.path.normpath(item_values["values"][1])
             image = os.path.join(self.selected_hud_dir, "addonimage.jpg")
 
             self.change_addon_image(image)

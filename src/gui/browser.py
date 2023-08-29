@@ -398,7 +398,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         if not result:
             get_browser_gui()
             return
-        
+
         self.descriptions_gui.destroy()
         self.save_window_geometry()
         save_and_exit_script()

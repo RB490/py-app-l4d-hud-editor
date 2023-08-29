@@ -9,6 +9,7 @@ from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
 from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import verify_directory
+from shared_utils.splash_gui import SplashGUI
 from utils.functions import (
     copy_directory,
     generate_random_string,
@@ -228,7 +229,7 @@ class GameDir:
 
     def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
-        
+
         # Get the games directory from the steam object of the game
         games_dir = self.game.steam.get_games_dir()
         # Get the title of the game
@@ -244,6 +245,8 @@ class GameDir:
         print("Restoring developer game files")
 
         try:
+            splash = SplashGUI("Uninstalling..", "Uninstalling..")
+
             # receive variables
             main_dir_backup = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
             main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
@@ -261,9 +264,12 @@ class GameDir:
             # update sync status
             self.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
 
+            # finish up
+            splash.destroy()
             print("Restored developer game files!")
             return True
         except Exception as err_info:
+            splash.destroy()
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info
 
     def check_for_invalid_id_file_structure(self):

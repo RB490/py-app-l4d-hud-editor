@@ -33,7 +33,6 @@ from utils.functions import (
     preform_checks_to_prepare_program_start,
     show_start_gui,
 )
-from utils.hotkey_manager import hotkey_manager_example
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -54,21 +53,23 @@ def debug_main():
 
     # unit tests
     # unit_test_hud_syncer()
-    
+
     debug_gui()
-    
+
     # save_data()
     # print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 
 def def_debug_hud_class():
+    "debug hud class"
     hud = get_hud_debug_instance()
     result = hud.edit.get_all_files_dict()
     result = hud.edit.get_files_dict()
-    
+
 
 def debug_data_manager():
+    "debug data manager"
     data_manager = PersistentDataManager()
     PersistentDataManager().save()
     result = data_manager.data
@@ -88,7 +89,7 @@ def debug_gui():
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
@@ -103,7 +104,7 @@ def debug_gui():
     # debug_get_user_input()
 
     # installer
-    # debug_progress_gui()
+    debug_progress_gui()
 
 
 def debug_id_handler(game_class):
