@@ -32,6 +32,3 @@ def splash_gui_example():
     input("wait for enter")
     splash.destroy()
     input("wait for enter2")
-
-
-splash_gui_example()

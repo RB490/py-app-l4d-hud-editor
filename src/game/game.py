@@ -114,7 +114,7 @@ class Game(metaclass=Singleton):
                         open(file_path, "w", encoding="utf-8").close()
                     if file.endswith(".vpk"):
                         shutil.copy(DUMMY_ADDON_VPK_PATH, file_path)
-                        print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
+                        # print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
 
     def _validate_dir_mode(self, dir_mode):
         "Validate the dir_mode parameter"

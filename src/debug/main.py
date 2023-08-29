@@ -61,6 +61,7 @@ def debug_main():
 
     input("Finished debugging! Press enter to exit...")
 
+
 def def_debug_hud_class():
     "debug hud class"
     hud = get_hud_debug_instance()
@@ -77,6 +78,7 @@ def debug_data_manager():
     result = data_manager.get("game_mode")
     print(f"result={result}")
 
+
 def debug_gui():
     "debug gui"
 
@@ -84,7 +86,7 @@ def debug_gui():
     # debug_popup_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # browser = get_browser_gui()
 
     # start
@@ -104,7 +106,7 @@ def debug_gui():
     # debug_get_user_input()
 
     # installer
-    debug_progress_gui()
+    # debug_progress_gui()
 
 
 def debug_id_handler(game_class):

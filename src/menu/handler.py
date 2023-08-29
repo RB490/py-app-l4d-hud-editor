@@ -140,6 +140,17 @@ class EditorMenuHandler:
         self.game.command.execute(self.data_manager.get("editor_reload_mode"))
         self.editor_menu.create_and_refresh_menu()
 
+    def editor_menu_reload_hud_once(self, reload_mode):
+        """Reload the hud once"""
+        print(f'TODO editor_menu_reload_hud_once={reload_mode}')
+        self.game.command.execute(reload_mode)
+
+    def editor_menu_set_hud_reload_mode(self, reload_mode):
+        """Set the hud reload setting & reload hud once"""
+        print(f'TODO editor_menu_set_hud_reload_mode={reload_mode}')
+        self.data_manager.set("reload_mode", reload_mode)
+        self.editor_menu_set_hud_reload_mode(reload_mode)
+
     def editor_menu_execute_game_command(self, execute_command):
         """Execute selected command ingame"""
         self.game.command.execute(execute_command)

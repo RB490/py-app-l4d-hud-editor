@@ -408,6 +408,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         print("Method: treeview_open_file - Handle 'Open File' option")
         full_path = self.get_selected_full_path()
         os.startfile(full_path)
+        self.hide()
 
     def action_open_vanilla_file(self):
         """Treeview handle Open vanilla File' option"""

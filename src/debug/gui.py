@@ -7,6 +7,8 @@ import time
 import tkinter as tk
 
 from debug.hud import get_hud_debug_instance
+from game.constants import DirectoryMode
+from game.game import Game
 from gui import descriptions
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
@@ -24,6 +26,9 @@ def debug_browser_gui():
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
     root = tk.Tk()
+
+    # game_class = Game()
+    # game_class.window.run(DirectoryMode.DEVELOPER)
 
     browser = GuiHudBrowser(root)
     browser.show()

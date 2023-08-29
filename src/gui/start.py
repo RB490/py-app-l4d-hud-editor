@@ -258,6 +258,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             image=self.img.folder_black_interface_symbol,
             compound="left",
         )
+
+        self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Export as VPK",
             command=self.selected_hud_export_vpk,
@@ -315,15 +317,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_open_dir(self):
         """Open the directory of the selected hud."""
-        print("Opening selected tree item directory")
-
         hud_dir = self.selected_hud_dir
 
         # Check if the source directory exists
         if os.path.exists(hud_dir):
             # Open the source directory in the file explorer
             subprocess.Popen(["explorer", hud_dir])
-            print(f"Opened directory '{hud_dir}'")
         else:
             print(f"Directory '{hud_dir}' does not exist.")
 
@@ -341,7 +340,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_export_directory(self):
         """Export hud as folder"""
-        print("selected_hud_export_directory")
 
         if not self.selected_hud_dir:
             print("No HUD selected!")
@@ -353,7 +351,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_export_vpk(self):
         """Export the selected hud as a vpk file."""
-        print("Exporting selected tree item as vpk")
 
         export_path = filedialog.asksaveasfilename(
             initialdir="/", title="Export HUD as VPK", filetypes=(("package files", "*.vpk"), ("all files", "*.*"))
@@ -368,7 +365,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def selected_hud_remove_or_delete(self):
         """Remove the selected hud."""
         # pylint: disable=attribute-defined-outside-init
-        print("Remove tree item")
 
         # set variables
         hud_name = self.selected_hud_name
@@ -424,7 +420,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         for item in selected_item:
             item_values = self.treeview.item(item)["values"]
             self.selected_hud_name = item_values[0]
-            self.selected_hud_dir = os.path.normpath(item_values["values"][1])
+            self.selected_hud_dir = os.path.normpath(item_values[1])
             image = os.path.join(self.selected_hud_dir, "addonimage.jpg")
 
             self.change_addon_image(image)

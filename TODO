@@ -1,7 +1,19 @@
 ✔ Feature: Add progress GUI for 'restoring dev game files' @done(23-08-29 17:59)
+✔ Refactor: Cleanup redundant print statements @done(23-08-29 18:01)
+✘ Bug: Browser: Move game position -> game is now focused. Behaviour should be cursor remains in the same place & focus is the same as before @cancelled(23-08-29 18:28) false positive
+✔ Feature: Menu: Set Reload hud functionality // result = data_manager.get("game_mode") result = data_manager.set("game_mode", value) @done(23-08-29 18:29)
+✔ Feature: Menu: Reload hud 'once' functionality @done(23-08-29 18:29)
 
 Current:
 	
+	☐ Feature: Hide the browser after having opened file. And maybe other options. probably not right now.
+	
+	☐ Feature: Right now the sync hud hotkey literally just syncs files. it needs to be bound to a method hat will also reload changes ingame based on settings (check if code for this already exists in the program)
+
+	☐ Feature: Menu: Reload modes menu should have checkboxes on them for which mode is currently selected
+
+	☐ Feature: Sync hud hotkey is set to ctrl+s. Do i want to change this
+
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
@@ -9,7 +21,6 @@ Current:
 
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 
-	☐ Refactor: Cleanup redundant print statements
 
 Release:
 	- GoaL: Being able to smug the program and have it 100% work for him on first try

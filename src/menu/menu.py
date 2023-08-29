@@ -4,7 +4,6 @@
 import os
 import tkinter as tk
 import webbrowser
-from msilib import Directory
 from tkinter import Menu, PhotoImage
 
 from game.constants import DirectoryMode
@@ -17,7 +16,6 @@ from utils.constants import (
     HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR,
     IMAGES_DIR_MISC,
     MAP_CODES,
     PROJECT_ROOT,
@@ -56,7 +54,7 @@ class EditorMenuClass:
         webbrowser.open(url)
 
     def do_nothing(self, *args):
-        # pylint: disable=unused-argument
+        # pylint: disable=unused-argument, unnecessary-pass
         """
         A dummy function that does nothing.
         """
@@ -838,7 +836,9 @@ class EditorMenuClass:
         for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             self.reload_mode_menu.add_command(
                 label=reload_mode,
-                command=create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}"),
+                command=create_lambda_command(
+                    self.handler.editor_menu_set_hud_reload_mode, f"{reload_code.lower()}"
+                ),
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
                 compound="left",
             )
@@ -850,7 +850,9 @@ class EditorMenuClass:
         for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             reload_once_menu.add_command(
                 label=reload_mode,
-                command=create_lambda_command(self.do_nothing, f"reload_{reload_code.lower()}"),
+                command=create_lambda_command(
+                    self.handler.editor_menu_reload_hud_once, f"{reload_code.lower()}"
+                ),
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
                 compound="left",
             )

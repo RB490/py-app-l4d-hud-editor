@@ -1,5 +1,5 @@
 {
-    "BrowserGuiGeometry": "886x380+21+551",
+    "BrowserGuiGeometry": "886x360+21+551",
     "HudSelectGuiGeometry": "865x500+1465+442",
     "VDFGuiGeometry": "903x472+376+407",
     "VDFGui_annotate": 1,
@@ -10,7 +10,7 @@
     "game_insecure": false,
     "game_mode": "Coop",
     "game_mute": true,
-    "game_pos": "Top Left",
+    "game_pos": "Bottom Right",
     "game_pos_custom_coord": null,
     "game_res": [
         640,
