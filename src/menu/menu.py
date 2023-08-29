@@ -833,15 +833,20 @@ class EditorMenuClass:
         self.reload_mode_menu.add_separator()
 
         # reload mode setting
-        for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
-            self.reload_mode_menu.add_command(
+        self.reload_mode_menu_hud_reload_mode = tk.IntVar()  # Variable to hold the selected mode
+        for idx, (reload_mode, reload_code) in enumerate(EDITOR_HUD_RELOAD_MODES.items()):
+            self.reload_mode_menu.add_radiobutton(
                 label=reload_mode,
-                command=create_lambda_command(
-                    self.handler.editor_menu_set_hud_reload_mode, f"{reload_code.lower()}"
-                ),
+                variable=self.reload_mode_menu_hud_reload_mode,
+                value=idx + 1,  # Start from 1, not 0
+                command=create_lambda_command(self.handler.editor_menu_set_hud_reload_mode, f"{reload_code.lower()}"),
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
                 compound="left",
             )
+
+            # enable checkmark for selected
+            if self.data_manager.get("hud_reload_mode") == reload_code:
+                self.reload_mode_menu_hud_reload_mode.set(idx + 1)
 
         self.reload_mode_menu.add_command(label="Options", state="disabled", columnbreak=True)
         self.reload_mode_menu.add_separator()
@@ -850,9 +855,7 @@ class EditorMenuClass:
         for reload_mode, reload_code in EDITOR_HUD_RELOAD_MODES.items():
             reload_once_menu.add_command(
                 label=reload_mode,
-                command=create_lambda_command(
-                    self.handler.editor_menu_reload_hud_once, f"{reload_code.lower()}"
-                ),
+                command=create_lambda_command(self.handler.editor_menu_reload_hud_once, f"{reload_code.lower()}"),
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
                 compound="left",
             )

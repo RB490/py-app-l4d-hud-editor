@@ -58,11 +58,13 @@ def debug_main():
     # manage_focus_example()
 
     game_class = Game()
-    game_class.dir.id.set_sync_state(SyncState.NOT_SYNCED)  # prevent restore_developer_directory from activating
+    game_class.dir.id.set_sync_state(
+        DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED
+    )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
     # game_class.window.restore_saved_position()
 
-    # debug_gui()
+    debug_gui()
     # debug_hud_class()
 
     # save_data()

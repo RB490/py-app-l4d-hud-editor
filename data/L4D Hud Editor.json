@@ -1,7 +1,7 @@
 {
-    "BrowserGuiGeometry": "886x360+21+551",
-    "HudSelectGuiGeometry": "865x500+1465+442",
-    "VDFGuiGeometry": "903x472+376+407",
+    "BrowserGuiGeometry": "828x517+114+776",
+    "HudSelectGuiGeometry": "865x528+100+100",
+    "VDFGuiGeometry": "875x425+159+110",
     "VDFGui_annotate": 1,
     "VDFGui_indent_values": 1,
     "VDFGui_modify_int": 1,
@@ -9,26 +9,23 @@
     "game_insecure": false,
     "game_mode": "Coop",
     "game_mute": true,
-    "game_pos": "Custom (Save)",
-    "game_pos_custom_coord": [
-        2774,
-        914
-    ],
+    "game_pos": "Top Left",
+    "game_pos_custom_coord": null,
     "game_res": [
-        640,
-        480
+        1600,
+        900
     ],
-    "hud_reload_mode": "reload_hud",
+    "hud_reload_mode": "reload_materials",
     "reload_mouse_clicks_coord_1": [
-        2146,
-        731
+        10,
+        20
     ],
     "reload_mouse_clicks_coord_2": [
-        294,
-        753
+        30,
+        40
     ],
     "reload_mouse_clicks_enabled": false,
-    "reload_reopen_menu_on_reload": true,
+    "reload_reopen_menu_on_reload": false,
     "steam_root_dir": "E:/games/steam",
     "stored_huds": [
         "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source"
