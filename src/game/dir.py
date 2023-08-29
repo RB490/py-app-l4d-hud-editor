@@ -242,6 +242,10 @@ class GameDir:
 
     def restore_developer_directory(self):
         "Restore developer game files using backup"
+        
+        # TODO enable restoring
+        return
+        
         print("Restoring developer game files")
 
         try:

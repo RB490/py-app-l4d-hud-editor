@@ -28,7 +28,7 @@ class PersistentDataManager(metaclass=Singleton):
             "VDFGui_indent_values": 1,
             "VDFGui_modify_int": 1,
             "VDFGui_sort_keys": 0,
-            "editor_reload_mode": "reload_hud",
+            "hud_reload_mode": "reload_hud",
             "game_insecure": False,
             "game_mode": "Coop",
             "game_mute": True,

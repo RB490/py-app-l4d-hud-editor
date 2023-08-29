@@ -38,6 +38,8 @@ class GameCommands:
         if not self.game.window.is_running():
             print("Not executing command! Game isn't running.")
             return
+        if not input_command:
+            raise ValueError("No input command available!")
 
         output_command = self._get_mapped_command(input_command.lower())
 

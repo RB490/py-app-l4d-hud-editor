@@ -54,7 +54,8 @@ def debug_main():
     # unit tests
     # unit_test_hud_syncer()
 
-    debug_gui()
+    # debug_gui()
+    debug_hud_class()
 
     # save_data()
     # print(f"result={result}")
@@ -62,11 +63,12 @@ def debug_main():
     input("Finished debugging! Press enter to exit...")
 
 
-def def_debug_hud_class():
+def debug_hud_class():
     "debug hud class"
-    hud = get_hud_debug_instance()
-    result = hud.edit.get_all_files_dict()
-    result = hud.edit.get_files_dict()
+    h = get_hud_debug_instance()
+    # result = hud.edit.get_all_files_dict()
+    # result = hud.edit.get_files_dict()
+    h.edit.sync()
 
 
 def debug_data_manager():

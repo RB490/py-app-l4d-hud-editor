@@ -159,10 +159,15 @@ class HudEditor:
         # print("main_dev_dir_basename:", main_dev_dir_basename)
 
         # pylint: disable=broad-exception-caught
-        try:
-            self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
-        except Exception as err_info:
-            print(f"Could not sync: {err_info}")
+
+        self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)  # TODO enable try:catch
+        self.game.command.execute(self.data_manager.get("hud_reload_mode"))
+        # try:
+        #     self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
+
+        #     self.game.command.execute(self.data_manager.get("hud_reload_mode"))
+        # except Exception as err_info:
+        #     print(f"Could not sync: {err_info}")
 
     def unsync(self):
         """Unsync hud"""
