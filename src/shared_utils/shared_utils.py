@@ -16,6 +16,7 @@ from ahk import AHK
 
 
 def add_empty_menu_separator(menu):
+    """Add empty menu item to act as separator"""
     empty_separator_label = " "  # Space as the label
     menu.add_command(label=empty_separator_label, state=tk.DISABLED, font=("Helvetica", 1))  # Small font size
 
@@ -121,8 +122,6 @@ def move_hwnd_to_position(hwnd, position):
     Raises:
         ValueError: If the position format is invalid.
     """
-    print(f"FIXME move_hwnd_to_position: position={position}")
-
     predefined_positions = {
         "Center": (0.5, 0.5),
         "Top Left": (0, 0),

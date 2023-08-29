@@ -9,15 +9,21 @@
 ✘ Refactor: Duplicate code: handler/editor_show_menu_panel directorly runs reload mode? self.game.command.execute(self.data_manager.get("hud_reload_mode")) @cancelled(23-08-29 18:41)
 ✘ Bug: Browser: Move game position -> game is now focused. Behaviour should be cursor remains in the same place & focus is the same as before @cancelled(23-08-29 18:28) false positive
 ✔ Bug: "game_pos": "Custom (Save)", doesn't get handled right by window.restore_saved_position. tuple is stored game_pos_custom_coord @done(23-08-29 19:09)
+✔ Bug: Commands: reload_all -> game gets reset to saved position but the focus will not have been restored to the previous window but game will be focused @done(23-08-29 19:42)
+	✔ Okay so the command is definetly executed without focusing the game. Just that reloading the resolution apparently captures the mouse focus. Detect reload_all/reload_fonts or better yet mat_reloadresolution thingy @done(23-08-29 19:42)
+	✔ Detect mat_setvideomode and wait until the game has finished processing. or just artificually sleep for a second or so @done(23-08-29 19:42)
+	✔ i checked the AHK code for this and it has a note: when executing (some) menu commands the active window will be 0x0 presumably because the menu was active @done(23-08-29 19:42)
+	✔ HUH turns out focus is being set correctly. it's just the game bugging out and still having focus of the mouse input. window focus is set perfectly @done(23-08-29 19:42)
+	✔ Game is also acting buggy. When i alt-tab it says focused. only when i manually focus the game window and then alt tab it finally loses mouse focus @done(23-08-29 19:42)
+	✔ Solution: first manually focus the game. and then the saved focused_hwnd @done(23-08-29 19:42)
 
 Current:
-	☐ Bug: Commands: reload_all -> game gets reset to saved position but the focus will not have been restored to the previous window but game will be focused
-		- Okay so the command is definetly executed without focusing the game. Just that reloading the resolution apparently captures the mouse focus. Detect reload_all/reload_fonts or better yet mat_reloadresolution thingy
-		- Detect mat_setvideomode and wait until the game has finished processing. or just artificually sleep for a second or so
-	
-	
+
+	☐ Feature: class to save mouse position & focus hwnd & restore it
 
 	☐ Feature: Menu: Reload modes menu should have checkboxes on them for which mode is currently selected
+
+	☐ Bug: built-in todo app doesn't detect this in shared_utils.py: print(f"FIXME TODO move_hwnd_to_position: position={position}")
 
 	☐ Testing: Test the program by using it to edit HUD's
 	

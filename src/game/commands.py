@@ -1,4 +1,4 @@
-# pylint: disable=protected-access
+# pylint: disable=protected-access, c-extension-no-member
 """This module is a sub class of the game class.
 functions related to the game folder such as switching between user/dev modes"""
 import ctypes
@@ -13,7 +13,7 @@ import win32gui
 from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
-from utils.functions import click_at, focus_hwnd
+from utils.functions import click_at, focus_hwnd, get_focused_hwnd
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -42,7 +42,7 @@ class GameCommands:
             raise ValueError("No input command available!")
 
         # Save the handle of the currently focused window
-        focused_hwnd = win32gui.GetForegroundWindow()
+        focused_hwnd = get_focused_hwnd()
 
         output_command = self._get_mapped_command(input_command.lower())
 
@@ -72,14 +72,6 @@ class GameCommands:
         self.send_keys_in_background([HOTKEY_EXECUTE_AUTOEXEC])
         print(f"Executed command: '{output_command}'")
 
-        # handle commands with 'mat_setvideomode' because the game will take mouse focus
-        if "mat_setvideomode" in output_command:
-            game_hwnd = self.game.window.get_hwnd()
-            
-            # Restore focus to the previously focused window
-            if game_hwnd is not focused_hwnd:
-                focus_hwnd(focused_hwnd)
-
         # perform mouse clicks
         if self.data_manager.get("reload_mouse_clicks_enabled"):
             click_at(self.data_manager.get("reload_mouse_clicks_coord_1"))
@@ -94,9 +86,19 @@ class GameCommands:
 
         # save previous panel to perform actions
         self.previous_ui_panel = self.show_ui_panel
-        
+
         # resetore game position
         self.game.window.restore_saved_position()
+
+        # handle commands with 'mat_setvideomode' because the game will take mouse focus
+        if "mat_setvideomode" in output_command:
+            game_hwnd = self.game.window.get_hwnd()
+            
+            if game_hwnd is not focused_hwnd:
+                # focus the game first. because else it bugs out and focus will be set correctly to focused_hwnd,
+                # but game will still have focus of the mouse.
+                focus_hwnd(game_hwnd)
+                focus_hwnd(focused_hwnd)
 
     def _get_mapped_command(self, input_command):
         """Map the input command to its corresponding game command."""
@@ -210,7 +212,7 @@ class GameCommands:
             return
 
         # Save the handle of the currently focused window
-        focused_hwnd = win32gui.GetForegroundWindow()
+        focused_hwnd = get_focused_hwnd()()
 
         focus_hwnd(game_hwnd)
         for key in keys:
