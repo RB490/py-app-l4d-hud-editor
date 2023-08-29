@@ -96,17 +96,17 @@ class GameWindow:
         self.data_manager.set("game_pos", position)
 
         if "custom" in position.lower():
-            # Use custom location
-            print("Restoring position:", position)
-
             # restore
             custom_position_tuple = self.data_manager.get("game_pos_custom_coord")
+            custom_position_tuple = tuple(custom_position_tuple) # load it back into a tuple to work with the coords
             if (  # verify tuple legitimacy
                 isinstance(custom_position_tuple, tuple)
                 and len(custom_position_tuple) == 2
                 and all(isinstance(i, int) and i >= 0 for i in custom_position_tuple)
             ):
                 position = custom_position_tuple
+            else:
+                raise ValueError(f"Invalid custom_position_tuple: {custom_position_tuple}")
 
         # move game
         move_hwnd_to_position(self.game.window.get_hwnd(), position)

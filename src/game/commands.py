@@ -41,6 +41,9 @@ class GameCommands:
         if not input_command:
             raise ValueError("No input command available!")
 
+        # Save the handle of the currently focused window
+        focused_hwnd = win32gui.GetForegroundWindow()
+
         output_command = self._get_mapped_command(input_command.lower())
 
         # re-show ui panel if set
@@ -68,6 +71,14 @@ class GameCommands:
         # execute command
         self.send_keys_in_background([HOTKEY_EXECUTE_AUTOEXEC])
         print(f"Executed command: '{output_command}'")
+
+        # handle commands with 'mat_setvideomode' because the game will take mouse focus
+        if "mat_setvideomode" in output_command:
+            game_hwnd = self.game.window.get_hwnd()
+            
+            # Restore focus to the previously focused window
+            if game_hwnd is not focused_hwnd:
+                focus_hwnd(focused_hwnd)
 
         # perform mouse clicks
         if self.data_manager.get("reload_mouse_clicks_enabled"):

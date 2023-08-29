@@ -121,6 +121,8 @@ def move_hwnd_to_position(hwnd, position):
     Raises:
         ValueError: If the position format is invalid.
     """
+    print(f"FIXME move_hwnd_to_position: position={position}")
+
     predefined_positions = {
         "Center": (0.5, 0.5),
         "Top Left": (0, 0),

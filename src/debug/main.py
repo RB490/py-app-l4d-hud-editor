@@ -54,8 +54,11 @@ def debug_main():
     # unit tests
     # unit_test_hud_syncer()
 
+    game_class = Game()
+    game_class.window.restore_saved_position()
+
     # debug_gui()
-    debug_hud_class()
+    # debug_hud_class()
 
     # save_data()
     # print(f"result={result}")
