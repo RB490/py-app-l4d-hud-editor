@@ -337,7 +337,7 @@ class EditorMenuClass:
         self.hud_menu.add_command(
             label="Hud (VS)",
             command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.vs_code,
             compound="left",
         )
 

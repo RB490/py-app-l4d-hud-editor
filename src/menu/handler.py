@@ -209,8 +209,8 @@ class EditorMenuHandler:
         except:
             message = (
                 "Run start GUI mainloop() first!\n\n"
-                "(Presumably this message only occurs while debugging)\n"
-                "For example when debugging the editor menu without having shown start gui\n"
+                "For example when debugging the editor menu without having shown start gui\n\n"
+                "(Presumably this message only occurs while debugging)"
             )
             show_message(message)
 
@@ -223,8 +223,8 @@ class EditorMenuHandler:
         except:
             message = (
                 "Run start GUI mainloop() first!\n\n"
-                "(Presumably this message only occurs while debugging)\n"
-                "For example when debugging the editor menu without having shown start gui\n"
+                "For example when debugging the editor menu without having shown start gui\n\n"
+                "(Presumably this message only occurs while debugging)"
             )
             show_message(message)
 

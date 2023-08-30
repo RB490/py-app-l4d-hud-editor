@@ -39,12 +39,31 @@ from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
     get_browser_gui,
-    hotkey_debugging_method,
+    get_mouse_position_on_click,
     preform_checks_to_prepare_program_start,
     prompt_for_folder,
     show_start_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
+
+
+def debug_function(*args):
+    """Debug"""
+    print(f"debug_function args={args}")
+
+
+def execute_debugging_hotkey_method_in_thread():
+    "debug hotkey in main thread incase it takes a bit longer and causes issue with the keyboard module"
+    thread = threading.Thread(target=hotkey_debugging_method)
+    thread.start()
+
+    print("thread finished!!!")
+
+
+def hotkey_debugging_method():
+    "debug hotkey"
+    print("hotkey_debugging_method!")
+    debug_popup_gui()
 
 
 def debug_main():
@@ -72,9 +91,10 @@ def debug_main():
 
     # showcase_hwnd_window_manager()
 
-    show_message("my message")
+    # get_mouse_position_on_click(debug_function)
+    # show_message("my message")
     # result = prompt_for_folder("title")
-    # debug_gui()
+    debug_gui()
     # debug_hud_class()
 
     # save_data()
@@ -120,7 +140,7 @@ def debug_gui():
     # debug_popup_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # browser = get_browser_gui()
 
     # start
@@ -128,7 +148,7 @@ def debug_gui():
     # show_start_gui()
 
     # vdf gui
-    debug_vdf_gui()
+    # debug_vdf_gui()
 
     # descriptions
     # debug_descriptions_gui()
