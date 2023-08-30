@@ -1,9 +1,12 @@
 import tkinter as tk
 
+from gui.base import BaseGUI
 
-class SplashGUI:
+
+class SplashGUI(BaseGUI):
     def __init__(self, title, text, duration_ms=None):
-        self.root = tk.Tk()
+        super().__init__()
+        # self.root = tk.Tk()
         self.root.title(title)
         # self.root.geometry("400x300")
         self.root.resizable(width=False, height=False)  # Make the GUI not resizable
@@ -14,7 +17,7 @@ class SplashGUI:
 
         self.duration_ms = duration_ms
 
-    def show(self):
+    def on_show(self):
         if self.duration_ms is not None:
             self.root.after(self.duration_ms, self.root.destroy)
         self.root.update()
@@ -27,6 +30,7 @@ class SplashGUI:
 def splash_gui_example():
     splash = SplashGUI("My Splash Screen", "Welcome!")
     splash.show()
+    splash.on_show()
 
     print("this is a test")
     input("wait for enter")

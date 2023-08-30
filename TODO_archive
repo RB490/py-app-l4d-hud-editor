@@ -358,18 +358,4 @@
 ✔ Bug: Sync hotkey is also sending ctrl+s but instead its typing an 's' in vscode @done(23-08-30 13:43) issue was the code execution taking too long causing issues with the keyboard hotkey module
 ✘ Bug: Menu: File -> Open file browser errors (without start gui having showed first, however) // this also happens for start. something slightly sus going on. something to do with the popup gui being showed first no doubt. confirm this is the case, and add a try:catch exception to the handler and/or maybe use the mainloop() check options with show_message explaining what's up @cancelled(23-08-30 13:48) non-issue just start mainloop() first
 ✘ Feature: Hotkey Manager: Run every hotkey in a thread @cancelled(23-08-30 14:49) possible, but then they can't be supressed anymore
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+✔ Feature: Editor Menu Handler class which will refresh the editor menu after every call @done(23-08-30 15:13) accomplished with decorators

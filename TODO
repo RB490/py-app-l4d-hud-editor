@@ -1,8 +1,9 @@
-✔ Feature: Editor Menu Handler class which will refresh the editor menu after every call @done(23-08-30 15:13) accomplished with decorators
-
 Current:
 	
 Todo:
+
+	☐ Refactor: Progress & Splash GUI's should inherit from basegui
+
 	☐ Testing: Test the program by using it to edit HUD's
 	
 	☐ Testing: Get the AHK version working and check it out to confirm feature parity

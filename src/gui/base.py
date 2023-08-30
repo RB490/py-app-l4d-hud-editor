@@ -63,6 +63,8 @@ class BaseGUI:
         if not self.has_been_run:
             self.run()
 
+        self.__call_method_if_exists("on_show")
+
     def has_ran(self):
         """Check if GUI has been ran once"""
         if self.has_been_run:
@@ -225,7 +227,11 @@ class BaseGUI:
         # pylint: disable=no-member
         self.__call_save_window_geometry()
         self.hide()
-        if hasattr(self, "on_close") and callable(getattr(self, "on_close")):
-            self.on_close()
+        self.__call_method_if_exists("on_close")
+
+    def __call_method_if_exists(self, method_name):
+        if hasattr(self, method_name) and callable(getattr(self, method_name)):
+            method = getattr(self, method_name)
+            method()
         else:
-            logger.debug(f"Child GUI {self.root.title()} does not have an 'on_close' method to call!")
+            logger.debug(f"Child instance {self} does not have a '{method_name}' method to call!")

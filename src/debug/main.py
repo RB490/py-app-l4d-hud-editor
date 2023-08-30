@@ -33,6 +33,7 @@ from shared_utils.hwnd_window_manager import (
     showcase_hwnd_window_manager,
 )
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
+from shared_utils.splash_gui import splash_gui_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
@@ -48,11 +49,11 @@ def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
-    hotkey_manager = HotkeyManager()
     # hotkeys
-    hotkey_manager.add_hotkey("CTRL+S", hotkey_debugging_method, suppress=True)
-    hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
-    hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
+    # hotkey_manager = HotkeyManager()
+    # hotkey_manager.add_hotkey("CTRL+S", hotkey_debugging_method, suppress=True)
+    # hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
+    # hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
     # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)
     # return
     # unit tests
@@ -108,16 +109,19 @@ def debug_data_manager():
 def debug_gui():
     "debug gui"
 
+    # splash
+    splash_gui_example()
+
     # popup
     # debug_popup_gui()
 
     # browser
-    debug_browser_gui()
+    # debug_browser_gui()
     # browser = get_browser_gui()
 
     # start
     # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
