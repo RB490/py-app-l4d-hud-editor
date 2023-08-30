@@ -14,7 +14,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self, parent_root):
-        super().__init__(parent_root)
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.root.title("File")
         self.root.iconbitmap(APP_ICON)
         self.set_always_on_top(True)

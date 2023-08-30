@@ -11,27 +11,41 @@ logger_manager = LoggerManager(__name__, level=logging.WARNING)
 logger = logger_manager.get_logger()
 
 
+# Define constants for GUI types
+class GUITypes:
+    """Enumeration of the different GUI types"""
+
+    MAIN = "main"  # mainloop() aka the one main gui in the program which also handles events for the sub guis
+    SUB = "sub"  # sub gui aka any other gui other than the main
+    MODAL = "modal"  # uses .update()
+
+
 class BaseGUI:
     """BaseGUI"""
 
     program_mainloop_started = False
 
-    def __init__(self, parent_root=None):
+    def __init__(self, gui_type=GUITypes.MAIN, parent_root=None):
         """
         Initialize the BaseGUI.
 
         Args:
             parent_root (tkinter main gui instance, optional): True if the GUI is a modal dialog, False otherwise.
         """
+        self.gui_type = gui_type
         self.is_hidden = None
         self.is_resizable = True
         self.has_been_run = False
         self.parent_root = parent_root if parent_root else None
 
-        if self.parent_root:
+        if self.gui_type == GUITypes.MAIN or self.gui_type == GUITypes.MODAL:
+            self.root = tk.Tk()
+        elif self.gui_type == GUITypes.SUB:
+            if self.parent_root is None:
+                raise ValueError("For GUITypes.SUB, parent_root must be supplied.")
             self.root = tk.Toplevel(self.parent_root)
         else:
-            self.root = tk.Tk()
+            raise ValueError("Invalid gui_type.")
 
         self.root.title("BaseGUI")
         self.hide()
@@ -90,15 +104,18 @@ class BaseGUI:
         logger.info(f"Running GUI {self.root.title()}")
 
         # toplevel gui's don't need a mainloop because they get handled by the main mainloop
-        if not self.parent_root:
+        if self.gui_type == GUITypes.MAIN:
             self.set_mainloop_started(True)
             self.root.mainloop()
+        elif self.gui_type == GUITypes.MODAL:
+            self.root.update()
 
     def destroy(self):
         """Destroy the window."""
         self.__call_save_window_geometry()
         self.root.update()  # fixes can't invoke "event" command: application has been destroyed error
         self.root.destroy()
+        self.__call_method_if_exists("on_destroy")
 
     def set_fullscreen(self, fullscreen):
         """
@@ -211,27 +228,21 @@ class BaseGUI:
         """
         self.root.unbind(key_combination)
 
-    def __call_save_window_geometry(self):
-        try:
-            if self.has_been_run:
-                if hasattr(self, "save_window_geometry") and callable(getattr(self, "save_window_geometry")):
-                    self.save_window_geometry()
-                    logger.info(f"Called save_window_geometry for {self.root.title()} GUI.")
-                else:
-                    logger.debug(f"GUI {self.root.title()} does not have a save_window_geometry method to call!")
-        except Exception as e_info:
-            logger.error(f"Error occurred while calling save_window_geometry for {self.root.title()} GUI: {e_info}")
-
     def __on_close_internal(self):
         """Callback function before the window is closed."""
-        # pylint: disable=no-member
-        self.__call_save_window_geometry()
+
         self.hide()
+        self.__call_save_window_geometry()
         self.__call_method_if_exists("on_close")
+
+    def __call_save_window_geometry(self):
+        if self.has_been_run:
+            self.__call_method_if_exists("save_window_geometry")
 
     def __call_method_if_exists(self, method_name):
         if hasattr(self, method_name) and callable(getattr(self, method_name)):
             method = getattr(self, method_name)
             method()
+            logger.info(f"Called {method_name} for {self.root.title()} GUI.")
         else:
-            logger.debug(f"Child instance {self} does not have a '{method_name}' method to call!")
+            logger.info(f"GUI {self.root.title()} does not have a {method_name} method to call!")

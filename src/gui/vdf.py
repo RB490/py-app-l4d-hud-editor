@@ -20,7 +20,7 @@ class VDFModifierGUI(BaseGUI):
         self.load_file()  # confirm whether the file is valid
 
         # setup gui
-        super().__init__(parent_root)
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.data_manager = PersistentDataManager()
         self.img = ImageConstants()
         self.modifier = None  # vdf modifier class

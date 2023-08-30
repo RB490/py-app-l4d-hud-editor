@@ -164,8 +164,6 @@ def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
 
 def prompt_for_folder(title):
     """Prompt user for a folder"""
-    root = tk.Tk()
-    root.withdraw()
     return filedialog.askdirectory(title=title)
 
 

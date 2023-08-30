@@ -2,7 +2,9 @@ Current:
 	
 Todo:
 
-	☐ Refactor: Progress & Splash GUI's should inherit from basegui
+	✔ Refactor: Progress & Splash GUI's should inherit from basegui @done(23-08-30 17:58)
+
+	☐ Refactor: Use BaseGUI for get_mouse_position_on_click
 
 	☐ Testing: Test the program by using it to edit HUD's
 	

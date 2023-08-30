@@ -1,11 +1,10 @@
 "Steam info retriever"
 import os
-import tkinter as tk
 import winreg
 from tkinter import filedialog
 
-from utils.persistent_data_manager import PersistentDataManager
 from shared_utils.shared_utils import Singleton
+from utils.persistent_data_manager import PersistentDataManager
 
 
 class SteamInfoRetriever(metaclass=Singleton):
@@ -120,8 +119,6 @@ class SteamInfoRetriever(metaclass=Singleton):
             str: Path to the selected Steam directory, or raises NotADirectoryError if not valid.
         """
         self.__print_if_debug("Asking user for Steam directory...")
-        root = tk.Tk()
-        root.withdraw()
         steam_path = filedialog.askdirectory(title="Select Steam directory")
         if self._check_path(steam_path, self.STEAM_EXECUTABLE):
             self.__print_if_debug("User-selected directory contains Steam executable.")

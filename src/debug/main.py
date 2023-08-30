@@ -33,6 +33,7 @@ from shared_utils.hwnd_window_manager import (
     showcase_hwnd_window_manager,
 )
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
+from shared_utils.shared_utils import show_message
 from shared_utils.splash_gui import splash_gui_example
 from tests.test_hud_syncer import unit_test_hud_syncer
 from utils.constants import HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER, ImageConstants
@@ -40,6 +41,7 @@ from utils.functions import (
     get_browser_gui,
     hotkey_debugging_method,
     preform_checks_to_prepare_program_start,
+    prompt_for_folder,
     show_start_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
@@ -70,7 +72,9 @@ def debug_main():
 
     # showcase_hwnd_window_manager()
 
-    debug_gui()
+    show_message("my message")
+    # result = prompt_for_folder("title")
+    # debug_gui()
     # debug_hud_class()
 
     # save_data()
@@ -110,7 +114,7 @@ def debug_gui():
     "debug gui"
 
     # splash
-    splash_gui_example()
+    # splash_gui_example()
 
     # popup
     # debug_popup_gui()
@@ -121,10 +125,10 @@ def debug_gui():
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
-    # debug_vdf_gui()
+    debug_vdf_gui()
 
     # descriptions
     # debug_descriptions_gui()

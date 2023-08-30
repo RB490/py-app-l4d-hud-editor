@@ -39,7 +39,7 @@ class HotkeyManager(metaclass=Singleton):
 
         keyboard.add_hotkey(hotkey, callback, suppress=suppress)
         self.hotkeys[hotkey] = callback
-        logger.info("Added hotkey: %s", hotkey)
+        logger.debug("Added hotkey: %s", hotkey)
 
     def remove_hotkey(self, hotkey):
         """
@@ -51,7 +51,7 @@ class HotkeyManager(metaclass=Singleton):
         if hotkey in self.hotkeys:
             keyboard.remove_hotkey(hotkey)
             del self.hotkeys[hotkey]
-            logger.info("Removed hotkey: %s", hotkey)
+            logger.debug("Removed hotkey: %s", hotkey)
         else:
             logger.warning("Attempted to remove non-existent hotkey: %s", hotkey)
 

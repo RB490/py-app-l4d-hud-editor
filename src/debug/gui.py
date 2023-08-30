@@ -1,4 +1,4 @@
-# pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long, unused-import
+# pylint: disable=unused-variable, missing-module-docstring, missing-function-docstring, line-too-long, unused-import, unreachable
 import os
 import random
 import shutil
@@ -15,6 +15,7 @@ from gui.popup import GuiEditorMenuPopup
 from gui.progress import ProgressGUI
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
+from shared_utils.shared_utils import get_invisible_tkinter_root
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path
 from utils.get_user_input import get_user_input
@@ -25,7 +26,7 @@ def debug_browser_gui():
     print("debug_browser")
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
-    root = tk.Tk()
+    root = get_invisible_tkinter_root()
 
     # game_class = Game()
     # game_class.window.run(DirectoryMode.DEVELOPER)
@@ -39,7 +40,7 @@ def debug_browser_gui():
 def debug_popup_gui():
     """Debug gui class"""
     # pylint: disable=unused-variable
-    root = tk.Tk()
+    root = get_invisible_tkinter_root()
     # app = GuiEditorMenuPopup(root)
     app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
     app.show(hide=True)
@@ -56,7 +57,7 @@ def debug_get_user_input():
 
 
 def debug_descriptions_gui():
-    root = tk.Tk()
+    root = get_invisible_tkinter_root()
     descriptions_gui = descriptions.GuiHudDescriptions(root)
     descriptions_gui.load_file("scripts\\hudlayout.res")
     # descriptions_gui.show()
@@ -76,24 +77,26 @@ def debug_progress_gui():
     # temp
     total_steps = 1
     gui = ProgressGUI("Uninstalling", 350, 60, total_steps)  # Create the GUI instance
+    gui.show()
+    return
 
-    # total_steps = len(installation_steps)
-    # total_steps = 150000
-    # gui = ProgressGUI("Debugging", 250, 60, total_steps)  # Create the GUI instance
+    total_steps = 150000
+    gui = ProgressGUI("Debugging", 250, 60, total_steps)  # Create the GUI instance
+    gui.show()
 
     # gui.update_progress("asdf asdf asdf asdf ")
     # gui.update_progress("asdf asdf asdf asdf ")
 
-    # for step in range(total_steps):
-    #     random_length = random.randint(1, 3)
-    #     # random_length = random.randint(1, 10)
-    #     # random_length = random.randint(1, 100)
-    #     # random_length = random.randint(1, 500)
-    #     random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
-    #     # gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
-    #     gui.update_progress(f"{random_string*10}")
-    #     # time.sleep(0.4)
-    #     # time.sleep(2)
+    for step in range(total_steps):
+        random_length = random.randint(1, 3)
+        # random_length = random.randint(1, 10)
+        # random_length = random.randint(1, 100)
+        # random_length = random.randint(1, 500)
+        random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
+        # gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
+        gui.update_progress(f"{random_string*10}")
+        # time.sleep(0.4)
+        # time.sleep(2)
 
     # gui.update_progress("this is!")
     # input("enter to cintieeiej")
@@ -116,6 +119,6 @@ def debug_vdf_gui():
     vdf_path_backup = get_backup_path(vdf_path)
     shutil.copy2(vdf_path, vdf_path_backup)
 
-    root = tk.Tk()
+    root = get_invisible_tkinter_root()
     app = VDFModifierGUI(root, vdf_path_backup)
     app.show()

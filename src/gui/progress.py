@@ -2,11 +2,12 @@
 # pylint: disable=broad-exception-raised
 import tkinter as tk
 
-from utils.constants import APP_ICON
+from gui.base import BaseGUI
 from shared_utils.shared_utils import show_message
+from utils.constants import APP_ICON
 
 
-class ProgressGUI:
+class ProgressGUI(BaseGUI):
     """A class representing a progress GUI window for installation."""
 
     def __init__(self, action_description, initial_width, max_label_length, total_steps):
@@ -17,7 +18,7 @@ class ProgressGUI:
             initial_width (int): The initial width of the GUI window.
             maximum_width (int): The maximum width the GUI window can have.
         """
-        self.root = tk.Tk()
+        super().__init__(gui_type="modal")
         self.root.title(action_description)
         self.root.iconbitmap(APP_ICON)
         self.root.protocol("WM_DELETE_WINDOW", self.close)

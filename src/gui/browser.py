@@ -37,7 +37,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
     def __init__(self, parent_root):
-        super().__init__(parent_root)
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)

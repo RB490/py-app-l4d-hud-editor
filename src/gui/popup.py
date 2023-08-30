@@ -31,7 +31,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
 
         Create a fully transparent GUI the size of the entire screen so clicking out of the context menu closes it
         """
-        super().__init__(parent_root)
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.root.title("Editor Context Menu Popup")
         self.debug_instantly_show_menu = debug_instantly_show_menu
         self.set_transparency(0.3)  # fully transparent makes it less reliable somehow

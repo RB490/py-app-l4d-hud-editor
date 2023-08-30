@@ -26,7 +26,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def __init__(self):
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        super().__init__()
+        super().__init__("main")
         self.img = ImageConstants()
         self.data_manager = PersistentDataManager()
         self.game = Game()
