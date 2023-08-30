@@ -1,16 +1,7 @@
-✔ Bug: Menu: Unsync hud -> AttributeError: 'Hud' object has no attribute 'unsync' @done(23-08-30 11:49)
-✔ Feature: Menu: File -> Open file browser @done(23-08-30 11:55)
-✘ Feature: Menu: Popup should refresh the menu before opening it(?) then again the menu options already do it @cancelled(23-08-30 11:58) making editor menu handler class instead
-✔ Feature: A lot of print statements Process left4dead2.exe is running when startgui->start editing? Analyze & move to logging @done(23-08-30 12:34)
-✔ Feature: Hotkey manager! @done(23-08-30 13:21)
-✔ Bug: Sync hotkey is also sending ctrl+s but instead its typing an 's' in vscode @done(23-08-30 13:43) issue was the code execution taking too long causing issues with the keyboard hotkey module
-✘ Bug: Menu: File -> Open file browser errors (without start gui having showed first, however) // this also happens for start. something slightly sus going on. something to do with the popup gui being showed first no doubt. confirm this is the case, and add a try:catch exception to the handler and/or maybe use the mainloop() check options with show_message explaining what's up @cancelled(23-08-30 13:48) non-issue just start mainloop() first
+✔ Feature: Editor Menu Handler class which will refresh the editor menu after every call @done(23-08-30 15:13) accomplished with decorators
 
 Current:
 	
-	☐ Feature: Editor Menu Handler class which will refresh the editor menu after every call
-	
-
 Todo:
 	☐ Testing: Test the program by using it to edit HUD's
 	

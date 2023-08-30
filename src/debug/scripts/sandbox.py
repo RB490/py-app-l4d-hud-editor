@@ -1,24 +1,38 @@
-import time
-import threading
+def call_internal(func):
+    def wrapper(self, *args, **kwargs):
+        # call the original method and store its result
+        result = func(self, *args, **kwargs)
+        # call the internal method after the original method
+        self._internal_method()
+        # return the result of the original method
+        return result
+    return wrapper
 
-import keyboard
 
-def longer_duration_method():
-    "debug hotkey"
-    print("hotkey_debugging_method!")
-    print("hotkey_debugging_method! #1")
-    time.sleep(1)
-    print("hotkey_debugging_method! #2")
+class MyClass:
+    def __init__(self):
+        self._value = 0
 
-def run_longer_duration_method_in_thread():
-    thread = threading.Thread(target=longer_duration_method)
-    thread.start()
+    def _internal_method(self):
+        # do something internal
+        print("Internal method called")
 
-# Simulate the issue without threading
-print("Simulating the issue without threading:")
-keyboard.add_hotkey('ctrl+s', longer_duration_method)
+    @call_internal
+    def increment(self):
+        # increment the value by 1
+        self._value += 1
+        print(f"Value is now {self._value}")
 
-# Simulate the solution using threading
-print("\nSimulating the solution using threading:")
-run_longer_duration_method_in_thread()
-keyboard.add_hotkey('ctrl+f', run_longer_duration_method_in_thread)
+    @call_internal
+    def decrement(self):
+        # decrement the value by 1
+        self._value -= 1
+        print(f"Value is now {self._value}")
+
+
+# Create an instance of MyClass
+obj = MyClass()
+
+# Call methods and see the after-method behavior
+obj.increment()
+obj.decrement()

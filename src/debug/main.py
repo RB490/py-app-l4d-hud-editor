@@ -50,6 +50,7 @@ def debug_main():
     print("Started debugging!")
     hotkey_manager = HotkeyManager()
     # hotkeys
+    hotkey_manager.add_hotkey("CTRL+S", hotkey_debugging_method, suppress=True)
     hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
     hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
     # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)
@@ -108,10 +109,10 @@ def debug_gui():
     "debug gui"
 
     # popup
-    debug_popup_gui()
+    # debug_popup_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # browser = get_browser_gui()
 
     # start

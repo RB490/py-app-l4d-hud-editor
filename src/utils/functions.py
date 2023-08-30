@@ -31,7 +31,6 @@ def execute_debugging_hotkey_method_in_thread():
 
 def hotkey_debugging_method():
     "debug hotkey"
-    print("hotkey_debugging_method!")
     print("hotkey_debugging_method! #1")
     time.sleep(1)
     print("hotkey_debugging_method! #2")

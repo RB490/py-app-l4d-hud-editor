@@ -13,6 +13,16 @@ from utils.functions import get_browser_gui, get_mouse_position_on_click, show_s
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
+def call_create_and_refresh_menu(func):
+    """Used by decorator to update menu after method"""
+    def wrapper(self, *args, **kwargs):
+        # call the original method and store its result
+        result = func(self, *args, **kwargs)
+        # call the internal method after the original method
+        self.editor_menu.create_and_refresh_menu()
+        return result
+
+    return wrapper
 
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
@@ -26,12 +36,12 @@ class EditorMenuHandler:
 
         self.hud = Hud()
 
+    @call_create_and_refresh_menu
     def editor_menu_game_mode(self, mode):
         """Method to handle the selected game mode in the menu."""
         print(f"The selected option is: {mode}")
-        self.data_manager.set("game_mode", "mode")
+        self.data_manager.set("game_mode", mode)
         self.game.command.execute(f"map {UNIVERSAL_GAME_MAP}")
-        self.editor_menu.create_and_refresh_menu()
 
     def editor_menu_game_map(self, map_name, map_code):
         """Method to handle the selected game map in the menu."""
@@ -71,6 +81,7 @@ class EditorMenuHandler:
         # restore game position
         self.game.window.restore_saved_position()
 
+    @call_create_and_refresh_menu
     def editor_menu_game_pos(self, pos):
         """Method to handle the selected game position in the menu."""
         print(f"Selected Game Position: {pos}")
@@ -80,8 +91,7 @@ class EditorMenuHandler:
         else:
             self.game.window.set_position(pos)
 
-        self.editor_menu.create_and_refresh_menu()
-
+    @call_create_and_refresh_menu
     def editor_menu_game_toggle_insecure(self):
         """Method to handle the selected secure/insecure option in the menu."""
         print("editor_menu_game_security")
@@ -93,9 +103,6 @@ class EditorMenuHandler:
         else:
             self.data_manager.set("game_insecure", True)
             self.editor_menu.editor_menu_game_insecure_checkmark.set(1)
-
-        # refresh menu
-        self.editor_menu.create_and_refresh_menu()
 
         # prompt to restart game
         message = "Restart needed for changes to take effect.\n\nDo you want to restart now?"
@@ -113,6 +120,7 @@ class EditorMenuHandler:
         self.game.window.run(DirectoryMode.DEVELOPER)
         self.hud.edit.start_game_exit_check()
 
+    @call_create_and_refresh_menu
     def editor_menu_game_toggle_mute(self):
         """Method to handle the selected secure/insecure option in the menu."""
         if self.data_manager.get("game_mute") is True:
@@ -122,9 +130,6 @@ class EditorMenuHandler:
             self.game.command.execute("volume 0")
             self.data_manager.set("game_mute", True)
 
-        # refresh menu
-        self.editor_menu.create_and_refresh_menu()
-
     def editor_menu_copy_snippet(self, file_path):
         """Copy snippet to clipboard"""
         with open(file_path, "r", encoding="utf-8") as file:
@@ -132,13 +137,13 @@ class EditorMenuHandler:
             pyperclip.copy(content)
             print(content)
 
+    @call_create_and_refresh_menu
     def editor_menu_show_panel(self, panel):
         """Show selected panel ingame"""
 
         # set selected panel
         self.game.command.set_ui_panel(panel)
         self.game.command.execute(self.data_manager.get("hud_reload_mode"))
-        self.editor_menu.create_and_refresh_menu()
 
     def editor_menu_reload_hud_once(self, reload_mode):
         """Reload the hud once"""
@@ -158,38 +163,36 @@ class EditorMenuHandler:
         # Define the function to be called when a menu item is selected
         self.game.command.execute(action)
 
+    @call_create_and_refresh_menu
     def editor_add_existing_hud(self):
         """Add exiting hud to the menu"""
         self.hud.manager.prompt_add_existing_hud()
-        self.editor_menu.create_and_refresh_menu()
 
+    @call_create_and_refresh_menu
     def editor_create_new_hud(self):
         """Add exiting hud to the menu"""
         self.hud.manager.prompt_create_new_hud()
-        self.editor_menu.create_and_refresh_menu()
 
+    @call_create_and_refresh_menu
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
         self.hud.manager.remove_stored_hud(hud_dir)
-        self.editor_menu.create_and_refresh_menu()
 
+    @call_create_and_refresh_menu
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
         print(f"editor_remove_temp_hud: {hud_dir}")
         self.hud.manager.remove_temp_hud(hud_dir)
-        self.editor_menu.create_and_refresh_menu()
 
+    @call_create_and_refresh_menu
     def editor_open_temp_hud(self):
         """Open temporary hud in the menu"""
         self.hud.manager.prompt_open_temp_hud()
-        self.editor_menu.create_and_refresh_menu()
 
+    @call_create_and_refresh_menu
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
         self.hud.edit.start_editing(hud_dir)
-
-        # refresh menu (selected hud)
-        self.editor_menu.create_and_refresh_menu()
 
     def editor_exit_script(self):
         """Exit script"""
@@ -264,6 +267,7 @@ class EditorMenuHandler:
         long_string = "W" * 144
         self.game.command.execute(f"say {long_string}")
 
+    @call_create_and_refresh_menu
     def editor_hide_game_world(self):
         """Hide game world"""
         if self.editor_menu.editor_menu_hide_world_checkmark.get() is True:
@@ -271,10 +275,10 @@ class EditorMenuHandler:
         else:
             self.game.command.execute("r_drawWorld 1; r_drawEntities 1")
 
+    @call_create_and_refresh_menu
     def editor_unsync_hud(self):
         """Unsync hud"""
         self.hud.edit.unsync()
-        self.editor_menu.create_and_refresh_menu()
 
     def editor_save_as_vpk(self):
         """Export hud as vpk"""
@@ -284,22 +288,23 @@ class EditorMenuHandler:
         """Export hud as folder"""
         self.hud.edit.save_as_folder()
 
+    @call_create_and_refresh_menu
     def editor_menu_reload_reopen_menu(self):
         """Repen menu on reload setting"""
         reload_reopen_menu_on_reload = self.data_manager.get("reload_reopen_menu_on_reload")
         self.data_manager.set("reload_reopen_menu_on_reload", not reload_reopen_menu_on_reload)
         self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(not reload_reopen_menu_on_reload)
-        self.editor_menu.create_and_refresh_menu()
         print(not reload_reopen_menu_on_reload)
 
+    @call_create_and_refresh_menu
     def editor_menu_reload_click(self):
         """Toggle reload click coordinate"""
         reload_mouse_clicks_enabled = self.data_manager.get("reload_mouse_clicks_enabled")
         self.data_manager.set("reload_mouse_clicks_enabled", not reload_mouse_clicks_enabled)
         self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(not reload_mouse_clicks_enabled)
-        self.editor_menu.create_and_refresh_menu()
         print(not reload_mouse_clicks_enabled)
 
+    @call_create_and_refresh_menu
     def editor_menu_reload_click_coord1(self):
         # pylint: disable=invalid-name
         """Set reload click coordinate"""
@@ -312,11 +317,11 @@ class EditorMenuHandler:
             else:
                 print("The operation was cancelled or the window was closed")
 
-            self.editor_menu.create_and_refresh_menu()
             print(f"Coord #1 set to: {coord_1}")
 
         get_mouse_position_on_click(xy_coord_callback)
 
+    @call_create_and_refresh_menu
     def editor_menu_reload_click_coord2(self):
         # pylint: disable=invalid-name
         """Set reload click coordinate"""
@@ -329,7 +334,6 @@ class EditorMenuHandler:
             else:
                 print("The operation was cancelled or the window was closed")
 
-            self.editor_menu.create_and_refresh_menu()
             print(f"Coord #2 set to: {coord_2}")
 
         get_mouse_position_on_click(xy_coord_callback)
