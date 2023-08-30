@@ -7,7 +7,6 @@ from tkinter import messagebox
 import pyperclip  # type: ignore
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
-from shared_utils.hwnd_window_manager import HwndWindowUtils
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import get_browser_gui, get_mouse_position_on_click, show_start_gui
@@ -26,6 +25,7 @@ def call_create_and_refresh_menu(func):
         return result
 
     return wrapper
+
 
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""

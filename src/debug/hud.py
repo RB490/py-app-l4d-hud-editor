@@ -1,4 +1,5 @@
 "Debug hud"
+# pylint: disable=invalid-name, protected-access
 import os
 import shutil
 

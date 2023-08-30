@@ -1,3 +1,5 @@
+"Modify video.txt"
+# pylint: disable=invalid-name, broad-exception-caught
 import os
 
 import vdf  # type: ignore
@@ -7,14 +9,39 @@ class VideoSettingsModifier:
     "Modify video.txt"
 
     def __init__(self, config_dir):
+        "Modify video.txt init"
         self.config_dir = config_dir
         self.video_settings_path = os.path.join(config_dir, "video.txt")
+        self.default_settings = {
+            "setting.cpu_level": "2",
+            "setting.gpu_level": "0",
+            "setting.mat_antialias": "4",
+            "setting.mat_aaquality": "0",
+            "setting.mat_forceaniso": "16",
+            "setting.mat_vsync": "0",
+            "setting.mat_triplebuffered": "0",
+            "setting.mat_grain_scale_override": "0",
+            "setting.mat_monitorgamma": "1.800000",
+            "setting.gpu_mem_level": "2",
+            "setting.mem_level": "2",
+            "setting.mat_queue_mode": "-1",
+            "setting.defaultres": "1024",
+            "setting.defaultresheight": "768",
+            "setting.aspectratiomode": "0",
+            "setting.fullscreen": "0",
+            "setting.nowindowborder": "0",
+        }
 
     def load_video_settings(self):
-        "Load"
-        if os.path.exists(self.video_settings_path):
-            return vdf.load(open(self.video_settings_path, encoding="utf-8"))
-        return None
+        """Load video settings or fall back to default"""
+        try:
+            if os.path.exists(self.video_settings_path):
+                return vdf.load(open(self.video_settings_path, encoding="utf-8"))
+        except Exception as e:
+            print(f"Error loading video settings: {e}")
+
+        # Return default settings if loading fails
+        return {"VideoConfig": self.default_settings.copy()}
 
     def save_video_settings(self, video_settings):
         "Save"
