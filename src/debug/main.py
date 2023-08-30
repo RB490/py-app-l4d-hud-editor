@@ -86,6 +86,9 @@ def debug_main():
     game_class.dir.id.set_sync_state(
         DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED
     )  # prevent restore_developer_directory from activating
+    game_class.dir.id.set_installation_state(
+        DirectoryMode.DEVELOPER, InstallationState.COMPLETED
+    )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
 
     # showcase_hwnd_window_manager()

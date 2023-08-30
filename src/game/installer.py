@@ -64,6 +64,7 @@ class GameInstaller:
 
         total_files, total_subdirs = count_files_and_dirs(path)
         gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
+        gui.show()
 
         for root, dirs, files in os.walk(path, topdown=False):
             for file_name in files:
@@ -181,16 +182,13 @@ class GameInstaller:
             InstallationState.REBUILDING_AUDIO,
         ]
         gui = ProgressGUI("Installing", 600, 60, len(installation_steps))  # Create the GUI instance
+        gui.show()
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
             last_completed_index = 0
         else:
             last_completed_index = installation_steps.index(resume_state)
-
-        # set gui completed steps
-        for _ in range(last_completed_index):
-            gui.update_progress(None)
 
         try:
             # Perform installation steps starting from the next step after the last completed one
