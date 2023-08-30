@@ -74,9 +74,9 @@ def debug_main():
     # game_class.command.execute("reload_fonts")
     # game_class.window.restore_saved_position()
 
-    showcase_hwnd_window_manager()
+    # showcase_hwnd_window_manager()
 
-    # debug_gui()
+    debug_gui()
     # debug_hud_class()
 
     # save_data()
@@ -110,12 +110,12 @@ def debug_gui():
     # debug_popup_gui()
 
     # browser
-    debug_browser_gui()
+    # debug_browser_gui()
     # browser = get_browser_gui()
 
     # start
     # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

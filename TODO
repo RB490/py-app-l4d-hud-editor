@@ -1,8 +1,20 @@
+✔ Bug: Menu: Unsync hud -> AttributeError: 'Hud' object has no attribute 'unsync' @done(23-08-30 11:49)
 Current:
+
+	Hotkey:
+		- interestingly the F8 hotkey to open the editor menu still works fine?
+		☐ Bug: Start editing -> Press F7 to open browser -> nothing at all
+		☐ Bug: Start editing -> Press ctrl+s to sync -> nothing at all?
+		☐ Bug: Start editing -> F12 to unsync hud with debug method -> nothing
+		☐ Bug: Start editing -> F10 for debug method -> nothing at all?
+
+	☐ Feature: Menu: File -> Open file browser
+	☐ Feature: A lot of print statements Process left4dead2.exe is running when startgui->start editing? Analyze & move to logging
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
 	☐ Testing: Get the AHK version working and check it out to confirm feature parity
+		☐ Feature: Menu: Open HUD in VSCode (and that icon)
 
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 

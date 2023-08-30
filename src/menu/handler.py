@@ -250,7 +250,7 @@ class EditorMenuHandler:
 
     def editor_unsync_hud(self):
         """Unsync hud"""
-        self.hud.unsync()
+        self.hud.edit.unsync()
         self.editor_menu.create_and_refresh_menu()
 
     def editor_save_as_vpk(self):
