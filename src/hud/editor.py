@@ -1,5 +1,5 @@
 """Class to manage hud editing"""
-# pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel
+# pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel, invalid_name
 import os
 import threading
 from tkinter import filedialog
@@ -14,11 +14,7 @@ from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import (
-    copy_directory,
-    get_browser_gui,
-    show_start_gui,
-)
+from utils.functions import copy_directory, get_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -106,12 +102,16 @@ class HudEditor:
         )
 
         # hotkeys
-        self.hotkey_manager.add_hotkey(
-            HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True
-        )
+        self.hotkey_manager.add_hotkey(HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True)
 
         # run the game
-        self.game.window.run(DirectoryMode.DEVELOPER)
+        try:
+            self.game.window.run(DirectoryMode.DEVELOPER)
+        except Exception as e:
+            self.unsync()
+            show_message(f"failed to run game: {e}")
+            show_start_gui()
+            return False
 
         # refresh hud incase game has not restarted
         self.game.command.execute("reload_all")
@@ -170,9 +170,7 @@ class HudEditor:
         try:
             self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
 
-            self.game.command.execute(
-                self.data_manager.get("hud_reload_mode")
-            )
+            self.game.command.execute(self.data_manager.get("hud_reload_mode"))
         except Exception as err_info:
             print(f"Could not sync: {err_info}")
 

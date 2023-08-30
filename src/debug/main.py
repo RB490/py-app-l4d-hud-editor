@@ -87,7 +87,6 @@ def debug_main():
         DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
-    # game_class.window.restore_saved_position()
 
     # showcase_hwnd_window_manager()
 
@@ -137,7 +136,7 @@ def debug_gui():
     # splash_gui_example()
 
     # popup
-    debug_popup_gui()
+    # debug_popup_gui()
 
     # browser
     # debug_browser_gui()
@@ -145,7 +144,7 @@ def debug_gui():
 
     # start
     # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

@@ -12,8 +12,8 @@
     "game_pos": "Top Left",
     "game_pos_custom_coord": null,
     "game_res": [
-        1600,
-        900
+        1024,
+        768
     ],
     "hud_reload_mode": "reload_materials",
     "reload_mouse_clicks_coord_1": [
