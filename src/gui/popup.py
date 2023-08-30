@@ -1,10 +1,9 @@
 """Module for the editor menu"""
 # pylint: disable=import-outside-toplevel
-import keyboard
-
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
+from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import Singleton
 from utils.constants import HOTKEY_EDITOR_MENU
 from utils.persistent_data_manager import PersistentDataManager
@@ -52,8 +51,8 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
 
-        keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_menu, suppress=True)
-        # keyboard.add_hotkey("F8", self.toggle_visibility, suppress=True)
+        hotkey_manager = HotkeyManager()
+        hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_menu, suppress=True)
 
         if self.debug_instantly_show_menu:
             self.show_menu()
@@ -68,12 +67,10 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         pos_x, pos_y = self.root.winfo_pointerxy()
 
         # show menu
-        if self.debug_instantly_show_menu:
-            self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
-            self.dev_context_menu.post(pos_x, pos_y)
-        else:
-            self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-            self.my_editor_menu.menu_bar.post(pos_x, pos_y)
+        # self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
+        # self.dev_context_menu.post(pos_x, pos_y)
+        self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
+        self.my_editor_menu.menu_bar.post(pos_x, pos_y)
 
         # hide gui after context menu closed
         self.hide()

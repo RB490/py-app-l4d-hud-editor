@@ -20,6 +20,13 @@ from utils.persistent_data_manager import PersistentDataManager
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 
+def hotkey_debugging_method():
+    "debug hotkey"
+    print("hotkey_debugging_method!")
+    print("hotkey_debugging_method! #1")
+    time.sleep(1)
+    print("hotkey_debugging_method! #2")
+
 def get_browser_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
     from gui.browser import GuiHudBrowser
@@ -43,8 +50,7 @@ def show_start_gui():
 
     start_gui = GuiHudStart()
     start_gui.show()
-
-    return start_gui
+    return
 
 
 def count_files_and_dirs(path):

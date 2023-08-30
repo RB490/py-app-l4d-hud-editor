@@ -5,7 +5,6 @@ import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
 
-import keyboard
 import send2trash
 import win32gui
 from PIL import Image, ImageTk
@@ -18,15 +17,19 @@ from gui.popup import GuiEditorMenuPopup
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
+from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
-    HOTKEY_EDITOR_MENU,
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
-from utils.functions import get_browser_gui, get_image_for_file_extension, save_and_exit_script
+from utils.functions import (
+    get_browser_gui,
+    get_image_for_file_extension,
+    save_and_exit_script,
+)
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -67,8 +70,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
 
         # setup hotkeys
-        keyboard.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
-        keyboard.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup_gui, suppress=True)
+        hotkey_manager = HotkeyManager()
+        hotkey_manager.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
 
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)

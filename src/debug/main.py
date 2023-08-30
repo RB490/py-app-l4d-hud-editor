@@ -5,6 +5,7 @@
 import logging
 import os
 import sys
+import threading
 import time
 
 import keyboard
@@ -26,42 +27,40 @@ from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
 from hud.hud import Hud
+from shared_utils.hotkey_manager import HotkeyManager, showcase_hotkey_manager
 from shared_utils.hwnd_window_manager import (
     HwndWindowUtils,
     showcase_hwnd_window_manager,
 )
 from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
 from tests.test_hud_syncer import unit_test_hud_syncer
-from utils.constants import HOTKEY_TOGGLE_BROWSER, ImageConstants
+from utils.constants import HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER, ImageConstants
 from utils.functions import (
     get_browser_gui,
+    hotkey_debugging_method,
     preform_checks_to_prepare_program_start,
     show_start_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
 
 
-def debug_unsync_hud_func():
-    "debug"
-    hud_ins = Hud()
-    hud_ins.edit.syncer.unsync()
-    print("finished: debug_unsync_hud_func")
+def execute_debugging_hotkey_method_in_thread():
+    thread = threading.Thread(target=hotkey_debugging_method)
+    thread.start()
 
-
-def hotkey_debugging_method():
-    "debug hotkey"
-    print("hotkey_debugging_method!")
+    print("thread finished!!!")
 
 
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
     print("Started debugging!")
-
+    hotkey_manager = HotkeyManager()
     # hotkeys
-    keyboard.add_hotkey("F10", hotkey_debugging_method, suppress=True)
-    keyboard.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
-
+    hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
+    hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
+    # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)
+    # return
     # unit tests
     # unit_test_hud_syncer()
 
@@ -90,7 +89,16 @@ def debug_hud_class():
     h = get_hud_debug_instance()
     # result = hud.edit.get_all_files_dict()
     # result = hud.edit.get_files_dict()
-    h.edit.sync()
+    h.edit.start_editing(h.edit.get_dir())
+    # h.edit.sync()
+
+
+def debug_unsync_hud_func():
+    "debug"
+
+    hud_ins = Hud()
+    hud_ins.edit.syncer.unsync()
+    print("finished: debug_unsync_hud_func")
 
 
 def debug_data_manager():

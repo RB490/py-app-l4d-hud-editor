@@ -9,7 +9,7 @@ import pyperclip  # type: ignore
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message
 from utils.constants import UNIVERSAL_GAME_MAP
-from utils.functions import get_mouse_position_on_click, show_start_gui
+from utils.functions import get_browser_gui, get_mouse_position_on_click, show_start_gui
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -201,6 +201,11 @@ class EditorMenuHandler:
         """Open hud select gui"""
         print("editor_open_hud_select")
         show_start_gui()
+    
+    def editor_open_browser_gui(self):
+        """Open hud select gui"""
+        print("editor_open_browser_gui")
+        get_browser_gui()
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""

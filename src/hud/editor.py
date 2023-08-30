@@ -5,17 +5,20 @@ import threading
 from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
 
-import keyboard
-
 from game.constants import DirectoryMode
 from game.game import Game
 from gui.browser import GuiHudBrowser
 from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
+from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import copy_directory, get_browser_gui, show_start_gui
+from utils.functions import (
+    copy_directory,
+    get_browser_gui,
+    show_start_gui,
+)
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -29,6 +32,7 @@ class HudEditor:
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()
         self.manager = HudManager()
+        self.hotkey_manager = HotkeyManager()
         self.hud_dir = None
         self.hud_name = None
         self.threaded_timer_game_exit = None
@@ -102,7 +106,9 @@ class HudEditor:
         )
 
         # hotkeys
-        keyboard.add_hotkey(HOTKEY_SYNC_HUD, self.sync, suppress=True)
+        self.hotkey_manager.add_hotkey(
+            HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True
+        )
 
         # run the game
         self.game.window.run(DirectoryMode.DEVELOPER)
@@ -133,9 +139,7 @@ class HudEditor:
         self.syncer.unsync()
 
         # remove hotkey
-        hotkeys = keyboard.get_hotkey_name()
-        if HOTKEY_SYNC_HUD in hotkeys:
-            keyboard.remove_hotkey(self.sync)
+        self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
 
         # clear variables
         self.clear_hud_info()
@@ -146,6 +150,11 @@ class HudEditor:
         # callback to the gui
         if open_start_gui:
             show_start_gui()
+
+    def sync_in_thread(self):
+        """Assign this to a hotkey to prevent sync() taking too long and the hotkey not being suppressed"""
+        thread = threading.Thread(target=self.sync)
+        thread.start()
 
     def sync(self):
         """Sync hud"""
@@ -161,7 +170,9 @@ class HudEditor:
         try:
             self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
 
-            self.game.command.execute(self.data_manager.get("hud_reload_mode"))
+            self.game.command.execute(
+                self.data_manager.get("hud_reload_mode")
+            )
         except Exception as err_info:
             print(f"Could not sync: {err_info}")
 

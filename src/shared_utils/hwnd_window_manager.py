@@ -2,7 +2,8 @@
 This module provides a utility class for managing windows using their HWND (handle),
 including methods to check process status, retrieve focused HWND, get executable name, move windows, and focus windows.
 """
-# pylint: disable=c-extension-no-member, broad-exception-caught, invalid-name
+# pylint: disable=c-extension-no-member, broad-exception-caught, invalid-name, logging-fstring-interpolation
+import logging
 import os
 import time
 
@@ -13,6 +14,12 @@ import win32con
 import win32gui
 import win32process
 
+from shared_utils.logging_manager import LoggerManager
+
+# Configure the logging settings
+logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+logger = logger_manager.get_logger()  # Get the logger instance
 
 class HwndWindowUtils:
     """
@@ -59,10 +66,10 @@ class HwndWindowUtils:
             process = psutil.Process(pid)
             is_running = psutil.pid_exists(pid)
             process_executable = process.name()
-            print(f"Process {process_executable} is {'running' if is_running else 'not running'}")
+            logger.debug(f"Process {process_executable} is {'running!' if is_running else 'not running!'}")
             return process_executable
         except psutil.NoSuchProcess:
-            print("Process not found")
+            print(f"Process {process_executable} not found!")
             return False
 
     def get_executable_name(self, hwnd):

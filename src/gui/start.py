@@ -5,7 +5,6 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, ttk
 
-import keyboard
 import send2trash
 from PIL import Image, ImageTk
 
@@ -13,6 +12,7 @@ from game.game import Game
 from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
+from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import Singleton, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
@@ -58,7 +58,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.update_treeview()
 
         # Dbg hotkeys
-        # keyboard.add_hotkey("F9", self.start_debug_method, suppress=True)  #  debg hotkey
+        hotkey_manager = HotkeyManager()
+        hotkey_manager.add_hotkey("F9", self.start_debug_method, suppress=True)
 
     def start_debug_method(self):
         "debug"

@@ -46,10 +46,11 @@ def logging_class_usage_example():
     Example of using the LoggerManager to log messages.
     """
     # logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-    logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
     # logger_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
     # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
-    logger = logger_manager.get_logger()  # Get the logger instance
+    # Get the logger instance
+    logger_manager = LoggerManager(__name__, level=logging.WARNING)
+    logger = logger_manager.get_logger()
 
     # Log messages at different levels
     logger.debug("This is a debug message")

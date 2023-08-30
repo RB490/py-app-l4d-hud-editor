@@ -1112,6 +1112,12 @@ class EditorMenuClass:
             compound="left",
             command=self.handler.editor_open_start_gui,
         )
+        self.file_menu.add_command(
+            label="Browser",
+            image=self.img.book_black_opened_symbol,
+            compound="left",
+            command=self.handler.editor_open_browser_gui,
+        )
         self.file_menu.add_cascade(
             label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
         )
