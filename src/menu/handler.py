@@ -1,5 +1,5 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
-# pylint: disable=broad-exception-caught
+# pylint: disable=broad-exception-caught, bare-except
 import os
 import sys
 from tkinter import messagebox
@@ -200,12 +200,30 @@ class EditorMenuHandler:
     def editor_open_start_gui(self):
         """Open hud select gui"""
         print("editor_open_hud_select")
-        show_start_gui()
-    
+
+        try:
+            show_start_gui()
+        except:
+            message = (
+                "Run start GUI mainloop() first!\n\n"
+                "(Presumably this message only occurs while debugging)\n"
+                "For example when debugging the editor menu without having shown start gui\n"
+            )
+            show_message(message)
+
     def editor_open_browser_gui(self):
         """Open hud select gui"""
         print("editor_open_browser_gui")
-        get_browser_gui()
+
+        try:
+            get_browser_gui()
+        except:
+            message = (
+                "Run start GUI mainloop() first!\n\n"
+                "(Presumably this message only occurs while debugging)\n"
+                "For example when debugging the editor menu without having shown start gui\n"
+            )
+            show_message(message)
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""

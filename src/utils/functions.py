@@ -6,6 +6,7 @@ import shutil
 import string
 import sys
 import tempfile
+import threading
 import time
 import tkinter as tk
 from tkinter import filedialog
@@ -20,12 +21,21 @@ from utils.persistent_data_manager import PersistentDataManager
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 
+def execute_debugging_hotkey_method_in_thread():
+    "debug hotkey in main thread incase it takes a bit longer and causes issue with the keyboard module"
+    thread = threading.Thread(target=hotkey_debugging_method)
+    thread.start()
+
+    print("thread finished!!!")
+
+
 def hotkey_debugging_method():
     "debug hotkey"
     print("hotkey_debugging_method!")
     print("hotkey_debugging_method! #1")
     time.sleep(1)
     print("hotkey_debugging_method! #2")
+
 
 def get_browser_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"

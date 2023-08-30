@@ -44,13 +44,6 @@ from utils.functions import (
 from utils.persistent_data_manager import PersistentDataManager
 
 
-def execute_debugging_hotkey_method_in_thread():
-    thread = threading.Thread(target=hotkey_debugging_method)
-    thread.start()
-
-    print("thread finished!!!")
-
-
 def debug_main():
     "Main debug func"
     os.system("cls")  # clear terminal
@@ -115,7 +108,7 @@ def debug_gui():
     "debug gui"
 
     # popup
-    # debug_popup_gui()
+    debug_popup_gui()
 
     # browser
     # debug_browser_gui()
@@ -123,7 +116,7 @@ def debug_gui():
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

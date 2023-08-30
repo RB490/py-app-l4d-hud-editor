@@ -5,6 +5,7 @@ import tkinter as tk
 
 from shared_utils.logging_manager import LoggerManager
 
+# logger_manager = LoggerManager(__name__, level=logging.INFO)
 logger_manager = LoggerManager(__name__, level=logging.WARNING)
 # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
 logger = logger_manager.get_logger()
