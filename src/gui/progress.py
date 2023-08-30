@@ -10,17 +10,19 @@ from utils.constants import APP_ICON
 class ProgressGUI(BaseGUI):
     """A class representing a progress GUI window for installation."""
 
-    def __init__(self, action_description, initial_width, max_label_length, total_steps):
-        """Initialize the progress GUI with the specified parameters.
+    def __init__(self, action_description: str, initial_width: int, max_label_length: int, total_steps: int) -> None:
+        """
+        Initialize the progress GUI with the specified parameters.
 
         Args:
-            total_steps (int): The total number of steps in the installation process.
+            action_description (str): The description of the action.
             initial_width (int): The initial width of the GUI window.
-            maximum_width (int): The maximum width the GUI window can have.
+            max_label_length (int): The maximum label length.
+            total_steps (int): The total number of steps in the installation process.
         """
         super().__init__(gui_type="modal")
         self.root.title(action_description)
-        self.root.iconbitmap(APP_ICON)
+        self.root.iconbitmap(APP_ICON) # type: ignore
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.height = 125
         self.root.geometry(f"{initial_width}x{self.height}")
@@ -32,11 +34,11 @@ class ProgressGUI(BaseGUI):
         self.step_info_label_xpadding = 15
         self.max_label_length = max_label_length
         self.longest_label_length = 10
-        self.avg_char_width = None
+        self.avg_char_width: float = 0
 
         self.__create_widgets()
 
-    def __create_widgets(self):
+    def __create_widgets(self) -> None:
         """Initialize the GUI elements and layout."""
         self.action_description_label = tk.Label(
             self.root,
@@ -62,7 +64,7 @@ class ProgressGUI(BaseGUI):
         self._calculate_avg_char_width()
         self._update_minimum_width()
 
-    def _calculate_avg_char_width(self):
+    def _calculate_avg_char_width(self) -> None:
         """Calculate the average character width based on the font."""
         font = self.step_info_label.cget("font")
         canvas = tk.Canvas(self.root)
@@ -71,7 +73,7 @@ class ProgressGUI(BaseGUI):
         self.avg_char_width = char_bbox[2] - char_bbox[0]
         canvas.destroy()
 
-    def _update_minimum_width(self):
+    def _update_minimum_width(self) -> None:
         """Update the minimum width of the GUI window."""
         if self.longest_label_length > self.max_label_length:
             minimum_width = int(self.longest_label_length * self.avg_char_width)
@@ -84,7 +86,7 @@ class ProgressGUI(BaseGUI):
         else:
             self.root.minsize(minimum_width, self.height)
 
-    def update_progress(self, step_information):
+    def update_progress(self, step_information: str) -> None:
         """Update the progress GUI with new step information.
 
         Args:
@@ -126,7 +128,7 @@ class ProgressGUI(BaseGUI):
         self._update_minimum_width()
         self.root.update()
 
-    def close(self):
+    def close(self) -> None:
         """Close the progress GUI window."""
         result = show_message(f"Are you sure you want to stop {self.action_description.lower()}?", "yesno")
         if not result:

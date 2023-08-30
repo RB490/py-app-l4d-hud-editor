@@ -75,10 +75,10 @@ def debug_progress_gui():
     "debug installer gui"
 
     # temp
-    total_steps = 1
-    gui = ProgressGUI("Uninstalling", 350, 60, total_steps)  # Create the GUI instance
-    gui.show()
-    return
+    # total_steps = 1
+    # gui = ProgressGUI("Uninstalling", 350, 60, total_steps)  # Create the GUI instance
+    # gui.show()
+    # return
 
     total_steps = 150000
     gui = ProgressGUI("Debugging", 250, 60, total_steps)  # Create the GUI instance

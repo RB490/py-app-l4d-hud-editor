@@ -2,6 +2,7 @@
 # pylint: disable=broad-exception-caught, logging-fstring-interpolation
 import logging
 import tkinter as tk
+from typing import Callable, Optional, Union
 
 from shared_utils.logging_manager import LoggerManager
 
@@ -23,9 +24,9 @@ class GUITypes:
 class BaseGUI:
     """BaseGUI"""
 
-    program_mainloop_started = False
+    program_mainloop_started: bool = False
 
-    def __init__(self, gui_type=GUITypes.MAIN, parent_root=None):
+    def __init__(self, gui_type: Union[GUITypes, str] = GUITypes.MAIN, parent_root: Optional[tk.Tk] = None) -> None:
         """
         Initialize the BaseGUI.
 
@@ -33,10 +34,11 @@ class BaseGUI:
             parent_root (tkinter main gui instance, optional): True if the GUI is a modal dialog, False otherwise.
         """
         self.gui_type = gui_type
-        self.is_hidden = None
-        self.is_resizable = True
-        self.has_been_run = False
+        self.is_hidden: bool = True
+        self.is_resizable: bool = True
+        self.has_been_run: bool = False
         self.parent_root = parent_root if parent_root else None
+        self.root: Union[tk.Tk, tk.Toplevel]
 
         if self.gui_type == GUITypes.MAIN or self.gui_type == GUITypes.MODAL:
             self.root = tk.Tk()
@@ -52,24 +54,29 @@ class BaseGUI:
         self.root.protocol("WM_DELETE_WINDOW", self.__on_close_internal)
         self.root.minsize(300, 200)
 
-    def hide(self):
+    def hide(self) -> None:
         """Hide the window."""
         self.__call_save_window_geometry()
         self.root.withdraw()
         self.is_hidden = True
 
-    def minimize(self):
+    def minimize(self) -> None:
         """Minimize the window (iconify)."""
         self.__call_save_window_geometry()
         self.root.iconify()
 
-    def maximize(self):
+    def maximize(self) -> None:
         """Maximize the window."""
         self.__call_save_window_geometry()
         self.root.state("zoomed")  # Maximizes the window
 
-    def show(self, hide=False):
-        """Show the window."""
+    def show(self, hide: bool = False) -> None:
+        """
+        Show the window.
+
+        Args:
+            hide (bool, optional): If True, hide the window after showing. Defaults to False.
+        """
         self.root.deiconify()
         self.is_hidden = False
         if hide:
@@ -79,45 +86,46 @@ class BaseGUI:
 
         self.__call_method_if_exists("on_show")
 
-    def has_ran(self):
-        """Check if GUI has been ran once"""
-        if self.has_been_run:
-            return True
-        else:
-            return False
+    def has_ran(self) -> bool:
+        """Check if GUI has been run once."""
+        return self.has_been_run
 
-    def get_mainloop_started(self):
-        """Check if mainloop was started"""
+    def get_mainloop_started(self) -> bool:
+        """Check if the mainloop was started."""
         return BaseGUI.program_mainloop_started
 
-    def set_mainloop_started(self, bool_value):
-        """Check if mainloop was started"""
-        BaseGUI.program_mainloop_started = bool_value
-        return
+    def set_mainloop_started(self, bool_value: bool) -> None:
+        """
+        Set the status of whether the mainloop was started.
 
-    def run(self):
-        """Run mainloop()"""
+        Args:
+            bool_value (bool): True if the mainloop was started, False otherwise.
+        """
+        BaseGUI.program_mainloop_started = bool_value
+
+    def run(self) -> None:
+        """Run the mainloop."""
         if self.has_been_run:
             raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
 
         self.has_been_run = True
         logger.info(f"Running GUI {self.root.title()}")
 
-        # toplevel gui's don't need a mainloop because they get handled by the main mainloop
+        # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
         if self.gui_type == GUITypes.MAIN:
             self.set_mainloop_started(True)
             self.root.mainloop()
         elif self.gui_type == GUITypes.MODAL:
             self.root.update()
 
-    def destroy(self):
+    def destroy(self) -> None:
         """Destroy the window."""
         self.__call_save_window_geometry()
-        self.root.update()  # fixes can't invoke "event" command: application has been destroyed error
+        self.root.update()  # Fixes "can't invoke 'event' command: application has been destroyed" error
         self.root.destroy()
         self.__call_method_if_exists("on_destroy")
 
-    def set_fullscreen(self, fullscreen):
+    def set_fullscreen(self, fullscreen: bool) -> None:
         """
         Set the window to full-screen mode. Will/might disable alt+tab
 
@@ -135,7 +143,7 @@ class BaseGUI:
                 self.root.attributes("-fullscreen", False)
             self.root.overrideredirect(False)  # Restore window decorations
 
-    def set_transparency(self, transparency):
+    def set_transparency(self, transparency: float) -> None:
         """
         Set the window transparency.
 
@@ -145,7 +153,7 @@ class BaseGUI:
         self.root.attributes("-alpha", transparency)
         logger.info(f"{self.root.title()} GUI Transparency set to {transparency}")
 
-    def set_decorations(self, show_decorations):
+    def set_decorations(self, show_decorations: bool) -> None:
         """
         Set window decorations on or off.
 
@@ -159,7 +167,7 @@ class BaseGUI:
         else:
             logger.info(f"{self.root.title()} GUI Window decorations are now hidden.")
 
-    def set_window_geometry(self, geometry):
+    def set_window_geometry(self, geometry: str) -> None:
         """
         Set the window geometry.
 
@@ -173,7 +181,7 @@ class BaseGUI:
             logger.exception(f"Error setting {self.root.title()} GUI geometry")
             self.root.geometry("1000x1000+100+100")
 
-    def get_window_geometry(self):
+    def get_window_geometry(self) -> str:
         """Get window geometry if GUI is loaded and visible"""
 
         if self.has_been_run:
@@ -184,7 +192,7 @@ class BaseGUI:
             logger.warning(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
             return "1000x1000+100+100"
 
-    def set_always_on_top(self, status):
+    def set_always_on_top(self, status: bool) -> None:
         """Set 'always on top' status of the window"""
         if self.root:
             if status:
@@ -207,19 +215,19 @@ class BaseGUI:
             self.hide()
         logger.info(f"{self.root.title()} GUI visibility toggled.")
 
-    def set_hotkey(self, key_combination, callback, widget=None):
+    def set_hotkey(self, key_combination: str, callback: Callable, widget: Optional[tk.Widget] = None) -> None:
         """
         Set a hotkey that triggers a callback function.
 
         Args:
             key_combination (str): The key combination (e.g., "Ctrl+C").
-            callback (function): The callback function.
-            widget: The widget to bind the hotkey to (default: self.root).
+            callback (callable): The callback function.
+            widget (Optional[tk.Widget]): The widget to bind the hotkey to (default: self.root).
         """
         target_widget = widget or self.root
         target_widget.bind(key_combination, callback)
 
-    def remove_hotkey(self, key_combination):
+    def remove_hotkey(self, key_combination: str) -> None:
         """
         Remove a hotkey associated with a key combination.
 
@@ -228,18 +236,17 @@ class BaseGUI:
         """
         self.root.unbind(key_combination)
 
-    def __on_close_internal(self):
+    def __on_close_internal(self) -> None:
         """Callback function before the window is closed."""
-
         self.hide()
         self.__call_save_window_geometry()
         self.__call_method_if_exists("on_close")
 
-    def __call_save_window_geometry(self):
+    def __call_save_window_geometry(self) -> None:
         if self.has_been_run:
             self.__call_method_if_exists("save_window_geometry")
 
-    def __call_method_if_exists(self, method_name):
+    def __call_method_if_exists(self, method_name: str) -> None:
         if hasattr(self, method_name) and callable(getattr(self, method_name)):
             method = getattr(self, method_name)
             method()

@@ -1,11 +1,20 @@
 ✔ Refactor: Progress & Splash GUI's should inherit from basegui @done(23-08-30 17:58)
 ✘ Refactor: Use BaseGUI for get_mouse_position_on_click @cancelled(23-08-30 18:03) nuh-uh
 ✔ Feature: Menu: Open in VSCode: VSCode icon @done(23-08-30 18:10)
+✘ Post: Multi-game support: Explore multi-game support feasibility: Check how much extra code was required. If too much, not worth it. Only if it's very easy @cancelled(23-08-30 19:44)
+	✘ I used GAME_CLASS.obj.version to check it && 1 method in game class to set specific variables @cancelled(23-08-30 19:44)
+	✘ Where is SwapFoldersTo called from? If !GAME_CLASS.DevMode.Enable() @cancelled(23-08-30 19:44)
+	✘ ^ okay so i'm noticing that i have been writing pretty good code which should mean that it might actually be trivial to add l4d1 support. it's mostly the editor menu needing various different options @cancelled(23-08-30 19:44)
+	✘ 		for example i used to hardcode left4dead_dlc1 etc but now i just search the folders @cancelled(23-08-30 19:44)
+	✘ Conclusion: it should be very easy to do. but i'm still not going to do it because it makes no sense @cancelled(23-08-30 19:44)
+✔ Post: Add types: Make a good GPT prompt @done(23-08-30 21:37) works but too much effort to do after the fact
 
 Current:
+
+
 	
 Todo:
-
+	☐ Post: Command line: Evaluate potential of using command line interface instead of GUI
 
 	☐ Testing: Test the program by using it to edit HUD's
 	
@@ -14,7 +23,7 @@ Todo:
 	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 
 Release:
-	- Goal: Being able to smug the program and have it 100% work for him on first try
+	- Goal: Being able to have smug use the program and have it 100% work for him on first try
 	☐ Version numbers
 	☐ Auto updating
 	☐ Link to the github repo in an 'about' gui
@@ -25,10 +34,6 @@ Release:
 Post:
 	☐ Post: Unit test: HudDescription
 	☐ Post: Unit test: ID File Handler
-	☐ Post: Multi-game support: Explore multi-game support feasibility
-	☐ Post: Command line: Evaluate potential of using command line interface instead of GUI
 	☐ Post: Idea: Threading (GUI) for lengthy operations such as shutil.rmtree mostly during install (Adds complexity) to prevent GUI's from freezing
-	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
-	☐ Post: Enable type checking? "python.analysis.typeCheckingMode": "off"
-	☐ Post: Use types for variables and params and such? "python.analysis.typeCheckingMode": "off"
 	☐ Post: decouple classes as much as possible by passing parameters instead of directly referencing other classes
+	☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions

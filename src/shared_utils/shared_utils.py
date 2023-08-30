@@ -4,27 +4,33 @@ import os
 import re
 import sys
 import tkinter as tk
-from tkinter import messagebox
-from typing import Dict, Type
+from tkinter import Menu, messagebox
+from typing import Any, Callable, Dict, Type, TypeVar
 
 import psutil
 from ahk import AHK
 
+T = TypeVar("T", bound="Singleton")
 
-def get_invisible_tkinter_root():
+
+def get_invisible_tkinter_root() -> tk.Tk:
     """Retrieve invisible tkinter root gui"""
     root = tk.Tk()
     root.withdraw()
     return root
 
 
-def add_empty_menu_separator(menu):
-    """Add empty menu item to act as separator"""
-    empty_separator_label = " "  # Space as the label
+def add_empty_menu_separator(menu: Menu) -> None:
+    """Add empty menu item to act as separator.
+
+    Args:
+        menu (Menu): The menu to which the separator should be added.
+    """
+    empty_separator_label: str = " "  # Space as the label
     menu.add_command(label=empty_separator_label, state=tk.DISABLED, font=("Helvetica", 1))  # Small font size
 
 
-def create_lambda_command(func, *args):
+def create_lambda_command(func: Callable[..., Any], *args: Any) -> Callable[[], Any]:
     # pylint: disable=line-too-long
     """
     The `create_lambda_command` method takes in a function `func`
@@ -55,22 +61,40 @@ def create_lambda_command(func, *args):
     return lambda: func(*args)
 
 
-def replace_text_between_quotes(input_string, replacement_text):
-    """Replace text between quotes. Multiple double quotes supported"""
+def replace_text_between_quotes(input_string: str, replacement_text: str) -> str:
+    """
+    Replace text between quotes. Multiple double quotes supported.
+
+    Args:
+        input_string (str): The input string containing quoted text.
+        replacement_text (str): The text to replace the quoted text with.
+
+    Returns:
+        str: The modified string with replaced text.
+    """
     pattern = r'"([^"]*)"'
     replaced_string = re.sub(pattern, f'"{replacement_text}"', input_string)
     return replaced_string
 
 
-def verify_directory(directory, error_message):
-    """Reduces clutter. Example: if not verify_directory(source_dir, "Could not retrieve source directory!"):"""
+def verify_directory(directory: str, error_message: str) -> bool:
+    """
+    Reduces clutter. Example: if not verify_directory(source_dir, "Could not retrieve source directory!"):
+
+    Args:
+        directory (str): The directory path to verify.
+        error_message (str): The error message to print if the directory doesn't exist.
+
+    Returns:
+        bool: True if the directory exists, False otherwise.
+    """
     if not os.path.isdir(directory):
         print(error_message)
         return False
     return True
 
 
-def is_subdirectory(parent_dir, child_dir):
+def is_subdirectory(parent_dir: str, child_dir: str) -> bool:
     """
     Check if a directory is a subdirectory of another directory.
 
@@ -96,29 +120,90 @@ def is_subdirectory(parent_dir, child_dir):
         print(f"{child_dir} is a subdirectory of {parent_dir}")
         return True
     else:
-        print(f"{child_dir} is not subdirectory of {parent_dir}")
+        print(f"{child_dir} is not a subdirectory of {parent_dir}")
         return False
 
 
-def move_window_with_ahk(window_title, new_x, new_y):
-    "Move window: https://pypi.org/project/ahk/"
+def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:
+    """
+    Move window: https://pypi.org/project/ahk/
+
+    Args:
+        window_title (str): The title of the window to move.
+        new_x (int): The new x-coordinate of the window.
+        new_y (int): The new y-coordinate of the window.
+    """
     ahk = AHK()
 
     try:
         win = ahk.find_window(title=window_title)  # Find the opened window
-        win.move(new_x, new_y)
+        win.move(new_x, new_y)  # type: ignore
         print(f"Moved {window_title} -> {new_x}x{new_y}")
     except Exception:
         print("Failed to move window using AHK")
 
 
-def close_process_executable(executable):
-    "Close process based on executable"
+def close_process_executable(executable: str) -> None:
+    """
+    Close process based on executable.
+
+    Args:
+        executable (str): The name of the executable process to close.
+    """
     for proc in psutil.process_iter(["name"]):
-        if proc.info["name"] == executable:
+        if proc.info["name"] == executable:  # type: ignore
             proc.kill()
             proc.wait()  # Wait for the process to fully terminate
             break
+
+
+def show_message(msg: str, msgbox_type: str = "info", title: str = "") -> Any:
+    """
+    Show a message and optionally a message box.
+
+    Args:
+        msg (str): The message to display.
+        msgbox_type (str, optional): Type of message box to display:
+            ("info", "warning", "error", "question", "yesno", "okcancel"). Defaults to "info".
+        title (str, optional): Title for the message box. Defaults to the script name.
+
+    Returns:
+        Any: The response from the message box (if shown).
+    """
+    # Retrieve variables
+    script_extension: str = os.path.splitext(sys.argv[0])[1].lower()
+    script_name: str = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    script_name_long: str = script_name + script_extension
+
+    # Always print the message
+    print(msg)
+
+    # If running in windowed mode (.pyw) and a valid msgbox_type is provided, show the messagebox
+    if not title:
+        title = script_name_long
+    else:
+        title = script_name_long + " - " + title
+    # if msgbox_type and script_extension == ".pyw":
+    if msgbox_type:
+        valid_msgbox_types: Dict[str, Callable[[str, str], Any]] = {
+            "info": messagebox.showinfo,  # type: ignore
+            "warning": messagebox.showwarning,  # type: ignore
+            "error": messagebox.showerror,  # type: ignore
+            "question": messagebox.askquestion,  # type: ignore
+            "yesno": messagebox.askyesno,  # type: ignore
+            "okcancel": messagebox.askokcancel,  # type: ignore
+        }
+
+        if msgbox_type in valid_msgbox_types:
+            # Capture the response of the messagebox
+            response: Any = valid_msgbox_types[msgbox_type](title, msg)
+
+            # Return the response to the caller
+            return response
+        else:
+            raise ValueError(
+                "Invalid message box type. Available options: info, warning, error, question, yesno, okcancel"
+            )
 
 
 class Singleton(type):
@@ -141,67 +226,7 @@ class Singleton(type):
 
     _instances: Dict[Type["Singleton"], "Singleton"] = {}
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls: Type[T], *args, **kwargs) -> T:  # type: ignore
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-def show_message(msg, msgbox_type="info", title=None):
-    """
-    Show message by printing it and showing in a messagebox if running as .pyw
-
-    Args:
-        msg (str): The message to be displayed.
-        msgbox_type (str, optional): The type of messagebox to show ("info", "warning", "error",
-            "question", "yesno", "okcancel"). Default is "info".
-        title (str, optional): The title for the message box. Default is "Message Box".
-
-    Returns:
-        bool or None: For "yesno" and "okcancel" types, returns True if "Yes" or "OK" is clicked,
-        and False if "No" or "Cancel" is clicked. For other types, returns None.
-
-    Example:
-        # Example usage
-        response = show_message("This is a message.", "okcancel", "Confirmation")
-        if response is not None:
-            if response:
-                print("User clicked OK")
-            else:
-                print("User clicked Cancel")
-    """
-
-    # Retrieve variables
-    script_extension = os.path.splitext(sys.argv[0])[1].lower()
-    script_name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-    script_name_long = script_name + script_extension
-
-    # Always print the message
-    print(msg)
-
-    # If running in windowed mode (.pyw) and a valid msgbox_type is provided, show the messagebox
-    if not title:
-        title = script_name_long
-    else:
-        title = script_name_long + " - " + title
-    # if msgbox_type and script_extension == ".pyw":
-    if msgbox_type:
-        valid_msgbox_types = {
-            "info": messagebox.showinfo,
-            "warning": messagebox.showwarning,
-            "error": messagebox.showerror,
-            "question": messagebox.askquestion,
-            "yesno": messagebox.askyesno,
-            "okcancel": messagebox.askokcancel,
-        }
-
-        if msgbox_type in valid_msgbox_types:
-            # Capture the response of the messagebox
-            response = valid_msgbox_types[msgbox_type](title, msg)
-
-            # Return the response to the caller
-            return response
-        else:
-            raise ValueError(
-                "Invalid message box type. Available options: info, warning, error, question, yesno, okcancel"
-            )
+        return cls._instances[cls]  # type: ignore

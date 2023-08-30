@@ -15,4 +15,5 @@
         "dev/debug": true,
         "assets/mods": true
     },
+    "python.analysis.typeCheckingMode": "off",
 }

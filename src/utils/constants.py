@@ -1,49 +1,83 @@
 """Global constant variables"""
 import os
 from tkinter import PhotoImage
+from typing import Dict, List, Optional, Tuple
 
 #####################################################
 # Path
 #####################################################
 
 # core
-DEBUG_MODE = True
-SCRIPT_NAME = "L4D Hud Editor"
+DEBUG_MODE: bool = True
+SCRIPT_NAME: str = "L4D Hud Editor"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SCRIPT_FILE_NAME = os.path.basename(PROJECT_ROOT)
+SCRIPT_FILE_NAME: str = os.path.basename(PROJECT_ROOT)
 
 # main directories
-DEVELOPMENT_DIR = os.path.join(PROJECT_ROOT, "dev")
-ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+DEVELOPMENT_DIR: str = os.path.join(PROJECT_ROOT, "dev")
+ASSETS_DIR: str = os.path.join(PROJECT_ROOT, "assets")
+DATA_DIR: str = os.path.join(PROJECT_ROOT, "data")
 
 # assets
-MODS_DIR = os.path.join(ASSETS_DIR, "mods")
-MISC_DIR = os.path.join(ASSETS_DIR, "misc")
-TUTORIALS_DIR = os.path.join(ASSETS_DIR, "tutorials")
-IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
+MODS_DIR: str = os.path.join(ASSETS_DIR, "mods")
+MISC_DIR: str = os.path.join(ASSETS_DIR, "misc")
+TUTORIALS_DIR: str = os.path.join(ASSETS_DIR, "tutorials")
+IMAGES_DIR: str = os.path.join(ASSETS_DIR, "images")
 
 # image_dirs
-IMAGES_DIR_EXT = os.path.join(IMAGES_DIR, "tree_file_extensions")
-IMAGES_DIR_128 = os.path.join(IMAGES_DIR, "png_128x128")
-IMAGES_DIR_32 = os.path.join(IMAGES_DIR, "png_32x32")
-IMAGES_DIR_MISC = os.path.join(IMAGES_DIR, "misc")
+IMAGES_DIR_EXT: str = os.path.join(IMAGES_DIR, "tree_file_extensions")
+IMAGES_DIR_128: str = os.path.join(IMAGES_DIR, "png_128x128")
+IMAGES_DIR_32: str = os.path.join(IMAGES_DIR, "png_32x32")
+IMAGES_DIR_MISC: str = os.path.join(IMAGES_DIR, "misc")
 
 # asset files
-APP_ICON = os.path.join(ASSETS_DIR, "app.ico")
+APP_ICON: str = os.path.join(ASSETS_DIR, "app.ico")
 
 # image files
-BIG_CROSS_ICON = os.path.join(IMAGES_DIR, "png_128x128", "cross.png")
-
+BIG_CROSS_ICON: str = os.path.join(IMAGES_DIR, "png_128x128", "cross.png")
 
 # data
-SNIPPETS_DIR = os.path.join(DATA_DIR, "snippets")
-NEW_HUD_DIR = os.path.join(DATA_DIR, "new_hud_template")
-EDITOR_AUTOEXEC_PATH = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
-DUMMY_ADDON_VPK_PATH = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
-PERSISTENT_DATA_PATH = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
-HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
+SNIPPETS_DIR: str = os.path.join(DATA_DIR, "snippets")
+NEW_HUD_DIR: str = os.path.join(DATA_DIR, "new_hud_template")
+EDITOR_AUTOEXEC_PATH: str = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
+DUMMY_ADDON_VPK_PATH: str = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
+PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
+HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json")
+
+#####################################################
+# General
+#####################################################
+
+BACKUP_APPEND_STRING: str = ".hud_dev_backup"
+UNIVERSAL_GAME_MAP: str = "hud_dev_map"
+HOTKEY_SYNC_HUD: str = "CTRL+S"
+HOTKEY_EXECUTE_AUTOEXEC: str = "F11"
+HOTKEY_EDITOR_MENU: str = "F8"
+HOTKEY_TOGGLE_BROWSER: str = "F7"
+
+EDITOR_HUD_RELOAD_MODES: Dict[str, str] = {
+    "All": "reload_all",
+    "Hud": "reload_hud",
+    "Menu": "reload_menu",
+    "Materials": "reload_materials",
+    "Fonts": "reload_fonts",
+}
+
+# Object of preset game positions
+GAME_POSITIONS: Dict[str, Optional[Tuple[float, float]]] = {
+    "Custom (Save)": None,
+    "Center": (0.5, 0.5),
+    "Top Left": (0, 0),
+    "Top Right": (1, 0),
+    "Bottom Left": (0, 1),
+    "Bottom Right": (1, 1),
+    "Top": (0.5, 0),
+    "Bottom": (0.5, 1),
+    "Left": (0, 0.5),
+    "Right": (1, 0.5),
+}
+
 
 #####################################################
 # Image constants
@@ -53,31 +87,28 @@ HUD_DESCRIPTIONS_PATH = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 class ImageConstants:
     """Manage loading and storing images for GUI components."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize and load images."""
-        self._images = {}
+        self._images: Dict[str, PhotoImage] = {}
         self.load_images()
 
-    def load_image(self, image_filename):
+    def load_image(self, image_filename: str) -> PhotoImage:
         """Load and store an image.
 
-        Keeping storing references inside self._images so they don't get garbage collected
+        Keeping storing references inside self._images so they don't get garbage collected.
 
-        this class isn't a singleton for the same reason. Because when assigning these images to a gui
-        and then deleting the gui the images will get garbage collected and the next gui will fail"""
+        This class isn't a singleton for the same reason. Because when assigning these images to a gui
+        and then deleting the gui the images will get garbage collected and the next gui will fail.
+        """
         image = PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
         self._images[image_filename] = image
         return image
 
-    # @staticmethod
-    # def load_image(image_filename):
-    #     return PhotoImage(file=os.path.join(IMAGES_DIR_32, image_filename)).subsample(2, 2)
-
-    def get_image(self, filename):
+    def get_image(self, filename: str) -> Optional[PhotoImage]:
         """Get a stored image."""
         return self._images.get(filename)
 
-    def load_images(self):
+    def load_images(self) -> None:
         """Load and store various images as attributes."""
         self.add_black_circular_button = self.load_image("add_black_circular_button.png")
         self.adding_black_square_button_interface_symbol = self.load_image(
@@ -409,42 +440,8 @@ class ImageConstants:
         self.zoom_magnifier_with_minus_symbol = self.load_image("zoom_magnifier_with_minus_symbol.png")
 
 
-#####################################################
-# General
-#####################################################
-
-BACKUP_APPEND_STRING = ".hud_dev_backup"
-UNIVERSAL_GAME_MAP = "hud_dev_map"
-HOTKEY_SYNC_HUD = "CTRL+S"
-HOTKEY_EXECUTE_AUTOEXEC = "F11"
-HOTKEY_EDITOR_MENU = "F8"
-HOTKEY_TOGGLE_BROWSER = "F7"
-
-
-EDITOR_HUD_RELOAD_MODES = {
-    "All": "reload_all",
-    "Hud": "reload_hud",
-    "Menu": "reload_menu",
-    "Materials": "reload_materials",
-    "Fonts": "reload_fonts",
-}
-
-# Object of preset game positions
-GAME_POSITIONS = {
-    "Custom (Save)": None,
-    "Center": (0.5, 0.5),
-    "Top Left": (0, 0),
-    "Top Right": (1, 0),
-    "Bottom Left": (0, 1),
-    "Bottom Right": (1, 1),
-    "Top": (0.5, 0),
-    "Bottom": (0.5, 1),
-    "Left": (0, 0.5),
-    "Right": (1, 0.5),
-}
-
 # Dictionary of map codes for each map
-MAP_CODES = {
+MAP_CODES: Dict[str, List[Dict[str, str]]] = {
     "No Mercy": [
         {"name": "The Apartments", "code": "c8m1_apartment"},
         {"name": "The Subway", "code": "c8m2_subway"},
@@ -538,7 +535,7 @@ MAP_CODES = {
 }
 
 # https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-KEY_SCANCODES = {
+KEY_SCANCODES: Dict[str, int] = {
     "0": 0x0B,
     "1": 0x02,
     "2": 0x03,

@@ -2,6 +2,7 @@
 A simple splash screen GUI that displays a title and a text message for a specified duration.
 """
 import tkinter as tk
+from typing import Optional
 
 from gui.base import BaseGUI
 
@@ -22,7 +23,7 @@ class SplashGUI(BaseGUI):
         splash.show()
     """
 
-    def __init__(self, title, text, duration_ms=None):
+    def __init__(self, title: str, text: str, duration_ms: Optional[int] = None) -> None:
         """
         Initialize the SplashGUI.
 
@@ -52,7 +53,7 @@ class SplashGUI(BaseGUI):
 
 
 # Example usage
-def splash_gui_example():
+def splash_gui_example() -> None:
     """
     Example usage of the SplashGUI class.
     """

@@ -9,6 +9,7 @@
 # ====================================================================================================
 
 import os
+
 from utils.functions import preform_checks_to_prepare_program_start, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -25,7 +26,7 @@ os.system("cls")  # clear terminal
 #     Load persistent data
 # ----------------------------------
 
-data_manager = PersistentDataManager()
+data_manager = PersistentDataManager()  # type: ignore
 
 # ----------------------------------
 #     Do stuff
