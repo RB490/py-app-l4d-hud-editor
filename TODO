@@ -5,7 +5,7 @@ Todo:
 
 	☐ Feature: Modify the videosettings class thing so that it can handle the file being broken? by using some default values or something
 	✔ Bug: Menu: Change game resolution -> Game has focus of the mouse&keyboard @done(23-08-31 00:16)
-	☐ bug: update game command gui
+	✔ bug: update game command gui @done(23-08-31 00:20)
 
 	☐ Testing: Test the program by using it to edit HUD's
 

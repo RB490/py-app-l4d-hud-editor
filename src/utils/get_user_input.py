@@ -24,7 +24,7 @@ class UserInputWindow(BaseGUI):
             title: The title to display at the top of the window.
             prompt: The prompt to display to the user.
         """
-        super().__init__(parent_root)
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.root.title(title)
         self.prompt = prompt
         # self.input_box = None
