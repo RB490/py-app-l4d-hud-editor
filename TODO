@@ -3,10 +3,7 @@ Current:
 	
 Todo:
 
-
 	☐ Testing: Test the program by using it to edit HUD's
-	
-	☐ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements
 
 	☐ Post: Idea: Threading (GUI) for lengthy operations such as shutil.rmtree mostly during install (Adds complexity) to prevent GUI's from freezing
 

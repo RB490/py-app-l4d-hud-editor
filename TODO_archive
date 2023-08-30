@@ -377,3 +377,4 @@ Post:
 	✘ Conclusion: it should be very easy to do. but i'm still not going to do it because it makes no sense @cancelled(23-08-30 19:44)
 ✔ Post: Add types: Make a good GPT prompt @done(23-08-30 21:37) works but too much effort to do after the fact
 ✔ Testing: Get the AHK version working and check it out to confirm feature parity @done(23-08-30 22:02)
+✔ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements @done(23-08-30 22:04)

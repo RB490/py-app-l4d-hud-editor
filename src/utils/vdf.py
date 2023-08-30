@@ -1,5 +1,8 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel
-"""Class for modifying VDF files."""
+"""Class for modifying VDF files.
+
+Keys can't be quoted else the value won't be retrieved. Incorrect: "addontitle". Corect: addontitle			"2020HUD"
+"""
 import os
 from typing import Any, Dict, List, Optional, Union
 
