@@ -1,11 +1,17 @@
+✔ Feature: Modify the videosettings class thing so that it can handle the file being broken? by using some default values or something @done(23-08-31 00:22)
+✔ Bug: Menu: Change game resolution -> Game has focus of the mouse&keyboard @done(23-08-31 00:16)
+✔ bug: update game command gui @done(23-08-31 00:20)
+✔ Bug -> editor menu -> installer -> repair -> dev mode is not installed. but is is. with valid id file and all @done(23-08-31 00:38)
 
 Current:
 	
 Todo:
 
-	✔ Feature: Modify the videosettings class thing so that it can handle the file being broken? by using some default values or something @done(23-08-31 00:22)
-	✔ Bug: Menu: Change game resolution -> Game has focus of the mouse&keyboard @done(23-08-31 00:16)
-	✔ bug: update game command gui @done(23-08-31 00:20)
+
+	☐ Feature: method to confirm validity of the dev folder. all pak01's should be disabled
+
+	☐ Bug: start editing hud -> open hud file -> modify it -> sync -> no changes ingame. hud is being reloaded ingame
+		- ^ seems like the files are being synced. maybe some pak01 is enabled?
 
 	☐ Testing: Test the program by using it to edit HUD's
 

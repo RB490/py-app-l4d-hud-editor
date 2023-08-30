@@ -89,8 +89,8 @@ class GameInstaller:
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # confirm action is possible
-        if action == "repair" or action == "update" and current_state != InstallationState.COMPLETED:
-            show_message(f"Can't {action}! Developer mode is not installed", "error", action_description)
+        if (action == "repair" or action == "update") and current_state != InstallationState.COMPLETED:
+            show_message(f"Can't {action}! Developer mode is not fully installed", "error", action_description)
             return False
         elif action == "install" and current_state == InstallationState.COMPLETED:
             show_message(f"Can't {action}! Developer mode is already installed!", "error", action_description)
