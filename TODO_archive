@@ -1,3 +1,10 @@
+Post:
+☐ Post: Command line: Evaluate potential of using command line interface instead of GUI
+☐ Post: decouple classes as much as possible by passing parameters instead of directly referencing other classes
+☐ Post: Optimize and improve functions, methods, and overall structure based on GPT suggestions
+☐ Post: Unit test: HudDescription
+☐ Post: Unit test: ID File Handler
+
 ✔ Write installer class @started(23-08-15 23:54) @done(23-08-16 06:00) @lasted(6h6m51s)
 	✔ Implementation: Replace & delete the old game instance @done(23-08-16 06:00)
 	✔ Centralize video settings calls into a general function @done(23-08-16 06:00)
@@ -359,3 +366,14 @@
 ✘ Bug: Menu: File -> Open file browser errors (without start gui having showed first, however) // this also happens for start. something slightly sus going on. something to do with the popup gui being showed first no doubt. confirm this is the case, and add a try:catch exception to the handler and/or maybe use the mainloop() check options with show_message explaining what's up @cancelled(23-08-30 13:48) non-issue just start mainloop() first
 ✘ Feature: Hotkey Manager: Run every hotkey in a thread @cancelled(23-08-30 14:49) possible, but then they can't be supressed anymore
 ✔ Feature: Editor Menu Handler class which will refresh the editor menu after every call @done(23-08-30 15:13) accomplished with decorators
+✔ Refactor: Progress & Splash GUI's should inherit from basegui @done(23-08-30 17:58)
+✘ Refactor: Use BaseGUI for get_mouse_position_on_click @cancelled(23-08-30 18:03) nuh-uh
+✔ Feature: Menu: Open in VSCode: VSCode icon @done(23-08-30 18:10)
+✘ Post: Multi-game support: Explore multi-game support feasibility: Check how much extra code was required. If too much, not worth it. Only if it's very easy @cancelled(23-08-30 19:44)
+	✘ I used GAME_CLASS.obj.version to check it && 1 method in game class to set specific variables @cancelled(23-08-30 19:44)
+	✘ Where is SwapFoldersTo called from? If !GAME_CLASS.DevMode.Enable() @cancelled(23-08-30 19:44)
+	✘ ^ okay so i'm noticing that i have been writing pretty good code which should mean that it might actually be trivial to add l4d1 support. it's mostly the editor menu needing various different options @cancelled(23-08-30 19:44)
+	✘ 		for example i used to hardcode left4dead_dlc1 etc but now i just search the folders @cancelled(23-08-30 19:44)
+	✘ Conclusion: it should be very easy to do. but i'm still not going to do it because it makes no sense @cancelled(23-08-30 19:44)
+✔ Post: Add types: Make a good GPT prompt @done(23-08-30 21:37) works but too much effort to do after the fact
+✔ Testing: Get the AHK version working and check it out to confirm feature parity @done(23-08-30 22:02)

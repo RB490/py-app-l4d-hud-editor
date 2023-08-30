@@ -8,13 +8,15 @@ import pyperclip  # type: ignore
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message
-from utils.constants import UNIVERSAL_GAME_MAP
+from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import get_browser_gui, get_mouse_position_on_click, show_start_gui
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
+
 def call_create_and_refresh_menu(func):
     """Used by decorator to update menu after method"""
+
     def wrapper(self, *args, **kwargs):
         # call the original method and store its result
         result = func(self, *args, **kwargs)
@@ -23,6 +25,7 @@ def call_create_and_refresh_menu(func):
         return result
 
     return wrapper
+
 
 class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
@@ -255,7 +258,8 @@ class EditorMenuHandler:
             if result:
                 self.game.command.execute(result)
 
-        get_user_input(self.editor_menu.root, "Execute game command", "Enter game command:", handle_user_input)
+        message = f"{HOTKEY_EXECUTE_AUTOEXEC} executes last game command\n\n" "Enter game command:"
+        get_user_input(self.editor_menu.root, "Execute game command", message, handle_user_input)
 
     def editor_inspect_hud(self):
         """Show inspect hud gui (vgui_drawtree)"""
