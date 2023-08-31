@@ -50,7 +50,7 @@ class PersistentDataManager(metaclass=Singleton):
             with open(self.file_path, "r", encoding="utf-8") as file:
                 loaded_data = json.load(file)
                 data = {**self.default_data, **loaded_data}
-                logger.info("Loaded data from disk.")
+                logger.debug("Loaded data from disk.")
         except Exception:
             logger.warning("Resetting settings file")
             data = self.__reset()
@@ -65,7 +65,7 @@ class PersistentDataManager(metaclass=Singleton):
 
     def print(self):
         """Print formatted JSON data."""
-        logger.info(self._get_pretty_json())
+        print(self._get_pretty_json())
 
     def _get_pretty_json(self):
         """Return formatted JSON string."""
@@ -77,7 +77,7 @@ class PersistentDataManager(metaclass=Singleton):
             with open(self.file_path, "w", encoding="utf-8") as file:
                 pretty_json = self._get_pretty_json()
                 file.write(pretty_json)
-                logger.info("Wrote data to disk!")
+                logger.debug("Wrote data to disk!")
         except Exception:
             logger.error(f"Error saving data to {self.file_path}")
 
@@ -89,14 +89,14 @@ class PersistentDataManager(metaclass=Singleton):
         """Set data value for key."""
         self.data[key] = value
         self.save()
-        logger.info(f"Set data for key '{key}' to: {value}")
+        logger.debug(f"Set data for key '{key}' to: {value}")
 
     def append(self, key, value):
         """Append value to a list in data."""
         if key in self.data and isinstance(self.data[key], list):
             self.data[key].append(value)
             self.save()
-            logger.info(f"Appended value '{value}' to key '{key}'")
+            logger.debug(f"Appended value '{value}' to key '{key}'")
         else:
             logger.error(f"Cannot append to key '{key}' as it is not a list.")
 
@@ -105,7 +105,7 @@ class PersistentDataManager(metaclass=Singleton):
         if key in self.data:
             del self.data[key]
             self.save()
-            logger.info(f"Removed key '{key}' from data.")
+            logger.debug(f"Removed key '{key}' from data.")
         else:
             logger.warning(f"Key '{key}' not found in data.")
 
@@ -115,7 +115,7 @@ class PersistentDataManager(metaclass=Singleton):
             if item in self.data[key]:
                 self.data[key].remove(item)
                 self.save()
-                logger.info(f"Removed item '{item}' from list key '{key}'")
+                logger.debug(f"Removed item '{item}' from list key '{key}'")
             else:
                 logger.warning(f"Item '{item}' not found in list key '{key}'")
         else:

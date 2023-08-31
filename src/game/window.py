@@ -130,6 +130,9 @@ class GameWindow:
             self.restore_saved_position()
             return True
 
+        # disable any enabled pak01s
+        self.game.dir.disable_any_enabled_pak01s()
+
         # setup
         self.game._disable_addons()
         if write_config:

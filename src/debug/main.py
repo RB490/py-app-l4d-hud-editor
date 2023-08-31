@@ -96,6 +96,7 @@ def debug_main():
         DirectoryMode.DEVELOPER, InstallationState.COMPLETED
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
+    game_class.dir.disable_any_enabled_pak01s()
 
     # hwnd_utils = HwndWindowUtils()
     # result = hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage("notepad.exe", 15, 25)
@@ -103,7 +104,7 @@ def debug_main():
     # hwnd_utils.wait_close(result)
     # hwnd_utils.close(result)
 
-    debug_vpk_class()
+    # debug_vpk_class()
 
     # debug_gui()
     # debug_hud_class()

@@ -18,7 +18,8 @@ from utils.functions import (
 )
 from utils.steam_info_retriever import SteamInfoRetriever
 
-logger_manager = LoggerManager(__name__, level=logging.INFO)
+# logger_manager = LoggerManager(__name__, level=logging.INFO)
+logger_manager = LoggerManager(__name__, level=logging.DEBUG)
 logger = logger_manager.get_logger()
 
 
@@ -241,10 +242,10 @@ class GameDir:
     def restore_developer_directory(self):
         "Restore developer game files using backup"
 
-        print("Restoring developer game files")
+        logger.debug("Restoring developer game files")
 
         try:
-            splash = SplashGUI("Uninstalling..", "Uninstalling..")
+            splash = SplashGUI("Restoring...", "Restoring game files..")
 
             # receive variables
             main_dir_backup = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
@@ -265,11 +266,36 @@ class GameDir:
 
             # finish up
             splash.destroy()
-            print("Restored developer game files!")
+            logger.warning("Restored developer game files!")
             return True
         except Exception as err_info:
             splash.destroy()
             raise Exception(f"Failed to restore game files!\n\n{err_info}") from err_info
+
+    def disable_any_enabled_pak01s(self):
+        """Check if developer directory has any pak01's enabled"""
+        logger.debug("Checking if developer directory is outdated...")
+
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+            logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            return None
+
+        dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+
+        for dev_subdir in dev_pak01_subdirs:
+            file_path = self.get_pak01_vpk_in(dev_subdir)
+            file_name = os.path.basename(file_path)
+
+            disabled_file_path = os.path.join(os.path.dirname(file_path), "pak01_dir.vpk")
+            disabled_file_path = get_backup_path(disabled_file_path)
+
+            if file_name == "pak01_dir.vpk":
+                # Rename the file
+                os.rename(file_path, disabled_file_path)
+                logger.info(f"Disabled pak01! '{file_path}' -> '{disabled_file_path}'")
+
+        logger.debug("All developer directory pak01_dir.vpk's are disabled!")
+        return False
 
     def check_for_invalid_id_file_structure(self):
         """
@@ -282,6 +308,12 @@ class GameDir:
             Exception: If two ID files are found in the same folder.
             Exception: If more than one of the same ID file is found in different folders.
         """
+        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+            logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            return None
+        if not self.game.installation_exists(DirectoryMode.USER):
+            logger.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
+            return None
         steam_game_dir = self.steam.get_games_dir()
 
         user_id_file_name = self.game.dir.id._get_filename(DirectoryMode.USER)
@@ -330,7 +362,7 @@ class GameDir:
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
             print("Unable to check outdated state: Developer mode is not installed!")
-            return False
+            return None
 
         user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
         dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
