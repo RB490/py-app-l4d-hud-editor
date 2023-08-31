@@ -168,13 +168,13 @@ class GameInstaller:
 
     def __process_installation_steps(self, resume_state, action_description):
         installation_steps = [
-            # InstallationState.CREATE_DEV_DIR,
-            # InstallationState.COPYING_FILES,
-            # InstallationState.VERIFYING_GAME,
+            InstallationState.CREATE_DEV_DIR,
+            InstallationState.COPYING_FILES,
+            InstallationState.VERIFYING_GAME,
             InstallationState.EXTRACTING_PAKS,
-            # InstallationState.MAIN_DIR_BACKUP,
-            # InstallationState.INSTALLING_MODS,
-            # InstallationState.REBUILDING_AUDIO,
+            InstallationState.MAIN_DIR_BACKUP,
+            InstallationState.INSTALLING_MODS,
+            InstallationState.REBUILDING_AUDIO,
         ]
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
@@ -281,43 +281,6 @@ class GameInstaller:
             vpk_class.extract(filepath, output_dir)
 
         self.__find_pak01_files(dev_dir, extract_callback)
-
-    def __extract_outdated_paks(self):
-        """1. Confirm which pak01_dir.vpk files are outdated by checking for differences between the user & dev modes
-        2. Extract all files from the outdated pak01_dir.vpk files to their respective root directories"""
-        print("Extracting outdated pak01.vpk's")
-
-        # retrieve pak files for user & dev modes
-        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        user_dir = self.game.dir.get(DirectoryMode.USER)
-
-        user_paks = []
-        dev_paks = []
-
-        def get_user_paks_callback(filepath, output_dir):
-            print(f"filepath={filepath}\noutput_dir={output_dir}")
-            pak_tuple = (filepath, output_dir)
-            user_paks.append(pak_tuple)
-
-        def get_dev_paks_callback(filepath, output_dir):
-            print(f"filepath={filepath}\noutput_dir={output_dir}")
-            pak_tuple = (filepath, output_dir)
-            dev_paks.append(pak_tuple)
-
-        self.__find_pak01_files(user_dir, get_user_paks_callback)
-        self.__find_pak01_files(dev_dir, get_dev_paks_callback)
-
-        # extract any paks that are not identical between the user & dev folders
-        i = 0
-        for dev_pak in dev_paks:
-            user_pak = user_paks[i]
-
-            print(f'comparing "{dev_pak[0]}" to "{user_pak[0]}"')
-            if not filecmp.cmp(dev_pak[0], user_pak[0]):
-                print(f'pak out of date! extracting "{dev_pak[0]}"')
-                vpk_class = VPKClass()
-                vpk_class.extract(dev_pak[0], dev_pak[1])
-            i += 1
 
     def __enable_paks(self):
         print("Enabling pak01.vpk's")

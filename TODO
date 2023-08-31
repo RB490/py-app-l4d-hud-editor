@@ -2,6 +2,8 @@ Current:
 
 Todo:
 	☐ Refactor: Remove __extract_outdated_paks?
+	☐ Refactor: ProgressGUI: Add logging
+	☐ Refactor: Add logging
 	
 	☐ Testing: Test the program by using it to edit HUD's
 
