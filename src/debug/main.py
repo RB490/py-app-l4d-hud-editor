@@ -95,6 +95,8 @@ def debug_main():
     # debug_gui()
     # debug_hud_class()
     debug_game_class()
+    # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
+    # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()
     # my_file = "E:\\Games\\Steam\\steamapps\\common\\Left 4 Dead 2\\left4dead2_dlc3\\pak01_dir.vpk"
     # output_dir = "D:\\Downloads\\New folder"

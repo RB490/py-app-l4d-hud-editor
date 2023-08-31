@@ -176,10 +176,10 @@ class GameInstaller:
             # InstallationState.CREATE_DEV_DIR,
             # InstallationState.COPYING_FILES,
             # InstallationState.VERIFYING_GAME,
-            # InstallationState.EXTRACTING_PAKS, # FIXME
+            # InstallationState.EXTRACTING_PAKS,
             # InstallationState.MAIN_DIR_BACKUP,
-            InstallationState.INSTALLING_MODS,
-            # InstallationState.REBUILDING_AUDIO,
+            # InstallationState.INSTALLING_MODS,
+            InstallationState.REBUILDING_AUDIO,  # FIXME
         ]
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
@@ -407,7 +407,7 @@ class GameInstaller:
         copy_directory(mods_addons_dir, main_dir)
         copy_directory(mods_sourcemod_dir, main_dir)
 
-    def __rebuild_audio(self):
+    def __rebuild_audio(self): # FIXME doesn't detect manual early close by me
         print("Rebuilding audio")
 
         # variables
@@ -416,10 +416,12 @@ class GameInstaller:
 
         # write .rc file
         with open(valverc_path, "w", encoding="utf-8") as file_handle:
-            file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
+            file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit") 
 
         # run game to rebuild audio
         self.game.close()
         result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
+        
+        print('debug: game is fully running!')
         if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
             raise InstallationError("Failed to run the game and rebuild audio cache!")

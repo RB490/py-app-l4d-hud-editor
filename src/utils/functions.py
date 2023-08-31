@@ -6,7 +6,6 @@ import shutil
 import string
 import sys
 import tempfile
-import threading
 import time
 import tkinter as tk
 from tkinter import filedialog
@@ -173,39 +172,6 @@ def wait_for_process(exe, timeout=None):
         if timeout is not None and time.time() - start_time > timeout:
             print("Timeout reached!")
             return False
-        time.sleep(0.1)
-
-
-def wait_for_process_with_ram_threshold(exe, timeout=None):
-    """
-    Wait until a process is running and consumes a specified amount of RAM.
-
-    :param exe: The executable name of the process.
-    :type exe: str
-    :param timeout: The maximum time to wait in seconds (optional).
-    :type timeout: float or None
-    :return: True if the process is found and RAM threshold is reached, False if timeout is reached.
-    :rtype: bool
-    """
-    ram_threshold_mb = 222  # Hardcoded RAM threshold in MB
-    print(f"Waiting for {exe} to run and use {ram_threshold_mb} MB of RAM")
-
-    start_time = time.time()
-    while True:
-        for process in psutil.process_iter(attrs=["name", "pid", "memory_info"]):
-            if process.info["name"] == exe:
-                # process_pid = process.info['pid']
-                process_memory_info = process.info["memory_info"]
-                ram_used_mb = process_memory_info.rss / (1024 * 1024)  # Convert bytes to MB
-
-                if ram_used_mb >= ram_threshold_mb:
-                    print(f"Process {exe} running and using {ram_used_mb:.2f} MB of RAM.")
-                    return True
-
-        if timeout is not None and time.time() - start_time > timeout:
-            print("Timeout reached!")
-            return False
-
         time.sleep(0.1)
 
 

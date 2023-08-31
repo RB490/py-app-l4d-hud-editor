@@ -9,10 +9,7 @@ from game.constants import InstallationState
 from shared_utils.hwnd_window_manager import HwndWindowUtils
 from shared_utils.shared_utils import show_message
 from utils.constants import GAME_POSITIONS
-from utils.functions import (
-    is_process_running,
-    wait_for_process_with_ram_threshold,
-)
+from utils.functions import is_process_running
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -22,6 +19,7 @@ class GameWindow:
     def __init__(self, game_class):
         self.game = game_class
         self.data_manager = PersistentDataManager()
+        self.hwnd_utils = HwndWindowUtils()
 
         self.hwnd = None
         self.exe = "left4dead2.exe"
@@ -33,8 +31,7 @@ class GameWindow:
     def get_hwnd(self):
         """Retrieve information"""
 
-        hwnd_utils = HwndWindowUtils()
-        if self.hwnd is None or not hwnd_utils.running(self.hwnd):
+        if self.hwnd is None or not self.hwnd_utils.running(self.hwnd):
             self.__set_hwnd()
 
         if not self.hwnd:
@@ -43,16 +40,15 @@ class GameWindow:
             # print(f"Get {self.get_exe()} hwnd '{self.hwnd}'")
             return self.hwnd
 
-    def __set_hwnd(self, timeout_seconds=0):
+    def __set_hwnd(self, hwnd=None):
         """Retrieve game hwnd"""
-        hwnd_utils = HwndWindowUtils()
-        # exception because we need the window handle
+        if hwnd is not None:
+            self.hwnd = hwnd
+            print(f"Set hwnd to '{self.hwnd}'")
+            return self.hwnd
         try:
-            # wait until game is running
-            wait_for_process_with_ram_threshold(self.get_exe(), timeout_seconds)
-
             # retrieve hwnd
-            self.hwnd = hwnd_utils.get_hwnd_from_executable(self.get_exe())
+            self.hwnd = self.hwnd_utils.get_hwnd_from_executable(self.get_exe())
             if not self.hwnd:
                 raise Exception("Could not set window handle!")
             else:
@@ -109,8 +105,7 @@ class GameWindow:
                 raise ValueError(f"Invalid custom_position_tuple: {custom_position_tuple}")
 
         # move game
-        hwnd_utils = HwndWindowUtils()
-        hwnd_utils.move(self.game.window.get_hwnd(), position)
+        self.hwnd_utils.move(self.game.window.get_hwnd(), position)
 
     def run(self, dir_mode, write_config=True):
         """Start the game
@@ -160,14 +155,14 @@ class GameWindow:
             return False
 
         # wait for game to fully open
-        wait_for_process_with_ram_threshold(self.get_exe(), 80)  # account for steam starting up
+        hwnd = self.hwnd_utils.wait_for_process_with_ram_threshold_and_timeout_to_get_hwnd(
+            self.get_exe(), 100, 80
+        )  # account for steam starting up
 
         # set hwnd
-        hwnd = self.__set_hwnd()
         if hwnd:
-            # set position
+            self.__set_hwnd(hwnd)
             self.restore_saved_position()
-
             return True
         else:
             return False

@@ -21,6 +21,7 @@ logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desi
 # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
 logger = logger_manager.get_logger()  # Get the logger instance
 
+
 class HwndWindowUtils:
     """
     This module provides a utility class for managing windows using their
@@ -32,8 +33,51 @@ class HwndWindowUtils:
         self.saved_hwnd = None
         self.saved_mouse_pos = None
 
-    @staticmethod
-    def get_hwnd_from_executable(executable_name):
+    def wait_for_process_with_ram_threshold_and_timeout_to_get_hwnd(
+        self, process_name, ram_threshold_mb=222, timeout=None
+    ):
+        """
+        Wait until a process is running and consumes a specified amount of RAM.
+        Return HWND if the process is found and RAM threshold is reached, otherwise return None.
+
+        :param process_name: The executable name of the process.
+        :type process_name: str
+        :param ram_threshold_mb: The RAM threshold in MB (default is 222 MB).
+        :type ram_threshold_mb: int
+        :param timeout: The maximum time to wait in seconds (optional).
+        :type timeout: float or None
+        :return: hwnd: int or None
+        :rtype: int or None
+
+        Example:
+            hwnd = wait_for_process_with_ram_threshold_and_get_hwnd("your_process_name.exe", timeout=60)
+            if hwnd is not None:
+                print(f"Process found with HWND: {hwnd}")
+        """
+        print(f"Waiting for '{process_name}' to run and use at least {ram_threshold_mb} MB of RAM")
+
+        start_time = time.time()
+        while True:
+            try:
+                for process in psutil.process_iter(attrs=["name", "pid", "memory_info"]):
+                    if process.info["name"] == process_name:
+                        process_memory_info = process.info["memory_info"]
+                        ram_used_mb = process_memory_info.rss / (1024 * 1024)  # Convert bytes to MB
+
+                        if ram_used_mb >= ram_threshold_mb:
+                            hwnd = self.get_hwnd_from_executable(process_name)
+                            print(f"'{process_name}' running and using {ram_used_mb:.2f} MB of RAM.")
+                            return hwnd
+            except psutil.NoSuchProcess:
+                pass
+
+            if timeout is not None and time.time() - start_time > timeout:
+                print("Timeout reached!")
+                return None
+
+            time.sleep(0.1)
+
+    def get_hwnd_from_executable(self, executable_name):
         # pylint: disable=c-extension-no-member
         """
         Retrieves the window handle for a process based on its executable name.
@@ -61,6 +105,10 @@ class HwndWindowUtils:
 
     def running(self, hwnd):
         """Confirm whether hwnd is running. Also works if invisible"""
+        
+        
+        
+        process_executable = None  # Initialize the variable before the try block
         try:
             _, pid = win32process.GetWindowThreadProcessId(hwnd)
             process = psutil.Process(pid)
