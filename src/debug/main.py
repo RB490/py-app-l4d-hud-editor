@@ -96,7 +96,7 @@ def debug_main():
         DirectoryMode.DEVELOPER, InstallationState.COMPLETED
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
-    game_class.dir.disable_any_enabled_pak01s()
+    # game_class.dir.disable_any_enabled_pak01s()
 
     # hwnd_utils = HwndWindowUtils()
     # result = hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage("notepad.exe", 15, 25)
@@ -108,7 +108,7 @@ def debug_main():
 
     # debug_gui()
     # debug_hud_class()
-    # debug_game_class()
+    debug_game_class()
     # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
     # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()

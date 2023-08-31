@@ -66,10 +66,10 @@ class VPKClass:
                             output_file.write(vpk_file[file_path].read())
                         logger.debug(f"Extract '{file_path}'")
                     except Exception as file_extract_err:
-                        print(f"Error extracting file '{file_path}': {str(file_extract_err)}")
+                        logger.error(f"Error extracting file '{file_path}': {str(file_extract_err)}")
                         continue
             except Exception as extract_err:
-                logger.warning(f"Error extracting pak01.vpk ''{input_file}'': {str(extract_err)}")
+                logger.error(f"Error extracting pak01.vpk ''{input_file}'': {str(extract_err)}")
                 self._extract_alternate(input_file, output_dir)
 
         # finish
@@ -94,7 +94,7 @@ class VPKClass:
         try:
             subprocess.run(extract_command, check=True)
         except subprocess.CalledProcessError as e:
-            print(f"Error extracting '{input_file}': {e}")
+            logger.error(f"Error extracting '{input_file}': {e}")
             return
 
         # Get the base name of the input file without the extension

@@ -67,7 +67,7 @@ class GameDir:
             return True
 
         # close game
-        self.game.close()
+        self.game.window.close()
 
         # backup source mode
         if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):

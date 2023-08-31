@@ -396,3 +396,6 @@ Post:
 ✔ Feature: Can i modify the hwnd class so that it saves data for a hwnd? for example when i get a hwnd automatically look up the executable name too and assign that to it @done(23-08-31 20:43)
 ✔ Refactor: create_temp_dir_from_input_dir_exclude_files_without_extension @done(23-08-31 21:52)
 ✔ Feature: Write my own VPK extract/create class. Creaton: the VPK module doesn't handle left4dead2_dlc3 properly and the way it is coded you can't suppress the error and continue extracting. it just stops extracting @done(23-08-31 21:52)
+✔ Feature: method to confirm validity of the dev folder. all pak01's should be disabled. merge this code into overcouples method for validiety checks @done(23-08-31 22:34)
+✔ Refactor: Modify copy_dir to ignore file extensions(?) @done(23-08-31 22:41)
+✔ Bug: start editing hud -> open hud file -> modify it -> sync -> no changes ingame. hud is being reloaded ingame @done(23-08-31 22:42) pak01's were enabled

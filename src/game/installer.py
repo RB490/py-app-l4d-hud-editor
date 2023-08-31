@@ -50,7 +50,7 @@ class GameInstaller:
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.PENDING_DELETION)
 
         # close the game
-        self.game.close()
+        self.game.window.close()
 
         # remove directory
         print("Deleting game directory...")
@@ -127,11 +127,11 @@ class GameInstaller:
                 print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        # if not prompt_start(action, f"This will {action_description.lower()}"):
-        #     return False
+        if not prompt_start(action, f"This will {action_description.lower()}"):
+            return False
 
         # close game
-        self.game.close()
+        self.game.window.close()
 
         # install: delete dev folder if needed
         if (
@@ -171,7 +171,7 @@ class GameInstaller:
             # InstallationState.CREATE_DEV_DIR,
             # InstallationState.COPYING_FILES,
             # InstallationState.VERIFYING_GAME,
-            InstallationState.EXTRACTING_PAKS,  # FIXME
+            InstallationState.EXTRACTING_PAKS,
             # InstallationState.MAIN_DIR_BACKUP,
             # InstallationState.INSTALLING_MODS,
             # InstallationState.REBUILDING_AUDIO,
@@ -278,10 +278,7 @@ class GameInstaller:
 
         def extract_callback(filepath, output_dir):
             vpk_class = VPKClass()
-            try:
-                vpk_class.extract(filepath, output_dir)  # FIXME: vpk_class.extract
-            except:
-                pass
+            vpk_class.extract(filepath, output_dir)
 
         self.__find_pak01_files(dev_dir, extract_callback)
 
@@ -319,7 +316,7 @@ class GameInstaller:
             if not filecmp.cmp(dev_pak[0], user_pak[0]):
                 print(f'pak out of date! extracting "{dev_pak[0]}"')
                 vpk_class = VPKClass()
-                vpk_class.extract(dev_pak[0], dev_pak[1])  # FIXME: vpk_class.extract
+                vpk_class.extract(dev_pak[0], dev_pak[1])
             i += 1
 
     def __enable_paks(self):
@@ -415,7 +412,7 @@ class GameInstaller:
             file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
 
         # run game to rebuild audio
-        self.game.close()
+        self.game.window.close()
         result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
 
         print("debug: game is fully running!")

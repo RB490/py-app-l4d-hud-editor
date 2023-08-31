@@ -111,12 +111,12 @@ class EditorMenuHandler:
 
     def editor_menu_game_close(self):
         """Method to handle the selected secure/insecure option in the menu."""
-        self.game.close()
+        self.game.window.close()
 
     def editor_menu_game_restart(self):
         """Method to handle the selected secure/insecure option in the menu."""
         self.hud.edit.stop_game_exit_check()
-        self.game.close()
+        self.game.window.close()
         self.game.window.run(DirectoryMode.DEVELOPER)
         self.hud.edit.start_game_exit_check()
 
