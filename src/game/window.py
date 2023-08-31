@@ -47,7 +47,7 @@ class GameWindow:
             return self.hwnd
         try:
             # retrieve hwnd
-            self.hwnd = self.hwnd_utils.get_hwnd_from_executable(self.get_exe())
+            self.hwnd = self.hwnd_utils.get_hwnd_from_process_name(self.get_exe())
             if not self.hwnd:
                 raise Exception("Could not set window handle!")
             else:
@@ -154,7 +154,7 @@ class GameWindow:
             return False
 
         # wait for game to fully open
-        hwnd = self.hwnd_utils.get_hwnd_from_executable_with_ram_threshold_and_timeout(
+        hwnd = self.hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage(
             self.get_exe(), 100, 80
         )  # account for steam starting up
 

@@ -1,6 +1,6 @@
 """
 This module provides a utility class for managing windows using their HWND (handle),
-including methods to check process status, retrieve focused HWND, get executable name, move windows, and focus windows.
+including methods to check process status, retrieve focused HWND, get process name, move windows, and focus windows.
 """
 # pylint: disable=c-extension-no-member, broad-exception-caught, invalid-name, logging-fstring-interpolation
 import ctypes
@@ -19,8 +19,9 @@ import win32process
 from shared_utils.logging_manager import LoggerManager
 
 # Configure the logging settings
-logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
-# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
+# logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
+# logger_manager = LoggerManager(__name__, level=logging.DEBUG)  # Pass the desired logging level
+logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
 logger = logger_manager.get_logger()  # Get the logger instance
 
 
@@ -30,7 +31,6 @@ def hwnd_is_running_check(func):
     @functools.wraps(func)
     def wrapper(self, hwnd, *args, **kwargs):
         if not self.running(hwnd):
-            logger.debug(f"Window {hwnd} is not running!")
             return None
         return func(self, hwnd, *args, **kwargs)
 
@@ -41,64 +41,69 @@ class HwndWindowUtils:
     """
     This module provides a utility class for managing windows using their
     HWND (handle), including methods to check process status, retrieve focused HWND,
-    get executable name, move windows, and focus windows.
+    get process name, move windows, and focus windows.
     """
 
     def __init__(self):
         self.saved_hwnd = None
         self.saved_mouse_pos = None
+        self.hwnd_process_mapping = {}
 
-    def get_hwnd_from_executable_with_ram_threshold_and_timeout(
-        self, process_name, ram_threshold_mb=222, timeout=None
+    def get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage(
+        self, process_name, timeout, ram_usage_mb=None
     ):
         """
-        Wait until a process is running and consumes a specified amount of RAM.
-        Return HWND if the process is found and RAM threshold is reached, otherwise return None.
+        Wait until a process is running and optionally consumes a specified amount of RAM.
+        Return HWND if the process is found within the timeout and, if specified, RAM usage is reached,
+        otherwise return None.
 
-        :param process_name: The executable name of the process.
+        :param process_name: The process name.
         :type process_name: str
-        :param ram_threshold_mb: The RAM threshold in MB (default is 222 MB).
-        :type ram_threshold_mb: int
-        :param timeout: The maximum time to wait in seconds (optional).
-        :type timeout: float or None
+        :param timeout: The maximum time to wait in seconds.
+        :type timeout: float
+        :param ram_usage_mb: The RAM usage in MB (optional).
+        :type ram_usage_mb: int or None
         :return: hwnd: int or None
         :rtype: int or None
 
         Example:
-            hwnd = wait_for_process_with_ram_threshold_and_get_hwnd("your_process_name.exe", timeout=60)
+            hwnd = wait_for_process_with_timeout("your_process_name.exe", timeout=60, ram_usage_mb=222)
             if hwnd is not None:
                 logger.debug(f"Process found with HWND: {hwnd}")
+            else:
+                logger.debug("Process not found within the specified timeout or RAM usage.")
         """
-        logger.debug(f"Waiting for '{process_name}' to run and use at least {ram_threshold_mb} MB of RAM")
+        logger.info(f"Waiting {timeout} seconds for '{process_name}' to run with RAM usage: {ram_usage_mb} MB")
 
         start_time = time.time()
-        while True:
+        while time.time() - start_time <= timeout:
             try:
                 for process in psutil.process_iter(attrs=["name", "pid", "memory_info"]):
-                    if process.info["name"] == process_name:
-                        process_memory_info = process.info["memory_info"]
-                        ram_used_mb = process_memory_info.rss / (1024 * 1024)  # Convert bytes to MB
+                    if process.info["name"].lower() == process_name.lower():
+                        if ram_usage_mb is not None:
+                            process_memory_info = process.info["memory_info"]
+                            ram_used_mb = process_memory_info.rss / (1024 * 1024)  # Convert bytes to MB
+                            if ram_used_mb < ram_usage_mb:
+                                continue
 
-                        if ram_used_mb >= ram_threshold_mb:
-                            hwnd = self.get_hwnd_from_executable(process_name)
-                            logger.debug(f"'{process_name}' running and using {ram_used_mb:.2f} MB of RAM.")
-                            return hwnd
+                        hwnd = self.get_hwnd_from_process_name(process_name)
+                        logger.debug(f"'{process_name}' is running!")
+                        return hwnd
             except psutil.NoSuchProcess:
                 pass
 
-            if timeout is not None and time.time() - start_time > timeout:
-                logger.debug("Timeout reached!")
-                return None
-
             time.sleep(0.1)
 
-    def get_hwnd_from_executable(self, executable_name):
+        logger.debug(f"Process '{process_name}' not found within the specified timeout of {timeout} seconds.")
+        return None
+
+    def get_hwnd_from_process_name(self, process_name):
         # pylint: disable=c-extension-no-member
         """
-        Retrieves the window handle for a process based on its executable name.
+        Retrieves the window handle for a process based on its process name.
         """
         for proc in psutil.process_iter(["name"]):
-            if proc.info["name"].lower() == executable_name.lower():  # .lower() to ignore caption
+            if proc.info["name"].lower() == process_name.lower():  # .lower() to ignore caption
                 pid = proc.pid
                 handle_list = []
 
@@ -108,45 +113,58 @@ class HwndWindowUtils:
                 win32gui.EnumWindows(callback, handle_list)
                 for handle in handle_list:
                     if win32process.GetWindowThreadProcessId(handle)[1] == pid:
+                        self.set_process_name(handle, process_name)
+                        logger.debug(f"Set {process_name} HWND ({handle})")
                         return handle
         return None
 
-    @staticmethod
-    def get_hwnd_focused():
+    def get_hwnd_focused(self):
         """Retrieve hwnd from focused window"""
         hwnd = win32gui.GetForegroundWindow()
+        self.get_process_name(hwnd)
         logger.debug(f"Focused hwnd = {hwnd}")
         return hwnd
 
-    def get_executable_name(self, hwnd):
-        """Retrieve executable name"""
-        # Verify hwnd param
-        return self.running(hwnd)
+    def set_process_name(self, hwnd, process_name):
+        """Set process name"""
+        self.hwnd_process_mapping[hwnd] = process_name
+        logger.debug(f"Set HWND {hwnd} process name: {process_name}")
 
+    def get_process_name(self, hwnd):
+        """Retrieve process name if not already set"""
+
+        # lookup process name if needed
+        if hwnd not in self.hwnd_process_mapping:
+            process_name = self.running(hwnd)
+            self.set_process_name(hwnd, process_name)
+
+        # return process name
+        process_name = self.hwnd_process_mapping.get(hwnd, None)
+        logger.debug(f"Retrieved process name '{process_name}' for HWND {hwnd}")
+        return process_name
+
+    @hwnd_is_running_check
     def wait_close(self, hwnd, timeout=None):
         "Wait for a window to close (if it exists)"
 
-        # Check if the window handle is valid
-        if not win32gui.IsWindow(hwnd):
-            logger.warning(f"Window with handle {hwnd} is not valid!")
-            return False
+        process_name = self.get_process_name(hwnd)
 
         # Otherwise, wait for the window to be destroyed or until timeout is reached
-        print(f"Waiting for window {hwnd} to close")
+        logger.info(f"Waiting for {process_name} to close")
         start = time.time()
         while True:
             # Check if the window still exists
             exists = win32gui.IsWindow(hwnd)
             # If not, return
             if not exists:
-                print(f"Window {hwnd} closed!")
+                logger.info(f"{process_name} closed!")
                 return True
             # Otherwise, check the elapsed time if timeout is provided
             if timeout is not None:
                 elapsed = time.time() - start
                 # If timeout is reached, return
                 if elapsed >= timeout:
-                    print(f"Window {hwnd} did not close after {timeout} seconds")
+                    logger.warning(f"{process_name} did not close after {timeout} seconds")
                     return False
             # Sleep for a short interval and repeat
             time.sleep(0.1)
@@ -155,23 +173,25 @@ class HwndWindowUtils:
         """Close window"""
         user32 = ctypes.windll.user32
         user32.PostMessageW(hwnd, 0x0010, 0, 0)  # 0x0010 is the message code for WM_CLOSE
-        logger.info("Closed window!")
+        logger.info(f"Closed {self.get_process_name(hwnd)}!")
 
     def running(self, hwnd):
-        """Confirm whether hwnd is running. Also works if invisible. Returns process name"""
+        """Confirm whether hwnd is running. Also works if invisible. Sets & returns process name"""
         if not hwnd:
+            logging.warning(f"Running() did not receive a HWND! '{hwnd}'. Cancelling HWND operation!")
             return False
 
-        process_executable = None  # Initialize the variable before the try block
+        process_name = None  # Initialize the variable before the try block
         try:
             _, pid = win32process.GetWindowThreadProcessId(hwnd)
             process = psutil.Process(pid)
             is_running = psutil.pid_exists(pid)
-            process_executable = process.name()
-            logger.debug(f"Process {process_executable} is {'running!' if is_running else 'not running!'}")
-            return process_executable
+            process_name = process.name()
+            self.set_process_name(hwnd, process_name)
+            logger.debug(f"Process {process_name} is {'running!' if is_running else 'not running!'}")
+            return process_name
         except psutil.NoSuchProcess:
-            print(f"Process {process_executable} not found!")
+            logger.warning(f"Process {process_name} not found!")
             return False
 
     @hwnd_is_running_check
@@ -209,7 +229,7 @@ class HwndWindowUtils:
         screen_height = win32api.GetSystemMetrics(1)
 
         if position is None or position == "":
-            print("No position provided, defaulting to center!")
+            logger.debug("No position provided, defaulting to center!")
             position = "Center"
 
         if position in predefined_positions:
@@ -226,8 +246,8 @@ class HwndWindowUtils:
         win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
 
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
-        window_executable = os.path.basename(psutil.Process(pid).exe())
-        logger.debug(f"Moved '{window_executable}' to position ({win_x}, {win_y})")
+        process_name = os.path.basename(psutil.Process(pid).exe())
+        logger.debug(f"Moved '{process_name}' to position ({win_x}, {win_y})")
 
     @hwnd_is_running_check
     def focus(self, hwnd):
@@ -303,7 +323,7 @@ def showcase_hwnd_window_manager():
 
     # perform action
     input("Press enter to perform HWND action")
-    result = hwnd_utils.get_executable_name(hwnd)
+    result = hwnd_utils.get_process_name(hwnd)
     hwnd_utils.move(hwnd, "Center")
     hwnd_utils.focus(hwnd)
 

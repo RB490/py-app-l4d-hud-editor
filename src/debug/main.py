@@ -93,8 +93,10 @@ def debug_main():
     # game_class.command.execute("reload_fonts")
 
     hwnd_utils = HwndWindowUtils()
-    result = hwnd_utils.get_hwnd_from_executable("notepad.exe")
-    hwnd_utils.close(result)
+    result = hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage("notepad.exe", 15, 25)
+    # result = hwnd_utils.get_hwnd_from_process_name("notepad.exe")
+    hwnd_utils.wait_close(result)
+    # hwnd_utils.close(result)
 
     # debug_gui()
     # debug_hud_class()
