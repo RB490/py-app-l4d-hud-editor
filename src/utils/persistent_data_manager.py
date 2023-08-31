@@ -1,5 +1,4 @@
 "Manages persistent data storage and retrieval."
-# pylint: disable=broad-exception-caught, logging-fstring-interpolation
 import json
 import logging
 

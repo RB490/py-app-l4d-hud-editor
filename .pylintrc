@@ -1,0 +1,6 @@
+[pylint]
+disable=logging-fstring-interpolation,
+disable=broad-exception-caught
+disable=broad-exception-raised
+disable=protected-access
+disable=invalid-name

@@ -5,7 +5,6 @@ Notes:
     There is a fair amount of duplicate install/update/repair. Choosing to leave
     as is right now because the added complexity isn't worth it
 """
-import filecmp
 import os
 import shutil
 import time

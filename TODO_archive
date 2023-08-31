@@ -399,3 +399,4 @@ Post:
 ✔ Feature: method to confirm validity of the dev folder. all pak01's should be disabled. merge this code into overcouples method for validiety checks @done(23-08-31 22:34)
 ✔ Refactor: Modify copy_dir to ignore file extensions(?) @done(23-08-31 22:41)
 ✔ Bug: start editing hud -> open hud file -> modify it -> sync -> no changes ingame. hud is being reloaded ingame @done(23-08-31 22:42) pak01's were enabled
+	✔ Refactor: Remove __extract_outdated_paks? @done(23-08-31 22:51)

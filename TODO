@@ -1,8 +1,8 @@
+✔ Refactor: ProgressGUI: Add logging @done(23-08-31 22:59)
 Current:
 
 Todo:
-	☐ Refactor: Remove __extract_outdated_paks?
-	☐ Refactor: ProgressGUI: Add logging
+	☐ Refactor: Better naming for logging manager & logger variable?
 	☐ Refactor: Add logging
 	
 	☐ Testing: Test the program by using it to edit HUD's

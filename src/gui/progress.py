@@ -1,11 +1,14 @@
 """A progress GUI window for installation."""
-# pylint: disable=broad-exception-raised
+import logging
 import tkinter as tk
 
 from gui.base import BaseGUI
+from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import show_message
 from utils.constants import APP_ICON
 
+logger_manager = LoggerManager(__name__, level=logging.WARNING)
+logger = logger_manager.get_logger()
 
 class ProgressGUI(BaseGUI):
     """A class representing a progress GUI window for installation."""
@@ -112,15 +115,15 @@ class ProgressGUI(BaseGUI):
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
-        print()
-        print(f"Step #{self.current_step}")
-        print(f"self.longest_step_info() = {self.longest_label_length}")
-        print(f"self.root.winfo_width() = {self.root.winfo_width()}")
-        print(f"len(step_information) = {len(step_information)}")
-        print(f"max_chars = {max_chars}")
-        print(f"available_width = {available_width}")
-        print(f"displayed_text = {displayed_text}")
-        print()
+        logger.debug()
+        logger.debug(f"Step #{self.current_step}")
+        logger.debug(f"self.longest_step_info() = {self.longest_label_length}")
+        logger.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
+        logger.debug(f"len(step_information) = {len(step_information)}")
+        logger.debug(f"max_chars = {max_chars}")
+        logger.debug(f"available_width = {available_width}")
+        logger.debug(f"displayed_text = {displayed_text}")
+        logger.debug()
 
         # update the gui
         self.step_info_label.config(text=displayed_text)

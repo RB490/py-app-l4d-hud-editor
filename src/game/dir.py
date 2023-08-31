@@ -27,7 +27,7 @@ class GameDir:
 
     def __init__(self, game_class):
         self.game = game_class
-        # pylint: disable=invalid-name
+
         self.id = GameIDHandler(self.game)
         self.steam = SteamInfoRetriever()
 

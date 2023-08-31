@@ -307,7 +307,6 @@ class EditorMenuHandler:
 
     @call_create_and_refresh_menu
     def editor_menu_reload_click_coord1(self):
-        # pylint: disable=invalid-name
         """Set reload click coordinate"""
 
         def xy_coord_callback(x, y):
@@ -324,7 +323,6 @@ class EditorMenuHandler:
 
     @call_create_and_refresh_menu
     def editor_menu_reload_click_coord2(self):
-        # pylint: disable=invalid-name
         """Set reload click coordinate"""
 
         def xy_coord_callback(x, y):

@@ -1,5 +1,4 @@
 "debug game class"
-# pylint: disable=protected-access
 from game.game import Game
 
 
