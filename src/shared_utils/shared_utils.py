@@ -7,7 +7,6 @@ import tkinter as tk
 from tkinter import Menu, messagebox
 from typing import Any, Callable, Dict, Type, TypeVar
 
-import psutil
 from ahk import AHK
 
 T = TypeVar("T", bound="Singleton")
@@ -141,21 +140,6 @@ def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:
         print(f"Moved {window_title} -> {new_x}x{new_y}")
     except Exception:
         print("Failed to move window using AHK")
-
-
-def close_process_executable(executable: str) -> None:
-    """
-    Close process based on executable.
-
-    Args:
-        executable (str): The name of the executable process to close.
-    """
-    for proc in psutil.process_iter(["name"]):
-        if proc.info["name"] == executable:  # type: ignore
-            proc.kill()
-            proc.wait()  # Wait for the process to fully terminate
-            break
-
 
 def show_message(msg: str, msgbox_type: str = "info", title: str = "") -> Any:
     """

@@ -92,9 +92,13 @@ def debug_main():
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
 
+    hwnd_utils = HwndWindowUtils()
+    result = hwnd_utils.get_hwnd_from_executable("notepad.exe")
+    hwnd_utils.close(result)
+
     # debug_gui()
     # debug_hud_class()
-    debug_game_class()
+    # debug_game_class()
     # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
     # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()
@@ -103,7 +107,7 @@ def debug_main():
     # vpk_instance.extract(my_file, output_dir)
 
     # save_data()
-    # print(f"result={result}")
+    print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 

@@ -154,7 +154,7 @@ class GameWindow:
             return False
 
         # wait for game to fully open
-        hwnd = self.hwnd_utils.wait_for_process_with_ram_threshold_and_timeout_to_get_hwnd(
+        hwnd = self.hwnd_utils.get_hwnd_from_executable_with_ram_threshold_and_timeout(
             self.get_exe(), 100, 80
         )  # account for steam starting up
 
@@ -169,3 +169,7 @@ class GameWindow:
     def is_running(self):
         """Checks if the game is running"""
         return self.hwnd_utils.running(self.get_hwnd())
+
+    def close(self):
+        "Close"
+        self.hwnd_utils.close(self.get_hwnd())

@@ -150,7 +150,6 @@ def prompt_for_folder(title):
     """Prompt user for a folder"""
     return filedialog.askdirectory(title=title)
 
-
 def wait_process_close(executable, timeout=None):
     "Wait for a process to close (if it exists)"
 
