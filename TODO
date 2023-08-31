@@ -4,21 +4,26 @@
 ✔ Bug -> editor menu -> installer -> repair -> dev mode is not installed. but is is. with valid id file and all @done(23-08-31 00:38)
 ✔ Bug: Progress gui not showing @done(23-08-31 00:52) fixed with .show()
 ✔ Bug: Installer closing progress gui instead of destroying @done(23-08-31 09:00)
+✔ Bug: Repairing error one small vdf file extract cancels all @done(23-08-31 09:19) raising specific file extarcting error and catching it
+✔ Bug: Installer: Starting the installer @ repairing still has all the 7 repair steps instead of the reminaing ones @done(23-08-31 10:11)
 
 Current:
 	
 Todo:
-
-
-	☐ Bug: Repairing error one small vdf file extract cancels all
-	---------------------------
-	run_debug_main.py
-	---------------------------
-	Repairing error: Installation step error: 'utf-8' codec can't decode byte 0xe9 in position 11: unexpected end of data
-	---------------------------
-	OK   
 	---------------------------
 
+	☐ Bug: Installer: When repairing the progress gui still says installing
+
+	☐ Feature: Write my own VPK extract/create class. Creaton: the VPK module doesn't handle left4dead2_dlc3 properly and the way it is coded you can't suppress the error and continue extracting. it just stops extracting
+		- Be sure to save my 'old' vpk module class as an example and add proper documentating of this issue
+
+		- Probably just use my ahk-app-l4d-hud editor vpk.exe's. what did i use 'nosteam' for again? compiling? could still compile vpk's with the vpk module if needed
+
+		- Could also catch exception and if there is one, use the legacy vpk.exe extracting method instead
+
+		- Note that i can debug this with left4dead2_dlc3
+
+		- Add logging to vpk class
 
 	☐ Feature: method to confirm validity of the dev folder. all pak01's should be disabled. merge this code into overcouples method for validiety checks
 

@@ -63,21 +63,21 @@ class GameInstaller:
         path = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         total_files, total_subdirs = count_files_and_dirs(path)
-        p_gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
-        p_gui.show()
+        rem_gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
+        rem_gui.show()
 
         for root, dirs, files in os.walk(path, topdown=False):
             for file_name in files:
                 file_path = os.path.join(root, file_name)
-                p_gui.update_progress(f"Deleting: '{file_path}'")
+                rem_gui.update_progress(f"Deleting: '{file_path}'")
                 os.remove(file_path)
 
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
-                p_gui.update_progress(f"Deleting directory: '{dir_path}'")
+                rem_gui.update_progress(f"Deleting directory: '{dir_path}'")
                 os.rmdir(dir_path)
 
-        p_gui.destroy()
+        rem_gui.destroy()
 
     def update(self):
         "Update"
@@ -132,7 +132,7 @@ class GameInstaller:
                 print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        # if not prompt_start(action, f"This will {action_description.lower()}"): # FIXME
+        # if not prompt_start(action, f"This will {action_description.lower()}"): # FIXME: re-enable
         #     return False
 
         # close game
@@ -181,14 +181,17 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-        p_gui = ProgressGUI("Installing", 600, 60, len(installation_steps))  # Create the GUI instance
-        p_gui.show()
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
             last_completed_index = 0
         else:
             last_completed_index = installation_steps.index(resume_state)
+
+        # show progress gui
+        total_steps = len(installation_steps) - last_completed_index
+        p_gui = ProgressGUI("Installing", 600, 60, total_steps)  # Create the GUI instance
+        p_gui.show()
 
         try:
             # Perform installation steps starting from the next step after the last completed one
@@ -278,7 +281,10 @@ class GameInstaller:
 
         def extract_callback(filepath, output_dir):
             vpk_class = VPKClass()
-            vpk_class.extract(filepath, output_dir)
+            try:
+                vpk_class.extract(filepath, output_dir)  # FIXME
+            except:
+                pass
 
         self.__find_pak01_files(dev_dir, extract_callback)
 
@@ -295,13 +301,11 @@ class GameInstaller:
         dev_paks = []
 
         def get_user_paks_callback(filepath, output_dir):
-            # vpk_class.extract(filepath, output_dir)
             print(f"filepath={filepath}\noutput_dir={output_dir}")
             pak_tuple = (filepath, output_dir)
             user_paks.append(pak_tuple)
 
         def get_dev_paks_callback(filepath, output_dir):
-            # vpk_class.extract(filepath, output_dir)
             print(f"filepath={filepath}\noutput_dir={output_dir}")
             pak_tuple = (filepath, output_dir)
             dev_paks.append(pak_tuple)
@@ -318,8 +322,8 @@ class GameInstaller:
             if not filecmp.cmp(dev_pak[0], user_pak[0]):
                 print(f'pak out of date! extracting "{dev_pak[0]}"')
                 vpk_class = VPKClass()
+                # FIXME apply same fix as i will come up with for reguarl extract paks
                 vpk_class.extract(dev_pak[0], dev_pak[1])
-
             i += 1
 
     def __enable_paks(self):

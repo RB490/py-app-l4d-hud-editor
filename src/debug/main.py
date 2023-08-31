@@ -45,6 +45,7 @@ from utils.functions import (
     show_start_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
+from utils.vpk import VPKClass
 
 
 def debug_function(*args):
@@ -94,7 +95,11 @@ def debug_main():
     # debug_gui()
     # debug_hud_class()
     debug_game_class()
-    
+    # vpk_instance = VPKClass()
+    # my_file = "E:\\Games\\Steam\\steamapps\\common\\Left 4 Dead 2\\left4dead2_dlc3\\pak01_dir.vpk"
+    # output_dir = "D:\\Downloads\\New folder"
+    # vpk_instance.extract(my_file, output_dir)
+
     # save_data()
     # print(f"result={result}")
 

@@ -34,15 +34,24 @@ class VPKClass:
             os.makedirs(output_dir)
 
         # Extract VPK file
+
         with vpk.open(input_file) as vpk_file:
-            for file_path in vpk_file:
-                full_path = os.path.join(output_dir, file_path)
-                os.makedirs(os.path.dirname(full_path), exist_ok=True)
-                try:
-                    with open(full_path, "wb") as output_file:
-                        output_file.write(vpk_file[file_path].read())
-                except Exception as extract_err:
-                    print(f"Error extracting file '{file_path}': {str(extract_err)}")
+            try:
+                for file_path in vpk_file:
+                    full_path = os.path.join(output_dir, file_path)
+                    os.makedirs(os.path.dirname(full_path), exist_ok=True)
+                    try:
+                        with open(full_path, "wb") as output_file:
+                            output_file.write(vpk_file[file_path].read())
+                        # print(f"Extract '{file_path}'")
+                    except Exception as file_extract_err:
+                        print(f"Error extracting file '{file_path}': {str(file_extract_err)}")
+                        continue
+            except Exception as extract_err:
+                print(f"Error extracting pak01.vpk '{input_file}': {str(extract_err)}")
+
+        # finish
+        print(f"Finished extracting: {input_file}")
 
     def create(self, input_dir: str, output_dir: str, output_file_name: str) -> None:
         """
