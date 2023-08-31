@@ -1,5 +1,6 @@
 """Shared utility functions"""
-# pylint: disable=c-extension-no-member, broad-exception-caught
+# pylint: disable=c-extension-no-member, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
+import logging
 import os
 import re
 import shutil
@@ -10,7 +11,12 @@ from typing import Any, Callable, Dict, Type, TypeVar
 
 from ahk import AHK
 
+from shared_utils.logging_manager import LoggerManager
+
 T = TypeVar("T", bound="Singleton")
+
+logger_manager = LoggerManager(__name__, level=logging.WARNING)
+logger = logger_manager.get_logger()
 
 
 def get_invisible_tkinter_root() -> tk.Tk:
@@ -123,14 +129,25 @@ def is_subdirectory(parent_dir: str, child_dir: str) -> bool:
         print(f"{child_dir} is not a subdirectory of {parent_dir}")
         return False
 
-def copy_directory(src_dir, dest_dir, ignore_file=None):
-    """Copy the files in asource directory to a destination directory, overwriting if necessary.
+
+def copy_directory(src_dir, dest_dir):
+    """Copy the files from a source directory to a destination directory, overwriting if necessary.
+
+    This function recursively copies files from the source directory to the destination
+    directory, preserving the directory structure. Any existing files in the destination
+    directory will be overwritten.
 
     Benefits of using this function as opposed to shutil.copytree:
     - shutil.copytree needs the destination directory to not exist, while this function merges them
     - i can see individual files printed out in console
-    - i can supply a file to be ignored"""
-    # pylint: disable=broad-exception-raised, broad-exception-caught
+
+    Args:
+        src_dir (str): The path to the source directory.
+        dest_dir (str): The path to the destination directory.
+
+    Returns:
+        None
+    """
 
     try:
         # Normalize paths
@@ -144,18 +161,13 @@ def copy_directory(src_dir, dest_dir, ignore_file=None):
             raise NotADirectoryError(f"The destination directory {dest_dir} is not valid.")
 
         # Build a list of source files to be copied
-        src_files = [
-            os.path.join(root, filename)
-            for root, _, files in os.walk(src_dir)
-            for filename in files
-            if filename != ignore_file
-        ]
+        src_files = [os.path.join(root, filename) for root, _, files in os.walk(src_dir) for filename in files]
 
         # Raise exception if no source files found
         if not src_files:
             raise Exception(f"No files in the source directory: {src_dir}")
 
-        print(f"Copying files '{src_dir}' -> '{dest_dir}'")
+        logger.info(f"Copying files '{src_dir}' -> '{dest_dir}'")
 
         # Copy each source file to the destination
         for src_path in src_files:
@@ -170,16 +182,17 @@ def copy_directory(src_dir, dest_dir, ignore_file=None):
             # Attempt to copy the file, handle errors
             try:
                 shutil.copy2(src_path, dest_path)
-                # print(f"Copied {src_path} -> {dest_path}")
+                logger.debug(f"Copied {src_path} -> {dest_path}")
             except shutil.Error as copy_error:
-                print(f"Copy error: {copy_error}")
+                logger.error(f"Copy error: {copy_error}")
             except Exception as general_error:
-                print(f"An error occurred: {general_error}")
+                logger.error(f"An error occurred: {general_error}")
 
     except Exception as err_info:
-        print(f"An error occurred during copy files in directory: {err_info}")
+        logger.error(f"An error occurred during copy files in directory: {err_info}")
     else:
-        print(f"Copied files '{src_dir}' -> '{dest_dir}'")
+        logger.info(f"Copied files '{src_dir}' -> '{dest_dir}'")
+
 
 def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:
     """
@@ -198,6 +211,7 @@ def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:
         print(f"Moved {window_title} -> {new_x}x{new_y}")
     except Exception:
         print("Failed to move window using AHK")
+
 
 def show_message(msg: str, msgbox_type: str = "info", title: str = "") -> Any:
     """

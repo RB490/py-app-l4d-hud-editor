@@ -1,9 +1,9 @@
 ✔ Feature: method to confirm validity of the dev folder. all pak01's should be disabled. merge this code into overcouples method for validiety checks @done(23-08-31 22:34)
+✔ Refactor: Modify copy_dir to ignore file extensions(?) @done(23-08-31 22:41)
 Current:
 
 Todo:
 
-	☐ Refactor: Modify copy_dir to ignore file extensions(?)
 
 	☐ Bug: start editing hud -> open hud file -> modify it -> sync -> no changes ingame. hud is being reloaded ingame
 		- ^ seems like the files are being synced. maybe some pak01 is enabled?

@@ -18,8 +18,7 @@ from utils.functions import (
 )
 from utils.steam_info_retriever import SteamInfoRetriever
 
-# logger_manager = LoggerManager(__name__, level=logging.INFO)
-logger_manager = LoggerManager(__name__, level=logging.DEBUG)
+logger_manager = LoggerManager(__name__, level=logging.INFO)
 logger = logger_manager.get_logger()
 
 
@@ -274,10 +273,10 @@ class GameDir:
 
     def disable_any_enabled_pak01s(self):
         """Check if developer directory has any pak01's enabled"""
-        logger.debug("Checking if developer directory is outdated...")
+        logger.debug("Disabling all pak01_dir.vpk's...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            logger.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
             return None
 
         dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
@@ -292,7 +291,7 @@ class GameDir:
             if file_name == "pak01_dir.vpk":
                 # Rename the file
                 os.rename(file_path, disabled_file_path)
-                logger.info(f"Disabled pak01! '{file_path}' -> '{disabled_file_path}'")
+                logger.info(f"Disabled pak01_dir.vpk! '{file_path}' -> '{disabled_file_path}'")
 
         logger.debug("All developer directory pak01_dir.vpk's are disabled!")
         return False

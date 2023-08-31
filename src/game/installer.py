@@ -252,8 +252,10 @@ class GameInstaller:
         copy_directory(
             self.game.dir.get(DirectoryMode.USER),
             self.game.dir.get(DirectoryMode.DEVELOPER),
-            self.game.dir.id._get_filename(DirectoryMode.USER),
         )
+        user_id_file = self.game.dir.id._get_filename(DirectoryMode.USER)
+        if os.path.isfile(user_id_file):
+            os.remove(user_id_file)
 
     def __prompt_verify_game(self):
         print("Prompting user to verify game")
