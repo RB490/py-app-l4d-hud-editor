@@ -245,9 +245,7 @@ class HwndWindowUtils:
 
         win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
 
-        _, pid = win32process.GetWindowThreadProcessId(hwnd)
-        process_name = os.path.basename(psutil.Process(pid).exe())
-        logger.debug(f"Moved '{process_name}' to position ({win_x}, {win_y})")
+        logger.debug(f"Moved '{self.get_process_name(hwnd)}' to position ({win_x}, {win_y})")
 
     @hwnd_is_running_check
     def focus(self, hwnd):
@@ -289,7 +287,7 @@ class HwndWindowUtils:
         # # Activate the window
         win32gui.SetActiveWindow(hwnd)  # <- this works for tkinter gui's in combination with topmost
 
-        logger.debug(f"Focused hwnd: {hwnd}!")
+        logger.debug(f"Focused {self.get_process_name(hwnd)}!")
 
     def save_focus_state(self):
         """
@@ -300,6 +298,7 @@ class HwndWindowUtils:
         """
         self.saved_hwnd = self.get_hwnd_focused()
         self.saved_mouse_pos = pyautogui.position()
+        logger.debug(f"Saved focus state to {self.get_process_name(self.saved_hwnd)}!")
         return self.saved_hwnd
 
     def restore_focus_state(self):
@@ -310,6 +309,7 @@ class HwndWindowUtils:
             self.focus(self.saved_hwnd)
         if self.saved_mouse_pos:
             pyautogui.moveTo(self.saved_mouse_pos)
+        logger.debug(f"Restored focus state to {self.get_process_name(self.saved_hwnd)}!")
 
 
 def showcase_hwnd_window_manager():
