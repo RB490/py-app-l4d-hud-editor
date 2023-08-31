@@ -9,7 +9,6 @@ from game.constants import InstallationState
 from shared_utils.hwnd_window_manager import HwndWindowUtils
 from shared_utils.shared_utils import show_message
 from utils.constants import GAME_POSITIONS
-from utils.functions import is_process_running
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -169,4 +168,4 @@ class GameWindow:
 
     def is_running(self):
         """Checks if the game is running"""
-        return is_process_running(self.get_exe())
+        return self.hwnd_utils.running(self.get_hwnd())

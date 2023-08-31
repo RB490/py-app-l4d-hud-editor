@@ -151,30 +151,6 @@ def prompt_for_folder(title):
     return filedialog.askdirectory(title=title)
 
 
-def wait_for_process(exe, timeout=None):
-    """
-    Wait until a process is running based on its executable name.
-
-    :param exe: The executable name of the process.
-    :type exe: str
-    :param timeout: The maximum time to wait in seconds (optional).
-    :type timeout: float or None
-    :return: True if the process is found, False if the timeout is reached.
-    :rtype: bool
-    """
-    print(f"Waiting for {exe} to run")
-    start_time = time.time()
-    while True:
-        for process_name in psutil.process_iter():
-            if process_name.name() == exe:
-                print(f"Process {exe} running!")
-                return True
-        if timeout is not None and time.time() - start_time > timeout:
-            print("Timeout reached!")
-            return False
-        time.sleep(0.1)
-
-
 def wait_process_close(executable, timeout=None):
     "Wait for a process to close (if it exists)"
 
@@ -204,35 +180,6 @@ def wait_process_close(executable, timeout=None):
                 return False
         # Sleep for a short interval and repeat
         time.sleep(0.1)
-
-
-def is_process_running(process_name: str) -> bool:
-    """
-    Check if a process with the specified name is currently running on the system.
-
-    Parameters:
-    process_name (str): The name of the process to check for. EG: notepad.exe
-
-    Returns:
-    bool: True if the process is running, False otherwise.
-    """
-
-    # Get a list of all running processes
-    processes = psutil.process_iter()
-
-    # Check if the process is in the list of running processes
-    process_running = False
-    for process in processes:
-        if process.name() == process_name:
-            process_running = True
-            break
-
-    # if process_running:
-    #     print(f"{process_name} is running")
-    # else:
-    #     print(f"{process_name} is not running")
-
-    return process_running
 
 
 def copy_directory(src_dir, dest_dir, ignore_file=None):

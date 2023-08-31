@@ -1,15 +1,14 @@
 ✔ Bug: Installer: Repairing finishes properly: tries to destroy progress gui but is already destroyed which causes error @done(23-08-31 10:35)
 ✔ Bug: Installer: During extracting vpk's the program freezes and doesnt detect l4d2 closing when i manually close l4d2 @done(23-08-31 18:50)
 ✔ Feature: hwnd window manager needs a static method to check if hwnd is valid for various methods such as running() focus() move() and such @done(23-08-31 18:57)
+✔ Bug: Run game is taking waay to long when rebuilding audio cache. it seems to wait until l4d starts 'responding'? @done(23-08-31 18:57)
+✔ Feature: I have too many loose functions, still, even with hwnd_tools class. a lot of overlap between them too. probably add wait until process runs and have that colltect HWND so i dont have to do it multiple times @done(23-08-31 19:00)
 Current:
 	
 Todo:
 
-	☐ Feature: I have too many loose functions, still, even with hwnd_tools class. a lot of overlap between them too. probably add wait until process runs and have that colltect HWND so i dont have to do it multiple times
 
-
-	☐ Bug: Run game is taking waay to long when rebuilding audio cache. it seems to wait until l4d starts 'responding'?
-
+	☐ Feature: Move wait_process_close into hwnd_utils?
 
 	☐ Feature: Write my own VPK extract/create class. Creaton: the VPK module doesn't handle left4dead2_dlc3 properly and the way it is coded you can't suppress the error and continue extracting. it just stops extracting
 		- Be sure to save my 'old' vpk module class as an example and add proper documentating of this issue
