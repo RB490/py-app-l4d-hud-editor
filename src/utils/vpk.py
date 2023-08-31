@@ -25,7 +25,7 @@ class VPKClass:
     """
 
     def _validate_extract_params(self, input_file: str, output_dir: str) -> bool:
-        logger.debug(f"Verifying parameters input_file: {input_file} and output_dir: {output_dir}")
+        logger.debug(f"Verifying parameters input_file: '{input_file}' and output_dir: '{output_dir}'")
 
         # Check if input_file exists and is a VPK file
         if not os.path.isfile(input_file) or not input_file.endswith(".vpk"):
@@ -33,14 +33,14 @@ class VPKClass:
 
         # Raise esception if output_dir is a file
         if os.path.isfile(output_dir):
-            raise ValueError(f"Output directory is a file! '{output_dir}'")
+            raise ValueError(f"Output directory is a file! ''{output_dir}''")
 
         # Create output directory if it doesn't exist
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir)
-            logger.debug(f"Created output directory: {output_dir}")
+            logger.debug(f"Created output directory: '{output_dir}'")
 
-        logger.debug(f"Verified parameters! intput_file {input_file} and output_dir: {output_dir}")
+        logger.debug(f"Verified parameters! intput_file '{input_file}' and output_dir: '{output_dir}'")
         return True
 
     def extract(self, input_file: str, output_dir: str) -> None:
@@ -53,7 +53,7 @@ class VPKClass:
         if not self._validate_extract_params(input_file, output_dir):
             return
 
-        logger.info(f"Extracting {input_file} into {output_dir}")
+        logger.info(f"Extracting '{input_file}' -> '{output_dir}'")
 
         # Extract VPK file
         with vpk.open(input_file) as vpk_file:
@@ -64,16 +64,16 @@ class VPKClass:
                     try:
                         with open(full_path, "wb") as output_file:
                             output_file.write(vpk_file[file_path].read())
-                        # print(f"Extract '{file_path}'")
+                        logger.debug(f"Extract '{file_path}'")
                     except Exception as file_extract_err:
                         print(f"Error extracting file '{file_path}': {str(file_extract_err)}")
                         continue
             except Exception as extract_err:
-                print(f"Error extracting pak01.vpk '{input_file}': {str(extract_err)}")
+                logger.warning(f"Error extracting pak01.vpk ''{input_file}'': {str(extract_err)}")
                 self._extract_alternate(input_file, output_dir)
 
         # finish
-        logger.debug(f"Finished extracting {input_file} into {output_dir}!")
+        logger.info(f"Extracted '{input_file}' -> '{output_dir}'!")
 
     def _extract_alternate(self, input_file: str, output_dir: str) -> None:
         """
@@ -85,7 +85,7 @@ class VPKClass:
         if not self._validate_extract_params(input_file, output_dir):
             return
 
-        logger.info(f"Extracting {input_file} into {output_dir} using alternative method")
+        logger.info(f"Extracting '{input_file}' -> '{output_dir}' using alternative method")
 
         # Run vpk.exe to extract the contents of the input_file
         input_file_quoted = f"{input_file}"
@@ -94,7 +94,7 @@ class VPKClass:
         try:
             subprocess.run(extract_command, check=True)
         except subprocess.CalledProcessError as e:
-            print(f"Error extracting {input_file}: {e}")
+            print(f"Error extracting '{input_file}': {e}")
             return
 
         # Get the base name of the input file without the extension
@@ -113,7 +113,7 @@ class VPKClass:
         shutil.rmtree(source_dir)
         logger.debug(f"Deleted source directory! {source_dir}")
 
-        logger.debug(f"Finished extracting {input_file} into {output_dir} using alternative method!")
+        logger.info(f"Extracted '{input_file}' -> '{output_dir}' using alternative method!")
 
     def create(self, input_dir: str, output_dir: str, output_file_name: str) -> None:
         """
@@ -125,9 +125,9 @@ class VPKClass:
         """
         # Verify input parameters
         if not os.path.exists(input_dir):
-            raise ValueError(f"Input directory does not exist: {input_dir}")
+            raise ValueError(f"Input directory does not exist: '{input_dir}'")
 
-        logger.info(f"Creating {output_file_name} from {input_dir} in {output_dir}!")
+        logger.info(f"Creating '{output_file_name}' from '{input_dir}' in '{output_dir}'!")
 
         # Exclude files without extensions as they are not supported
         temp_dir = self._create_temp_dir_excluding_files_without_file_extension(input_dir)
@@ -142,14 +142,13 @@ class VPKClass:
 
             # Save the VPK
             new_vpk.save(output_path)
-            logger.info(f"Created {output_file_name} from {input_dir} in {output_dir}!")
+            logger.info(f"Created '{output_file_name}' from '{input_dir}' in '{output_dir}'!")
         except Exception as err:
-            logger.warning(f"Error creating {output_file_name} from {input_dir} in {output_dir}! {err}")
-
+            logger.warning(f"Error creating '{output_file_name}' from '{input_dir}' in ! {err}")
         finally:
             # Clean temporary directory
             shutil.rmtree(temp_dir)
-            logger.debug(f"Cleaned up temporary directory: {temp_dir}")
+            logger.debug(f"Cleaned up temporary directory: '{temp_dir}'")
 
     def _create_temp_dir_excluding_files_without_file_extension(self, input_dir):
         # pylint: disable=unused-variable
@@ -169,7 +168,7 @@ class VPKClass:
                     file_path = os.path.join(root, file)
                     temp_path = os.path.join(temp_dir, file)
                     shutil.copy2(file_path, temp_path)
-        logger.debug(f"Created temporary directory without files without a file extension: {temp_dir}")
+        logger.debug(f"Created temporary directory without files without a file extension: '{temp_dir}'")
         return temp_dir
 
 
