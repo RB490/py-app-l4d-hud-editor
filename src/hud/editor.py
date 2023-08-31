@@ -1,5 +1,5 @@
 """Class to manage hud editing"""
-# pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel, invalid_name
+# pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel, invalid-name
 import os
 import threading
 from tkinter import filedialog
@@ -12,9 +12,9 @@ from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import show_message
+from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import copy_directory, get_browser_gui, show_start_gui
+from utils.functions import get_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 

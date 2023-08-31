@@ -32,9 +32,10 @@ IMAGES_DIR_32: str = os.path.join(IMAGES_DIR, "png_32x32")
 IMAGES_DIR_MISC: str = os.path.join(IMAGES_DIR, "misc")
 
 # asset files
-APP_ICON: str = os.path.join(ASSETS_DIR, "app.ico")
+VPK_EXE: str = os.path.join(ASSETS_DIR, "vpk.exe", "left4dead2", "vpk.exe")
 
 # image files
+APP_ICON: str = os.path.join(ASSETS_DIR, "app.ico")
 BIG_CROSS_ICON: str = os.path.join(IMAGES_DIR, "png_128x128", "cross.png")
 
 # data

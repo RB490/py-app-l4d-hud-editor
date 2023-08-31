@@ -11,11 +11,8 @@ from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import Singleton
 from utils.functions import get_backup_path
 
-# configure logging
-# logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
-# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
-logger = logger_manager.get_logger()  # Get the logger instance
+logger_manager = LoggerManager(__name__, level=logging.INFO)
+logger = logger_manager.get_logger()
 
 
 def calculate_md5_hash(file_path):

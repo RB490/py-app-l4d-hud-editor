@@ -36,7 +36,12 @@ from shared_utils.logging_manager import LoggerManager, logging_class_usage_exam
 from shared_utils.shared_utils import show_message
 from shared_utils.splash_gui import splash_gui_example
 from tests.test_hud_syncer import unit_test_hud_syncer
-from utils.constants import HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER, ImageConstants
+from utils.constants import (
+    HOTKEY_SYNC_HUD,
+    HOTKEY_TOGGLE_BROWSER,
+    VPK_EXE,
+    ImageConstants,
+)
 from utils.functions import (
     get_browser_gui,
     get_mouse_position_on_click,
@@ -45,7 +50,7 @@ from utils.functions import (
     show_start_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
-from utils.vpk import VPKClass
+from utils.vpk import VPKClass, debug_vpk_class
 
 
 def debug_function(*args):
@@ -92,11 +97,13 @@ def debug_main():
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
 
-    hwnd_utils = HwndWindowUtils()
-    result = hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage("notepad.exe", 15, 25)
+    # hwnd_utils = HwndWindowUtils()
+    # result = hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage("notepad.exe", 15, 25)
     # result = hwnd_utils.get_hwnd_from_process_name("notepad.exe")
-    hwnd_utils.wait_close(result)
+    # hwnd_utils.wait_close(result)
     # hwnd_utils.close(result)
+
+    debug_vpk_class()
 
     # debug_gui()
     # debug_hud_class()
@@ -109,7 +116,7 @@ def debug_main():
     # vpk_instance.extract(my_file, output_dir)
 
     # save_data()
-    print(f"result={result}")
+    # print(f"result={result}")
 
     input("Finished debugging! Press enter to exit...")
 

@@ -392,3 +392,5 @@ Post:
 ✔ Feature: hwnd window manager needs a static method to check if hwnd is valid for various methods such as running() focus() move() and such @done(23-08-31 18:57)
 ✔ Bug: Run game is taking waay to long when rebuilding audio cache. it seems to wait until l4d starts 'responding'? @done(23-08-31 18:57)
 ✔ Feature: I have too many loose functions, still, even with hwnd_tools class. a lot of overlap between them too. probably add wait until process runs and have that colltect HWND so i dont have to do it multiple times @done(23-08-31 19:00)
+✔ Feature: Move wait_process_close into hwnd_utils? @done(23-08-31 19:46)
+✔ Feature: Can i modify the hwnd class so that it saves data for a hwnd? for example when i get a hwnd automatically look up the executable name too and assign that to it @done(23-08-31 20:43)

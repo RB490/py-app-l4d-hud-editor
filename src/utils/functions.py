@@ -2,10 +2,8 @@
 """Functions used throughout the program"""
 import os
 import random
-import shutil
 import string
 import sys
-import tempfile
 import time
 import tkinter as tk
 from tkinter import filedialog
@@ -125,30 +123,10 @@ def rename_with_timeout(src, dst, timeout=5):
                 time.sleep(0.1)
 
 
-def create_temp_dir_from_input_dir_exclude_files_without_extension(input_dir):
-    # pylint: disable=unused-variable
-    """
-    Creates a temporary directory and copies the contents of the input directory to it,
-    excluding any files without a file extension.
-
-    :param input_dir: The path of the input directory.
-    :type input_dir: str
-    :return: The path of the temporary directory.
-    :rtype: str
-    """
-    temp_dir = tempfile.mkdtemp()
-    for root, dirs, files in os.walk(input_dir):
-        for file in files:
-            if "." in file:
-                file_path = os.path.join(root, file)
-                temp_path = os.path.join(temp_dir, file)
-                shutil.copy2(file_path, temp_path)
-    return temp_dir
-
-
 def prompt_for_folder(title):
     """Prompt user for a folder"""
     return filedialog.askdirectory(title=title)
+
 
 def wait_process_close(executable, timeout=None):
     "Wait for a process to close (if it exists)"
@@ -179,65 +157,6 @@ def wait_process_close(executable, timeout=None):
                 return False
         # Sleep for a short interval and repeat
         time.sleep(0.1)
-
-
-def copy_directory(src_dir, dest_dir, ignore_file=None):
-    """Copy the files in asource directory to a destination directory, overwriting if necessary.
-
-    Benefits of using this function as opposed to shutil.copytree:
-    - shutil.copytree needs the destination directory to not exist, while this function merges them
-    - i can see individual files printed out in console
-    - i can supply a file to be ignored"""
-    # pylint: disable=broad-exception-raised, broad-exception-caught
-
-    try:
-        # Normalize paths
-        src_dir = os.path.normpath(src_dir)
-        dest_dir = os.path.normpath(dest_dir)
-
-        # Verify and create destination directory if needed
-        if not os.path.exists(dest_dir):
-            os.makedirs(dest_dir)
-        elif not os.path.isdir(dest_dir):
-            raise NotADirectoryError(f"The destination directory {dest_dir} is not valid.")
-
-        # Build a list of source files to be copied
-        src_files = [
-            os.path.join(root, filename)
-            for root, _, files in os.walk(src_dir)
-            for filename in files
-            if filename != ignore_file
-        ]
-
-        # Raise exception if no source files found
-        if not src_files:
-            raise Exception(f"No files in the source directory: {src_dir}")
-
-        print(f"Copying files '{src_dir}' -> '{dest_dir}'")
-
-        # Copy each source file to the destination
-        for src_path in src_files:
-            relative_path = os.path.relpath(src_path, src_dir)
-            dest_path = os.path.join(dest_dir, relative_path)
-
-            # Create the destination directory if it doesn't exist
-            relative_dir = os.path.dirname(dest_path)
-            if not os.path.exists(relative_dir):
-                os.makedirs(relative_dir)
-
-            # Attempt to copy the file, handle errors
-            try:
-                shutil.copy2(src_path, dest_path)
-                # print(f"Copied {src_path} -> {dest_path}")
-            except shutil.Error as copy_error:
-                print(f"Copy error: {copy_error}")
-            except Exception as general_error:
-                print(f"An error occurred: {general_error}")
-
-    except Exception as err_info:
-        print(f"An error occurred during copy files in directory: {err_info}")
-    else:
-        print(f"Copied files '{src_dir}' -> '{dest_dir}'")
 
 
 def get_dir_size(path):

@@ -18,11 +18,8 @@ import win32process
 
 from shared_utils.logging_manager import LoggerManager
 
-# Configure the logging settings
-# logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
-# logger_manager = LoggerManager(__name__, level=logging.DEBUG)  # Pass the desired logging level
-logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-logger = logger_manager.get_logger()  # Get the logger instance
+logger_manager = LoggerManager(__name__, level=logging.INFO)
+logger = logger_manager.get_logger()
 
 
 def hwnd_is_running_check(func):

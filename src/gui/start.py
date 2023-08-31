@@ -13,10 +13,9 @@ from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import Singleton, show_message
+from shared_utils.shared_utils import Singleton, copy_directory, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
-from utils.functions import copy_directory
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 

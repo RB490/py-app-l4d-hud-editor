@@ -8,10 +8,9 @@ from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
 from shared_utils.logging_manager import LoggerManager
-from shared_utils.shared_utils import verify_directory
+from shared_utils.shared_utils import copy_directory, verify_directory
 from shared_utils.splash_gui import SplashGUI
 from utils.functions import (
-    copy_directory,
     generate_random_string,
     get_backup_filename,
     get_backup_path,
@@ -19,9 +18,8 @@ from utils.functions import (
 )
 from utils.steam_info_retriever import SteamInfoRetriever
 
-logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
-# logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
-logger = logger_manager.get_logger()  # Get the logger instance
+logger_manager = LoggerManager(__name__, level=logging.INFO)
+logger = logger_manager.get_logger()
 
 
 class GameDir:
@@ -242,7 +240,7 @@ class GameDir:
 
     def restore_developer_directory(self):
         "Restore developer game files using backup"
-        
+
         print("Restoring developer game files")
 
         try:

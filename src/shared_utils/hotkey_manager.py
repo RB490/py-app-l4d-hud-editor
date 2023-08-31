@@ -9,7 +9,6 @@ from shared_utils.logging_manager import LoggerManager
 from shared_utils.shared_utils import Singleton
 
 logger_manager = LoggerManager(__name__, level=logging.INFO)
-# logger_manager = LoggerManager(__name__, level=logging.WARNING)
 logger = logger_manager.get_logger()
 
 
