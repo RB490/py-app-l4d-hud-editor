@@ -1,4 +1,4 @@
-# pylint: disable=protected-access, broad-exception-caught, unused-private-member
+# pylint: disable=protected-access, broad-exception-caught, unused-private-member, bare-except
 """Game class installation methods
 
 Notes:
@@ -132,7 +132,7 @@ class GameInstaller:
                 print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        # if not prompt_start(action, f"This will {action_description.lower()}"): # FIXME: re-enable
+        # if not prompt_start(action, f"This will {action_description.lower()}"): # FIXME
         #     return False
 
         # close game
@@ -173,13 +173,13 @@ class GameInstaller:
 
     def __process_installation_steps(self, resume_state, action_description):
         installation_steps = [
-            InstallationState.CREATE_DEV_DIR,
-            InstallationState.COPYING_FILES,
-            InstallationState.VERIFYING_GAME,
-            InstallationState.EXTRACTING_PAKS,
-            InstallationState.MAIN_DIR_BACKUP,
+            # InstallationState.CREATE_DEV_DIR,
+            # InstallationState.COPYING_FILES,
+            # InstallationState.VERIFYING_GAME,
+            # InstallationState.EXTRACTING_PAKS, # FIXME
+            # InstallationState.MAIN_DIR_BACKUP,
             InstallationState.INSTALLING_MODS,
-            InstallationState.REBUILDING_AUDIO,
+            # InstallationState.REBUILDING_AUDIO,
         ]
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
@@ -282,7 +282,7 @@ class GameInstaller:
         def extract_callback(filepath, output_dir):
             vpk_class = VPKClass()
             try:
-                vpk_class.extract(filepath, output_dir)  # FIXME
+                vpk_class.extract(filepath, output_dir)  # FIXME: vpk_class.extract
             except:
                 pass
 
@@ -322,7 +322,7 @@ class GameInstaller:
             if not filecmp.cmp(dev_pak[0], user_pak[0]):
                 print(f'pak out of date! extracting "{dev_pak[0]}"')
                 vpk_class = VPKClass()
-                # FIXME apply same fix as i will come up with for reguarl extract paks
+                # FIXME: vpk_class.extract
                 vpk_class.extract(dev_pak[0], dev_pak[1])
             i += 1
 

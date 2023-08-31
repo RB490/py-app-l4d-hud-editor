@@ -378,3 +378,12 @@ Post:
 ✔ Post: Add types: Make a good GPT prompt @done(23-08-30 21:37) works but too much effort to do after the fact
 ✔ Testing: Get the AHK version working and check it out to confirm feature parity @done(23-08-30 22:02)
 ✔ Feature: Readme.md -> add ahk version's readme.md with maybe some (formatting) improvements @done(23-08-30 22:04)
+✔ Feature: Modify the videosettings class thing so that it can handle the file being broken? by using some default values or something @done(23-08-31 00:22)
+✔ Bug: Menu: Change game resolution -> Game has focus of the mouse&keyboard @done(23-08-31 00:16)
+✔ bug: update game command gui @done(23-08-31 00:20)
+✔ Bug -> editor menu -> installer -> repair -> dev mode is not installed. but is is. with valid id file and all @done(23-08-31 00:38)
+✔ Bug: Progress gui not showing @done(23-08-31 00:52) fixed with .show()
+✔ Bug: Installer closing progress gui instead of destroying @done(23-08-31 09:00)
+✔ Bug: Repairing error one small vdf file extract cancels all @done(23-08-31 09:19) raising specific file extarcting error and catching it
+✔ Bug: Installer: Starting the installer @ repairing still has all the 7 repair steps instead of the reminaing ones @done(23-08-31 10:11)
+✔ Bug: Installer: When repairing the progress gui still says installing @done(23-08-31 10:13)

@@ -34,6 +34,7 @@ class BaseGUI:
             parent_root (tkinter main gui instance, optional): True if the GUI is a modal dialog, False otherwise.
         """
         self.gui_type = gui_type
+        self.is_destroyed: bool = False
         self.is_hidden: bool = True
         self.is_resizable: bool = True
         self.has_been_run: bool = False
@@ -120,10 +121,12 @@ class BaseGUI:
 
     def destroy(self) -> None:
         """Destroy the window."""
-        self.__call_save_window_geometry()
-        self.root.update()  # Fixes "can't invoke 'event' command: application has been destroyed" error
-        self.root.destroy()
-        self.__call_method_if_exists("on_destroy")
+        if not self.is_destroyed:
+            self.__call_save_window_geometry()
+            self.__call_method_if_exists("on_destroy") # call this before the actual destroy can't invoke "wm" command
+            self.root.update()  # Fixes "can't invoke 'event' command: application has been destroyed" error
+            self.root.destroy()
+            self.is_destroyed = True
 
     def set_fullscreen(self, fullscreen: bool) -> None:
         """

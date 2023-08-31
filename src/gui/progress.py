@@ -133,4 +133,4 @@ class ProgressGUI(BaseGUI):
         result = show_message(f"Are you sure you want to stop {self.action_description.lower()}?", "yesno")
         if not result:
             return
-        self.root.destroy()
+        self.destroy()

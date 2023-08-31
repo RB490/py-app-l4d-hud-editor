@@ -1,18 +1,9 @@
-✔ Feature: Modify the videosettings class thing so that it can handle the file being broken? by using some default values or something @done(23-08-31 00:22)
-✔ Bug: Menu: Change game resolution -> Game has focus of the mouse&keyboard @done(23-08-31 00:16)
-✔ bug: update game command gui @done(23-08-31 00:20)
-✔ Bug -> editor menu -> installer -> repair -> dev mode is not installed. but is is. with valid id file and all @done(23-08-31 00:38)
-✔ Bug: Progress gui not showing @done(23-08-31 00:52) fixed with .show()
-✔ Bug: Installer closing progress gui instead of destroying @done(23-08-31 09:00)
-✔ Bug: Repairing error one small vdf file extract cancels all @done(23-08-31 09:19) raising specific file extarcting error and catching it
-✔ Bug: Installer: Starting the installer @ repairing still has all the 7 repair steps instead of the reminaing ones @done(23-08-31 10:11)
-✔ Bug: Installer: When repairing the progress gui still says installing @done(23-08-31 10:13)
-
+✔ Bug: Installer: Repairing finishes properly: tries to destroy progress gui but is already destroyed which causes error @done(23-08-31 10:35)
 Current:
 	
 Todo:
-	---------------------------
 
+	☐ Bug: Installer: During extracting vpk's the program freezes and doesnt detect l4d2 closing when i manually close l4d2
 
 	☐ Feature: Write my own VPK extract/create class. Creaton: the VPK module doesn't handle left4dead2_dlc3 properly and the way it is coded you can't suppress the error and continue extracting. it just stops extracting
 		- Be sure to save my 'old' vpk module class as an example and add proper documentating of this issue
