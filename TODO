@@ -3,13 +3,24 @@
 ✔ bug: update game command gui @done(23-08-31 00:20)
 ✔ Bug -> editor menu -> installer -> repair -> dev mode is not installed. but is is. with valid id file and all @done(23-08-31 00:38)
 ✔ Bug: Progress gui not showing @done(23-08-31 00:52) fixed with .show()
+✔ Bug: Installer closing progress gui instead of destroying @done(23-08-31 09:00)
 
 Current:
 	
 Todo:
 
 
-	☐ Feature: method to confirm validity of the dev folder. all pak01's should be disabled
+	☐ Bug: Repairing error one small vdf file extract cancels all
+	---------------------------
+	run_debug_main.py
+	---------------------------
+	Repairing error: Installation step error: 'utf-8' codec can't decode byte 0xe9 in position 11: unexpected end of data
+	---------------------------
+	OK   
+	---------------------------
+
+
+	☐ Feature: method to confirm validity of the dev folder. all pak01's should be disabled. merge this code into overcouples method for validiety checks
 
 	☐ Bug: start editing hud -> open hud file -> modify it -> sync -> no changes ingame. hud is being reloaded ingame
 		- ^ seems like the files are being synced. maybe some pak01 is enabled?

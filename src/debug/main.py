@@ -91,14 +91,10 @@ def debug_main():
     )  # prevent restore_developer_directory from activating
     # game_class.command.execute("reload_fonts")
 
-    # showcase_hwnd_window_manager()
-
-    # get_mouse_position_on_click(debug_function)
-    # show_message("my message")
-    # result = prompt_for_folder("title")
-    debug_gui()
+    # debug_gui()
     # debug_hud_class()
-
+    debug_game_class()
+    
     # save_data()
     # print(f"result={result}")
 

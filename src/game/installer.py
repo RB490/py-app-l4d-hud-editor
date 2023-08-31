@@ -63,21 +63,34 @@ class GameInstaller:
         path = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         total_files, total_subdirs = count_files_and_dirs(path)
-        gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
-        gui.show()
+        p_gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
+        p_gui.show()
 
         for root, dirs, files in os.walk(path, topdown=False):
             for file_name in files:
                 file_path = os.path.join(root, file_name)
-                gui.update_progress(f"Deleting: '{file_path}'")
+                p_gui.update_progress(f"Deleting: '{file_path}'")
                 os.remove(file_path)
 
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
-                gui.update_progress(f"Deleting directory: '{dir_path}'")
+                p_gui.update_progress(f"Deleting directory: '{dir_path}'")
                 os.rmdir(dir_path)
 
-        gui.close()
+        p_gui.destroy()
+
+    def update(self):
+        "Update"
+        return self.common_installation_logic("update", InstallationState.VERIFYING_GAME, "Updating")
+
+    def repair(self):
+        "Repair"
+        return self.common_installation_logic("repair", InstallationState.EXTRACTING_PAKS, "Repairing")
+
+    def install(self):
+        "Install"
+        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
+        return self.common_installation_logic("install", current_state, "Installing")
 
     def common_installation_logic(self, action, resume_state, action_description):
         "Installation logic for repair/update/install"
@@ -119,8 +132,8 @@ class GameInstaller:
                 print(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
-        if not prompt_start(action, f"This will {action_description.lower()}"):
-            return False
+        # if not prompt_start(action, f"This will {action_description.lower()}"): # FIXME
+        #     return False
 
         # close game
         self.game.close()
@@ -158,19 +171,6 @@ class GameInstaller:
             show_message(f"{action_description} error: {err_info}", "error")
             return False
 
-    def update(self):
-        "Update"
-        return self.common_installation_logic("update", InstallationState.VERIFYING_GAME, "Updating")
-
-    def repair(self):
-        "Repair"
-        return self.common_installation_logic("repair", InstallationState.EXTRACTING_PAKS, "Repairing")
-
-    def install(self):
-        "Install"
-        current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
-        return self.common_installation_logic("install", current_state, "Installing")
-
     def __process_installation_steps(self, resume_state):
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
@@ -181,8 +181,8 @@ class GameInstaller:
             InstallationState.INSTALLING_MODS,
             InstallationState.REBUILDING_AUDIO,
         ]
-        gui = ProgressGUI("Installing", 600, 60, len(installation_steps))  # Create the GUI instance
-        gui.show()
+        p_gui = ProgressGUI("Installing", 600, 60, len(installation_steps))  # Create the GUI instance
+        p_gui.show()
 
         # Find the index of the last completed step or set to 0 if resume_state is not in installation_steps
         if resume_state not in installation_steps:
@@ -194,18 +194,18 @@ class GameInstaller:
             # Perform installation steps starting from the next step after the last completed one
             for _, state in enumerate(installation_steps[last_completed_index:]):
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
-                gui.update_progress(state.name)
+                p_gui.update_progress(state.name)
                 self.__perform_installation_step(state)
                 time.sleep(2)  # artifically was some amount of time so very short steps are still visible in gui
 
             # close progress gui
-            gui.close()
+            p_gui.destroy()
 
             # Update installation state to completed
             self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
             return True
         except Exception as err_info:
-            gui.close()
+            p_gui.destroy()
             raise InstallationError(f"Installation step error: {err_info}") from err_info
 
     def __perform_installation_step(self, state):
