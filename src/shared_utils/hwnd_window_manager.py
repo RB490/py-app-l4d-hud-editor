@@ -3,6 +3,7 @@ This module provides a utility class for managing windows using their HWND (hand
 including methods to check process status, retrieve focused HWND, get executable name, move windows, and focus windows.
 """
 # pylint: disable=c-extension-no-member, broad-exception-caught, invalid-name, logging-fstring-interpolation
+import functools
 import logging
 import os
 import time
@@ -20,6 +21,19 @@ from shared_utils.logging_manager import LoggerManager
 logger_manager = LoggerManager(__name__, level=logging.WARNING)  # Pass the desired logging level
 # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # turns off
 logger = logger_manager.get_logger()  # Get the logger instance
+
+
+def hwnd_is_running_check(func):
+    "Check if hwnd is running"
+
+    @functools.wraps(func)
+    def wrapper(self, hwnd, *args, **kwargs):
+        if not self.running(hwnd):
+            print(f"Window {hwnd} is not running!")
+            return None
+        return func(self, hwnd, *args, **kwargs)
+
+    return wrapper
 
 
 class HwndWindowUtils:
@@ -105,9 +119,9 @@ class HwndWindowUtils:
 
     def running(self, hwnd):
         """Confirm whether hwnd is running. Also works if invisible"""
-        
-        
-        
+        if not hwnd:
+            return False
+
         process_executable = None  # Initialize the variable before the try block
         try:
             _, pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -128,6 +142,7 @@ class HwndWindowUtils:
 
         return self.running(hwnd)
 
+    @hwnd_is_running_check
     def move(self, hwnd, position="Center"):
         """
         Move a window (specified by its hwnd) to the desired position on the screen.
@@ -141,9 +156,6 @@ class HwndWindowUtils:
         Raises:
             ValueError: If the position format is invalid.
         """
-        # Verify hwnd param
-        if not self.running(hwnd):
-            return None
 
         predefined_positions = {
             "Center": (0.5, 0.5),
@@ -185,6 +197,7 @@ class HwndWindowUtils:
         window_executable = os.path.basename(psutil.Process(pid).exe())
         print(f"Moved '{window_executable}' to position ({win_x}, {win_y})")
 
+    @hwnd_is_running_check
     def focus(self, hwnd):
         # pylint: disable=c-extension-no-member
         """
@@ -198,11 +211,6 @@ class HwndWindowUtils:
             game_app = Application().connect(handle=game_hwnd)
             game_app.top_window().set_focus()
         """
-
-        # Verify hwnd param
-        if not self.running(hwnd):
-            print("Invalid window handle!")
-            return None
 
         # Set the window to the foreground
         try:
