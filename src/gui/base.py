@@ -4,10 +4,10 @@ import logging
 import tkinter as tk
 from typing import Callable, Optional, Union
 
-from shared_utils.logging_manager import LoggerManager
+from shared_utils.logging_manager import LoggingManager
 
-logger_manager = LoggerManager(__name__, level=logging.INFO)
-logger = logger_manager.get_logger()
+logging_manager = LoggingManager(__name__, level=logging.INFO)
+log = logging_manager.get_logger()
 
 
 # Define constants for GUI types
@@ -108,7 +108,7 @@ class BaseGUI:
             raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
 
         self.has_been_run = True
-        logger.info(f"Running GUI {self.root.title()}")
+        log.info(f"Running GUI {self.root.title()}")
 
         # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
         if self.gui_type == GUITypes.MAIN:
@@ -121,7 +121,7 @@ class BaseGUI:
         """Destroy the window."""
         if not self.is_destroyed:
             self.__call_save_window_geometry()
-            self.__call_method_if_exists("on_destroy") # call this before the actual destroy can't invoke "wm" command
+            self.__call_method_if_exists("on_destroy")  # call this before the actual destroy can't invoke "wm" command
             self.root.update()  # Fixes "can't invoke 'event' command: application has been destroyed" error
             self.root.destroy()
             self.is_destroyed = True
@@ -152,7 +152,7 @@ class BaseGUI:
             transparency (float): The transparency value (0.0 to 1.0).
         """
         self.root.attributes("-alpha", transparency)
-        logger.info(f"{self.root.title()} GUI Transparency set to {transparency}")
+        log.info(f"{self.root.title()} GUI Transparency set to {transparency}")
 
     def set_decorations(self, show_decorations: bool) -> None:
         """
@@ -164,9 +164,9 @@ class BaseGUI:
         self.root.overrideredirect(not show_decorations)
         if show_decorations:
             self.root.attributes("-fullscreen", False)
-            logger.info(f"{self.root.title()} GUI Window decorations are now visible.")
+            log.info(f"{self.root.title()} GUI Window decorations are now visible.")
         else:
-            logger.info(f"{self.root.title()} GUI Window decorations are now hidden.")
+            log.info(f"{self.root.title()} GUI Window decorations are now hidden.")
 
     def set_window_geometry(self, geometry: str) -> None:
         """
@@ -177,9 +177,9 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
-            logger.info(f"Set {self.root.title()} GUI to '{geometry}'!")
+            log.info(f"Set {self.root.title()} GUI to '{geometry}'!")
         except Exception:
-            logger.exception(f"Error setting {self.root.title()} GUI geometry")
+            log.exception(f"Error setting {self.root.title()} GUI geometry")
             self.root.geometry("1000x1000+100+100")
 
     def get_window_geometry(self) -> str:
@@ -187,10 +187,10 @@ class BaseGUI:
 
         if self.has_been_run:
             geometry = self.root.geometry()
-            logger.info(f"{self.root.title()} GUI geometry: {geometry}")
+            log.info(f"{self.root.title()} GUI geometry: {geometry}")
             return geometry
         else:
-            logger.warning(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
+            log.warning(f"{self.root.title()} GUI is NOT running. Returning default geometry.")
             return "1000x1000+100+100"
 
     def set_always_on_top(self, status: bool) -> None:
@@ -214,7 +214,7 @@ class BaseGUI:
             self.show()
         else:
             self.hide()
-        logger.info(f"{self.root.title()} GUI visibility toggled.")
+        log.info(f"{self.root.title()} GUI visibility toggled.")
 
     def set_hotkey(self, key_combination: str, callback: Callable, widget: Optional[tk.Widget] = None) -> None:
         """
@@ -251,6 +251,6 @@ class BaseGUI:
         if hasattr(self, method_name) and callable(getattr(self, method_name)):
             method = getattr(self, method_name)
             method()
-            logger.info(f"Called {method_name} for {self.root.title()} GUI.")
+            log.info(f"Called {method_name} for {self.root.title()} GUI.")
         else:
-            logger.info(f"GUI {self.root.title()} does not have a {method_name} method to call!")
+            log.info(f"GUI {self.root.title()} does not have a {method_name} method to call!")

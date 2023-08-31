@@ -32,7 +32,7 @@ from shared_utils.hwnd_window_manager import (
     HwndWindowUtils,
     showcase_hwnd_window_manager,
 )
-from shared_utils.logging_manager import LoggerManager, logging_class_usage_example
+from shared_utils.logging_manager import LoggingManager, logging_class_usage_example
 from shared_utils.shared_utils import show_message
 from shared_utils.splash_gui import splash_gui_example
 from tests.test_hud_syncer import unit_test_hud_syncer

@@ -1,8 +1,8 @@
 ✔ Refactor: ProgressGUI: Add logging @done(23-08-31 22:59)
+✔ Refactor: Better naming for logging manager & logger variable? @done(23-08-31 23:01)
 Current:
 
 Todo:
-	☐ Refactor: Better naming for logging manager & logger variable?
 	☐ Refactor: Add logging
 	
 	☐ Testing: Test the program by using it to edit HUD's

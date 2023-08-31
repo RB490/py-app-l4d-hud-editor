@@ -2,7 +2,7 @@
 import logging
 
 
-class LoggerManager:
+class LoggingManager:
     """
     LoggerManager class that manages a logger instance.
 
@@ -19,8 +19,8 @@ class LoggerManager:
 
     def setup_logging(self, level):
         """Configures the logger with a console handler and sets the logging format."""
-        self.logger = logging.getLogger(self.logger_name)
-        self.logger.setLevel(level)
+        self.log = logging.getLogger(self.logger_name)
+        self.log.setLevel(level)
         console_handler = logging.StreamHandler()
         console_handler.setLevel(level)
 
@@ -34,7 +34,7 @@ class LoggerManager:
         # 2023-08-28 23:38:59,448 - game.dir_id_handler - DEBUG - ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
 
         console_handler.setFormatter(formatter)
-        self.logger.addHandler(console_handler)
+        self.log.addHandler(console_handler)
 
     def get_logger(self):
         """Returns the logger instance."""
@@ -45,19 +45,19 @@ def logging_class_usage_example():
     """
     Example of using the LoggerManager to log messages.
     """
-    # logger_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
-    # logger_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
+    # logging_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
+    # logging_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
+    # logging_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
     # Get the logger instance
-    logger_manager = LoggerManager(__name__, level=logging.WARNING)
-    logger = logger_manager.get_logger()
+    logging_manager = LoggingManager(__name__, level=logging.WARNING)
+    log = logging_manager.get_logger()
 
     # Log messages at different levels
-    logger.debug("This is a debug message")
-    logger.info("This is an info message")
-    logger.warning("This is a warning message")
-    logger.error("This is an error message")
-    logger.critical("This is a critical message")
+    log.debug("This is a debug message")
+    log.info("This is an info message")
+    log.warning("This is a warning message")
+    log.error("This is an error message")
+    log.critical("This is a critical message")
 
 
 # Call the usage example function

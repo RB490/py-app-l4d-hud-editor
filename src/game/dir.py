@@ -7,7 +7,7 @@ import shutil
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
-from shared_utils.logging_manager import LoggerManager
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory, verify_directory
 from shared_utils.splash_gui import SplashGUI
 from utils.functions import (
@@ -18,8 +18,8 @@ from utils.functions import (
 )
 from utils.steam_info_retriever import SteamInfoRetriever
 
-logger_manager = LoggerManager(__name__, level=logging.INFO)
-logger = logger_manager.get_logger()
+logging_manager = LoggingManager(__name__, level=logging.INFO)
+log = logging_manager.get_logger()
 
 
 class GameDir:
@@ -42,7 +42,7 @@ class GameDir:
         "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
 
-        logger.debug(f"Setting mode: {dir_mode.name}")
+        log.debug(f"Setting mode: {dir_mode.name}")
 
         # retrieving source & target dir with self.get also already checks whether they are installed
         rename_timeout = 6
@@ -63,7 +63,7 @@ class GameDir:
 
         # do we need to swap?
         if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
-            logger.debug(f"{target_mode.name} already active!")
+            log.debug(f"{target_mode.name} already active!")
             return True
 
         # close game
@@ -147,7 +147,7 @@ class GameDir:
             if os.path.isdir(folder_path):
                 id_path = os.path.join(folder_path, id_filename)
                 if os.path.isfile(id_path):
-                    logger.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
+                    log.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
                     return folder_path
 
         print(f"No installation directory found for mode '{dir_mode}'.")
@@ -241,7 +241,7 @@ class GameDir:
     def restore_developer_directory(self):
         "Restore developer game files using backup"
 
-        logger.debug("Restoring developer game files")
+        log.debug("Restoring developer game files")
 
         try:
             splash = SplashGUI("Restoring...", "Restoring game files..")
@@ -265,7 +265,7 @@ class GameDir:
 
             # finish up
             splash.destroy()
-            logger.warning("Restored developer game files!")
+            log.warning("Restored developer game files!")
             return True
         except Exception as err_info:
             splash.destroy()
@@ -273,10 +273,10 @@ class GameDir:
 
     def disable_any_enabled_pak01s(self):
         """Check if developer directory has any pak01's enabled"""
-        logger.debug("Disabling all pak01_dir.vpk's...")
+        log.debug("Disabling all pak01_dir.vpk's...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
+            log.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
             return None
 
         dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
@@ -291,9 +291,9 @@ class GameDir:
             if file_name == "pak01_dir.vpk":
                 # Rename the file
                 os.rename(file_path, disabled_file_path)
-                logger.info(f"Disabled pak01_dir.vpk! '{file_path}' -> '{disabled_file_path}'")
+                log.info(f"Disabled pak01_dir.vpk! '{file_path}' -> '{disabled_file_path}'")
 
-        logger.debug("All developer directory pak01_dir.vpk's are disabled!")
+        log.debug("All developer directory pak01_dir.vpk's are disabled!")
         return False
 
     def check_for_invalid_id_file_structure(self):
@@ -308,10 +308,10 @@ class GameDir:
             Exception: If more than one of the same ID file is found in different folders.
         """
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            log.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
             return None
         if not self.game.installation_exists(DirectoryMode.USER):
-            logger.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
+            log.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
             return None
         steam_game_dir = self.steam.get_games_dir()
 

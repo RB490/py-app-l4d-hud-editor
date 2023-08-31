@@ -3,12 +3,13 @@ import logging
 import tkinter as tk
 
 from gui.base import BaseGUI
-from shared_utils.logging_manager import LoggerManager
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import show_message
 from utils.constants import APP_ICON
 
-logger_manager = LoggerManager(__name__, level=logging.WARNING)
-logger = logger_manager.get_logger()
+logging_manager = LoggingManager(__name__, level=logging.WARNING)
+log = logging_manager.get_logger()
+
 
 class ProgressGUI(BaseGUI):
     """A class representing a progress GUI window for installation."""
@@ -25,7 +26,7 @@ class ProgressGUI(BaseGUI):
         """
         super().__init__(gui_type="modal")
         self.root.title(action_description)
-        self.root.iconbitmap(APP_ICON) # type: ignore
+        self.root.iconbitmap(APP_ICON)  # type: ignore
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.height = 125
         self.root.geometry(f"{initial_width}x{self.height}")
@@ -115,15 +116,15 @@ class ProgressGUI(BaseGUI):
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
-        logger.debug()
-        logger.debug(f"Step #{self.current_step}")
-        logger.debug(f"self.longest_step_info() = {self.longest_label_length}")
-        logger.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
-        logger.debug(f"len(step_information) = {len(step_information)}")
-        logger.debug(f"max_chars = {max_chars}")
-        logger.debug(f"available_width = {available_width}")
-        logger.debug(f"displayed_text = {displayed_text}")
-        logger.debug()
+        log.debug()
+        log.debug(f"Step #{self.current_step}")
+        log.debug(f"self.longest_step_info() = {self.longest_label_length}")
+        log.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
+        log.debug(f"len(step_information) = {len(step_information)}")
+        log.debug(f"max_chars = {max_chars}")
+        log.debug(f"available_width = {available_width}")
+        log.debug(f"displayed_text = {displayed_text}")
+        log.debug()
 
         # update the gui
         self.step_info_label.config(text=displayed_text)

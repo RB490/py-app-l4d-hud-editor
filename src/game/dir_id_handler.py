@@ -6,12 +6,12 @@ import os
 from tkinter import filedialog
 
 from game.constants import DirectoryMode, InstallationState, SyncState
-from shared_utils.logging_manager import LoggerManager
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import is_subdirectory, show_message
 
 # Set logging configuration
-logger_manager = LoggerManager(__name__, level=logging.INFO)
-logger = logger_manager.get_logger()
+logging_manager = LoggingManager(__name__, level=logging.INFO)
+log = logging_manager.get_logger()
 
 
 class GameIDHandler:
@@ -34,17 +34,17 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
-            logger.info(f"Could not retrieve ID path for {dir_mode.name}.")
+            log.info(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
         id_path = os.path.join(mode_dir, self._get_filename(dir_mode))
-        logger.debug(f"ID Path: {id_path}")
+        log.debug(f"ID Path: {id_path}")
         return id_path
 
     def set_path(self, dir_mode):
         """Manually set the directory for a given directory mode."""
 
-        logger.info(f"Manually setting directory for: {dir_mode.name}")
+        log.info(f"Manually setting directory for: {dir_mode.name}")
 
         try:
             self.game._validate_dir_mode(dir_mode)
@@ -128,17 +128,17 @@ class GameIDHandler:
         id_path = self.__get_path(dir_mode)
 
         if id_path is None:
-            logger.debug(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
+            log.debug(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
             return default_value
 
         state_data = self.__read_content(id_path)
         state_value = state_data.get(state_key)
 
         if state_value is None:
-            logger.debug(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
+            log.debug(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
             return default_value
 
-        logger.debug(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
+        log.debug(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
         return state_value
 
     def __set_state(self, dir_mode, state_key, state_value):
@@ -150,7 +150,7 @@ class GameIDHandler:
         state_data = self.__read_content(id_path)
         state_data[state_key] = state_value.name if state_value is not None else None
         self.__write_content(dir_mode, state_data)
-        logger.debug(f"Updated {state_key} state to: '{state_value.name}'")
+        log.debug(f"Updated {state_key} state to: '{state_value.name}'")
 
     def __read_content(self, id_path):
         """Read and return the content of the ID file."""
@@ -159,7 +159,7 @@ class GameIDHandler:
                 with open(id_path, "r", encoding="utf-8") as file_handle:
                     return json.load(file_handle)
         except Exception as err:
-            logger.error(f"Error reading ID content: {err}")
+            log.error(f"Error reading ID content: {err}")
         return {}  # Fallback to empty json
 
     def __write_content(self, dir_mode, state_data):
@@ -172,7 +172,7 @@ class GameIDHandler:
         try:
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump(state_data, file_handle, indent=4)
-                logger.debug(f"Set ID content in: {id_path}")
+                log.debug(f"Set ID content in: {id_path}")
                 return True
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
