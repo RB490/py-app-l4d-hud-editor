@@ -164,14 +164,14 @@ class GameInstaller:
 
         # perform installation steps
         try:
-            self.__process_installation_steps(resume_state)
+            self.__process_installation_steps(resume_state, action_description)
             show_message(f"Finished {action_description.lower()}!", "info")
             return True
         except Exception as err_info:
             show_message(f"{action_description} error: {err_info}", "error")
             return False
 
-    def __process_installation_steps(self, resume_state):
+    def __process_installation_steps(self, resume_state, action_description):
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
             InstallationState.COPYING_FILES,
@@ -190,7 +190,7 @@ class GameInstaller:
 
         # show progress gui
         total_steps = len(installation_steps) - last_completed_index
-        p_gui = ProgressGUI("Installing", 600, 60, total_steps)  # Create the GUI instance
+        p_gui = ProgressGUI(action_description, 600, 60, total_steps)  # Create the GUI instance
         p_gui.show()
 
         try:

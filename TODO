@@ -6,13 +6,13 @@
 ✔ Bug: Installer closing progress gui instead of destroying @done(23-08-31 09:00)
 ✔ Bug: Repairing error one small vdf file extract cancels all @done(23-08-31 09:19) raising specific file extarcting error and catching it
 ✔ Bug: Installer: Starting the installer @ repairing still has all the 7 repair steps instead of the reminaing ones @done(23-08-31 10:11)
+✔ Bug: Installer: When repairing the progress gui still says installing @done(23-08-31 10:13)
 
 Current:
 	
 Todo:
 	---------------------------
 
-	☐ Bug: Installer: When repairing the progress gui still says installing
 
 	☐ Feature: Write my own VPK extract/create class. Creaton: the VPK module doesn't handle left4dead2_dlc3 properly and the way it is coded you can't suppress the error and continue extracting. it just stops extracting
 		- Be sure to save my 'old' vpk module class as an example and add proper documentating of this issue
