@@ -10,6 +10,7 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
+from debug.hud import get_hud_debug_instance
 
 from game.game import Game
 from shared_utils.shared_utils import show_message
@@ -29,6 +30,8 @@ def get_browser_gui():
     if not start_gui.get_mainloop_started():
         raise ValueError("Retrieved browser GUI without having started mainloop() first")
 
+
+    h = get_hud_debug_instance()
     browser_gui = GuiHudBrowser(start_gui.root)
     browser_gui.treeview_refresh(browser_gui.treeview)
     browser_gui.show()

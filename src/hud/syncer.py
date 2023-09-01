@@ -239,9 +239,9 @@ class HudSyncer(metaclass=Singleton):
                 if overwrite_target:
                     try:
                         shutil.copy(item, target_item)
-                        log.info(f"Copying: {item} -> {target_item}")
+                        log.debug(f"Copying: {item} -> {target_item}")
                     except Exception as e:
-                        # log.info(f"Error copying {item} to {target_item}: {e}")
+                        log.warning(f"Error copying {item} to {target_item}: {e}")
                         raise Exception(f"Error copying {item} to {target_item}: {e}") from e
 
     def __remove_deleted_source_items(self):

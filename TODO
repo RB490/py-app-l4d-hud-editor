@@ -1,10 +1,25 @@
 ✔ Refactor: ProgressGUI: Add logging @done(23-08-31 22:59)
 ✔ Refactor: Better naming for logging manager & logger variable? @done(23-08-31 23:01)
+✔ Bug: Start -> Edit hud -> Browser does not have the hud loaded (it does load when i manually do something like reload it) @done(23-09-01 10:22)
 Current:
 
 Todo:
-	☐ Refactor: Add logging
+	☐ Bug: Start -> Edit hud -> hud.syncer is trying to sync 'VideoConfig'? as in the object?
 	
+	☐ Bug: Hotkeys: Hotkeys randomly stop working. F8 to open the editor menu -> press close option -> hotkeys stop working. so instead of do_nothing it should destroy the gui?
+		- ^ well, if needed, could always disable entirely. or have some way to reset the hotkey in the class or ask gpt etc
+
+		- ^ so, it's definetly caused by the popup gui hotkey. if the hotkeys stop working, and i show and hide the popup gui again, the hotkeys continue working just fine
+	☐ Bug: Hotkeys: Pressing the show editor menu hotkey while the editor menu is shown causes the show browser hotkey to stop working entirely
+
+	☐ Bug: VPK/installer: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
+		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
+
+	☐ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa?
+	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
+	
+	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
+
 	☐ Testing: Test the program by using it to edit HUD's
 
 	☐ Post: Idea: Threading (GUI) for lengthy operations such as shutil.rmtree mostly during install (Adds complexity) to prevent GUI's from freezing

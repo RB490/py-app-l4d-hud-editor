@@ -1,5 +1,6 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, c-extension-no-member
 """Module for the hud browser gui class"""
+import logging
 import os
 import tkinter as tk
 from datetime import datetime
@@ -18,6 +19,7 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.hotkey_manager import HotkeyManager
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import (
     APP_ICON,
@@ -31,6 +33,10 @@ from utils.functions import (
     save_and_exit_script,
 )
 from utils.persistent_data_manager import PersistentDataManager
+
+
+logging_manager = LoggingManager(__name__, level=logging.WARNING)
+log = logging_manager.get_logger()
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -326,6 +332,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """
         # don't update tree until has been run
         if not self.get_mainloop_started():
+            log.warning("Not refreshing browser treeview! Mainloop has not been started")
             return
 
         # Get HUD directory and display choice

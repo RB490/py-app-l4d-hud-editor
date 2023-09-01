@@ -69,7 +69,8 @@ def execute_debugging_hotkey_method_in_thread():
 def hotkey_debugging_method():
     "debug hotkey"
     print("hotkey_debugging_method!")
-    debug_popup_gui()
+    # debug_popup_gui()
+    browser = get_browser_gui()
 
 
 def debug_main():
@@ -77,9 +78,9 @@ def debug_main():
     os.system("cls")  # clear terminal
     print("Started debugging!")
     # hotkeys
-    # hotkey_manager = HotkeyManager()
+    hotkey_manager = HotkeyManager()
     # hotkey_manager.add_hotkey("CTRL+S", hotkey_debugging_method, suppress=True)
-    # hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
+    hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
     # hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
     # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)
     # return
@@ -106,9 +107,9 @@ def debug_main():
 
     # debug_vpk_class()
 
-    # debug_gui()
+    debug_gui()
     # debug_hud_class()
-    debug_game_class()
+    # debug_game_class()
     # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
     # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()
@@ -129,7 +130,6 @@ def debug_hud_class():
     # result = hud.edit.get_files_dict()
     h.edit.start_editing(h.edit.get_dir())
     # h.edit.sync()
-
 
 def debug_unsync_hud_func():
     "debug"

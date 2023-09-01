@@ -52,7 +52,7 @@ HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json"
 
 BACKUP_APPEND_STRING: str = ".hud_dev_backup"
 UNIVERSAL_GAME_MAP: str = "hud_dev_map"
-HOTKEY_SYNC_HUD: str = "CTRL+S"
+HOTKEY_SYNC_HUD: str = "CTRL+R"
 HOTKEY_EXECUTE_AUTOEXEC: str = "F11"
 HOTKEY_EDITOR_MENU: str = "F8"
 HOTKEY_TOGGLE_BROWSER: str = "F7"

@@ -19,8 +19,8 @@ class LoggingManager:
 
     def setup_logging(self, level):
         """Configures the logger with a console handler and sets the logging format."""
-        self.log = logging.getLogger(self.logger_name)
-        self.log.setLevel(level)
+        self.logger = logging.getLogger(self.logger_name)
+        self.logger.setLevel(level)
         console_handler = logging.StreamHandler()
         console_handler.setLevel(level)
 
@@ -34,7 +34,7 @@ class LoggingManager:
         # 2023-08-28 23:38:59,448 - game.dir_id_handler - DEBUG - ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
 
         console_handler.setFormatter(formatter)
-        self.log.addHandler(console_handler)
+        self.logger.addHandler(console_handler)
 
     def get_logger(self):
         """Returns the logger instance."""
