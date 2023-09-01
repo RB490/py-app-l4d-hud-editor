@@ -61,8 +61,8 @@ def debug_descriptions_gui():
     descriptions_gui = descriptions.GuiHudDescriptions(root)
     descriptions_gui.load_file("scripts\\hudlayout.res")
     # descriptions_gui.show()
-    # descriptions_gui.hud.desc.remove_entry("scripts\\custom_hudlayout.res")
-    # descriptions_gui.load_file("scripts\\custom_hudlayout.res")
+    # descriptions_gui.hud.desc.remove_entry("custom_hudlayout.res")
+    # descriptions_gui.load_file("custom_hudlayout.res")
 
 
 def debug_start_gui():

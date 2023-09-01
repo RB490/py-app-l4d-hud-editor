@@ -122,6 +122,12 @@ class HudDescriptions(metaclass=Singleton):
         log.debug(f"Retrieved description for file name '{file_name}': {description}")
         return description
 
+    def get_file_relative_path(self, file_name):
+        """Get information"""
+        relative_path = self.data.get(file_name, {}).get("file_relative_path", "")
+        log.debug(f"Retrieved relative path for file name '{file_name}': {relative_path}")
+        return relative_path
+
     def get_custom_file_status(self, file_name):
         """
         Check if a file has a custom status based on the given file name.

@@ -324,17 +324,14 @@ class VDFModifier:
 
         modified_vdf_obj: Dict[str, Dict[str, Any]] = vdf_obj.copy()
         file_name: str = self.get_file_name()
-        rel_path: str = self.__get_relative_path(file_name)
+        rel_path: str = self.hud.desc.get_file_relative_path(file_name)
 
         for controls in modified_vdf_obj.values():
             for control_name, control_data in controls.items():
-                control_data[self.description_key_name] = self.hud.desc.get_control_description(rel_path, control_name)
+                control_data[self.description_key_name] = self.hud.desc.get_control_description(file_name, control_name)
 
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
-
-    def __get_relative_path(self, file_name):
-        return self.game.dir.get_resource_file_relative_path(file_name)
 
     def __get_header_file_name(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
         """

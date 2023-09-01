@@ -220,9 +220,9 @@ def debug_id_handler(game_class):
 def debug_hud_descriptions_class():
     print("hi there!")
     desc = HudDescriptions()
-    rel_path = "scripts\\hudlayout.res"
-    # result = desc.get_control_description(rel_path, "HudWeaponSelection")
-    result = desc.get_control_description(rel_path, "CHudZombieTeamDisplay")
+    file_name = "hudlayout.res"
+    # result = desc.get_control_description(file_name, "HudWeaponSelection")
+    result = desc.get_control_description(file_name, "CHudZombieTeamDisplay")
 
     print(f"desc result = {result}")
 

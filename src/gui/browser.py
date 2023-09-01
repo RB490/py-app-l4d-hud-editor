@@ -342,7 +342,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             # Calculate file path
             file_path = os.path.join(hud_dir, file_relative_path)
             # Determine if file is custom based on developer mode
-            is_custom = "Y" if self.hud.desc.get_custom_file_status(file_relative_path) else "N"
+            is_custom = "Y" if self.hud.desc.get_custom_file_status(file_name) else "N"
 
             # Calculate last modified timestamp and image path
             last_modified = "not_added"
