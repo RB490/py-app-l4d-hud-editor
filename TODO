@@ -1,10 +1,18 @@
 ✔ Refactor: ProgressGUI: Add logging @done(23-08-31 22:59)
 ✔ Refactor: Better naming for logging manager & logger variable? @done(23-08-31 23:01)
 ✔ Bug: Start -> Edit hud -> Browser does not have the hud loaded (it does load when i manually do something like reload it) @done(23-09-01 10:22)
+✘ Bug: Start -> Edit hud -> hud.syncer is trying to sync 'VideoConfig'? as in the object? @cancelled(23-09-01 10:24) doesn't do it right now
+✔ Bug: VDF -> Annotate -> can't add or reetrieve descriptions. i had a file with Resource\Hudlayout.res // do i want to write code to look for the resource file in the resource folder? // do i want to use the file's location in the actual hud instead? or both? @done(23-09-01 11:09)
 Current:
 
 Todo:
-	☐ Bug: Start -> Edit hud -> hud.syncer is trying to sync 'VideoConfig'? as in the object?
+	☐ Feature: game.dir.find_resource_file
+	
+	☐ Feature: Do i want to modify my descriptions json structure? Save relative path as a subkey found with the function i just created. seems better in many ways actually. then add a method for retrieving relative path
+		- ^ in fact, i probably don't even need relative path at any one point?
+		- ^ definetly do this
+
+	☐ Bug: Desc -> HudWeaponSelection is missing? didn't i have this registered before?
 	
 	☐ Bug: Hotkeys: Hotkeys randomly stop working. F8 to open the editor menu -> press close option -> hotkeys stop working. so instead of do_nothing it should destroy the gui?
 		- ^ well, if needed, could always disable entirely. or have some way to reset the hotkey in the class or ask gpt etc

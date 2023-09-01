@@ -18,7 +18,7 @@ def debug_game_class():
     # Installer
     ###########################
     # result = gamez.installer.install()
-    result = gamez.installer.repair()
+    # result = gamez.installer.repair()
     # result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
@@ -65,6 +65,9 @@ def debug_game_class():
     # result = gamez.dir.check_for_invalid_id_file_structure()
 
     # result = gamez.dir.dev_out_of_date()
+
+    result = gamez.dir.get_resource_file_relative_path("clientscheme_borders.res")
+    result = gamez.dir.get_resource_file_relative_path("hudlayout.res")
 
     ###########################
     # Result

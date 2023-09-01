@@ -18,10 +18,13 @@ class VDFModifier:
 
     def __init__(self, vdf_path: str = "") -> None:
         from hud.hud import Hud
+        from game.game import Game
 
+        self.game = Game()  # type: ignore
         self.hud = Hud()  # type: ignore
         self.description_key_name: str = "__description__"
         self.vdf_text_raw: str = ""
+        self.vdf_file_name: str = ""
         self.key_order: List[str] = [
             self.description_key_name,
             "fieldname",
@@ -105,6 +108,14 @@ class VDFModifier:
         """Return the source VDF path."""
         return self.vdf_path
 
+    def get_file_name(self) -> str:
+        """Return the source file name."""
+        return self.vdf_file_name
+
+    def _set_file_name(self, vdf_obj) -> None:
+        """Return the source file name."""
+        self.vdf_file_name = self.__get_header_file_name(vdf_obj)
+
     def print_current_vdf(self) -> None:
         """Print the current VDF object."""
         if self.vdf_obj:
@@ -127,6 +138,7 @@ class VDFModifier:
             cleaned_vdf_obj = self.__preprocess_obj(cleaned_vdf_obj)  # type: ignore
             # cleaned_vdf_obj = self.annotate(cleaned_vdf_obj)
             # cleaned_vdf_obj = self.sort_controls(cleaned_vdf_obj)
+            self._set_file_name(cleaned_vdf_obj)
             return cleaned_vdf_obj
         return None
 
@@ -311,8 +323,8 @@ class VDFModifier:
             raise ValueError("No VDF object loaded")
 
         modified_vdf_obj: Dict[str, Dict[str, Any]] = vdf_obj.copy()
-        rel_path: str = self.__get_relative_path(vdf_obj)
-        print(rel_path)
+        file_name: str = self.get_file_name()
+        rel_path: str = self.__get_relative_path(file_name)
 
         for controls in modified_vdf_obj.values():
             for control_name, control_data in controls.items():
@@ -320,6 +332,28 @@ class VDFModifier:
 
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
+
+    def __get_relative_path(self, file_name):
+        return self.game.dir.get_resource_file_relative_path(file_name)
+
+    def __get_header_file_name(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
+        """
+        Get relative file path. Aka the file header for every resource file.
+
+        Args:
+            vdf_obj (Dict[str, Dict[str, Any]]): The VDF object to get the relative file path from.
+
+        Returns:
+            str: The modified relative file path.
+        """
+        if not vdf_obj:
+            raise ValueError("No VDF object loaded")
+
+        first_key: str = next(iter(vdf_obj))
+
+        modified_string: str = first_key.replace("/", "\\")
+        modified_string = os.path.basename(modified_string)
+        return modified_string
 
     def remove_annotations(self, vdf_obj: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
         """
@@ -342,26 +376,6 @@ class VDFModifier:
                     del control_data[self.description_key_name]
 
         return modified_vdf_obj
-
-    def __get_relative_path(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
-        """
-        Get relative file path. Aka the file header for every resource file.
-
-        Args:
-            vdf_obj (Dict[str, Dict[str, Any]]): The VDF object to get the relative file path from.
-
-        Returns:
-            str: The modified relative file path.
-        """
-        if not vdf_obj:
-            raise ValueError("No VDF object loaded")
-
-        first_key: str = next(iter(vdf_obj))
-
-        modified_string: str = first_key.replace("/", "\\")
-        if "hudlayout" in modified_string:
-            modified_string = modified_string.replace("resource", "scripts")
-        return modified_string
 
     def sort_control_keys(self, vdf_obj: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
         """

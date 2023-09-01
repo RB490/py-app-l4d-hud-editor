@@ -26,6 +26,7 @@ from game.installer_prompts import prompt_start
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
+from hud.descriptions import HudDescriptions
 from hud.hud import Hud
 from shared_utils.hotkey_manager import HotkeyManager, showcase_hotkey_manager
 from shared_utils.hwnd_window_manager import (
@@ -105,11 +106,12 @@ def debug_main():
     # hwnd_utils.wait_close(result)
     # hwnd_utils.close(result)
 
-    # debug_vpk_class()
 
     debug_gui()
     # debug_hud_class()
     # debug_game_class()
+    # debug_vpk_class()
+    # debug_hud_descriptions_class()
     # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
     # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()
@@ -130,6 +132,7 @@ def debug_hud_class():
     # result = hud.edit.get_files_dict()
     h.edit.start_editing(h.edit.get_dir())
     # h.edit.sync()
+
 
 def debug_unsync_hud_func():
     "debug"
@@ -164,10 +167,10 @@ def debug_gui():
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # vdf gui
-    # debug_vdf_gui()
+    debug_vdf_gui()
 
     # descriptions
     # debug_descriptions_gui()
@@ -180,6 +183,15 @@ def debug_gui():
 
     # installer
     # debug_progress_gui()
+
+
+def debug_hud_descriptions_class():
+    print("hi there!")
+    desc = HudDescriptions()
+    rel_path = "scripts\\hudlayout.res"
+    result = desc.get_control_description(rel_path, "HudWeaponSelection")
+
+    print(f"desc result = {result}")
 
 
 def debug_id_handler(game_class):
