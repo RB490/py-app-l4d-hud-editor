@@ -34,8 +34,8 @@ from utils.functions import (
 )
 from utils.persistent_data_manager import PersistentDataManager
 
-
-logging_manager = LoggingManager(__name__, level=logging.WARNING)
+logging_manager = LoggingManager(__name__, level=logging.DEBUG)
+# logging_manager = LoggingManager(__name__, level=logging.WARNING)
 log = logging_manager.get_logger()
 
 
@@ -63,7 +63,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.__create_context_menu()
 
         # Bind the function to the selection event
-        self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
+        self.treeview.bind("<<TreeviewSelect>>", self.treeview_set_selected_item)
 
         # Bind the context menu to the right-click event on the treeview
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
@@ -267,34 +267,17 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             # Show the context menu at the event's coordinates
             self.context_menu.post(event.x_root, event.y_root)
 
-    def treeview_get_selected_values(self):
-        """Get a list of the values of the selected treeview row"""
-
-        selection = self.treeview.selection()
-        if not selection:
-            return "No item selected"
-
-        item = self.treeview.selection()[0]
-        values = self.treeview.item(item)["values"]
-
-        return values
-
-    def treeview_set_selected_full_path(self):
-        """Retrieve selected treeview row path"""
-        relative_path = self.treeview_get_selected_relative_path()
-        full_path = os.path.join(self.hud.edit.get_dir(), relative_path)
-        self.selected_full_path = full_path if full_path else "No item selected"
-
-    def treeview_get_selected_relative_path(self):
+    def get_selected_file_name(self):
         "Treeview get info"
-        values = self.treeview_get_selected_values()
-        if values:
-            return values[4]
-        return None
+        return self.selected_file_name
 
     def get_selected_full_path(self):
         """Retrieve selected full path"""
         return self.selected_full_path
+
+    def get_selected_relative_path(self):
+        """Retrieve selected full path"""
+        return self.selected_relative_path
 
     def treeview_on_double_click(self, event):
         """Handle user double-clicks"""
@@ -304,20 +287,23 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             cell = self.treeview.identify_row(event.y)
             print("Double-clicked on row:", cell)
             # Perform your desired action here, e.g., open a file
-            self.tree_set_selected_item(cell)
+            self.treeview_set_selected_item(cell)
             if os.path.isfile(self.selected_full_path):
                 os.startfile(self.selected_full_path)
 
     # pylint: disable=unused-argument
-    def tree_set_selected_item(self, event):
+    def treeview_set_selected_item(self, event):
         """Get select item from treeview"""
         selected_item = self.treeview.selection()
         for item in selected_item:
-            # item_values = self.treeview.item(item)["values"]
-            # print(item_values)
-            rel_path = self.treeview.item(item)["values"][4]
-            self.selected_full_path = os.path.join(self.hud.edit.get_dir(), rel_path)
-            print(f"Selected full path: {self.selected_full_path}")
+            item_values = self.treeview.item(item)["values"]
+
+            self.selected_relative_path = item_values[4]
+            self.selected_full_path = os.path.join(self.hud.edit.get_dir(), self.selected_relative_path)
+            self.selected_file_name = item_values[0]
+            log.debug(f"Selected full path: {self.selected_full_path}")
+            log.debug(f"Selected relative path: {self.selected_relative_path}")
+            log.debug(f"Selected file name: {self.selected_file_name}")
 
     def treeview_refresh(self, treeview, search_term=None):
         """
@@ -450,7 +436,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             print("Unable to open game directory. Developer directory is not installed.")
             return
 
-        rel_path = self.treeview_get_selected_relative_path()
+        rel_path = self.get_selected_full_path()
         main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
         game_directory = os.path.join(main_dir, rel_path)
 
@@ -464,8 +450,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         "Treeview Handle 'Description' option"
         print("Method: treeview_description - TODO: Handle 'Description' option")
 
-        rel_path = self.treeview_get_selected_relative_path()
-        self.descriptions_gui.load_file(rel_path)
+        file_name = self.get_selected_file_name()
+        rel_path = self.get_selected_relative_path()
+        self.descriptions_gui.load_file(file_name, rel_path)
 
     def action_annotate(self):
         "Treeview Handle 'Annotate' option"

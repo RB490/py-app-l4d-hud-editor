@@ -1,4 +1,5 @@
 """Module for the hud file descriptions gui"""
+import os
 import tkinter as tk
 from tkinter import simpledialog
 
@@ -25,6 +26,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.img = ImageConstants()
 
         self.parent = parent_root
+        self.file_name = None
         self.relative_path = None
         self.unsaved_changes = False
         self.prev_file_desc_content = None
@@ -169,13 +171,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.ctrl_desc_text.edit_modified(False)
             print("Set unsaved changes to false!")
 
-    def load_file(self, relative_path):
+    def load_file(self, file_name, relative_path):
         """Load description for hud file into the gui"""
 
         # prompt to save unsaved changes
         self.prompt_to_save_unsaved_changes()
 
         # save relative path
+        self.file_name = file_name
         self.relative_path = relative_path
 
         # Check if the file has a custom status using the self.game.dir.is_custom_file function
@@ -184,13 +187,15 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # Set gui title with custom status if applicable
         if is_custom:
             custom_status = "Custom File"
+        elif is_custom == None:
+            custom_status = "New File"
         else:
             custom_status = "Vanilla File"
         self.root.title(f"{relative_path} ({custom_status})")
 
         # set file description
         self.file_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(relative_path))
+        self.file_desc_text.insert(tk.END, self.hud.desc.get_file_description(file_name))
 
         # load controls
         self.load_controls()
@@ -212,7 +217,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         """Load controls into option menu & load the first one"""
 
         # update the controls list and OptionMenu with new values
-        controls_list = self.hud.desc.get_controls(self.relative_path)
+        controls_list = self.hud.desc.get_controls(self.file_name)
 
         # controls available at all?
         if not controls_list:
@@ -233,18 +238,18 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # set control description
         self.ctrl_desc_text.delete("1.0", tk.END)  # delete all existing text
-        self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.relative_path, input_ctrl))
+        self.ctrl_desc_text.insert(tk.END, self.hud.desc.get_control_description(self.file_name, input_ctrl))
 
     def save_control_description(self):
         """Save control description"""
         selected_control = self.ctrl_menu_variable.get()
         control_desc = self.ctrl_desc_text.get("1.0", "end-1c")
-        self.hud.desc.set_control_description(self.relative_path, selected_control, control_desc)
+        self.hud.desc.set_control_description(self.file_name, selected_control, control_desc)
 
     def save_file_description(self):
         """Save file description"""
         file_description = self.file_desc_text.get("1.0", "end-1c")
-        self.hud.desc.set_file_description(self.relative_path, file_description)
+        self.hud.desc.set_file_description(self.file_name, file_description)
 
     def selected_ctrl(self, input_ctrl):
         """Handle control menu selection"""
@@ -267,22 +272,22 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.save_control_description()
 
             # Add control
-            self.hud.desc.add_control(self.relative_path, new_control)
+            self.hud.desc.add_control(self.file_name, new_control)
             self.load_controls()
             self.load_control(new_control)
             print(f"Added {new_control}")
 
     def remove_file_entry(self):
         """Remove control"""
-        if show_message(f"Are you sure you want to remove '{self.relative_path}'?", "yesno"):
-            self.hud.desc.remove_entry(self.relative_path)
+        if show_message(f"Are you sure you want to remove '{self.file_name}'?", "yesno"):
+            self.hud.desc.remove_entry(self.file_name)
             self.load_controls()
 
     def remove_control(self):
         """Remove control"""
         selected_control = self.ctrl_menu_variable.get()
         if show_message("Remove Control", f"Are you sure you want to remove '{selected_control}'?", "yesno"):
-            self.hud.desc.remove_control(self.relative_path, selected_control)
+            self.hud.desc.remove_control(self.file_name, selected_control)
             self.load_controls()
 
     def save_changes(self):
@@ -292,11 +297,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # save currently loaded control
         self.save_control_description()
+        
+        # save relative path
+        self.hud.desc.set_file_relative_path(self.file_name, self.relative_path)
 
         # Reset unsaved_changes flag
         self.set_unsaved_changes(False)
 
-        print(f"Saved descriptions for '{self.relative_path}'")
+        print(f"Saved descriptions for '{self.file_name}'")
 
     def submit_gui_save_changes(self):
         """Submit gui"""
@@ -313,7 +321,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         "Ask user whether to save unsaved changes"
         if self.unsaved_changes:
             response = show_message(
-                f"Do you want to save the unsaved changes made to '{self.relative_path}'?", "yesno", "Unsaved Changes"
+                f"Do you want to save the unsaved changes made to '{self.file_name}'?", "yesno", "Unsaved Changes"
             )
 
             if response:

@@ -4,15 +4,21 @@
 ✘ Bug: Start -> Edit hud -> hud.syncer is trying to sync 'VideoConfig'? as in the object? @cancelled(23-09-01 10:24) doesn't do it right now
 ✔ Bug: VDF -> Annotate -> can't add or reetrieve descriptions. i had a file with Resource\Hudlayout.res // do i want to write code to look for the resource file in the resource folder? // do i want to use the file's location in the actual hud instead? or both? @done(23-09-01 11:09)
 ✔ Feature: game.dir.find_resource_file @done(23-09-01 11:34)
+✔ Modify the hud descriptions class to use file_name as indicator @done(23-09-01 16:23)
 
 
 
 
 Current:
-	☐ Feature: game.dir.find_resource_file -> game.dir.get_file_relative_path
+	
 
-	☐ Modify the hud descriptions class to use file_name as indicator
+	☐ Feature: game.dir.find_resource_file -> game.dir.get_file_relative_path // wait, do i even need this function? doesn't browser already do this?
+
 	☐ Modify the hud descriptions class to save file_relative_path by comparing input file relative path & relative path in the header. and/or file_name in both
+
+	☐ Feature: Geometry saving & loading for descriptions gui
+	☐ Feature: Geometry saving & loading for vdf gui
+	☐ Feature: Geometry saving & loading for remaining main gui's
 
 Vdf:
 
