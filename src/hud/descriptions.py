@@ -154,7 +154,7 @@ class HudDescriptions(metaclass=Singleton):
     def save_to_disk(self):
         """Save persistent data to disk"""
         data = self.data
-        
+
         try:
             with open(HUD_DESCRIPTIONS_PATH, "w", encoding="utf-8") as file:
                 pretty_json = json.dumps(data, sort_keys=True, indent=4)

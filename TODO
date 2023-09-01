@@ -10,7 +10,6 @@
 
 
 Current:
-	
 
 	☐ Feature: game.dir.find_resource_file -> game.dir.get_file_relative_path // wait, do i even need this function? doesn't browser already do this?
 

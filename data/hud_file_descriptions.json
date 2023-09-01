@@ -193,7 +193,7 @@
     },
     "customHudSubFile.txt": {
         "file_control_descriptions": {},
-        "file_description": "my desc tah",
+        "file_description": "",
         "file_is_custom": true,
         "file_name": "customHudSubFile.txt",
         "file_relative_path": "customHudFolder\\customHudSubFile.txt"
@@ -416,11 +416,40 @@
         "file_relative_path": "resource\\ui\\hud\\hudholdouttimer.res"
     },
     "hudlayout.res": {
-        "file_control_descriptions": {},
-        "file_description": "Game icon definitions. Eg: game instructor icons",
+        "file_control_descriptions": {
+            "BuildableCostPanel": "Progressbar looking panel. Unused but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "CHudAbilityTimer": "Infected local player ability cooldown timer",
+            "CHudLocalPlayerDisplay": "Local player health hud section",
+            "CHudTeamDisplay": "Survivor teammate panels",
+            "CHudVote": "Vote hud",
+            "CHudZombieTeamDisplay": "Infected teammate panels",
+            "HudChat": "Unused by the game. Overwritten by basechat.res",
+            "HudCloseCaption": "Closed captions",
+            "HudCrosshair": "Infected crosshair properties",
+            "HudFinaleMeter": "'Rescue countdown' Unused panel but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "HudFrustrationMeter": "Tank frustration meter",
+            "HudHintDisplay": "Game instructor. But is hard coded. Font: InstructorTitle",
+            "HudHintKeyDisplay": "Game instructor. But is hard coded. Font: InstructorTitle",
+            "HudHoldoutTimer": "Survival round timer",
+            "HudIntensityGraph": "'Build_up' survivor meter Unused panel but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "HudLeavingAreaWarning": "(by default red) 'Please wait for your teammates' panel that sometimes shows at the start of a map",
+            "HudPZDamageRecord": "Kill feed eg: Player X killed smoker",
+            "HudProgressBar": "Progress bar. Healing/being healed, starting generator etc",
+            "HudScavengeProgress": "Scavenge gascan hud",
+            "HudScavengeTimer": "Scavenge round timer",
+            "HudSurvivalTimer": "Survival round timer",
+            "HudVoiceSelfStatus": "Local player voice chat icon",
+            "HudZombieHealth": "Local player infected health section",
+            "HudZombiePanel": "Infected Tank approaching / Too far from Survivors",
+            "HudZoom": "Sniper zoom hud. Unused since its now hardcoded but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "Option 1": "",
+            "PZEndGamePanel": "Infected rematch voting hud",
+            "PlayerLabel": "Survivor Player Label floating above their head. Everything is hard coded, however the 'alpha' key works"
+        },
+        "file_description": "Defines the positions of a variety of hud controls.",
         "file_is_custom": false,
         "file_name": "hudlayout.res",
-        "file_relative_path": "scripts\\mod_textures.txt"
+        "file_relative_path": "scripts\\hudlayout.res"
     },
     "hudscavengeprogress.res": {
         "file_control_descriptions": {},
@@ -564,6 +593,286 @@
         "file_name": "mainmenu.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\mainmenu.res"
     },
+    "materials\\sprites\\640_pain_down.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Damage indicator",
+        "file_is_custom": false,
+        "file_name": "640_pain_down.vtf",
+        "file_relative_path": "materials\\sprites\\640_pain_down.vtf"
+    },
+    "materials\\sprites\\640_pain_left.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Damage indicator",
+        "file_is_custom": false,
+        "file_name": "640_pain_left.vtf",
+        "file_relative_path": "materials\\sprites\\640_pain_left.vtf"
+    },
+    "materials\\sprites\\640_pain_right.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Damage indicator",
+        "file_is_custom": false,
+        "file_name": "640_pain_right.vtf",
+        "file_relative_path": "materials\\sprites\\640_pain_right.vtf"
+    },
+    "materials\\sprites\\640_pain_up.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Damage indicator",
+        "file_is_custom": false,
+        "file_name": "640_pain_up.vtf",
+        "file_relative_path": "materials\\sprites\\640_pain_up.vtf"
+    },
+    "materials\\vgui\\fonts\\buttons_32.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Iconsheet containing ping images and some console buttons",
+        "file_is_custom": false,
+        "file_name": "buttons_32.vtf",
+        "file_relative_path": "materials\\vgui\\fonts\\buttons_32.vtf"
+    },
+    "materials\\vgui\\hud\\800corner1.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Used to create corners for source panels such as the chat",
+        "file_is_custom": false,
+        "file_name": "800corner1.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\800corner1.vtf"
+    },
+    "materials\\vgui\\hud\\800corner2.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Used to create corners for source panels such as the chat",
+        "file_is_custom": false,
+        "file_name": "800corner2.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\800corner2.vtf"
+    },
+    "materials\\vgui\\hud\\800corner3.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Used to create corners for source panels such as the chat",
+        "file_is_custom": false,
+        "file_name": "800corner3.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\800corner3.vtf"
+    },
+    "materials\\vgui\\hud\\800corner4.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Used to create corners for source panels such as the chat",
+        "file_is_custom": false,
+        "file_name": "800corner4.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\800corner4.vtf"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_green.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture",
+        "file_is_custom": false,
+        "file_name": "healthbar_ticks_withglow_green.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_green.vtf"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_orange.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture",
+        "file_is_custom": false,
+        "file_name": "healthbar_ticks_withglow_orange.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_orange.vtf"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_red.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture",
+        "file_is_custom": false,
+        "file_name": "healthbar_ticks_withglow_red.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_red.vtf"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_white.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture (Not used by default)",
+        "file_is_custom": false,
+        "file_name": "healthbar_ticks_withglow_white.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_white.vtf"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_whiteSolid.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture (Not used by default)",
+        "file_is_custom": true,
+        "file_name": "healthbar_ticks_withglow_whiteSolid.vmt",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_whiteSolid.vmt"
+    },
+    "materials\\vgui\\hud\\healthbar_ticks_withglow_whiteSolid.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Health bar texture (Not used by default)",
+        "file_is_custom": true,
+        "file_name": "healthbar_ticks_withglow_whiteSolid.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\healthbar_ticks_withglow_whiteSolid.vtf"
+    },
+    "materials\\vgui\\hud\\iconsheet.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Weapon, ammo, item(pickups) and game instructor icons",
+        "file_is_custom": false,
+        "file_name": "iconsheet.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\iconsheet.vtf"
+    },
+    "materials\\vgui\\hud\\iconsheet2.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Weapon, ammo, item(pickups) and game instructor icons",
+        "file_is_custom": false,
+        "file_name": "iconsheet2.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\iconsheet2.vtf"
+    },
+    "materials\\vgui\\hud\\overlay_dead.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Local and teammate panels dead overlay",
+        "file_is_custom": false,
+        "file_name": "overlay_dead.vmt",
+        "file_relative_path": "materials\\vgui\\hud\\overlay_dead.vmt"
+    },
+    "materials\\vgui\\hud\\overlay_dead.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Local and teammate panels dead overlay",
+        "file_is_custom": false,
+        "file_name": "overlay_dead.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\overlay_dead.vtf"
+    },
+    "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegreen_glow.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Weapons hud background panel texture",
+        "file_is_custom": false,
+        "file_name": "scalablepanel_bgmidgrey_outlinegreen_glow.vmt",
+        "file_relative_path": "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegreen_glow.vmt"
+    },
+    "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegreen_glow.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Weapons hud background panel texture",
+        "file_is_custom": false,
+        "file_name": "scalablepanel_bgmidgrey_outlinegreen_glow.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegreen_glow.vtf"
+    },
+    "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegrey.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Weapons hud background panel texture",
+        "file_is_custom": false,
+        "file_name": "scalablepanel_bgmidgrey_outlinegrey.vmt",
+        "file_relative_path": "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegrey.vmt"
+    },
+    "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegrey.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Weapons hud background panel texture",
+        "file_is_custom": false,
+        "file_name": "scalablepanel_bgmidgrey_outlinegrey.vtf",
+        "file_relative_path": "materials\\vgui\\hud\\scalablepanel_bgmidgrey_outlinegrey.vtf"
+    },
+    "materials\\vgui\\s_panel_biker_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_biker_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_biker_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_biker_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_biker_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_biker_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_coach_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_coach_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_coach_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_coach_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_coach_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_coach_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_dead.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Dead survivor",
+        "file_is_custom": false,
+        "file_name": "s_panel_dead.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_dead.vtf"
+    },
+    "materials\\vgui\\s_panel_gambler_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_gambler_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_gambler_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_gambler_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_gambler_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_gambler_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_manager_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_manager_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_manager_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_manager_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_manager_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_manager_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_mechanic_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_mechanic_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_mechanic_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_mechanic_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_mechanic_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_mechanic_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_namvet_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_namvet_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_namvet_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_namvet_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_namvet_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_namvet_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_producer_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_producer_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_producer_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_producer_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_producer_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_producer_incap.vtf"
+    },
+    "materials\\vgui\\s_panel_teenangst_incap.vmt": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_teenangst_incap.vmt",
+        "file_relative_path": "materials\\vgui\\s_panel_teenangst_incap.vmt"
+    },
+    "materials\\vgui\\s_panel_teenangst_incap.vtf": {
+        "file_control_descriptions": {},
+        "file_description": "Incapped survivor texture",
+        "file_is_custom": false,
+        "file_name": "s_panel_teenangst_incap.vtf",
+        "file_relative_path": "materials\\vgui\\s_panel_teenangst_incap.vtf"
+    },
     "minimotd.res": {
         "file_control_descriptions": {},
         "file_description": "Tab scoreboard server mini motd",
@@ -626,6 +935,738 @@
         "file_is_custom": false,
         "file_name": "readycountdown.res",
         "file_relative_path": "resource\\ui\\readycountdown.res"
+    },
+    "resource\\chatscheme.res": {
+        "file_control_descriptions": {},
+        "file_description": "Chat box scheme. Tightly integrated with 'basechat.res'",
+        "file_is_custom": false,
+        "file_name": "chatscheme.res",
+        "file_relative_path": "resource\\chatscheme.res"
+    },
+    "resource\\clientscheme.res": {
+        "file_control_descriptions": {},
+        "file_description": "Defines (custom) fonts, borders and colours\r\n\r\nCredits main header font: 'InstructorTitle'\r\nCredits stats 'survivors': 'OuttroStatsCrawlUnderline'\r\nCredits stats 'gameplay stats': OuttroStatsCrawlTitles\r\nCredits stats text: 'OuttroStatsCrawl'\r\nCredits 'space bar - return to lobby': 'DefaultLarge'\r\n\r\nGame instructor popup font: 'InstructorTitle'\r\nRadial: DefaultDropShadowBold\r\nRadial selected: 'DefaultLargeDropShadowBold'\r\nRadial font colour: 'White'\r\nSurvivor head overlay font: 'TargetID'. This font has outline hardcoded by default. enabling it again applies it twice and can cause strange effects\r\n\r\nFont options\r\nNAME:\t\tfont name as defined under 'CustomFonts' or installed on the operating system\r\nTALL:\t\tfont size\r\nWEIGHT:\t\tthe thickness of the font. This can be one of; 0, 100, 200, 300, 400, 500, 600, 700, 800 or 900. Some fonts are limited in how thin or thick they can be\r\nITALIC:\t\titalics\r\nADDITIVE:\tseems to make the font slightly transparent and change colour based on the background\r\nRANGE:\t\tthis is a hexadecimal range for defined for the range of characters we want to use. If you don't know much about font files, don't worry about this, just leave it for existing fonts and don't bother adding it for custom fonts\r\nYRES:\t\trange between x and y to use this font at\r\nDROPSHADOW:\tblack shadow behind the font\r\nOUTLINE:\toutline around the entire font\r\nANTIALIAS:\tantialias the edges",
+        "file_is_custom": false,
+        "file_name": "clientscheme.res",
+        "file_relative_path": "resource\\clientscheme.res"
+    },
+    "resource\\l4d360uischeme.res": {
+        "file_control_descriptions": {},
+        "file_description": "Scheme for l4d specific built-in panels such as the warning message in the addons menu when there are conflicts. Msg header font: 'MainBold', Msg button font: 'DefaultBold', Msg content font: 'Default'",
+        "file_is_custom": false,
+        "file_name": "l4d360uischeme.res",
+        "file_relative_path": "resource\\l4d360uischeme.res"
+    },
+    "resource\\loadingdiscpanel.res": {
+        "file_control_descriptions": {
+            "CLoadingDiscPanel": "hard coded 'xpos' & 'ypos'"
+        },
+        "file_description": "Game paused panel. Changes require font reloading. \r\n\r\nCLoadingDiscPanel: hard coded 'xpos' & 'ypos'",
+        "file_is_custom": false,
+        "file_name": "loadingdiscpanel.res",
+        "file_relative_path": "resource\\loadingdiscpanel.res"
+    },
+    "resource\\sourcescheme.res": {
+        "file_control_descriptions": {},
+        "file_description": "Defines (custom) fonts, borders and colours for 'built-in' source panels such as the console. Console font: 'ConsoleText', Console input font: 'DefaultSmall' ",
+        "file_is_custom": false,
+        "file_name": "sourcescheme.res",
+        "file_relative_path": "resource\\sourcescheme.res"
+    },
+    "resource\\ui\\basechat.res": {
+        "file_control_descriptions": {
+            "ChatFiltersButton": "Chat filters button. Hidden by default because it's buggy",
+            "ChatInputLine": "Chat input line. Hardcoded: 'ypos', 'tall'. These are calculated with values defined in 'chatscheme.res' fonts->Default",
+            "HudChat": "Chat panel position",
+            "HudChatHistory": "Chat history. Hard coded: 'tall'",
+            "KeyStateLabel": "Multiplier key combinations. Eg: Ctrl+Shift"
+        },
+        "file_description": "Chat box. Most controls require resolution reload and some game restart. Tightly integrated with 'chatscheme.res'",
+        "file_is_custom": false,
+        "file_name": "basechat.res",
+        "file_relative_path": "resource\\ui\\basechat.res"
+    },
+    "resource\\ui\\chatfilters.res": {
+        "file_control_descriptions": {},
+        "file_description": "Chat filters menu. Chatbox button hidden by default",
+        "file_is_custom": false,
+        "file_name": "chatfilters.res",
+        "file_relative_path": "resource\\ui\\chatfilters.res"
+    },
+    "resource\\ui\\fullscreenholdoutmodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival scoreboard",
+        "file_is_custom": true,
+        "file_name": "fullscreenholdoutmodescoreboard.res",
+        "file_relative_path": "resource\\ui\\fullscreenholdoutmodescoreboard.res"
+    },
+    "resource\\ui\\fullscreenscavengemodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Scavenge scoreboard",
+        "file_is_custom": false,
+        "file_name": "fullscreenscavengemodescoreboard.res",
+        "file_relative_path": "resource\\ui\\fullscreenscavengemodescoreboard.res"
+    },
+    "resource\\ui\\fullscreensurvivalmodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival scoreboard",
+        "file_is_custom": false,
+        "file_name": "fullscreensurvivalmodescoreboard.res",
+        "file_relative_path": "resource\\ui\\fullscreensurvivalmodescoreboard.res"
+    },
+    "resource\\ui\\fullscreenversusmoderesults.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus scoreboard end of match position",
+        "file_is_custom": false,
+        "file_name": "fullscreenversusmoderesults.res",
+        "file_relative_path": "resource\\ui\\fullscreenversusmoderesults.res"
+    },
+    "resource\\ui\\holdoutmodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival scoreboard",
+        "file_is_custom": true,
+        "file_name": "holdoutmodescoreboard.res",
+        "file_relative_path": "resource\\ui\\holdoutmodescoreboard.res"
+    },
+    "resource\\ui\\holdoutmodescoreboardentry.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival scoreboard player row",
+        "file_is_custom": true,
+        "file_name": "holdoutmodescoreboardentry.res",
+        "file_relative_path": "resource\\ui\\holdoutmodescoreboardentry.res"
+    },
+    "resource\\ui\\holdoutmodeshutdown.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival server shutting down",
+        "file_is_custom": true,
+        "file_name": "holdoutmodeshutdown.res",
+        "file_relative_path": "resource\\ui\\holdoutmodeshutdown.res"
+    },
+    "resource\\ui\\hud\\abilitytimerhud.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected local player ability cooldown timer",
+        "file_is_custom": false,
+        "file_name": "abilitytimerhud.res",
+        "file_relative_path": "resource\\ui\\hud\\abilitytimerhud.res"
+    },
+    "resource\\ui\\hud\\boomerhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected local player hud ",
+        "file_is_custom": false,
+        "file_name": "boomerhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\boomerhealth.res"
+    },
+    "resource\\ui\\hud\\chargerhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected charger local player hud",
+        "file_is_custom": false,
+        "file_name": "chargerhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\chargerhealth.res"
+    },
+    "resource\\ui\\hud\\frustrationmeter.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected tank frustration meter",
+        "file_is_custom": false,
+        "file_name": "frustrationmeter.res",
+        "file_relative_path": "resource\\ui\\hud\\frustrationmeter.res"
+    },
+    "resource\\ui\\hud\\hudholdouttimer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival round timer",
+        "file_is_custom": true,
+        "file_name": "hudholdouttimer.res",
+        "file_relative_path": "resource\\ui\\hud\\hudholdouttimer.res"
+    },
+    "resource\\ui\\hud\\hudscavengeprogress.res": {
+        "file_control_descriptions": {},
+        "file_description": "Dead Center finale gascan hud",
+        "file_is_custom": false,
+        "file_name": "hudscavengeprogress.res",
+        "file_relative_path": "resource\\ui\\hud\\hudscavengeprogress.res"
+    },
+    "resource\\ui\\hud\\hudscavengetimer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Scavenge round timer",
+        "file_is_custom": false,
+        "file_name": "hudscavengetimer.res",
+        "file_relative_path": "resource\\ui\\hud\\hudscavengetimer.res"
+    },
+    "resource\\ui\\hud\\hudsurvivaltimer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival round timer",
+        "file_is_custom": false,
+        "file_name": "hudsurvivaltimer.res",
+        "file_relative_path": "resource\\ui\\hud\\hudsurvivaltimer.res"
+    },
+    "resource\\ui\\hud\\hunterhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected hunter hud",
+        "file_is_custom": false,
+        "file_name": "hunterhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\hunterhealth.res"
+    },
+    "resource\\ui\\hud\\itempickup.res": {
+        "file_control_descriptions": {},
+        "file_description": "Item pickup panel that gets animated in hudanimations.txt",
+        "file_is_custom": false,
+        "file_name": "itempickup.res",
+        "file_relative_path": "resource\\ui\\hud\\itempickup.res"
+    },
+    "resource\\ui\\hud\\jockeyhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected jockey hud",
+        "file_is_custom": false,
+        "file_name": "jockeyhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\jockeyhealth.res"
+    },
+    "resource\\ui\\hud\\localplayerdisplay.res": {
+        "file_control_descriptions": {},
+        "file_description": "Position local player health hud",
+        "file_is_custom": false,
+        "file_name": "localplayerdisplay.res",
+        "file_relative_path": "resource\\ui\\hud\\localplayerdisplay.res"
+    },
+    "resource\\ui\\hud\\localplayerpanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Local player health hud",
+        "file_is_custom": false,
+        "file_name": "localplayerpanel.res",
+        "file_relative_path": "resource\\ui\\hud\\localplayerpanel.res"
+    },
+    "resource\\ui\\hud\\localplayerpanel_incap.res": {
+        "file_control_descriptions": {},
+        "file_description": "Local player health hud while incapitated",
+        "file_is_custom": false,
+        "file_name": "localplayerpanel_incap.res",
+        "file_relative_path": "resource\\ui\\hud\\localplayerpanel_incap.res"
+    },
+    "resource\\ui\\hud\\progressbar.res": {
+        "file_control_descriptions": {},
+        "file_description": "Progress bar. Healing/being healed, starting generator etc",
+        "file_is_custom": false,
+        "file_name": "progressbar.res",
+        "file_relative_path": "resource\\ui\\hud\\progressbar.res"
+    },
+    "resource\\ui\\hud\\pzdamagerecordpanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Kill feed eg: Player X killed smoker. Mainlabel: 'recordlabel0' ",
+        "file_is_custom": false,
+        "file_name": "pzdamagerecordpanel.res",
+        "file_relative_path": "resource\\ui\\hud\\pzdamagerecordpanel.res"
+    },
+    "resource\\ui\\hud\\smokerhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected smoker hud",
+        "file_is_custom": false,
+        "file_name": "smokerhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\smokerhealth.res"
+    },
+    "resource\\ui\\hud\\spitterhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected spitter hud",
+        "file_is_custom": false,
+        "file_name": "spitterhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\spitterhealth.res"
+    },
+    "resource\\ui\\hud\\tankhealth.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected tank hud",
+        "file_is_custom": false,
+        "file_name": "tankhealth.res",
+        "file_relative_path": "resource\\ui\\hud\\tankhealth.res"
+    },
+    "resource\\ui\\hud\\teamdisplayhud.res": {
+        "file_control_descriptions": {},
+        "file_description": "Position survivor teammate panels",
+        "file_is_custom": false,
+        "file_name": "teamdisplayhud.res",
+        "file_relative_path": "resource\\ui\\hud\\teamdisplayhud.res"
+    },
+    "resource\\ui\\hud\\teammatepanel.res": {
+        "file_control_descriptions": {
+            "Status": "Set to enabled & visible. labelText gets hidden and shown by the game as needed. IDLE"
+        },
+        "file_description": "Survivor teammate panel",
+        "file_is_custom": false,
+        "file_name": "teammatepanel.res",
+        "file_relative_path": "resource\\ui\\hud\\teammatepanel.res"
+    },
+    "resource\\ui\\hud\\teammatepanel_incap.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survivor teammate panel while incapped. Can be copy pasted but replace 'dead' control with 'backgroundimage'",
+        "file_is_custom": false,
+        "file_name": "teammatepanel_incap.res",
+        "file_relative_path": "resource\\ui\\hud\\teammatepanel_incap.res"
+    },
+    "resource\\ui\\hud\\votehud.res": {
+        "file_control_descriptions": {},
+        "file_description": "Vote hud. 'YesPCLabel' and 'NoPCLabel' labeltext's are hardcoded, definition set in 'resource\\left4dead(2)_english.txt'",
+        "file_is_custom": false,
+        "file_name": "votehud.res",
+        "file_relative_path": "resource\\ui\\hud\\votehud.res"
+    },
+    "resource\\ui\\hud\\zombieteamdisplayplayer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected teammate panels",
+        "file_is_custom": false,
+        "file_name": "zombieteamdisplayplayer.res",
+        "file_relative_path": "resource\\ui\\hud\\zombieteamdisplayplayer.res"
+    },
+    "resource\\ui\\hudghostpanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Infected local player spawn hud",
+        "file_is_custom": false,
+        "file_name": "hudghostpanel.res",
+        "file_relative_path": "resource\\ui\\hudghostpanel.res"
+    },
+    "resource\\ui\\l4d360ui\\achievementlistitem.res": {
+        "file_control_descriptions": {},
+        "file_description": "Achievements menu table row item",
+        "file_is_custom": false,
+        "file_name": "achievementlistitem.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\achievementlistitem.res"
+    },
+    "resource\\ui\\l4d360ui\\achievements.res": {
+        "file_control_descriptions": {},
+        "file_description": "Achievements menu",
+        "file_is_custom": false,
+        "file_name": "achievements.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\achievements.res"
+    },
+    "resource\\ui\\l4d360ui\\addonlistitem.res": {
+        "file_control_descriptions": {},
+        "file_description": "Addons menu table row item",
+        "file_is_custom": false,
+        "file_name": "addonlistitem.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\addonlistitem.res"
+    },
+    "resource\\ui\\l4d360ui\\addons.res": {
+        "file_control_descriptions": {},
+        "file_description": "Addons menu",
+        "file_is_custom": false,
+        "file_name": "addons.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\addons.res"
+    },
+    "resource\\ui\\l4d360ui\\audio.res": {
+        "file_control_descriptions": {},
+        "file_description": "Audio settings menu",
+        "file_is_custom": false,
+        "file_name": "audio.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\audio.res"
+    },
+    "resource\\ui\\l4d360ui\\cloud.res": {
+        "file_control_descriptions": {},
+        "file_description": "Cloud settings menu",
+        "file_is_custom": false,
+        "file_name": "cloud.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\cloud.res"
+    },
+    "resource\\ui\\l4d360ui\\createlobbyflyout.res": {
+        "file_control_descriptions": {},
+        "file_description": "Create lobby drop down menu",
+        "file_is_custom": true,
+        "file_name": "createlobbyflyout.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\createlobbyflyout.res"
+    },
+    "resource\\ui\\l4d360ui\\customcampaignlistitem.res": {
+        "file_control_descriptions": {},
+        "file_description": "Choose custom campaign menu table row item",
+        "file_is_custom": false,
+        "file_name": "customcampaignlistitem.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\customcampaignlistitem.res"
+    },
+    "resource\\ui\\l4d360ui\\customcampaigns.res": {
+        "file_control_descriptions": {},
+        "file_description": "Choose custom campaign menu",
+        "file_is_custom": false,
+        "file_name": "customcampaigns.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\customcampaigns.res"
+    },
+    "resource\\ui\\l4d360ui\\footerpanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Menu footer",
+        "file_is_custom": false,
+        "file_name": "footerpanel.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\footerpanel.res"
+    },
+    "resource\\ui\\l4d360ui\\foundgamelistitem.res": {
+        "file_control_descriptions": {},
+        "file_description": "Join friends game or lobby menu table row item",
+        "file_is_custom": false,
+        "file_name": "foundgamelistitem.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\foundgamelistitem.res"
+    },
+    "resource\\ui\\l4d360ui\\foundgamelistitempublic.res": {
+        "file_control_descriptions": {},
+        "file_description": "Join public game or lobby menu row item",
+        "file_is_custom": false,
+        "file_name": "foundgamelistitempublic.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\foundgamelistitempublic.res"
+    },
+    "resource\\ui\\l4d360ui\\foundgames.res": {
+        "file_control_descriptions": {},
+        "file_description": "Join friends game or lobby menu",
+        "file_is_custom": false,
+        "file_name": "foundgames.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\foundgames.res"
+    },
+    "resource\\ui\\l4d360ui\\foundgroupgames.res": {
+        "file_control_descriptions": {},
+        "file_description": "Join steam group friends game or lobby menu",
+        "file_is_custom": true,
+        "file_name": "foundgroupgames.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\foundgroupgames.res"
+    },
+    "resource\\ui\\l4d360ui\\foundpublicgames.res": {
+        "file_control_descriptions": {},
+        "file_description": "Join public game or lobby menu",
+        "file_is_custom": false,
+        "file_name": "foundpublicgames.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\foundpublicgames.res"
+    },
+    "resource\\ui\\l4d360ui\\gamelobby.res": {
+        "file_control_descriptions": {},
+        "file_description": "Lobby menu",
+        "file_is_custom": false,
+        "file_name": "gamelobby.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamelobby.res"
+    },
+    "resource\\ui\\l4d360ui\\gamesettings.res": {
+        "file_control_descriptions": {},
+        "file_description": "Lobby settings menu",
+        "file_is_custom": false,
+        "file_name": "gamesettings.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings.res"
+    },
+    "resource\\ui\\l4d360ui\\gamesettings_campaigncreate.res": {
+        "file_control_descriptions": {},
+        "file_description": "Create campaign menu",
+        "file_is_custom": true,
+        "file_name": "gamesettings_campaigncreate.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaigncreate.res"
+    },
+    "resource\\ui\\l4d360ui\\gamesettings_campaignedit.res": {
+        "file_control_descriptions": {},
+        "file_description": "Lobby settings menu",
+        "file_is_custom": true,
+        "file_name": "gamesettings_campaignedit.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaignedit.res"
+    },
+    "resource\\ui\\l4d360ui\\gamesettings_campaignsearch.res": {
+        "file_control_descriptions": {},
+        "file_description": "Create singleplayer campaign menu",
+        "file_is_custom": true,
+        "file_name": "gamesettings_campaignsearch.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaignsearch.res"
+    },
+    "resource\\ui\\l4d360ui\\gamesettings_commentary.res": {
+        "file_control_descriptions": {},
+        "file_description": "Create singleplayer commentary campaign menu",
+        "file_is_custom": false,
+        "file_name": "gamesettings_commentary.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_commentary.res"
+    },
+    "resource\\ui\\l4d360ui\\ingamechapterselect.res": {
+        "file_control_descriptions": {},
+        "file_description": "Ingame voting menu campaign select",
+        "file_is_custom": false,
+        "file_name": "ingamechapterselect.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\ingamechapterselect.res"
+    },
+    "resource\\ui\\l4d360ui\\ingamemainmenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "Ingame menu",
+        "file_is_custom": false,
+        "file_name": "ingamemainmenu.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\ingamemainmenu.res"
+    },
+    "resource\\ui\\l4d360ui\\keyboardmouse.res": {
+        "file_control_descriptions": {},
+        "file_description": "Keyboard / mouse settings menu",
+        "file_is_custom": false,
+        "file_name": "keyboardmouse.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\keyboardmouse.res"
+    },
+    "resource\\ui\\l4d360ui\\leaderboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Leaderbord menu",
+        "file_is_custom": false,
+        "file_name": "leaderboard.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\leaderboard.res"
+    },
+    "resource\\ui\\l4d360ui\\mainmenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "Main menu",
+        "file_is_custom": false,
+        "file_name": "mainmenu.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\mainmenu.res"
+    },
+    "resource\\ui\\l4d360ui\\multiplayer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Multiplayer settings menu",
+        "file_is_custom": false,
+        "file_name": "multiplayer.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\multiplayer.res"
+    },
+    "resource\\ui\\l4d360ui\\scriptedmodelistitem.res": {
+        "file_control_descriptions": {},
+        "file_description": "Mutation menu table row",
+        "file_is_custom": true,
+        "file_name": "scriptedmodelistitem.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\scriptedmodelistitem.res"
+    },
+    "resource\\ui\\l4d360ui\\scriptedmodes.res": {
+        "file_control_descriptions": {},
+        "file_description": "Mutation menu",
+        "file_is_custom": true,
+        "file_name": "scriptedmodes.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\scriptedmodes.res"
+    },
+    "resource\\ui\\l4d360ui\\video.res": {
+        "file_control_descriptions": {},
+        "file_description": "Video settings menu",
+        "file_is_custom": false,
+        "file_name": "video.res",
+        "file_relative_path": "resource\\ui\\l4d360ui\\video.res"
+    },
+    "resource\\ui\\leavingareawarning.res": {
+        "file_control_descriptions": {},
+        "file_description": "(by default red) 'Please wait for your teammates' panel that sometimes shows at the start of a map",
+        "file_is_custom": false,
+        "file_name": "leavingareawarning.res",
+        "file_relative_path": "resource\\ui\\leavingareawarning.res"
+    },
+    "resource\\ui\\minimotd.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard server mini motd",
+        "file_is_custom": false,
+        "file_name": "minimotd.res",
+        "file_relative_path": "resource\\ui\\minimotd.res"
+    },
+    "resource\\ui\\pzendgamepanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus rematch voting hud. \r\n\r\nGets shown under versus end of match scoreboard - on a black (credits) background",
+        "file_is_custom": false,
+        "file_name": "pzendgamepanel.res",
+        "file_relative_path": "resource\\ui\\pzendgamepanel.res"
+    },
+    "resource\\ui\\radialmenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "Radial menu",
+        "file_is_custom": false,
+        "file_name": "radialmenu.res",
+        "file_relative_path": "resource\\ui\\radialmenu.res"
+    },
+    "resource\\ui\\readycountdown.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus/Scavenge round start timer",
+        "file_is_custom": false,
+        "file_name": "readycountdown.res",
+        "file_relative_path": "resource\\ui\\readycountdown.res"
+    },
+    "resource\\ui\\riverescapefailed.res": {
+        "file_control_descriptions": {},
+        "file_description": "Sacrifice finale escape failed - 'You must have at least two survivors to complete the finale'. Showpanel might not work until generator is started",
+        "file_is_custom": false,
+        "file_name": "riverescapefailed.res",
+        "file_relative_path": "resource\\ui\\riverescapefailed.res"
+    },
+    "resource\\ui\\riverfinalefailed.res": {
+        "file_control_descriptions": {},
+        "file_description": "Sacrifice finale failed - 'You need at least one survivor on the bridge and another to restart the last generator' Showpanel might not work until generator is started",
+        "file_is_custom": false,
+        "file_name": "riverfinalefailed.res",
+        "file_relative_path": "resource\\ui\\riverfinalefailed.res"
+    },
+    "resource\\ui\\scavengemodeembeddedscoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard scavenge",
+        "file_is_custom": false,
+        "file_name": "scavengemodeembeddedscoreboard.res",
+        "file_relative_path": "resource\\ui\\scavengemodeembeddedscoreboard.res"
+    },
+    "resource\\ui\\scavengemodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Scavenge end of round scoreboard",
+        "file_is_custom": false,
+        "file_name": "scavengemodescoreboard.res",
+        "file_relative_path": "resource\\ui\\scavengemodescoreboard.res"
+    },
+    "resource\\ui\\scavengeroundpanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "A single round entry in the scavenge scoreboard",
+        "file_is_custom": false,
+        "file_name": "scavengeroundpanel.res",
+        "file_relative_path": "resource\\ui\\scavengeroundpanel.res"
+    },
+    "resource\\ui\\scavengetiebreakerpanel.res": {
+        "file_control_descriptions": {
+            "RoundInfoMessage": "TIE BREAKER",
+            "TieBreakerMethodLabel": "Time it took for the round to end"
+        },
+        "file_description": "Scavenge tie breaker panel",
+        "file_is_custom": false,
+        "file_name": "scavengetiebreakerpanel.res",
+        "file_relative_path": "resource\\ui\\scavengetiebreakerpanel.res"
+    },
+    "resource\\ui\\scoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard",
+        "file_is_custom": false,
+        "file_name": "scoreboard.res",
+        "file_relative_path": "resource\\ui\\scoreboard.res"
+    },
+    "resource\\ui\\scoreboardinfectedplayer.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard infected player",
+        "file_is_custom": false,
+        "file_name": "scoreboardinfectedplayer.res",
+        "file_relative_path": "resource\\ui\\scoreboardinfectedplayer.res"
+    },
+    "resource\\ui\\scoreboardsurvivor.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard survivor player",
+        "file_is_custom": false,
+        "file_name": "scoreboardsurvivor.res",
+        "file_relative_path": "resource\\ui\\scoreboardsurvivor.res"
+    },
+    "resource\\ui\\spawnboomermenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "L4D1 Infected boomer spawning tutorial panel",
+        "file_is_custom": false,
+        "file_name": "spawnboomermenu.res",
+        "file_relative_path": "resource\\ui\\spawnboomermenu.res"
+    },
+    "resource\\ui\\spawnhuntermenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "L4D1 Infected hunter spawning tutorial panel",
+        "file_is_custom": false,
+        "file_name": "spawnhuntermenu.res",
+        "file_relative_path": "resource\\ui\\spawnhuntermenu.res"
+    },
+    "resource\\ui\\spawnmodemenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "L4D2 Infected spawning tutorial panel",
+        "file_is_custom": false,
+        "file_name": "spawnmodemenu.res",
+        "file_relative_path": "resource\\ui\\spawnmodemenu.res"
+    },
+    "resource\\ui\\spawnsmokermenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "L4D1 Infected smoker spawning tutorial panel",
+        "file_is_custom": false,
+        "file_name": "spawnsmokermenu.res",
+        "file_relative_path": "resource\\ui\\spawnsmokermenu.res"
+    },
+    "resource\\ui\\spectator.res": {
+        "file_control_descriptions": {},
+        "file_description": "Spectator hud while spectating, idle or before joining game. Survivor head overlay font: TargetID",
+        "file_is_custom": false,
+        "file_name": "spectator.res",
+        "file_relative_path": "resource\\ui\\spectator.res"
+    },
+    "resource\\ui\\spectatorinfected.res": {
+        "file_control_descriptions": {
+            "InfectedState": "You will enter spawn mode in X seconds",
+            "SpawnModeLabel": "'You are dead'"
+        },
+        "file_description": "Spectator infected hud while dead",
+        "file_is_custom": false,
+        "file_name": "spectatorinfected.res",
+        "file_relative_path": "resource\\ui\\spectatorinfected.res"
+    },
+    "resource\\ui\\spectatorsurvivor.res": {
+        "file_control_descriptions": {
+            "RescueMessage": "The survivors have been overwhelmed"
+        },
+        "file_description": "Spectator survivor hud while dead",
+        "file_is_custom": false,
+        "file_name": "spectatorsurvivor.res",
+        "file_relative_path": "resource\\ui\\spectatorsurvivor.res"
+    },
+    "resource\\ui\\survivalmodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival end of round scoreboard",
+        "file_is_custom": false,
+        "file_name": "survivalmodescoreboard.res",
+        "file_relative_path": "resource\\ui\\survivalmodescoreboard.res"
+    },
+    "resource\\ui\\survivalmodescoreboardentry.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival end of round scoreboard row",
+        "file_is_custom": false,
+        "file_name": "survivalmodescoreboardentry.res",
+        "file_relative_path": "resource\\ui\\survivalmodescoreboardentry.res"
+    },
+    "resource\\ui\\survivalmodeshutdown.res": {
+        "file_control_descriptions": {},
+        "file_description": "Survival server shutting down",
+        "file_is_custom": false,
+        "file_name": "survivalmodeshutdown.res",
+        "file_relative_path": "resource\\ui\\survivalmodeshutdown.res"
+    },
+    "resource\\ui\\takeoversurvivorbar.res": {
+        "file_control_descriptions": {},
+        "file_description": "Spectator takeover survivor player after coming out of spectate. 1. spectate 2.' jointeam 2' or 'chooseteam' \r\n\r\n'FireMessage' and 'FireBind' have hardcoded 'xpos'. Create custom controls and position them",
+        "file_is_custom": false,
+        "file_name": "takeoversurvivorbar.res",
+        "file_relative_path": "resource\\ui\\takeoversurvivorbar.res"
+    },
+    "resource\\ui\\teammenu.res": {
+        "file_control_descriptions": {},
+        "file_description": "'ChooseTeam' Choose team menu. Select which side to join, survivors/infected. Usefull cvar: 'vs_max_team_switches'. Usually when coming from spectator. \r\n\r\nClientscheme entries: \r\n'Cancel' button borders: 'Button', 'RoundedButton'\r\nFont: 'Default', though can be overwritten with 'font' property",
+        "file_is_custom": false,
+        "file_name": "teammenu.res",
+        "file_relative_path": "resource\\ui\\teammenu.res"
+    },
+    "resource\\ui\\transitionstatssurvivor.res": {
+        "file_control_descriptions": {},
+        "file_description": "Coop end of round score screen",
+        "file_is_custom": false,
+        "file_name": "transitionstatssurvivor.res",
+        "file_relative_path": "resource\\ui\\transitionstatssurvivor.res"
+    },
+    "resource\\ui\\transitionstatssurvivorhighlight.res": {
+        "file_control_descriptions": {},
+        "file_description": "Coop end of round score screen stats table",
+        "file_is_custom": false,
+        "file_name": "transitionstatssurvivorhighlight.res",
+        "file_relative_path": "resource\\ui\\transitionstatssurvivorhighlight.res"
+    },
+    "resource\\ui\\versusmodeembeddedscoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tab scoreboard versus",
+        "file_is_custom": false,
+        "file_name": "versusmodeembeddedscoreboard.res",
+        "file_relative_path": "resource\\ui\\versusmodeembeddedscoreboard.res"
+    },
+    "resource\\ui\\versusmoderesults.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus scoreboard end of match",
+        "file_is_custom": false,
+        "file_name": "versusmoderesults.res",
+        "file_relative_path": "resource\\ui\\versusmoderesults.res"
+    },
+    "resource\\ui\\versusmodescoreboard.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus scoreboard end of round",
+        "file_is_custom": false,
+        "file_name": "versusmodescoreboard.res",
+        "file_relative_path": "resource\\ui\\versusmodescoreboard.res"
+    },
+    "resource\\ui\\vsmodeshutdown.res": {
+        "file_control_descriptions": {},
+        "file_description": "Versus / Scavenge server shutdown",
+        "file_is_custom": false,
+        "file_name": "vsmodeshutdown.res",
+        "file_relative_path": "resource\\ui\\vsmodeshutdown.res"
+    },
+    "resource\\ui\\zombiepanel.res": {
+        "file_control_descriptions": {},
+        "file_description": "Tank approaching / Too far from Survivors",
+        "file_is_custom": false,
+        "file_name": "zombiepanel.res",
+        "file_relative_path": "resource\\ui\\zombiepanel.res"
     },
     "riverescapefailed.res": {
         "file_control_descriptions": {},
@@ -760,15 +1801,6 @@
         "file_name": "s_panel_teenangst_incap.vtf",
         "file_relative_path": "materials\\vgui\\s_panel_teenangst_incap.vtf"
     },
-    "sample.txt": {
-        "file_control_descriptions": {
-            "control1": "Control description"
-        },
-        "file_description": "",
-        "file_is_custom": true,
-        "file_name": "sample.txt",
-        "file_relative_path": ""
-    },
     "scalablepanel_bgmidgrey_outlinegreen_glow.vmt": {
         "file_control_descriptions": {},
         "file_description": "Weapons hud background panel texture",
@@ -863,12 +1895,76 @@
         "file_name": "scriptedmodes.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\scriptedmodes.res"
     },
-    "scripts\\sample.txt": {
+    "scripts\\customHudSubFolder\\customHudFile.txt": {
         "file_control_descriptions": {},
-        "file_description": "File description",
+        "file_description": "",
         "file_is_custom": true,
-        "file_name": "scripts\\sample.txt",
-        "file_relative_path": ""
+        "file_name": "customHudFile.txt",
+        "file_relative_path": "scripts\\customHudSubFolder\\customHudFile.txt"
+    },
+    "scripts\\hudanimations.txt": {
+        "file_control_descriptions": {},
+        "file_description": "Defines some hud animations such as the item pickup icons though most are hard coded\r\n\r\n---Confirmed working:\r\nMisc:\r\n- 'PulsePickedUpWeaponSlot'\r\n\r\nItems:\r\n- 'StartItemPickup1', 2 and 3\r\n- 'CleanupItemPickup'\r\n\r\nVoting:\r\n- 'PulseYesVote'\r\n- 'PulseNoVote'\r\n- 'HideVoteBackgrounds'",
+        "file_is_custom": false,
+        "file_name": "hudanimations.txt",
+        "file_relative_path": "scripts\\hudanimations.txt"
+    },
+    "scripts\\hudlayout.res": {
+        "file_control_descriptions": {
+            "BuildableCostPanel": "Progressbar looking panel. Unused but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "CHudAbilityTimer": "Infected local player ability cooldown timer",
+            "CHudLocalPlayerDisplay": "Local player health hud section",
+            "CHudTeamDisplay": "Survivor teammate panels",
+            "CHudVote": "Vote hud",
+            "CHudZombieTeamDisplay": "Infected teammate panels",
+            "HudChat": "Unused by the game. Overwritten by basechat.res",
+            "HudCloseCaption": "Closed captions",
+            "HudCrosshair": "Infected crosshair properties",
+            "HudFinaleMeter": "'Rescue countdown' Unused panel but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "HudFrustrationMeter": "Tank frustration meter",
+            "HudHintDisplay": "Game instructor. But is hard coded. Font: InstructorTitle",
+            "HudHintKeyDisplay": "Game instructor. But is hard coded. Font: InstructorTitle",
+            "HudHoldoutTimer": "Survival round timer",
+            "HudIntensityGraph": "'Build_up' survivor meter Unused panel but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "HudLeavingAreaWarning": "(by default red) 'Please wait for your teammates' panel that sometimes shows at the start of a map",
+            "HudPZDamageRecord": "Kill feed eg: Player X killed smoker",
+            "HudProgressBar": "Progress bar. Healing/being healed, starting generator etc",
+            "HudScavengeProgress": "Scavenge gascan hud",
+            "HudScavengeTimer": "Scavenge round timer",
+            "HudSurvivalTimer": "Survival round timer",
+            "HudVoiceSelfStatus": "Local player voice chat icon",
+            "HudZombieHealth": "Local player infected health section",
+            "HudZombiePanel": "Infected Tank approaching / Too far from Survivors",
+            "HudZoom": "Sniper zoom hud. Unused since its now hardcoded but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
+            "Option 1": "",
+            "PZEndGamePanel": "Infected rematch voting hud",
+            "PlayerLabel": "Survivor Player Label floating above their head. Everything is hard coded, however the 'alpha' key works"
+        },
+        "file_description": "Defines the positions of a variety of hud controls.",
+        "file_is_custom": false,
+        "file_name": "hudlayout.res",
+        "file_relative_path": "scripts\\hudlayout.res"
+    },
+    "scripts\\instructor_lessons.txt": {
+        "file_control_descriptions": {},
+        "file_description": "Game instructor hints definitions file",
+        "file_is_custom": false,
+        "file_name": "instructor_lessons.txt",
+        "file_relative_path": "scripts\\instructor_lessons.txt"
+    },
+    "scripts\\mod_textures.txt": {
+        "file_control_descriptions": {},
+        "file_description": "Game icon definitions. Eg: game instructor icons",
+        "file_is_custom": false,
+        "file_name": "hudlayout.res",
+        "file_relative_path": "scripts\\mod_textures.txt"
+    },
+    "scripts\\stats_crawl.txt": {
+        "file_control_descriptions": {},
+        "file_description": "Credits at the end of a campaign",
+        "file_is_custom": false,
+        "file_name": "stats_crawl.txt",
+        "file_relative_path": "scripts\\stats_crawl.txt"
     },
     "smokerhealth.res": {
         "file_control_descriptions": {},
