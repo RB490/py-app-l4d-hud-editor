@@ -3,15 +3,44 @@
 ✔ Bug: Start -> Edit hud -> Browser does not have the hud loaded (it does load when i manually do something like reload it) @done(23-09-01 10:22)
 ✘ Bug: Start -> Edit hud -> hud.syncer is trying to sync 'VideoConfig'? as in the object? @cancelled(23-09-01 10:24) doesn't do it right now
 ✔ Bug: VDF -> Annotate -> can't add or reetrieve descriptions. i had a file with Resource\Hudlayout.res // do i want to write code to look for the resource file in the resource folder? // do i want to use the file's location in the actual hud instead? or both? @done(23-09-01 11:09)
-Current:
+✔ Feature: game.dir.find_resource_file @done(23-09-01 11:34)
 
-Todo:
-	☐ Feature: game.dir.find_resource_file
+
+
+
+Current:
+	☐ Feature: game.dir.find_resource_file -> game.dir.get_file_relative_path
+
+	☐ Modify the hud descriptions class to use file_name as indicator
+	☐ Modify the hud descriptions class to save file_relative_path by comparing input file relative path & relative path in the header. and/or file_name in both
+
+Vdf:
+
+- Issue: VDF GUI used resource\hudlayout.res (from header) to retrieve hud description which is invalid because its scripts\hudlayout.res		
+	☐ Thought: Should i not rely on the resource header at all? or rely on it entirely
+	- ^ i should compare the file name to the file name in the resource header. if these don't match up throw an error
+	- ^ i should use this verified file name to look up the resource path and save it in hud desc
+	- ^ hud desc should do all of this. that should be the only location where the data is modified in any way
+
+	- ^ should i still use relative file path to save data? or name? does it even matter? i could write code to do either, relative path seems a bit better
+		- ^ relative path is arguably worse because when looking up hudlayout.res from some random location it wouldn't work right
+	
+	- ^ notes. not every file has a file header.
+	
 	
 	☐ Feature: Do i want to modify my descriptions json structure? Save relative path as a subkey found with the function i just created. seems better in many ways actually. then add a method for retrieving relative path
-		- ^ in fact, i probably don't even need relative path at any one point?
-		- ^ definetly do this
+	- ^ in fact, i probably don't even need relative path at any one point?
+	- ^ definetly do this
 
+
+
+
+
+
+
+
+	
+Todo:		
 	☐ Bug: Desc -> HudWeaponSelection is missing? didn't i have this registered before?
 	
 	☐ Bug: Hotkeys: Hotkeys randomly stop working. F8 to open the editor menu -> press close option -> hotkeys stop working. so instead of do_nothing it should destroy the gui?

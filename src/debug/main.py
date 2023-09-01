@@ -107,11 +107,11 @@ def debug_main():
     # hwnd_utils.close(result)
 
 
-    debug_gui()
+    # debug_gui()
     # debug_hud_class()
     # debug_game_class()
     # debug_vpk_class()
-    # debug_hud_descriptions_class()
+    debug_hud_descriptions_class()
     # result = game_class.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
     # result = game_class.window.restore_saved_position()
     # vpk_instance = VPKClass()
