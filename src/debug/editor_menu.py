@@ -13,7 +13,7 @@ class debug_editor_menu_class(BaseGUI, metaclass=Singleton):
 
         self.editor_menu = EditorMenuClass(self, self.root)
         # debug_menu = self.editor_menu.create_and_refresh_menu(is_context_menu=True)
-        debug_menu = self.editor_menu.get_developer_installer_menu(self.root)
+        debug_menu = self.editor_menu.get_context_menu_dev(self.root)
 
         pos_x, pos_y = self.root.winfo_pointerxy()
         self.show_post_menu(debug_menu, pos_x, pos_y)

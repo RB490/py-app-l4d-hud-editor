@@ -79,7 +79,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         # self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
         # self.dev_context_menu.post(pos_x, pos_y)
         self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-        self.show_post_menu(self.my_editor_menu.menu_bar, pos_x, pos_y)
+        self.show_post_menu(self.my_editor_menu.main_menu, pos_x, pos_y)
 
         # hide gui after context menu closed
         self.hide()

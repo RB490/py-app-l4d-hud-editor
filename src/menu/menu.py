@@ -2,6 +2,7 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 
 import os
+import time
 import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
@@ -768,7 +769,6 @@ class EditorMenuClass:
             compound="left",
             accelerator="F11",
         )
-        # self.help_menu.add_cascade(label="Hotkeys", menu=self.hotkeys_menu)
 
     def create_help_menu(self, menubar):
         """Create help menu"""
@@ -824,6 +824,8 @@ class EditorMenuClass:
             compound="left",
             command=lambda: self.open_file(flame_path),
         )
+
+        return self.help_menu
 
     def create_reload_mode_menu(self, menubar):
         """Create reload mode menu"""
@@ -985,10 +987,10 @@ class EditorMenuClass:
             compound=tk.LEFT,
             command=self.handler.editor_installer_disable_dev_mode,
         )
-        
+
         active_dir_mode = self.game.dir._get_active_mode()
         self.dev_install_menu.entryconfigure(active_dir_mode.name, state="disabled")
-        
+
         # self.dev_install_menu.add_separator()
         # currently_active_mode_name = f"Active: {self.game.dir._get_active_mode().name}"
         # currently_active_mode_name = f"{self.game.dir._get_active_mode().name}"
@@ -1034,52 +1036,50 @@ class EditorMenuClass:
             command=self.handler.editor_installer_uninstall,
         )
 
-    def create_and_refresh_menu_developer_installer(self):
-        """
-        Creates the menu bar for the application geared towards only developer options
-        """
-        self.data_manager.save()
-
-        self.menu_bar = Menu(self.root, tearoff=False)
-
-        self.create_developer_installer_menu(self.menu_bar)
-
-        self.menu_bar.add_cascade(label="Developer", menu=self.dev_install_menu)
-
-        self.root.config(menu=self.menu_bar)
-
-    def get_developer_installer_menu(self, menu):
+    def get_context_menu_dev(self):
         """Retrieve developer installer menu (for adding it to a context menu for example)"""
-        self.create_developer_installer_menu(menu)
+        self.create_and_refresh_menu(is_context_menu=True)
         return self.dev_install_menu
+
+    def get_context_menu_main(self):
+        """Retrieve developer installer menu (for adding it to a context menu for example)"""
+        self.create_and_refresh_menu(is_context_menu=True)
+        return self.main_menu
+
+    def get_context_menu_help(self):
+        """Retrieve developer installer menu (for adding it to a context menu for example)"""
+        self.create_and_refresh_menu(is_context_menu=True)
+        return self.help_menu
 
     def create_and_refresh_menu(self, is_context_menu=False):
         """
         Creates the menu bar for the application
         if not is_context_menu:
         """
+        print("Refreshing editor menu!")
+
         self.data_manager.save()
 
-        self.menu_bar = Menu(self.root, tearoff=False)
+        self.main_menu = Menu(self.root, tearoff=False)
 
-        self.create_reload_mode_menu(self.menu_bar)
-        self.create_hud_menu(self.menu_bar)
-        self.create_game_menu(self.menu_bar)
-        self.create_load_hud_menu(self.menu_bar)
-        self.create_voting_menu(self.menu_bar)
-        self.create_show_panel_menu(self.menu_bar)
-        self.create_switch_team_menu(self.menu_bar)
-        self.create_hotkeys_menu(self.menu_bar)
-        self.create_help_menu(self.menu_bar)
-        self.create_give_items_menu(self.menu_bar)
-        self.create_clipboard_menu(self.menu_bar)
-        self.create_developer_installer_menu(self.menu_bar)
+        self.create_reload_mode_menu(self.main_menu)
+        self.create_hud_menu(self.main_menu)
+        self.create_game_menu(self.main_menu)
+        self.create_load_hud_menu(self.main_menu)
+        self.create_voting_menu(self.main_menu)
+        self.create_show_panel_menu(self.main_menu)
+        self.create_switch_team_menu(self.main_menu)
+        self.create_hotkeys_menu(self.main_menu)
+        self.create_help_menu(self.main_menu)
+        self.create_give_items_menu(self.main_menu)
+        self.create_clipboard_menu(self.main_menu)
+        self.create_developer_installer_menu(self.main_menu)
 
         # ----------------------------------
         #       Parent tools menu
         # ----------------------------------
 
-        self.tools_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.tools_menu = tk.Menu(self.main_menu, tearoff=0)
         self.editor_menu_inspect_hud_checkmark = tk.BooleanVar()
         self.tools_menu.add_checkbutton(
             label="Inspect",
@@ -1116,7 +1116,7 @@ class EditorMenuClass:
         #       Parent File menu
         # ----------------------------------
 
-        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.file_menu = tk.Menu(self.main_menu, tearoff=0)
         self.file_menu.add_command(
             label="Start",
             image=self.img.flag_black_cutted_shape,
@@ -1171,7 +1171,7 @@ class EditorMenuClass:
         #       Parent Tools menu
         # ----------------------------------
 
-        self.debug_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.debug_menu = tk.Menu(self.main_menu, tearoff=0)
         self.debug_menu.add_command(
             label="Game cmd", command=self.handler.editor_prompt_game_command, image=self.img.game_alt, compound="left"
         )
@@ -1266,38 +1266,39 @@ class EditorMenuClass:
         # ----------------------------------
 
         if not is_context_menu:
-            self.menu_bar.add_cascade(label="File", menu=self.file_menu)
-            self.menu_bar.add_cascade(label="Hud", menu=self.hud_menu)
-            self.menu_bar.add_cascade(label="Mode", menu=self.reload_mode_menu)
-            self.menu_bar.add_cascade(label="Game", menu=self.game_menu)
-            self.menu_bar.add_cascade(label="Debug", menu=self.debug_menu)
-            self.menu_bar.add_command(label="Close", command=self.do_nothing)  # useful when displaying menu as popup
+            self.main_menu.add_cascade(label="File", menu=self.file_menu)
+            self.main_menu.add_cascade(label="Hud", menu=self.hud_menu)
+            self.main_menu.add_cascade(label="Mode", menu=self.reload_mode_menu)
+            self.main_menu.add_cascade(label="Game", menu=self.game_menu)
+            self.main_menu.add_cascade(label="Debug", menu=self.debug_menu)
         else:
-            self.menu_bar.add_cascade(
+            self.main_menu.add_cascade(
                 label="File", image=self.img.file_black_rounded_symbol_1, compound="left", menu=self.file_menu
             )
-            self.menu_bar.add_cascade(
+            self.main_menu.add_cascade(
                 label="Hud",
                 image=self.img.paintbrush_design_tool_interface_symbol,
                 compound="left",
                 menu=self.hud_menu,
             )
-            self.menu_bar.add_cascade(
+            self.main_menu.add_cascade(
                 label="Mode",
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
                 compound="left",
                 menu=self.reload_mode_menu,
             )
-            self.menu_bar.add_cascade(label="Game", image=self.img.game_alt, compound="left", menu=self.game_menu)
-            self.menu_bar.add_cascade(
+            self.main_menu.add_cascade(label="Game", image=self.img.game_alt, compound="left", menu=self.game_menu)
+            self.main_menu.add_cascade(
                 label="Debug", image=self.img.hot_or_burn_interface_symbol, compound="left", menu=self.debug_menu
             )
-            self.menu_bar.add_command(
+            self.main_menu.add_command(
                 label="Close (ESC)", image=self.img.cross, compound="left", command=self.do_nothing
             )  # useful when displaying menu as popup
 
         if not self.hud.edit.get_dir():
-            self.menu_bar.entryconfig("Hud", state="disabled")
+            self.main_menu.entryconfig("Hud", state="disabled")
 
+        # update the menubar on the gui
+        #   note: for context menu's is_context_menu=False is important. otherwise showing menu on button will be misaligned
         if not is_context_menu:
-            self.root.config(menu=self.menu_bar)
+            self.root.config(menu=self.main_menu)

@@ -10,12 +10,13 @@
 ✔ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible @done(23-09-02 18:09)
 ✔ Bug: BaseGUI: Set browser to always on top true -> debug_browser_gui() -> not always on top @done(23-09-02 20:31)
 ✔ Feature: Browser: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup @started(23-09-02 18:29) @done(23-09-02 20:57) @lasted(2h28m7s)
+✔ Feature: BaseGUI: Show menu on button @done(23-09-02 22:07)
 
 Current:
+	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
 
 Todo:		
 	
-	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
 	☐ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely
 	☐ Feature: Todo: Import todo's from microsoft todo
 
@@ -52,6 +53,8 @@ Todo:
 	☐ Refactor: Hotkeys: Should i move some global hotkeys to root/widget bindings? these would be gui only
 	☐ Refactor: BaseGui: Create a way to reduce duplicate code with {self.root.title()}: log.debug(f"{self.root.title()} GUI always on top: {bool}")
 	☐ Refactor: Use BaseGUI's self.show_context_menu_on_button
+	☐ Feature: Start: CTRL+F hotkey for focusing search
+	☐ Feature: Start: Move search frame below the treeview
 
 	☐ Testing: Test the program by using it to edit HUD's
 

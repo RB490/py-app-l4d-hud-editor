@@ -74,8 +74,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # editor menu
-        self.my_editor_menu = EditorMenuClass(self, self.root)
-        self.my_editor_menu.create_and_refresh_menu()
+        self.editor_menu = EditorMenuClass(self, self.root)
 
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
@@ -184,8 +183,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             self.toolbar_frame,
             text=f"Menu {HOTKEY_EDITOR_MENU}",
             justify="center",
-            # command=self.dummy_handler,
-            command=lambda: self.show_context_menu_on_button(self.editor_menu_hotkey_button, self.my_editor_menu.menu_bar),
+            command=lambda: self.show_menu_on_button(
+                self.editor_menu_hotkey_button, self.editor_menu.get_context_menu_main()
+            ),
             state="normal",
             image=self.img.arrows_couple_counterclockwise_rotating_symbol,
             compound="left",
@@ -194,37 +194,24 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             height=25,
         )
         self.editor_menu_hotkey_button.pack(padx=5, pady=0, side="left")
-        # self.editor_menu_hotkey_button.bind("<ButtonRelease-1>", self.show_editor_menu_popup)
-        # self.editor_menu_hotkey_button.bind("<ButtonRelease-1>", self.show_context_menu_on_button)
-        # self.editor_menu_hotkey_button.bind(
-        #     "<ButtonRelease-1>",
-        #     lambda event, button=self.editor_menu_hotkey_button, menu=self.my_editor_menu.menu_bar: self.show_context_menu_on_button(button, menu),
-        # )
 
-    def show_editor_menu_popup(self, event):
-        """Open the developer context menu"""
-        x, y = event.x_root, event.y_root
-        button_x, button_y = self.editor_menu_hotkey_button.winfo_rootx(), self.editor_menu_hotkey_button.winfo_rooty()
-        menu_width = self.my_editor_menu.menu_bar.winfo_width()
-        menu_height = self.my_editor_menu.menu_bar.winfo_height()
-
-        # Access the root window of the Tkinter application
-        root = self.editor_menu_hotkey_button.winfo_toplevel()
-
-        # Calculate the new position for the context menu
-        new_x = button_x
-        new_y = button_y + self.editor_menu_hotkey_button.winfo_height()
-
-        # Ensure the menu stays within the screen boundaries
-        screen_width = root.winfo_screenwidth()
-        screen_height = root.winfo_screenheight()
-
-        if new_x + menu_width > screen_width:
-            new_x = screen_width - menu_width
-        if new_y + menu_height > screen_height:
-            new_y = screen_height - menu_height
-
-        self.my_editor_menu.menu_bar.post(new_x, new_y)
+        # Create and configure the editor_menuhronization help button
+        self.editor_menu_help_button = tk.Button(
+            self.toolbar_frame,
+            text=f"Help",
+            justify="center",
+            # command=self.dummy_handler,
+            state="normal",
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            compound="left",
+            padx=btn_img_padx,
+            width=125,
+            height=25,
+            command=lambda: self.show_menu_on_button(
+                self.editor_menu_hotkey_button, self.editor_menu.get_context_menu_help()
+            ),
+        )
+        self.editor_menu_help_button.pack(padx=5, pady=0, side="left")
 
     def __create_treeview(self):
         """Search treeview"""

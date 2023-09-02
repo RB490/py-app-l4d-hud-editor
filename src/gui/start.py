@@ -29,7 +29,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
-        
+
         # gui
         super().__init__("main")
         self.browser = GuiHudBrowser(self.root)
@@ -50,9 +50,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         from menu.menu import EditorMenuClass
 
-        self.my_editor_menu = EditorMenuClass(self, self.root)
-        # self.my_editor_menu.create_and_refresh_menu_developer_installer() # add to the menubar
-        self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)  # add as context menu
+        self.editor_menu = EditorMenuClass(self, self.root)
 
         # Configure the root window with the menubar
         self.update_treeview()
@@ -229,11 +227,18 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.dev_and_edit_frame.pack(fill=tk.X, expand=True)
 
         # Developer menu
-        developer_menu_button = tk.Button(self.dev_and_edit_frame, text="Developer", justify="center")
-        developer_menu_button.config(width=85, height=25)
-        developer_menu_button.config(image=self.img.wrench_black_silhouette, compound="left", padx=self.pad_x)
+        developer_menu_button = tk.Button(
+            self.dev_and_edit_frame,
+            text="Developer",
+            justify="center",
+            width=85,
+            height=25,
+            image=self.img.wrench_black_silhouette,
+            compound="left",
+            padx=self.pad_x,
+            command=lambda: self.show_menu_on_button(developer_menu_button, self.editor_menu.get_context_menu_dev()),
+        )
         developer_menu_button.pack(padx=(0, 5), pady=0, side="left")
-        developer_menu_button.bind("<ButtonRelease-1>", self.show_developer_menu)
 
         # create a button above the picture frame
         self.edit_button = tk.Button(
@@ -299,10 +304,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.remove_button.config(state="normal")
         # Enable the edit button
         self.edit_button.config(state="normal")
-
-    def show_developer_menu(self, event):
-        """Open the developer context menu"""
-        self.dev_context_menu.post(event.x_root, event.y_root)
 
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
