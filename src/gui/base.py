@@ -6,7 +6,8 @@ from typing import Callable, Optional, Union
 
 from shared_utils.logging_manager import LoggingManager
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
+logging_manager = LoggingManager(__name__, level=logging.DEBUG)
+# logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
 
 
@@ -69,21 +70,30 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.state("zoomed")  # Maximizes the window
 
-    def show(self, hide: bool = False) -> None:
+    def show(self, hide: bool = False, callback: str = "") -> None:
         """
         Show the window.
+
+        Purpose for callback can be to open a sub GUI (which relies on the main gui mainloop)
 
         Args:
             hide (bool, optional): If True, hide the window after showing. Defaults to False.
         """
         self.root.deiconify()
         self.is_hidden = False
+        self.root.after(250, lambda: self.__delayed_show(callback))
         if hide:
             self.hide()
         if not self.has_been_run:
             self.run()
 
+    def __delayed_show(self, callback: str = ""):
+        """After mainloop()"""
+        log.debug("Running __delayed_show")
         self.__call_method_if_exists("on_show")
+        if callback:
+            log.info(f"Running specified callback for {self.root.title}!")
+            self.__call_method_if_exists(callback)
 
     def show_post_menu(self, menu, x, y):
         """
@@ -120,7 +130,7 @@ class BaseGUI:
             raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
 
         self.has_been_run = True
-        log.info(f"Running GUI {self.root.title()}")
+        log.info(f"Running GUI {self.root.title()} as gui_type: {self.gui_type}")
 
         # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
         if self.gui_type == GUITypes.MAIN:

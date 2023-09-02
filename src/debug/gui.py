@@ -25,19 +25,19 @@ from utils.get_user_input import get_user_input
 def main_debug_gui():
     "debug gui"
 
+    # start
+    # debug_start_gui()
+    # show_start_gui()
+
+    # browser
+    debug_browser_gui()
+    # browser = get_browser_gui()
+
     # splash
     # splash_gui_example()
 
     # popup
     # debug_popup_gui()
-
-    # browser
-    # debug_browser_gui()
-    # browser = get_browser_gui()
-
-    # start
-    # debug_start_gui()
-    # show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
@@ -57,15 +57,27 @@ def debug_browser_gui():
     print("debug_browser")
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
-    root = get_invisible_tkinter_root()
+    # root = get_invisible_tkinter_root()
 
     # game_class = Game()
     # game_class.window.run(DirectoryMode.DEVELOPER)
 
-    browser = GuiHudBrowser(root)
-    browser.show()
+    # browser = GuiHudBrowser(root)
+    # browser.show()
+    start_instance = GuiHudStart()
+    # start_instance.browser.show()
+    print(f"info #1 = {start_instance.get_mainloop_started()}")
+    start_instance.show(hide=True, callback="debug_show_browser_gui")  # start mainloop
+    # start_instance.show(hide=True, callback=start_instance.browser.show())  # start mainloop
+    print(f"info #2 = {start_instance.get_mainloop_started()}")
 
     return
+
+
+def debug_start_gui():
+    "Show start gui"
+    start_instance = GuiHudStart()
+    start_instance.show()
 
 
 def debug_popup_gui():
@@ -94,12 +106,6 @@ def debug_descriptions_gui():
     # descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("custom_hudlayout.res")
     # descriptions_gui.load_file("custom_hudlayout.res")
-
-
-def debug_start_gui():
-    "Show start gui"
-    start_instance = GuiHudStart()
-    start_instance.show()
 
 
 def debug_progress_gui():

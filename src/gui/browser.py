@@ -305,6 +305,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             log.debug(f"Selected relative path: {self.selected_relative_path}")
             log.debug(f"Selected file name: {self.selected_file_name}")
 
+    def on_show(self):
+        self.treeview_refresh(self.treeview)
+
     def treeview_refresh(self, treeview, search_term=None):
         """
         Refreshes the provided Treeview with up-to-date content.

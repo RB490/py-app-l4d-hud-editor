@@ -61,6 +61,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         hotkey_manager = HotkeyManager()
         hotkey_manager.add_hotkey("F9", self.start_debug_method, suppress=True)
 
+    def debug_show_browser_gui(self):
+        self.browser.show()
+
     def start_debug_method(self):
         "debug"
         print("start_debug_method")
