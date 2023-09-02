@@ -1,6 +1,7 @@
 
 ✔ Bug: Desc -> HudWeaponSelection is missing? didn't i have this registered before? @done(23-09-02 05:44) nope, checked ahk
 ✔ Bug: Logging with log.debug() causing an error @done(23-09-02 05:49) using log.debug(" ")
+✔ Bug: Installer: ProcessGUI being behind StartGUI @done(23-09-02 05:52) set to always on top
 
 Current:
 
@@ -12,7 +13,7 @@ Todo:
 
 	☐ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa?
 	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
-	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front
+	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible
 	
 	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
 
