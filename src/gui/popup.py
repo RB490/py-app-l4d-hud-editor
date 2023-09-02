@@ -69,16 +69,8 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
     def show_editor_menu_popup_gui_at_cursor(self):
         """Show menu at mouse cursor"""
 
-        print(f"show_editor_menu_popup_gui_at_cursor: start. hidden = {self.is_hidden}")
-
-        if self.is_hidden == False:
-            print(f"{self.root.title} is already being shown!")
-            print(f"show_editor_menu_popup_gui_at_cursor: returning hidden = {self.is_hidden}")
-            return
-        self.disable_hotkey()
-
         # Show gui so context menu can be closed by clicking out & Resize the GUI to the entire screen
-        self.maximize()  # not setting fullscreen because it disables alt=tab
+        self.maximize()  # not setting fullscreen because it disables alt+tab
 
         # get coordinates
         pos_x, pos_y = self.root.winfo_pointerxy()
@@ -87,12 +79,8 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         # self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
         # self.dev_context_menu.post(pos_x, pos_y)
         self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-        # self.is_hidden = False # manually set is_hidden # TODO how can i modify basegui to programatically do this
-        # self.my_editor_menu.menu_bar.post(pos_x, pos_y)
         self.show_post_menu(self.my_editor_menu.menu_bar, pos_x, pos_y)
 
         # hide gui after context menu closed
-        print(f"show_editor_menu_popup_gui_at_cursor: before end = {self.is_hidden}")
         self.hide()
-        self.enable_hotkey()
         print(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")

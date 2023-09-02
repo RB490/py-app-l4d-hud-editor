@@ -43,6 +43,7 @@ class EditorMenuClass:
         from hud.hud import Hud
 
         self.hud = Hud()
+        self.create_and_refresh_menu()
 
     def open_file(self, path):
         """Open file"""
@@ -984,6 +985,16 @@ class EditorMenuClass:
             compound=tk.LEFT,
             command=self.handler.editor_installer_disable_dev_mode,
         )
+        
+        active_dir_mode = self.game.dir._get_active_mode()
+        self.dev_install_menu.entryconfigure(active_dir_mode.name, state="disabled")
+        
+        # self.dev_install_menu.add_separator()
+        # currently_active_mode_name = f"Active: {self.game.dir._get_active_mode().name}"
+        # currently_active_mode_name = f"{self.game.dir._get_active_mode().name}"
+        # self.dev_install_menu.add_command(
+        #     label=currently_active_mode_name, image=self.img.link, compound=tk.LEFT, state=tk.DISABLED
+        # )
 
         # Empty Separator
         add_empty_menu_separator(self.dev_install_menu)

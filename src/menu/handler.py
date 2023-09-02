@@ -14,7 +14,7 @@ from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
 
-def call_create_and_refresh_menu(func):
+def call_create_and_refresh_menu_after_method(func):
     """Used by decorator to update menu after method"""
 
     def wrapper(self, *args, **kwargs):
@@ -39,7 +39,7 @@ class EditorMenuHandler:
 
         self.hud = Hud()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_game_mode(self, mode):
         """Method to handle the selected game mode in the menu."""
         print(f"The selected option is: {mode}")
@@ -81,7 +81,7 @@ class EditorMenuHandler:
         )
         self.game.command.execute(f"{res_command}; mat_savechanges")
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_game_pos(self, pos):
         """Method to handle the selected game position in the menu."""
         print(f"Selected Game Position: {pos}")
@@ -91,7 +91,7 @@ class EditorMenuHandler:
         else:
             self.game.window.set_position(pos)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_game_toggle_insecure(self):
         """Method to handle the selected secure/insecure option in the menu."""
         print("editor_menu_game_security")
@@ -120,7 +120,7 @@ class EditorMenuHandler:
         self.game.window.run(DirectoryMode.DEVELOPER)
         self.hud.edit.start_game_exit_check()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_game_toggle_mute(self):
         """Method to handle the selected secure/insecure option in the menu."""
         if self.data_manager.get("game_mute") is True:
@@ -137,7 +137,7 @@ class EditorMenuHandler:
             pyperclip.copy(content)
             print(content)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_show_panel(self, panel):
         """Show selected panel ingame"""
 
@@ -163,33 +163,33 @@ class EditorMenuHandler:
         # Define the function to be called when a menu item is selected
         self.game.command.execute(action)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_add_existing_hud(self):
         """Add exiting hud to the menu"""
         self.hud.manager.prompt_add_existing_hud()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_create_new_hud(self):
         """Add exiting hud to the menu"""
         self.hud.manager.prompt_create_new_hud()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_remove_stored_hud(self, hud_dir):
         """Remove existing hud"""
         self.hud.manager.remove_stored_hud(hud_dir)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
         print(f"editor_remove_temp_hud: {hud_dir}")
         self.hud.manager.remove_temp_hud(hud_dir)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_open_temp_hud(self):
         """Open temporary hud in the menu"""
         self.hud.manager.prompt_open_temp_hud()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_edit_hud(self, hud_dir):
         """Start editing selected hud"""
         self.hud.edit.start_editing(hud_dir)
@@ -268,7 +268,7 @@ class EditorMenuHandler:
         long_string = "W" * 144
         self.game.command.execute(f"say {long_string}")
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_hide_game_world(self):
         """Hide game world"""
         if self.editor_menu.editor_menu_hide_world_checkmark.get() is True:
@@ -276,7 +276,7 @@ class EditorMenuHandler:
         else:
             self.game.command.execute("r_drawWorld 1; r_drawEntities 1")
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_unsync_hud(self):
         """Unsync hud"""
         self.hud.edit.unsync()
@@ -289,7 +289,7 @@ class EditorMenuHandler:
         """Export hud as folder"""
         self.hud.edit.save_as_folder()
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_reload_reopen_menu(self):
         """Repen menu on reload setting"""
         reload_reopen_menu_on_reload = self.data_manager.get("reload_reopen_menu_on_reload")
@@ -297,7 +297,7 @@ class EditorMenuHandler:
         self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(not reload_reopen_menu_on_reload)
         print(not reload_reopen_menu_on_reload)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_reload_click(self):
         """Toggle reload click coordinate"""
         reload_mouse_clicks_enabled = self.data_manager.get("reload_mouse_clicks_enabled")
@@ -305,7 +305,7 @@ class EditorMenuHandler:
         self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(not reload_mouse_clicks_enabled)
         print(not reload_mouse_clicks_enabled)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_reload_click_coord1(self):
         """Set reload click coordinate"""
 
@@ -321,7 +321,7 @@ class EditorMenuHandler:
 
         get_mouse_position_on_click(xy_coord_callback)
 
-    @call_create_and_refresh_menu
+    @call_create_and_refresh_menu_after_method
     def editor_menu_reload_click_coord2(self):
         """Set reload click coordinate"""
 
@@ -363,6 +363,7 @@ class EditorMenuHandler:
             print(f"Could not open developer directory: {err_info}")
             show_message("Directory does not exist!", "error")
 
+    @call_create_and_refresh_menu_after_method
     def editor_installer_enable_dev_mode(self):
         """
         This method enables developer mode.
@@ -374,6 +375,7 @@ class EditorMenuHandler:
         else:
             show_message(f"Failed to set {DirectoryMode.DEVELOPER.name} mode!", "info")
 
+    @call_create_and_refresh_menu_after_method
     def editor_installer_disable_dev_mode(self):
         """
         This method disables developer mode.

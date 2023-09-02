@@ -1,20 +1,21 @@
 ✔ Feature: Cleanup main debugging file by moving methods to separate files and keeping main() as it should be, just delegating @done(23-09-02 15:32)
 ✔ Feature: Installer: Update verify games prompt. as it's outdated. maybe add a timestamp for when instruction were written @done(23-09-02 15:44)
 ✔ Feature: Installer: Clear 'exit' from valve.rc after finishing -- infact just write my proper config as sv_consistency 0 is needed too @started(23-09-02 15:44) @done(23-09-02 15:46) @lasted(2m10s)
+✔ Feature: DevMenu: indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry @done(23-09-02 16:15)
+✘ Feature: DevMenu: Run game option(?) @cancelled(23-09-02 16:21)
 
 
 Current:
 
 Todo:		
 	
-	☐ Feature: DevMenu: Somehow indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry
-	☐ Feature: DevMenu: Run game option(?)
 	☐ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa?
 	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
 	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible
 	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
 	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
 	☐ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely
+	☐ Feature: Todo: Import todo's from microsoft todo
 
 	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
 		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
