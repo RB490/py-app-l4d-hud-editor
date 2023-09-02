@@ -65,7 +65,7 @@ class Game(metaclass=Singleton):
         valid_titles = {"left 4 dead": "L4D1", "left 4 dead 2": "L4D2"}
         return valid_titles.get(title, None)
 
-    def _write_config(self):
+    def write_config(self):
         # variables
         config_dir = self.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
         valverc_path = os.path.join(config_dir, "valve.rc")

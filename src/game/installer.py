@@ -380,3 +380,6 @@ class GameInstaller:
         print("debug: game is fully running!")
         if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
             raise InstallationError("Failed to run the game and rebuild audio cache!")
+
+        # write default config so manually running the game doesn't rebuild audiocache -> exit
+        self.game.write_config()
