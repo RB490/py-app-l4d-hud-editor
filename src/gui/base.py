@@ -107,8 +107,10 @@ class BaseGUI:
         self.root.lift()
         
         # Make the window topmost (works on some systems)
+        previous_status = self.root.attributes('-topmost')
         self.root.attributes('-topmost', True)
         self.root.attributes('-topmost', False)
+        self.root.attributes('-topmost', previous_status)
         
         # Set focus to the entire window
         self.root.focus_force()
@@ -243,7 +245,8 @@ class BaseGUI:
             else:
                 self.root.attributes("-topmost", False)
         else:
-            print("GUI is not loaded.")
+            log.debug(f"{self.root.title()} GUI always on top: GUI is not loaded")
+        log.debug(f"{self.root.title()} GUI always on top: {bool}")
 
     def toggle_resizability(self):
         """Toggle window resizability."""

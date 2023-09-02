@@ -59,6 +59,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
+        self.set_always_on_top(True) # FIXME disable
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
         self.__create_context_menu()
