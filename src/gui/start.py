@@ -16,6 +16,7 @@ from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
+from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -449,3 +450,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # edit hud
         self.hud.edit.start_editing(self.selected_hud_dir)
+
+    def on_close(self):
+        save_and_exit_script()

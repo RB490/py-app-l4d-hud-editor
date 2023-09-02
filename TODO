@@ -11,9 +11,9 @@
 ✔ Bug: BaseGUI: Set browser to always on top true -> debug_browser_gui() -> not always on top @done(23-09-02 20:31)
 ✔ Feature: Browser: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup @started(23-09-02 18:29) @done(23-09-02 20:57) @lasted(2h28m7s)
 ✔ Feature: BaseGUI: Show menu on button @done(23-09-02 22:07)
+✔ Feature: Start: Closing start gui should close the program + activate user mode, most likely @done(23-09-02 22:09)
 
 Current:
-	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
 
 Todo:		
 	
