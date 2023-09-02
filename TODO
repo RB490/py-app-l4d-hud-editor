@@ -10,10 +10,10 @@
 ✔ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible @done(23-09-02 18:09)
 
 Current:
+	☐ Feature: Browser: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup @started(23-09-02 18:29)
 
 Todo:		
 	
-	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
 	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
 	☐ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely
 	☐ Feature: Todo: Import todo's from microsoft todo
@@ -26,6 +26,21 @@ Todo:
 
 		- Alright. Confirmed. extracting it with l4d1_vpk.exe works perfect. No issues ingame. Get the latest version from steam. Add documentation
 		- Still todo: How and do i want to detect if extracted files are corrupted? -- use the comparison methods for _dlc3
+
+	☐ Refactor: Buttons:
+	        self.sync_hotkey_button = tk.Button(
+				self.toolbar_frame,
+				text=f"Sync {HOTKEY_SYNC_HUD}",
+				justify="center",
+				command=self.dummy_handler,
+				state="disabled",
+				image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+				compound="left",
+				padx=5,
+				width=125,
+				height=25,
+			)
+			self.sync_hotkey_button.pack(padx=0, pady=0, side="left")
 
 	☐ Testing: Test the program by using it to edit HUD's
 

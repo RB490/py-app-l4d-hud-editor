@@ -24,6 +24,7 @@ from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
+    HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
@@ -104,6 +105,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # draw controls
         self.__create_search_frame()
+        self.__create_toolbar_frame()
         self.__create_treeview()
 
     def __create_search_frame(self):
@@ -135,6 +137,28 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             self.search_frame, text="All", variable=self.display_choice, value="All", command=self.handle_radio_click
         )
         self.radio_2.pack(side="right", padx=5)
+
+    def __create_toolbar_frame(self):
+        """toolbar frame"""
+        # pylint: disable=attribute-defined-outside-init
+        # create a frame for toolbar controls
+        self.toolbar_frame = tk.Frame(self.frame)
+        self.toolbar_frame.pack(side="top", fill="x", padx=5, pady=5)
+
+        # Create and configure the synchronization hotkey button
+        self.sync_hotkey_button = tk.Button(
+            self.toolbar_frame,
+            text=f"Sync {HOTKEY_SYNC_HUD}",
+            justify="center",
+            command=self.dummy_handler,
+            state="disabled",
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            compound="left",
+            padx=5,
+            width=125,
+            height=25,
+        )
+        self.sync_hotkey_button.pack(padx=0, pady=0, side="left")
 
     def __create_treeview(self):
         """Search treeview"""

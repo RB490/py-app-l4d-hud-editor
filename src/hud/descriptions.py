@@ -8,8 +8,8 @@ from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import Singleton
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
-logging_manager = LoggingManager(__name__, level=logging.DEBUG)
-# logging_manager = LoggingManager(__name__, level=logging.INFO)
+# logging_manager = LoggingManager(__name__, level=logging.DEBUG)
+logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
 
 
@@ -119,7 +119,7 @@ class HudDescriptions(metaclass=Singleton):
         If the file name doesn't exist in the data dictionary, return an empty string.
         """
         description = self.data.get(file_name, {}).get("file_description", "")
-        log.debug(f"Retrieved description for file name '{file_name}': {description}")
+        log.debug(f"Retrieved file description for '{file_name}': {description}")
         return description
 
     def get_file_relative_path(self, file_name):
