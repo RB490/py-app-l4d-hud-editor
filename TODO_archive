@@ -433,3 +433,6 @@ Post:
 ✔ @done(23-09-02 05:42)
 		✔ ^ so, it's definetly caused by the popup gui hotkey. if the hotkeys stop working, and i show and hide the popup gui again, the hotkeys continue working just fine @done(23-09-02 05:42)
 	✔ Bug: Hotkeys: Pressing the show editor menu hotkey while the editor menu is shown causes the show browser hotkey to stop working entirely @done(23-09-02 05:42)
+✔ Bug: Desc -> HudWeaponSelection is missing? didn't i have this registered before? @done(23-09-02 05:44) nope, checked ahk
+✔ Bug: Logging with log.debug() causing an error @done(23-09-02 05:49) using log.debug(" ")
+✔ Bug: Installer: ProcessGUI being behind StartGUI @done(23-09-02 05:52) set to always on top

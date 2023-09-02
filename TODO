@@ -1,21 +1,20 @@
 
-✔ Bug: Desc -> HudWeaponSelection is missing? didn't i have this registered before? @done(23-09-02 05:44) nope, checked ahk
-✔ Bug: Logging with log.debug() causing an error @done(23-09-02 05:49) using log.debug(" ")
-✔ Bug: Installer: ProcessGUI being behind StartGUI @done(23-09-02 05:52) set to always on top
 
 Current:
 
 Todo:		
 	
-
-	☐ Bug: VPK/installer: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
-		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
-
+	☐ Feature: Installer: Update verify games prompt. as it's outdated. maybe add a timestamp for when instruction were written
+	☐ Feature: Installer: Clear 'exit' from valve.rc after finishing -- infact just write my proper config as sv_consistency 0 is needed too
+	☐ Feature: DevMenu: Somehow indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry
+	☐ Feature: DevMenu: Run game option(?)
 	☐ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa?
 	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
 	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible
-	
 	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
+
+	☐ Bug: VPK/installer: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
+		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
 
 	☐ Testing: Test the program by using it to edit HUD's
 
