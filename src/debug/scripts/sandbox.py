@@ -1,38 +1,39 @@
-def call_internal(func):
-    def wrapper(self, *args, **kwargs):
-        # call the original method and store its result
-        result = func(self, *args, **kwargs)
-        # call the internal method after the original method
-        self._internal_method()
-        # return the result of the original method
-        return result
-    return wrapper
+import tkinter as tk
+from tkinter import ttk
 
 
-class MyClass:
-    def __init__(self):
-        self._value = 0
-
-    def _internal_method(self):
-        # do something internal
-        print("Internal method called")
-
-    @call_internal
-    def increment(self):
-        # increment the value by 1
-        self._value += 1
-        print(f"Value is now {self._value}")
-
-    @call_internal
-    def decrement(self):
-        # decrement the value by 1
-        self._value -= 1
-        print(f"Value is now {self._value}")
+def focus_treeview():
+    tree.focus_set()
+    children = tree.get_children()
+    if children:
+        tree.focus(children[0])
+        tree.selection_set(children[0])
+    return "break"  # Prevent the default tab behavior (inserting a tab character)
 
 
-# Create an instance of MyClass
-obj = MyClass()
+# Create a Tkinter window
+root = tk.Tk()
+root.title("Treeview Focus Example")
 
-# Call methods and see the after-method behavior
-obj.increment()
-obj.decrement()
+# Create a Treeview widget
+tree = ttk.Treeview(root, columns=("Name", "Age"))
+tree.heading("#1", text="Name")
+tree.heading("#2", text="Age")
+
+# Insert some sample data
+tree.insert("", "end", text="Person 1", values=("Alice", 30))
+tree.insert("", "end", text="Person 2", values=("Bob", 25))
+tree.insert("", "end", text="Person 3", values=("Charlie", 35))
+
+# Bind the Tab key to the focus_treeview function
+tree.bind("<Tab>", lambda event, tree=tree: focus_treeview())
+
+# Pack the Treeview widget
+tree.pack()
+
+# Create a button to trigger the focus_treeview function
+focus_button = tk.Button(root, text="Focus Treeview", command=focus_treeview)
+focus_button.pack()
+
+# Start the Tkinter main loop
+root.mainloop()

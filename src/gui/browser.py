@@ -50,7 +50,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.hud = Hud()
         self.game = Game()
         self.img = ImageConstants()
-        
+
         # create gui
         super().__init__(gui_type="sub", parent_root=parent_root)
         self.popup_gui = GuiEditorMenuPopup(self.root)
@@ -62,11 +62,17 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.__create_widgets()
         self.__create_context_menu()
 
-        # Bind the function to the selection event
+        # Bindings
         self.treeview.bind("<<TreeviewSelect>>", self.treeview_set_selected_item)
-
-        # Bind the context menu to the right-click event on the treeview
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
+        # self.root.bind("<F1>", self.focus_treeview)
+        self.root.bind("<F1>", self.focus_main_treeview)
+        self.root.bind("<F2>", self.toggle_focus_treeview_and_search)
+        self.root.bind("<Control-Tab>", self.toggle_focus_treeview_and_search)
+        # self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.search_box.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # editor menu
         self.my_editor_menu = EditorMenuClass(self, self.root)
@@ -81,6 +87,27 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
+
+    def focus_main_treeview(self, *event):
+        self.focus_treeview(self.treeview)
+
+    def toggle_focus_treeview_and_search(self, *event):
+        current_focus = self.root.focus_get()
+        log.debug(f"current_focus = {current_focus}")
+        if current_focus == self.search_box:
+            self.focus_main_treeview()
+            log.debug("Focused treeview")
+        else:
+            self.search_box.focus_set()
+            log.debug("Focused searchbox")
+        return "break"  # Prevent the default tab behavior (inserting a tab character)
+
+    def select_first_row(self):
+        selected_items = self.treeview.selection()
+        if not selected_items:
+            first_item = self.treeview.get_children()[0]  # Get the first item
+            self.treeview.selection_set(first_item)  # Select the first item
+            self.treeview.focus(first_item)
 
     def __create_widgets(self):
         """Create widgets"""
@@ -103,9 +130,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.search_label = tk.Label(self.search_frame, text="Search")
         self.search_label.pack(side="left", padx=5, pady=5)
 
-        self.search_box = tk.Text(self.search_frame, height=1, wrap=None, width=10)
+        self.search_box = tk.Text(self.search_frame, height=1, wrap=None, width=10, takefocus=0)
         self.search_box.pack(side="left", fill="x", expand=True, padx=5, pady=0)
-        self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # create Radiobuttons
         self.display_choice = tk.StringVar(value="Added")
@@ -307,6 +333,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def on_show(self):
         self.treeview_refresh(self.treeview)
+        self.search_box.focus_set()
 
     def treeview_refresh(self, treeview, search_term=None):
         """

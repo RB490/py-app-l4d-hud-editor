@@ -70,6 +70,21 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.state("zoomed")  # Maximizes the window
 
+    def run(self) -> None:
+        """Run the mainloop."""
+        if self.has_been_run:
+            raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
+
+        self.has_been_run = True
+        log.info(f"Running GUI {self.root.title()} as gui_type: {self.gui_type}")
+
+        # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
+        if self.gui_type == GUITypes.MAIN:
+            self.set_mainloop_started(True)
+            self.root.mainloop()
+        elif self.gui_type == GUITypes.MODAL:
+            self.root.update()
+
     def show(self, hide: bool = False, callback: str = "") -> None:
         """
         Show the window.
@@ -86,6 +101,14 @@ class BaseGUI:
             self.hide()
         if not self.has_been_run:
             self.run()
+
+    def focus_treeview(self, tree, *event):
+        tree.focus_set()
+        children = tree.get_children()
+        if children:
+            tree.focus(children[0])
+            tree.selection_set(children[0])
+        return "break"  # Prevent the default tab behavior (inserting a tab character)
 
     def __delayed_show(self, callback: str = ""):
         """After mainloop()"""
@@ -123,21 +146,6 @@ class BaseGUI:
             bool_value (bool): True if the mainloop was started, False otherwise.
         """
         BaseGUI.program_mainloop_started = bool_value
-
-    def run(self) -> None:
-        """Run the mainloop."""
-        if self.has_been_run:
-            raise ValueError(f"Called GUI {self.root.title()} Run() while already running!")
-
-        self.has_been_run = True
-        log.info(f"Running GUI {self.root.title()} as gui_type: {self.gui_type}")
-
-        # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
-        if self.gui_type == GUITypes.MAIN:
-            self.set_mainloop_started(True)
-            self.root.mainloop()
-        elif self.gui_type == GUITypes.MODAL:
-            self.root.update()
 
     def destroy(self) -> None:
         """Destroy the window."""

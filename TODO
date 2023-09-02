@@ -4,13 +4,14 @@
 ✔ Feature: DevMenu: indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry @done(23-09-02 16:15)
 ✘ Feature: DevMenu: Run game option(?) @cancelled(23-09-02 16:21)
 ✔ Feature: Modified BaseGUI.show() to allow for a callback to be able to open a sub gui for debugging after mainloop() @done(23-09-02 16:53)
+✔ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa? @started(23-09-02 17:07) @done(23-09-02 18:00) @lasted(53m)
 
 Current:
-	☐ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa?
 
 Todo:		
 	
 	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
+	☐ Refactor: Browser: Move create widgets to separate file?
 	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible
 	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
 	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
