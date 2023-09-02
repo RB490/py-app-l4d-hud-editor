@@ -4,6 +4,7 @@ Current:
 
 Todo:		
 	
+	☐ Feature: Cleanup main debugging file by moving methods to separate files and keeping main() as it should be, just delegating
 	☐ Feature: Installer: Update verify games prompt. as it's outdated. maybe add a timestamp for when instruction were written
 	☐ Feature: Installer: Clear 'exit' from valve.rc after finishing -- infact just write my proper config as sv_consistency 0 is needed too
 	☐ Feature: DevMenu: Somehow indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry
@@ -12,9 +13,17 @@ Todo:
 	☐ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front
 	☐ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible
 	☐ Feature: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup
+	☐ Feature: Start: Closing start gui should close the program + activate user mode, most likely
+	☐ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely
 
-	☐ Bug: VPK/installer: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
+	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
 		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
+			- Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
+		- Test with any L4D1 map: map c12m4_barn
+
+
+		- Alright. Confirmed. extracting it with l4d1_vpk.exe works perfect. No issues ingame. Get the latest version from steam. Add documentation
+		- Still todo: How and do i want to detect if extracted files are corrupted? -- use the comparison methods for _dlc3
 
 	☐ Testing: Test the program by using it to edit HUD's
 

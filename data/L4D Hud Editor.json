@@ -1,6 +1,7 @@
 {
     "BrowserGuiGeometry": "828x141+8+868",
     "GuiGeometryDescriptions": "543x540+220+285",
+    "GuiGeometryStart": "865x500+130+130",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "982x613+182+370",
     "VDFGui_annotate": 1,
