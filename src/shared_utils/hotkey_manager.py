@@ -8,7 +8,8 @@ import keyboard
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import Singleton
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
+# logging_manager = LoggingManager(__name__, level=logging.INFO)
+logging_manager = LoggingManager(__name__, level=logging.DEBUG)
 log = logging_manager.get_logger()
 
 

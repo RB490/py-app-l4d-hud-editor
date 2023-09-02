@@ -43,22 +43,22 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
     def __init__(self, parent_root):
-        super().__init__(gui_type="sub", parent_root=parent_root)
-        self.root.title("Browser")
-        self.root.minsize(300, 100)
-        self.root.iconbitmap(APP_ICON)
-
         # set variables
+        self.settings_geometry_key = "GuiGeometryBrowser"
+        self.selected_full_path = None
         self.data_manager = PersistentDataManager()
         self.hud = Hud()
         self.game = Game()
         self.img = ImageConstants()
+        
+        # create gui
+        super().__init__(gui_type="sub", parent_root=parent_root)
         self.popup_gui = GuiEditorMenuPopup(self.root)
         self.descriptions_gui = GuiHudDescriptions(self.root)
-
-        self.selected_full_path = None
-        self.set_window_geometry(self.data_manager.get("BrowserGuiGeometry"))
-
+        self.root.title("Browser")
+        self.root.minsize(300, 100)
+        self.root.iconbitmap(APP_ICON)
+        self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
         self.__create_context_menu()
 
@@ -386,7 +386,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        self.data_manager.set("BrowserGuiGeometry", self.get_window_geometry())
+        self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
 
     def on_close(self):
         """Runs on close"""

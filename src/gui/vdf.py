@@ -14,7 +14,8 @@ class VDFModifierGUI(BaseGUI):
     """GUI Class for modifying VDF files."""
 
     def __init__(self, parent_root, vdf_path):
-        # verify input
+        # variables
+        self.settings_geometry_key = "GuiGeometryVDF"
         self.vdf_path = vdf_path
         self.root = None  # load_file() uses this to check if the gui was loaded
         self.load_file()  # confirm whether the file is valid
@@ -27,23 +28,20 @@ class VDFModifierGUI(BaseGUI):
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
         self.root.title("VDF Modifier")
-
-        # load saved geometry
-        self.set_window_geometry(self.data_manager.get("VDFGuiGeometry"))
-
         self.control_options = ["xpos", "ypos", "wide", "tall", "visible", "enabled"]
         self.selected_control = tk.StringVar(value=self.control_options[0])
         self.previous_output = None
-
         self.annotate_var = tk.IntVar(value=self.data_manager.get("VDFGui_annotate"))
         self.sort_control_keys_var = tk.IntVar(value=self.data_manager.get("VDFGui_sort_keys"))
         self.align_values_indent_var = tk.IntVar(value=self.data_manager.get("VDFGui_indent_values"))
         self.modify_int_var = tk.IntVar(value=self.data_manager.get("VDFGui_modify_int"))
         self.modify_amount_var = tk.IntVar()
         self.modify_modifier_var = tk.StringVar(value="plus")
-
+        self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
-        self.load_file()  # load file into gui
+
+        # load file
+        self.load_file()
 
     def load_file(self):
         "Load VDF file"
@@ -254,4 +252,4 @@ class VDFModifierGUI(BaseGUI):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
 
-        self.data_manager.set("VDFGuiGeometry", self.get_window_geometry())
+        self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())

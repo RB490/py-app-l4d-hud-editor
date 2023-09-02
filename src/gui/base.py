@@ -85,6 +85,18 @@ class BaseGUI:
 
         self.__call_method_if_exists("on_show")
 
+    def show_post_menu(self, menu, x, y):
+        """
+        Show a menu at the specified coordinates.
+
+        Args:
+            menu: The tkinter.Menu instance to post.
+            x (int): The x-coordinate.
+            y (int): The y-coordinate.
+        """
+        self.show()
+        menu.post(x, y)
+
     def has_ran(self) -> bool:
         """Check if GUI has been run once."""
         return self.has_been_run

@@ -1,5 +1,7 @@
 """Module for the editor menu"""
 # pylint: disable=import-outside-toplevel
+import time
+
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
@@ -32,6 +34,9 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         Create a fully transparent GUI the size of the entire screen so clicking out of the context menu closes it
         """
         super().__init__(gui_type="sub", parent_root=parent_root)
+        self.hotkey_manager = HotkeyManager()
+
+        # root
         self.root.title("Editor Context Menu Popup")
         self.debug_instantly_show_menu = debug_instantly_show_menu
         self.set_transparency(0.3)  # fully transparent makes it less reliable somehow
@@ -50,15 +55,27 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         from menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
-
-        hotkey_manager = HotkeyManager()
-        hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_menu, suppress=True)
+        self.enable_hotkey()
 
         if self.debug_instantly_show_menu:
-            self.show_menu()
+            self.show_editor_menu_popup_gui_at_cursor()
 
-    def show_menu(self):
+    def enable_hotkey(self):
+        self.hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_editor_menu_popup_gui_at_cursor, suppress=False)
+
+    def disable_hotkey(self):
+        self.hotkey_manager.remove_hotkey(HOTKEY_EDITOR_MENU)  # prevent it from being pressed while menu is open
+
+    def show_editor_menu_popup_gui_at_cursor(self):
         """Show menu at mouse cursor"""
+
+        print(f"show_editor_menu_popup_gui_at_cursor: start. hidden = {self.is_hidden}")
+
+        if self.is_hidden == False:
+            print(f"{self.root.title} is already being shown!")
+            print(f"show_editor_menu_popup_gui_at_cursor: returning hidden = {self.is_hidden}")
+            return
+        self.disable_hotkey()
 
         # Show gui so context menu can be closed by clicking out & Resize the GUI to the entire screen
         self.maximize()  # not setting fullscreen because it disables alt=tab
@@ -70,7 +87,12 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         # self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
         # self.dev_context_menu.post(pos_x, pos_y)
         self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-        self.my_editor_menu.menu_bar.post(pos_x, pos_y)
+        # self.is_hidden = False # manually set is_hidden # TODO how can i modify basegui to programatically do this
+        # self.my_editor_menu.menu_bar.post(pos_x, pos_y)
+        self.show_post_menu(self.my_editor_menu.menu_bar, pos_x, pos_y)
 
         # hide gui after context menu closed
+        print(f"show_editor_menu_popup_gui_at_cursor: before end = {self.is_hidden}")
         self.hide()
+        self.enable_hotkey()
+        print(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")

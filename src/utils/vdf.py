@@ -24,7 +24,7 @@ class VDFModifier:
         self.hud = Hud()  # type: ignore
         self.description_key_name: str = "__description__"
         self.vdf_text_raw: str = ""
-        self.vdf_file_name: str = ""
+        self.vdf_file_name: str = os.path.basename(vdf_path)
         self.key_order: List[str] = [
             self.description_key_name,
             "fieldname",
@@ -112,10 +112,6 @@ class VDFModifier:
         """Return the source file name."""
         return self.vdf_file_name
 
-    def _set_file_name(self, vdf_obj) -> None:
-        """Return the source file name."""
-        self.vdf_file_name = self.__get_header_file_name(vdf_obj)
-
     def print_current_vdf(self) -> None:
         """Print the current VDF object."""
         if self.vdf_obj:
@@ -138,7 +134,6 @@ class VDFModifier:
             cleaned_vdf_obj = self.__preprocess_obj(cleaned_vdf_obj)  # type: ignore
             # cleaned_vdf_obj = self.annotate(cleaned_vdf_obj)
             # cleaned_vdf_obj = self.sort_controls(cleaned_vdf_obj)
-            self._set_file_name(cleaned_vdf_obj)
             return cleaned_vdf_obj
         return None
 
@@ -333,9 +328,11 @@ class VDFModifier:
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
 
-    def __get_header_file_name(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
+    def __legacy_get_header_file_name(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
         """
         Get relative file path. Aka the file header for every resource file.
+
+        Not using the file header because it can be damaged or incorrect
 
         Args:
             vdf_obj (Dict[str, Dict[str, Any]]): The VDF object to get the relative file path from.

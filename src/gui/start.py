@@ -24,21 +24,22 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     """Class for the hud select gui"""
 
     def __init__(self):
-        # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        super().__init__("main")
-        self.img = ImageConstants()
+        # variables
+        self.settings_geometry_key = "GuiGeometryStart"
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
+        
+        # gui
+        super().__init__("main")
+        self.browser = GuiHudBrowser(self.root)
+        self.img = ImageConstants()
         self.root.title("Select")
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 500)
-        self.set_window_geometry(self.data_manager.get("HudSelectGuiGeometry"))
-        self.browser = GuiHudBrowser(self.root)
-
+        self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
         self.__create_context_menu()
-
         self.change_addon_image(os.path.join(IMAGES_DIR_128, "cross.png"))
 
         # Bind the right-click event to show the context menu
@@ -282,7 +283,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
-        self.data_manager.set("HudSelectGuiGeometry", self.get_window_geometry())
+        self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
 
     def enable_buttons(self):
         """Enable the following buttons: edit, export, open, remove"""

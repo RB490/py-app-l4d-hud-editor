@@ -61,17 +61,19 @@ def debug_function(*args):
 
 def execute_debugging_hotkey_method_in_thread():
     "debug hotkey in main thread incase it takes a bit longer and causes issue with the keyboard module"
-    thread = threading.Thread(target=hotkey_debugging_method)
+    thread = threading.Thread(target=debugging_hotkey)
     thread.start()
 
     print("thread finished!!!")
 
 
-def hotkey_debugging_method():
+def debugging_hotkey():
     "debug hotkey"
     print("hotkey_debugging_method!")
     # debug_popup_gui()
     browser = get_browser_gui()
+    # hotkey_manager = HotkeyManager()
+    # print(hotkey_manager.list_hotkeys())
 
 
 def debug_main():
@@ -80,8 +82,8 @@ def debug_main():
     print("Started debugging!")
     # hotkeys
     hotkey_manager = HotkeyManager()
-    # hotkey_manager.add_hotkey("CTRL+S", hotkey_debugging_method, suppress=True)
-    hotkey_manager.add_hotkey("F10", hotkey_debugging_method, suppress=True)
+    hotkey_manager.add_hotkey("CTRL+S", debugging_hotkey, suppress=True)
+    hotkey_manager.add_hotkey("F10", debugging_hotkey, suppress=True)
     # hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
     # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)
     # return
@@ -166,8 +168,8 @@ def debug_gui():
     # browser = get_browser_gui()
 
     # start
-    debug_start_gui()
-    # show_start_gui()
+    # debug_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()
@@ -220,9 +222,10 @@ def debug_id_handler(game_class):
 def debug_hud_descriptions_class():
     print("hi there!")
     desc = HudDescriptions()
-    file_name = "hudlayout.res"
+    # file_name = "hudlayout.res"
+    file_name = "debug_file.txt"
     # result = desc.get_control_description(file_name, "HudWeaponSelection")
-    result = desc.get_control_description(file_name, "CHudZombieTeamDisplay")
+    result = desc.set_file_relative_path(file_name, "some\path")
 
     print(f"desc result = {result}")
 

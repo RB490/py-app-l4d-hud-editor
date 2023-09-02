@@ -9,30 +9,38 @@ from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, ImageConstants
 from utils.functions import get_browser_gui
+from utils.persistent_data_manager import PersistentDataManager
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
     """Class for the hud file descriptions gui"""
 
     def __init__(self, parent_root):
-        super().__init__(gui_type="sub", parent_root=parent_root)
-        self.root.title("File")
-        self.root.iconbitmap(APP_ICON)
-        self.set_always_on_top(True)
-        # self.root.minsize(450, 400)
-
-        self.game = Game()
-        self.hud = Hud()
-        self.img = ImageConstants()
-
+        # variables
+        self.settings_geometry_key = "GuiGeometryDescriptions"
         self.parent = parent_root
         self.file_name = None
         self.relative_path = None
         self.unsaved_changes = False
         self.prev_file_desc_content = None
         self.prev_ctrl_desc_content = None
-
+        self.data_manager = PersistentDataManager()
+        self.game = Game()
+        self.hud = Hud()
+        self.img = ImageConstants()
+        
+        # gui
+        super().__init__(gui_type="sub", parent_root=parent_root)
+        self.root.title("File")
+        self.root.iconbitmap(APP_ICON)
+        self.set_always_on_top(True)
+        # self.root.minsize(450, 400)
+        self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
+
+    def save_window_geometry(self):
+        """Save size & position if GUI is loaded and visible"""
+        self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
 
     def __create_widgets(self):
         """Create widgets"""
