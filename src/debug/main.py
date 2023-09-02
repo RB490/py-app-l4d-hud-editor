@@ -82,7 +82,7 @@ def debug_main():
     print("Started debugging!")
     # hotkeys
     hotkey_manager = HotkeyManager()
-    hotkey_manager.add_hotkey("CTRL+S", debugging_hotkey, suppress=True)
+    # hotkey_manager.add_hotkey("CTRL+S", debugging_hotkey, suppress=True)
     hotkey_manager.add_hotkey("F10", debugging_hotkey, suppress=True)
     # hotkey_manager.add_hotkey("F12", debug_unsync_hud_func, suppress=True)
     # hotkey_manager.add_hotkey("CTRL+S", execute_debugging_hotkey_method_in_thread, suppress=True)

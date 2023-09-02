@@ -116,7 +116,7 @@ class ProgressGUI(BaseGUI):
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
-        log.debug()
+        log.debug(" ")
         log.debug(f"Step #{self.current_step}")
         log.debug(f"self.longest_step_info() = {self.longest_label_length}")
         log.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
@@ -124,7 +124,7 @@ class ProgressGUI(BaseGUI):
         log.debug(f"max_chars = {max_chars}")
         log.debug(f"available_width = {available_width}")
         log.debug(f"displayed_text = {displayed_text}")
-        log.debug()
+        log.debug(" ")
 
         # update the gui
         self.step_info_label.config(text=displayed_text)
