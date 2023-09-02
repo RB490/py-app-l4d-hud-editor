@@ -1,7 +1,11 @@
 import os
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
+from game.installer_prompts import prompt_verify_game
 from utils.persistent_data_manager import PersistentDataManager
+
+def main_misc_debug():
+    prompt_verify_game()
 
 def setup_debugging_environment():
     os.system("cls")  # Clear the terminal

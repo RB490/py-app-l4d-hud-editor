@@ -1,8 +1,8 @@
 "Installer prompts"
 from game.constants import DirectoryMode
 from game.game import Game
-from utils.functions import get_dir_size_in_gb
 from shared_utils.shared_utils import show_message
+from utils.functions import get_dir_size_in_gb
 
 
 def prompt_start(install_type, message_extra=""):
@@ -61,9 +61,12 @@ def prompt_verify_game():
     game_title = game_class.get_title()
     title = "Verify game files"
 
+    # https://help.steampowered.com/en/faqs/view/0C48-FCBD-DA71-93EB
+
     message = (
         f"Verify game files for {game_title}\n\n"
-        f"Steam -> Right-Click {game_title} -> Properties -> Local Files -> 'Verify integrity of game files'\n\n"
+        f"Steam -> Right-Click {game_title} -> Properties -> Installed Files -> 'Verify integrity of game files'. "
+        "(this is how to do it at time of writing on 2023.09.02. Might differ slightly)\n\n"
         "This will not affect your game installation. Only the copy that was just made\n\n"
         "Are you sure steam has finished verifying AND downloaded any missing files?"
     )
