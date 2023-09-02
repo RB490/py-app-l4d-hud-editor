@@ -30,9 +30,9 @@ from utils.constants import (
     ImageConstants,
 )
 from utils.functions import (
-    get_browser_gui,
     get_image_for_file_extension,
     save_and_exit_script,
+    show_browser_gui,
 )
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -60,7 +60,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.title("Browser")
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
-        self.set_always_on_top(True)  # FIXME disable
+        self.set_always_on_top(True)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
         self.__create_context_menu()
@@ -485,11 +485,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Runs on close"""
         result = show_message("Are you sure you want to exit?", "yesno")
         if not result:
-            get_browser_gui()
+            show_browser_gui()
             return
 
-        self.descriptions_gui.destroy()
-        self.save_window_geometry()
+        self.descriptions_gui.hide()
         save_and_exit_script()
 
     def action_open_file(self):

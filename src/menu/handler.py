@@ -9,7 +9,12 @@ import pyperclip  # type: ignore
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
-from utils.functions import get_browser_gui, get_mouse_position_on_click, show_start_gui
+from utils.functions import (
+    get_mouse_position_on_click,
+    save_and_exit_script,
+    show_browser_gui,
+    show_start_gui,
+)
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -197,8 +202,7 @@ class EditorMenuHandler:
     def editor_exit_script(self):
         """Exit script"""
 
-        self.hud.edit.finish_editing(open_start_gui=False)
-        sys.exit()
+        save_and_exit_script()
 
     def editor_open_start_gui(self):
         """Open hud select gui"""
@@ -219,14 +223,9 @@ class EditorMenuHandler:
         print("editor_open_browser_gui")
 
         try:
-            get_browser_gui()
-        except:
-            message = (
-                "Run start GUI mainloop() first!\n\n"
-                "For example when debugging the editor menu without having shown start gui\n\n"
-                "(Presumably this message only occurs while debugging)"
-            )
-            show_message(message)
+            show_browser_gui()
+        except Exception as e:
+            show_message(f"Could not open browser gui: {e}")
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""

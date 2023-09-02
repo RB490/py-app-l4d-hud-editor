@@ -1,7 +1,8 @@
 import threading
+from debug.gui import debug_browser_gui
 
 from shared_utils.hotkey_manager import HotkeyManager
-from utils.functions import get_browser_gui
+from utils.functions import show_browser_gui
 
 
 def enable_debug_hotkeys():
@@ -23,6 +24,6 @@ def debugging_hotkey():
     "Debug hotkey"
     print("Hotkey debugging method!")
     # debug_popup_gui()
-    browser = get_browser_gui()
+    browser = debug_browser_gui()
     # hotkey_manager = HotkeyManager()
     # print(hotkey_manager.list_hotkeys())

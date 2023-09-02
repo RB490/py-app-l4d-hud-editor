@@ -8,7 +8,7 @@ from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, ImageConstants
-from utils.functions import get_browser_gui
+from utils.functions import show_browser_gui
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -28,7 +28,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.game = Game()
         self.hud = Hud()
         self.img = ImageConstants()
-        
+
         # gui
         super().__init__(gui_type="sub", parent_root=parent_root)
         self.root.title("File")
@@ -305,7 +305,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # save currently loaded control
         self.save_control_description()
-        
+
         # save relative path
         self.hud.desc.set_file_relative_path(self.file_name, self.relative_path)
 
@@ -320,8 +320,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # save changes
         self.save_changes()
 
-        browser = get_browser_gui()
-        browser.treeview_refresh(browser.treeview)
+        browser = show_browser_gui()
 
         self.on_close()
 

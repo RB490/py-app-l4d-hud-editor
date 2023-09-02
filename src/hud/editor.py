@@ -14,7 +14,7 @@ from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import get_browser_gui, show_start_gui
+from utils.functions import show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -120,7 +120,7 @@ class HudEditor:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        self.browser = get_browser_gui()
+        self.browser = show_browser_gui()
 
         return True
 
@@ -144,8 +144,11 @@ class HudEditor:
         # clear variables
         self.clear_hud_info()
 
-        # enable user mode
-        self.game.dir.set(DirectoryMode.DEVELOPER)
+        # prompt close game
+        result = show_message(f"Close game and switch back to {DirectoryMode.USER.name} mode?", "yesno")
+        if result:
+            # enable user mode
+            self.game.dir.set(DirectoryMode.USER)
 
         # callback to the gui
         if open_start_gui:

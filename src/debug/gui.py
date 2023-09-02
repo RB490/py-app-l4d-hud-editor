@@ -18,7 +18,7 @@ from gui.vdf import VDFModifierGUI
 from shared_utils.shared_utils import get_invisible_tkinter_root
 from shared_utils.splash_gui import splash_gui_example
 from utils.constants import DEVELOPMENT_DIR
-from utils.functions import get_backup_path, get_browser_gui, show_start_gui
+from utils.functions import get_backup_path, show_start_gui
 from utils.get_user_input import get_user_input
 
 
@@ -27,10 +27,10 @@ def main_debug_gui():
 
     # start
     # debug_start_gui()
-    show_start_gui()
+    # show_start_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
     # browser = get_browser_gui()
 
     # splash

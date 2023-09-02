@@ -10,9 +10,9 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
+
 from debug.hud import get_hud_debug_instance
 from game.constants import DirectoryMode
-
 from game.game import Game
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
@@ -20,21 +20,16 @@ from utils.persistent_data_manager import PersistentDataManager
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 
-def get_browser_gui():
-    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+def show_browser_gui():
+    "Show the browser gui"
     from gui.browser import GuiHudBrowser
     from gui.start import GuiHudStart
 
-    # destroy other main gui
     start_gui = GuiHudStart()
-
     if not start_gui.get_mainloop_started():
         raise ValueError("Retrieved browser GUI without having started mainloop() first")
 
-
-    h = get_hud_debug_instance()
     browser_gui = GuiHudBrowser(start_gui.root)
-    browser_gui.treeview_refresh(browser_gui.treeview)
     browser_gui.show()
     return browser_gui
 
@@ -253,7 +248,6 @@ def save_and_exit_script():
 
     hud_instance = Hud()
     hud_instance.edit.finish_editing(open_start_gui=False)
-    game_class = Game()
-    game_class.set(DirectoryMode.USER)
+    
     PersistentDataManager().save()
     sys.exit()

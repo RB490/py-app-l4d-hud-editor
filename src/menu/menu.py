@@ -1299,6 +1299,6 @@ class EditorMenuClass:
             self.main_menu.entryconfig("Hud", state="disabled")
 
         # update the menubar on the gui
-        #   note: for context menu's is_context_menu=False is important. otherwise showing menu on button will be misaligned
+        #   for context menu's is_context_menu=False is important. otherwise showing menu on button will be misaligned
         if not is_context_menu:
             self.root.config(menu=self.main_menu)
