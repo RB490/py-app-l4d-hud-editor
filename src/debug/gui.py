@@ -37,7 +37,7 @@ def main_debug_gui():
 
     # start
     # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # vdf gui
     # debug_vdf_gui()

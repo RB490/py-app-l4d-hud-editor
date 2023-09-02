@@ -58,7 +58,3 @@ def logging_class_usage_example():
     log.warning("This is a warning message")
     log.error("This is an error message")
     log.critical("This is a critical message")
-
-
-# Call the usage example function
-logging_class_usage_example()
