@@ -58,15 +58,15 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.enable_hotkey()
 
         if self.debug_instantly_show_menu:
-            self.show_editor_menu_popup_gui_at_cursor()
+            self.show_popup()
 
     def enable_hotkey(self):
-        self.hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_editor_menu_popup_gui_at_cursor, suppress=False)
+        self.hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup, suppress=False)
 
     def disable_hotkey(self):
         self.hotkey_manager.remove_hotkey(HOTKEY_EDITOR_MENU)  # prevent it from being pressed while menu is open
 
-    def show_editor_menu_popup_gui_at_cursor(self):
+    def show_popup(self):
         """Show menu at mouse cursor"""
 
         # Show gui so context menu can be closed by clicking out & Resize the GUI to the entire screen

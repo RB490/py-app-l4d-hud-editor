@@ -299,3 +299,14 @@ class BaseGUI:
             log.info(f"Called {method_name} for {self.root.title()} GUI.")
         else:
             log.info(f"GUI {self.root.title()} does not have a {method_name} method to call!")
+
+    def show_context_menu_on_button(self, button, context_menu):
+        """Display a context menu near the specified button."""
+        x, y, _, _ = button.bbox("all")
+
+        # Calculate the new position for the context menu
+        new_x = button.winfo_rootx() + x
+        new_y = button.winfo_rooty() + y + button.winfo_height()
+
+        # Display the context menu
+        context_menu.post(new_x, new_y)
