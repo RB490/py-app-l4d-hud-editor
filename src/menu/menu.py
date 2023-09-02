@@ -2,7 +2,6 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 
 import os
-import time
 import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage

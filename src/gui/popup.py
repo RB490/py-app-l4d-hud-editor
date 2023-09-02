@@ -1,7 +1,5 @@
 """Module for the editor menu"""
 # pylint: disable=import-outside-toplevel
-import time
-
 from game.game import Game
 from gui.base import BaseGUI
 from hud.hud import Hud
@@ -61,9 +59,11 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
             self.show_popup()
 
     def enable_hotkey(self):
+        """Enable hotkey"""
         self.hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup, suppress=False)
 
     def disable_hotkey(self):
+        """Disable hotkey"""
         self.hotkey_manager.remove_hotkey(HOTKEY_EDITOR_MENU)  # prevent it from being pressed while menu is open
 
     def show_popup(self):

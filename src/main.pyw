@@ -26,7 +26,7 @@ os.system("cls")  # clear terminal
 #     Load persistent data
 # ----------------------------------
 
-data_manager = PersistentDataManager()  # type: ignore # TODO
+data_manager = PersistentDataManager()  # type: ignore
 
 # ----------------------------------
 #     Do stuff

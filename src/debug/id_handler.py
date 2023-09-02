@@ -1,3 +1,4 @@
+"""Debug"""
 from game.constants import DirectoryMode, InstallationState, SyncState
 
 

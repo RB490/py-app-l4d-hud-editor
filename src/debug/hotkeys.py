@@ -1,12 +1,14 @@
+"""Debug hotkeys"""
 import threading
-from debug.gui import debug_browser_gui
 
+from debug.gui import debug_browser_gui
 from shared_utils.hotkey_manager import HotkeyManager
-from utils.functions import show_browser_gui
 
 
 def enable_debug_hotkeys():
-    # Set up hotkeys # TODO
+    """Debug hotkeys"""
+
+    # Set up hotkeys
     hotkey_manager = HotkeyManager()
     hotkey_manager.add_hotkey("F10", debugging_hotkey, suppress=True)
 
@@ -24,6 +26,6 @@ def debugging_hotkey():
     "Debug hotkey"
     print("Hotkey debugging method!")
     # debug_popup_gui()
-    browser = debug_browser_gui()
+    debug_browser_gui()
     # hotkey_manager = HotkeyManager()
     # print(hotkey_manager.list_hotkeys())

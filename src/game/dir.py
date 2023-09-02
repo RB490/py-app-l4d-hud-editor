@@ -10,12 +10,7 @@ from hud.syncer import files_differ
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory, verify_directory
 from shared_utils.splash_gui import SplashGUI
-from utils.functions import (
-    generate_random_string,
-    get_backup_filename,
-    get_backup_path,
-    rename_with_timeout,
-)
+from utils.functions import generate_random_string, get_backup_filename, get_backup_path, rename_with_timeout
 from utils.steam_info_retriever import SteamInfoRetriever
 
 logging_manager = LoggingManager(__name__, level=logging.INFO)
@@ -394,7 +389,7 @@ class GameDir:
         return pak01_subdirs
 
     def _find_resource_recursive(self, current_dir, target_file, root_dir):
-        for root, dirs, files in os.walk(current_dir):
+        for root, _, files in os.walk(current_dir):
             log.debug(f"Searching in directory: {root}")
             if target_file in files:
                 resource_path = os.path.relpath(os.path.join(root, target_file), root_dir)

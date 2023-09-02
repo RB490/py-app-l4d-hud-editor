@@ -1,7 +1,7 @@
+"""Subclass of the hud class. Manages everything related to hud file descriptions"""
 # pylint: disable=logging-fstring-interpolation
 import json
 import logging
-import os
 
 from game.game import Game
 from shared_utils.logging_manager import LoggingManager

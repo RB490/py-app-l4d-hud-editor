@@ -3,12 +3,7 @@
 import os
 import shutil
 
-from game.constants import (
-    DirectoryMode,
-    DirModeError,
-    InstallationState,
-    TitleRetrievalError,
-)
+from game.constants import DirectoryMode, DirModeError, InstallationState, TitleRetrievalError
 from game.video_settings_modifier import VideoSettingsModifier
 from shared_utils.shared_utils import Singleton
 from utils.constants import DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
@@ -66,6 +61,7 @@ class Game(metaclass=Singleton):
         return valid_titles.get(title, None)
 
     def write_config(self):
+        """Write editor config"""
         # variables
         config_dir = self.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
         valverc_path = os.path.join(config_dir, "valve.rc")

@@ -103,6 +103,7 @@ class BaseGUI:
             self.run()
 
     def bring_to_front(self):
+        """Bring GUI to front"""
         # Lift the window to the top
         self.root.lift()
 
@@ -125,6 +126,8 @@ class BaseGUI:
             self.__call_method_if_exists(callback)
 
     def focus_treeview(self, tree, *event):
+        """Focus the first row of a treeview"""
+        # pylint: disable=unused-argument
         tree.focus_set()
         children = tree.get_children()
         if children:

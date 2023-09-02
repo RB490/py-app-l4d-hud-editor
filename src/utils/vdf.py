@@ -17,8 +17,8 @@ class VDFModifier:
     """Class for modifying VDF files."""
 
     def __init__(self, vdf_path: str = "") -> None:
-        from hud.hud import Hud
         from game.game import Game
+        from hud.hud import Hud
 
         self.game = Game()  # type: ignore
         self.hud = Hud()  # type: ignore
@@ -319,16 +319,19 @@ class VDFModifier:
 
         modified_vdf_obj: Dict[str, Dict[str, Any]] = vdf_obj.copy()
         file_name: str = self.get_file_name()
-        rel_path: str = self.hud.desc.get_file_relative_path(file_name)
+        # rel_path: str = self.hud.desc.get_file_relative_path(file_name)
 
         for controls in modified_vdf_obj.values():
             for control_name, control_data in controls.items():
-                control_data[self.description_key_name] = self.hud.desc.get_control_description(file_name, control_name)
+                control_data[self.description_key_name] = self.hud.desc.get_control_description(
+                    file_name, control_name
+                )
 
         self.vdf_obj = modified_vdf_obj
         return modified_vdf_obj
 
     def __legacy_get_header_file_name(self, vdf_obj: Dict[str, Dict[str, Any]]) -> str:
+        # pylint: disable=unused-private-member
         """
         Get relative file path. Aka the file header for every resource file.
 

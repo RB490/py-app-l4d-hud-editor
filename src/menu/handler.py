@@ -1,7 +1,6 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 # pylint: disable=broad-exception-caught, bare-except
 import os
-import sys
 from tkinter import messagebox
 
 import pyperclip  # type: ignore

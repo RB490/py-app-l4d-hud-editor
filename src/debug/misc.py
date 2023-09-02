@@ -1,3 +1,4 @@
+"""Debug"""
 import os
 
 from debug.game import debug_game_set_states_synced_and_installed
@@ -6,11 +7,12 @@ from utils.persistent_data_manager import PersistentDataManager
 
 
 def main_misc_debug():
-    pass
+    """Debug"""
     # prompt_verify_game()
 
 
 def setup_debugging_environment():
+    """Debug"""
     os.system("cls")  # Clear the terminal
     print("Started debugging!")
     debug_game_set_states_synced_and_installed()

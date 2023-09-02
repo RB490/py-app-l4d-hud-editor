@@ -1,50 +1,8 @@
-✔ Feature: Cleanup main debugging file by moving methods to separate files and keeping main() as it should be, just delegating @done(23-09-02 15:32)
-✔ Feature: Installer: Update verify games prompt. as it's outdated. maybe add a timestamp for when instruction were written @done(23-09-02 15:44)
-✔ Feature: Installer: Clear 'exit' from valve.rc after finishing -- infact just write my proper config as sv_consistency 0 is needed too @started(23-09-02 15:44) @done(23-09-02 15:46) @lasted(2m10s)
-✔ Feature: DevMenu: indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry @done(23-09-02 16:15)
-✘ Feature: DevMenu: Run game option(?) @cancelled(23-09-02 16:21)
-✔ Feature: Modified BaseGUI.show() to allow for a callback to be able to open a sub gui for debugging after mainloop() @done(23-09-02 16:53)
-✔ Feature: Browser: Can i modify the shortcut 'control' of the gui? So pressing tab would switch from text input to the treeview. and maybe vice-versa? @started(23-09-02 17:07) @done(23-09-02 18:00) @lasted(53m)
-✔ Feature: BaseGUI: Toggle visibility should focus the gui & bring it to front @done(23-09-02 18:03)
-✘ Refactor: Browser: Move create widgets to separate file? @cancelled(23-09-02 18:09)
-✔ Feature: BaseGUI: Show() should focus the gui & bring it to front // test with the installer & remove always_on_top if possible @done(23-09-02 18:09)
-✔ Bug: BaseGUI: Set browser to always on top true -> debug_browser_gui() -> not always on top @done(23-09-02 20:31)
-✔ Feature: Browser: Add those large buttons to the browser that indicate the hotkeys that are available just like on my content editor, eg: syncing,browser toggling,editor menu popup @started(23-09-02 18:29) @done(23-09-02 20:57) @lasted(2h28m7s)
-✔ Feature: BaseGUI: Show menu on button @done(23-09-02 22:07)
-✔ Feature: Start: Closing start gui should close the program + activate user mode, most likely @done(23-09-02 22:09)
-✔ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely @done(23-09-02 22:27)
-✔ Feature: Todo: Import todo's from microsoft todo @done(23-09-02 22:27)
-
 Current:
 
 Todo:		
-	
-	☐ Bug: # TODO #FIXME # don't get shown in the problems terminal? was that functionality from a different extension? They do show in the TODO extenion box
-
-	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
-		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
-			- Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
-		- Test with any L4D1 map: map c12m4_barn
-
-
-		- Alright. Confirmed. extracting it with l4d1_vpk.exe works perfect. No issues ingame. Get the latest version from steam. Add documentation
-		- Still todo: How and do i want to detect if extracted files are corrupted? -- use the comparison methods for _dlc3
-
-	☐ Refactor: Buttons:
-	        self.sync_hotkey_button = tk.Button(
-				self.toolbar_frame,
-				text=f"Sync {HOTKEY_SYNC_HUD}",
-				justify="center",
-				command=self.dummy_handler,
-				state="disabled",
-				image=self.img.arrows_couple_counterclockwise_rotating_symbol,
-				compound="left",
-				padx=5,
-				width=125,
-				height=25,
-			)
-			self.sync_hotkey_button.pack(padx=0, pady=0, side="left")
-
+	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe
+	☐ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
 	☐ Feature: Retrieve HWND / PID in basegui?
 	☐ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils
 	☐ Feature: VDF GUI: Add some info like comments not getting saved
@@ -56,10 +14,9 @@ Todo:
 	☐ Refactor: Use BaseGUI's self.show_context_menu_on_button
 	☐ Feature: Start: CTRL+F hotkey for focusing search
 	☐ Feature: Start: Move search frame below the treeview
+	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
 
 	☐ Testing: Test the program by using it to edit HUD's
-
-	☐ Post: Idea: Threading (GUI) for lengthy operations such as shutil.rmtree mostly during install (Adds complexity) to prevent GUI's from freezing
 
 Release:
 	- Goal: Being able to have smug use the program and have it 100% work for him on first try

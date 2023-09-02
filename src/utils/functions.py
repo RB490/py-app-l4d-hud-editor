@@ -11,8 +11,6 @@ from tkinter import filedialog
 import psutil
 import pyautogui
 
-from debug.hud import get_hud_debug_instance
-from game.constants import DirectoryMode
 from game.game import Game
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
@@ -248,6 +246,6 @@ def save_and_exit_script():
 
     hud_instance = Hud()
     hud_instance.edit.finish_editing(open_start_gui=False)
-    
+
     PersistentDataManager().save()
     sys.exit()

@@ -58,14 +58,15 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # Dbg hotkeys
         hotkey_manager = HotkeyManager()
-        hotkey_manager.add_hotkey("F9", self.start_debug_method, suppress=True)
+        hotkey_manager.add_hotkey("F9", self.debug_hotkey, suppress=True)
 
     def debug_show_browser_gui(self):
+        """Used for debugging to automatically open the browser gui after starting mainloop"""
         self.browser.show()
 
-    def start_debug_method(self):
+    def debug_hotkey(self):
         "debug"
-        print("start_debug_method")
+        print("debug_hotkey")
         # get_browser_gui()
 
     def __create_widgets(self):
@@ -452,4 +453,5 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.hud.edit.start_editing(self.selected_hud_dir)
 
     def on_close(self):
+        """On close callback"""
         save_and_exit_script()

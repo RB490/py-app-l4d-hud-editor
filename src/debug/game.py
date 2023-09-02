@@ -4,6 +4,7 @@ from game.game import Game
 
 
 def debug_game_set_states_synced_and_installed():
+    """Debug"""
     game_class = Game()
     game_class.dir.id.set_sync_state(
         DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED
@@ -11,6 +12,7 @@ def debug_game_set_states_synced_and_installed():
     game_class.dir.id.set_installation_state(
         DirectoryMode.DEVELOPER, InstallationState.COMPLETED
     )  # Prevent restore_developer_directory from activating
+
 
 def main_debug_game():
     "debug game class"

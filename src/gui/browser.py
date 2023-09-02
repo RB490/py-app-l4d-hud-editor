@@ -5,7 +5,7 @@ import os
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
-# TODO
+
 import send2trash
 import win32gui
 from PIL import Image, ImageTk
@@ -29,16 +29,13 @@ from utils.constants import (
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
-from utils.functions import (
-    get_image_for_file_extension,
-    save_and_exit_script,
-    show_browser_gui,
-)
+from utils.functions import get_image_for_file_extension, save_and_exit_script, show_browser_gui
 from utils.persistent_data_manager import PersistentDataManager
 
 logging_manager = LoggingManager(__name__, level=logging.DEBUG)
 # logging_manager = LoggingManager(__name__, level=logging.WARNING)
 log = logging_manager.get_logger()
+
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
@@ -47,6 +44,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # set variables
         self.settings_geometry_key = "GuiGeometryBrowser"
         self.selected_full_path = None
+        self.selected_file_name = None
+        self.selected_relative_path = None
         self.data_manager = PersistentDataManager()
         self.hud = Hud()
         self.game = Game()
@@ -86,6 +85,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_sort_column("modified", True)
 
     def toggle_focus_treeview_and_search(self, *event):
+        """Toggle focus between treeview and search"""
+        # pylint: disable=unused-argument
         current_focus = self.root.focus_get()
         log.debug(f"current_focus = {current_focus}")
         if current_focus == self.search_box:
@@ -394,6 +395,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             log.debug(f"Selected file name: {self.selected_file_name}")
 
     def on_show(self):
+        """Callback on show"""
         self.treeview_refresh(self.treeview)
         self.search_box.focus_set()
 
@@ -484,8 +486,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Runs on close"""
         result = show_message("Are you sure you want to exit?", "yesno")
         if not result:
-            show_browser_gui()  # TODO
-            return  # FIXME
+            show_browser_gui()
+            return
 
         self.descriptions_gui.hide()
         save_and_exit_script()

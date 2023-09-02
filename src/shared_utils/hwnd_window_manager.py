@@ -6,7 +6,6 @@ including methods to check process status, retrieve focused HWND, get process na
 import ctypes
 import functools
 import logging
-import os
 import time
 
 import psutil
