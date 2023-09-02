@@ -1,10 +1,10 @@
+✔ Feature: Cleanup main debugging file by moving methods to separate files and keeping main() as it should be, just delegating @done(23-09-02 15:32)
 
 
 Current:
 
 Todo:		
 	
-	☐ Feature: Cleanup main debugging file by moving methods to separate files and keeping main() as it should be, just delegating
 	☐ Feature: Installer: Update verify games prompt. as it's outdated. maybe add a timestamp for when instruction were written
 	☐ Feature: Installer: Clear 'exit' from valve.rc after finishing -- infact just write my proper config as sv_consistency 0 is needed too
 	☐ Feature: DevMenu: Somehow indicate which mode is currently activated. aka in the 'vanilla' path. either by disablig and/or additional entry

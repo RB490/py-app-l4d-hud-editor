@@ -6,6 +6,21 @@ import shutil
 from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR
 
+def debug_hud_class():
+    "debug hud class"
+    h = get_hud_debug_instance()
+    # result = hud.edit.get_all_files_dict()
+    # result = hud.edit.get_files_dict()
+    h.edit.start_editing(h.edit.get_dir())
+    # h.edit.sync()
+
+
+def debug_unsync_hud_func():
+    "debug"
+
+    hud_ins = Hud()
+    hud_ins.edit.syncer.unsync()
+    print("finished: debug_unsync_hud_func")
 
 def get_hud_debug_instance():
     """Debug the hud class"""

@@ -1,5 +1,5 @@
 """Runs the debugging module"""
 # from debug.debug_game import debug_game_class
-from debug.main import debug_main
+from debug.main import main_debug
 
-debug_main()
+main_debug()

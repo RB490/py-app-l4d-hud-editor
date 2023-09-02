@@ -16,9 +16,40 @@ from gui.progress import ProgressGUI
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
 from shared_utils.shared_utils import get_invisible_tkinter_root
+from shared_utils.splash_gui import splash_gui_example
 from utils.constants import DEVELOPMENT_DIR
-from utils.functions import get_backup_path
+from utils.functions import get_backup_path, get_browser_gui, show_start_gui
 from utils.get_user_input import get_user_input
+
+
+def main_debug_gui():
+    "debug gui"
+
+    # splash
+    # splash_gui_example()
+
+    # popup
+    # debug_popup_gui()
+
+    # browser
+    # debug_browser_gui()
+    # browser = get_browser_gui()
+
+    # start
+    # debug_start_gui()
+    # show_start_gui()
+
+    # vdf gui
+    # debug_vdf_gui()
+
+    # descriptions
+    # debug_descriptions_gui()
+
+    # user input (used to retrieve game command)
+    # debug_get_user_input()
+
+    # installer
+    # debug_progress_gui()
 
 
 def debug_browser_gui():
