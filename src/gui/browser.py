@@ -65,13 +65,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Bindings
         self.treeview.bind("<<TreeviewSelect>>", self.treeview_set_selected_item)
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
-        # self.root.bind("<F1>", self.focus_treeview)
-        self.root.bind("<F1>", self.focus_main_treeview)
-        self.root.bind("<F2>", self.toggle_focus_treeview_and_search)
-        self.root.bind("<Control-Tab>", self.toggle_focus_treeview_and_search)
-        # self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
-        self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
         self.search_box.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.root.bind("<Control-Tab>", self.toggle_focus_treeview_and_search)
         self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # editor menu
@@ -88,26 +84,16 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
 
-    def focus_main_treeview(self, *event):
-        self.focus_treeview(self.treeview)
-
     def toggle_focus_treeview_and_search(self, *event):
         current_focus = self.root.focus_get()
         log.debug(f"current_focus = {current_focus}")
         if current_focus == self.search_box:
-            self.focus_main_treeview()
+            self.focus_treeview(self.treeview)
             log.debug("Focused treeview")
         else:
             self.search_box.focus_set()
             log.debug("Focused searchbox")
         return "break"  # Prevent the default tab behavior (inserting a tab character)
-
-    def select_first_row(self):
-        selected_items = self.treeview.selection()
-        if not selected_items:
-            first_item = self.treeview.get_children()[0]  # Get the first item
-            self.treeview.selection_set(first_item)  # Select the first item
-            self.treeview.focus(first_item)
 
     def __create_widgets(self):
         """Create widgets"""

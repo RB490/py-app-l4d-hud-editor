@@ -14,7 +14,7 @@ log = logging_manager.get_logger()
 class ProgressGUI(BaseGUI):
     """A class representing a progress GUI window for installation."""
 
-    def __init__(self, action_description: str, initial_width: int, max_label_length: int, total_steps: int, always_on_top: bool = True) -> None:
+    def __init__(self, action_description: str, initial_width: int, max_label_length: int, total_steps: int) -> None:
         """
         Initialize the progress GUI with the specified parameters.
 
@@ -31,7 +31,6 @@ class ProgressGUI(BaseGUI):
         self.height = 125
         self.root.geometry(f"{initial_width}x{self.height}")
         self.root.resizable(True, False)  # resizable in width but not in height
-        self.set_always_on_top(always_on_top)
 
         self.action_description = action_description
         self.total_steps = total_steps

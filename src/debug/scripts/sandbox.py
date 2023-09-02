@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from functools import partial
 
 
-def focus_treeview():
+def focus_treeview(tree, *event):
     tree.focus_set()
     children = tree.get_children()
     if children:
@@ -26,13 +27,13 @@ tree.insert("", "end", text="Person 2", values=("Bob", 25))
 tree.insert("", "end", text="Person 3", values=("Charlie", 35))
 
 # Bind the Tab key to the focus_treeview function
-tree.bind("<Tab>", lambda event, tree=tree: focus_treeview())
+tree.bind("<Tab>", partial(focus_treeview, tree))
 
 # Pack the Treeview widget
 tree.pack()
 
 # Create a button to trigger the focus_treeview function
-focus_button = tk.Button(root, text="Focus Treeview", command=focus_treeview)
+focus_button = tk.Button(root, text="Focus Treeview", command=partial(focus_treeview, tree))
 focus_button.pack()
 
 # Start the Tkinter main loop
