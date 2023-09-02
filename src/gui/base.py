@@ -102,6 +102,26 @@ class BaseGUI:
         if not self.has_been_run:
             self.run()
 
+    def bring_to_front(self):
+        # Lift the window to the top
+        self.root.lift()
+        
+        # Make the window topmost (works on some systems)
+        self.root.attributes('-topmost', True)
+        self.root.attributes('-topmost', False)
+        
+        # Set focus to the entire window
+        self.root.focus_force()
+
+    def __delayed_show(self, callback: str = ""):
+        """After mainloop()"""
+        log.debug("Running __delayed_show")
+        self.bring_to_front()
+        self.__call_method_if_exists("on_show")
+        if callback:
+            log.info(f"Running specified callback for {self.root.title}!")
+            self.__call_method_if_exists(callback)
+
     def focus_treeview(self, tree, *event):
         tree.focus_set()
         children = tree.get_children()
@@ -109,14 +129,6 @@ class BaseGUI:
             tree.focus(children[0])
             tree.selection_set(children[0])
         return "break"  # Prevent the default tab behavior (inserting a tab character)
-
-    def __delayed_show(self, callback: str = ""):
-        """After mainloop()"""
-        log.debug("Running __delayed_show")
-        self.__call_method_if_exists("on_show")
-        if callback:
-            log.info(f"Running specified callback for {self.root.title}!")
-            self.__call_method_if_exists(callback)
 
     def show_post_menu(self, menu, x, y):
         """
