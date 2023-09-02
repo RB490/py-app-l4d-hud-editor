@@ -1,6 +1,8 @@
 [pylint]
-disable=logging-fstring-interpolation,
-disable=broad-exception-caught
-disable=broad-exception-raised
-disable=protected-access
-disable=invalid-name
+# It's important to have these on one line. Otherwise the extension bugs out and stops considering TODO & FIXME as problems
+disable=
+    logging-fstring-interpolation,
+    broad-exception-caught,
+    broad-exception-raised,
+    protected-access,
+    invalid-name

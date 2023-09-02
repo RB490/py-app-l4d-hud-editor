@@ -6,7 +6,7 @@ from utils.functions import show_browser_gui
 
 
 def enable_debug_hotkeys():
-    # Set up hotkeys
+    # Set up hotkeys # TODO
     hotkey_manager = HotkeyManager()
     hotkey_manager.add_hotkey("F10", debugging_hotkey, suppress=True)
 

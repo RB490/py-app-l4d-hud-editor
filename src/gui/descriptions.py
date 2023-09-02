@@ -1,5 +1,4 @@
 """Module for the hud file descriptions gui"""
-import os
 import tkinter as tk
 from tkinter import simpledialog
 
@@ -195,7 +194,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # Set gui title with custom status if applicable
         if is_custom:
             custom_status = "Custom File"
-        elif is_custom == None:
+        elif is_custom is None:
             custom_status = "New File"
         else:
             custom_status = "Vanilla File"
@@ -320,7 +319,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # save changes
         self.save_changes()
 
-        browser = show_browser_gui()
+        show_browser_gui()
 
         self.on_close()
 

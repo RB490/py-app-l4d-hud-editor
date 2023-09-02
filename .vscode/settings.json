@@ -15,5 +15,11 @@
         "dev/debug": true,
         "assets/mods": true
     },
-    "python.analysis.typeCheckingMode": "off",
+    "todo.embedded.include": [
+        "**/src/**"
+    ],
+    "todo.embedded.exclude": [
+        "**/assets/**",
+        "**/dev/**"
+    ],
 }

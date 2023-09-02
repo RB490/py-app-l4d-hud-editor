@@ -5,7 +5,7 @@ import os
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
-
+# TODO
 import send2trash
 import win32gui
 from PIL import Image, ImageTk
@@ -39,7 +39,6 @@ from utils.persistent_data_manager import PersistentDataManager
 logging_manager = LoggingManager(__name__, level=logging.DEBUG)
 # logging_manager = LoggingManager(__name__, level=logging.WARNING)
 log = logging_manager.get_logger()
-
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
@@ -198,7 +197,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Create and configure the editor_menuhronization help button
         self.editor_menu_help_button = tk.Button(
             self.toolbar_frame,
-            text=f"Help",
+            text="Help",
             justify="center",
             # command=self.dummy_handler,
             state="normal",
@@ -485,8 +484,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Runs on close"""
         result = show_message("Are you sure you want to exit?", "yesno")
         if not result:
-            show_browser_gui()
-            return
+            show_browser_gui()  # TODO
+            return  # FIXME
 
         self.descriptions_gui.hide()
         save_and_exit_script()

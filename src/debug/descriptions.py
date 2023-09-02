@@ -9,7 +9,7 @@ def debug_hud_descriptions_class():
     # result = desc.get_control_description(file_name, "HudWeaponSelection")
     result = desc.set_file_relative_path(file_name, "some\path")
 
-    print(f"desc result = {result}")
+    print(f"desc result = {result}") # TODO
 
 
 def test_hud_descriptions():

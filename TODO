@@ -13,13 +13,13 @@
 ✔ Feature: BaseGUI: Show menu on button @done(23-09-02 22:07)
 ✔ Feature: Start: Closing start gui should close the program + activate user mode, most likely @done(23-09-02 22:09)
 ✔ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely @done(23-09-02 22:27)
+✔ Feature: Todo: Import todo's from microsoft todo @done(23-09-02 22:27)
 
 Current:
 
 Todo:		
 	
 	☐ Bug: # TODO #FIXME # don't get shown in the problems terminal? was that functionality from a different extension? They do show in the TODO extenion box
-	☐ Feature: Todo: Import todo's from microsoft todo
 
 	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. Is this because left4dead2_dlc3 is actually really corrupted and the textures are overwriting it? so vpk.exe doesn't correctly extract it just ignores errors
 		- Can i use the left4dead1 vpk.exe to extract this? or nosteam? how do i verify that files aren't corrupted?
