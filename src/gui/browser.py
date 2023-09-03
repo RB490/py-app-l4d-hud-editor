@@ -378,12 +378,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         region = self.treeview.identify_region(event.x, event.y)
 
         if region == "cell":
-            cell = self.treeview.identify_row(event.y)
-            print("Double-clicked on row:", cell)
-            # Perform your desired action here, e.g., open a file
-            self.treeview_set_selected_item(cell)
-            if os.path.isfile(self.selected_full_path):
-                os.startfile(self.selected_full_path)
+            self.action_open_file()
 
     # pylint: disable=unused-argument
     def treeview_set_selected_item(self, event):
