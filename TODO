@@ -2,14 +2,12 @@ Current:
 
 
 Todo:
-	
+
 	☐ Testing: Test the program by using it to edit HUD's
 
 Release:
 	- Goal: Being able to have smug use the program and have it 100% work for him on first try
-	☐ Version numbers
 	☐ Auto updating
-	☐ Link to the github repo in an 'about' gui
 	☐ A way to test the program in a fresh environment. Maybe a virtual machine
 	☐ Full coverage unit testing? or atleast the important parts like HudDescription/ID FileHandler/more?
 	☐ Ask GPT on how to do this properly

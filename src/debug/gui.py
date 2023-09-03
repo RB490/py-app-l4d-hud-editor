@@ -10,6 +10,7 @@ from debug.hud import get_hud_debug_instance
 from game.constants import DirectoryMode
 from game.game import Game
 from gui import descriptions
+from gui.about import GuiAbout
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.progress import ProgressGUI
@@ -26,10 +27,10 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    show_start_gui()
+    # show_start_gui()
 
     # browser
-    # debug_browser_gui()
+    # debug_browser_gui()  # & also properly editor menu
 
     # splash
     # splash_gui_example()
@@ -48,6 +49,15 @@ def main_debug_gui():
 
     # installer
     # debug_progress_gui()
+
+    # about
+    debug_about_gui()
+
+
+def debug_about_gui():
+    invis_root = get_invisible_tkinter_root()
+    gui_about = GuiAbout(invis_root)
+    gui_about.show()
 
 
 def debug_browser_gui():

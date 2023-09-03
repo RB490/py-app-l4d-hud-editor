@@ -1137,6 +1137,12 @@ class EditorMenuClass:
         )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
+        self.file_menu.add_cascade(
+            label="About",
+            image=self.img.star_black_fivepointed_shape_symbol,
+            compound="left",
+            command=self.handler.editor_show_about_menu,
+        )
         self.file_menu.add_command(
             label="Close",
             image=self.img.save_black_diskette_interface_symbol,

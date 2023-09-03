@@ -12,6 +12,7 @@ import psutil
 import pyautogui
 
 from game.game import Game
+from gui.about import GuiAbout
 from shared_utils.shared_utils import show_message
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -40,6 +41,16 @@ def show_start_gui():
     start_gui.show()
     return
 
+def show_about_gui():
+    """Show about gui"""
+    from gui.start import GuiHudStart
+
+    start_gui = GuiHudStart()
+    if not start_gui.get_mainloop_started():
+        raise ValueError("Retrieved browser GUI without having started mainloop() first")
+
+    gui_about = GuiAbout(start_gui.root)
+    gui_about.show()
 
 def count_files_and_dirs(path):
     "Count files and directories"

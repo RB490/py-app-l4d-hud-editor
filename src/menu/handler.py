@@ -9,7 +9,13 @@ from loguru import logger as my_logger
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
-from utils.functions import get_mouse_position_on_click, save_and_exit_script, show_browser_gui, show_start_gui
+from utils.functions import (
+    get_mouse_position_on_click,
+    save_and_exit_script,
+    show_about_gui,
+    show_browser_gui,
+    show_start_gui,
+)
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -198,6 +204,10 @@ class EditorMenuHandler:
         """Exit script"""
 
         save_and_exit_script()
+
+    def editor_show_about_menu(self):
+        """Open about gui"""
+        show_about_gui()
 
     def editor_open_start_gui(self):
         """Open hud select gui"""

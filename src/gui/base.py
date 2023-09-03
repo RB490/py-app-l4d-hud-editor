@@ -48,7 +48,7 @@ class BaseGUI:
         self.root.title("BaseGUI")
         self.hide()
         self.root.protocol("WM_DELETE_WINDOW", self.__on_close_internal)
-        self.root.minsize(300, 200)
+        self.root.minsize(50, 50)
 
     def hide(self) -> None:
         """Hide the window."""
@@ -78,6 +78,7 @@ class BaseGUI:
         if self.gui_type == GUITypes.MAIN:
             self.set_mainloop_started(True)
             self.root.mainloop()
+            my_logger.info("Started main loop!")
         elif self.gui_type == GUITypes.MODAL:
             self.root.update()
 
@@ -257,10 +258,10 @@ class BaseGUI:
             my_logger.debug(f"{self.get_quoted_title()} always on top: GUI is not loaded")
         my_logger.debug(f"{self.get_quoted_title()} always on top: {status}")
 
-    def toggle_resizability(self):
-        """Toggle window resizability."""
-        self.is_resizable = not self.is_resizable
-        self.root.resizable(self.is_resizable, self.is_resizable)
+    def set_resizable(self, is_resizable):
+        """Set window resizability."""
+        self.is_resizable = is_resizable
+        self.root.resizable(is_resizable, is_resizable)
 
     def toggle_visibility(self):
         """Toggle window visibility between visible and hidden."""
