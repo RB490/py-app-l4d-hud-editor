@@ -61,7 +61,9 @@ class VDFModifierGUI(BaseGUI):
         self.main_frame = tk.Frame(self.root)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
 
-        info_msg = "Expect incorrect results on larger and/or more complex VDF files like sourcescheme.res!"
+        info_msg = "Expect incorrect results on larger and/or more complex VDF files like sourcescheme.res! "
+        info_msg += "(comments are not saved!)"
+
         self.info_label = tk.Label(self.main_frame, text=info_msg)
         self.info_label.pack(side=tk.BOTTOM, pady=(0, 5))
 

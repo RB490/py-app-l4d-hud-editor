@@ -4,14 +4,14 @@
 ✔ Bug: game.dir.set is failing to rename the dev directory randomly? @done(23-09-03 12:34) was because XYplorer had it open
 ✔ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils @done(23-09-03 13:36)
 ✔ Feature: Start: Replace custom msgbox for export vpk/folder with context menu @done(23-09-03 13:36)
+✘ Feature: Start: Consider merging add/new buttons under a context menu @cancelled(23-09-03 13:37)
+✔ Feature: VDF GUI: Add some info like comments not getting saved @done(23-09-03 13:39)
 
 Current:
 
 
 Todo:		
 
-	☐ Feature: VDF GUI: Add some info like comments not getting saved
-	☐ Feature: Start: Consider merging add/new buttons under a context menu
 	☐ Feature: Browser: Keyboard: Bind arrow up/down to select search/start
 	☐ Refactor: Hotkeys: Should i move some global hotkeys to root/widget bindings? these would be gui only
 	☐ Refactor: BaseGui: Create a way to reduce duplicate code with {self.root.title()}: log.debug(f"{self.root.title()} GUI always on top: {bool}")

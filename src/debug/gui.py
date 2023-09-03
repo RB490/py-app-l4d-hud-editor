@@ -26,7 +26,7 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    show_start_gui()
+    # show_start_gui()
 
     # browser
     # debug_browser_gui()
@@ -38,7 +38,7 @@ def main_debug_gui():
     # debug_popup_gui()
 
     # vdf gui
-    # debug_vdf_gui()
+    debug_vdf_gui()
 
     # descriptions
     # debug_descriptions_gui()
