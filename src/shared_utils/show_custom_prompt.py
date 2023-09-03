@@ -9,7 +9,7 @@ class CustomDialog(simpledialog.Dialog):
     """A custom dialog window for selecting options."""
 
     def __init__(self, master, options):
-        """Initialize the custom dialog."""
+        """Initialize the custom dialogger."""
         self.options = options
         self.root = master
         super().__init__(master)

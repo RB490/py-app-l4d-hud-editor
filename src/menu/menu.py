@@ -10,7 +10,7 @@ from tkinter import Menu, PhotoImage
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import add_empty_menu_separator, create_lambda_command
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
@@ -27,8 +27,8 @@ from utils.constants import (
 )
 from utils.persistent_data_manager import PersistentDataManager
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
+
 
 class EditorMenuClass:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized
@@ -51,13 +51,13 @@ class EditorMenuClass:
 
     def open_file(self, path):
         """Open file"""
-        log.debug("Opening file: {path}")
+        logger.debug("Opening file: {path}")
         os.startfile(path)
 
     def open_url(self, url):
         """Open url"""
         webbrowser.open(url)
-        log.debug("Opening URL: {url}")
+        logger.debug("Opening URL: {url}")
 
     def do_nothing(self, *args):
         # pylint: disable=unused-argument, unnecessary-pass
@@ -1061,7 +1061,7 @@ class EditorMenuClass:
         Creates the menu bar for the application
         if not is_context_menu:
         """
-        log.debug("Refreshing editor menu!")
+        logger.debug("Refreshing editor menu!")
 
         self.data_manager.save()
 

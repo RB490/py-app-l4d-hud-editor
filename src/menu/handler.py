@@ -7,15 +7,14 @@ from tkinter import messagebox
 import pyperclip  # type: ignore
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import get_mouse_position_on_click, save_and_exit_script, show_browser_gui, show_start_gui
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 def call_create_and_refresh_menu_after_method(func):
@@ -46,18 +45,18 @@ class EditorMenuHandler:
     @call_create_and_refresh_menu_after_method
     def editor_menu_game_mode(self, mode):
         """Method to handle the selected game mode in the menu."""
-        log.debug(f"The selected option is: {mode}")
+        logger.debug(f"The selected option is: {mode}")
         self.data_manager.set("game_mode", mode)
         self.game.command.execute(f"map {UNIVERSAL_GAME_MAP}")
 
     def editor_menu_game_map(self, map_name, map_code):
         """Method to handle the selected game map in the menu."""
-        log.debug(f"The code for {map_name} is {map_code}.")
+        logger.debug(f"The code for {map_name} is {map_code}.")
         self.game.command.execute(f"map {map_code}")
 
     def editor_menu_game_resolution(self, string_resolution):
         """Method to handle the selected game resolution in the menu."""
-        log.debug(f"Selected resolution: {string_resolution}")
+        logger.debug(f"Selected resolution: {string_resolution}")
 
         config_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
 
@@ -88,7 +87,7 @@ class EditorMenuHandler:
     @call_create_and_refresh_menu_after_method
     def editor_menu_game_pos(self, pos):
         """Method to handle the selected game position in the menu."""
-        log.debug(f"Selected Game Position: {pos}")
+        logger.debug(f"Selected Game Position: {pos}")
 
         if "custom" in pos.lower():
             self.game.window.save_position()
@@ -98,7 +97,7 @@ class EditorMenuHandler:
     @call_create_and_refresh_menu_after_method
     def editor_menu_game_toggle_insecure(self):
         """Method to handle the selected secure/insecure option in the menu."""
-        log.debug("editor_menu_game_security")
+        logger.debug("editor_menu_game_security")
 
         # toggle setting
         if self.data_manager.get("game_insecure") is True:
@@ -139,7 +138,7 @@ class EditorMenuHandler:
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
             pyperclip.copy(content)
-            log.debug(content)
+            logger.debug(content)
 
     @call_create_and_refresh_menu_after_method
     def editor_menu_show_panel(self, panel):
@@ -185,7 +184,7 @@ class EditorMenuHandler:
     @call_create_and_refresh_menu_after_method
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
-        log.debug(f"editor_remove_temp_hud: {hud_dir}")
+        logger.debug(f"editor_remove_temp_hud: {hud_dir}")
         self.hud.manager.remove_temp_hud(hud_dir)
 
     @call_create_and_refresh_menu_after_method
@@ -205,7 +204,7 @@ class EditorMenuHandler:
 
     def editor_open_start_gui(self):
         """Open hud select gui"""
-        log.debug("editor_open_hud_select")
+        logger.debug("editor_open_hud_select")
 
         try:
             show_start_gui()
@@ -219,7 +218,7 @@ class EditorMenuHandler:
 
     def editor_open_browser_gui(self):
         """Open hud select gui"""
-        log.debug("editor_open_browser_gui")
+        logger.debug("editor_open_browser_gui")
 
         try:
             show_browser_gui()
@@ -228,12 +227,12 @@ class EditorMenuHandler:
 
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
-        log.debug("editor_finish_editing")
+        logger.debug("editor_finish_editing")
         self.hud.edit.finish_editing(open_start_gui=True)
 
     def editor_open_folder(self, input_dir):
         """Open folder"""
-        log.debug(f"editor_open_folder: {input_dir}")
+        logger.debug(f"editor_open_folder: {input_dir}")
         directory = input_dir
         if os.path.isdir(directory):
             os.startfile(directory)
@@ -242,14 +241,14 @@ class EditorMenuHandler:
 
     def editor_open_folder_in_vscode(self, input_dir):
         """Open folder"""
-        log.debug(f"editor_open_folder_in_vscode: {input_dir}")
+        logger.debug(f"editor_open_folder_in_vscode: {input_dir}")
         os.system(f'start /b cmd /c code . "{input_dir}"')
 
     def editor_prompt_game_command(self):
         """Prompt & execute game command"""
 
         def handle_user_input(result):
-            log.debug(f"user_command: {result}")
+            logger.debug(f"user_command: {result}")
             if result:
                 self.game.command.execute(result)
 
@@ -293,7 +292,7 @@ class EditorMenuHandler:
         reload_reopen_menu_on_reload = self.data_manager.get("reload_reopen_menu_on_reload")
         self.data_manager.set("reload_reopen_menu_on_reload", not reload_reopen_menu_on_reload)
         self.editor_menu.reload_mode_menu_reopen_menu_checkmark.set(not reload_reopen_menu_on_reload)
-        log.debug(not reload_reopen_menu_on_reload)
+        logger.debug(not reload_reopen_menu_on_reload)
 
     @call_create_and_refresh_menu_after_method
     def editor_menu_reload_click(self):
@@ -301,7 +300,7 @@ class EditorMenuHandler:
         reload_mouse_clicks_enabled = self.data_manager.get("reload_mouse_clicks_enabled")
         self.data_manager.set("reload_mouse_clicks_enabled", not reload_mouse_clicks_enabled)
         self.editor_menu.reload_mode_menu_coord_clicks_checkmark.set(not reload_mouse_clicks_enabled)
-        log.debug(not reload_mouse_clicks_enabled)
+        logger.debug(not reload_mouse_clicks_enabled)
 
     @call_create_and_refresh_menu_after_method
     def editor_menu_reload_click_coord1(self):
@@ -309,13 +308,13 @@ class EditorMenuHandler:
 
         def xy_coord_callback(x, y):
             if x is not None and y is not None:
-                log.debug(f"The mouse was clicked at ({x}, {y})")
+                logger.debug(f"The mouse was clicked at ({x}, {y})")
                 coord_1 = (x, y)
                 self.data_manager.set("reload_mouse_clicks_coord_1", coord_1)
             else:
-                log.debug("The operation was cancelled or the window was closed")
+                logger.debug("The operation was cancelled or the window was closed")
 
-            log.debug(f"Coord #1 set to: {coord_1}")
+            logger.debug(f"Coord #1 set to: {coord_1}")
 
         get_mouse_position_on_click(xy_coord_callback)
 
@@ -325,13 +324,13 @@ class EditorMenuHandler:
 
         def xy_coord_callback(x, y):
             if x is not None and y is not None:
-                log.debug(f"The mouse was clicked at ({x}, {y})")
+                logger.debug(f"The mouse was clicked at ({x}, {y})")
                 coord_2 = (x, y)
                 self.data_manager.set("reload_mouse_clicks_coord_2", coord_2)
             else:
-                log.debug("The operation was cancelled or the window was closed")
+                logger.debug("The operation was cancelled or the window was closed")
 
-            log.debug(f"Coord #2 set to: {coord_2}")
+            logger.debug(f"Coord #2 set to: {coord_2}")
 
         get_mouse_position_on_click(xy_coord_callback)
 
@@ -341,24 +340,24 @@ class EditorMenuHandler:
 
     def editor_installer_open_user_dir(self):
         """This method returns the user directory."""
-        log.debug("Opening user directory")
+        logger.debug("Opening user directory")
         try:
             directory = self.game.dir.get(DirectoryMode.USER)
             os.startfile(directory)
         except Exception as err_info:
-            log.debug(f"Could not open user directory: {err_info}")
+            logger.debug(f"Could not open user directory: {err_info}")
             show_message("Directory does not exist!", "error")
 
     def editor_installer_open_dev_dir(self):
         """
         This method returns the developer directory.
         """
-        log.debug("Opening developer directory")
+        logger.debug("Opening developer directory")
         try:
             directory = self.game.dir.get(DirectoryMode.DEVELOPER)
             os.startfile(directory)
         except Exception as err_info:
-            log.debug(f"Could not open developer directory: {err_info}")
+            logger.debug(f"Could not open developer directory: {err_info}")
             show_message("Directory does not exist!", "error")
 
     @call_create_and_refresh_menu_after_method
@@ -366,7 +365,7 @@ class EditorMenuHandler:
         """
         This method enables developer mode.
         """
-        log.debug("Enabling developer mode")
+        logger.debug("Enabling developer mode")
         result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if result:
             show_message(f"Enabled {DirectoryMode.DEVELOPER.name} mode!", "info")
@@ -378,7 +377,7 @@ class EditorMenuHandler:
         """
         This method disables developer mode.
         """
-        log.debug("Disabling developer mode")
+        logger.debug("Disabling developer mode")
         result = self.game.dir.set(DirectoryMode.USER)
         if result:
             show_message(f"Enabled {DirectoryMode.USER.name} mode!", "info")
@@ -389,26 +388,26 @@ class EditorMenuHandler:
         """
         This method installs developer mode.
         """
-        log.debug("Install developer mode")
+        logger.debug("Install developer mode")
         self.game.installer.install()
 
     def editor_installer_update(self):
         """
         This method updates developer mode.
         """
-        log.debug("Updating developer mode")
+        logger.debug("Updating developer mode")
         self.game.installer.update()
 
     def editor_installer_repair(self):
         """
         This method repairs developer mode.
         """
-        log.debug("Repairing developer mode")
+        logger.debug("Repairing developer mode")
         self.game.installer.repair()
 
     def editor_installer_uninstall(self):
         """
         This method removes developer mode.
         """
-        log.debug("Removing developer mode")
+        logger.debug("Removing developer mode")
         self.game.installer.uninstall()

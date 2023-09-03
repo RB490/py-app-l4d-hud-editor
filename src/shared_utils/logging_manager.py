@@ -2,59 +2,41 @@
 import logging
 
 
-class LoggingManager:
+def get_logger(name, log_level=logging.INFO):
     """
-    LoggerManager class that manages a logger instance.
+    Get a logger with the specified name and logging level.
 
-    Methods:
-    - __init__(name, level): Initializes the logger instance and sets up logging.
-    - setup_logging(level): Configures the logger with a console handler and sets the logging format.
-    - get_logger(): Returns the logger instance.
+    Args:
+        name (str): The name of the logger.
+        log_level (int): The logging level (default is logging.INFO).
+
+    Returns:
+        logger (logging.Logger): The logger instance.
     """
+    internal_logger = logging.getLogger(name)
+    internal_logger.setLevel(log_level)
 
-    def __init__(self, name, level=logging.DEBUG):
-        """Initialize logger and setup logging during object creation."""
-        self.logger_name = name
-        self.setup_logging(level)
+    # formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter("%(name)s (%(levelname)s): %(message)s")
 
-    def setup_logging(self, level):
-        """Configures the logger with a console handler and sets the logging format."""
-        self.logger = logging.getLogger(self.logger_name)
-        self.logger.setLevel(level)
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(level)
+    # Create a console handler and set the log level
+    ch = logging.StreamHandler()
+    ch.setLevel(log_level)
+    ch.setFormatter(formatter)
 
-        formatter = logging.Formatter("%(name)s (%(levelname)s): %(message)s")
-        # game.dir_id_handler (DEBUG): ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
+    # Add the console handler to the logger only if it has no handlers
+    if not internal_logger.hasHandlers():
+        internal_logger.addHandler(ch)
 
-        # formatter = logging.Formatter("%(asctime)s - %(name)s (%(levelname)s): %(message)s")
-        # 2023-08-28 23:38:12,040 - game.dir_id_handler (DEBUG): ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
-
-        # formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-        # 2023-08-28 23:38:59,448 - game.dir_id_handler - DEBUG - ID Path: E:\games\steam\steamapps\common\Left 4 Dead 2\_hud_editor_id_file__dev_directory.DoNotDelete
-
-        console_handler.setFormatter(formatter)
-        self.logger.addHandler(console_handler)
-
-    def get_logger(self):
-        """Returns the logger instance."""
-        return self.logger
+    return internal_logger
 
 
-def logging_class_usage_example():
-    """
-    Example of using the LoggerManager to log messages.
-    """
-    # logging_manager = LoggerManager(__name__, level=logging.INFO)  # Pass the desired logging level
-    # logging_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
-    # logging_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
-    # Get the logger instance
-    logging_manager = LoggingManager(__name__, level=logging.INFO)
-    log = logging_manager.get_logger()
-
-    # Log messages at different levels
-    log.debug("This is a debug message")
-    log.info("This is an info message")
-    log.warning("This is a warning message")
-    log.error("This is an error message")
-    log.critical("This is a critical message")
+# # Example usage:
+if __name__ == "__main__":
+    # Only create and use the logger if this module is run as the main script
+    logger_showcase = logger = get_logger(__name__, log_level=logging.INFO)
+    logger_showcase.debug("This is a debug message")
+    logger_showcase.info("This is an info message")
+    logger_showcase.warning("This is a warning message")
+    logger_showcase.error("This is an error message")
+    logger_showcase.critical("This is a critical message")

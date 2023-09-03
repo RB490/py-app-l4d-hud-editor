@@ -1,33 +1,26 @@
-✔ Feature: Base: Set HWND! hwnd = root.winfo_id() @done(23-09-03 12:31)
-✔ Feature: Base: Set PID! hwnd = root.os.getpid() @done(23-09-03 12:31)
-✔ Feature: Base: Use HWND/PID? @done(23-09-03 12:31)
-✔ Bug: game.dir.set is failing to rename the dev directory randomly? @done(23-09-03 12:34) was because XYplorer had it open
-✔ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils @done(23-09-03 13:36)
-✔ Feature: Start: Replace custom msgbox for export vpk/folder with context menu @done(23-09-03 13:36)
-✘ Feature: Start: Consider merging add/new buttons under a context menu @cancelled(23-09-03 13:37)
-✔ Feature: VDF GUI: Add some info like comments not getting saved @done(23-09-03 13:39)
-✔ Feature: Browser: Keyboard: Bind arrow up/down to select search/start @done(23-09-03 13:56)
-✔ Feature: Start: CTRL+F hotkey for focusing search @done(23-09-03 13:56)
-✔ Feature: Start: Move search frame below the treeview @done(23-09-03 13:56)
-✘ Refactor: Hotkeys: Should i move some global hotkeys to root/widget bindings? these would be gui only @cancelled(23-09-03 13:58)
-✘ Refactor: BaseGui: Create a way to reduce duplicate code with {self.root.title()}: log.debug(f"{self.root.title()} GUI always on top: {bool}") @cancelled(23-09-03 14:07)
-✔ Refactor: Use BaseGUI's self.show_context_menu_on_button @done(23-09-03 14:08)
-✔ Bug: Menu: Uninstall dev mode -> Enable dev mode -> Error @done(23-09-03 14:09)
-✔ Refactor: Cleaned up get & set game hwnd methods @done(23-09-03 14:24)
+✔ Bug: Installer: Install: -> Progress gui is behind start @done(23-09-03 16:15)
+✔ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way @done(23-09-03 16:20)
 
 Current:
 
 
 Todo:		
 
-	☐ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set)
-	☐ Bug: Installer: Install: -> Progress gui is behind start
-	☐ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way
+	
 	☐ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop
 	☐ Bug: Installer: Uninstall: It's quite slow deleting compared to just deleting manually with windows file explorer. probably because it's updating the gui all the time?
 	☐ Bug: Installer: During rebuilding audio i get a bunch of 'failed to set window handle' before it correctly sets hwnd
-	
 	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
+	
+	☐ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set)
+		- Duplicate entries in game class: INFO:shared_utils.hwnd_window_manager:Closed False! -> log.info(f"Closed {self.get_process_name(hwnd)}!")
+		- Already messed with this for longer than an hour
+		- Figured out that it only happens when actually switching dir modes. If calling the same thing it doesn't duplicate
+		- Figured out that when actually switching modes log statements in debug->game.py also duplicate?! very confusing stuff -- in fact all the way down the stack also in main_debug()
+		✔ Tried removing the game class by changing it into a function @done(23-09-03 16:10)
+		✔ Tried instead of making the logger a module global variable in game() i put it as part of the class @done(23-09-03 16:11)
+		✔ Asked GPT a bunch @done(23-09-03 16:11)
+	
 	☐ Testing: Test the program by using it to edit HUD's
 
 Release:

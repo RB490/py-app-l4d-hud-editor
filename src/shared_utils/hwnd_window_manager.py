@@ -15,13 +15,12 @@ import win32con
 import win32gui
 import win32process
 
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
-def hwnd_is_running_check(func):
+def cancel_if_hwnd_not_running(func):
     "Check if hwnd is running"
 
     @functools.wraps(func)
@@ -65,11 +64,11 @@ class HwndWindowUtils:
         Example:
             hwnd = wait_for_process_with_timeout("your_process_name.exe", timeout=60, ram_usage_mb=222)
             if hwnd is not None:
-                log.debug(f"Process found with HWND: {hwnd}")
+                logger.debug(f"Process found with HWND: {hwnd}")
             else:
-                log.debug("Process not found within the specified timeout or RAM usage.")
+                logger.debug("Process not found within the specified timeout or RAM usage.")
         """
-        log.info(f"Waiting {timeout} seconds for '{process_name}' to run with RAM usage: {ram_usage_mb} MB")
+        logger.info(f"Waiting {timeout} seconds for '{process_name}' to run with RAM usage: {ram_usage_mb} MB")
 
         start_time = time.time()
         while time.time() - start_time <= timeout:
@@ -83,14 +82,14 @@ class HwndWindowUtils:
                                 continue
 
                         hwnd = self.get_hwnd_from_process_name(process_name)
-                        log.debug(f"'{process_name}' is running!")
+                        logger.debug(f"'{process_name}' is running!")
                         return hwnd
             except psutil.NoSuchProcess:
                 pass
 
             time.sleep(0.1)
 
-        log.debug(f"Process '{process_name}' not found within the specified timeout of {timeout} seconds.")
+        logger.debug(f"Process '{process_name}' not found within the specified timeout of {timeout} seconds.")
         return None
 
     def get_hwnd_from_process_name(self, process_name):
@@ -110,7 +109,7 @@ class HwndWindowUtils:
                 for handle in handle_list:
                     if win32process.GetWindowThreadProcessId(handle)[1] == pid:
                         self.set_process_name(handle, process_name)
-                        log.debug(f"Set {process_name} HWND ({handle})")
+                        logger.debug(f"Set {process_name} HWND ({handle})")
                         return handle
         return None
 
@@ -118,13 +117,13 @@ class HwndWindowUtils:
         """Retrieve hwnd from focused window"""
         hwnd = win32gui.GetForegroundWindow()
         self.get_process_name(hwnd)
-        log.debug(f"Focused hwnd = {hwnd}")
+        logger.debug(f"Focused hwnd = {hwnd}")
         return hwnd
 
     def set_process_name(self, hwnd, process_name):
         """Set process name"""
         self.hwnd_process_mapping[hwnd] = process_name
-        log.debug(f"Set HWND {hwnd} process name: {process_name}")
+        logger.debug(f"Set HWND {hwnd} process name: {process_name}")
 
     def get_process_name(self, hwnd):
         """Retrieve process name if not already set"""
@@ -136,45 +135,46 @@ class HwndWindowUtils:
 
         # return process name
         process_name = self.hwnd_process_mapping.get(hwnd, None)
-        log.debug(f"Retrieved process name '{process_name}' for HWND {hwnd}")
+        logger.debug(f"Retrieved process name '{process_name}' for HWND {hwnd}")
         return process_name
 
-    @hwnd_is_running_check
+    @cancel_if_hwnd_not_running
     def wait_close(self, hwnd, timeout=None):
         "Wait for a window to close (if it exists)"
 
         process_name = self.get_process_name(hwnd)
 
         # Otherwise, wait for the window to be destroyed or until timeout is reached
-        log.info(f"Waiting for {process_name} to close")
+        logger.info(f"Waiting for {process_name} to close")
         start = time.time()
         while True:
             # Check if the window still exists
             exists = win32gui.IsWindow(hwnd)
             # If not, return
             if not exists:
-                log.info(f"{process_name} closed!")
+                logger.info(f"{process_name} closed!")
                 return True
             # Otherwise, check the elapsed time if timeout is provided
             if timeout is not None:
                 elapsed = time.time() - start
                 # If timeout is reached, return
                 if elapsed >= timeout:
-                    log.warning(f"{process_name} did not close after {timeout} seconds")
+                    logger.warning(f"{process_name} did not close after {timeout} seconds")
                     return False
             # Sleep for a short interval and repeat
             time.sleep(0.1)
 
+    @cancel_if_hwnd_not_running
     def close(self, hwnd):
         """Close window"""
         user32 = ctypes.windll.user32
         user32.PostMessageW(hwnd, 0x0010, 0, 0)  # 0x0010 is the message code for WM_CLOSE
-        log.info(f"Closed {self.get_process_name(hwnd)}!")
+        logger.info(f"Closed HWND: {self.get_process_name(hwnd)}!")
 
     def is_running(self, hwnd):
         """Confirm whether hwnd is running. Also works if invisible. Sets & returns process name"""
         if not hwnd:
-            logging.warning(f"Running() did not receive a HWND! '{hwnd}'. Cancelling HWND operation!")
+            logging.debug(f"is_running() did not receive a HWND! '{hwnd}'!")
             return False
 
         process_name = None  # Initialize the variable before the try block
@@ -184,13 +184,13 @@ class HwndWindowUtils:
             is_running = psutil.pid_exists(pid)
             process_name = process.name()
             self.set_process_name(hwnd, process_name)
-            log.debug(f"Process {process_name} is {'running!' if is_running else 'not running!'}")
+            logger.debug(f"Process {process_name} is {'running!' if is_running else 'not running!'}")
             return process_name
         except psutil.NoSuchProcess:
-            log.warning(f"Process {process_name} not found!")
+            logger.warning(f"Process {process_name} not found!")
             return False
 
-    @hwnd_is_running_check
+    @cancel_if_hwnd_not_running
     def move(self, hwnd, position="Center"):
         """
         Move a window (specified by its hwnd) to the desired position on the screen.
@@ -225,7 +225,7 @@ class HwndWindowUtils:
         screen_height = win32api.GetSystemMetrics(1)
 
         if position is None or position == "":
-            log.debug("No position provided, defaulting to center!")
+            logger.debug("No position provided, defaulting to center!")
             position = "Center"
 
         if position in predefined_positions:
@@ -241,9 +241,9 @@ class HwndWindowUtils:
 
         win32gui.SetWindowPos(hwnd, None, win_x, win_y, win_width, win_height, win32con.SWP_NOZORDER)
 
-        log.debug(f"Moved '{self.get_process_name(hwnd)}' to position ({win_x}, {win_y})")
+        logger.debug(f"Moved '{self.get_process_name(hwnd)}' to position ({win_x}, {win_y})")
 
-    @hwnd_is_running_check
+    @cancel_if_hwnd_not_running
     def focus(self, hwnd):
         # pylint: disable=c-extension-no-member
         """
@@ -262,7 +262,7 @@ class HwndWindowUtils:
         try:
             win32gui.SetForegroundWindow(hwnd)
         except Exception as e:
-            log.debug(f"Error while setting foreground window: {e}")
+            logger.debug(f"Error while setting foreground window: {e}")
 
         # # If the window is minimized, restore it
         if win32gui.IsIconic(hwnd):
@@ -283,7 +283,7 @@ class HwndWindowUtils:
         # # Activate the window
         win32gui.SetActiveWindow(hwnd)  # <- this works for tkinter gui's in combination with topmost
 
-        log.debug(f"Focused {self.get_process_name(hwnd)}!")
+        logger.debug(f"Focused {self.get_process_name(hwnd)}!")
 
     def save_focus_state(self):
         """
@@ -294,7 +294,7 @@ class HwndWindowUtils:
         """
         self.saved_hwnd = self.get_hwnd_focused()
         self.saved_mouse_pos = pyautogui.position()
-        log.debug(f"Saved focus state to {self.get_process_name(self.saved_hwnd)}!")
+        logger.debug(f"Saved focus state to {self.get_process_name(self.saved_hwnd)}!")
         return self.saved_hwnd
 
     def restore_focus_state(self):
@@ -305,7 +305,7 @@ class HwndWindowUtils:
             self.focus(self.saved_hwnd)
         if self.saved_mouse_pos:
             pyautogui.moveTo(self.saved_mouse_pos)
-        log.debug(f"Restored focus state to {self.get_process_name(self.saved_hwnd)}!")
+        logger.debug(f"Restored focus state to {self.get_process_name(self.saved_hwnd)}!")
 
 
 def showcase_hwnd_window_manager():

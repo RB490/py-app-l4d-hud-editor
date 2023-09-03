@@ -1,6 +1,11 @@
 "debug game class"
+import logging
+
 from game.constants import DirectoryMode, InstallationState, SyncState
 from game.game import Game
+from shared_utils.logging_manager import get_logger
+
+logger = get_logger(__name__, log_level=logging.DEBUG)
 
 
 def debug_game_set_states_synced_and_installed():
@@ -62,8 +67,13 @@ def main_debug_game():
     ###########################
     # Directory
     ###########################
-    # result = gamez.dir.set(DirectoryMode.USER)
+    result = gamez.dir.set(DirectoryMode.USER)
     result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.set(DirectoryMode.USER)
+    logger.debug("what the fuck?????????????????")
+    # result = gamez.dir.set(DirectoryMode.USER)
+    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
 
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.DEVELOPER)
@@ -81,4 +91,4 @@ def main_debug_game():
     ###########################
     # Result
     ###########################
-    print(f"result = {result}")
+    # print(f"result = {result}")

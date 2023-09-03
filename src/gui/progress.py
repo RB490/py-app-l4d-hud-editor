@@ -3,12 +3,11 @@ import logging
 import tkinter as tk
 
 from gui.base import BaseGUI
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import show_message
 from utils.constants import APP_ICON
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 class ProgressGUI(BaseGUI):
@@ -116,15 +115,15 @@ class ProgressGUI(BaseGUI):
             step_information[:max_chars] + "..." if len(step_information) > max_chars else step_information
         )
 
-        log.debug(" ")
-        log.debug(f"Step #{self.current_step}")
-        log.debug(f"self.longest_step_info() = {self.longest_label_length}")
-        log.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
-        log.debug(f"len(step_information) = {len(step_information)}")
-        log.debug(f"max_chars = {max_chars}")
-        log.debug(f"available_width = {available_width}")
-        log.debug(f"displayed_text = {displayed_text}")
-        log.debug(" ")
+        logger.debug(" ")
+        logger.debug(f"Step #{self.current_step}")
+        logger.debug(f"self.longest_step_info() = {self.longest_label_length}")
+        logger.debug(f"self.root.winfo_width() = {self.root.winfo_width()}")
+        logger.debug(f"len(step_information) = {len(step_information)}")
+        logger.debug(f"max_chars = {max_chars}")
+        logger.debug(f"available_width = {available_width}")
+        logger.debug(f"displayed_text = {displayed_text}")
+        logger.debug(" ")
 
         # update the gui
         self.step_info_label.config(text=displayed_text)

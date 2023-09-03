@@ -5,12 +5,10 @@ import logging
 
 import keyboard
 
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import Singleton
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-# logging_manager = LoggingManager(__name__, level=logging.DEBUG)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 class HotkeyManager(metaclass=Singleton):
@@ -23,7 +21,7 @@ class HotkeyManager(metaclass=Singleton):
         Initialize an instance of HotkeyManager.
         """
         self.hotkeys = {}  # Store registered hotkeys
-        log.debug("HotkeyManager instance created.")
+        logger.debug("HotkeyManager instance created.")
 
     def add_hotkey(self, hotkey, callback, suppress=True):
         """
@@ -39,7 +37,7 @@ class HotkeyManager(metaclass=Singleton):
 
         keyboard.add_hotkey(hotkey, callback, suppress=suppress)
         self.hotkeys[hotkey] = callback
-        log.debug("Added hotkey: %s", hotkey)
+        logger.debug("Added hotkey: %s", hotkey)
 
     def remove_hotkey(self, hotkey):
         """
@@ -51,9 +49,9 @@ class HotkeyManager(metaclass=Singleton):
         if hotkey in self.hotkeys:
             keyboard.remove_hotkey(hotkey)
             del self.hotkeys[hotkey]
-            log.debug("Removed hotkey: %s", hotkey)
+            logger.debug("Removed hotkey: %s", hotkey)
         else:
-            log.warning("Attempted to remove non-existent hotkey: %s", hotkey)
+            logger.warning("Attempted to remove non-existent hotkey: %s", hotkey)
 
     def list_hotkeys(self):
         """
@@ -63,7 +61,7 @@ class HotkeyManager(metaclass=Singleton):
             list: A list of strings representing the registered hotkeys.
         """
         hotkey_list = list(self.hotkeys.keys())
-        log.debug("List of hotkeys: %s", hotkey_list)
+        logger.debug("List of hotkeys: %s", hotkey_list)
         return hotkey_list
 
 

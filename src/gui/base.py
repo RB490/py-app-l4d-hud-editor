@@ -4,11 +4,9 @@ import logging
 import tkinter as tk
 from typing import Callable, Optional, Union
 
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 
-# logging_manager = LoggingManager(__name__, level=logging.DEBUG)
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 # Define constants for GUI types
@@ -77,7 +75,7 @@ class BaseGUI:
             raise ValueError(f"Called {self.get_quoted_title()} Run() while already running!")
 
         self.has_been_run = True
-        log.debug(f"Running {self.get_quoted_title()} with gui_type: {self.gui_type}")
+        logger.debug(f"Running {self.get_quoted_title()} with gui_type: {self.gui_type}")
 
         # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
         if self.gui_type == GUITypes.MAIN:
@@ -119,7 +117,7 @@ class BaseGUI:
 
     def __delayed_show(self, callback: str = ""):
         """After mainloop()"""
-        log.debug("Running __delayed_show")
+        logger.debug("Running __delayed_show")
         if not self.is_hidden:
             self.bring_to_front()
         self.__call_method_if_exists("on_show")
@@ -167,7 +165,7 @@ class BaseGUI:
 
     def get_hwnd(self):
         """Retrieve HWND"""
-        log.debug(f"{self.get_quoted_title()} HWND = {self.window_handle}")
+        logger.debug(f"{self.get_quoted_title()} HWND = {self.window_handle}")
         return self.window_handle
 
     def destroy(self) -> None:
@@ -205,7 +203,7 @@ class BaseGUI:
             transparency (float): The transparency value (0.0 to 1.0).
         """
         self.root.attributes("-alpha", transparency)
-        log.debug(f"{self.get_quoted_title()} Transparency set to {transparency}")
+        logger.debug(f"{self.get_quoted_title()} Transparency set to {transparency}")
 
     def set_decorations(self, show_decorations: bool) -> None:
         """
@@ -217,9 +215,9 @@ class BaseGUI:
         self.root.overrideredirect(not show_decorations)
         if show_decorations:
             self.root.attributes("-fullscreen", False)
-            log.debug(f"{self.get_quoted_title()} Window decorations are now visible.")
+            logger.debug(f"{self.get_quoted_title()} Window decorations are now visible.")
         else:
-            log.debug(f"{self.get_quoted_title()} Window decorations are now hidden.")
+            logger.debug(f"{self.get_quoted_title()} Window decorations are now hidden.")
 
     def set_window_geometry(self, geometry: str) -> None:
         """
@@ -230,9 +228,9 @@ class BaseGUI:
         """
         try:
             self.root.geometry(geometry)
-            log.debug(f"Set {self.get_quoted_title()} to '{geometry}'!")
+            logger.debug(f"Set {self.get_quoted_title()} to '{geometry}'!")
         except Exception:
-            log.exception(f"Error setting {self.get_quoted_title()} geometry")
+            logger.exception(f"Error setting {self.get_quoted_title()} geometry")
             self.root.geometry("1000x1000+100+100")
 
     def get_quoted_title(self):
@@ -245,10 +243,10 @@ class BaseGUI:
 
         if self.has_been_run:
             geometry = self.root.geometry()
-            log.debug(f"{self.get_quoted_title()} geometry: {geometry}")
+            logger.debug(f"{self.get_quoted_title()} geometry: {geometry}")
             return geometry
         else:
-            log.warning(f"{self.get_quoted_title()} is NOT running. Returning default geometry.")
+            logger.warning(f"{self.get_quoted_title()} is NOT running. Returning default geometry.")
             return "1000x1000+100+100"
 
     def set_always_on_top(self, status: bool) -> None:
@@ -259,8 +257,8 @@ class BaseGUI:
             else:
                 self.root.attributes("-topmost", False)
         else:
-            log.debug(f"{self.get_quoted_title()} always on top: GUI is not loaded")
-        log.debug(f"{self.get_quoted_title()} always on top: {status}")
+            logger.debug(f"{self.get_quoted_title()} always on top: GUI is not loaded")
+        logger.debug(f"{self.get_quoted_title()} always on top: {status}")
 
     def toggle_resizability(self):
         """Toggle window resizability."""
@@ -273,7 +271,7 @@ class BaseGUI:
             self.show()
         else:
             self.hide()
-        log.debug(f"{self.get_quoted_title()} visibility toggled.")
+        logger.debug(f"{self.get_quoted_title()} visibility toggled.")
 
     def set_hotkey(self, key_combination: str, callback: Callable, widget: Optional[tk.Widget] = None) -> None:
         """
@@ -310,9 +308,9 @@ class BaseGUI:
         if hasattr(self, method_name) and callable(getattr(self, method_name)):
             method = getattr(self, method_name)
             method()
-            log.debug(f"Called {method_name} for {self.get_quoted_title()}.")
+            logger.debug(f"Called {method_name} for {self.get_quoted_title()}.")
         else:
-            log.debug(f"{self.get_quoted_title()} does not have a {method_name} method to call!")
+            logger.debug(f"{self.get_quoted_title()} does not have a {method_name} method to call!")
 
     def show_menu_on_button(self, button, menu):
         """Display a context menu near the specified button."""
@@ -323,5 +321,5 @@ class BaseGUI:
         new_y = button.winfo_rooty() + y + button.winfo_height()
 
         # Display the context menu
-        log.debug(f"Showing context menu @ x:{new_x} y:{new_y}")
+        logger.debug(f"Showing context menu @ x:{new_x} y:{new_y}")
         menu.post(new_x, new_y)

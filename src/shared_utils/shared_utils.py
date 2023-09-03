@@ -11,12 +11,11 @@ from typing import Any, Callable, Dict, Type, TypeVar
 
 from ahk import AHK
 
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 
 T = TypeVar("T", bound="Singleton")
 
-logging_manager = LoggingManager(__name__, level=logging.WARNING)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 def get_invisible_tkinter_root() -> tk.Tk:
@@ -167,7 +166,7 @@ def copy_directory(src_dir, dest_dir):
         if not src_files:
             raise Exception(f"No files in the source directory: {src_dir}")
 
-        log.info(f"Copying files '{src_dir}' -> '{dest_dir}'")
+        logger.info(f"Copying files '{src_dir}' -> '{dest_dir}'")
 
         # Copy each source file to the destination
         for src_path in src_files:
@@ -182,16 +181,16 @@ def copy_directory(src_dir, dest_dir):
             # Attempt to copy the file, handle errors
             try:
                 shutil.copy2(src_path, dest_path)
-                log.debug(f"Copied {src_path} -> {dest_path}")
+                logger.debug(f"Copied {src_path} -> {dest_path}")
             except shutil.Error as copy_error:
-                log.error(f"Copy error: {copy_error}")
+                logger.error(f"Copy error: {copy_error}")
             except Exception as general_error:
-                log.error(f"An error occurred: {general_error}")
+                logger.error(f"An error occurred: {general_error}")
 
     except Exception as err_info:
-        log.error(f"An error occurred during copy files in directory: {err_info}")
+        logger.error(f"An error occurred during copy files in directory: {err_info}")
     else:
-        log.info(f"Copied files '{src_dir}' -> '{dest_dir}'")
+        logger.info(f"Copied files '{src_dir}' -> '{dest_dir}'")
 
 
 def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:

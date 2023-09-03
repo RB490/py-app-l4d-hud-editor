@@ -7,14 +7,13 @@ import shutil
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
-from shared_utils.logging_manager import LoggingManager
+from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import copy_directory, verify_directory
 from shared_utils.splash_gui import SplashGUI
 from utils.functions import generate_random_string, get_backup_filename, get_backup_path, rename_with_timeout
 from utils.steam_info_retriever import SteamInfoRetriever
 
-logging_manager = LoggingManager(__name__, level=logging.INFO)
-log = logging_manager.get_logger()
+logger = get_logger(__name__, log_level=logging.DEBUG)
 
 
 class GameDir:
@@ -25,6 +24,8 @@ class GameDir:
 
         self.id = GameIDHandler(self.game)
         self.steam = SteamInfoRetriever()
+
+        self.logger = get_logger(__name__, log_level=logging.DEBUG)
 
     def _get_dir_backup_name(self, dir_mode):
         random_string = generate_random_string()
@@ -37,7 +38,7 @@ class GameDir:
         "Set directory to mode"
         self.game._validate_dir_mode(dir_mode)
 
-        log.debug(f"Setting mode: {dir_mode.name}")
+        self.logger.debug(f"Setting mode: {dir_mode.name}")
 
         # retrieving source & target dir with self.get also already checks whether they are installed
         rename_timeout = 6
@@ -58,11 +59,18 @@ class GameDir:
 
         # do we need to swap?
         if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
-            log.debug(f"{target_mode.name} already active!")
+            self.logger.debug(f"{target_mode.name} already active!")
             return True
 
         # close game
         self.game.window.close()
+
+        # rename vanilla folder if it's not a hud editor version
+        if (vanilla_dir != source_dir) and (vanilla_dir != target_dir):
+            random_string = generate_random_string()
+            vanilla_dir_renamed = vanilla_dir + random_string
+            if not rename_with_timeout(vanilla_dir, vanilla_dir_renamed, rename_timeout):
+                return False
 
         # backup source mode
         if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
@@ -72,7 +80,6 @@ class GameDir:
         if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
             return False
 
-        log.info(f"Set mode: {dir_mode.name} successfully!")
         return True
 
     def get_vanilla_file(self, relative_file_path):
@@ -96,11 +103,11 @@ class GameDir:
                 file_path = get_backup_path(file_path)
 
             if os.path.isfile(file_path):
-                log.debug(f"Get vanilla file: '{relative_file_path}'")
+                self.logger.debug(f"Get vanilla file: '{relative_file_path}'")
                 return file_path
 
         # could not find file path in game folders. is a custom file
-        log.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
+        self.logger.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
         return True
 
     def is_custom_file(self, relative_file_path):
@@ -110,10 +117,10 @@ class GameDir:
 
         vanilla_file = self.get_vanilla_file(relative_file_path)
         if vanilla_file:
-            log.debug(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
+            self.logger.debug(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
             return True
         else:
-            log.debug(f"Vanilla file is not available. Custom file: '{relative_file_path}'")
+            self.logger.debug(f"Vanilla file is not available. Custom file: '{relative_file_path}'")
             return False
 
     def get_pak01_vpk_in(self, directory):
@@ -142,10 +149,10 @@ class GameDir:
             if os.path.isdir(folder_path):
                 id_path = os.path.join(folder_path, id_filename)
                 if os.path.isfile(id_path):
-                    log.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
+                    self.logger.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
                     return folder_path
 
-        log.debug(f"No installation directory found for mode '{dir_mode}'.")
+        self.logger.debug(f"No installation directory found for mode '{dir_mode}'.")
         return None
 
     def _get_active_mode(self):
@@ -154,13 +161,13 @@ class GameDir:
         vanilla_dir = self.__get_vanilla_dir()
 
         if dev_dir == vanilla_dir:
-            log.debug(f"Active mode: {DirectoryMode.DEVELOPER.name}")
+            self.logger.debug(f"Active mode: {DirectoryMode.DEVELOPER.name}")
             return DirectoryMode.DEVELOPER
         elif user_dir == vanilla_dir:
-            log.debug(f"Active mode: {DirectoryMode.USER.name}")
+            self.logger.debug(f"Active mode: {DirectoryMode.USER.name}")
             return DirectoryMode.USER
         else:
-            log.debug("No active mode found")
+            self.logger.debug("No active mode found")
             return None
 
     def get_main_dir_name(self):
@@ -174,20 +181,20 @@ class GameDir:
 
         root_dir = self.get(dir_mode)
         if not os.path.isdir(root_dir):
-            log.debug(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
+            self.logger.debug(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
             return None
 
         main_dir_name = self.get_main_dir_name()
         main_dir = os.path.join(root_dir, main_dir_name)
 
-        log.debug(f"Get {dir_mode.name} main dir: {main_dir}")
+        self.logger.debug(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
     def get_main_dir_backup(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
         main_dir = self.get_main_dir(dir_mode)
         main_dir_backup = get_backup_path(main_dir)
-        log.debug(f"Main directory backup: '{main_dir_backup}'")
+        self.logger.debug(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 
     def _get_main_subdir(self, dir_mode, subdir_name):
@@ -199,7 +206,7 @@ class GameDir:
         if not os.path.exists(subdir_path):
             raise FileNotFoundError(f"{subdir_path} directory not found for {dir_mode.name} mode")
 
-        log.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
+        self.logger.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
         return subdir_path
 
     def _get_main_subdir_backup(self, dir_mode, subdir_name):
@@ -209,7 +216,7 @@ class GameDir:
         main_dir_backup = self.get_main_dir_backup(dir_mode)
         subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
 
-        log.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
+        self.logger.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
         return subdir_backup_path
 
     def get_cfg_dir(self, dir_mode):
@@ -230,13 +237,13 @@ class GameDir:
 
         # Construct and return the vanilla directory path
         vanilla_dir = os.path.join(games_dir, title)
-        log.debug(f"Vanilla directory: {vanilla_dir}")
+        self.logger.debug(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
 
     def restore_developer_directory(self):
         "Restore developer game files using backup"
 
-        log.debug("Restoring developer game files")
+        self.logger.debug("Restoring developer game files")
 
         try:
             splash = SplashGUI("Restoring...", "Restoring game files..")
@@ -260,7 +267,7 @@ class GameDir:
 
             # finish up
             splash.destroy()
-            log.warning("Restored developer game files!")
+            self.logger.warning("Restored developer game files!")
             return True
         except Exception as err_info:
             splash.destroy()
@@ -268,10 +275,10 @@ class GameDir:
 
     def disable_any_enabled_pak01s(self):
         """Check if developer directory has any pak01's enabled"""
-        log.debug("Disabling all pak01_dir.vpk's...")
+        self.logger.debug("Disabling all pak01_dir.vpk's...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            log.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
+            self.logger.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
             return None
 
         dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
@@ -286,9 +293,9 @@ class GameDir:
             if file_name == "pak01_dir.vpk":
                 # Rename the file
                 os.rename(file_path, disabled_file_path)
-                log.info(f"Disabled pak01_dir.vpk! '{file_path}' -> '{disabled_file_path}'")
+                self.logger.info(f"Disabled pak01_dir.vpk! '{file_path}' -> '{disabled_file_path}'")
 
-        log.debug("All developer directory pak01_dir.vpk's are disabled!")
+        self.logger.debug("All developer directory pak01_dir.vpk's are disabled!")
         return False
 
     def check_for_invalid_id_file_structure(self):
@@ -303,10 +310,10 @@ class GameDir:
             Exception: If more than one of the same ID file is found in different folders.
         """
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            log.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            self.logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
             return None
         if not self.game.installation_exists(DirectoryMode.USER):
-            log.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
+            self.logger.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
             return None
         steam_game_dir = self.steam.get_games_dir()
 
@@ -348,14 +355,14 @@ class GameDir:
                     if id_counts[id_file] > 1:
                         raise Exception(f"More than one '{id_file}' file found in different folders")
 
-        log.debug("Verified ID file structure!")
+        self.logger.debug("Verified ID file structure!")
 
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"
-        log.debug("Checking if developer directory is outdated...")
+        self.logger.debug("Checking if developer directory is outdated...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            log.debug("Unable to check outdated state: Developer mode is not installed!")
+            self.logger.debug("Unable to check outdated state: Developer mode is not installed!")
             return None
 
         user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
@@ -366,9 +373,9 @@ class GameDir:
             dev_pak01 = self.get_pak01_vpk_in(dev_subdir)
 
             if files_differ(user_pak01, dev_pak01):
-                log.debug("Developer directory is outdated!")
+                self.logger.debug("Developer directory is outdated!")
                 return True
-        log.debug("Developer directory is up-to-date!")
+        self.logger.debug("Developer directory is up-to-date!")
         return False
 
     def __get_pak01_vpk_subdirs(self, dir_mode):
@@ -390,9 +397,9 @@ class GameDir:
 
     def _find_resource_recursive(self, current_dir, target_file, root_dir):
         for root, _, files in os.walk(current_dir):
-            log.debug(f"Searching in directory: {root}")
+            self.logger.debug(f"Searching in directory: {root}")
             if target_file in files:
                 resource_path = os.path.relpath(os.path.join(root, target_file), root_dir)
-                log.info(f"Found '{target_file}' at: {resource_path}")
+                self.logger.info(f"Found '{target_file}' at: {resource_path}")
                 return resource_path
         return None
