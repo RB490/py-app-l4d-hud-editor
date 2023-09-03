@@ -1,14 +1,20 @@
 """Debug"""
+import logging
 import os
 
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
+from shared_utils.logging_manager import LoggingManager
 from utils.persistent_data_manager import PersistentDataManager
 
 
 def main_misc_debug():
     """Debug"""
     # prompt_verify_game()
+    logging_manager = LoggingManager(__name__, level=logging.INFO)
+    log = logging_manager.get_logger()
+
+    log.info("this is definetly a test")
 
 
 def setup_debugging_environment():

@@ -335,6 +335,30 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_export_vpk_or_folder(self):
         """Export the selected hud as a vpk file or directory"""
+
+        # Create the menu
+        self.vpk_export_menu = tk.Menu(self.root, tearoff=0)
+
+        # self.vpk_export_menu.add_command(label="Export", state=tk.DISABLED, command=lambda: None)
+        # self.vpk_export_menu.add_separator()
+
+        self.vpk_export_menu.add_command(
+            label="VPK",
+            image=self.img.file_black_rounded_symbol_1,
+            compound=tk.LEFT,
+            command=self.selected_hud_export_vpk,
+        )
+
+        self.vpk_export_menu.add_command(
+            label="Folder",
+            image=self.img.folder_black_interface_symbol,
+            compound=tk.LEFT,
+            command=self.selected_hud_export_directory,
+        )
+
+        self.show_menu_on_button(self.export_vpk_button, self.vpk_export_menu)
+
+        return
         options = ["VPK", "Folder"]
         result = show_custom_prompt(options)
         if not result:

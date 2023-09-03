@@ -1,15 +1,16 @@
 ✔ Feature: Base: Set HWND! hwnd = root.winfo_id() @done(23-09-03 12:31)
 ✔ Feature: Base: Set PID! hwnd = root.os.getpid() @done(23-09-03 12:31)
 ✔ Feature: Base: Use HWND/PID? @done(23-09-03 12:31)
+✔ Bug: game.dir.set is failing to rename the dev directory randomly? @done(23-09-03 12:34) was because XYplorer had it open
+✔ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils @done(23-09-03 13:36)
+✔ Feature: Start: Replace custom msgbox for export vpk/folder with context menu @done(23-09-03 13:36)
 
 Current:
 
 
 Todo:		
 
-	☐ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils
 	☐ Feature: VDF GUI: Add some info like comments not getting saved
-	☐ Feature: Start: Replace custom msgbox for export vpk/folder with context menu
 	☐ Feature: Start: Consider merging add/new buttons under a context menu
 	☐ Feature: Browser: Keyboard: Bind arrow up/down to select search/start
 	☐ Refactor: Hotkeys: Should i move some global hotkeys to root/widget bindings? these would be gui only
@@ -18,6 +19,7 @@ Todo:
 	☐ Feature: Start: CTRL+F hotkey for focusing search
 	☐ Feature: Start: Move search frame below the treeview
 	☐ Bug: Menu: Uninstall dev mode -> Enable dev mode -> Error
+	☐ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set)
 	☐ Bug: Installer: Install: -> Progress gui is behind start
 	☐ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way
 	☐ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop
