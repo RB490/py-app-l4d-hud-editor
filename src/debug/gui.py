@@ -29,7 +29,7 @@ def main_debug_gui():
     # show_start_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
 
     # splash
     # splash_gui_example()
@@ -38,7 +38,7 @@ def main_debug_gui():
     # debug_popup_gui()
 
     # vdf gui
-    debug_vdf_gui()
+    # debug_vdf_gui()
 
     # descriptions
     # debug_descriptions_gui()

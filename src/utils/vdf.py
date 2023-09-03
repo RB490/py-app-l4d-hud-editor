@@ -3,14 +3,19 @@
 
 Keys can't be quoted else the value won't be retrieved. Incorrect: "addontitle". Corect: addontitle			"2020HUD"
 """
+import logging
 import os
 from typing import Any, Dict, List, Optional, Union
 
 import send2trash
-import vdf  # type: ignore
+import vdf
+from shared_utils.logging_manager import LoggingManager  # type: ignore
 
 from shared_utils.shared_utils import replace_text_between_quotes, show_message
 from utils.constants import DEVELOPMENT_DIR
+
+logging_manager = LoggingManager(__name__, level=logging.INFO)
+log = logging_manager.get_logger()
 
 
 class VDFModifier:
@@ -73,7 +78,7 @@ class VDFModifier:
         self.vdf_path: str = vdf_path
         self.vdf_obj: Optional[Any] = self.__load_vdf() if self.vdf_path else None
 
-        # self.print_current_vdf()
+        self.print_current_vdf()
 
     def get_pretty_printed_vdf(self, align_value_indentation: bool) -> str:
         """
@@ -94,7 +99,7 @@ class VDFModifier:
 
     def get_source_raw_text(self) -> str:
         """Return the original raw unmodified vdf text."""
-        print("Returning raw text")
+        log.debug("Returning raw text")
         return self.vdf_text_raw
 
     def get_obj(self):
@@ -115,7 +120,7 @@ class VDFModifier:
     def print_current_vdf(self) -> None:
         """Print the current VDF object."""
         if self.vdf_obj:
-            print(vdf.dumps(self.vdf_obj, pretty=True))  # type:ignore
+            log.debug(vdf.dumps(self.vdf_obj, pretty=True))  # type:ignore
 
     def __load_vdf(self) -> Optional[Any]:
         """
@@ -124,7 +129,7 @@ class VDFModifier:
         Returns:
             Optional[Any]: The loaded and preprocessed VDF object, or None if vdf_path is not specified.
         """
-        print("Loading and preprocess the VDF file")
+        log.debug("Loading and preprocess the VDF file")
         if self.vdf_path:
             with open(self.vdf_path, encoding="utf-8") as vdf_file:
                 vdf_text = vdf_file.read()
@@ -149,7 +154,7 @@ class VDFModifier:
         Returns:
             None
         """
-        print("Save the modified VDF object to a file")
+        log.debug("Save the modified VDF object to a file")
         if os.path.exists(output_path):
             send2trash.send2trash(output_path)  # Move the existing file to the recycle bin
 
@@ -162,7 +167,7 @@ class VDFModifier:
         try:
             vdf.loads(result)  # Attempt to load the VDF object # type:ignore
         except Exception as err_info:
-            # print(f"Invalid VDF format. Cannot save: {err_info}")
+            # log.debug(f"Invalid VDF format. Cannot save: {err_info}")
             show_message(f"Invalid VDF format. Cannot save: {err_info}", "error")
             return
 
@@ -202,7 +207,7 @@ class VDFModifier:
             cleaned_lines.append(line)
 
         cleaned_vdf_text: str = "\n".join(cleaned_lines)
-        print(cleaned_vdf_text)
+        log.debug(cleaned_vdf_text)
         return cleaned_vdf_text
 
     def __preprocess_obj(self, vdf_obj: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -221,7 +226,7 @@ class VDFModifier:
         controls_to_remove: List[str] = []
         controls: Dict[str, Any] = modified_vdf_obj[next(iter(vdf_obj))]
         for control_name in controls:
-            print(f"control name = {control_name}")
+            log.debug(f"control name = {control_name}")
             if control_name == "DELETE_ME":
                 controls_to_remove.append(control_name)
         for control_name in controls_to_remove:
@@ -251,7 +256,7 @@ class VDFModifier:
         Returns:
             Dict[str, Dict[str, Any]]: The VDF object with modified integer values.
         """
-        print("Modifying integer values...")
+        log.debug("Modifying integer values...")
 
         if modifier not in ["plus", "minus"]:
             raise ValueError("Invalid modifier")
@@ -384,7 +389,7 @@ class VDFModifier:
         Returns:
             Dict[str, Dict[str, Any]]: The VDF object with sorted control keys.
         """
-        print("Sorting control keys...")
+        log.debug("Sorting control keys...")
 
         # pylint: disable=unused-variable
         sorted_vdf_obj: Dict[str, Dict[str, Any]] = vdf_obj.copy()
