@@ -26,10 +26,10 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    show_start_gui()
+    # show_start_gui()
 
     # browser
-    # debug_browser_gui()
+    debug_browser_gui()
 
     # splash
     # splash_gui_example()

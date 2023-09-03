@@ -452,3 +452,11 @@ Post:
 ✔ Feature: Start: Closing start gui should close the program + activate user mode, most likely @done(23-09-02 22:09)
 ✔ Feature: Browser: Verify what close does right now and what i would like it to do + activate user mode, most likely @done(23-09-02 22:27)
 ✔ Feature: Todo: Import todo's from microsoft todo @done(23-09-02 22:27)
+✔ Bug: Installer: Uninstall: Uninstall dev mode -> try to open editor menu dev installer menu -> error about can't disable menu item @done(23-09-03 11:05)
+✔ Bug: Installer: Install -> user ID file isn't deleted from dev directory @done(23-09-03 11:15)
+✔ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe -- just exctract everything with l4d1.exe like i did for the ahk version @done(23-09-03 12:14)
+✔ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare. Info: nosteam apparently extracts every pak01_dir.vpk correctly while the steam versions mess up almost everything, and vpk module left4dead2_dlc3 @done(23-09-03 12:25)
+	✔ Good testing file, try opening: materials\ads\ad01.vtf this will fail if corrupted @done(23-09-03 12:25)
+	✔ I could maybe do something with capturing output from running vpk.exe @done(23-09-03 12:23)  result code is 0 so it doesnt detect any errors!
+	✔ I could maybe do something with different vpk.exe commands like list files or something @done(23-09-03 12:25)
+	✔ I could maybe try copying the rest of the bin folder to see if it makes a difference @done(23-09-03 12:22) NOPE!

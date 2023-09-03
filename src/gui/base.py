@@ -49,6 +49,7 @@ class BaseGUI:
         else:
             raise ValueError("Invalid gui_type.")
 
+        self.window_handle = self.root.winfo_id()
         self.root.title("BaseGUI")
         self.hide()
         self.root.protocol("WM_DELETE_WINDOW", self.__on_close_internal)
@@ -163,6 +164,11 @@ class BaseGUI:
             bool_value (bool): True if the mainloop was started, False otherwise.
         """
         BaseGUI.program_mainloop_started = bool_value
+
+    def get_hwnd(self):
+        """Retrieve HWND"""
+        log.debug(f"{self.get_quoted_title()} HWND = {self.window_handle}")
+        return self.window_handle
 
     def destroy(self) -> None:
         """Destroy the window."""

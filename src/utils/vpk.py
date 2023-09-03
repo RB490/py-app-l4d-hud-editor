@@ -10,7 +10,7 @@ import vpk  # type: ignore
 
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory
-from utils.constants import ASSETS_DIR, VPK_EXE_EXTRACT
+from utils.constants import VPK_EXE_EXTRACT
 
 logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
@@ -97,27 +97,14 @@ class VPKClass:
         input_file_dir = os.path.dirname(input_file)
         extract_dir = os.path.join(input_file_dir, input_file_base)
         input_file_quoted = f"{input_file}"
-        # extract_command = [os.path.join(ASSETS_DIR, "vpk.exe", "left4dead2", "vpk.exe"), input_file_quoted]
-        extract_command = ["E:\\Games\\Steam\\steamapps\\common\\Left 4 Dead 2\\bin\\vpk.exe", input_file_quoted]
-        # extract_command = [os.path.join(ASSETS_DIR, "vpk.exe", "left4dead", "vpk.exe"), input_file_quoted]
-        # extract_command = [VPK_EXE_EXTRACT, input_file_quoted] # FIXME
+        extract_command = [VPK_EXE_EXTRACT, input_file_quoted]
 
         # Cleanup extract directory (extracted contents) incase it exists
         self._delete_extracting_dir(extract_dir)
 
         # Run vpk.exe to extract the contents of the input_file
         try:
-            result = subprocess.run(
-                extract_command, check=True
-            )  # FIXME cleanup to previous version aka remove result=
-
-            # Check the exit code
-            if result.returncode == 0:
-                print("Operation was successful")
-            else:
-                print(f"An error occurred (Exit Code: {result.returncode})")
-                print("Error Output:")
-                print(result.stderr)
+            subprocess.run(extract_command, check=True)
         except subprocess.CalledProcessError as e:
             log.error(f"Error extracting '{input_file}': {e}")
             return
