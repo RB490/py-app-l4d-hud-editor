@@ -26,12 +26,10 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    # debug_start_gui()
-    # show_start_gui()
+    show_start_gui()
 
     # browser
-    debug_browser_gui()
-    # browser = get_browser_gui()
+    # debug_browser_gui()
 
     # splash
     # splash_gui_example()
@@ -72,12 +70,6 @@ def debug_browser_gui():
     print(f"info #2 = {start_instance.get_mainloop_started()}")
 
     return
-
-
-def debug_start_gui():
-    "Show start gui"
-    start_instance = GuiHudStart()
-    start_instance.show()
 
 
 def debug_popup_gui():

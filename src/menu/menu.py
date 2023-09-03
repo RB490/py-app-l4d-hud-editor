@@ -988,7 +988,10 @@ class EditorMenuClass:
         )
 
         active_dir_mode = self.game.dir._get_active_mode()
-        self.dev_install_menu.entryconfigure(active_dir_mode.name, state="disabled")
+        if active_dir_mode:
+            self.dev_install_menu.entryconfigure(active_dir_mode.name, state="disabled")
+        else:
+            print("dev_install_menu: No mode active! Not disabling user/dev option")
 
         # self.dev_install_menu.add_separator()
         # currently_active_mode_name = f"Active: {self.game.dir._get_active_mode().name}"

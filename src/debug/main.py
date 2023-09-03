@@ -3,6 +3,7 @@
 
 from debug.editor_menu import main_debug_editor_menu
 from debug.gui import main_debug_gui
+from debug.vpk import debug_vpk_class
 
 
 def main_debug():
@@ -10,4 +11,5 @@ def main_debug():
     # main_misc_debug()
     # main_debug_editor_menu()
     main_debug_gui()
+    # debug_vpk_class()
     input("Finished debugging! Press enter to exit...")

@@ -10,7 +10,7 @@ import vpk  # type: ignore
 
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory
-from utils.constants import VPK_EXE
+from utils.constants import VPK_EXE_L4D1, VPK_EXE_L4D2
 
 logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
@@ -87,33 +87,39 @@ class VPKClass:
 
         log.info(f"Extracting '{input_file}' -> '{output_dir}' using alternative method")
 
-        # Run vpk.exe to extract the contents of the input_file
+        # Variables
+        input_file_base = os.path.splitext(os.path.basename(input_file))[0]
+        input_file_dir = os.path.dirname(input_file)
+        extract_dir = os.path.join(input_file_dir, input_file_base)
         input_file_quoted = f"{input_file}"
-        extract_command = [VPK_EXE, input_file_quoted]
+        extract_command = [VPK_EXE_L4D2, input_file_quoted]
 
+        # Cleanup extract directory (extracted contents) incase it exists
+        self._delete_extracting_dir(extract_dir)
+
+        # Run vpk.exe to extract the contents of the input_file
         try:
             subprocess.run(extract_command, check=True)
         except subprocess.CalledProcessError as e:
             log.error(f"Error extracting '{input_file}': {e}")
             return
 
-        # Get the base name of the input file without the extension
-        input_file_base = os.path.splitext(os.path.basename(input_file))[0]
-
-        # Construct the source directory path (extracted contents)
-        source_dir = os.path.join(output_dir, input_file_base)
-
-        # Construct the destination directory path
-        destination_dir = os.path.join(os.path.dirname(input_file))
-
         # Move the extracted contents to the destination directory
-        copy_directory(source_dir, destination_dir)
+        copy_directory(extract_dir, output_dir)
 
-        # Cleanup source directory (extracted contents)
-        shutil.rmtree(source_dir)
-        log.debug(f"Deleted source directory! {source_dir}")
-
+        # Finish
+        self._delete_extracting_dir(extract_dir)
         log.info(f"Extracted '{input_file}' -> '{output_dir}' using alternative method!")
+
+    def _delete_extracting_dir(self, dir_path: str) -> None:
+        """
+        Delete an extracted directory.
+
+        :param dir_path: The path to the directory to delete.
+        """
+        if os.path.isdir(dir_path):
+            shutil.rmtree(dir_path)
+            log.debug(f"Deleted directory: {dir_path}")
 
     def create(self, input_dir: str, output_dir: str, output_file_name: str) -> None:
         """
@@ -170,27 +176,3 @@ class VPKClass:
                     shutil.copy2(file_path, temp_path)
         log.debug(f"Created temporary directory without files without a file extension: '{temp_dir}'")
         return temp_dir
-
-
-def debug_vpk_class():
-    "Debug"
-    vpk_class = VPKClass()
-
-    problematic_pak_file = "E:\\Games\\Steam\\steamapps\\common\\Left 4 Dead 2 dev\\left4dead2_dlc3\\pak01_dir.vpk"
-    output_dir = "E:\\Games\\Steam\\steamapps\\common\\Left 4 Dead 2 dev\\left4dead2_dlc3"
-    # vpk_class.extract(problematic_pak_file, output_dir)
-    vpk_class._extract_alternate(problematic_pak_file, output_dir)
-    # print(f"result = {result}")
-
-    # # Example usage: Extracting files from a VPK
-    # input_file = "input.vpk"
-    # output_dir = "extracted_files"
-    # vpk_file_class.extract(input_file, output_dir)
-
-    # # Example usage: Creating a new VPK
-    # input_dir = "input_folder"
-    # output_dir = "output_folder"
-    # output_file_name = "output.vpk"
-    # vpk_file_class.create(input_dir, output_dir, output_file_name)
-
-    print("Finished")
