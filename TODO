@@ -2,11 +2,14 @@
 ✔ Feature: Browser: Double click to open file & actually opening file in general should hide the gui @done(23-09-03 21:29)
 ✔ Bug: Browser: Load hud -> unsync hud -> error. seems like self.manager.retrieve_hud_name_for_dir(directory) isn't receiving a directory @done(23-09-03 21:39)
 ✔ Bug: Browser: Load hud -> unsync hud -> hud is unsynced, but not updated ingame @done(23-09-03 21:40)
+✔ Bug: Load hud -> unsync hud -> browser treeview is not refreshed/cleared @done(23-09-03 22:01)
 
 Current:
+	
+	☐ Bug: Load hud -> unsync hud -> browser treeview is not refreshed/cleared until after the game is reloaded?
 
-	
-	
+	☐ Feature: Method to retrieve mainloop root
+	☐ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in
 
 Todo:
 

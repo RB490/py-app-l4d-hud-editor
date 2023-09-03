@@ -78,7 +78,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         hotkey_manager = HotkeyManager()
         hotkey_manager.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
 
-        self.treeview_refresh(self.treeview)
+        self.treeview_refresh()
         self.treeview_sort_column("modified", True)
 
     def focus_search_box_if_first_row_selected(self, *event):
@@ -306,7 +306,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             label="Refresh",
             image=self.img.arrows_couple_counterclockwise_rotating_symbol,
             compound=tk.LEFT,
-            command=lambda: self.treeview_refresh(self.treeview),
+            command=self.treeview_refresh,
         )
         self.context_menu.add_command(
             label="Recycle", image=self.img.trash_can_black_symbol, compound=tk.LEFT, command=self.action_recycle
@@ -323,7 +323,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         display_choice = self.display_choice.get()
         # Do something with the selected choice, such as refreshing the UI
         print(f"Radio button clicked: {display_choice}")
-        self.treeview_refresh(self.treeview)
+        self.treeview_refresh()
 
     def treeview_sort_column(self, col, reverse):
         """Sort selected treeview column"""
@@ -346,7 +346,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         search_term = self.search_box.get("1.0", "end-1c")
 
         # Refresh the Treeview with the search term
-        self.treeview_refresh(self.treeview, search_term=search_term if search_term else None)
+        self.treeview_refresh(search_term=search_term if search_term else None)
 
     def treeview_show_context_menu(self, event):
         """Treeview context menu"""
@@ -396,10 +396,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def on_show(self):
         """Callback on show"""
-        self.treeview_refresh(self.treeview)
+        self.treeview_refresh()
         self.search_box.focus_set()
 
-    def treeview_refresh(self, treeview, search_term=None):
+    def treeview_refresh(self, search_term=None):
         """
         Refreshes the provided Treeview with up-to-date content.
 
@@ -415,17 +415,20 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             my_logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
-        # Get HUD directory and display choice
+        # variables
+        treeview = self.treeview
         hud_dir = self.hud.edit.get_dir()
-        display_choice = self.display_choice.get().lower()
-
-        # Retrieve data based on display choice
-        data_dict = self.hud.edit.get_all_files_dict() if display_choice == "all" else self.hud.edit.get_files_dict()
-        if not data_dict:
-            return
 
         # Clear existing items in the Treeview
         treeview.delete(*treeview.get_children())
+        my_logger.debug("Cleared treeview!")
+
+        # Retrieve data based on display choice
+        display_choice = self.display_choice.get().lower()
+        data_dict = self.hud.edit.get_all_files_dict() if display_choice == "all" else self.hud.edit.get_files_dict()
+        if not data_dict:
+            my_logger.debug("Not refreshing browser treeview! No data dict retrieved")
+            return
 
         # Determine if game is in developer mode
         search_term_lower = search_term.lower() if search_term else None
@@ -570,4 +573,4 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             return
 
         send2trash.send2trash(full_path)
-        self.treeview_refresh(self.treeview)
+        self.treeview_refresh()

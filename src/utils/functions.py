@@ -32,6 +32,16 @@ def show_browser_gui():
     browser_gui.show()
     return browser_gui
 
+def get_browser_gui():
+    """Retrieve browser GUI instance"""
+    return show_browser_gui()
+
+def get_mainloop_root():
+    from gui.start import GuiHudStart
+    start_gui = GuiHudStart()
+    if not start_gui.get_mainloop_started():
+        raise ValueError("Mainloop() is not running!")
+    return start_gui.root
 
 def show_start_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"

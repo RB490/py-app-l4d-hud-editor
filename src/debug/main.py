@@ -13,8 +13,8 @@ from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
 
 my_logger.remove()
-my_logger.add(sys.stderr, level="INFO")
-# my_logger.add(sys.stderr, level="DEBUG")
+# my_logger.add(sys.stderr, level="INFO")
+my_logger.add(sys.stderr, level="DEBUG")
 
 
 def main_debug():

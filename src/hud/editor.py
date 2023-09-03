@@ -7,14 +7,13 @@ from tkinter.filedialog import asksaveasfilename
 
 from game.constants import DirectoryMode
 from game.game import Game
-from gui.browser import GuiHudBrowser
 from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
-from utils.functions import show_browser_gui, show_start_gui
+from utils.functions import get_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -32,7 +31,6 @@ class HudEditor:
         self.hud_dir = None
         self.hud_name = None
         self.threaded_timer_game_exit = None
-        self.browser = None
 
     def _is_already_being_edited(self):
         """Check if the current HUD is already being edited."""
@@ -120,7 +118,7 @@ class HudEditor:
         self.wait_for_game_exit_then_finish_editing()
 
         # Open browser
-        self.browser = show_browser_gui()
+        get_browser_gui()
 
         return True
 
@@ -132,8 +130,7 @@ class HudEditor:
         self.stop_game_exit_check()
 
         # close browser
-        if isinstance(self.browser, GuiHudBrowser):
-            self.browser.hide()
+        get_browser_gui().hide()
 
         # unsync hud
         self.syncer.unsync()
@@ -180,11 +177,15 @@ class HudEditor:
     def unsync(self):
         """Unsync hud"""
 
+        # unsync
         self.syncer.unsync()
 
         # clear variables
         self._set_hud_info(None)
-        
+
+        # refresh browser
+        get_browser_gui().treeview_refresh()
+
         # refresh hud ingame
         self.game.command.execute("reload_all")
 
