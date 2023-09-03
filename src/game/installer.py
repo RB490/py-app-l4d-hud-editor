@@ -57,24 +57,31 @@ class GameInstaller:
 
         # remove directory
         logger.debug("Deleting game directory...")
-        # shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
-        path = self.game.dir.get(DirectoryMode.DEVELOPER)
 
+        # variables
+        path = self.game.dir.get(DirectoryMode.DEVELOPER)
+        update_interval = 1000  # Update the GUI every 1000 files/dirs processed
         total_files, total_subdirs = count_files_and_dirs(path)
-        rem_gui = ProgressGUI("Uninstalling", 600, 60, total_files + total_subdirs)
+        total_items = total_files + total_subdirs
+        
+        rem_gui = ProgressGUI("Uninstalling", 600, 60, total_items // update_interval)  # Adjust total steps
         rem_gui.show()
 
+        files_processed = 0
         for root, dirs, files in os.walk(path, topdown=False):
             for file_name in files:
                 file_path = os.path.join(root, file_name)
-                rem_gui.update_progress(f"Deleting: '{file_path}'")
                 os.remove(file_path)
+                files_processed += 1
+
+                if files_processed % update_interval == 0:
+                    rem_gui.update_progress(f"Deleted {files_processed}/{total_files} files")
 
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
-                rem_gui.update_progress(f"Deleting directory: '{dir_path}'")
                 os.rmdir(dir_path)
 
+        rem_gui.update_progress(f"Deletion completed: {files_processed}/{total_files} files")
         rem_gui.destroy()
 
     def update(self):
