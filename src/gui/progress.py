@@ -130,10 +130,12 @@ class ProgressGUI(BaseGUI):
         self.steps_remaining_label.config(text=f"Step {self.current_step} of {self.total_steps}")
         self._update_minimum_width()
         self.root.update()
+        self.bring_to_front()
 
     def close(self) -> None:
         """Close the progress GUI window."""
         result = show_message(f"Are you sure you want to stop {self.action_description.lower()}?", "yesno")
         if not result:
+            self.show()
             return
         self.destroy()

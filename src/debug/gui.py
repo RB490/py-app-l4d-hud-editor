@@ -26,14 +26,14 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    # show_start_gui()
+    show_start_gui()
 
     # browser
     # debug_browser_gui()
 
     # splash
     # splash_gui_example()
-# 
+    #
     # popup
     # debug_popup_gui()
 
@@ -47,7 +47,7 @@ def main_debug_gui():
     # debug_get_user_input()
 
     # installer
-    debug_progress_gui()
+    # debug_progress_gui()
 
 
 def debug_browser_gui():

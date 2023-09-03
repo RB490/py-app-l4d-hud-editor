@@ -1,24 +1,17 @@
-✔ Bug: Installer: Install: -> Progress gui is behind start @done(23-09-03 16:15)
-✔ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way @done(23-09-03 16:20)
-✔ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop @done(23-09-03 16:27)
-✔ Bug: Installer: Uninstall: It's quite slow deleting compared to just deleting manually with windows file explorer. probably because it's updating the gui all the time? @done(23-09-03 16:36)
-
 Current:
 
 
-Todo:		
+Todo:
 
-	
-	☐ Bug: Installer: During rebuilding audio i get a bunch of 'failed to set window handle' before it correctly sets hwnd
-
-	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
-	
 	☐ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set)
 		- Duplicate entries in game class: INFO:shared_utils.hwnd_window_manager:Closed False! -> log.info(f"Closed {self.get_process_name(hwnd)}!")
 		- Already messed with this for longer than an hour
 		- Figured out that it only happens when actually switching dir modes. If calling the same thing it doesn't duplicate
 		- Figured out that when actually switching modes log statements in debug->game.py also duplicate?! very confusing stuff -- in fact all the way down the stack also in main_debug()
-		- It also does this for the installer module for example while installing. except just the format is weird. no duplications?
+		- During installer's install() the pintout format is also messed up 'DEBUG:game.dir:Found install' however it doesn't seem duplicated
+		- During install() copy_dir is also logging twice?
+			shared_utils.shared_utils (INFO): Copying files 'D:\Programming and projects\py-app-l4d-hud-editor\assets\mods\Dev Map\Left 4 Dead 2\export' -> 'E:\games\steam\steamapps\common\Left 4 Dead 2\left4dead2'       
+			INFO:shared_utils.shared_utils:Copying files 'D:\Programming and projects\py-app-l4d-hud-editor\assets\mods\Dev Map\Left 4 Dead 2\export' -> 'E:\games\steam\steamapps\common\Left 4 Dead 2\left4dead2'
 		✔ Tried removing the game class by changing it into a function @done(23-09-03 16:10)
 		✔ Tried instead of making the logger a module global variable in game() i put it as part of the class @done(23-09-03 16:11)
 		✔ Asked GPT a bunch @done(23-09-03 16:11)
