@@ -184,6 +184,9 @@ class HudEditor:
 
         # clear variables
         self._set_hud_info(None)
+        
+        # refresh hud ingame
+        self.game.command.execute("reload_all")
 
     def synced(self):
         "Verify if hud is loaded"

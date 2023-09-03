@@ -1,12 +1,12 @@
 ✔ Bug: Browser: Open vanilla file -> TypeError: GameDir.get_vanilla_file() missing 1 required positional argument: 'relative_file_path' @done(23-09-03 21:27)
 ✔ Feature: Browser: Double click to open file & actually opening file in general should hide the gui @done(23-09-03 21:29)
 ✔ Bug: Browser: Load hud -> unsync hud -> error. seems like self.manager.retrieve_hud_name_for_dir(directory) isn't receiving a directory @done(23-09-03 21:39)
+✔ Bug: Browser: Load hud -> unsync hud -> hud is unsynced, but not updated ingame @done(23-09-03 21:40)
 
 Current:
 
 	
 	
-	☐ Bug: Browser: Load hud -> unsync hud -> hud is unsynced, but not updated ingame
 
 Todo:
 
