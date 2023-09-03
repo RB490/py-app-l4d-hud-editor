@@ -2,19 +2,6 @@ Current:
 
 
 Todo:
-
-	☐ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set)
-		- Duplicate entries in game class: INFO:shared_utils.hwnd_window_manager:Closed False! -> log.info(f"Closed {self.get_process_name(hwnd)}!")
-		- Already messed with this for longer than an hour
-		- Figured out that it only happens when actually switching dir modes. If calling the same thing it doesn't duplicate
-		- Figured out that when actually switching modes log statements in debug->game.py also duplicate?! very confusing stuff -- in fact all the way down the stack also in main_debug()
-		- During installer's install() the pintout format is also messed up 'DEBUG:game.dir:Found install' however it doesn't seem duplicated
-		- During install() copy_dir is also logging twice?
-			shared_utils.shared_utils (INFO): Copying files 'D:\Programming and projects\py-app-l4d-hud-editor\assets\mods\Dev Map\Left 4 Dead 2\export' -> 'E:\games\steam\steamapps\common\Left 4 Dead 2\left4dead2'       
-			INFO:shared_utils.shared_utils:Copying files 'D:\Programming and projects\py-app-l4d-hud-editor\assets\mods\Dev Map\Left 4 Dead 2\export' -> 'E:\games\steam\steamapps\common\Left 4 Dead 2\left4dead2'
-		✔ Tried removing the game class by changing it into a function @done(23-09-03 16:10)
-		✔ Tried instead of making the logger a module global variable in game() i put it as part of the class @done(23-09-03 16:11)
-		✔ Asked GPT a bunch @done(23-09-03 16:11)
 	
 	☐ Testing: Test the program by using it to edit HUD's
 

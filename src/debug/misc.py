@@ -1,6 +1,8 @@
 """Debug"""
 import os
 
+from loguru import logger
+
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
 from utils.persistent_data_manager import PersistentDataManager
@@ -8,6 +10,7 @@ from utils.persistent_data_manager import PersistentDataManager
 
 def main_misc_debug():
     """Debug"""
+    logger.info("This is an info message")
 
 
 def setup_debugging_environment():

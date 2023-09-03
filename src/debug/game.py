@@ -1,11 +1,6 @@
 "debug game class"
-import logging
-
 from game.constants import DirectoryMode, InstallationState, SyncState
 from game.game import Game
-from shared_utils.logging_manager import get_logger
-
-logger = get_logger(__name__, log_level=logging.DEBUG)
 
 
 def debug_game_set_states_synced_and_installed():
@@ -37,7 +32,7 @@ def main_debug_game():
     # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
     # result = gamez.installer.install()
     # result = gamez.installer.repair()
-    result = gamez.installer.uninstall()
+    # result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
@@ -68,10 +63,10 @@ def main_debug_game():
     ###########################
     # Directory
     ###########################
-    # result = gamez.dir.set(DirectoryMode.USER) # FIXME this is testing for the duplicate messages
-    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    result = gamez.dir.set(DirectoryMode.USER)  # FIXME this is testing for the duplicate messages
+    result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
-    # logger.debug("what the fuck?????????????????")
+    # my_logger.debug("what the fuck?????????????????")
     # result = gamez.dir.set(DirectoryMode.USER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)

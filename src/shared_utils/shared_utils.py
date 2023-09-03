@@ -1,6 +1,5 @@
 """Shared utility functions"""
 # pylint: disable=c-extension-no-member, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
-import logging
 import os
 import re
 import shutil
@@ -10,12 +9,9 @@ from tkinter import Menu, messagebox
 from typing import Any, Callable, Dict, Type, TypeVar
 
 from ahk import AHK
-
-from shared_utils.logging_manager import get_logger
+from loguru import logger as my_logger
 
 T = TypeVar("T", bound="Singleton")
-
-logger = get_logger(__name__, log_level=logging.INFO)
 
 
 def get_invisible_tkinter_root() -> tk.Tk:
@@ -166,7 +162,7 @@ def copy_directory(src_dir, dest_dir):
         if not src_files:
             raise Exception(f"No files in the source directory: {src_dir}")
 
-        logger.info(f"Copying files '{src_dir}' -> '{dest_dir}'")
+        my_logger.info(f"Copying files '{src_dir}' -> '{dest_dir}'")
 
         # Copy each source file to the destination
         for src_path in src_files:
@@ -181,16 +177,16 @@ def copy_directory(src_dir, dest_dir):
             # Attempt to copy the file, handle errors
             try:
                 shutil.copy2(src_path, dest_path)
-                logger.debug(f"Copied {src_path} -> {dest_path}")
+                my_logger.debug(f"Copied {src_path} -> {dest_path}")
             except shutil.Error as copy_error:
-                logger.error(f"Copy error: {copy_error}")
+                my_logger.error(f"Copy error: {copy_error}")
             except Exception as general_error:
-                logger.error(f"An error occurred: {general_error}")
+                my_logger.error(f"An error occurred: {general_error}")
 
     except Exception as err_info:
-        logger.error(f"An error occurred during copy files in directory: {err_info}")
+        my_logger.error(f"An error occurred during copy files in directory: {err_info}")
     else:
-        logger.info(f"Copied files '{src_dir}' -> '{dest_dir}'")
+        my_logger.info(f"Copied files '{src_dir}' -> '{dest_dir}'")
 
 
 def move_window_with_ahk(window_title: str, new_x: int, new_y: int) -> None:

@@ -1,6 +1,5 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, c-extension-no-member
 """Module for the hud browser gui class"""
-import logging
 import os
 import tkinter as tk
 from datetime import datetime
@@ -8,6 +7,7 @@ from tkinter import ttk
 
 import send2trash
 import win32gui
+from loguru import logger as my_logger
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
@@ -19,7 +19,6 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.logging_manager import get_logger
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import (
     APP_ICON,
@@ -31,8 +30,6 @@ from utils.constants import (
 )
 from utils.functions import get_image_for_file_extension, save_and_exit_script, show_browser_gui
 from utils.persistent_data_manager import PersistentDataManager
-
-logger = get_logger(__name__, log_level=logging.INFO)
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -97,13 +94,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Toggle focus between treeview and search"""
         # pylint: disable=unused-argument
         current_focus = self.root.focus_get()
-        logger.debug(f"current_focus = {current_focus}")
+        my_logger.debug(f"current_focus = {current_focus}")
         if current_focus == self.search_box:
             self.focus_treeview(self.treeview)
-            logger.debug("Focused treeview")
+            my_logger.debug("Focused treeview")
         else:
             self.search_box.focus_set()
-            logger.debug("Focused searchbox")
+            my_logger.debug("Focused searchbox")
         return "break"  # Prevent the default tab behavior (inserting a tab character)
 
     def __create_widgets(self):
@@ -399,9 +396,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             self.selected_relative_path = item_values[4]
             self.selected_full_path = os.path.join(self.hud.edit.get_dir(), self.selected_relative_path)
             self.selected_file_name = item_values[0]
-            logger.debug(f"Selected full path: {self.selected_full_path}")
-            logger.debug(f"Selected relative path: {self.selected_relative_path}")
-            logger.debug(f"Selected file name: {self.selected_file_name}")
+            my_logger.debug(f"Selected full path: {self.selected_full_path}")
+            my_logger.debug(f"Selected relative path: {self.selected_relative_path}")
+            my_logger.debug(f"Selected file name: {self.selected_file_name}")
 
     def on_show(self):
         """Callback on show"""
@@ -421,7 +418,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """
         # don't update tree until has been run
         if not self.get_mainloop_started():
-            logger.debug("Not refreshing browser treeview! Mainloop has not been started")
+            my_logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
         # Get HUD directory and display choice
