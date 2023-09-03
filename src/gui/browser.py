@@ -66,7 +66,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Bindings
         self.treeview.bind("<<TreeviewSelect>>", self.treeview_set_selected_item)
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
+        self.treeview.bind("<Up>", self.focus_search_box_if_first_row_selected)
         self.search_box.bind("<Tab>", self.toggle_focus_treeview_and_search)
+        self.search_box.bind("<Down>", self.toggle_focus_treeview_and_search)
+        self.root.bind("<Control-f>", lambda event: self.search_box.focus_set())
         self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
         self.root.bind("<Control-Tab>", self.toggle_focus_treeview_and_search)
         self.search_box.bind("<KeyRelease>", self.treeview_search)
@@ -83,6 +86,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         self.treeview_refresh(self.treeview)
         self.treeview_sort_column("modified", True)
+
+    def focus_search_box_if_first_row_selected(self, *event):
+        """Focus search box if first row is selected"""
+        selected_item = self.treeview.selection()
+        first_row = self.treeview.get_children()[0]  # get the identifier of the first row
+        if selected_item and selected_item[0] == first_row:  # compare identifiers
+            self.search_box.focus_set()
 
     def toggle_focus_treeview_and_search(self, *event):
         """Toggle focus between treeview and search"""
@@ -105,8 +115,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.frame.pack(fill="both", anchor="nw", expand=True)
 
         # draw controls
-        self.__create_search_frame()
         self.__create_toolbar_frame()
+        self.__create_search_frame()
         self.__create_treeview()
 
     def __create_search_frame(self):
@@ -114,7 +124,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # pylint: disable=attribute-defined-outside-init
         # create a frame for search controls
         self.search_frame = tk.Frame(self.frame)
-        self.search_frame.pack(side="top", fill="x", padx=5, pady=5)
+        self.search_frame.pack(side="bottom", fill="x", padx=5, pady=5)
 
         self.search_label = tk.Label(self.search_frame, text="Search")
         self.search_label.pack(side="left", padx=5, pady=5)

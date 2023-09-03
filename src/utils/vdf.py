@@ -8,9 +8,9 @@ import os
 from typing import Any, Dict, List, Optional, Union
 
 import send2trash
-import vdf
-from shared_utils.logging_manager import LoggingManager  # type: ignore
+import vdf  # type: ignore
 
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import replace_text_between_quotes, show_message
 from utils.constants import DEVELOPMENT_DIR
 
