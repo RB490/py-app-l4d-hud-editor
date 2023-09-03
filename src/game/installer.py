@@ -21,8 +21,9 @@ from utils.constants import MODS_DIR
 from utils.functions import count_files_and_dirs, get_backup_path, wait_process_close
 from utils.vpk import VPKClass
 
-logging_manager = LoggingManager(__name__, level=logging.WARNING)
+logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
+
 
 class GameInstaller:
     "Game class installation methods"
@@ -56,7 +57,7 @@ class GameInstaller:
         self.game.window.close()
 
         # remove directory
-        print("Deleting game directory...")
+        log.debug("Deleting game directory...")
         # shutil.rmtree(self.game.dir.get(DirectoryMode.DEVELOPER))
         path = self.game.dir.get(DirectoryMode.DEVELOPER)
 
@@ -92,7 +93,7 @@ class GameInstaller:
 
     def common_installation_logic(self, action, resume_state, action_description):
         "Installation logic for repair/update/install"
-        print(f"{action_description}...")
+        log.debug(f"{action_description}...")
 
         # confirm params
         if action not in ["install", "update", "repair"]:
@@ -124,10 +125,10 @@ class GameInstaller:
                 if result:
                     current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
                     if current_state == InstallationState.COMPLETED:
-                        print(f"Successfully selected the developer directory. Finished {action_description}.")
+                        log.debug(f"Successfully selected the developer directory. Finished {action_description}.")
                         return True
             except Exception as err_info:
-                print(f"User did not select developer installation directory! Continuing... ({err_info})")
+                log.debug(f"User did not select developer installation directory! Continuing... ({err_info})")
 
         # confirm start
         if not prompt_start(action, f"This will {action_description.lower()}"):
@@ -211,7 +212,7 @@ class GameInstaller:
 
     def __perform_installation_step(self, state):
         "perform"
-        print(f"Performing installation step with state: {state}")
+        log.debug(f"Performing installation step with state: {state}")
 
         if state == InstallationState.CREATE_DEV_DIR:
             self.__create_dev_dir()
@@ -230,7 +231,7 @@ class GameInstaller:
             self.__rebuild_audio()
 
     def __create_dev_dir(self):
-        print("Creating developer directory")
+        log.debug("Creating developer directory")
 
         dev_dir = self.game.dir._get_dir_backup_name(DirectoryMode.DEVELOPER)
 
@@ -268,7 +269,7 @@ class GameInstaller:
             raise InstallationError(f"Could not remove user ID file from dev directory: {user_id_file_path}")
 
     def __prompt_verify_game(self):
-        print("Prompting user to verify game")
+        log.debug("Prompting user to verify game")
         prompt_verify_game()
 
     def __find_pak01_files(self, game_dir, callback):
@@ -282,7 +283,7 @@ class GameInstaller:
     def __extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
-        print("Extracting pak01.vpk's")
+        log.debug("Extracting pak01.vpk's")
 
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
@@ -293,24 +294,24 @@ class GameInstaller:
         self.__find_pak01_files(dev_dir, extract_callback)
 
     def __enable_paks(self):
-        print("Enabling pak01.vpk's")
+        log.debug("Enabling pak01.vpk's")
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         # this check ensures repair() & update() can use this method. and install() ignores it if needed
         if not dev_dir:
-            print("Enable paks: Developer directory not retrieved.")
+            log.debug("Enable paks: Developer directory not retrieved.")
             return
 
         def enable_callback(filepath, subdir_path):
             source_filepath = filepath
             target_filepath = os.path.join(subdir_path, "pak01_dir.vpk")
             os.rename(source_filepath, target_filepath)
-            print("Renaming file from", source_filepath, "to", target_filepath)
+            log.debug(f"Renaming file {source_filepath} -> {target_filepath}")
 
         self.__find_pak01_files(dev_dir, enable_callback)
 
     def __disable_paks(self):
-        print("Disabling pak01.vpk's")
+        log.debug("Disabling pak01.vpk's")
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
         def disable_callback(filepath, subdir_path):
@@ -321,7 +322,7 @@ class GameInstaller:
         self.__find_pak01_files(dev_dir, disable_callback)
 
     def _main_dir_backup(self):
-        print("Copying main directory to create a backup for the sync class")
+        log.debug("Copying main directory to create a backup for the sync class")
 
         resource_dir = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "resource")
         resource_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "resource")
@@ -331,14 +332,14 @@ class GameInstaller:
 
         # create backup dir from scratch
         if os.path.isdir(backup_dir):
-            print("Removing previous backup directory to keep it 100% clean")
+            log.debug("Removing previous backup directory to keep it 100% clean")
             shutil.rmtree(backup_dir)
         os.makedirs(backup_dir)
 
-        print(resource_dir)
-        print(resource_backup_dir)
-        print(materials_dir)
-        print(materials_backup_dir)
+        log.debug(resource_dir)
+        log.debug(resource_backup_dir)
+        log.debug(materials_dir)
+        log.debug(materials_backup_dir)
 
         copy_directory(
             resource_dir,
@@ -350,7 +351,7 @@ class GameInstaller:
         )
 
     def __install_mods(self):
-        print("Installing mods")
+        log.debug("Installing mods")
 
         # variables
         mods_dev_map_dir = os.path.join(MODS_DIR, "Dev Map", self.game.get_title(), "export")
@@ -374,7 +375,7 @@ class GameInstaller:
         copy_directory(mods_sourcemod_dir, main_dir)
 
     def __rebuild_audio(self):
-        print("Rebuilding audio")
+        log.debug("Rebuilding audio")
 
         # variables
         cfg_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
@@ -388,7 +389,7 @@ class GameInstaller:
         self.game.window.close()
         result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
 
-        print("debug: game is fully running!")
+        log.debug("debug: game is fully running!")
         if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
             raise InstallationError("Failed to run the game and rebuild audio cache!")
 

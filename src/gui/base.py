@@ -119,7 +119,8 @@ class BaseGUI:
     def __delayed_show(self, callback: str = ""):
         """After mainloop()"""
         log.debug("Running __delayed_show")
-        self.bring_to_front()
+        if not self.is_hidden:
+            self.bring_to_front()
         self.__call_method_if_exists("on_show")
         if callback:
             self.__call_method_if_exists(callback)
@@ -229,6 +230,7 @@ class BaseGUI:
             self.root.geometry("1000x1000+100+100")
 
     def get_quoted_title(self):
+        """Get pretty quoted title for displaying logging statements"""
         quoted_title = f"'{self.root.title()}'"
         return quoted_title
 

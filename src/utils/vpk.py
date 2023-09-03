@@ -10,7 +10,7 @@ import vpk  # type: ignore
 
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory
-from utils.constants import VPK_EXE_L4D1, VPK_EXE_L4D2
+from utils.constants import VPK_EXE_EXTRACT
 
 logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
@@ -56,7 +56,8 @@ class VPKClass:
         self._extract_alternate(input_file, output_dir)
         return
 
-
+        # just using nosteam for everything. because issues... see readme in vpk.exe directory
+        # pylint: disable=unreachable
         log.info(f"Extracting '{input_file}' -> '{output_dir}'")
 
         # Extract VPK file
@@ -96,7 +97,7 @@ class VPKClass:
         input_file_dir = os.path.dirname(input_file)
         extract_dir = os.path.join(input_file_dir, input_file_base)
         input_file_quoted = f"{input_file}"
-        extract_command = [VPK_EXE_L4D1, input_file_quoted]
+        extract_command = [VPK_EXE_EXTRACT, input_file_quoted]
 
         # Cleanup extract directory (extracted contents) incase it exists
         self._delete_extracting_dir(extract_dir)

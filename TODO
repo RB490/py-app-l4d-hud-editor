@@ -1,13 +1,18 @@
 ✔ Bug: Installer: Uninstall: Uninstall dev mode -> try to open editor menu dev installer menu -> error about can't disable menu item @done(23-09-03 11:05)
 ✔ Bug: Installer: Install -> user ID file isn't deleted from dev directory @done(23-09-03 11:15)
+✔ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe -- just exctract everything with l4d1.exe like i did for the ahk version @done(23-09-03 12:14)
 Current:
 
 
 Todo:		
-	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe -- just exctract everything with l4d1.exe like i did for the ahk version
-	
-	
-	☐ Feature: Retrieve HWND / PID in basegui?
+		
+	☐ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare. Info: nosteam apparently extracts every pak01_dir.vpk correctly while the steam versions mess up almost everything, and vpk module left4dead2_dlc3
+		☐ I could maybe do something with capturing output from running vpk.exe
+		☐ I could maybe do something with different vpk.exe commands like list files or something
+
+	☐ Feature: Base: Set HWND! hwnd = root.winfo_id()
+	☐ Feature: Base: Set PID! hwnd = root.os.getpid()
+
 	☐ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils
 	☐ Feature: VDF GUI: Add some info like comments not getting saved
 	☐ Feature: Start: Replace custom msgbox for export vpk/folder with context menu
@@ -19,12 +24,12 @@ Todo:
 	☐ Feature: Start: CTRL+F hotkey for focusing search
 	☐ Feature: Start: Move search frame below the treeview
 	☐ Bug: Menu: Uninstall dev mode -> Enable dev mode -> Error
+	☐ Bug: Installer: Install: -> Progress gui is behind start
 	☐ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way
 	☐ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop
 	☐ Bug: Installer: Uninstall: It's quite slow deleting compared to just deleting manually with windows file explorer. probably because it's updating the gui all the time?
 	☐ Bug: Installer: During rebuilding audio i get a bunch of 'failed to set window handle' before it correctly sets hwnd
 	
-	☐ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
 	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
 	☐ Testing: Test the program by using it to edit HUD's
 

@@ -32,8 +32,8 @@ IMAGES_DIR_32: str = os.path.join(IMAGES_DIR, "png_32x32")
 IMAGES_DIR_MISC: str = os.path.join(IMAGES_DIR, "misc")
 
 # asset files
-VPK_EXE_L4D1: str = os.path.join(ASSETS_DIR, "vpk.exe", "left4dead", "vpk.exe")
-VPK_EXE_L4D2: str = os.path.join(ASSETS_DIR, "vpk.exe", "left4dead2", "vpk.exe")
+VPK_EXE_CREATE: str = os.path.join(ASSETS_DIR, "vpk.exe", "left4dead", "vpk.exe")
+VPK_EXE_EXTRACT: str = os.path.join(ASSETS_DIR, "vpk.exe", "nosteam", "vpk.exe")
 
 # image files
 APP_ICON: str = os.path.join(ASSETS_DIR, "app.ico")

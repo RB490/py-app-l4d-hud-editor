@@ -10,17 +10,13 @@ from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
-from utils.functions import (
-    get_mouse_position_on_click,
-    save_and_exit_script,
-    show_browser_gui,
-    show_start_gui,
-)
+from utils.functions import get_mouse_position_on_click, save_and_exit_script, show_browser_gui, show_start_gui
 from utils.get_user_input import get_user_input
 from utils.persistent_data_manager import PersistentDataManager
 
 logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
+
 
 def call_create_and_refresh_menu_after_method(func):
     """Used by decorator to update menu after method"""
@@ -415,4 +411,4 @@ class EditorMenuHandler:
         This method removes developer mode.
         """
         log.debug("Removing developer mode")
-        result = self.game.installer.uninstall()
+        self.game.installer.uninstall()

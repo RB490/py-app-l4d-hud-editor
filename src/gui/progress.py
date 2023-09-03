@@ -7,7 +7,7 @@ from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import show_message
 from utils.constants import APP_ICON
 
-logging_manager = LoggingManager(__name__, level=logging.WARNING)
+logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
 
 
