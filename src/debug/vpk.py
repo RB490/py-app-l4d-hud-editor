@@ -1,3 +1,4 @@
+"Debug"
 import os
 
 from game.constants import DirectoryMode

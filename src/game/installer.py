@@ -5,6 +5,7 @@ Notes:
     There is a fair amount of duplicate install/update/repair. Choosing to leave
     as is right now because the added complexity isn't worth it
 """
+import logging
 import os
 import shutil
 import time
@@ -14,11 +15,14 @@ from game.constants import DirectoryMode, InstallationError, InstallationState
 # pylint: disable=unused-import
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from gui.progress import ProgressGUI
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import MODS_DIR
 from utils.functions import count_files_and_dirs, get_backup_path, wait_process_close
 from utils.vpk import VPKClass
 
+logging_manager = LoggingManager(__name__, level=logging.WARNING)
+log = logging_manager.get_logger()
 
 class GameInstaller:
     "Game class installation methods"
@@ -248,13 +252,20 @@ class GameInstaller:
         return
 
     def __copy_game_files(self):
+        user_dir = self.game.dir.get(DirectoryMode.USER)
+        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+
         copy_directory(
-            self.game.dir.get(DirectoryMode.USER),
-            self.game.dir.get(DirectoryMode.DEVELOPER),
+            user_dir,
+            dev_dir,
         )
         user_id_file = self.game.dir.id._get_filename(DirectoryMode.USER)
-        if os.path.isfile(user_id_file):
-            os.remove(user_id_file)
+        user_id_file_path = os.path.join(dev_dir, user_id_file)
+        if os.path.isfile(user_id_file_path):
+            os.remove(user_id_file_path)
+            log.debug(f"Deleted user ID file from dev directory: {user_id_file_path}")
+        else:
+            raise InstallationError(f"Could not remove user ID file from dev directory: {user_id_file_path}")
 
     def __prompt_verify_game(self):
         print("Prompting user to verify game")

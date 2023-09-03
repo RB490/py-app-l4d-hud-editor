@@ -1,6 +1,7 @@
 ✔ Bug: Installer: Uninstall: Uninstall dev mode -> try to open editor menu dev installer menu -> error about can't disable menu item @done(23-09-03 11:05)
+✔ Bug: Installer: Install -> user ID file isn't deleted from dev directory @done(23-09-03 11:15)
 Current:
-	
+
 
 Todo:		
 	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe
@@ -16,6 +17,8 @@ Todo:
 	☐ Refactor: Use BaseGUI's self.show_context_menu_on_button
 	☐ Feature: Start: CTRL+F hotkey for focusing search
 	☐ Feature: Start: Move search frame below the treeview
+	☐ Bug: Menu: Uninstall dev mode -> Enable dev mode -> Error
+	☐ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way
 	☐ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop
 	☐ Bug: Installer: Uninstall: It's a bit slow removing the dev folder?
 	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
