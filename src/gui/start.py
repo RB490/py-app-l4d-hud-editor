@@ -12,7 +12,6 @@ from game.game import Game
 from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
-from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
 from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
@@ -56,18 +55,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Configure the root window with the menubar
         self.update_treeview()
 
-        # Dbg hotkeys
-        hotkey_manager = HotkeyManager()
-        hotkey_manager.add_hotkey("F9", self.debug_hotkey, suppress=True)
-
     def debug_show_browser_gui(self):
         """Used for debugging to automatically open the browser gui after starting mainloop"""
         self.browser.show()
-
-    def debug_hotkey(self):
-        "debug"
-        print("debug_hotkey")
-        # get_browser_gui()
 
     def __create_widgets(self):
         # gui variables
@@ -337,37 +327,26 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Export the selected hud as a vpk file or directory"""
 
         # Create the menu
-        self.vpk_export_menu = tk.Menu(self.root, tearoff=0)
+        vpk_export_menu = tk.Menu(self.root, tearoff=0)
 
-        # self.vpk_export_menu.add_command(label="Export", state=tk.DISABLED, command=lambda: None)
-        # self.vpk_export_menu.add_separator()
+        # vpk_export_menu.add_command(label="Export", state=tk.DISABLED, command=lambda: None)
+        # vpk_export_menu.add_separator()
 
-        self.vpk_export_menu.add_command(
+        vpk_export_menu.add_command(
             label="VPK",
             image=self.img.file_black_rounded_symbol_1,
             compound=tk.LEFT,
             command=self.selected_hud_export_vpk,
         )
 
-        self.vpk_export_menu.add_command(
+        vpk_export_menu.add_command(
             label="Folder",
             image=self.img.folder_black_interface_symbol,
             compound=tk.LEFT,
             command=self.selected_hud_export_directory,
         )
 
-        self.show_menu_on_button(self.export_vpk_button, self.vpk_export_menu)
-
-        return
-        options = ["VPK", "Folder"]
-        result = show_custom_prompt(options)
-        if not result:
-            print("User did not select an export method!")
-            return
-        if result == "VPK":
-            self.selected_hud_export_vpk()
-        if result == "Folder":
-            self.selected_hud_export_directory()
+        self.show_menu_on_button(self.export_vpk_button, vpk_export_menu)
 
     def selected_hud_export_directory(self):
         """Export hud as folder"""

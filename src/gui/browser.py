@@ -89,6 +89,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def focus_search_box_if_first_row_selected(self, *event):
         """Focus search box if first row is selected"""
+        # pylint: disable=unused-argument
         selected_item = self.treeview.selection()
         first_row = self.treeview.get_children()[0]  # get the identifier of the first row
         if selected_item and selected_item[0] == first_row:  # compare identifiers
