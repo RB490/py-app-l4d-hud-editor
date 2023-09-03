@@ -199,11 +199,11 @@ class HudEditor:
     def _set_hud_info(self, directory):
         """Get information"""
         self.hud_dir = directory
-        result = self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
-        if result:
-            return True
-        else:
+        if directory is None:
             return False
+        else:
+            result = self.hud_name = self.manager.retrieve_hud_name_for_dir(directory)
+            return bool(result)
 
     def clear_hud_info(self):
         """Get information"""
