@@ -128,7 +128,7 @@ class GameWindow:
         # setup
         self.game._disable_addons()
         if write_config:
-            self.game._write_config()
+            self.game.write_config()
 
         # build game argument params
         game_args = ["-novid", "-console"]  # novid=Skip intro videos  # consoleEnable developer console

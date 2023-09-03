@@ -508,12 +508,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Treeview handle Open vanilla File' option"""
         print("Method: treeview_open_default_file - handle 'Open vanilla File' option")
 
-        full_path = self.game.dir.get_vanilla_file()
-        if full_path:
-            print(f"Opening vanilla file: '{full_path}'")
-            os.startfile(full_path)
+        rel_path = self.get_selected_relative_path()
+        vanilla_path = self.game.dir.get_vanilla_file(rel_path)
+        if vanilla_path:
+            print(f"Opening vanilla file: '{vanilla_path}'")
+            os.startfile(vanilla_path)
         else:
-            print(f"vanilla file unavailable: '{full_path}'")
+            print(f"vanilla file unavailable: '{vanilla_path}'")
 
     def action_open_folder(self):
         "Treeview Handle 'Open Folder' option"

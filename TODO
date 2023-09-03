@@ -1,13 +1,19 @@
+✔ Bug: Browser: Open vanilla file -> TypeError: GameDir.get_vanilla_file() missing 1 required positional argument: 'relative_file_path' @done(23-09-03 21:27)
+
 Current:
 
 
 Todo:
 
-	☐ Testing: Test the program by using it to edit HUD's
+	☐ Feature: Browser: Double click to open file & actually opening file in general should hide the gui
 
-Release:
 	- Goal: Being able to have smug use the program and have it 100% work for him on first try
 	☐ Auto updating
 	☐ A way to test the program in a fresh environment. Maybe a virtual machine
 	☐ Full coverage unit testing? or atleast the important parts like HudDescription/ID FileHandler/more?
 	☐ Ask GPT on how to do this properly
+	
+	
+	☐ Testing: Test the program by using it to edit HUD's
+
+Release:

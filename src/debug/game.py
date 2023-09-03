@@ -47,7 +47,7 @@ def main_debug_game():
     # result = gamez.installer.__install_mods()
     # result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
     # result = gamez._disable_addons()
-    # result = gamez._write_config()
+    # result = gamez.write_config()
 
     ###########################
     # ID
