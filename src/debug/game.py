@@ -63,10 +63,10 @@ def main_debug_game():
     # Directory
     ###########################
     # result = gamez.dir.set(DirectoryMode.USER)
-    # result = gamez.dir.set(DirectoryMode.USER)
+    result = gamez.dir.set(DirectoryMode.DEVELOPER)
 
     # result = gamez.dir.get(DirectoryMode.USER)
-    # result = gamez.dir.get(DirectoryMode.USER)
+    # result = gamez.dir.get(DirectoryMode.DEVELOPER)
 
     # result = gamez.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
     # result = gamez.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
@@ -77,9 +77,6 @@ def main_debug_game():
     # result = gamez.dir.check_for_invalid_id_file_structure()
 
     # result = gamez.dir.dev_out_of_date()
-
-    result = gamez.dir.get_resource_file_relative_path("clientscheme_borders.res")
-    result = gamez.dir.get_resource_file_relative_path("hudlayout.res")
 
     ###########################
     # Result

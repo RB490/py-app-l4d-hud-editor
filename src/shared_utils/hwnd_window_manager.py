@@ -26,7 +26,7 @@ def hwnd_is_running_check(func):
 
     @functools.wraps(func)
     def wrapper(self, hwnd, *args, **kwargs):
-        if not self.running(hwnd):
+        if not self.is_running(hwnd):
             return None
         return func(self, hwnd, *args, **kwargs)
 
@@ -131,7 +131,7 @@ class HwndWindowUtils:
 
         # lookup process name if needed
         if hwnd not in self.hwnd_process_mapping:
-            process_name = self.running(hwnd)
+            process_name = self.is_running(hwnd)
             self.set_process_name(hwnd, process_name)
 
         # return process name
@@ -171,7 +171,7 @@ class HwndWindowUtils:
         user32.PostMessageW(hwnd, 0x0010, 0, 0)  # 0x0010 is the message code for WM_CLOSE
         log.info(f"Closed {self.get_process_name(hwnd)}!")
 
-    def running(self, hwnd):
+    def is_running(self, hwnd):
         """Confirm whether hwnd is running. Also works if invisible. Sets & returns process name"""
         if not hwnd:
             logging.warning(f"Running() did not receive a HWND! '{hwnd}'. Cancelling HWND operation!")

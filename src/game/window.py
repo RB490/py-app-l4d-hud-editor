@@ -30,32 +30,24 @@ class GameWindow:
     def get_hwnd(self):
         """Retrieve information"""
 
-        if self.hwnd is None or not self.hwnd_utils.running(self.hwnd):
-            self.__set_hwnd()
+        if self.hwnd is None or not self.hwnd_utils.is_running(self.hwnd):
+            if not self.__set_hwnd():
+                return None
 
-        if not self.hwnd:
-            print("No window handle to get!")
-        else:
-            # print(f"Get {self.get_exe()} hwnd '{self.hwnd}'")
-            return self.hwnd
+        return self.hwnd
 
-    def __set_hwnd(self, hwnd=None):
+    def __set_hwnd(self, input_hwnd=None):
         """Retrieve game hwnd"""
-        if hwnd is not None:
-            self.hwnd = hwnd
-            print(f"Set hwnd to '{self.hwnd}'")
-            return self.hwnd
-        try:
-            # retrieve hwnd
+
+        if input_hwnd:
+            # set specified hwnd from running game
+            self.hwnd = input_hwnd
+        else:
+            # retrieve hwnd from process name
             self.hwnd = self.hwnd_utils.get_hwnd_from_process_name(self.get_exe())
-            if not self.hwnd:
-                raise Exception("Could not set window handle!")
-            else:
-                print(f"Set {self.get_exe()} hwnd '{self.hwnd}'")
-                return self.hwnd
-        except Exception as err_info:
-            print(f"An error occurred retrieving window handle: {err_info}")
-            return False
+
+        print(f"Set hwnd to '{self.hwnd}'")
+        return self.hwnd
 
     def restore_saved_position(self):
         "Restore saved position"
@@ -171,7 +163,7 @@ class GameWindow:
 
     def is_running(self):
         """Checks if the game is running"""
-        return self.hwnd_utils.running(self.get_hwnd())
+        return self.hwnd_utils.is_running(self.get_hwnd())
 
     def close(self):
         "Close"

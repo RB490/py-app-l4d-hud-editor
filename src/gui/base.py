@@ -260,7 +260,7 @@ class BaseGUI:
                 self.root.attributes("-topmost", False)
         else:
             log.debug(f"{self.get_quoted_title()} always on top: GUI is not loaded")
-        log.debug(f"{self.get_quoted_title()} always on top: {bool}")
+        log.debug(f"{self.get_quoted_title()} always on top: {status}")
 
     def toggle_resizability(self):
         """Toggle window resizability."""

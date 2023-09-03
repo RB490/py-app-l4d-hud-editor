@@ -2,6 +2,7 @@
 # pylint: disable=unused-import, unused-variable, unused-argument, undefined-variable, invalid-name
 
 from debug.editor_menu import main_debug_editor_menu
+from debug.game import main_debug_game
 from debug.gui import main_debug_gui
 from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
@@ -9,9 +10,10 @@ from debug.vpk import debug_vpk_class
 def main_debug():
     "Main debug function"
     setup_debugging_environment()
-    
+
     # main_misc_debug()
     # main_debug_editor_menu()
-    main_debug_gui()
+    # main_debug_gui()
     # debug_vpk_class()
+    main_debug_game()
     input("Finished debugging! Press enter to exit...")
