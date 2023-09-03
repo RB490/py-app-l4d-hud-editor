@@ -4,8 +4,9 @@ Current:
 
 
 Todo:		
-	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe
-	☐ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
+	☐ Bug: VPK/installer: Extracting with l4d2_vpk.exe: A lot of textures on l4d1 maps are messed up. This is because left4dead2_dlc3 needs to be extracted with l4d1 vpk.exe -- just exctract everything with l4d1.exe like i did for the ahk version
+	
+	
 	☐ Feature: Retrieve HWND / PID in basegui?
 	☐ Feature: Move function currently used to show vpk/folder export aka custom messagebox into shared utils
 	☐ Feature: VDF GUI: Add some info like comments not getting saved
@@ -20,9 +21,11 @@ Todo:
 	☐ Bug: Menu: Uninstall dev mode -> Enable dev mode -> Error
 	☐ Bug: Installer: Code failed to rename the dev folder into the active game directory, because that directory already existed, without an ID file in it. Handle this some way
 	☐ Bug: Installer: Uninstall: Uninstall while the game is running. Some error will be shown in terminal, however the code doesn't handle this causing the gui and code in general to just stop
-	☐ Bug: Installer: Uninstall: It's a bit slow removing the dev folder?
+	☐ Bug: Installer: Uninstall: It's quite slow deleting compared to just deleting manually with windows file explorer. probably because it's updating the gui all the time?
+	☐ Bug: Installer: During rebuilding audio i get a bunch of 'failed to set window handle' before it correctly sets hwnd
+	
+	☐ Testing: Can i detect corrupted extracted vpk files? Debugging idea: Extract with all the different methods, l4d1, l4d2, nosteam (old l4d1), vpk module. then compare
 	☐ Feature: Threading (GUI?) for lengthy operations such as shutil.rmtree mostly during install to prevent GUI's from freezing (Adds complexity, careful)
-
 	☐ Testing: Test the program by using it to edit HUD's
 
 Release:

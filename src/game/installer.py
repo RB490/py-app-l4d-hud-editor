@@ -32,11 +32,11 @@ class GameInstaller:
 
     def uninstall(self):
         "Uninstall"
-        print("Uninstalling..")
+        log.debug("Uninstalling..")
 
         # is dev installed?
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            print("Not installed!")
+            show_message("Not installed!", "info")
             return True
 
         # prompt user

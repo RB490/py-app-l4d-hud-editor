@@ -34,7 +34,7 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
-            log.info(f"Could not retrieve ID path for {dir_mode.name}.")
+            log.debug(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
         id_path = os.path.join(mode_dir, self._get_filename(dir_mode))

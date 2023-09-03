@@ -49,7 +49,7 @@ def logging_class_usage_example():
     # logging_manager = LoggerManager(__name__, level=logging.CRITICAL)  # Pass the desired logging level
     # logging_manager = LoggerManager(__name__, level=logging.CRITICAL + 1)  # Pass the desired logging level
     # Get the logger instance
-    logging_manager = LoggingManager(__name__, level=logging.WARNING)
+    logging_manager = LoggingManager(__name__, level=logging.INFO)
     log = logging_manager.get_logger()
 
     # Log messages at different levels

@@ -53,6 +53,10 @@ class VPKClass:
         if not self._validate_extract_params(input_file, output_dir):
             return
 
+        self._extract_alternate(input_file, output_dir)
+        return
+
+
         log.info(f"Extracting '{input_file}' -> '{output_dir}'")
 
         # Extract VPK file
@@ -92,7 +96,7 @@ class VPKClass:
         input_file_dir = os.path.dirname(input_file)
         extract_dir = os.path.join(input_file_dir, input_file_base)
         input_file_quoted = f"{input_file}"
-        extract_command = [VPK_EXE_L4D2, input_file_quoted]
+        extract_command = [VPK_EXE_L4D1, input_file_quoted]
 
         # Cleanup extract directory (extracted contents) incase it exists
         self._delete_extracting_dir(extract_dir)

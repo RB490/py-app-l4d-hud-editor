@@ -1,6 +1,7 @@
 # pylint: disable=attribute-defined-outside-init, broad-exception-caught, too-many-lines
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 
+import logging
 import os
 import tkinter as tk
 import webbrowser
@@ -9,6 +10,7 @@ from tkinter import Menu, PhotoImage
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
+from shared_utils.logging_manager import LoggingManager
 from shared_utils.shared_utils import add_empty_menu_separator, create_lambda_command
 from utils.constants import (
     EDITOR_HUD_RELOAD_MODES,
@@ -25,6 +27,8 @@ from utils.constants import (
 )
 from utils.persistent_data_manager import PersistentDataManager
 
+logging_manager = LoggingManager(__name__, level=logging.INFO)
+log = logging_manager.get_logger()
 
 class EditorMenuClass:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized
@@ -47,12 +51,13 @@ class EditorMenuClass:
 
     def open_file(self, path):
         """Open file"""
-        print(path)
+        log.debug("Opening file: {path}")
         os.startfile(path)
 
     def open_url(self, url):
         """Open url"""
         webbrowser.open(url)
+        log.debug("Opening URL: {url}")
 
     def do_nothing(self, *args):
         # pylint: disable=unused-argument, unnecessary-pass
@@ -990,8 +995,6 @@ class EditorMenuClass:
         active_dir_mode = self.game.dir._get_active_mode()
         if active_dir_mode:
             self.dev_install_menu.entryconfigure(active_dir_mode.name, state="disabled")
-        else:
-            print("dev_install_menu: No mode active! Not disabling user/dev option")
 
         # self.dev_install_menu.add_separator()
         # currently_active_mode_name = f"Active: {self.game.dir._get_active_mode().name}"
@@ -1058,7 +1061,7 @@ class EditorMenuClass:
         Creates the menu bar for the application
         if not is_context_menu:
         """
-        print("Refreshing editor menu!")
+        log.debug("Refreshing editor menu!")
 
         self.data_manager.save()
 

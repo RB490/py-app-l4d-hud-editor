@@ -72,7 +72,7 @@ class GameDir:
         if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
             return False
 
-        print(f"Set mode: {dir_mode.name} successfully!")
+        log.info(f"Set mode: {dir_mode.name} successfully!")
         return True
 
     def get_vanilla_file(self, relative_file_path):
@@ -96,11 +96,11 @@ class GameDir:
                 file_path = get_backup_path(file_path)
 
             if os.path.isfile(file_path):
-                print(f"Get vanilla file: '{relative_file_path}'")
+                log.debug(f"Get vanilla file: '{relative_file_path}'")
                 return file_path
 
         # could not find file path in game folders. is a custom file
-        print(f"No vanilla file available, custom file: '{relative_file_path}'")
+        log.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
         return True
 
     def is_custom_file(self, relative_file_path):
@@ -110,10 +110,10 @@ class GameDir:
 
         vanilla_file = self.get_vanilla_file(relative_file_path)
         if vanilla_file:
-            print(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
+            log.debug(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
             return True
         else:
-            print(f"Vanilla file is not available. Ccustom file: '{relative_file_path}'")
+            log.debug(f"Vanilla file is not available. Custom file: '{relative_file_path}'")
             return False
 
     def get_pak01_vpk_in(self, directory):
@@ -145,7 +145,7 @@ class GameDir:
                     log.debug(f"Found installation directory for mode '{dir_mode}': '{folder_path}'")
                     return folder_path
 
-        print(f"No installation directory found for mode '{dir_mode}'.")
+        log.debug(f"No installation directory found for mode '{dir_mode}'.")
         return None
 
     def _get_active_mode(self):
@@ -154,13 +154,13 @@ class GameDir:
         vanilla_dir = self.__get_vanilla_dir()
 
         if dev_dir == vanilla_dir:
-            print(f"Active mode: {DirectoryMode.DEVELOPER.name}")
+            log.debug(f"Active mode: {DirectoryMode.DEVELOPER.name}")
             return DirectoryMode.DEVELOPER
         elif user_dir == vanilla_dir:
-            print(f"Active mode: {DirectoryMode.USER.name}")
+            log.debug(f"Active mode: {DirectoryMode.USER.name}")
             return DirectoryMode.USER
         else:
-            print("No active mode found")
+            log.debug("No active mode found")
             return None
 
     def get_main_dir_name(self):
@@ -174,20 +174,20 @@ class GameDir:
 
         root_dir = self.get(dir_mode)
         if not os.path.isdir(root_dir):
-            print(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
+            log.debug(f"Unable to get {dir_mode.name} main directory. Directory unavailable")
             return None
 
         main_dir_name = self.get_main_dir_name()
         main_dir = os.path.join(root_dir, main_dir_name)
 
-        # print(f"Get {dir_mode.name} main dir: {main_dir}")
+        log.debug(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
     def get_main_dir_backup(self, dir_mode):
         "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
         main_dir = self.get_main_dir(dir_mode)
         main_dir_backup = get_backup_path(main_dir)
-        # print(f"Main directory backup: '{main_dir_backup}'")
+        log.debug(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 
     def _get_main_subdir(self, dir_mode, subdir_name):
@@ -199,7 +199,7 @@ class GameDir:
         if not os.path.exists(subdir_path):
             raise FileNotFoundError(f"{subdir_path} directory not found for {dir_mode.name} mode")
 
-        # print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
+        log.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
         return subdir_path
 
     def _get_main_subdir_backup(self, dir_mode, subdir_name):
@@ -209,7 +209,7 @@ class GameDir:
         main_dir_backup = self.get_main_dir_backup(dir_mode)
         subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
 
-        # print(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
+        log.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
         return subdir_backup_path
 
     def get_cfg_dir(self, dir_mode):
@@ -230,7 +230,7 @@ class GameDir:
 
         # Construct and return the vanilla directory path
         vanilla_dir = os.path.join(games_dir, title)
-        # print(f"Vanilla directory: {vanilla_dir}")
+        log.debug(f"Vanilla directory: {vanilla_dir}")
         return vanilla_dir
 
     def restore_developer_directory(self):
@@ -348,14 +348,14 @@ class GameDir:
                     if id_counts[id_file] > 1:
                         raise Exception(f"More than one '{id_file}' file found in different folders")
 
-        print("Verified ID file structure!")
+        log.debug("Verified ID file structure!")
 
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"
-        print("Checking if developer directory is outdated...")
+        log.debug("Checking if developer directory is outdated...")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            print("Unable to check outdated state: Developer mode is not installed!")
+            log.debug("Unable to check outdated state: Developer mode is not installed!")
             return None
 
         user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
@@ -366,9 +366,9 @@ class GameDir:
             dev_pak01 = self.get_pak01_vpk_in(dev_subdir)
 
             if files_differ(user_pak01, dev_pak01):
-                print("Developer directory is outdated!")
+                log.debug("Developer directory is outdated!")
                 return True
-        print("Developer directory is up-to-date!")
+        log.debug("Developer directory is up-to-date!")
         return False
 
     def __get_pak01_vpk_subdirs(self, dir_mode):

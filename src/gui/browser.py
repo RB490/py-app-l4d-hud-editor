@@ -32,8 +32,8 @@ from utils.constants import (
 from utils.functions import get_image_for_file_extension, save_and_exit_script, show_browser_gui
 from utils.persistent_data_manager import PersistentDataManager
 
-logging_manager = LoggingManager(__name__, level=logging.DEBUG)
-# logging_manager = LoggingManager(__name__, level=logging.WARNING)
+# logging_manager = LoggingManager(__name__, level=logging.DEBUG)
+logging_manager = LoggingManager(__name__, level=logging.INFO)
 log = logging_manager.get_logger()
 
 
@@ -412,7 +412,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """
         # don't update tree until has been run
         if not self.get_mainloop_started():
-            log.warning("Not refreshing browser treeview! Mainloop has not been started")
+            log.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
         # Get HUD directory and display choice
