@@ -164,12 +164,30 @@ class HwndWindowUtils:
             # Sleep for a short interval and repeat
             time.sleep(0.1)
 
+    def __get_process_id(self, hwnd):
+        """Get the process ID associated with the window"""
+        try:
+            process_id = ctypes.c_ulong()
+            thread_id = ctypes.windll.user32.GetWindowThreadProcessId(hwnd, ctypes.byref(process_id))
+            if thread_id == 0:
+                raise ValueError("Failed to get process ID for HWND")
+            return process_id.value
+        except Exception as e:
+            logger.error(f"Failed to get process ID for HWND: {hwnd} - {str(e)}")
+            return None
+
     @cancel_if_hwnd_not_running
     def close(self, hwnd):
-        """Close window"""
-        user32 = ctypes.windll.user32
-        user32.PostMessageW(hwnd, 0x0010, 0, 0)  # 0x0010 is the message code for WM_CLOSE
-        logger.info(f"Closed HWND: {self.get_process_name(hwnd)}!")
+        """Forcefully close window by terminating the associated process"""
+        try:
+            pid = self.__get_process_id(hwnd)
+            if pid is not None:
+                # Terminate the process
+                process = psutil.Process(pid)
+                process.terminate()
+                logger.info(f"Forcefully closed HWND: {hwnd} (PID: {pid})!")
+        except Exception as e:
+            logger.error(f"Failed to forcefully close HWND: {hwnd} - {str(e)}")
 
     def is_running(self, hwnd):
         """Confirm whether hwnd is running. Also works if invisible. Sets & returns process name"""

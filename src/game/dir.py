@@ -13,7 +13,7 @@ from shared_utils.splash_gui import SplashGUI
 from utils.functions import generate_random_string, get_backup_filename, get_backup_path, rename_with_timeout
 from utils.steam_info_retriever import SteamInfoRetriever
 
-logger = get_logger(__name__, log_level=logging.DEBUG)
+logger = get_logger(__name__, log_level=logging.INFO)
 
 
 class GameDir:

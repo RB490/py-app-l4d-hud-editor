@@ -29,11 +29,12 @@ def main_debug_game():
     # Game
     ###########################
 
-    # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
+    gamez.window.close()
 
     ###########################
     # Installer
     ###########################
+    # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
     # result = gamez.installer.install()
     # result = gamez.installer.repair()
     # result = gamez.installer.uninstall()
@@ -67,10 +68,10 @@ def main_debug_game():
     ###########################
     # Directory
     ###########################
-    result = gamez.dir.set(DirectoryMode.USER)
-    result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.set(DirectoryMode.USER) # FIXME this is testing for the duplicate messages
+    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
-    logger.debug("what the fuck?????????????????")
+    # logger.debug("what the fuck?????????????????")
     # result = gamez.dir.set(DirectoryMode.USER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)
