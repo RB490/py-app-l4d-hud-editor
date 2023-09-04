@@ -15,8 +15,8 @@
     "game_pos": "Top Right",
     "game_pos_custom_coord": null,
     "game_res": [
-        1024,
-        768
+        800,
+        600
     ],
     "hud_reload_mode": "reload_hud",
     "reload_mouse_clicks_coord_1": [

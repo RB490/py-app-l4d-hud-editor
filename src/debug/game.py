@@ -94,4 +94,4 @@ def main_debug_game():
     ###########################
     # Result
     ###########################
-    print(f"result = {result}")
+    # print(f"result = {result}")

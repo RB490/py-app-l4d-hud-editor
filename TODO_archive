@@ -508,3 +508,11 @@ Post:
 		✔ Possibly because clearing the treeview is triggering a method possibly in basegui which refreshes it again @done(23-09-04 17:25)
 		✔ With testing i do know that __delayed show from base gui is calling on_show which refreshes the treeview and clears it @done(23-09-04 17:25)
 		✔ For whatever reason manually calling treeview refresh doesn't delete the items @done(23-09-04 17:25)
+
+✔ Found & added per module logging option for loguru @done(23-09-04 17:56)
+✔ Also backup all DLC folders @done(23-09-04 20:50)
+✔ Also restore all DLC folders @done(23-09-04 20:50)
+✔ Refactor: Way to many get dir methods in dir.py i can combine almost all of them. _get_subdir is the most recent one @done(23-09-04 21:10)
+✔ Refactor: Installer has that find_pak01_dir's callback thing. and game.dir has __get_pak01_vpk_subdirs which do the same. use one or the other? @done(23-09-04 21:21)
+✔ Feature: Method to retrieve mainloop root @done(23-09-04 21:43)
+✔ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in @done(23-09-04 21:56)
