@@ -31,9 +31,9 @@
 	HudWeaponSelection
 	{
 		"fieldName" "HudWeaponSelection"
-		"xpos"	"r197"
-		"ypos"	"c95"
-		"wide"	"200"
+		"xpos"	"r398"
+		"ypos"	"c-90"
+		"wide"	"100"
 		"tall"	"175"
 		"visible" "1"
 		"enabled" "1"

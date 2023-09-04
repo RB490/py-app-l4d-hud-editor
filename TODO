@@ -4,14 +4,18 @@
 ✔ Also restore all DLC folders @done(23-09-04 20:50)
 ✔ Refactor: Way to many get dir methods in dir.py i can combine almost all of them. _get_subdir is the most recent one @done(23-09-04 21:10)
 ✔ Refactor: Installer has that find_pak01_dir's callback thing. and game.dir has __get_pak01_vpk_subdirs which do the same. use one or the other? @done(23-09-04 21:21)
+✔ Feature: Method to retrieve mainloop root @done(23-09-04 21:43)
+✔ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in @done(23-09-04 21:56)
 
 Current:
-
-	☐ Modify syncer so it can delete any (custom) shit if unsycning fails - write log to file
-
-	☐ Feature: Method to retrieve mainloop root
 	
-	☐ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in
+
+	☐ Modify syncer so it can delete any (custom) shit if unsycning fails - write log to file. Ideas:
+		- Modify the data structure so i can save all required information in one file. For example currently i save custom files in a separate object
+
+	☐ Feature: Menu: Game: AlwaysOnTop + remember this setting(?)
+	
+	☐ Feature: Browser: Modify get vanilla file to rename to default extension without .backup if needed and create a temporary copy in %temp% and return that
 
 Todo:
 

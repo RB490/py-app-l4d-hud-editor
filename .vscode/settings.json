@@ -1,11 +1,9 @@
 {
-    "files.exclude": {
+    "files.exclude": { // don't exclude assets/debugging from file explorer
         "**/.git": true,
         "**/.*": true,
         "**/__*": true,
         "__pycache__": true,
-        "dev/debug": true,
-        "assets/mods": true,
     },
     "search.exclude": {
         "**/.git": true,
