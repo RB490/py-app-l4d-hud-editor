@@ -237,7 +237,7 @@ class GameInstaller:
     def __create_dev_dir(self):
         logger.debug("Creating developer directory")
 
-        dev_dir = self.game.dir._get_dir_backup_name(DirectoryMode.DEVELOPER)
+        dev_dir = self.game.dir._get_random_dir_name_for(DirectoryMode.DEVELOPER)
 
         os.mkdir(dev_dir)
 
@@ -332,7 +332,7 @@ class GameInstaller:
 
         def backup_callback(_, pak01_dir):
             # variables
-            backup_dir = self.game.dir._get_backup_dir(pak01_dir)
+            backup_dir = get_backup_path(pak01_dir)
 
             resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
             materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
@@ -385,7 +385,7 @@ class GameInstaller:
         logger.debug("Rebuilding audio")
 
         # variables
-        cfg_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
+        cfg_dir = self.game.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "cfg")
         valverc_path = os.path.join(cfg_dir, "valve.rc")
 
         # write .rc file

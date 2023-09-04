@@ -79,8 +79,7 @@ def main_debug_game():
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.DEVELOPER)
 
-    # result = gamez.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
-    # result = gamez.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "materials")
 
     # result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
     # result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
@@ -88,7 +87,8 @@ def main_debug_game():
     # result = gamez.dir.check_for_invalid_id_file_structure()
 
     # result = gamez.dir.dev_out_of_date()
-    result = gamez.dir.restore_developer_directory()
+    # result = gamez.dir.restore_developer_directory()
+    result = gamez.dir.get_vanilla_file("scripts\hudlayout.res")
 
     ###########################
     # Result

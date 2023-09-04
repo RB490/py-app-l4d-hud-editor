@@ -23,7 +23,7 @@ class GameDir:
         self.id = GameIDHandler(self.game)
         self.steam = SteamInfoRetriever()
 
-    def _get_dir_backup_name(self, dir_mode):
+    def _get_random_dir_name_for(self, dir_mode):
         random_string = generate_random_string()
         output = os.path.join(
             self.game.steam.get_games_dir(), f"_backup_hud_{dir_mode.name}.{self.game.get_title()}_{random_string}"
@@ -41,7 +41,7 @@ class GameDir:
         # variables - source
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
         source_dir = self.get(source_mode)
-        source_dir_backup = self._get_dir_backup_name(source_mode)
+        source_dir_backup = self._get_random_dir_name_for(source_mode)
         # variables - target
         target_mode = dir_mode
         target_dir = self.get(target_mode)
@@ -90,7 +90,7 @@ class GameDir:
         game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         game_file_directories = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
         # add backup directory last so it's searched last so the code preferably returns file in the main directory
-        game_file_directories.append(self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER))
+        game_file_directories.append(get_backup_path(self.get_main_dir(DirectoryMode.DEVELOPER)))
 
         # search game folders for relative file path
         for game_dir in game_file_directories:
@@ -104,7 +104,7 @@ class GameDir:
 
         # could not find file path in game folders. is a custom file
         logger.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
-        return True
+        return False
 
     def is_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file
@@ -186,20 +186,7 @@ class GameDir:
         logger.debug(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
-    def get_main_dir_backup(self, dir_mode):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
-        main_dir = self.get_main_dir(dir_mode)
-        main_dir_backup = get_backup_path(main_dir)
-        logger.debug(f"Main directory backup: '{main_dir_backup}'")
-        return main_dir_backup
-
-    def _get_backup_dir(self, game_dir):
-        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
-        backup_dir = get_backup_path(game_dir)
-        logger.debug(f"Main directory backup: '{backup_dir}'")
-        return backup_dir
-
-    def _get_main_subdir(self, dir_mode, subdir_name):
+    def get_main_sub_dir(self, dir_mode, subdir_name):
         "Get the full path to a subdirectory within the main dir"
 
         main_dir = self.get_main_dir(dir_mode)
@@ -210,69 +197,6 @@ class GameDir:
 
         logger.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_path}")
         return subdir_path
-
-    def _get_main_subdir_backup(self, dir_mode, subdir_name):
-        """Get the full path to a subdirectory within the main dir backup:'Left 4 Dead 2\\left4dead2.backup\\materials'
-        Not throwing an expection because installer uses this to create the backup folder"""
-
-        main_dir_backup = self.get_main_dir_backup(dir_mode)
-        subdir_backup_path = os.path.join(main_dir_backup, subdir_name)
-
-        logger.debug(f"Get {dir_mode.name} {subdir_name} dir: {subdir_backup_path}")
-        return subdir_backup_path
-
-    def get_cfg_dir(self, dir_mode):
-        "Get the full path to the config dir eg. 'Left 4 Dead 2\\left4dead2\\cfg'"
-        return self._get_main_subdir(dir_mode, "cfg")
-
-    def _get_addons_dir(self, dir_mode):
-        "Get the full path to the addons dir eg. 'Left 4 Dead 2\\left4dead2\\addons'"
-        return self._get_main_subdir(dir_mode, "addons")
-
-
-
-
-
-
-
-
-
-
-
-    def _get_subdir_backup(self, game_dir, subdir_name):
-        """Get the full path to a subdirectory within the main dir backup:'Left 4 Dead 2\\left4dead2.backup\\materials'
-        Not throwing an expection because installer uses this to create the backup folder"""
-
-        backup_dir = self._get_backup_dir(game_dir)
-        backup_sub_dir = os.path.join(backup_dir, subdir_name)
-
-        logger.debug(f"Get {subdir_name} backup dir: {backup_sub_dir}")
-        return backup_sub_dir
-
-    def _get_subdir(self, game_dir, subdir_name):
-        "Get the full path to a subdirectory within the main dir"
-
-        subdir_path = os.path.join(game_dir, subdir_name)
-
-        if not os.path.exists(subdir_path):
-            raise FileNotFoundError(f"{subdir_name} not found in '{game_dir}'")
-
-        logger.debug(f"Get {subdir_name} in '{game_dir}'")
-        return subdir_path
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
@@ -294,27 +218,26 @@ class GameDir:
 
         try:
             splash = SplashGUI("Restoring...", "Restoring game files..")
-            
+
             dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
             for pak01_dir in dev_pak01_subdirs:
-                
                 # variables
-                backup_dir = self.game.dir._get_backup_dir(pak01_dir)
+                backup_dir = get_backup_path(pak01_dir)
 
                 resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
                 materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
-            
+
                 # delete potentially beschmirched game directories
                 shutil.rmtree(resource_dir)
                 shutil.rmtree(materials_dir)
 
                 # restore backup
                 copy_directory(backup_dir, pak01_dir)
-            
+
             # update sync status
             self.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-            
+
             # finish up
             splash.destroy()
             logger.warning("Restored developer game files!")

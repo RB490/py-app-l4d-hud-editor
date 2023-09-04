@@ -61,7 +61,7 @@ class EditorMenuHandler:
         """Method to handle the selected game resolution in the menu."""
         logger.debug(f"Selected resolution: {string_resolution}")
 
-        config_dir = self.game.dir.get_cfg_dir(DirectoryMode.DEVELOPER)
+        config_dir = self.game.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "cfg")
 
         # save new resolution
         width, height = map(int, string_resolution.split("x"))
