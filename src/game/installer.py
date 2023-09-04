@@ -278,11 +278,11 @@ class GameInstaller:
 
     def __find_pak01_files(self, game_dir, callback):
         for subdir_name in os.listdir(game_dir):
-            subdir_path = os.path.join(game_dir, subdir_name)
-            pak01_path = self.game.dir.get_pak01_vpk_in(subdir_path)
+            pak01_dir = os.path.join(game_dir, subdir_name)
+            pak01_path = self.game.dir.get_pak01_vpk_in(pak01_dir)
 
             if pak01_path:
-                callback(pak01_path, subdir_path)
+                callback(pak01_path, pak01_dir)
 
     def __extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
@@ -291,9 +291,9 @@ class GameInstaller:
 
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        def extract_callback(filepath, output_dir):
+        def extract_callback(pak01_path, output_dir):
             vpk_class = VPKClass()
-            vpk_class.extract(filepath, output_dir)
+            vpk_class.extract(pak01_path, output_dir)
 
         self.__find_pak01_files(dev_dir, extract_callback)
 
@@ -306,9 +306,9 @@ class GameInstaller:
             logger.debug("Enable paks: Developer directory not retrieved.")
             return
 
-        def enable_callback(filepath, subdir_path):
-            source_filepath = filepath
-            target_filepath = os.path.join(subdir_path, "pak01_dir.vpk")
+        def enable_callback(pak01_path, pak01_dir):
+            source_filepath = pak01_path
+            target_filepath = os.path.join(pak01_dir, "pak01_dir.vpk")
             os.rename(source_filepath, target_filepath)
             logger.debug(f"Renaming file {source_filepath} -> {target_filepath}")
 
@@ -318,9 +318,9 @@ class GameInstaller:
         logger.debug("Disabling pak01.vpk's")
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        def disable_callback(filepath, subdir_path):
-            source_filepath = filepath
-            target_filepath = get_backup_path(os.path.join(subdir_path, "pak01_dir.vpk"))
+        def disable_callback(pak01_path, pak01_dir):
+            source_filepath = pak01_path
+            target_filepath = get_backup_path(os.path.join(pak01_dir, "pak01_dir.vpk"))
             os.rename(source_filepath, target_filepath)
 
         self.__find_pak01_files(dev_dir, disable_callback)
@@ -328,31 +328,34 @@ class GameInstaller:
     def _main_dir_backup(self):
         logger.debug("Copying main directory to create a backup for the sync class")
 
-        resource_dir = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "resource")
-        resource_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "resource")
-        materials_dir = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
-        materials_backup_dir = self.game.dir._get_main_subdir_backup(DirectoryMode.DEVELOPER, "materials")
-        backup_dir = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
+        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        # create backup dir from scratch
-        if os.path.isdir(backup_dir):
-            logger.debug("Removing previous backup directory to keep it 100% clean")
-            shutil.rmtree(backup_dir)
-        os.makedirs(backup_dir)
+        def backup_callback(_, pak01_dir):
+            # variables
+            backup_dir = self.game.dir._get_backup_dir(pak01_dir)
 
-        logger.debug(resource_dir)
-        logger.debug(resource_backup_dir)
-        logger.debug(materials_dir)
-        logger.debug(materials_backup_dir)
+            resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
+            materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
 
-        copy_directory(
-            resource_dir,
-            resource_backup_dir,
-        )
-        copy_directory(
-            materials_dir,
-            materials_backup_dir,
-        )
+            resource_backup_dir = self.game.dir._get_subdir_backup(pak01_dir, "resource")
+            materials_backup_dir = self.game.dir._get_subdir_backup(pak01_dir, "materials")
+
+            # remove old backup dir
+            if os.path.isdir(backup_dir):
+                logger.debug("Removing previous backup directory to keep it 100% clean: '{backup_dir}'")
+                shutil.rmtree(backup_dir)
+
+            # create backup dir
+            copy_directory(
+                resource_dir,
+                resource_backup_dir,
+            )
+            copy_directory(
+                materials_dir,
+                materials_backup_dir,
+            )
+
+        self.__find_pak01_files(dev_dir, backup_callback)
 
     def __install_mods(self):
         logger.debug("Installing mods")

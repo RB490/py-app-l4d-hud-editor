@@ -193,6 +193,12 @@ class GameDir:
         logger.debug(f"Main directory backup: '{main_dir_backup}'")
         return main_dir_backup
 
+    def _get_backup_dir(self, game_dir):
+        "Get the full path to the main dir backup eg. 'Left 4 Dead 2\\left4dead2.backup'"
+        backup_dir = get_backup_path(game_dir)
+        logger.debug(f"Main directory backup: '{backup_dir}'")
+        return backup_dir
+
     def _get_main_subdir(self, dir_mode, subdir_name):
         "Get the full path to a subdirectory within the main dir"
 
@@ -223,6 +229,51 @@ class GameDir:
         "Get the full path to the addons dir eg. 'Left 4 Dead 2\\left4dead2\\addons'"
         return self._get_main_subdir(dir_mode, "addons")
 
+
+
+
+
+
+
+
+
+
+
+    def _get_subdir_backup(self, game_dir, subdir_name):
+        """Get the full path to a subdirectory within the main dir backup:'Left 4 Dead 2\\left4dead2.backup\\materials'
+        Not throwing an expection because installer uses this to create the backup folder"""
+
+        backup_dir = self._get_backup_dir(game_dir)
+        backup_sub_dir = os.path.join(backup_dir, subdir_name)
+
+        logger.debug(f"Get {subdir_name} backup dir: {backup_sub_dir}")
+        return backup_sub_dir
+
+    def _get_subdir(self, game_dir, subdir_name):
+        "Get the full path to a subdirectory within the main dir"
+
+        subdir_path = os.path.join(game_dir, subdir_name)
+
+        if not os.path.exists(subdir_path):
+            raise FileNotFoundError(f"{subdir_name} not found in '{game_dir}'")
+
+        logger.debug(f"Get {subdir_name} in '{game_dir}'")
+        return subdir_path
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def __get_vanilla_dir(self):
         """Get the vanilla directory path of the game"""
 
@@ -243,24 +294,27 @@ class GameDir:
 
         try:
             splash = SplashGUI("Restoring...", "Restoring game files..")
+            
+            dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
-            # receive variables
-            main_dir_backup = self.game.dir.get_main_dir_backup(DirectoryMode.DEVELOPER)
-            main_dir = self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)
+            for pak01_dir in dev_pak01_subdirs:
+                
+                # variables
+                backup_dir = self.game.dir._get_backup_dir(pak01_dir)
 
-            main_dir_resource = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "resource")
-            main_dir_materials = self.game.dir._get_main_subdir(DirectoryMode.DEVELOPER, "materials")
+                resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
+                materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
+            
+                # delete potentially beschmirched game directories
+                shutil.rmtree(resource_dir)
+                shutil.rmtree(materials_dir)
 
-            # delete potentially beschmirched game directories
-            shutil.rmtree(main_dir_resource)
-            shutil.rmtree(main_dir_materials)
-
-            # copy files
-            copy_directory(main_dir_backup, main_dir)
-
+                # restore backup
+                copy_directory(backup_dir, pak01_dir)
+            
             # update sync status
             self.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-
+            
             # finish up
             splash.destroy()
             logger.warning("Restored developer game files!")

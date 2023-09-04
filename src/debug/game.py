@@ -52,6 +52,7 @@ def main_debug_game():
     # result = gamez.window.run(DirectoryMode.DEVELOPER, wait_on_close=120)
     # result = gamez._disable_addons()
     # result = gamez.write_config()
+    # result = gamez.installer._main_dir_backup()
 
     ###########################
     # ID
@@ -67,8 +68,8 @@ def main_debug_game():
     ###########################
     # Directory
     ###########################
-    result = gamez.dir.set(DirectoryMode.USER)
-    result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    # result = gamez.dir.set(DirectoryMode.USER)
+    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
     # logger.debug("what the fuck?????????????????")
     # result = gamez.dir.set(DirectoryMode.USER)
@@ -87,6 +88,7 @@ def main_debug_game():
     # result = gamez.dir.check_for_invalid_id_file_structure()
 
     # result = gamez.dir.dev_out_of_date()
+    result = gamez.dir.restore_developer_directory()
 
     ###########################
     # Result

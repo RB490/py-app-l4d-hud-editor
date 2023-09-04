@@ -31,7 +31,9 @@ def configure_debug_logging():
     """Configure debug logging"""
     logger.remove()
     logger.add(sys.stderr, level="INFO")
-    logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
+    # logger.add(sys.stderr, level="DEBUG")
+    # logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
+    logger.add(sys.stderr, filter=lambda record: "game.installer" in record["name"], level="DEBUG")  # type: ignore
     logger.debug("Configured debug logging")
 
 

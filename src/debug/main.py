@@ -20,13 +20,13 @@ def main_debug():
 
     setup_debugging_environment()
 
-    main_debug_gui()
+    # main_debug_gui()
     # main_misc_debug()
     # main_debug_editor_menu()
     # debug_vpk_class()
 
     # this is for debugging duplicate print messages
     # logger.debug("some debug print statement in main_debug() #1")
-    # main_debug_game()
+    main_debug_game()
     # logger.debug("some debug print statement in main_debug() #2")
     input("Finished debugging! Press enter to exit...")
