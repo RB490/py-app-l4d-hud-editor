@@ -2,10 +2,9 @@
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
 import json
 import os
-import sys
 from tkinter import filedialog
 
-from loguru import logger as logger
+from loguru import logger
 
 from game.constants import DirectoryMode, InstallationState, SyncState
 from shared_utils.shared_utils import is_subdirectory, show_message

@@ -1,5 +1,6 @@
 """Debug"""
 import os
+import sys
 
 from loguru import logger
 
@@ -15,10 +16,23 @@ def main_misc_debug():
 
 def setup_debugging_environment():
     """Debug"""
-    os.system("cls")  # Clear the terminal
-    print("Started debugging!")
+    print("Setting up debug environment!")
+
+    # Clear the terminal
+    os.system("cls")
+
+    # Setup
+    configure_debug_logging()
     debug_game_set_states_synced_and_installed()
     enable_debug_hotkeys()
+
+
+def configure_debug_logging():
+    """Configure debug logging"""
+    logger.remove()
+    logger.add(sys.stderr, level="INFO")
+    logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
+    logger.debug("Configured debug logging")
 
 
 # Debugging function with variable parameters

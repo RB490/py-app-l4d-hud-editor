@@ -4,7 +4,7 @@
 import logging
 import sys
 
-from loguru import logger as logger
+from loguru import logger
 
 from debug.editor_menu import main_debug_editor_menu
 from debug.game import main_debug_game
@@ -12,9 +12,7 @@ from debug.gui import main_debug_gui
 from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
 
-logger.remove()
-logger.add(sys.stderr, level="INFO")
-# logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
+
 
 
 def main_debug():

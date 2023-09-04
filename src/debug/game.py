@@ -1,4 +1,6 @@
 "debug game class"
+from loguru import logger
+
 from game.constants import DirectoryMode, InstallationState, SyncState
 from game.game import Game
 
@@ -12,6 +14,8 @@ def debug_game_set_states_synced_and_installed():
     game_class.dir.id.set_installation_state(
         DirectoryMode.DEVELOPER, InstallationState.COMPLETED
     )  # Prevent restore_developer_directory from activating
+
+    logger.debug("Wrote states: SyncState.NOT_SYNCED & InstallationState.COMPLETED")
 
 
 def main_debug_game():
@@ -63,7 +67,7 @@ def main_debug_game():
     ###########################
     # Directory
     ###########################
-    result = gamez.dir.set(DirectoryMode.USER)  # FIXME this is testing for the duplicate messages
+    result = gamez.dir.set(DirectoryMode.USER)
     result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
     # logger.debug("what the fuck?????????????????")

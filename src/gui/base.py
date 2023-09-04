@@ -3,7 +3,7 @@
 import tkinter as tk
 from typing import Callable, Optional, Union
 
-from loguru import logger as logger
+from loguru import logger
 
 
 # Define constants for GUI types

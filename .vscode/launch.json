@@ -4,14 +4,18 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-		
-	
-		
 		{
 			"type": "python",
 			"request": "launch",
 			"name": "Debug.py",
 			"program": "${workspaceFolder}/src/run_debug_main.py",
+		},
+		{
+			"type": "python",
+			"request": "launch",
+			"name": "Debug.py (External Terminal)",
+			"program": "${workspaceFolder}/src/run_debug_main.py",
+			"console": "externalTerminal",
 		},
 		{
 			"name": "Python: Current File",

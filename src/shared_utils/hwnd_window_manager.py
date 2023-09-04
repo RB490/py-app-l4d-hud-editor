@@ -14,7 +14,7 @@ import win32api
 import win32con
 import win32gui
 import win32process
-from loguru import logger as logger
+from loguru import logger
 
 
 def cancel_if_hwnd_not_running(func):

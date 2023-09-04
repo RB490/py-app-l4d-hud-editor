@@ -2,7 +2,7 @@
 HotkeyManager.
 """
 import keyboard
-from loguru import logger as logger
+from loguru import logger
 
 from shared_utils.shared_utils import Singleton
 

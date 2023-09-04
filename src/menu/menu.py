@@ -6,7 +6,7 @@ import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
 
-from loguru import logger as logger
+from loguru import logger
 
 from game.constants import DirectoryMode
 from game.game import Game

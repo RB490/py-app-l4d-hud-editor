@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 
 import vpk  # type: ignore
-from loguru import logger as logger
+from loguru import logger
 
 from shared_utils.shared_utils import copy_directory
 from utils.constants import VPK_EXE_EXTRACT

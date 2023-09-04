@@ -4,7 +4,7 @@ import os
 from tkinter import messagebox
 
 import pyperclip  # type: ignore
-from loguru import logger as logger
+from loguru import logger
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message

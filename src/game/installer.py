@@ -9,7 +9,7 @@ import os
 import shutil
 import time
 
-from loguru import logger as logger
+from loguru import logger
 
 from game.constants import DirectoryMode, InstallationError, InstallationState
 

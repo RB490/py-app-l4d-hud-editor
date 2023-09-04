@@ -7,7 +7,7 @@ from tkinter import ttk
 
 import send2trash
 import win32gui
-from loguru import logger as logger
+from loguru import logger
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode

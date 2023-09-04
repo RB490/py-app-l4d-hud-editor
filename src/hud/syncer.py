@@ -4,7 +4,7 @@ import hashlib
 import os
 import shutil
 
-from loguru import logger as logger
+from loguru import logger
 
 from game.constants import DirectoryMode, SyncState
 from game.game import Game

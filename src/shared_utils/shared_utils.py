@@ -9,7 +9,7 @@ from tkinter import Menu, messagebox
 from typing import Any, Callable, Dict, Type, TypeVar
 
 from ahk import AHK
-from loguru import logger as logger
+from loguru import logger
 
 T = TypeVar("T", bound="Singleton")
 

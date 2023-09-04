@@ -1,7 +1,7 @@
 """A progress GUI window for installation."""
 import tkinter as tk
 
-from loguru import logger as logger
+from loguru import logger
 
 from gui.base import BaseGUI
 from shared_utils.shared_utils import show_message

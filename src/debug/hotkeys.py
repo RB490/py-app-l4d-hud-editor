@@ -1,6 +1,8 @@
 """Debug hotkeys"""
 import threading
 
+from loguru import logger
+
 from debug.gui import debug_browser_gui
 from shared_utils.hotkey_manager import HotkeyManager
 
@@ -12,6 +14,7 @@ def enable_debug_hotkeys():
     hotkey_manager = HotkeyManager()
     hotkey_manager.add_hotkey("F10", debugging_hotkey, suppress=True)
 
+    logger.debug("Configured debug hotkeys")
 
 # Execute debugging hotkey method in a separate thread
 def execute_debugging_hotkey_method_in_thread():
