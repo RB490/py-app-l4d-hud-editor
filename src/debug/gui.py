@@ -74,10 +74,7 @@ def debug_browser_gui():
     # browser.show()
     start_instance = GuiHudStart()
     # start_instance.browser.show()
-    print(f"info #1 = {start_instance.get_mainloop_started()}")
     start_instance.show(hide=True, callback="debug_show_browser_gui")  # start mainloop
-    # start_instance.show(hide=True, callback=start_instance.browser.show())  # start mainloop
-    print(f"info #2 = {start_instance.get_mainloop_started()}")
 
     return
 

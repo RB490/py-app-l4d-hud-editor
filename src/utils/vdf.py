@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import send2trash
 import vdf  # type: ignore
-from loguru import logger as my_logger
+from loguru import logger as logger
 
 from shared_utils.shared_utils import replace_text_between_quotes, show_message
 from utils.constants import DEVELOPMENT_DIR
@@ -95,7 +95,7 @@ class VDFModifier:
 
     def get_source_raw_text(self) -> str:
         """Return the original raw unmodified vdf text."""
-        my_logger.debug("Returning raw text")
+        logger.debug("Returning raw text")
         return self.vdf_text_raw
 
     def get_obj(self):
@@ -116,7 +116,7 @@ class VDFModifier:
     def print_current_vdf(self) -> None:
         """Print the current VDF object."""
         if self.vdf_obj:
-            my_logger.debug(vdf.dumps(self.vdf_obj, pretty=True))  # type:ignore
+            logger.debug(vdf.dumps(self.vdf_obj, pretty=True))  # type:ignore
 
     def __load_vdf(self) -> Optional[Any]:
         """
@@ -125,7 +125,7 @@ class VDFModifier:
         Returns:
             Optional[Any]: The loaded and preprocessed VDF object, or None if vdf_path is not specified.
         """
-        my_logger.debug("Loading and preprocess the VDF file")
+        logger.debug("Loading and preprocess the VDF file")
         if self.vdf_path:
             with open(self.vdf_path, encoding="utf-8") as vdf_file:
                 vdf_text = vdf_file.read()
@@ -150,7 +150,7 @@ class VDFModifier:
         Returns:
             None
         """
-        my_logger.debug("Save the modified VDF object to a file")
+        logger.debug("Save the modified VDF object to a file")
         if os.path.exists(output_path):
             send2trash.send2trash(output_path)  # Move the existing file to the recycle bin
 
@@ -163,7 +163,7 @@ class VDFModifier:
         try:
             vdf.loads(result)  # Attempt to load the VDF object # type:ignore
         except Exception as err_info:
-            # my_logger.debug(f"Invalid VDF format. Cannot save: {err_info}")
+            # logger.debug(f"Invalid VDF format. Cannot save: {err_info}")
             show_message(f"Invalid VDF format. Cannot save: {err_info}", "error")
             return
 
@@ -203,7 +203,7 @@ class VDFModifier:
             cleaned_lines.append(line)
 
         cleaned_vdf_text: str = "\n".join(cleaned_lines)
-        my_logger.debug(cleaned_vdf_text)
+        logger.debug(cleaned_vdf_text)
         return cleaned_vdf_text
 
     def __preprocess_obj(self, vdf_obj: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -222,7 +222,7 @@ class VDFModifier:
         controls_to_remove: List[str] = []
         controls: Dict[str, Any] = modified_vdf_obj[next(iter(vdf_obj))]
         for control_name in controls:
-            my_logger.debug(f"control name = {control_name}")
+            logger.debug(f"control name = {control_name}")
             if control_name == "DELETE_ME":
                 controls_to_remove.append(control_name)
         for control_name in controls_to_remove:
@@ -252,7 +252,7 @@ class VDFModifier:
         Returns:
             Dict[str, Dict[str, Any]]: The VDF object with modified integer values.
         """
-        my_logger.debug("Modifying integer values...")
+        logger.debug("Modifying integer values...")
 
         if modifier not in ["plus", "minus"]:
             raise ValueError("Invalid modifier")
@@ -385,7 +385,7 @@ class VDFModifier:
         Returns:
             Dict[str, Dict[str, Any]]: The VDF object with sorted control keys.
         """
-        my_logger.debug("Sorting control keys...")
+        logger.debug("Sorting control keys...")
 
         # pylint: disable=unused-variable
         sorted_vdf_obj: Dict[str, Dict[str, Any]] = vdf_obj.copy()

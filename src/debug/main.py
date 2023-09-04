@@ -4,7 +4,7 @@
 import logging
 import sys
 
-from loguru import logger as my_logger
+from loguru import logger as logger
 
 from debug.editor_menu import main_debug_editor_menu
 from debug.game import main_debug_game
@@ -12,9 +12,9 @@ from debug.gui import main_debug_gui
 from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
 
-my_logger.remove()
-# my_logger.add(sys.stderr, level="INFO")
-my_logger.add(sys.stderr, level="DEBUG")
+logger.remove()
+logger.add(sys.stderr, level="INFO")
+# logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
 
 
 def main_debug():
@@ -28,7 +28,7 @@ def main_debug():
     # debug_vpk_class()
 
     # this is for debugging duplicate print messages
-    # my_logger.debug("some debug print statement in main_debug() #1")
+    # logger.debug("some debug print statement in main_debug() #1")
     # main_debug_game()
-    # my_logger.debug("some debug print statement in main_debug() #2")
+    # logger.debug("some debug print statement in main_debug() #2")
     input("Finished debugging! Press enter to exit...")

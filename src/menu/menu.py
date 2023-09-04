@@ -6,7 +6,7 @@ import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
 
-from loguru import logger as my_logger
+from loguru import logger as logger
 
 from game.constants import DirectoryMode
 from game.game import Game
@@ -49,13 +49,13 @@ class EditorMenuClass:
 
     def open_file(self, path):
         """Open file"""
-        my_logger.debug("Opening file: {path}")
+        logger.debug("Opening file: {path}")
         os.startfile(path)
 
     def open_url(self, url):
         """Open url"""
         webbrowser.open(url)
-        my_logger.debug("Opening URL: {url}")
+        logger.debug("Opening URL: {url}")
 
     def do_nothing(self, *args):
         # pylint: disable=unused-argument, unnecessary-pass
@@ -1059,7 +1059,7 @@ class EditorMenuClass:
         Creates the menu bar for the application
         if not is_context_menu:
         """
-        my_logger.debug("Refreshing editor menu!")
+        logger.debug("Refreshing editor menu!")
 
         self.data_manager.save()
 

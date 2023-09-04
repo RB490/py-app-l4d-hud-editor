@@ -7,7 +7,7 @@ from tkinter import ttk
 
 import send2trash
 import win32gui
-from loguru import logger as my_logger
+from loguru import logger as logger
 from PIL import Image, ImageTk
 
 from game.constants import DirectoryMode
@@ -93,13 +93,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Toggle focus between treeview and search"""
         # pylint: disable=unused-argument
         current_focus = self.root.focus_get()
-        my_logger.debug(f"current_focus = {current_focus}")
+        logger.debug(f"current_focus = {current_focus}")
         if current_focus == self.search_box:
             self.focus_treeview(self.treeview)
-            my_logger.debug("Focused treeview")
+            logger.debug("Focused treeview")
         else:
             self.search_box.focus_set()
-            my_logger.debug("Focused searchbox")
+            logger.debug("Focused searchbox")
         return "break"  # Prevent the default tab behavior (inserting a tab character)
 
     def __create_widgets(self):
@@ -390,9 +390,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             self.selected_relative_path = item_values[4]
             self.selected_full_path = os.path.join(self.hud.edit.get_dir(), self.selected_relative_path)
             self.selected_file_name = item_values[0]
-            my_logger.debug(f"Selected full path: {self.selected_full_path}")
-            my_logger.debug(f"Selected relative path: {self.selected_relative_path}")
-            my_logger.debug(f"Selected file name: {self.selected_file_name}")
+            logger.debug(f"Selected full path: {self.selected_full_path}")
+            logger.debug(f"Selected relative path: {self.selected_relative_path}")
+            logger.debug(f"Selected file name: {self.selected_file_name}")
 
     def on_show(self):
         """Callback on show"""
@@ -412,7 +412,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """
         # don't update tree until has been run
         if not self.get_mainloop_started():
-            my_logger.debug("Not refreshing browser treeview! Mainloop has not been started")
+            logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
         # variables
@@ -421,13 +421,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # Clear existing items in the Treeview
         self.treeview.delete(*self.treeview.get_children())
-        my_logger.debug("Cleared treeview!")
+        logger.debug("Cleared treeview!")
 
         # Retrieve data based on display choice
         display_choice = self.display_choice.get().lower()
         data_dict = self.hud.edit.get_all_files_dict() if display_choice == "all" else self.hud.edit.get_files_dict()
         if not data_dict:
-            my_logger.debug("Not refreshing browser treeview! No data dict retrieved")
+            logger.debug("Not refreshing browser treeview! No data dict retrieved")
             return
 
         # Determine if game is in developer mode

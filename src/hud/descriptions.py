@@ -1,8 +1,9 @@
 """Subclass of the hud class. Manages everything related to hud file descriptions"""
 # pylint: disable=logging-fstring-interpolation
 import json
+import sys
 
-from loguru import logger as my_logger
+from loguru import logger as logger
 
 from game.game import Game
 from shared_utils.shared_utils import Singleton
@@ -16,7 +17,7 @@ class HudDescriptions(metaclass=Singleton):
         self.data = None
         self.game = Game()
         self.read_from_disk()
-        my_logger.debug("Initialized HudDescriptions instance")
+        logger.debug("Initialized HudDescriptions instance")
 
     def add_control(self, file_name, input_control):
         """Set information"""
@@ -24,24 +25,24 @@ class HudDescriptions(metaclass=Singleton):
             self._add_entry_if_new(file_name)
             self.data[file_name]["file_control_descriptions"][input_control] = ""
             self.save_to_disk()
-            my_logger.debug(f"Added control '{input_control}' for file name '{file_name}'")
+            logger.debug(f"Added control '{input_control}' for file name '{file_name}'")
         else:
-            my_logger.warning("Cannot add control with None name")
+            logger.warning("Cannot add control with None name")
 
     def remove_control(self, file_name, input_control):
         """Set information"""
         del self.data[file_name]["file_control_descriptions"][input_control]
         self.save_to_disk()
-        my_logger.debug(f"Removed control '{input_control}' for file name '{file_name}'")
+        logger.debug(f"Removed control '{input_control}' for file name '{file_name}'")
 
     def remove_entry(self, file_name):
         """Remove an entire entry based on the provided file name"""
         if file_name in self.data:
             del self.data[file_name]
             self.save_to_disk()
-            my_logger.debug(f"Removed entry for file name '{file_name}'")
+            logger.debug(f"Removed entry for file name '{file_name}'")
         else:
-            my_logger.warning(f"No entry found for file name '{file_name}'")
+            logger.warning(f"No entry found for file name '{file_name}'")
 
     def _add_entry_if_new(self, file_name):
         """Create a new entry in data if file_name doesn't exist"""
@@ -55,7 +56,7 @@ class HudDescriptions(metaclass=Singleton):
                 "file_relative_path": "",
                 "file_is_custom": is_custom_file,
             }
-            my_logger.debug(f"Added new description entry:\n{self.data[file_name]}")
+            logger.debug(f"Added new description entry:\n{self.data[file_name]}")
             self.save_to_disk()
 
     def set_control_description(self, file_name, input_control, control_desc):
@@ -64,16 +65,16 @@ class HudDescriptions(metaclass=Singleton):
             self._add_entry_if_new(file_name)
             self.data[file_name]["file_control_descriptions"][input_control] = control_desc
             self.save_to_disk()
-            my_logger.debug(f"Saved description for control '{input_control}' in file name '{file_name}'")
+            logger.debug(f"Saved description for control '{input_control}' in file name '{file_name}'")
         else:
-            my_logger.warning("Cannot save an empty control description")
+            logger.warning("Cannot save an empty control description")
 
     def set_file_description(self, file_name, file_desc):
         """Set file description for a given file name"""
         self._add_entry_if_new(file_name)
         self.data[file_name]["file_description"] = file_desc
         self.save_to_disk()
-        my_logger.debug(f"Saved file description for file name '{file_name}'")
+        logger.debug(f"Saved file description for file name '{file_name}'")
 
     def set_file_relative_path(self, file_name, relative_path):
         """
@@ -85,7 +86,7 @@ class HudDescriptions(metaclass=Singleton):
         self._add_entry_if_new(file_name)
         self.data[file_name]["file_relative_path"] = relative_path
         self.save_to_disk()
-        my_logger.debug(f"Set file_relative_path '{relative_path}' for file name '{file_name}'")
+        logger.debug(f"Set file_relative_path '{relative_path}' for file name '{file_name}'")
 
     def get_all_descriptions(self):
         """
@@ -100,15 +101,13 @@ class HudDescriptions(metaclass=Singleton):
             values["file_name"]: (values["file_description"], values["file_relative_path"])
             for file_name, values in self.data.items()
         }
-        my_logger.debug("Retrieved all file descriptions")
+        logger.debug("Retrieved all file descriptions")
         return all_descriptions
 
     def get_control_description(self, file_name, input_control):
         """Get information"""
         description = self.data.get(file_name, {}).get("file_control_descriptions", {}).get(input_control)
-        my_logger.debug(
-            f"Retrieved description for control '{input_control}' in file name '{file_name}': {description}"
-        )
+        logger.debug(f"Retrieved description for control '{input_control}' in file name '{file_name}': {description}")
         return description
 
     def get_file_description(self, file_name):
@@ -117,13 +116,13 @@ class HudDescriptions(metaclass=Singleton):
         If the file name doesn't exist in the data dictionary, return an empty string.
         """
         description = self.data.get(file_name, {}).get("file_description", "")
-        my_logger.debug(f"Retrieved file description for '{file_name}': {description}")
+        logger.debug(f"Retrieved file description for '{file_name}': {description}")
         return description
 
     def get_file_relative_path(self, file_name):
         """Get information"""
         relative_path = self.data.get(file_name, {}).get("file_relative_path", "")
-        my_logger.debug(f"Retrieved relative path for file name '{file_name}': {relative_path}")
+        logger.debug(f"Retrieved relative path for file name '{file_name}': {relative_path}")
         return relative_path
 
     def get_custom_file_status(self, file_name):
@@ -132,7 +131,7 @@ class HudDescriptions(metaclass=Singleton):
         Return True if the file name has a custom status, otherwise return None.
         """
         is_custom = self.data.get(file_name, {}).get("file_is_custom", None)
-        my_logger.debug(f"Retrieved custom status for file name '{file_name}': {is_custom}")
+        logger.debug(f"Retrieved custom status for file name '{file_name}': {is_custom}")
         return is_custom
 
     def get_controls(self, file_name):
@@ -141,7 +140,7 @@ class HudDescriptions(metaclass=Singleton):
         If the file name doesn't exist in the data dictionary, return an empty list.
         """
         file_controls = list(self.data.get(file_name, {}).get("file_control_descriptions", {}))
-        my_logger.debug(f"Retrieved controls for file name '{file_name}': {file_controls}")
+        logger.debug(f"Retrieved controls for file name '{file_name}': {file_controls}")
         return file_controls
 
     def read_from_disk(self):
@@ -149,10 +148,10 @@ class HudDescriptions(metaclass=Singleton):
         try:
             with open(HUD_DESCRIPTIONS_PATH, "r", encoding="utf-8") as file:
                 data = json.load(file)
-                my_logger.debug("Read data from disk")
+                logger.debug("Read data from disk")
         except (FileNotFoundError, json.JSONDecodeError):
             data = {}
-            my_logger.warning("No data found on disk")
+            logger.warning("No data found on disk")
         self.data = data
 
     def save_to_disk(self):
@@ -163,6 +162,6 @@ class HudDescriptions(metaclass=Singleton):
             with open(HUD_DESCRIPTIONS_PATH, "w", encoding="utf-8") as file:
                 pretty_json = json.dumps(data, sort_keys=True, indent=4)
                 file.write(pretty_json)
-                my_logger.debug(f"Saved data to {HUD_DESCRIPTIONS_PATH}")
+                logger.debug(f"Saved data to {HUD_DESCRIPTIONS_PATH}")
         except (FileNotFoundError, TypeError):
-            my_logger.error(f"Error saving data to {HUD_DESCRIPTIONS_PATH}")
+            logger.error(f"Error saving data to {HUD_DESCRIPTIONS_PATH}")

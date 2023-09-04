@@ -1,7 +1,7 @@
 "Manages persistent data storage and retrieval."
 import json
 
-from loguru import logger as my_logger
+from loguru import logger as logger
 
 from shared_utils.shared_utils import Singleton
 from utils.constants import PERSISTENT_DATA_PATH
@@ -46,9 +46,9 @@ class PersistentDataManager(metaclass=Singleton):
             with open(self.file_path, "r", encoding="utf-8") as file:
                 loaded_data = json.load(file)
                 data = {**self.default_data, **loaded_data}
-                my_logger.debug("Loaded data from disk.")
+                logger.debug("Loaded data from disk.")
         except Exception:
-            my_logger.warning("Resetting settings file")
+            logger.warning("Resetting settings file")
             data = self.__reset()
             self.save()
         return data
@@ -73,9 +73,9 @@ class PersistentDataManager(metaclass=Singleton):
             with open(self.file_path, "w", encoding="utf-8") as file:
                 pretty_json = self._get_pretty_json()
                 file.write(pretty_json)
-                my_logger.debug("Wrote data to disk!")
+                logger.debug("Wrote data to disk!")
         except Exception:
-            my_logger.error(f"Error saving data to {self.file_path}")
+            logger.error(f"Error saving data to {self.file_path}")
 
     def get(self, key):
         """Get data value by key."""
@@ -85,25 +85,25 @@ class PersistentDataManager(metaclass=Singleton):
         """Set data value for key."""
         self.data[key] = value
         self.save()
-        my_logger.debug(f"Set data for key '{key}' to: {value}")
+        logger.debug(f"Set data for key '{key}' to: {value}")
 
     def append(self, key, value):
         """Append value to a list in data."""
         if key in self.data and isinstance(self.data[key], list):
             self.data[key].append(value)
             self.save()
-            my_logger.debug(f"Appended value '{value}' to key '{key}'")
+            logger.debug(f"Appended value '{value}' to key '{key}'")
         else:
-            my_logger.error(f"Cannot append to key '{key}' as it is not a list.")
+            logger.error(f"Cannot append to key '{key}' as it is not a list.")
 
     def remove_data(self, key):
         """Remove data entry by key."""
         if key in self.data:
             del self.data[key]
             self.save()
-            my_logger.debug(f"Removed key '{key}' from data.")
+            logger.debug(f"Removed key '{key}' from data.")
         else:
-            my_logger.warning(f"Key '{key}' not found in data.")
+            logger.warning(f"Key '{key}' not found in data.")
 
     def remove_item_from_list(self, key, item):
         """Remove item from a list in data."""
@@ -111,11 +111,11 @@ class PersistentDataManager(metaclass=Singleton):
             if item in self.data[key]:
                 self.data[key].remove(item)
                 self.save()
-                my_logger.debug(f"Removed item '{item}' from list key '{key}'")
+                logger.debug(f"Removed item '{item}' from list key '{key}'")
             else:
-                my_logger.warning(f"Item '{item}' not found in list key '{key}'")
+                logger.warning(f"Item '{item}' not found in list key '{key}'")
         else:
-            my_logger.error(f"Cannot remove item from key '{key}' as it is not a list.")
+            logger.error(f"Cannot remove item from key '{key}' as it is not a list.")
 
     def get_obj(self):
         """Get the entire data object."""

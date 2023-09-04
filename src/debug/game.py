@@ -66,7 +66,7 @@ def main_debug_game():
     result = gamez.dir.set(DirectoryMode.USER)  # FIXME this is testing for the duplicate messages
     result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
-    # my_logger.debug("what the fuck?????????????????")
+    # logger.debug("what the fuck?????????????????")
     # result = gamez.dir.set(DirectoryMode.USER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.DEVELOPER)
