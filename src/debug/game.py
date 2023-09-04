@@ -36,6 +36,7 @@ def main_debug_game():
     # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
     # result = gamez.installer.install()
     # result = gamez.installer.repair()
+    result = gamez.installer._main_dir_backup()
     # result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
@@ -79,7 +80,7 @@ def main_debug_game():
     # result = gamez.dir.get(DirectoryMode.USER)
     # result = gamez.dir.get(DirectoryMode.DEVELOPER)
 
-    # result = gamez.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "materials")
+    # result = gamez.dir.get_main_subdir(DirectoryMode.DEVELOPER, "materials")
 
     # result = gamez.dir.is_custom_file("scripts\\hudlayout.res")
     # result = gamez.dir.is_custom_file("scripts\\custom_hudlayout.res")
@@ -88,7 +89,7 @@ def main_debug_game():
 
     # result = gamez.dir.dev_out_of_date()
     # result = gamez.dir.restore_developer_directory()
-    result = gamez.dir.get_vanilla_file("scripts\hudlayout.res")
+    # result = gamez.dir.get_vanilla_file("scripts\hudlayout.res")
 
     ###########################
     # Result

@@ -280,7 +280,7 @@ class GameInstaller:
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
         logger.debug("Extracting pak01.vpk's")
-        
+
         vpk_class = VPKClass()
 
         pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
@@ -295,7 +295,7 @@ class GameInstaller:
         if not dev_dir:
             logger.debug("Enable paks: Developer directory not retrieved.")
             return
-        
+
         pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
         for pak01_dir, pak01_path in pak01_data:
             source_filepath = pak01_path
@@ -320,11 +320,11 @@ class GameInstaller:
             # variables
             backup_dir = get_backup_path(pak01_dir)
 
-            resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
-            materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
+            resource_dir = self.game.dir.get_subdir(pak01_dir, "resource")
+            materials_dir = self.game.dir.get_subdir(pak01_dir, "materials")
 
-            resource_backup_dir = self.game.dir._get_subdir_backup(pak01_dir, "resource")
-            materials_backup_dir = self.game.dir._get_subdir_backup(pak01_dir, "materials")
+            resource_backup_dir = os.path.join(get_backup_path(pak01_dir), "resource")
+            materials_backup_dir = os.path.join(get_backup_path(pak01_dir), "materials")
 
             # remove old backup dir
             if os.path.isdir(backup_dir):
@@ -369,7 +369,7 @@ class GameInstaller:
         logger.debug("Rebuilding audio")
 
         # variables
-        cfg_dir = self.game.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "cfg")
+        cfg_dir = self.game.dir.get_main_subdir(DirectoryMode.DEVELOPER, "cfg")
         valverc_path = os.path.join(cfg_dir, "valve.rc")
 
         # write .rc file

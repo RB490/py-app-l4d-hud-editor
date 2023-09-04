@@ -63,7 +63,7 @@ class Game(metaclass=Singleton):
     def write_config(self):
         """Write editor config"""
         # variables
-        config_dir = self.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "cfg")
+        config_dir = self.dir.get_main_subdir(DirectoryMode.DEVELOPER, "cfg")
         valverc_path = os.path.join(config_dir, "valve.rc")
         autoexec_name = os.path.split(EDITOR_AUTOEXEC_PATH)[-1]
         autoexec_path = os.path.join(config_dir, autoexec_name)
@@ -93,7 +93,7 @@ class Game(metaclass=Singleton):
 
     def _disable_addons(self):
         # variables
-        addons_dir = self.dir.get_main_sub_dir(DirectoryMode.DEVELOPER, "addons")
+        addons_dir = self.dir.get_main_subdir(DirectoryMode.DEVELOPER, "addons")
 
         # disable mods by overwriting them with a dummy vpk (empty file caused ingame console errors)
         dirs = [

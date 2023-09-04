@@ -186,7 +186,18 @@ class GameDir:
         logger.debug(f"Get {dir_mode.name} main dir: {main_dir}")
         return main_dir
 
-    def get_main_sub_dir(self, dir_mode, subdir_name):
+    def get_subdir(self, subdir, subdir_name):
+        "Get the full path to a subdirectory within the main dir"
+
+        subdir_path = os.path.join(subdir, subdir_name)
+
+        if not os.path.exists(subdir_path):
+            raise FileNotFoundError(f"{subdir_name} subdir not found in {subdir}")
+
+        logger.debug(f"Get {subdir_name} in dir: {subdir}")
+        return subdir_path
+
+    def get_main_subdir(self, dir_mode, subdir_name):
         "Get the full path to a subdirectory within the main dir"
 
         main_dir = self.get_main_dir(dir_mode)
@@ -225,8 +236,8 @@ class GameDir:
                 # variables
                 backup_dir = get_backup_path(pak01_dir)
 
-                resource_dir = self.game.dir._get_subdir(pak01_dir, "resource")
-                materials_dir = self.game.dir._get_subdir(pak01_dir, "materials")
+                resource_dir = self.game.dir.get_subdir(pak01_dir, "resource")
+                materials_dir = self.game.dir.get_subdir(pak01_dir, "materials")
 
                 # delete potentially beschmirched game directories
                 shutil.rmtree(resource_dir)
@@ -355,26 +366,28 @@ class GameDir:
         "Retrieve subdirs with pak01's in them. Eg: left4dead2, left4dead2_dlc1, update"
 
         result = self._get_pak01_dirs_with_files(dir_mode)
-        directories = list(result.keys())  # Get the directory paths from the dictionary
-        
+
+        # Extract the directory paths from the list of tuples
+        directories = [item[0] for item in result]
+
         return directories
 
     def _get_pak01_dirs_with_files(self, dir_mode):
         "Retrieve subdirs with pak01's in them along with the corresponding pak01 file."
-        
+
         # variables
         game_dir = self.game.dir.get(dir_mode)
-        
-        # create a dictionary to store subdir paths and their corresponding pak01 file paths
-        subdir_file_mapping = {}
-        
+
+        # create a list to store tuples of subdir paths and their corresponding pak01 file paths
+        subdir_file_mapping = []
+
         # retrieve game folders to check
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
             pak01_file_path = self.get_pak01_vpk_in(subdir_path)
-            
+
             if pak01_file_path:
-                subdir_file_mapping[subdir_path] = pak01_file_path
+                subdir_file_mapping.append((subdir_path, pak01_file_path))
 
         return subdir_file_mapping
 

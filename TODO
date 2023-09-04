@@ -7,7 +7,6 @@
 
 Current:
 
-
 	☐ Modify syncer so it can delete any (custom) shit if unsycning fails - write log to file
 
 	☐ Feature: Method to retrieve mainloop root
