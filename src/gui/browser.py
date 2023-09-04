@@ -420,7 +420,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         hud_dir = self.hud.edit.get_dir()
 
         # Clear existing items in the Treeview
-        treeview.delete(*treeview.get_children())
+        self.treeview.delete(*self.treeview.get_children())
         my_logger.debug("Cleared treeview!")
 
         # Retrieve data based on display choice

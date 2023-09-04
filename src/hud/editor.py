@@ -184,7 +184,7 @@ class HudEditor:
         self._set_hud_info(None)
 
         # refresh browser
-        get_browser_gui().treeview_refresh()
+        get_browser_gui() # refresh treeview (basegui will call on_show which triggers treeview refresh)
 
         # refresh hud ingame
         self.game.command.execute("reload_all")

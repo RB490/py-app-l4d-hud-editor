@@ -1,14 +1,17 @@
-✔ Bug: Browser: Open vanilla file -> TypeError: GameDir.get_vanilla_file() missing 1 required positional argument: 'relative_file_path' @done(23-09-03 21:27)
-✔ Feature: Browser: Double click to open file & actually opening file in general should hide the gui @done(23-09-03 21:29)
-✔ Bug: Browser: Load hud -> unsync hud -> error. seems like self.manager.retrieve_hud_name_for_dir(directory) isn't receiving a directory @done(23-09-03 21:39)
-✔ Bug: Browser: Load hud -> unsync hud -> hud is unsynced, but not updated ingame @done(23-09-03 21:40)
-✔ Bug: Load hud -> unsync hud -> browser treeview is not refreshed/cleared @done(23-09-03 22:01)
+
 
 Current:
 	
-	☐ Bug: Load hud -> unsync hud -> browser treeview is not refreshed/cleared until after the game is reloaded?
 
+
+	☐ Ga even onderzoeken of er een logging oplossing is die wel per module makkelijk kan werken zoals eigenlijk de standaard logging maar die had er fouten in zitten ofzo of kan ik die misschien oplossen
+
+	☐ Ik moet ook de DLC folders backuppen en er is storen net zoals ik met hem mee map doe hoofdmap doe
+
+	☐ Feature: Hoe kan ik python debug messages in een exernal console laten zien
+	
 	☐ Feature: Method to retrieve mainloop root
+	
 	☐ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in
 
 Todo:

@@ -93,7 +93,8 @@ class BaseGUI:
         """
         self.root.deiconify()
         self.is_hidden = False
-        self.root.after(250, lambda: self.__delayed_show(callback))
+
+        self.root.after(0, lambda: self.__delayed_show(callback))
         if hide:
             self.hide()
         if not self.has_been_run:
