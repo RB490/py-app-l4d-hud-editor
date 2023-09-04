@@ -3,11 +3,10 @@
 ✔ Also backup all DLC folders @done(23-09-04 20:50)
 ✔ Also restore all DLC folders @done(23-09-04 20:50)
 ✔ Refactor: Way to many get dir methods in dir.py i can combine almost all of them. _get_subdir is the most recent one @done(23-09-04 21:10)
+✔ Refactor: Installer has that find_pak01_dir's callback thing. and game.dir has __get_pak01_vpk_subdirs which do the same. use one or the other? @done(23-09-04 21:21)
 
 Current:
 
-
-	☐ Refactor: Installer has that find_pak01_dir's callback thing. and game.dir has __get_pak01_vpk_subdirs which do the same. use one or the other?
 
 	☐ Modify syncer so it can delete any (custom) shit if unsycning fails - write log to file
 

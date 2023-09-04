@@ -276,26 +276,16 @@ class GameInstaller:
         logger.debug("Prompting user to verify game")
         prompt_verify_game()
 
-    def __find_pak01_files(self, game_dir, callback):
-        for subdir_name in os.listdir(game_dir):
-            pak01_dir = os.path.join(game_dir, subdir_name)
-            pak01_path = self.game.dir.get_pak01_vpk_in(pak01_dir)
-
-            if pak01_path:
-                callback(pak01_path, pak01_dir)
-
     def __extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
         logger.debug("Extracting pak01.vpk's")
+        
+        vpk_class = VPKClass()
 
-        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-
-        def extract_callback(pak01_path, output_dir):
-            vpk_class = VPKClass()
-            vpk_class.extract(pak01_path, output_dir)
-
-        self.__find_pak01_files(dev_dir, extract_callback)
+        pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
+        for pak01_dir, pak01_path in pak01_data:
+            vpk_class.extract(pak01_path, pak01_dir)
 
     def __enable_paks(self):
         logger.debug("Enabling pak01.vpk's")
@@ -305,32 +295,28 @@ class GameInstaller:
         if not dev_dir:
             logger.debug("Enable paks: Developer directory not retrieved.")
             return
-
-        def enable_callback(pak01_path, pak01_dir):
+        
+        pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
+        for pak01_dir, pak01_path in pak01_data:
             source_filepath = pak01_path
             target_filepath = os.path.join(pak01_dir, "pak01_dir.vpk")
             os.rename(source_filepath, target_filepath)
             logger.debug(f"Renaming file {source_filepath} -> {target_filepath}")
 
-        self.__find_pak01_files(dev_dir, enable_callback)
-
     def __disable_paks(self):
         logger.debug("Disabling pak01.vpk's")
-        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        def disable_callback(pak01_path, pak01_dir):
+        pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
+        for pak01_dir, pak01_path in pak01_data:
             source_filepath = pak01_path
             target_filepath = get_backup_path(os.path.join(pak01_dir, "pak01_dir.vpk"))
             os.rename(source_filepath, target_filepath)
 
-        self.__find_pak01_files(dev_dir, disable_callback)
-
     def _main_dir_backup(self):
         logger.debug("Copying main directory to create a backup for the sync class")
 
-        dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-
-        def backup_callback(_, pak01_dir):
+        pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
+        for pak01_dir, _ in pak01_data:
             # variables
             backup_dir = get_backup_path(pak01_dir)
 
@@ -354,8 +340,6 @@ class GameInstaller:
                 materials_dir,
                 materials_backup_dir,
             )
-
-        self.__find_pak01_files(dev_dir, backup_callback)
 
     def __install_mods(self):
         logger.debug("Installing mods")

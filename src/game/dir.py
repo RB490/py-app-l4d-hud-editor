@@ -88,7 +88,7 @@ class GameDir:
         # variables
         # retrieve game folders to check
         game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        game_file_directories = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+        game_file_directories = self._get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
         # add backup directory last so it's searched last so the code preferably returns file in the main directory
         game_file_directories.append(get_backup_path(self.get_main_dir(DirectoryMode.DEVELOPER)))
 
@@ -219,7 +219,7 @@ class GameDir:
         try:
             splash = SplashGUI("Restoring...", "Restoring game files..")
 
-            dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+            dev_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
             for pak01_dir in dev_pak01_subdirs:
                 # variables
@@ -254,7 +254,7 @@ class GameDir:
             logger.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
             return None
 
-        dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+        dev_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
         for dev_subdir in dev_pak01_subdirs:
             file_path = self.get_pak01_vpk_in(dev_subdir)
@@ -338,8 +338,8 @@ class GameDir:
             logger.debug("Unable to check outdated state: Developer mode is not installed!")
             return None
 
-        user_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.USER)
-        dev_pak01_subdirs = self.__get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
+        user_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.USER)
+        dev_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
         for user_subdir, dev_subdir in zip(user_pak01_subdirs, dev_pak01_subdirs):
             user_pak01 = self.get_pak01_vpk_in(user_subdir)
@@ -351,22 +351,32 @@ class GameDir:
         logger.debug("Developer directory is up-to-date!")
         return False
 
-    def __get_pak01_vpk_subdirs(self, dir_mode):
+    def _get_pak01_vpk_subdirs(self, dir_mode):
         "Retrieve subdirs with pak01's in them. Eg: left4dead2, left4dead2_dlc1, update"
 
-        # variables
-        pak01_subdirs = []
-        game_dir = self.game.dir.get(dir_mode)
+        result = self._get_pak01_dirs_with_files(dir_mode)
+        directories = list(result.keys())  # Get the directory paths from the dictionary
+        
+        return directories
 
+    def _get_pak01_dirs_with_files(self, dir_mode):
+        "Retrieve subdirs with pak01's in them along with the corresponding pak01 file."
+        
+        # variables
+        game_dir = self.game.dir.get(dir_mode)
+        
+        # create a dictionary to store subdir paths and their corresponding pak01 file paths
+        subdir_file_mapping = {}
+        
         # retrieve game folders to check
         for subdir_name in os.listdir(game_dir):
             subdir_path = os.path.join(game_dir, subdir_name)
-            is_game_files_dir = self.get_pak01_vpk_in(subdir_path)
+            pak01_file_path = self.get_pak01_vpk_in(subdir_path)
+            
+            if pak01_file_path:
+                subdir_file_mapping[subdir_path] = pak01_file_path
 
-            if is_game_files_dir:
-                pak01_subdirs.append(subdir_path)
-
-        return pak01_subdirs
+        return subdir_file_mapping
 
     def _find_resource_recursive(self, current_dir, target_file, root_dir):
         for root, _, files in os.walk(current_dir):
