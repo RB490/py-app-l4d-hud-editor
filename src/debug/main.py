@@ -11,8 +11,7 @@ from debug.game import main_debug_game
 from debug.gui import main_debug_gui
 from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
-
-
+from tests.test_hud_syncer import unit_test_hud_syncer
 
 
 def main_debug():
@@ -20,6 +19,7 @@ def main_debug():
 
     setup_debugging_environment()
 
+    unit_test_hud_syncer()
     # main_debug_gui()
     # main_misc_debug()
     # main_debug_editor_menu()

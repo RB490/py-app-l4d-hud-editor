@@ -8,14 +8,10 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from hud.syncer import (
-    HudSyncer,
-    calculate_md5_hash,
-    files_differ,
-    get_all_files_and_dirs,
-    get_subdirectories_names,
-)
+from loguru import logger
+
 from game.constants import SyncState
+from hud.syncer import HudSyncer, calculate_md5_hash, files_differ, get_all_files_and_dirs, get_subdirectories_names
 from utils.functions import get_backup_path
 
 
@@ -131,6 +127,8 @@ class TestHudSyncer(unittest.TestCase):
 
     @patch("builtins.print")  # Mock the print function
     def test_unsync(self, mock_print):
+        os.startfile(self.fake_target_dir)
+
         # Set up syncer instance and attributes
         self.syncer.source_dir = self.fake_source_dir
         self.syncer.target_dir_root = self.fake_target_dir
@@ -144,6 +142,10 @@ class TestHudSyncer(unittest.TestCase):
         # input(f"ress enter to sync: {self.fake_source_dir}")
         # self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
         print(f"custom items: {self.syncer.hud_items_custom}")
+
+        self.syncer.hud_items_previous = []  # clear hud items from testing sync earlier!
+        self.syncer.sync_state = SyncState.NOT_SYNCED
+        self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
         self.syncer.unsync()
 
         # Variable assertion
