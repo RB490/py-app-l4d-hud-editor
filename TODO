@@ -1,9 +1,15 @@
 Current:
-	
 
-	☐ Modify syncer so it can delete any (custom) shit if unsycning fails - write log to file. Ideas:
-		- Modify the data structure so i can save all required information in one file. For example currently i save custom files in a separate object
+Todo:		
+	
+	☐ Syncer robust system for unsyncing every change made even after incorrect program exit
+		- Maintain a 'changes' data structure which keeps track of all the changes made in the game folder. EG: creating a custom folder/file or renaming a vanilla file to it's backup version. Could use an enum with actions and one or two path params. CREATE/NEW, COPY/RENAME
+		- If setup the right way i could probably use the 'changes' data structure to more easily undo changes in the game folder by looking up the appropriate changes to undo for a given file or folder that needs to be unsynced
+		- It might be a good idea to have a mini class which maintains the 'changes' data structure
+		- Keep 'changes' data structure as up to date as possible on disk. Probably/possibly inside the ID file. And sync class can then use this to undo every change as needed
 		- Syncer currently imports the game class & imports code to restore game dev directory. that should be done in hud.start_editing instead
+	
+	☐ Feature: (Recovering) Backups: Consider how i want to handle this after modifying the sync class to always be able to unsync properly. Having backups is probably still a nice feature to have. But i guess i don't have to restore them anymore. Atleast automatically
 
 	☐ Feature: Menu: Game: AlwaysOnTop + remember this setting(?)
 	
@@ -11,18 +17,43 @@ Current:
 
 	☐ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed
 	
+	☐ Feature: BaseGUI: Add code example. Small as possible main gui
+
+	☐ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread?
+
+	☐ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2
+
+	☐ Feature: Menu: Move about into the help menu
+
 	☐ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview
 
-Todo:
-
-
-	- Goal: Being able to have smug use the program and have it 100% work for him on first try
-	☐ Auto updating
-	☐ A way to test the program in a fresh environment. Maybe a virtual machine
-	☐ Full coverage unit testing? or atleast the important parts like HudDescription/ID FileHandler/more?
-	☐ Ask GPT on how to do this properly
+	☐ Feature: Auto updating: GUI: Add version number from github vs version number from local script
 	
+	☐ Feature: Auto updating: add a check on program startup to compare versions. Only show that every couple days for example
+	
+	☐ Feature: About GUI: Rename into 'Update'?
+	
+	☐ Feature: Browser/Start GUI: Add version #?
+	
+	☐ Feature: Version #: Automatically increase the # based on git commits or something else?
+
+	☐ Feature: Auto updating: Look into how fully auto updating would work
+	
+	☐ Unit testing: Game Dir module
+	
+	☐ Unit testing: Syncer
+	
+	☐ Unit testing: ID Handler
+	
+	☐ Unit testing: HUD Description
+	
+	☐ Research: Ask GPT on how to properly test a program so it's ready for release
+	
+	☐ Research: Ask GPT on how to properly prepare a python program for release
+	
+	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
 	
 	☐ Testing: Test the program by using it to edit HUD's
-
+	
 Release:
+	☐ Goal: Being able to have third parties (smug) run the program and have it 100% work on first try
