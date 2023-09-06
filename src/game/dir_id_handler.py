@@ -115,19 +115,27 @@ class GameIDHandler:
 
     @call_validate_dir_mode_before_method
     def get_installation_state(self, dir_mode):
-        return self.__get_key(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
+        state_name = self.__get_key(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
+        return InstallationState[state_name]
 
     @call_validate_dir_mode_before_method
     def set_installation_state(self, dir_mode, installation_state):
+        if not isinstance(installation_state, InstallationState):
+            raise ValueError("installation_state must be an instance of InstallationState enum")
+        
         self.__set_key(dir_mode, "installation_state", installation_state)
 
     @call_validate_dir_mode_before_method
-    def get_sync_state(self, dir_mode):
-        return self.__get_key(dir_mode, "sync_state", SyncState.UNKNOWN.name)
+    def set_sync_state(self, dir_mode, sync_state):
+        if not isinstance(sync_state, SyncState):
+            raise ValueError("sync_state must be an instance of SyncState enum")
+        
+        self.__set_key(dir_mode, "sync_state", sync_state)
 
     @call_validate_dir_mode_before_method
-    def set_sync_state(self, dir_mode, sync_state):
-        self.__set_key(dir_mode, "sync_state", sync_state)
+    def get_sync_state(self, dir_mode):
+        state_name = self.__get_key(dir_mode, "sync_state", SyncState.UNKNOWN.name)
+        return SyncState[state_name]
 
     @call_validate_dir_mode_before_method
     def get_sync_changes(self, dir_mode):

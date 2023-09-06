@@ -45,6 +45,16 @@ class ChangeItem:
         self.source = source
         self.target = target
 
+    def to_dict(self):
+        return {
+            "action": self.action,
+            "source": self.source,
+            "target": self.target,
+        }
+
+    def __dict__(self):
+        return self.to_dict()
+
 
 class FileOperations:
     def __init__(self, hud_syncer):
@@ -54,7 +64,7 @@ class FileOperations:
         try:
             os.rename(source_item, target_item)
             change = ChangeItem("rename", source_item, target_item)
-            self.hud_syncer._record_item_change(hud_item, change)
+            self.hud_syncer._record_item_change(hud_item, change.to_dict())
             logger.info(f"Renamed '{source_item}' to '{target_item}'")
         except Exception as e:
             error_message = f"Failed to rename '{source_item}' to '{target_item}': {e}"
@@ -66,7 +76,7 @@ class FileOperations:
             if not os.path.exists(target_item):
                 os.makedirs(target_item)
                 change = ChangeItem("create", source_item, target_item)
-                self.hud_syncer._record_item_change(hud_item, change)
+                self.hud_syncer._record_item_change(hud_item, change.to_dict())
                 logger.info(f"Created folder '{target_item}'")
         except OSError as e:
             error_message = f"Failed to create folder '{target_item}': {e}"
@@ -76,7 +86,7 @@ class FileOperations:
     def perform_copy(self, hud_item, source_item, target_item):
         try:
             if any(
-                change.action == "copy" and change.source == source_item and change.target == target_item
+                change["action"] == "copy" and change["source"] == source_item and change["target"] == target_item
                 for change in self.hud_syncer.item_changes.get(hud_item, [])
             ):
                 logger.info(f"Copy operation for '{source_item}' to '{target_item}' already exists.")
@@ -84,7 +94,7 @@ class FileOperations:
 
             shutil.copy(source_item, target_item)
             change = ChangeItem("copy", source_item, target_item)
-            self.hud_syncer._record_item_change(hud_item, change)
+            self.hud_syncer._record_item_change(hud_item, change.to_dict())  # Convert to dictionary
             logger.info(f"Copied '{source_item}' to '{target_item}'")
         except Exception as e:
             error_message = f"Failed to copy '{source_item}' to '{target_item}': {e}"
@@ -128,24 +138,31 @@ class HudSyncer(metaclass=Singleton):
             changes_for_item = self.item_changes.get(item)
             if changes_for_item is not None:
                 for change in reversed(changes_for_item):
-                    if change.action == "rename":
-                        os.rename(change.target, change.source)
-                        logger.info(f"Undone rename of '{change.target}' to '{change.source}'")
-                    elif change.action == "create":
-                        if os.path.isfile(change.target):
-                            os.remove(change.target)
-                            logger.info(f"Undone create of file '{change.target}'")
-                        elif os.path.isdir(change.target):
-                            shutil.rmtree(change.target)
-                            logger.info(f"Undone create of folder '{change.target}'")
-                    elif change.action == "copy":
-                        if os.path.isfile(change.target):
-                            os.remove(change.target)
-                            logger.info(f"Undone copy of file '{change.source}' to '{change.target}'")
-                        elif os.path.isdir(change.target):
-                            shutil.rmtree(change.target)
-                            logger.info(f"Undone copy of folder '{change.source}' to '{change.target}'")
-                    changes_for_item.remove(change)
+                    action = change.get("action")  # Get the action from the dictionary
+                    source = change.get("source")
+                    target = change.get("target")
+
+                    if action == "rename":
+                        os.rename(target, source)
+                        logger.info(f"Undone rename of '{target}' to '{source}'")
+                    elif action == "create":
+                        if os.path.isfile(target):
+                            os.remove(target)
+                            logger.info(f"Undone create of file '{target}'")
+                        elif os.path.isdir(target):
+                            shutil.rmtree(target)
+                            logger.info(f"Undone create of folder '{target}'")
+                    elif action == "copy":
+                        if os.path.isfile(target):
+                            os.remove(target)
+                            logger.info(f"Undone copy of file '{source}' to '{target}'")
+                        elif os.path.isdir(target):
+                            shutil.rmtree(target)
+                            logger.info(f"Undone copy of folder '{source}' to '{target}'")
+
+                    # Since we are iterating and modifying the list, it's better to use a copy of the list
+                    # to avoid potential issues with modifying the original list during iteration.
+                    changes_for_item.remove(change.copy())
         except Exception as e:
             error_message = f"Failed to undo changes for '{item}': {e}"
             logger.error(error_message)
@@ -156,10 +173,10 @@ class HudSyncer(metaclass=Singleton):
         for hud_item in self.item_changes:
             self.__undo_changes_for_item(hud_item)
         logger.info("Undoing changes for all items completed.")
-        self.set_sync_state(SyncState.NOT_SYNCED)
+        self.__set_sync_state(SyncState.NOT_SYNCED)
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
 
-    def set_sync_state(self, sync_state):
+    def __set_sync_state(self, sync_state):
         self.sync_state = sync_state
         self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, sync_state)
 
@@ -168,11 +185,11 @@ class HudSyncer(metaclass=Singleton):
 
     def get_sync_status(self):
         if self.game.installation_exists(DirectoryMode.DEVELOPER):
-            self.set_sync_state(self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER))
+            self.__set_sync_state(self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER))
         else:
-            self.set_sync_state(SyncState.UNKNOWN)
+            self.__set_sync_state(SyncState.UNKNOWN)
 
-        return self.sync_state
+        return self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
 
     def is_synced(self):
         if self.get_sync_status() == SyncState.FULLY_SYNCED:
@@ -232,7 +249,7 @@ class HudSyncer(metaclass=Singleton):
         # self.__overwrite_target()
         self.__unsync_deleted_source_items()
 
-        self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, self.sync_state)
+        self.__set_sync_state(SyncState.FULLY_SYNCED)
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, self.item_changes)
 
         logger.info("Synced!")

@@ -12,6 +12,8 @@ from debug.gui import main_debug_gui
 from debug.id_handler import debug_id_handler
 from debug.misc import main_misc_debug, setup_debugging_environment
 from debug.vpk import debug_vpk_class
+from game.constants import DirectoryMode
+from game.game import Game
 from tests.test_hud_syncer import unit_test_hud_syncer
 
 
@@ -20,6 +22,8 @@ def main_debug():
 
     setup_debugging_environment()
 
+    game_class_s = Game()
+    game_class_s.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
     unit_test_hud_syncer()
     # main_debug_gui()
     # main_misc_debug()
