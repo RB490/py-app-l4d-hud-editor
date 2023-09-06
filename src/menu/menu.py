@@ -786,6 +786,8 @@ class EditorMenuClass:
             all_cvars_link = "https://developer.valvesoftware.com/wiki/List_of_L4D2_Cvars"
 
         self.help_menu = Menu(menubar, tearoff=0)
+
+        # help
         self.help_menu.add_command(label="Help", state="disabled")
         self.help_menu.add_separator()
         self.help_menu.add_command(
@@ -807,6 +809,8 @@ class EditorMenuClass:
             menu=self.hotkeys_menu,
         )
         self.help_menu.add_separator()
+
+        # tutorials
         self.help_menu.add_command(label="Tutorials", state="disabled")
         self.help_menu.add_command(
             label="TF2 Hud Editing Guide - DoodlesStuff",
@@ -825,6 +829,17 @@ class EditorMenuClass:
             image=self.img.file_black_rounded_symbol_1,
             compound="left",
             command=lambda: self.open_file(flame_path),
+        )
+        self.help_menu.add_separator()
+
+        # update
+        self.help_menu.add_command(label="Update", state="disabled")
+        self.help_menu.add_separator()
+        self.help_menu.add_cascade(
+            label="About",
+            image=self.img.star_black_fivepointed_shape_symbol,
+            compound="left",
+            command=self.handler.editor_show_about_menu,
         )
 
         return self.help_menu
@@ -1141,12 +1156,6 @@ class EditorMenuClass:
         )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
-        self.file_menu.add_cascade(
-            label="About",
-            image=self.img.star_black_fivepointed_shape_symbol,
-            compound="left",
-            command=self.handler.editor_show_about_menu,
-        )
         self.file_menu.add_command(
             label="Close",
             image=self.img.save_black_diskette_interface_symbol,

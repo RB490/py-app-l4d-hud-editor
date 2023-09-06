@@ -14,7 +14,7 @@ class debug_editor_menu_class(BaseGUI, metaclass=Singleton):
         self.root.maxsize(width=400, height=10)
 
         self.editor_menu = EditorMenuClass(self, self.root)
-        self.editor_menu.create_and_refresh_menu(is_context_menu=True)
+        self.root.config(menu=self.editor_menu.get_main_menu())
 
         context_menu = self.editor_menu.get_context_menu_main()
         # context_menu = self.editor_menu.get_context_menu_dev()

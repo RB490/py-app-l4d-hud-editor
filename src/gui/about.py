@@ -33,7 +33,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
             text=f"{PROGRAM_NAME} (Version {VERSION_NO})",
             padx=10,
             pady=10,
-            font=("Helvetica", 13),
+            font=("Helvetica", 11),
         )
         project_info_header.pack()
 

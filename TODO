@@ -6,6 +6,8 @@
 ✔ Feature: Auto updating: Look into how fully auto updating would work @done(23-09-06 16:23)
 ✔ Feature: About GUI: Rename into 'Update'? @done(23-09-06 16:23)
 ✔ Feature: Auto updating: GUI: Add version number from github vs version number from local script @done(23-09-06 16:23)
+✘ Feature: Browser/Start GUI: Add version #? @cancelled(23-09-06 16:28)
+✔ Feature: Menu: Move about into the help menu @done(23-09-06 16:34)
 
 Current:
 	
@@ -15,10 +17,11 @@ Todo:
 	Updating-related:
 
 		
-		☐ Feature: Browser/Start GUI: Add version #?
-		
-		☐ Feature: Menu: Move about into the help menu
 	
+	☐ Refactor: Menu: File menu. Some options don't make sense
+		☐ Having an installer option
+		☐ A close & exit option
+
 	☐ Unit testing: Game Dir module
 	
 	☐ Unit testing: Syncer
