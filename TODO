@@ -3,15 +3,10 @@
 ✔ Feature: Keep 'item_changes' data structure as up to date as possible on disk. inside the ID file. @done(23-09-06 07:11)
 ✔ Feature: Unsync changes if program failed to exit -- Read self.item_changes from ID file if sync status -- aka use this to unsync where needed @done(23-09-06 07:11)
 ✔ Refactor: ID: Use decorators for checking dir_mode @done(23-09-06 07:53)
+✔ Refactor: ID Handler: overlap between get_state set_state and set_sync get_sync @done(23-09-06 07:56)
 
 Current:
-	
 
-	☐ Refactor: Where did i previously use restore_developer_directory and do i still need it?
-
-	☐ Feature: (Recovering) Backups: Consider how i want to handle this after modifying the sync class to always be able to unsync properly. Having backups is probably still a nice feature to have. But i guess i don't have to restore them anymore. Atleast automatically
-
-	☐ Refactor: ID Handler: overlap between get_state set_state and set_sync get_sync
 
 Todo:		
 
@@ -41,6 +36,8 @@ Todo:
 	
 	☐ Feature: Browser/Start GUI: Add version #?
 	
+	☐ Feature: 'restore_developer_directory' to restore backups: Do still need this? Having this feature is probably still a nice feature to have. But i guess i don't need it anymore. Atleast automatically
+
 	☐ Feature: Version #: Automatically increase the # based on git commits or something else?
 
 	☐ Feature: Auto updating: Look into how fully auto updating would work
