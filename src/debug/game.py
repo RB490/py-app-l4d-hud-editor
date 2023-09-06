@@ -40,7 +40,7 @@ def main_debug_game():
     # result = gamez.installer.uninstall()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
-    # result = gamez.window.run(DirectoryMode.DEVELOPER)
+    result = gamez.window.run(DirectoryMode.DEVELOPER)
     # result = gamez.command.execute("noclip")
     # result = gamez.command._get_reload_fonts_command()
     # result = gamez.command.execute()
@@ -94,4 +94,4 @@ def main_debug_game():
     ###########################
     # Result
     ###########################
-    # print(f"result = {result}")
+    print(f"result = {result}")

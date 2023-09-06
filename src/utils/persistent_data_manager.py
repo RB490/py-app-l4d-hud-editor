@@ -28,6 +28,7 @@ class PersistentDataManager(metaclass=Singleton):
             "game_mode": "Coop",
             "game_mute": True,
             "game_pos": "Top Left",
+            "game_always_on_top": False,
             "game_pos_custom_coord": None,
             "game_res": [1600, 900],
             "reload_mouse_clicks_coord_1": (10, 20),

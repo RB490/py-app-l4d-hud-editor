@@ -98,6 +98,13 @@ class GameWindow:
         # move game
         self.hwnd_utils.move(self.game.window.get_hwnd(), position)
 
+    def apply_always_on_top_setting(self):
+        """Enable or disable always on top"""
+        if self.data_manager.get("game_always_on_top") is True:
+            self.hwnd_utils.set_always_on_top(self.game.window.get_hwnd(), True)
+        else:
+            self.hwnd_utils.set_always_on_top(self.game.window.get_hwnd(), False)
+
     def run(self, dir_mode, write_config=True):
         """Start the game
         'write_config' param is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
@@ -119,6 +126,7 @@ class GameWindow:
         # run game
         if self.is_running():
             self.__set_hwnd()
+            self.apply_always_on_top_setting()
             self.restore_saved_position()
             return True
 

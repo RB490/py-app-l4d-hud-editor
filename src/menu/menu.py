@@ -1246,6 +1246,19 @@ class EditorMenuClass:
         else:
             self.editor_menu_game_insecure_checkmark.set(0)
 
+        self.editor_menu_game_always_on_top_checkmark = tk.BooleanVar()
+        self.game_menu.add_checkbutton(
+            label="Topmost",
+            variable=self.editor_menu_game_always_on_top_checkmark,
+            command=self.handler.editor_menu_game_toggle_always_on_top,
+            image=self.img.up_arrow_button,
+            compound="left",
+        )
+        if self.data_manager.get("game_always_on_top") is True:
+            self.editor_menu_game_always_on_top_checkmark.set(1)
+        else:
+            self.editor_menu_game_always_on_top_checkmark.set(0)
+
         self.editor_menu_game_mute_checkmark = tk.BooleanVar()
         self.game_menu.add_checkbutton(
             label="Muted",

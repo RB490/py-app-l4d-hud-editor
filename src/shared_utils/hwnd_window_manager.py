@@ -174,6 +174,16 @@ class HwndWindowUtils:
             return None
 
     @cancel_if_hwnd_not_running
+    def set_always_on_top(self, hwnd, always_on_top=True):
+        """Set always on top status"""
+        if always_on_top:
+            # Enable "always on top"
+            win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+        else:
+            # Disable "always on top"
+            win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+
+    @cancel_if_hwnd_not_running
     def close(self, hwnd):
         """Forcefully close window by terminating the associated process"""
         try:

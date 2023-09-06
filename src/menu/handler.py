@@ -125,14 +125,24 @@ class EditorMenuHandler:
         self.hud.edit.start_game_exit_check()
 
     @call_create_and_refresh_menu_after_method
+    def editor_menu_game_toggle_always_on_top(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        if self.data_manager.get("game_always_on_top") is True:
+            self.data_manager.set("game_always_on_top", False)
+        else:
+            self.data_manager.set("game_always_on_top", True)
+
+        self.game.window.apply_always_on_top_setting()
+
+    @call_create_and_refresh_menu_after_method
     def editor_menu_game_toggle_mute(self):
         """Method to handle the selected secure/insecure option in the menu."""
         if self.data_manager.get("game_mute") is True:
             self.data_manager.set("game_mute", False)
             self.game.command.execute("volume 1")
         else:
-            self.game.command.execute("volume 0")
             self.data_manager.set("game_mute", True)
+            self.game.command.execute("volume 0")
 
     def editor_menu_copy_snippet(self, file_path):
         """Copy snippet to clipboard"""
