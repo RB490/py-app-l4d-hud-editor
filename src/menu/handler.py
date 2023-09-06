@@ -280,6 +280,7 @@ class EditorMenuHandler:
 
         # close browser
         browser = get_browser_gui()
+        is_visible = browser.is_visible()
         browser.hide()
         result = browser.prompt_close_or_continue()
         if not result:

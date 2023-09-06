@@ -397,9 +397,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def treeview_refresh(self, called_by_browser=False):
         """Clear treeview & load up-to-date content + update browser menu"""
-        
+
         # also update browser menu
-        if not called_by_browser:
+        if not called_by_browser and self.browser.has_been_run and self.browser.is_visible():
             self.browser.editor_menu_refresh()
 
         # Clear the existing items in the Treeview

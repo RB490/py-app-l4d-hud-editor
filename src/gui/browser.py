@@ -415,7 +415,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.root.config(menu=self.editor_menu.get_main_menu())
 
         # also refresh start treeview
-        if self.parent.has_been_run:
+        if self.parent.has_been_run and self.parent.is_visible():
             self.parent.treeview_refresh(called_by_browser=True)
 
         logger.debug("Refreshed editor menu!")

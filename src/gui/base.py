@@ -100,6 +100,10 @@ class BaseGUI:
         if not self.has_been_run:
             self.run()
 
+    def is_visible(self):
+        """Is visible?"""
+        return not self.is_hidden
+
     def bring_to_front(self):
         """Bring GUI to front"""
         # Lift the window to the top
