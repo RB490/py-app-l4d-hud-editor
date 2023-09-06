@@ -3,6 +3,7 @@
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import tkinter as tk
@@ -14,10 +15,25 @@ from loguru import logger
 
 T = TypeVar("T", bound="Singleton")
 
+def generate_version_number_from_git():
+    try:
+        # Get the number of commits in the repository
+        commit_count = int(subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).strip())
+
+        # Get the short SHA-1 hash of the latest commit
+        git_hash = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip().decode("utf-8")
+
+        # Generate a version number based on commit count and hash
+        version_number = f"{commit_count}"
+        # version_number = f"{commit_count}.{git_hash}"
+        return version_number
+    except subprocess.CalledProcessError:
+        return "0.0"  # Default version if not found
+
 def create_and_open_temp_file(file_path):
     """Create a temporary directory, copy the file, and open the temporary file."""
     # Create a temporary directory in %temp%
-    temp_dir = tempfile.mkdtemp(dir=os.environ.get('TEMP'))
+    temp_dir = tempfile.mkdtemp(dir=os.environ.get("TEMP"))
 
     # Get the file name from the original path
     file_name = os.path.basename(file_path)
@@ -30,6 +46,7 @@ def create_and_open_temp_file(file_path):
 
     # Open the temporary file
     os.startfile(temp_file_path)
+
 
 def get_invisible_tkinter_root() -> tk.Tk:
     """Retrieve invisible tkinter root gui"""

@@ -1,7 +1,10 @@
 """Global constant variables"""
 import os
+import subprocess
 from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
+
+from shared_utils.shared_utils import generate_version_number_from_git
 
 #####################################################
 # Path
@@ -9,7 +12,7 @@ from typing import Dict, List, Optional, Tuple
 
 # core
 DEBUG_MODE: bool = True
-VERSION_NO: str = "0.6.9"
+VERSION_NO: str = generate_version_number_from_git()
 SCRIPT_NAME: str = "Hud Editor for L4D2"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -1,6 +1,6 @@
-✔ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start @done(23-09-06 13:35) *.py*
-✔ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2 @done(23-09-06 13:37)
-✔ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview @done(23-09-06 13:43)
+✔ Feature: Version #: Automatically increase the # based on git commits or something else? @done(23-09-06 13:54)
+
+
 Current:
 	
 Todo:
@@ -15,8 +15,6 @@ Todo:
 		☐ Feature: About GUI: Rename into 'Update'?
 		
 		☐ Feature: Browser/Start GUI: Add version #?
-		
-		☐ Feature: Version #: Automatically increase the # based on git commits or something else?
 
 		☐ Feature: Auto updating: Look into how fully auto updating would work
 	
