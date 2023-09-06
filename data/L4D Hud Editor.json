@@ -9,7 +9,7 @@
     "VDFGui_indent_values": 1,
     "VDFGui_modify_int": 1,
     "VDFGui_sort_keys": 1,
-    "game_insecure": false,
+    "game_insecure": true,
     "game_mode": "Coop",
     "game_mute": true,
     "game_pos": "Top Right",

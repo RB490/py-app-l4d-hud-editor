@@ -1,11 +1,11 @@
+✔ Bug: Menu: Game: Make insecure a toggle like 'mute' is right now @done(23-09-06 11:37)
 Current:
-
-
 
 Todo:		
 
 
 	☐ Feature: Menu: Game: AlwaysOnTop + remember this setting(?)
+	
 	
 	☐ Feature: Browser: Modify get vanilla file to rename to default extension without .backup if needed and create a temporary copy in %temp% and return that
 

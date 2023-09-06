@@ -14,11 +14,13 @@ class debug_editor_menu_class(BaseGUI, metaclass=Singleton):
         self.root.maxsize(width=400, height=10)
 
         self.editor_menu = EditorMenuClass(self, self.root)
-        # debug_menu = self.editor_menu.create_and_refresh_menu(is_context_menu=True)
-        debug_menu = self.editor_menu.get_context_menu_dev()
+        self.editor_menu.create_and_refresh_menu(is_context_menu=True)
+
+        context_menu = self.editor_menu.get_context_menu_main()
+        # context_menu = self.editor_menu.get_context_menu_dev()
 
         pos_x, pos_y = self.root.winfo_pointerxy()
-        self.show_post_menu(debug_menu, pos_x, pos_y)
+        self.show_post_menu(context_menu, pos_x, pos_y)
 
 
 def main_debug_editor_menu():

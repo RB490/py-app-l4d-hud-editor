@@ -105,10 +105,8 @@ class EditorMenuHandler:
         # toggle setting
         if self.data_manager.get("game_insecure") is True:
             self.data_manager.set("game_insecure", False)
-            self.editor_menu.editor_menu_game_insecure_checkmark.set(0)
         else:
             self.data_manager.set("game_insecure", True)
-            self.editor_menu.editor_menu_game_insecure_checkmark.set(1)
 
         # prompt to restart game
         message = "Restart needed for changes to take effect.\n\nDo you want to restart now?"

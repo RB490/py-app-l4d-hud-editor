@@ -1241,6 +1241,10 @@ class EditorMenuClass:
             image=self.img.unlocked_padlock,
             compound="left",
         )
+        if self.data_manager.get("game_insecure") is True:
+            self.editor_menu_game_insecure_checkmark.set(1)
+        else:
+            self.editor_menu_game_insecure_checkmark.set(0)
 
         self.editor_menu_game_mute_checkmark = tk.BooleanVar()
         self.game_menu.add_checkbutton(
