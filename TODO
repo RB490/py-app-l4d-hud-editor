@@ -3,9 +3,7 @@
 ✔ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview @done(23-09-06 13:43)
 Current:
 	
-Todo:		
-
-	☐ Feature: 'restore_developer_directory' to restore backups: Do still need this? Having this feature is probably still a nice feature to have. But i guess i don't need it anymore. Atleast automatically
+Todo:
 	
 	Updating-related:
 		☐ Feature: Menu: Move about into the help menu
