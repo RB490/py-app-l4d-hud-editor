@@ -103,7 +103,7 @@ class HudSyncer(metaclass=Singleton):
         self.hud_items_custom = []
         self.hud_items_previous = []
         self.hud_items = None
-        self.item_changes = {}
+        self.item_changes = self.game.dir.id.get_sync_changes(DirectoryMode.DEVELOPER)
         self.file_operations = FileOperations(self)
 
     def _record_item_change(self, hud_item, change):
@@ -151,6 +151,14 @@ class HudSyncer(metaclass=Singleton):
             logger.error(error_message)
             raise Exception(error_message) from e
 
+    def __undo_changes_for_all_items(self):
+        logger.debug("Undoing changes for all items...")
+        for hud_item in self.item_changes:
+            self.__undo_changes_for_item(hud_item)
+        logger.info("Undoing changes for all items completed.")
+        self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
+        self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
+
     def get_source_dir(self):
         return self.source_dir
 
@@ -177,13 +185,8 @@ class HudSyncer(metaclass=Singleton):
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")
 
-        logger.debug(f"Unsyncing HUD: {self.hud_items}")
+        self.__undo_changes_for_all_items()  # also sets sync status
 
-        for item in self.hud_items:
-            self.__undo_changes_for_item(item)
-
-        self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-        self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
         logger.info("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
@@ -196,6 +199,7 @@ class HudSyncer(metaclass=Singleton):
         self.target_dir_main_name = target_dir_main_name
         self.target_sub_dir_names = get_subdirectories_names(target_dir)
         self.hud_items = get_all_files_and_dirs(self.source_dir)
+        self.__undo_changes_for_all_items()  # cleanup previously not undone changes eg. program unexpected exit
         self.item_changes = {}
 
         if source_dir is None or not os.path.isdir(source_dir):

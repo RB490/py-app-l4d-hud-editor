@@ -32,16 +32,20 @@ def show_browser_gui():
     browser_gui.show()
     return browser_gui
 
+
 def get_browser_gui():
     """Retrieve browser GUI instance"""
     return show_browser_gui()
 
+
 def get_mainloop_root():
     from gui.start import GuiHudStart
+
     start_gui = GuiHudStart()
     if not start_gui.get_mainloop_started():
         raise ValueError("Mainloop() is not running!")
     return start_gui.root
+
 
 def show_start_gui():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
@@ -50,6 +54,7 @@ def show_start_gui():
     start_gui = GuiHudStart()
     start_gui.show()
     return
+
 
 def show_about_gui():
     """Show about gui"""
@@ -61,6 +66,7 @@ def show_about_gui():
 
     gui_about = GuiAbout(start_gui.root)
     gui_about.show()
+
 
 def count_files_and_dirs(path):
     "Count files and directories"
@@ -247,15 +253,21 @@ def get_mouse_position_on_click(callback):
 
 def preform_checks_to_prepare_program_start():
     """Run vital checks before starting program so i don't need to add them everywhere"""
-    game = Game()
+    from hud.hud import Hud
+
+    g_game = Game()
+    h_hud = Hud()
+
+    # unsync previously not unsynced hud if needed
+    h_hud.edit.syncer.__undo_changes_for_all_items()
 
     # warn about dev being out of date
-    if game.dir.dev_out_of_date():
+    if g_game.dir.dev_out_of_date():
         show_message("Developer directory is out of date!\nConsider updating it", "warning")
 
     # verify validity of ID file structure
     try:
-        game.dir.check_for_invalid_id_file_structure()
+        g_game.dir.check_for_invalid_id_file_structure()
     except Exception as e_info:
         raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
 

@@ -1,4 +1,5 @@
 """Debug"""
+# pylint: disable=unused-variable
 from game.constants import DirectoryMode, InstallationState, SyncState
 from game.game import Game
 
