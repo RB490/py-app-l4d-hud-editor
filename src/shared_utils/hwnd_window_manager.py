@@ -184,6 +184,18 @@ class HwndWindowUtils:
             win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
 
     @cancel_if_hwnd_not_running
+    def get_window_geometry(self, hwnd):
+        """Retrieve window geometry"""
+        rect = win32gui.GetWindowRect(hwnd)
+        x, y, width, height = rect
+        return {
+            'x': x,
+            'y': y,
+            'width': width - x,
+            'height': height - y
+        }
+
+    @cancel_if_hwnd_not_running
     def close(self, hwnd):
         """Forcefully close window by terminating the associated process"""
         try:

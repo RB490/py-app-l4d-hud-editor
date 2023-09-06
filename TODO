@@ -1,12 +1,11 @@
 ✔ Bug: Menu: Game: Make insecure a toggle like 'mute' is right now @done(23-09-06 11:37)
 ✔ Feature: Menu: Game: AlwaysOnTop + remember this setting(?) @done(23-09-06 11:57)
 ✔ Feature: Browser: Modify get vanilla file to rename to default extension without .backup if needed and create a temporary copy in %temp% and return that @done(23-09-06 12:03)
+✔ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed @done(23-09-06 12:25)
 Current:
 
 Todo:		
 
-
-	☐ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed
 	
 	☐ Feature: BaseGUI: Add code example. Small as possible main gui
 

@@ -1,6 +1,7 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 # pylint: disable=broad-exception-caught, bare-except
 import os
+import time
 from tkinter import messagebox
 
 import pyperclip  # type: ignore
@@ -85,7 +86,33 @@ class EditorMenuHandler:
         res_command = (
             f"mat_setvideomode 1 1 1 0; mat_setvideomode {res_w} {res_h} {int(is_fullscreen)} {int(has_border)}"
         )
-        self.game.command.execute(f"{res_command}; mat_savechanges")
+
+        # set game resolution until the game successfully sets it.
+        # (sometimes, mat_setvideomode fails to change the resolution, resulting in a black screen with unchanged res)
+        while True:
+            # Get the current game width
+            geometry = self.game.window.hwnd_utils.get_window_geometry(self.game.window.get_hwnd())
+            game_width = geometry["width"]
+            game_height = geometry["height"]
+
+            # correct for windows caption
+            if has_border:
+                game_width = game_width - 6
+                game_height = game_height - 29
+
+            print(
+                f"game_width = {game_width} original: {geometry['width']} game_height = {game_height} original: {geometry['height']}"
+            )
+
+            # Check if the game width is equal to the target width (res_w)
+            if game_width == res_w:
+                break  # Exit the loop if the condition is met
+
+            # If the condition is not met, set the game resolution and save changes
+            self.game.command.execute(f"{res_command}; mat_savechanges")
+
+            # give the game some time to finish resizing
+            time.sleep(1.5)
 
     @call_create_and_refresh_menu_after_method
     def editor_menu_game_pos(self, pos):
