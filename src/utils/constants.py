@@ -2,8 +2,41 @@
 import os
 from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
+from loguru import logger
 
-from shared_utils.shared_utils import generate_version_number_from_git
+import requests
+
+
+def get_local_version_number():
+    """Retrieve local version number"""
+    # Check if the version.txt file exists
+    if os.path.isfile(VERSION_NO_PATH):
+        try:
+            # Read the content of the file and strip any leading/trailing whitespace
+            with open(VERSION_NO_PATH, "r") as version_file:
+                version = version_file.read().strip()
+                return version
+        except Exception as e:
+            print(f"An error occurred while reading the version file: {str(e)}")
+            return None
+
+def get_github_version_number():
+    """Retrieve github version number"""
+    try:
+        # Send an HTTP GET request to the URL
+        response = requests.get(VERSION_NO_URL, timeout=10)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Get the content of the file and strip any leading/trailing whitespace
+            version_number = response.text.strip()
+            logger.debug(f"Version Number: {version_number}")
+            return version_number
+        else:
+            logger.error(f"Failed to retrieve data. Status code: {response.status_code}")
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"An error occurred: {str(e)}")
 
 #####################################################
 # Path
@@ -11,14 +44,15 @@ from shared_utils.shared_utils import generate_version_number_from_git
 
 # core
 DEBUG_MODE: bool = True
-VERSION_NO: str = generate_version_number_from_git(major_version=0)
-with open("version.txt", "w") as file:
-    file.write(VERSION_NO)
 PROGRAM_NAME: str = "Hud Editor for L4D2"
 PROGRAM_URL: str = "https://github.com/RB490"
-SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPT_FILE_NAME: str = os.path.basename(PROJECT_ROOT)
+VERSION_NO_URL: str = "https://raw.githubusercontent.com/RB490/py-app-l4d-hud-editor/main/version.txt"
+VERSION_NO_PATH: str = os.path.join(PROJECT_ROOT, "version.txt")
+VERSION_NO_GITHUB: str = get_github_version_number()
+VERSION_NO: str = get_local_version_number()
 
 # main directories
 DEVELOPMENT_DIR: str = os.path.join(PROJECT_ROOT, "dev")

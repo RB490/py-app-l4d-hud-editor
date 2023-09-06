@@ -10,13 +10,20 @@ from tkinter import filedialog
 
 import psutil
 import pyautogui
+from loguru import logger
 
-from game.game import Game
 from gui.about import GuiAbout
-from shared_utils.shared_utils import show_message
+from shared_utils.shared_utils import generate_version_number_from_git, show_message
 from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
+
+
+def update_version_number_file():
+    """Write version number to file"""
+    version = generate_version_number_from_git(major_version=0)
+    with open("version.txt", "w") as file:
+        file.write(version)
 
 
 def show_browser_gui():
@@ -37,15 +44,6 @@ def get_browser_gui():
 
     browser_gui = GuiHudBrowser(start_gui.root)
     return browser_gui
-
-
-def get_mainloop_root():
-    from gui.start import GuiHudStart
-
-    start_gui = GuiHudStart()
-    if not start_gui.get_mainloop_started():
-        raise ValueError("Mainloop() is not running!")
-    return start_gui.root
 
 
 def show_start_gui():
@@ -116,7 +114,7 @@ def get_image_for_file_extension(input_path):
     # Get the corresponding image path or return "warning.png"
     output_image_path = file_types.get(file_extension, os.path.join(IMAGES_DIR_EXT, "error.ico"))
 
-    # print(f"Retrieved image for {input_path} -> {output_image_path}")
+    logger.debug(f"Retrieved image for {input_path} -> {output_image_path}")
     return output_image_path
 
 
@@ -134,7 +132,7 @@ def rename_with_timeout(src, dst, timeout=5):
     - Miscelanious operating system issue where renaming fails once but is fine the next time"""
     start = time.time()
 
-    print(f"Renaming {src} -> {dst} with timeout: {timeout}")
+    logger.debug(f"Renaming {src} -> {dst} with timeout: {timeout}")
 
     while True:
         try:
@@ -142,7 +140,7 @@ def rename_with_timeout(src, dst, timeout=5):
             return True
         except Exception:
             if time.time() - start > timeout:
-                print("Failed to rename!")
+                logger.debug("Failed to rename!")
                 return False
             else:
                 time.sleep(0.1)
@@ -160,25 +158,25 @@ def wait_process_close(executable, timeout=None):
     processes = [p for p in psutil.process_iter() if p.name() == executable]
     # If no processes are found, return immediately
     if not processes:
-        print(f"{executable} is not running!")
+        logger.debug(f"{executable} is not running!")
         return False
 
     # Otherwise, wait for the processes to terminate or until timeout is reached
-    print(f"Waiting for {executable} to close")
+    logger.debug(f"Waiting for {executable} to close")
     start = time.time()
     while True:
         # Check if any process is still alive
         alive = any(p.is_running() for p in processes)
         # If not, return
         if not alive:
-            print(f"Process {executable} closed!")
+            logger.debug(f"Process {executable} closed!")
             return True
         # Otherwise, check the elapsed time if timeout is provided
         if timeout is not None:
             elapsed = time.time() - start
             # If timeout is reached, raise an exception
             if elapsed >= timeout:
-                print(f"Process {executable} did not close after {timeout} seconds")
+                logger.debug(f"Process {executable} did not close after {timeout} seconds")
                 return False
         # Sleep for a short interval and repeat
         time.sleep(0.1)
@@ -244,7 +242,7 @@ def get_mouse_position_on_click(callback):
 
     def on_click(event):
         pos_x, pos_y = event.x_root, event.y_root
-        print(f"Mouse clicked at ({pos_x}, {pos_y})")
+        logger.debug(f"Mouse clicked at ({pos_x}, {pos_y})")
         root.destroy()  # destroy the window when mouse is clicked
         callback(pos_x, pos_y)
 
@@ -254,6 +252,7 @@ def get_mouse_position_on_click(callback):
 
 def preform_checks_to_prepare_program_start():
     """Run vital checks before starting program so i don't need to add them everywhere"""
+    from game.game import Game
     from hud.hud import Hud
 
     g_game = Game()

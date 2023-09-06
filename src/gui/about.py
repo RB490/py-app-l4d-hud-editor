@@ -4,7 +4,7 @@ import webbrowser
 
 from gui.base import BaseGUI
 from shared_utils.shared_utils import Singleton
-from utils.constants import APP_ICON, PROGRAM_NAME, PROGRAM_URL, VERSION_NO, ImageConstants
+from utils.constants import APP_ICON, PROGRAM_NAME, PROGRAM_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -36,18 +36,19 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
             font=("Helvetica", 13),
         )
         project_info_header.pack()
-        # project_info_label = tk.Label(
-        #     self.root,
-        #     text="Barbeque Bacon Burger.",
-        #     padx=10,
-        #     pady=10,
-        # )
-        # project_info_label.pack()
+
+        project_info_latest_version_label = tk.Label(
+            self.root,
+            text=f"Github Version: {VERSION_NO_GITHUB}",
+            padx=10,
+            pady=10,
+        )
+        project_info_latest_version_label.pack()
 
         # Create and configure the synchronization hotkey button
         self.open_project_url_btn = tk.Button(
             self.root,
-            text="Project Page",
+            text="Github Page",
             justify="center",
             command=self.open_main_page,
             state="normal",

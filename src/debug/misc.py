@@ -1,4 +1,5 @@
 """Debug"""
+# pylint: disable=unused-import, unused-variable, unnecessary-pass
 import os
 import sys
 
@@ -7,13 +8,14 @@ from loguru import logger
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
 from debug.hud import get_hud_debug_instance
+from utils.functions import update_version_number_file
 from utils.persistent_data_manager import PersistentDataManager
 
 
 def main_misc_debug():
     """Debug"""
     logger.info("This is an info message")
-    get_hud_debug_instance()
+    # get_hud_debug_instance()
 
 
 def setup_debugging_environment():
@@ -24,6 +26,7 @@ def setup_debugging_environment():
     os.system("cls")
 
     # Setup
+    update_version_number_file()
     configure_debug_logging()
     debug_game_set_states_synced_and_installed()
     enable_debug_hotkeys()
