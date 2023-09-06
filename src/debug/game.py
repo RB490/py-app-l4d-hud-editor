@@ -34,10 +34,10 @@ def main_debug_game():
     # Installer
     ###########################
     # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
-    # result = gamez.installer.install()
-    result = gamez.installer.repair()
-    # result = gamez.installer._main_dir_backup()
     # result = gamez.installer.uninstall()
+    result = gamez.installer.install()
+    # result = gamez.installer.repair()
+    # result = gamez.installer._main_dir_backup()
     # result = gamez.installer._main_dir_backup()
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
@@ -59,7 +59,7 @@ def main_debug_game():
     # ID
     ###########################
     # result = gamez.dir.id.get_installation_state
-    # result = gamez.dir.id.get_filename(DirectoryMode.USER)
+    # result = gamez.dir.id.get_file_name(DirectoryMode.USER)
 
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)

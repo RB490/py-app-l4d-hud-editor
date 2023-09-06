@@ -246,7 +246,7 @@ class GameInstaller:
         os.mkdir(dev_dir)
 
         # write id file
-        id_path = os.path.join(dev_dir, self.game.dir.id.get_filename(DirectoryMode.DEVELOPER))
+        id_path = os.path.join(dev_dir, self.game.dir.id.get_file_name(DirectoryMode.DEVELOPER))
         with open(id_path, "w", encoding="utf-8"):
             pass
 
@@ -263,25 +263,22 @@ class GameInstaller:
     def __copy_game_files(self):
         user_dir = self.game.dir.get(DirectoryMode.USER)
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
+        user_id_file_name = self.game.dir.id.get_file_name(DirectoryMode.USER)
 
-        # Define a function to run in the thread
-        def copy_directory_thread():
-            copy_directory(user_dir, dev_dir)
+        # Copy all files from the root folder to the developer folder (except user ID file)
+        for item in os.listdir(user_dir):
+            src_item = os.path.join(user_dir, item)
+            dest_item = os.path.join(dev_dir, item)
 
-        # Create and start the thread
-        thread = threading.Thread(target=copy_directory_thread)
-        thread.start()
+            if os.path.isfile(src_item) and os.path.basename(src_item) != user_id_file_name:
+                shutil.copy2(src_item, dest_item)
 
-        # Wait for the thread to finish
-        thread.join()
-
-        user_id_file = self.game.dir.id.get_filename(DirectoryMode.USER)
-        user_id_file_path = os.path.join(dev_dir, user_id_file)
-        if os.path.isfile(user_id_file_path):
-            os.remove(user_id_file_path)
-            logger.debug(f"Deleted user ID file from dev directory: {user_id_file_path}")
-        else:
-            raise InstallationError(f"Could not remove user ID file from dev directory: {user_id_file_path}")
+        # Loop through subfolders and call copy_directory
+        for dir_name in os.listdir(user_dir):
+            src_subfolder = os.path.join(user_dir, dir_name)
+            dest_subfolder = os.path.join(dev_dir, dir_name)
+            if os.path.isdir(src_subfolder):
+                copy_directory(src_subfolder, dest_subfolder)
 
     def __prompt_verify_game(self):
         logger.debug("Prompting user to verify game")

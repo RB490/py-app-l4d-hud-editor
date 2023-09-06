@@ -37,7 +37,7 @@ class GameIDHandler:
         }
 
     @call_validate_dir_mode_before_method
-    def get_filename(self, dir_mode):
+    def get_file_name(self, dir_mode):
         self.game._validate_dir_mode(dir_mode)
         return self.id_file_names[dir_mode]
 
@@ -48,7 +48,7 @@ class GameIDHandler:
             logger.warning(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
-        id_path = os.path.join(mode_dir, self.get_filename(dir_mode))
+        id_path = os.path.join(mode_dir, self.get_file_name(dir_mode))
         logger.debug(f"ID Path: {id_path}")
         return id_path
 
@@ -106,7 +106,7 @@ class GameIDHandler:
                 "sync_state": SyncState.UNKNOWN.name,
             }
 
-            id_path = os.path.join(id_dir, self.get_filename(dir_mode))
+            id_path = os.path.join(id_dir, self.get_file_name(dir_mode))
             self.__create_file(id_path)
             self.__write_data(id_path, initial_data)
             return True
@@ -122,14 +122,14 @@ class GameIDHandler:
     def set_installation_state(self, dir_mode, installation_state):
         if not isinstance(installation_state, InstallationState):
             raise ValueError("installation_state must be an instance of InstallationState enum")
-        
+
         self.__set_key(dir_mode, "installation_state", installation_state)
 
     @call_validate_dir_mode_before_method
     def set_sync_state(self, dir_mode, sync_state):
         if not isinstance(sync_state, SyncState):
             raise ValueError("sync_state must be an instance of SyncState enum")
-        
+
         self.__set_key(dir_mode, "sync_state", sync_state)
 
     @call_validate_dir_mode_before_method

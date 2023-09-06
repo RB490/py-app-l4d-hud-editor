@@ -20,10 +20,10 @@ def main_debug():
 
     # unit_test_hud_syncer()
     # main_misc_debug()
-    main_debug_gui()
+    # main_debug_gui()
     # main_debug_editor_menu()
     # debug_vpk_class()
     # debug_id_handler()
-    # main_debug_game()
+    main_debug_game()
 
     input("Finished debugging! Press enter to exit...")

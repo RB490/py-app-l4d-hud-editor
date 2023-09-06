@@ -4,12 +4,19 @@
 ✔ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed @done(23-09-06 12:25)
 ✔ Feature: BaseGUI: Add code example. Small as possible main gui @done(23-09-06 12:35)
 ✔ Bug: Installer: Uninstall dev mode -> empty folder is still present @done(23-09-06 12:42)
+✘ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread? @cancelled(23-09-06 12:45) i need to use thread.join() which halts mainloop until completed
+✔ Bug: Installer: Cancelling copy files leaves the dev mode folder with a user & dev id file @done(23-09-06 13:10)
 
 Current:
 
 Todo:		
 
-	☐ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread?
+	
+	☐ Bug: Installer: Install -> No left 4 dead 2 folder existing: Renaming E:\games\steam\steamapps\common\Left 4 Dead 2 -> E:\games\steam\steamapps\common\Left 4 Dead 2yfr5pCKe with timeout: 6
+
+	☐ Bug: GameDir: Can't activate user mode with dev mode uninstalled. Could modify dir.set
+
+	☐ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start
 
 	☐ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2
 

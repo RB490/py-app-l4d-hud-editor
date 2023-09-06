@@ -34,37 +34,37 @@ class SteamInfoRetriever(metaclass=Singleton):
         if self.print_debug_messages:
             print(message)
 
-    def _check_path(self, path, filename):
+    def _check_path(self, path, file_name):
         """
         Check if a file exists in the given path.
 
         Args:
             path (str): The directory path.
-            filename (str): The name of the file to check.
+            file_name (str): The name of the file to check.
 
         Returns:
             bool: True if the file exists, False otherwise.
         """
         self.__print_if_debug(f"Checking path: {path}")
-        return os.path.isfile(os.path.join(path, filename))
+        return os.path.isfile(os.path.join(path, file_name))
 
-    def _find_directory_in_paths(self, paths, target_filename):
+    def _find_directory_in_paths(self, paths, target_file_name):
         """
         Search for a directory containing a specific file in a list of paths.
 
         Args:
             paths (list): List of directory paths to search in.
-            target_filename (str): The name of the file to find.
+            target_file_name (str): The name of the file to find.
 
         Returns:
             str: Path to the directory containing the target file, or None if not found.
         """
-        self.__print_if_debug(f"Looking for directory containing '{target_filename}' in specified paths...")
+        self.__print_if_debug(f"Looking for directory containing '{target_file_name}' in specified paths...")
         for path in paths:
-            if self._check_path(path, target_filename):
+            if self._check_path(path, target_file_name):
                 self.__print_if_debug(f"Directory found at: {path}")
                 return path
-        self.__print_if_debug(f"Directory containing '{target_filename}' not found in specified paths.")
+        self.__print_if_debug(f"Directory containing '{target_file_name}' not found in specified paths.")
         return None
 
     def _find_steam_directory_in_paths(self):
