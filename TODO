@@ -1,24 +1,10 @@
-✔ Bug: Menu: Game: Make insecure a toggle like 'mute' is right now @done(23-09-06 11:37)
-✔ Feature: Menu: Game: AlwaysOnTop + remember this setting(?) @done(23-09-06 11:57)
-✔ Feature: Browser: Modify get vanilla file to rename to default extension without .backup if needed and create a temporary copy in %temp% and return that @done(23-09-06 12:03)
-✔ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed @done(23-09-06 12:25)
-✔ Feature: BaseGUI: Add code example. Small as possible main gui @done(23-09-06 12:35)
-✔ Bug: Installer: Uninstall dev mode -> empty folder is still present @done(23-09-06 12:42)
-✘ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread? @cancelled(23-09-06 12:45) i need to use thread.join() which halts mainloop until completed
-✔ Bug: Installer: Cancelling copy files leaves the dev mode folder with a user & dev id file @done(23-09-06 13:10)
-✔ Bug: Installer: Install -> 023-09-06 13:09:00.977 | ERROR    | game.dir_id_handler:__read_data:183 - Error reading ID content: Expecting value: line 1 column 1 (char 0) @done(23-09-06 13:23)
-✔ Bug: Installer: Install -> No left 4 dead 2 folder existing: Renaming E:\games\steam\steamapps\common\Left 4 Dead 2 -> E:\games\steam\steamapps\common\Left 4 Dead 2yfr5pCKe with timeout: 6 @done(23-09-06 13:32)
-✔ Bug: GameDir: Can't activate user mode with dev mode uninstalled. Could modify dir.set @done(23-09-06 13:32)
-
+✔ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start @done(23-09-06 13:35) *.py*
+✔ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2 @done(23-09-06 13:37)
 Current:
 	
 Todo:		
 		
-	
 
-	☐ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start
-
-	☐ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2
 
 	☐ Feature: Menu: Move about into the help menu
 

@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Tuple
 # core
 DEBUG_MODE: bool = True
 VERSION_NO: str = "0.6.9"
-SCRIPT_NAME: str = "L4D Hud Editor"
+SCRIPT_NAME: str = "Hud Editor for L4D2"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCRIPT_FILE_NAME: str = os.path.basename(PROJECT_ROOT)
