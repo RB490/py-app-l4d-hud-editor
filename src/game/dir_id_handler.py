@@ -1,4 +1,4 @@
-"""Handles game ID and state information for different directory modes."""
+"""Handles game ID information for different directory modes."""
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
 import json
 import os
@@ -25,7 +25,7 @@ def call_validate_dir_mode_before_method(func):
 
 
 class GameIDHandler:
-    """Handles game ID and state information for different directory modes."""
+    """Handles game ID information for different directory modes."""
 
     def __init__(self, game_class):
         """Initialize the GameIDHandler with the associated game class."""
@@ -98,7 +98,7 @@ class GameIDHandler:
                 install_state = InstallationState.COMPLETED
 
             # write ID file
-            initial_state_data = {
+            initial_data = {
                 "directory_mode": dir_mode.name,
                 "installation_state": install_state.name,
                 "sync_state": SyncState.UNKNOWN.name,
@@ -106,71 +106,70 @@ class GameIDHandler:
 
             id_path = os.path.join(id_dir, self.get_filename(dir_mode))
             self.__create_file(id_path)
-            self.__write_content(id_path, initial_state_data)
+            self.__write_data(id_path, initial_data)
             return True
         except Exception as err_info:
             raise RuntimeError(f"Could not set {dir_mode.name} ID location! \n\n{err_info}") from err_info
 
     @call_validate_dir_mode_before_method
     def get_installation_state(self, dir_mode):
-        return self.__get_state_value(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
+        return self.__get_key(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
 
     @call_validate_dir_mode_before_method
     def set_installation_state(self, dir_mode, installation_state):
-        self.__set_state(dir_mode, "installation_state", installation_state)
+        self.__set_key(dir_mode, "installation_state", installation_state)
         return installation_state
 
     @call_validate_dir_mode_before_method
     def get_sync_state(self, dir_mode):
-        return self.__get_state_value(dir_mode, "sync_state", SyncState.UNKNOWN.name)
+        return self.__get_key(dir_mode, "sync_state", SyncState.UNKNOWN.name)
 
     @call_validate_dir_mode_before_method
     def set_sync_state(self, dir_mode, sync_state):
-        self.__set_state(dir_mode, "sync_state", sync_state)
+        self.__set_key(dir_mode, "sync_state", sync_state)
         return sync_state
 
     @call_validate_dir_mode_before_method
     def set_sync_changes(self, dir_mode, sync_changes):
-        self.__set_state(dir_mode, "sync_changes", sync_changes)
-        logger.debug(f"Set sync changes for {dir_mode.name}")
+        self.__set_key(dir_mode, "sync_changes", sync_changes)
+        return sync_changes
 
     @call_validate_dir_mode_before_method
     def get_sync_changes(self, dir_mode):
-        state_data = self.__read_state_data(dir_mode)
-        return state_data.get("sync_changes", {})
+        return self.__get_key(dir_mode, "sync_changes", {})
 
-    def __get_state_value(self, dir_mode, state_key, default_value):
-        state_data = self.__read_state_data(dir_mode)
-        return state_data.get(state_key, default_value)
+    def __get_key(self, dir_mode, key, default_value):
+        data = self.__get_data(dir_mode)
+        return data.get(key, default_value)
 
-    def __set_state(self, dir_mode, state_key, state_value):
+    def __set_key(self, dir_mode, key, value):
         id_path = self.__get_path(dir_mode)
         if id_path is None:
             return None
 
-        state_data = self.__read_content(id_path)
+        data = self.__get_data(dir_mode)
 
         # Handle enums
-        if isinstance(state_value, Enum):
-            state_data[state_key] = state_value.name if state_value is not None else None
+        if isinstance(value, Enum):
+            data[key] = value.name if value is not None else None
         # Handle objects
         else:
-            state_data[state_key] = state_value
+            data[key] = value
 
-        self.__write_content(id_path, state_data)
+        self.__write_data(id_path, data)
         logger.debug(
-            f"Updated {state_key} state to: '{state_value.name if isinstance(state_value, Enum) else state_value}'"
+            f"Updated {key} value to: '{value.name if isinstance(value, Enum) else value}'"
         )
 
-    def __read_state_data(self, dir_mode):
+    def __get_data(self, dir_mode):
         id_path = self.__get_path(dir_mode)
         if id_path is None:
             return {}
 
-        state_data = self.__read_content(id_path)
-        return state_data
+        data = self.__read_data(id_path)
+        return data
 
-    def __read_content(self, id_path):
+    def __read_data(self, id_path):
         try:
             if os.path.isfile(id_path):
                 with open(id_path, "r", encoding="utf-8") as file_handle:
@@ -179,10 +178,10 @@ class GameIDHandler:
             logger.error(f"Error reading ID content: {err}")
         return {}  # Fallback to empty json
 
-    def __write_content(self, id_path, state_data):
+    def __write_data(self, id_path, data):
         try:
             with open(id_path, "w", encoding="utf-8") as file_handle:
-                json.dump(state_data, file_handle, indent=4)
+                json.dump(data, file_handle, indent=4)
                 logger.debug(f"Set ID content in: {id_path}")
                 return True
         except Exception as err_info:

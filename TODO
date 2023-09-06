@@ -1,16 +1,16 @@
-✔ Feature: Write self.item_changes to ID file (often, everywhere) @started(23-09-06 06:24) @done(23-09-06 06:39) @lasted(15m57s)
-✔ Syncer currently imports the game class & imports code to restore game dev directory. that should be done in hud.start_editing instead @done(23-09-06 07:11)
-✔ Feature: Keep 'item_changes' data structure as up to date as possible on disk. inside the ID file. @done(23-09-06 07:11)
-✔ Feature: Unsync changes if program failed to exit -- Read self.item_changes from ID file if sync status -- aka use this to unsync where needed @done(23-09-06 07:11)
-✔ Refactor: ID: Use decorators for checking dir_mode @done(23-09-06 07:53)
-✔ Refactor: ID Handler: overlap between get_state set_state and set_sync get_sync @done(23-09-06 07:56)
-
+✔ Refactor: ID Handler: Rename 'state' related methods and variables to key @done(23-09-06 08:25)
 Current:
+	☐ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path
+	        # manually select location
+            id_dir = filedialog.askdirectory(
+                mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
+            )
+
+	☐ Refactor: ID Handler: Right now the 'set' methods return values. probably don't do that
 
 
 Todo:		
 
-	☐ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path
 
 	☐ Feature: Menu: Game: AlwaysOnTop + remember this setting(?)
 	
