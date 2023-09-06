@@ -1,28 +1,26 @@
 ✔ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start @done(23-09-06 13:35) *.py*
 ✔ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2 @done(23-09-06 13:37)
+✔ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview @done(23-09-06 13:43)
 Current:
 	
 Todo:		
-		
 
-
-	☐ Feature: Menu: Move about into the help menu
-
-	☐ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview
-
-	☐ Feature: Auto updating: GUI: Add version number from github vs version number from local script
-	
-	☐ Feature: Auto updating: add a check on program startup to compare versions. Only show that every couple days for example
-	
-	☐ Feature: About GUI: Rename into 'Update'?
-	
-	☐ Feature: Browser/Start GUI: Add version #?
-	
 	☐ Feature: 'restore_developer_directory' to restore backups: Do still need this? Having this feature is probably still a nice feature to have. But i guess i don't need it anymore. Atleast automatically
+	
+	Updating-related:
+		☐ Feature: Menu: Move about into the help menu
 
-	☐ Feature: Version #: Automatically increase the # based on git commits or something else?
+		☐ Feature: Auto updating: GUI: Add version number from github vs version number from local script
+		
+		☐ Feature: Auto updating: add a check on program startup to compare versions. Only show that every couple days for example
+		
+		☐ Feature: About GUI: Rename into 'Update'?
+		
+		☐ Feature: Browser/Start GUI: Add version #?
+		
+		☐ Feature: Version #: Automatically increase the # based on git commits or something else?
 
-	☐ Feature: Auto updating: Look into how fully auto updating would work
+		☐ Feature: Auto updating: Look into how fully auto updating would work
 	
 	☐ Unit testing: Game Dir module
 	
@@ -39,6 +37,7 @@ Todo:
 	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
 	
 	☐ Testing: Test the program by using it to edit HUD's
-	
+
+		
 Release:
 	☐ Goal: Being able to have third parties (smug) run the program and have it 100% work on first try

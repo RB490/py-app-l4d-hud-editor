@@ -21,6 +21,13 @@ from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 def show_browser_gui():
     "Show the browser gui"
+
+    browser_gui = get_browser_gui()
+    browser_gui.show()
+
+
+def get_browser_gui():
+    """Retrieve browser GUI instance"""
     from gui.browser import GuiHudBrowser
     from gui.start import GuiHudStart
 
@@ -29,13 +36,7 @@ def show_browser_gui():
         raise ValueError("Retrieved browser GUI without having started mainloop() first")
 
     browser_gui = GuiHudBrowser(start_gui.root)
-    browser_gui.show()
     return browser_gui
-
-
-def get_browser_gui():
-    """Retrieve browser GUI instance"""
-    return show_browser_gui()
 
 
 def get_mainloop_root():
