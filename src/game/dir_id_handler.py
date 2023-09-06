@@ -107,7 +107,7 @@ class GameIDHandler:
             }
 
             id_path = os.path.join(id_dir, self.get_file_name(dir_mode))
-            self.__create_file(id_path)
+            self._create_file(id_path)
             self.__write_data(id_path, initial_data)
             return True
         except Exception as err_info:
@@ -192,7 +192,7 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
 
-    def __create_file(self, id_path):
+    def _create_file(self, id_path):
         try:
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump({}, file_handle, indent=4)

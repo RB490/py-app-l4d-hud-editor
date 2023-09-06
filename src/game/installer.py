@@ -247,8 +247,7 @@ class GameInstaller:
 
         # write id file
         id_path = os.path.join(dev_dir, self.game.dir.id.get_file_name(DirectoryMode.DEVELOPER))
-        with open(id_path, "w", encoding="utf-8"):
-            pass
+        self.game.dir.id._create_file(id_path)
 
         # copy executable
         game_exe = self.game.get_exe()

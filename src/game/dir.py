@@ -62,7 +62,7 @@ class GameDir:
         self.game.window.close()
 
         # rename vanilla folder if it's not a hud editor version
-        if (vanilla_dir != source_dir) and (vanilla_dir != target_dir):
+        if os.path.isdir(vanilla_dir) and (vanilla_dir != source_dir) and (vanilla_dir != target_dir):
             random_string = generate_random_string()
             vanilla_dir_renamed = vanilla_dir + random_string
             if not rename_with_timeout(vanilla_dir, vanilla_dir_renamed, rename_timeout):
