@@ -1,9 +1,3 @@
-✔ Refactor: ID Handler: Rename 'state' related methods and variables to key @done(23-09-06 08:25)
-✔ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path @done(23-09-06 08:27)
-✔ Refactor: ID Handler: Right now the 'set' methods return values. probably don't do that @done(23-09-06 08:46)
-✘ Feature: ID Handler: Handle damaged JSON file. Restore to default values or something / delete it and/or prompt user @cancelled(23-09-06 08:46) already fallback to empty data
-✔ Bug: ID Handler: __write_data fails to write the item_changes object from sync class during testing @done(23-09-06 11:23)
-
 Current:
 
 
