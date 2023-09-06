@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 import tkinter as tk
 from tkinter import Menu, messagebox
 from typing import Any, Callable, Dict, Type, TypeVar
@@ -13,6 +14,22 @@ from loguru import logger
 
 T = TypeVar("T", bound="Singleton")
 
+def create_and_open_temp_file(file_path):
+    """Create a temporary directory, copy the file, and open the temporary file."""
+    # Create a temporary directory in %temp%
+    temp_dir = tempfile.mkdtemp(dir=os.environ.get('TEMP'))
+
+    # Get the file name from the original path
+    file_name = os.path.basename(file_path)
+
+    # Create a temporary file path in the temporary directory
+    temp_file_path = os.path.join(temp_dir, file_name)
+
+    # Copy the content of the original file to the temporary file
+    shutil.copy(file_path, temp_file_path)
+
+    # Open the temporary file
+    os.startfile(temp_file_path)
 
 def get_invisible_tkinter_root() -> tk.Tk:
     """Retrieve invisible tkinter root gui"""

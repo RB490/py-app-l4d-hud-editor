@@ -19,7 +19,7 @@ from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import Singleton, show_message
+from shared_utils.shared_utils import Singleton, create_and_open_temp_file, show_message
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
@@ -316,13 +316,13 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def dummy_handler(self):
         "Dummy method"
-        print("dummy")
+        logger.debug("dummy")
 
     def handle_radio_click(self):
         """Handle clicks on radio buttons."""
         display_choice = self.display_choice.get()
         # Do something with the selected choice, such as refreshing the UI
-        print(f"Radio button clicked: {display_choice}")
+        logger.debug(f"Radio button clicked: {display_choice}")
         self.treeview_refresh()
 
     def treeview_sort_column(self, col, reverse):
@@ -497,40 +497,43 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def action_open_file(self):
         """Treeview Handle 'Open File' option"""
-        print("Method: treeview_open_file - Handle 'Open File' option")
+        logger.debug("Method: treeview_open_file - Handle 'Open File' option")
         full_path = self.get_selected_full_path()
         os.startfile(full_path)
         self.hide()
 
     def action_open_vanilla_file(self):
         """Treeview handle Open vanilla File' option"""
-        print("Method: treeview_open_default_file - handle 'Open vanilla File' option")
+        logger.debug("Method: treeview_open_default_file - handle 'Open vanilla File' option")
 
         rel_path = self.get_selected_relative_path()
         vanilla_path = self.game.dir.get_vanilla_file(rel_path)
+
         if vanilla_path:
-            print(f"Opening vanilla file: '{vanilla_path}'")
-            os.startfile(vanilla_path)
+            logger.debug(f"Opening vanilla file: '{vanilla_path}'")
+
+            create_and_open_temp_file(vanilla_path)
+
         else:
-            print(f"vanilla file unavailable: '{vanilla_path}'")
+            logger.debug("Vanilla file unavailable")
 
     def action_open_folder(self):
         "Treeview Handle 'Open Folder' option"
-        print("Method: treeview_open_folder - Handle 'Open Folder' option")
+        logger.debug("Method: treeview_open_folder - Handle 'Open Folder' option")
         full_path = self.get_selected_full_path()
         directory = os.path.dirname(full_path)
         if os.path.isdir(directory):
-            print(f"Opening directory: '{directory}'")
+            logger.debug(f"Opening directory: '{directory}'")
             os.startfile(directory)
         else:
-            print(f"Directory unavailable: '{directory}'")
+            logger.debug(f"Directory unavailable: '{directory}'")
 
     def action_open_game_folder(self):
         "Treeview Handle 'Open Game Folder' option"
-        print("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
+        logger.debug("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
 
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            print("Unable to open game directory. Developer directory is not installed.")
+            logger.debug("Unable to open game directory. Developer directory is not installed.")
             return
 
         rel_path = self.get_selected_full_path()
@@ -538,14 +541,14 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         game_directory = os.path.join(main_dir, rel_path)
 
         if os.path.isdir(game_directory):
-            print(f"Opening game directory: '{game_directory}'")
+            logger.debug(f"Opening game directory: '{game_directory}'")
             os.startfile(game_directory)
         else:
-            print(f"Game directory unavailable: '{game_directory}'")
+            logger.debug(f"Game directory unavailable: '{game_directory}'")
 
     def action_description(self):
         "Treeview Handle 'Description' option"
-        print("Method: treeview_description - TODO: Handle 'Description' option")
+        logger.debug("Method: treeview_description - TODO: Handle 'Description' option")
 
         file_name = self.get_selected_file_name()
         rel_path = self.get_selected_relative_path()
@@ -553,17 +556,17 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def action_annotate(self):
         "Treeview Handle 'Annotate' option"
-        print("Method: treeview_describe - TODO: Handle 'Annotate' option")
+        logger.debug("Method: treeview_describe - TODO: Handle 'Annotate' option")
 
         try:
             app = VDFModifierGUI(self.root, self.selected_full_path)
             app.show()
         except Exception:
-            print("Browser: Can't load VDF GUI!")
+            logger.debug("Browser: Can't load VDF GUI!")
 
     def action_recycle(self):
         "Treeview Handle 'Recycle' option"
-        print("Method: treeview_recycle - TODO: Handle 'Recycle' option")
+        logger.debug("Method: treeview_recycle - TODO: Handle 'Recycle' option")
 
         full_path = self.get_selected_full_path()
 
