@@ -3,10 +3,11 @@
 ✔ Feature: Browser: Modify get vanilla file to rename to default extension without .backup if needed and create a temporary copy in %temp% and return that @done(23-09-06 12:03)
 ✔ Feature: Menu: In AHK i had some method to keep resizing the game until it successfully did so to prevent the black window thing. i should do that in python now as its needed @done(23-09-06 12:25)
 ✔ Feature: BaseGUI: Add code example. Small as possible main gui @done(23-09-06 12:35)
+✔ Bug: Installer: Uninstall dev mode -> empty folder is still present @done(23-09-06 12:42)
+
 Current:
 
 Todo:		
-
 
 	☐ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread?
 

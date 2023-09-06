@@ -28,7 +28,7 @@ def main_debug_gui():
     "debug gui"
 
     # start
-    # show_start_gui()
+    show_start_gui()
 
     # browser
     # debug_browser_gui()  # & also properly editor menu
@@ -55,7 +55,7 @@ def main_debug_gui():
     # debug_about_gui()
     
     # basegui
-    example_create_main_and_sub_gui()
+    # example_create_main_and_sub_gui()
 
 
 def debug_about_gui():

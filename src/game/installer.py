@@ -7,6 +7,7 @@ Notes:
 """
 import os
 import shutil
+import threading
 import time
 
 from loguru import logger
@@ -78,6 +79,9 @@ class GameInstaller:
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
                 os.rmdir(dir_path)
+
+        # remove empty folder
+        os.rmdir(path)
 
         rem_gui.update_progress(f"Deletion completed: {files_processed}/{total_files} files")
         rem_gui.destroy()
@@ -260,10 +264,17 @@ class GameInstaller:
         user_dir = self.game.dir.get(DirectoryMode.USER)
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
-        copy_directory(
-            user_dir,
-            dev_dir,
-        )
+        # Define a function to run in the thread
+        def copy_directory_thread():
+            copy_directory(user_dir, dev_dir)
+
+        # Create and start the thread
+        thread = threading.Thread(target=copy_directory_thread)
+        thread.start()
+
+        # Wait for the thread to finish
+        thread.join()
+
         user_id_file = self.game.dir.id.get_filename(DirectoryMode.USER)
         user_id_file_path = os.path.join(dev_dir, user_id_file)
         if os.path.isfile(user_id_file_path):
