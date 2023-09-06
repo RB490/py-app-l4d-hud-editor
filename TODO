@@ -7,15 +7,14 @@
 ✘ Feature: Installer: Threading: Instead of running large blocks of code inside threads instead run long running lines of code. for example deleting/copying a folder or extracting a VPK. Should be fairly straight forward to do. Though one issue is how will i retrieve potential errors and output in general from the thread? @cancelled(23-09-06 12:45) i need to use thread.join() which halts mainloop until completed
 ✔ Bug: Installer: Cancelling copy files leaves the dev mode folder with a user & dev id file @done(23-09-06 13:10)
 ✔ Bug: Installer: Install -> 023-09-06 13:09:00.977 | ERROR    | game.dir_id_handler:__read_data:183 - Error reading ID content: Expecting value: line 1 column 1 (char 0) @done(23-09-06 13:23)
+✔ Bug: Installer: Install -> No left 4 dead 2 folder existing: Renaming E:\games\steam\steamapps\common\Left 4 Dead 2 -> E:\games\steam\steamapps\common\Left 4 Dead 2yfr5pCKe with timeout: 6 @done(23-09-06 13:32)
+✔ Bug: GameDir: Can't activate user mode with dev mode uninstalled. Could modify dir.set @done(23-09-06 13:32)
 
 Current:
 	
 Todo:		
 		
 	
-	☐ Bug: Installer: Install -> No left 4 dead 2 folder existing: Renaming E:\games\steam\steamapps\common\Left 4 Dead 2 -> E:\games\steam\steamapps\common\Left 4 Dead 2yfr5pCKe with timeout: 6
-
-	☐ Bug: GameDir: Can't activate user mode with dev mode uninstalled. Could modify dir.set
 
 	☐ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start
 

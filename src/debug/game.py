@@ -35,7 +35,7 @@ def main_debug_game():
     ###########################
     # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
     # result = gamez.installer.uninstall()
-    result = gamez.installer.install()
+    # result = gamez.installer.install()
     # result = gamez.installer.repair()
     # result = gamez.installer._main_dir_backup()
     # result = gamez.installer._main_dir_backup()
@@ -70,7 +70,7 @@ def main_debug_game():
     # Directory
     ###########################
     # result = gamez.dir.set(DirectoryMode.USER)
-    # result = gamez.dir.set(DirectoryMode.DEVELOPER)
+    result = gamez.dir.set(DirectoryMode.DEVELOPER)
     # result = gamez.dir.set(DirectoryMode.USER)
     # logger.debug("what the fuck?????????????????")
     # result = gamez.dir.set(DirectoryMode.USER)

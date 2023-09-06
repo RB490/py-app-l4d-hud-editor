@@ -31,52 +31,59 @@ class GameDir:
         return output
 
     def set(self, dir_mode):
-        "Set directory to mode"
-        self.game._validate_dir_mode(dir_mode)
+        """
+        Set the directory to the specified mode.
 
+        Args:
+            dir_mode (DirectoryMode): The target directory mode to set.
+        Returns:
+            bool: True if the directory was successfully set; False otherwise.
+        """
+        self.game._validate_dir_mode(dir_mode)
         logger.debug(f"Setting mode: {dir_mode.name}")
 
-        # retrieving source & target dir with self.get also already checks whether they are installed
-        rename_timeout = 6
-        # variables - source
+        # Get source and target directories
         source_mode = DirectoryMode.USER if dir_mode == DirectoryMode.DEVELOPER else DirectoryMode.DEVELOPER
         source_dir = self.get(source_mode)
-        source_dir_backup = self._get_random_dir_name_for(source_mode)
-        # variables - target
-        target_mode = dir_mode
-        target_dir = self.get(target_mode)
+        target_dir = self.get(dir_mode)
         vanilla_dir = self.__get_vanilla_dir()
 
-        if not verify_directory(source_dir, "Could not retrieve source directory!"):
-            return False
+        # Set the rename timeout to 6
+        rename_timeout = 6
+
+        # Verify target directory
         if not verify_directory(target_dir, "Could not retrieve target directory!"):
             return False
-        # not checking vanilla_dir because it might very well not exist if both of the modes are custom renamed
 
-        # do we need to swap?
-        if os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
-            logger.debug(f"{target_mode.name} already active!")
+        # Check if the target directory is already active
+        if vanilla_dir and os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
+            logger.debug(f"{dir_mode.name} already active!")
             return True
 
-        # close game
+        # Close the game
         self.game.window.close()
 
-        # rename vanilla folder if it's not a hud editor version
-        if os.path.isdir(vanilla_dir) and (vanilla_dir != source_dir) and (vanilla_dir != target_dir):
+        # Rename vanilla folder if needed
+        if vanilla_dir and os.path.isdir(vanilla_dir) and vanilla_dir != source_dir and vanilla_dir != target_dir:
             random_string = generate_random_string()
             vanilla_dir_renamed = vanilla_dir + random_string
             if not rename_with_timeout(vanilla_dir, vanilla_dir_renamed, rename_timeout):
                 return False
 
-        # backup source mode
-        if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
-            return False
+        # Verify and rename source directory if source_dir == vanilla_dir
+        if source_dir == vanilla_dir:
+            if vanilla_dir and not verify_directory(vanilla_dir, "Could not retrieve vanilla directory!"):
+                return False
+            source_dir_backup = self._get_random_dir_name_for(source_mode)
+            if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
+                return False
 
-        # activate target mode
+        # Activate the target mode
         if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
             return False
 
         return True
+
 
     def get_vanilla_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
