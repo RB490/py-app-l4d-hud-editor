@@ -2,14 +2,20 @@
 ✔ Syncer currently imports the game class & imports code to restore game dev directory. that should be done in hud.start_editing instead @done(23-09-06 07:11)
 ✔ Feature: Keep 'item_changes' data structure as up to date as possible on disk. inside the ID file. @done(23-09-06 07:11)
 ✔ Feature: Unsync changes if program failed to exit -- Read self.item_changes from ID file if sync status -- aka use this to unsync where needed @done(23-09-06 07:11)
+✔ Refactor: ID: Use decorators for checking dir_mode @done(23-09-06 07:53)
 
 Current:
 	
+
+	☐ Refactor: Where did i previously use restore_developer_directory and do i still need it?
+
 	☐ Feature: (Recovering) Backups: Consider how i want to handle this after modifying the sync class to always be able to unsync properly. Having backups is probably still a nice feature to have. But i guess i don't have to restore them anymore. Atleast automatically
 
 	☐ Refactor: ID Handler: overlap between get_state set_state and set_sync get_sync
 
 Todo:		
+
+	☐ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path
 
 	☐ Feature: Menu: Game: AlwaysOnTop + remember this setting(?)
 	

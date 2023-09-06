@@ -242,7 +242,7 @@ class GameInstaller:
         os.mkdir(dev_dir)
 
         # write id file
-        id_path = os.path.join(dev_dir, self.game.dir.id._get_filename(DirectoryMode.DEVELOPER))
+        id_path = os.path.join(dev_dir, self.game.dir.id.get_filename(DirectoryMode.DEVELOPER))
         with open(id_path, "w", encoding="utf-8"):
             pass
 
@@ -264,7 +264,7 @@ class GameInstaller:
             user_dir,
             dev_dir,
         )
-        user_id_file = self.game.dir.id._get_filename(DirectoryMode.USER)
+        user_id_file = self.game.dir.id.get_filename(DirectoryMode.USER)
         user_id_file_path = os.path.join(dev_dir, user_id_file)
         if os.path.isfile(user_id_file_path):
             os.remove(user_id_file_path)

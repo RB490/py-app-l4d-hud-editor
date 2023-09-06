@@ -2,12 +2,26 @@
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
 import json
 import os
+from enum import Enum
 from tkinter import filedialog
 
 from loguru import logger
 
 from game.constants import DirectoryMode, InstallationState, SyncState
 from shared_utils.shared_utils import is_subdirectory, show_message
+
+
+def call_validate_dir_mode_before_method(func):
+    """Decorator to call _validate_dir_mode before a method."""
+
+    def wrapper(self, dir_mode, *args, **kwargs):
+        # Call the original method and store its result
+        result = func(self, dir_mode, *args, **kwargs)
+        # Call _validate_dir_mode after the original method
+        self.game._validate_dir_mode(dir_mode)
+        return result
+
+    return wrapper
 
 
 class GameIDHandler:
@@ -22,7 +36,8 @@ class GameIDHandler:
             DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
         }
 
-    def _get_filename(self, dir_mode):
+    @call_validate_dir_mode_before_method
+    def get_filename(self, dir_mode):
         self.game._validate_dir_mode(dir_mode)
         return self.id_file_names[dir_mode]
 
@@ -30,13 +45,14 @@ class GameIDHandler:
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
         if not mode_dir:
-            logger.debug(f"Could not retrieve ID path for {dir_mode.name}.")
+            logger.warning(f"Could not retrieve ID path for {dir_mode.name}.")
             return None
 
-        id_path = os.path.join(mode_dir, self._get_filename(dir_mode))
+        id_path = os.path.join(mode_dir, self.get_filename(dir_mode))
         logger.debug(f"ID Path: {id_path}")
         return id_path
 
+    @call_validate_dir_mode_before_method
     def set_path(self, dir_mode):
         """Manually set the directory for a given directory mode."""
 
@@ -84,111 +100,77 @@ class GameIDHandler:
             # write ID file
             initial_state_data = {
                 "directory_mode": dir_mode.name,
-                "game_directory": id_dir,
                 "installation_state": install_state.name,
                 "sync_state": SyncState.UNKNOWN.name,
             }
 
-            self.__create_file(dir_mode, id_dir)
-            self.__write_content(dir_mode, initial_state_data)
+            id_path = os.path.join(id_dir, self.get_filename(dir_mode))
+            self.__create_file(id_path)
+            self.__write_content(id_path, initial_state_data)
             return True
         except Exception as err_info:
             raise RuntimeError(f"Could not set {dir_mode.name} ID location! \n\n{err_info}") from err_info
 
+    @call_validate_dir_mode_before_method
     def get_installation_state(self, dir_mode):
-        """Get the installation state for a specific directory mode."""
-        self.game._validate_dir_mode(dir_mode)
-        return InstallationState[
-            self.__get_state_value(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
-        ]
+        return self.__get_state_value(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
 
+    @call_validate_dir_mode_before_method
     def set_installation_state(self, dir_mode, installation_state):
-        """Set the installation state for a specific directory mode."""
-        self.game._validate_dir_mode(dir_mode)
         self.__set_state(dir_mode, "installation_state", installation_state)
         return installation_state
 
+    @call_validate_dir_mode_before_method
     def get_sync_state(self, dir_mode):
-        """Get the synchronization state for a specific directory mode."""
-        self.game._validate_dir_mode(dir_mode)
-        return SyncState[self.__get_state_value(dir_mode, "sync_state", SyncState.UNKNOWN.name)]
+        return self.__get_state_value(dir_mode, "sync_state", SyncState.UNKNOWN.name)
 
+    @call_validate_dir_mode_before_method
     def set_sync_state(self, dir_mode, sync_state):
-        """Set the synchronization state for a specific directory mode."""
-        self.game._validate_dir_mode(dir_mode)
         self.__set_state(dir_mode, "sync_state", sync_state)
         return sync_state
 
+    @call_validate_dir_mode_before_method
+    def set_sync_changes(self, dir_mode, sync_changes):
+        self.__set_state(dir_mode, "sync_changes", sync_changes)
+        logger.debug(f"Set sync changes for {dir_mode.name}")
+
+    @call_validate_dir_mode_before_method
+    def get_sync_changes(self, dir_mode):
+        state_data = self.__read_state_data(dir_mode)
+        return state_data.get("sync_changes", {})
+
     def __get_state_value(self, dir_mode, state_key, default_value):
-        """Get a specific state value from the ID file with a default value if not present."""
-        id_path = self.__get_path(dir_mode)
-
-        if id_path is None:
-            logger.debug(f"No ID path for {dir_mode.name}. Defaulting '{state_key}' to '{default_value}'")
-            return default_value
-
-        state_data = self.__read_content(id_path)
-        state_value = state_data.get(state_key)
-
-        if state_value is None:
-            logger.debug(f"No '{state_key}' value for {dir_mode.name}. Defaulting to '{default_value}'")
-            return default_value
-
-        logger.debug(f"Retrieved {dir_mode.name} '{state_key}' value '{state_value}'")
-        return state_value
+        state_data = self.__read_state_data(dir_mode)
+        return state_data.get(state_key, default_value)
 
     def __set_state(self, dir_mode, state_key, state_value):
-        """Set a specific state value in the ID file."""
         id_path = self.__get_path(dir_mode)
         if id_path is None:
-            logger.debug(f"No ID path for {dir_mode.name}!")
             return None
 
         state_data = self.__read_content(id_path)
-        state_data[state_key] = state_value.name if state_value is not None else None
-        self.__write_content(dir_mode, state_data)
-        logger.debug(f"Updated {state_key} state to: '{state_value.name}'")
 
-    def set_sync_changes(self, dir_mode, sync_changes):
-        """
-        Set the synchronization changes for a specific directory mode.
+        # Handle enums
+        if isinstance(state_value, Enum):
+            state_data[state_key] = state_value.name if state_value is not None else None
+        # Handle objects
+        else:
+            state_data[state_key] = state_value
 
-        Args:
-            dir_mode (DirectoryMode): The directory mode for which to set the changes.
-            sync_changes (list): A list of synchronization changes to be stored.
-        """
-        self.game._validate_dir_mode(dir_mode)
+        self.__write_content(id_path, state_data)
+        logger.debug(
+            f"Updated {state_key} state to: '{state_value.name if isinstance(state_value, Enum) else state_value}'"
+        )
+
+    def __read_state_data(self, dir_mode):
         id_path = self.__get_path(dir_mode)
         if id_path is None:
-            logger.debug(f"No ID path for {dir_mode.name}!")
-            return False
-
-        state_data = self.__read_content(id_path)
-        state_data["sync_changes"] = sync_changes
-        self.__write_content(dir_mode, state_data)
-        logger.debug(f"Set sync changes for {dir_mode.name}")
-
-    def get_sync_changes(self, dir_mode):
-        """
-        Get the synchronization changes for a specific directory mode.
-
-        Args:
-            dir_mode (DirectoryMode): The directory mode for which to retrieve the changes.
-
-        Returns:
-            list: A list of synchronization changes.
-        """
-        self.game._validate_dir_mode(dir_mode)
-        id_path = self.__get_path(dir_mode)
-        if id_path is None:
-            logger.debug(f"No ID path for {dir_mode.name}!")
             return {}
 
         state_data = self.__read_content(id_path)
-        return state_data.get("sync_changes", {})
+        return state_data
 
     def __read_content(self, id_path):
-        """Read and return the content of the ID file."""
         try:
             if os.path.isfile(id_path):
                 with open(id_path, "r", encoding="utf-8") as file_handle:
@@ -197,13 +179,7 @@ class GameIDHandler:
             logger.error(f"Error reading ID content: {err}")
         return {}  # Fallback to empty json
 
-    def __write_content(self, dir_mode, state_data):
-        """Write the state data to the ID file."""
-        id_path = self.__get_path(dir_mode)
-
-        state_data["directory_mode"] = dir_mode.name
-        state_data["game_directory"] = self.game.dir.get(dir_mode)
-
+    def __write_content(self, id_path, state_data):
         try:
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump(state_data, file_handle, indent=4)
@@ -212,12 +188,8 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Couldn't write id content! Info: {err_info}") from err_info
 
-    def __create_file(self, dir_mode, directory):
-        """Create an ID file in the specified directory."""
-
+    def __create_file(self, id_path):
         try:
-            id_path = os.path.join(directory, self._get_filename(dir_mode))
-
             with open(id_path, "w", encoding="utf-8") as file_handle:
                 json.dump({}, file_handle, indent=4)
         except Exception as err_info:

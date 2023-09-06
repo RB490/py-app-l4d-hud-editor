@@ -59,7 +59,7 @@ def main_debug_game():
     # ID
     ###########################
     # result = gamez.dir.id.get_installation_state
-    # result = gamez.dir.id._get_filename(DirectoryMode.USER)
+    # result = gamez.dir.id.get_filename(DirectoryMode.USER)
 
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)

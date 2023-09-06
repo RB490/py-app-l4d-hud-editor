@@ -12,8 +12,11 @@ def debug_id_handler():
 
     # my_obj = {"mykey1": "value1", "mykey2": "value2", "mykey3": "value3"}
     my_obj = {}
+    game.dir.id.set_path(DirectoryMode.DEVELOPER)
     game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, my_obj)
     sync_changes = game.dir.id.get_sync_changes(DirectoryMode.DEVELOPER)
+    sync_state = game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+    installation_state = game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
     print("finished debug_id_handler")
 

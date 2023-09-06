@@ -136,7 +136,7 @@ class GameDir:
         "Get directory"
         # set variables
         self.game._validate_dir_mode(dir_mode)
-        id_filename = self.id._get_filename(dir_mode)
+        id_filename = self.id.get_filename(dir_mode)
         steam_games_dir = self.game.steam.get_games_dir()
 
         # Search through folders in the Steam games directory
@@ -301,8 +301,8 @@ class GameDir:
             return None
         steam_game_dir = self.steam.get_games_dir()
 
-        user_id_file_name = self.game.dir.id._get_filename(DirectoryMode.USER)
-        dev_id_file_name = self.game.dir.id._get_filename(DirectoryMode.DEVELOPER)
+        user_id_file_name = self.game.dir.id.get_filename(DirectoryMode.USER)
+        dev_id_file_name = self.game.dir.id.get_filename(DirectoryMode.DEVELOPER)
 
         id_files_in_folders = {}  # Dictionary to store ID files in each folder
 
