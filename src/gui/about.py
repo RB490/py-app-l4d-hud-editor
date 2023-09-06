@@ -4,7 +4,7 @@ import webbrowser
 
 from gui.base import BaseGUI
 from shared_utils.shared_utils import Singleton
-from utils.constants import APP_ICON, SCRIPT_NAME, VERSION_NO, ImageConstants
+from utils.constants import APP_ICON, PROGRAM_NAME, PROGRAM_URL, VERSION_NO, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -14,7 +14,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
     def __init__(self, parent_root):
         # set variables
         self.settings_geometry_key = "GuiGeometryAbout"
-        self.project_url = "https://github.com/RB490"
+        self.project_url = PROGRAM_URL
         self.img = ImageConstants()
         self.data_manager = PersistentDataManager()
 
@@ -30,19 +30,19 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         # Create a label to display project information
         project_info_header = tk.Label(
             self.root,
-            text=f"{SCRIPT_NAME} (Version {VERSION_NO})",
+            text=f"{PROGRAM_NAME} (Version {VERSION_NO})",
             padx=10,
             pady=10,
-            font=("Helvetica", 15),
+            font=("Helvetica", 13),
         )
         project_info_header.pack()
-        project_info_label = tk.Label(
-            self.root,
-            text="Barbeque Bacon Burger.",
-            padx=10,
-            pady=10,
-        )
-        project_info_label.pack()
+        # project_info_label = tk.Label(
+        #     self.root,
+        #     text="Barbeque Bacon Burger.",
+        #     padx=10,
+        #     pady=10,
+        # )
+        # project_info_label.pack()
 
         # Create and configure the synchronization hotkey button
         self.open_project_url_btn = tk.Button(

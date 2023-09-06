@@ -6,21 +6,23 @@
 
 Current:
 	
-Todo:
 	
+Todo:
 
 	Updating-related:
-		☐ Feature: Menu: Move about into the help menu
 
 		☐ Feature: Auto updating: GUI: Add version number from github vs version number from local script
+			- Idea: On every debugging instance start i print the program version to a text file which then ends up on github and i can compare that
 		
 		☐ Feature: Auto updating: add a check on program startup to compare versions. Only show that every couple days for example
+		
+		☐ Feature: Auto updating: Look into how fully auto updating would work
 		
 		☐ Feature: About GUI: Rename into 'Update'?
 		
 		☐ Feature: Browser/Start GUI: Add version #?
-
-		☐ Feature: Auto updating: Look into how fully auto updating would work
+		
+		☐ Feature: Menu: Move about into the help menu
 	
 	☐ Unit testing: Game Dir module
 	

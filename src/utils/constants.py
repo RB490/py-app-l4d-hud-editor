@@ -12,7 +12,10 @@ from shared_utils.shared_utils import generate_version_number_from_git
 # core
 DEBUG_MODE: bool = True
 VERSION_NO: str = generate_version_number_from_git(major_version=0)
-SCRIPT_NAME: str = "Hud Editor for L4D2"
+with open("version.txt", "w") as file:
+    file.write(VERSION_NO)
+PROGRAM_NAME: str = "Hud Editor for L4D2"
+PROGRAM_URL: str = "https://github.com/RB490"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCRIPT_FILE_NAME: str = os.path.basename(PROJECT_ROOT)
@@ -47,7 +50,7 @@ SNIPPETS_DIR: str = os.path.join(DATA_DIR, "snippets")
 NEW_HUD_DIR: str = os.path.join(DATA_DIR, "new_hud_template")
 EDITOR_AUTOEXEC_PATH: str = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
 DUMMY_ADDON_VPK_PATH: str = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
-PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, SCRIPT_NAME + ".json")
+PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, PROGRAM_NAME + ".json")
 HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 
 #####################################################

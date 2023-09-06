@@ -5,4 +5,5 @@ disable=
     broad-exception-caught,
     broad-exception-raised,
     protected-access,
-    invalid-name
+    invalid-name,
+    unspecified-encoding
