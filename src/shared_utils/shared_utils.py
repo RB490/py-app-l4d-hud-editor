@@ -15,17 +15,17 @@ from loguru import logger
 
 T = TypeVar("T", bound="Singleton")
 
-def generate_version_number_from_git():
+def generate_version_number_from_git(major_version=0):
     try:
         # Get the number of commits in the repository
-        commit_count = int(subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).strip())
+        commit_count = int(subprocess.check_output(['git', 'rev-list', '--count', 'HEAD']).strip())
 
         # Get the short SHA-1 hash of the latest commit
-        git_hash = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip().decode("utf-8")
+        git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
 
-        # Generate a version number based on commit count and hash
-        version_number = f"{commit_count}"
-        # version_number = f"{commit_count}.{git_hash}"
+        # Generate a version number based on commit count, hash, and major version
+        version_number = f"{major_version}.{commit_count}"
+        # version_number = f"{major_version}.{commit_count}.{git_hash}"
         return version_number
     except subprocess.CalledProcessError:
         return "0.0"  # Default version if not found

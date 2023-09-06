@@ -12,7 +12,7 @@ from shared_utils.shared_utils import generate_version_number_from_git
 
 # core
 DEBUG_MODE: bool = True
-VERSION_NO: str = generate_version_number_from_git()
+VERSION_NO: str = generate_version_number_from_git(major_version=0)
 SCRIPT_NAME: str = "Hud Editor for L4D2"
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
