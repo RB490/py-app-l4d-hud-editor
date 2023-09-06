@@ -325,6 +325,7 @@ class BaseGUI:
 
 
 def example_create_main_and_sub_gui():
+    """Example"""
     # Create a main GUI window
     main_gui = BaseGUI(gui_type=GUITypes.MAIN)
     main_gui.set_window_geometry("800x600")  # Set the window size

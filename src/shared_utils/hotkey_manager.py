@@ -45,9 +45,9 @@ class HotkeyManager(metaclass=Singleton):
         if hotkey in self.hotkeys:
             keyboard.remove_hotkey(hotkey)
             del self.hotkeys[hotkey]
-            logger.debug("Removed hotkey: %s", hotkey)
+            logger.debug(f"Removed hotkey: {hotkey}")
         else:
-            logger.warning("Attempted to remove non-existent hotkey: %s", hotkey)
+            logger.warning(f"Attempted to remove non-existent hotkey: {hotkey}")
 
     def list_hotkeys(self):
         """
@@ -57,7 +57,7 @@ class HotkeyManager(metaclass=Singleton):
             list: A list of strings representing the registered hotkeys.
         """
         hotkey_list = list(self.hotkeys.keys())
-        logger.debug("List of hotkeys: %s", hotkey_list)
+        logger.debug(f"List of hotkeys: {hotkey_list}")
         return hotkey_list
 
 

@@ -13,7 +13,6 @@ from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
-from shared_utils.show_custom_prompt import show_custom_prompt
 from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
@@ -32,7 +31,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # gui
         super().__init__("main")
-        self.browser = GuiHudBrowser(self.root)
+        self.browser = GuiHudBrowser(self.root, self)
         self.img = ImageConstants()
         self.root.title("Select")
         self.root.iconbitmap(APP_ICON)
@@ -53,7 +52,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.editor_menu = EditorMenuClass(self, self.root)
 
         # Configure the root window with the menubar
-        self.update_treeview()
+        self.treeview_refresh()
 
     def debug_show_browser_gui(self):
         """Used for debugging to automatically open the browser gui after starting mainloop"""
@@ -389,15 +388,19 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.data_manager.remove_item_from_list("stored_huds", hud_dir_json_format)
         self.selected_hud_dir = ""
         self.selected_hud_name = ""
-        self.update_treeview()
+        self.treeview_refresh()
 
         # prompt move to trash
         result = show_message(f"Also move {hud_name} directory into the trash?", "yesno")
         if result:
             send2trash.send2trash(self.selected_hud_dir)
 
-    def update_treeview(self):
-        """Clear treeview & load up-to-date content"""
+    def treeview_refresh(self, called_by_browser=False):
+        """Clear treeview & load up-to-date content + update browser menu"""
+        
+        # also update browser menu
+        if not called_by_browser:
+            self.browser.editor_menu_refresh()
 
         # Clear the existing items in the Treeview
         self.treeview.delete(*self.treeview.get_children())
@@ -439,12 +442,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def prompt_add_hud(self):
         """Prompt user for hud folder to add"""
         if self.hud.manager.prompt_add_existing_hud():
-            self.update_treeview()
+            self.treeview_refresh()
 
     def prompt_new_hud(self):
         """Prompt user for hud folder to create a new hud in"""
         if self.hud.manager.prompt_create_new_hud():
-            self.update_treeview()
+            self.treeview_refresh()
 
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""

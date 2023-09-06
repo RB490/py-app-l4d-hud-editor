@@ -35,8 +35,9 @@ from utils.persistent_data_manager import PersistentDataManager
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
 
-    def __init__(self, parent_root):
+    def __init__(self, parent_root, parent=None):
         # set variables
+        self.parent = parent
         self.settings_geometry_key = "GuiGeometryBrowser"
         self.selected_full_path = None
         self.selected_file_name = None
@@ -70,7 +71,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # editor menu
         self.editor_menu = EditorMenuClass(self, self.root)
-        self.root.config(menu=self.editor_menu.get_main_menu())
+        self.editor_menu_refresh()
 
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
@@ -400,6 +401,25 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_refresh()
         self.search_box.focus_set()
 
+    def editor_menu_refresh(self, called_by_editor_menu=False):
+        """Refresh the menu. Called by self.editor_menu
+
+        Doing this when treeview refreshes because it captures every kind of refresh
+        like for example simply when the gui takes focus"""
+        
+        # refresh menu
+        if not called_by_editor_menu:
+            self.editor_menu.create_and_refresh_menu(is_context_menu=False)
+        
+        # update menu on gui
+        self.root.config(menu=self.editor_menu.get_main_menu())
+
+        # also refresh start treeview
+        if self.parent.has_been_run:
+            self.parent.treeview_refresh(called_by_browser=True)
+
+        logger.debug("Refreshed editor menu!")
+
     def treeview_refresh(self, search_term=None):
         """
         Refreshes the provided Treeview with up-to-date content.
@@ -415,6 +435,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         if not self.get_mainloop_started():
             logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
+
+        # also refresh menu incase gui start has modified stored huds for example
+        self.editor_menu_refresh()
 
         # variables
         treeview = self.treeview
@@ -476,6 +499,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 values=(file_name, file_desc, is_custom, last_modified, file_relative_path),
                 image=photo,
             )
+        logger.debug("Refreshed treeview!")
 
     def show_popup_gui(self):
         """Show editor menu as a context menu"""

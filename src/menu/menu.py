@@ -1070,7 +1070,10 @@ class EditorMenuClass:
         return self.help_menu
 
     def get_main_menu(self):
-        self.create_and_refresh_menu(is_context_menu=False)
+        """Retrieve main menu (for adding as menu bar)"""
+        # this line is replaced by 'editor_menu_refresh' in 'create_and_refresh_menu'
+        #       self.create_and_refresh_menu(is_context_menu=False)
+
         return self.main_menu
 
     def create_and_refresh_menu(self, is_context_menu=False):
@@ -1151,9 +1154,9 @@ class EditorMenuClass:
             compound="left",
             command=self.handler.editor_open_browser_gui,
         )
-        self.file_menu.add_cascade(
-            label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
-        )
+        # self.file_menu.add_cascade( # doesn't really make any sense to have an installer option in here
+        #     label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
+        # )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
         self.file_menu.add_command(
@@ -1336,3 +1339,11 @@ class EditorMenuClass:
 
         if not self.hud.edit.get_dir():
             self.main_menu.entryconfig("Hud", state="disabled")
+
+        # call method to update menu
+        if (
+            self.parent.has_been_run
+            and hasattr(self.parent, "editor_menu_refresh")
+            and callable(getattr(self.parent, "editor_menu_refresh"))
+        ):
+            self.parent.editor_menu_refresh(called_by_editor_menu=True)
