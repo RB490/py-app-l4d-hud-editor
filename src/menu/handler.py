@@ -89,7 +89,11 @@ class EditorMenuHandler:
 
         # set game resolution until the game successfully sets it.
         # (sometimes, mat_setvideomode fails to change the resolution, resulting in a black screen with unchanged res)
-        while True:
+        attempt = 0
+        max_attempts = 4
+        while attempt < max_attempts:
+            # Increment the attempt counter
+            attempt += 1
             # Get the current game width
             geometry = self.game.window.hwnd_utils.get_window_geometry(self.game.window.get_hwnd())
             game_width = geometry["width"]
@@ -100,9 +104,8 @@ class EditorMenuHandler:
                 game_width = game_width - 6
                 game_height = game_height - 29
 
-            print(
-                f"game_width = {game_width} original: {geometry['width']} game_height = {game_height} original: {geometry['height']}"
-            )
+            logger.debug(f"game_width = {game_width} original: {geometry['width']}")
+            logger.debug(f"game_height = {game_height} original: {geometry['height']}")
 
             # Check if the game width is equal to the target width (res_w)
             if game_width == res_w:
@@ -113,6 +116,9 @@ class EditorMenuHandler:
 
             # give the game some time to finish resizing
             time.sleep(1.5)
+
+        if attempt == max_attempts:
+            logger.warning("Maximum number of resolution modification attempts reached. Exiting the loop.")
 
     @call_create_and_refresh_menu_after_method
     def editor_menu_game_pos(self, pos):

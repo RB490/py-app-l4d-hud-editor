@@ -11,6 +11,7 @@ from game.constants import DirectoryMode
 from game.game import Game
 from gui import descriptions
 from gui.about import GuiAbout
+from gui.base import example_create_main_and_sub_gui
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.progress import ProgressGUI
@@ -30,7 +31,7 @@ def main_debug_gui():
     # show_start_gui()
 
     # browser
-    debug_browser_gui()  # & also properly editor menu
+    # debug_browser_gui()  # & also properly editor menu
 
     # splash
     # splash_gui_example()
@@ -52,6 +53,9 @@ def main_debug_gui():
 
     # about
     # debug_about_gui()
+    
+    # basegui
+    example_create_main_and_sub_gui()
 
 
 def debug_about_gui():

@@ -322,3 +322,29 @@ class BaseGUI:
         # Display the context menu
         logger.debug(f"Showing context menu @ x:{new_x} y:{new_y}")
         menu.post(new_x, new_y)
+
+
+def example_create_main_and_sub_gui():
+    # Create a main GUI window
+    main_gui = BaseGUI(gui_type=GUITypes.MAIN)
+    main_gui.set_window_geometry("800x600")  # Set the window size
+    main_gui.set_resizable(True)  # Allow the window to be resized
+
+    # Define a callback function to show the sub GUI
+    def show_sub_gui():
+        sub_gui.show()
+
+    # Create a button in the main GUI that opens the sub GUI
+    button = tk.Button(main_gui.root, text="Open Sub GUI", command=show_sub_gui)
+    button.pack()
+
+    # Create a sub GUI window with the main GUI as its parent
+    sub_gui = BaseGUI(gui_type=GUITypes.SUB, parent_root=main_gui.root)
+    sub_gui.set_window_geometry("400x300")  # Set the sub GUI window size
+
+    # Create a button in the sub GUI to close it
+    sub_button = tk.Button(sub_gui.root, text="Close Sub GUI", command=sub_gui.hide)
+    sub_button.pack()
+
+    # Show the main GUI
+    main_gui.show()

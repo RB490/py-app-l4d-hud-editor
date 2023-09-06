@@ -1,3 +1,4 @@
+"""Class for the hud browser gui"""
 import tkinter as tk
 import webbrowser
 
