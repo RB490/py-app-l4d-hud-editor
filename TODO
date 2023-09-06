@@ -1,14 +1,13 @@
 ✔ Feature: Version #: Automatically increase the # based on git commits or something else? @done(23-09-06 13:54)
 ✔ Feature: Browser: Have a method for prompting whether or not i want to close the browser. and if yes, also hide the scriptions gui @done(23-09-06 14:09)
 ✔ Bug: Browser -> Menu close option -> No -> Gui Start is now opened? @done(23-09-06 14:09)
+✔ Bug: Browser -> Menu close option -> No -> Gui Start now has the editor menu attached? @done(23-09-06 14:15)
 
 
 Current:
 	
 Todo:
 	
-
-	☐ Bug: Browser -> Menu close option -> No -> Gui Start now has the editor menu attached?
 
 	Updating-related:
 		☐ Feature: Menu: Move about into the help menu

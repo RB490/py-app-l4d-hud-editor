@@ -1054,6 +1054,10 @@ class EditorMenuClass:
         self.create_and_refresh_menu(is_context_menu=True)
         return self.help_menu
 
+    def get_main_menu(self):
+        self.create_and_refresh_menu(is_context_menu=False)
+        return self.main_menu
+
     def create_and_refresh_menu(self, is_context_menu=False):
         """
         Creates the menu bar for the application
@@ -1323,8 +1327,3 @@ class EditorMenuClass:
 
         if not self.hud.edit.get_dir():
             self.main_menu.entryconfig("Hud", state="disabled")
-
-        # update the menubar on the gui
-        #   for context menu's is_context_menu=False is important. otherwise showing menu on button will be misaligned
-        if not is_context_menu:
-            self.root.config(menu=self.main_menu)

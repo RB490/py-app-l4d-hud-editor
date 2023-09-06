@@ -70,6 +70,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # editor menu
         self.editor_menu = EditorMenuClass(self, self.root)
+        self.root.config(menu=self.editor_menu.get_main_menu())
 
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
