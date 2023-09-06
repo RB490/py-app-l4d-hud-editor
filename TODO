@@ -1,10 +1,7 @@
 ✔ Refactor: ID Handler: Rename 'state' related methods and variables to key @done(23-09-06 08:25)
+✔ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path @done(23-09-06 08:27)
+
 Current:
-	☐ Feature: ID Handler: Automatically open the steam games directory when prompting to manually select path
-	        # manually select location
-            id_dir = filedialog.askdirectory(
-                mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
-            )
 
 	☐ Refactor: ID Handler: Right now the 'set' methods return values. probably don't do that
 

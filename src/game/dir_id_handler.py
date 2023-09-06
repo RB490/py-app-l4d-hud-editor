@@ -72,7 +72,9 @@ class GameIDHandler:
 
             # manually select location
             id_dir = filedialog.askdirectory(
-                mustexist=True, title=f"Select the {dir_mode.name} directory", initialdir=self.game.steam.get_games_dir
+                mustexist=True,
+                title=f"Select the {dir_mode.name} directory",
+                initialdir=self.game.steam.get_games_dir(),
             )
 
             # verify location - existence
@@ -157,9 +159,7 @@ class GameIDHandler:
             data[key] = value
 
         self.__write_data(id_path, data)
-        logger.debug(
-            f"Updated {key} value to: '{value.name if isinstance(value, Enum) else value}'"
-        )
+        logger.debug(f"Updated {key} value to: '{value.name if isinstance(value, Enum) else value}'")
 
     def __get_data(self, dir_mode):
         id_path = self.__get_path(dir_mode)
