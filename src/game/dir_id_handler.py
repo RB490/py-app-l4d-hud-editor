@@ -120,7 +120,6 @@ class GameIDHandler:
     @call_validate_dir_mode_before_method
     def set_installation_state(self, dir_mode, installation_state):
         self.__set_key(dir_mode, "installation_state", installation_state)
-        return installation_state
 
     @call_validate_dir_mode_before_method
     def get_sync_state(self, dir_mode):
@@ -129,16 +128,14 @@ class GameIDHandler:
     @call_validate_dir_mode_before_method
     def set_sync_state(self, dir_mode, sync_state):
         self.__set_key(dir_mode, "sync_state", sync_state)
-        return sync_state
-
-    @call_validate_dir_mode_before_method
-    def set_sync_changes(self, dir_mode, sync_changes):
-        self.__set_key(dir_mode, "sync_changes", sync_changes)
-        return sync_changes
 
     @call_validate_dir_mode_before_method
     def get_sync_changes(self, dir_mode):
         return self.__get_key(dir_mode, "sync_changes", {})
+
+    @call_validate_dir_mode_before_method
+    def set_sync_changes(self, dir_mode, sync_changes):
+        self.__set_key(dir_mode, "sync_changes", sync_changes)
 
     def __get_key(self, dir_mode, key, default_value):
         data = self.__get_data(dir_mode)

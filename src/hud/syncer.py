@@ -156,17 +156,21 @@ class HudSyncer(metaclass=Singleton):
         for hud_item in self.item_changes:
             self.__undo_changes_for_item(hud_item)
         logger.info("Undoing changes for all items completed.")
-        self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
+        self.set_sync_state(SyncState.NOT_SYNCED)
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
+
+    def set_sync_state(self, sync_state):
+        self.sync_state = sync_state
+        self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, sync_state)
 
     def get_source_dir(self):
         return self.source_dir
 
     def get_sync_status(self):
         if self.game.installation_exists(DirectoryMode.DEVELOPER):
-            self.sync_state = self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
+            self.set_sync_state(self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER))
         else:
-            self.sync_state = SyncState.UNKNOWN
+            self.set_sync_state(SyncState.UNKNOWN)
 
         return self.sync_state
 
@@ -228,7 +232,7 @@ class HudSyncer(metaclass=Singleton):
         # self.__overwrite_target()
         self.__unsync_deleted_source_items()
 
-        self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
+        self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, self.sync_state)
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, self.item_changes)
 
         logger.info("Synced!")

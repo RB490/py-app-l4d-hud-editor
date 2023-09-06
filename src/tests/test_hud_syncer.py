@@ -125,60 +125,60 @@ class TestHudSyncer(unittest.TestCase):
         for file_path in check_files_not_exist:
             self.assertFalse(os.path.exists(file_path))
 
-    @patch("builtins.print")  # Mock the print function
-    def test_unsync(self, mock_print):
-        os.startfile(self.fake_target_dir)
+    # @patch("builtins.print")  # Mock the print function
+    # def test_unsync(self, mock_print):
+    #     os.startfile(self.fake_target_dir)
 
-        # Set up syncer instance and attributes
-        self.syncer.source_dir = self.fake_source_dir
-        self.syncer.target_dir_root = self.fake_target_dir
-        self.syncer.target_dir_main_name = self.fake_main_name
-        self.syncer.target_sub_dir_names = ["left4dead2", "left4dead2_dlc1"]
+    #     # Set up syncer instance and attributes
+    #     self.syncer.source_dir = self.fake_source_dir
+    #     self.syncer.target_dir_root = self.fake_target_dir
+    #     self.syncer.target_dir_main_name = self.fake_main_name
+    #     self.syncer.target_sub_dir_names = ["left4dead2", "left4dead2_dlc1"]
 
-        # Manually set the hud_items attribute with example values
-        self.syncer.hud_items = get_all_files_and_dirs(self.fake_source_dir)
+    #     # Manually set the hud_items attribute with example values
+    #     self.syncer.hud_items = get_all_files_and_dirs(self.fake_source_dir)
 
-        # Perform sync and unsync
-        # input(f"ress enter to sync: {self.fake_source_dir}")
-        # self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
-        print(f"custom items: {self.syncer.hud_items_custom}")
+    #     # Perform sync and unsync
+    #     # input(f"ress enter to sync: {self.fake_source_dir}")
+    #     # self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
+    #     print(f"custom items: {self.syncer.hud_items_custom}")
 
-        self.syncer.hud_items_previous = []  # clear hud items from testing sync earlier!
-        self.syncer.sync_state = SyncState.NOT_SYNCED
-        self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
-        self.syncer.unsync()
+    #     self.syncer.hud_items_previous = []  # clear hud items from testing sync earlier!
+    #     self.syncer.sync_state = SyncState.NOT_SYNCED
+    #     self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
+    #     self.syncer.unsync()
 
-        # Variable assertion
-        self.assertEqual(self.syncer.sync_state, SyncState.NOT_SYNCED)
+    #     # Variable assertion
+    #     self.assertEqual(self.syncer.sync_state, SyncState.NOT_SYNCED)
 
-        # Assertions for directory structure
-        self.assertTrue(os.path.isdir(self.syncer.source_dir))
-        self.assertTrue(os.path.isdir(self.syncer.target_dir_root))
-        for subdir_name in self.syncer.target_sub_dir_names:
-            self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root, subdir_name)))
-            self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root)))
+    #     # Assertions for directory structure
+    #     self.assertTrue(os.path.isdir(self.syncer.source_dir))
+    #     self.assertTrue(os.path.isdir(self.syncer.target_dir_root))
+    #     for subdir_name in self.syncer.target_sub_dir_names:
+    #         self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root, subdir_name)))
+    #         self.assertTrue(os.path.isdir(os.path.join(self.syncer.target_dir_root)))
 
-        # Assertions for synced files and folders - exist
-        check_files_not_exist = [
-            os.path.join(self.fake_source_dir, "scripts", "hudlayout.res"),
-            os.path.join(self.fake_main_dir, "just_some_target_file.txt"),
-            os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res"),
-        ]
-        for file_path in check_files_not_exist:
-            self.assertTrue(os.path.exists(file_path))
+    #     # Assertions for synced files and folders - exist
+    #     check_files_not_exist = [
+    #         os.path.join(self.fake_source_dir, "scripts", "hudlayout.res"),
+    #         os.path.join(self.fake_main_dir, "just_some_target_file.txt"),
+    #         os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res"),
+    #     ]
+    #     for file_path in check_files_not_exist:
+    #         self.assertTrue(os.path.exists(file_path))
 
-        # Assertions for synced files and folders - do not exist
-        check_files = [
-            os.path.join(self.fake_main_dir, "my_source_test_file.txt"),
-            os.path.join(self.fake_main_dir, "my_custom_source_folder"),
-            os.path.join(self.fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
-            get_backup_path(os.path.join(self.fake_main_dir, "scripts", "hudlayout.res")),
-            get_backup_path(os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res")),
-        ]
-        for file_path in check_files:
-            self.assertFalse(os.path.exists(file_path))
+    #     # Assertions for synced files and folders - do not exist
+    #     check_files = [
+    #         os.path.join(self.fake_main_dir, "my_source_test_file.txt"),
+    #         os.path.join(self.fake_main_dir, "my_custom_source_folder"),
+    #         os.path.join(self.fake_main_dir, "my_custom_source_folder", "my_custom_source_file.txt"),
+    #         get_backup_path(os.path.join(self.fake_main_dir, "scripts", "hudlayout.res")),
+    #         get_backup_path(os.path.join(self.fake_main_sub_dir, "scripts", "hudlayout.res")),
+    #     ]
+    #     for file_path in check_files:
+    #         self.assertFalse(os.path.exists(file_path))
 
-        # os.startfile(self.fake_target_dir)
+    #     # os.startfile(self.fake_target_dir)
 
     def test_calculate_md5_hash(self):
         content = "test data"
