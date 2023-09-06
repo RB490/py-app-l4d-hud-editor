@@ -11,6 +11,7 @@ from game.game import DirectoryMode, Game, VideoSettingsModifier
 from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import (
+    get_browser_gui,
     get_mouse_position_on_click,
     save_and_exit_script,
     show_about_gui,
@@ -241,7 +242,7 @@ class EditorMenuHandler:
         """Start editing selected hud"""
         self.hud.edit.start_editing(hud_dir)
 
-    def editor_exit_script(self):
+    def editor_save_and_exit_script(self):
         """Exit script"""
 
         save_and_exit_script()
@@ -276,6 +277,15 @@ class EditorMenuHandler:
     def editor_finish_editing(self):
         """Finish editing and sync changes"""
         logger.debug("editor_finish_editing")
+
+        # close browser
+        browser = get_browser_gui()
+        browser.hide()
+        result = browser.prompt_close_or_continue()
+        if not result:
+            return
+
+        # finish editing
         self.hud.edit.finish_editing(open_start_gui=True)
 
     def editor_open_folder(self, input_dir):

@@ -142,7 +142,7 @@ class HudEditor:
         self.clear_hud_info()
 
         # prompt close game
-        result = show_message(f"Close game and switch back to {DirectoryMode.USER.name} mode?", "yesno")
+        result = show_message("Also close game?", "yesno")
         if result:
             # enable user mode
             self.game.dir.set(DirectoryMode.USER)

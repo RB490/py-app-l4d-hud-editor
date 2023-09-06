@@ -487,13 +487,19 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def on_close(self):
         """Runs on close"""
+        result = self.prompt_close_or_continue()
+        if not result:
+            return
+        save_and_exit_script()
+
+    def prompt_close_or_continue(self):
+        """Prompt to close. Then properly close"""
         result = show_message("Are you sure you want to exit?", "yesno")
         if not result:
             show_browser_gui()
-            return
-
+            return False
         self.descriptions_gui.hide()
-        save_and_exit_script()
+        return True
 
     def action_open_file(self):
         """Treeview Handle 'Open File' option"""

@@ -1,6 +1,5 @@
 """Global constant variables"""
 import os
-import subprocess
 from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
 

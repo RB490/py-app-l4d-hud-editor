@@ -15,13 +15,16 @@ from loguru import logger
 
 T = TypeVar("T", bound="Singleton")
 
+
 def generate_version_number_from_git(major_version=0):
+    """Generate version number from git, using total commits and optionally a major version #"""
+    # pylint: disable=unused-variable
     try:
         # Get the number of commits in the repository
-        commit_count = int(subprocess.check_output(['git', 'rev-list', '--count', 'HEAD']).strip())
+        commit_count = int(subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).strip())
 
         # Get the short SHA-1 hash of the latest commit
-        git_hash = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+        git_hash = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).strip().decode("utf-8")
 
         # Generate a version number based on commit count, hash, and major version
         version_number = f"{major_version}.{commit_count}"
@@ -29,6 +32,7 @@ def generate_version_number_from_git(major_version=0):
         return version_number
     except subprocess.CalledProcessError:
         return "0.0"  # Default version if not found
+
 
 def create_and_open_temp_file(file_path):
     """Create a temporary directory, copy the file, and open the temporary file."""

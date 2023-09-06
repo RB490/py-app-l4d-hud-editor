@@ -1153,7 +1153,7 @@ class EditorMenuClass:
             label="Exit",
             image=self.img.cross_black_circular_button,
             compound="left",
-            command=self.handler.editor_exit_script,
+            command=self.handler.editor_save_and_exit_script,
         )
         self.file_menu.add_command(label="Open", state="disabled", columnbreak=True)
         self.file_menu.add_separator()
