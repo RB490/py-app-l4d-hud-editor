@@ -1,9 +1,26 @@
 """Debug"""
 from game.constants import DirectoryMode, InstallationState, SyncState
+from game.game import Game
 
 
-def debug_id_handler(game_class):
+def debug_id_handler():
     "Debug"
+    game = Game()
+
+    sync_state = game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
+
+    # my_obj = {"mykey1": "value1", "mykey2": "value2", "mykey3": "value3"}
+    my_obj = {}
+    game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, my_obj)
+    sync_changes = game.dir.id.get_sync_changes(DirectoryMode.DEVELOPER)
+
+    print("finished debug_id_handler")
+
+
+def test_id_handler():
+    "Debug"
+    game_class = Game()
+
     game_id_handler = game_class.dir.id
     # game_class.dir.id.set_path(DirectoryMode.DEVELOPER)
 

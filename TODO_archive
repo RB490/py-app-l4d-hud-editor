@@ -516,3 +516,7 @@ Post:
 ✔ Refactor: Installer has that find_pak01_dir's callback thing. and game.dir has __get_pak01_vpk_subdirs which do the same. use one or the other? @done(23-09-04 21:21)
 ✔ Feature: Method to retrieve mainloop root @done(23-09-04 21:43)
 ✔ Feature: Debug hud should be modified so that it moves some panels around and i can actually tell its loaded in @done(23-09-04 21:56)
+	✔ Syncer robust system for unsyncing every change made even after incorrect program exit @done(23-09-05 21:54)
+		✔ Maintain a 'changes' data structure which keeps track of all the changes made in the game folder. EG: creating a custom folder/file or renaming a vanilla file to it's backup version. Could use an enum with actions and one or two path params. CREATE/NEW, COPY/RENAME @done(23-09-05 21:54)
+		✔ If setup the right way i could probably use the 'changes' data structure to more easily undo changes in the game folder by looking up the appropriate changes to undo for a given file or folder that needs to be unsynced @done(23-09-05 21:54)
+		✔ It might be a good idea to have a mini class which maintains the 'changes' data structure @done(23-09-05 21:54)

@@ -1,6 +1,5 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
 # pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
-# pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
 import hashlib
 import os
 import shutil
@@ -47,6 +46,52 @@ class ChangeItem:
         self.target = target
 
 
+class FileOperations:
+    def __init__(self, hud_syncer):
+        self.hud_syncer = hud_syncer
+
+    def perform_rename(self, hud_item, source_item, target_item):
+        try:
+            os.rename(source_item, target_item)
+            change = ChangeItem("rename", source_item, target_item)
+            self.hud_syncer._record_item_change(hud_item, change)
+            logger.info(f"Renamed '{source_item}' to '{target_item}'")
+        except Exception as e:
+            error_message = f"Failed to rename '{source_item}' to '{target_item}': {e}"
+            logger.error(error_message)
+            raise Exception(error_message) from e
+
+    def perform_create_dir(self, hud_item, source_item, target_item):
+        try:
+            if not os.path.exists(target_item):
+                os.makedirs(target_item)
+                change = ChangeItem("create", source_item, target_item)
+                self.hud_syncer._record_item_change(hud_item, change)
+                logger.info(f"Created folder '{target_item}'")
+        except OSError as e:
+            error_message = f"Failed to create folder '{target_item}': {e}"
+            logger.error(error_message)
+            raise Exception(error_message) from e
+
+    def perform_copy(self, hud_item, source_item, target_item):
+        try:
+            if any(
+                change.action == "copy" and change.source == source_item and change.target == target_item
+                for change in self.hud_syncer.item_changes.get(hud_item, [])
+            ):
+                logger.info(f"Copy operation for '{source_item}' to '{target_item}' already exists.")
+                return
+
+            shutil.copy(source_item, target_item)
+            change = ChangeItem("copy", source_item, target_item)
+            self.hud_syncer._record_item_change(hud_item, change)
+            logger.info(f"Copied '{source_item}' to '{target_item}'")
+        except Exception as e:
+            error_message = f"Failed to copy '{source_item}' to '{target_item}': {e}"
+            logger.error(error_message)
+            raise Exception(error_message) from e
+
+
 class HudSyncer(metaclass=Singleton):
     def __init__(self):
         self.game = Game()
@@ -59,55 +104,26 @@ class HudSyncer(metaclass=Singleton):
         self.hud_items_previous = []
         self.hud_items = None
         self.item_changes = {}
+        self.file_operations = FileOperations(self)
 
-    def __record_item_change(self, hud_item, change):
+    def _record_item_change(self, hud_item, change):
         if hud_item in self.item_changes:
-            self.item_changes[hud_item].append(change)
+            if change not in self.item_changes[hud_item]:
+                self.item_changes[hud_item].append(change)
         else:
             self.item_changes[hud_item] = [change]
 
     def __perform_rename(self, hud_item, source_item, target_item):
-        try:
-            os.rename(source_item, target_item)
-            change = ChangeItem("rename", source_item, target_item)
-            self.__record_item_change(hud_item, change)
-            logger.info(f"Renamed '{source_item}' to '{target_item}'")
-        except Exception as e:
-            error_message = f"Failed to rename '{source_item}' to '{target_item}': {e}"
-            logger.error(error_message)
-            raise Exception(error_message)
+        self.file_operations.perform_rename(hud_item, source_item, target_item)
 
     def __perform_create_dir(self, hud_item, source_item, target_item):
-        try:
-            if not os.path.exists(target_item):
-                os.makedirs(target_item)
-                change = ChangeItem("create", source_item, target_item)
-                self.__record_item_change(hud_item, change)
-                logger.info(f"Created folder '{target_item}'")
-        except OSError as e:
-            error_message = f"Failed to create folder '{target_item}': {e}"
-            logger.error(error_message)
-            raise Exception(error_message)
+        self.file_operations.perform_create_dir(hud_item, source_item, target_item)
 
     def __perform_copy(self, hud_item, source_item, target_item):
-        try:
-            if any(
-                change.action == "copy" and change.source == source_item and change.target == target_item
-                for change in self.item_changes.get(hud_item, [])
-            ):
-                logger.info(f"Copy operation for '{source_item}' to '{target_item}' already exists.")
-                return
-
-            shutil.copy(source_item, target_item)
-            change = ChangeItem("copy", source_item, target_item)
-            self.__record_item_change(hud_item, change)
-            logger.info(f"Copied '{source_item}' to '{target_item}'")
-        except Exception as e:
-            error_message = f"Failed to copy '{source_item}' to '{target_item}': {e}"
-            logger.error(error_message)
-            raise Exception(error_message)
+        self.file_operations.perform_copy(hud_item, source_item, target_item)
 
     def __undo_changes_for_item(self, item):
+        logger.debug(f"Unsyncing: {item}")
         try:
             changes_for_item = self.item_changes.get(item)
             if changes_for_item is not None:
@@ -133,7 +149,7 @@ class HudSyncer(metaclass=Singleton):
         except Exception as e:
             error_message = f"Failed to undo changes for '{item}': {e}"
             logger.error(error_message)
-            raise Exception(error_message)
+            raise Exception(error_message) from e
 
     def get_source_dir(self):
         return self.source_dir
@@ -156,32 +172,31 @@ class HudSyncer(metaclass=Singleton):
         logger.debug("Unsyncing...")
 
         if not self.is_synced():
-            logger.debug("Unsync: No HUD to unsync!")
+            logger.error("Unsync: No HUD to unsync!")
             return
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")
 
         logger.debug(f"Unsyncing HUD: {self.hud_items}")
 
-        hud_items_copy = self.hud_items.copy()
-
-        for item in hud_items_copy:
-            self.__unsync_item(item)
+        for item in self.hud_items:
+            self.__undo_changes_for_item(item)
 
         self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED)
-        logger.debug("Unsynced!")
+        self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
+        logger.info("Unsynced!")
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         logger.debug("Synching...")
         logger.debug(f"Source: {source_dir}")
         logger.debug(f"Target: {target_dir}")
 
-        self.item_changes = {}
         self.source_dir = source_dir
         self.target_dir_root = target_dir
         self.target_dir_main_name = target_dir_main_name
         self.target_sub_dir_names = get_subdirectories_names(target_dir)
         self.hud_items = get_all_files_and_dirs(self.source_dir)
+        self.item_changes = {}
 
         if source_dir is None or not os.path.isdir(source_dir):
             raise NotADirectoryError(f"Invalid source directory: '{source_dir}'")
@@ -205,70 +220,66 @@ class HudSyncer(metaclass=Singleton):
         logger.debug(f"Sync target_dir_main_name: {self.target_dir_main_name}")
         logger.debug(f"Sync target_sub_dir_names: {self.target_sub_dir_names}")
 
-        self.__backup_target()
-        self.__overwrite_target()
-        self.__remove_deleted_source_items()
+        self.__backup_and_overwrite_target()
+        # self.__overwrite_target()
+        self.__unsync_deleted_source_items()
 
         self.sync_state = self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
+        self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, self.item_changes)
 
         logger.info("Synced!")
 
-    def __backup_target(self):
+    def __backup_and_overwrite_target(self):
         for target_sub_dir_name in self.target_sub_dir_names:
-            target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
-
             for item in self.hud_items:
-                target_item = item.replace(self.source_dir, target_sub_dir)
-                target_item_backup = get_backup_path(target_item)
+                self.__backup_item(item, target_sub_dir_name)
 
                 if target_sub_dir_name == self.target_dir_main_name:
-                    if not os.path.exists(target_item) and target_item not in self.hud_items_custom:
-                        self.hud_items_custom.append(target_item)
-                        logger.debug(f"Adding custom file: {target_item}")
+                    self.__overwrite_item(item, target_sub_dir_name)
 
-                if all(
-                    (
-                        os.path.isfile(target_item),
-                        not os.path.exists(target_item_backup),
-                        target_item not in self.hud_items_custom,
-                    )
-                ):
-                    self.__perform_rename(item, target_item, target_item_backup)
+    def __backup_item(self, item, target_sub_dir_name):
+        target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
+        target_item = item.replace(self.source_dir, target_sub_dir)
+        target_item_backup = get_backup_path(target_item)
 
-    def __overwrite_target(self):
-        for target_sub_dir_name in self.target_sub_dir_names:
-            target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
+        # keep track of custom items
+        if target_sub_dir_name == self.target_dir_main_name:
+            if not os.path.exists(target_item) and (target_item not in self.hud_items_custom):
+                self.hud_items_custom.append(target_item)
+                logger.debug(f"Adding custom item: {target_item}")
 
-            if target_sub_dir_name != self.target_dir_main_name:
-                continue
+        # backup vanilla files
+        if all(
+            (
+                os.path.isfile(target_item),
+                not os.path.exists(target_item_backup),
+                target_item not in self.hud_items_custom,
+            )
+        ):
+            self.__perform_rename(item, target_item, target_item_backup)
 
-            for item in self.hud_items:
-                target_item = item.replace(self.source_dir, target_sub_dir)
+    def __overwrite_item(self, item, target_sub_dir_name):
+        target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
+        target_item = item.replace(self.source_dir, target_sub_dir)
 
-                if os.path.isdir(item):
-                    if not os.path.isdir(target_item):
-                        self.__perform_create_dir(item, item, target_item)
-                    continue
+        if os.path.isdir(item):
+            if not os.path.isdir(target_item):
+                self.__perform_create_dir(item, item, target_item)
+            return
 
-                overwrite_target = False
+        overwrite_target = False
 
-                if os.path.isfile(target_item):
-                    if files_differ(item, target_item):
-                        overwrite_target = True
-                else:
-                    overwrite_target = True
+        if os.path.isfile(target_item):
+            if files_differ(item, target_item):
+                overwrite_target = True
+        else:
+            overwrite_target = True
 
-                if overwrite_target:
-                    self.__perform_copy(item, item, target_item)
+        if overwrite_target:
+            self.__perform_copy(item, item, target_item)
 
-    def __remove_deleted_source_items(self):
+    def __unsync_deleted_source_items(self):
         for item in self.hud_items_previous:
             if item not in self.hud_items:
-                self.__unsync_item(item)
+                self.__undo_changes_for_item(item)
         self.hud_items_previous = self.hud_items
-
-    def __unsync_item(self, item):
-        logger.debug(f"Unsyncing: {item}")
-
-        self.__undo_changes_for_item(item)
-        return

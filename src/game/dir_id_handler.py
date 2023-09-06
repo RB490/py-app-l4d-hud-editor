@@ -141,12 +141,51 @@ class GameIDHandler:
         """Set a specific state value in the ID file."""
         id_path = self.__get_path(dir_mode)
         if id_path is None:
+            logger.debug(f"No ID path for {dir_mode.name}!")
             return None
 
         state_data = self.__read_content(id_path)
         state_data[state_key] = state_value.name if state_value is not None else None
         self.__write_content(dir_mode, state_data)
         logger.debug(f"Updated {state_key} state to: '{state_value.name}'")
+
+    def set_sync_changes(self, dir_mode, sync_changes):
+        """
+        Set the synchronization changes for a specific directory mode.
+
+        Args:
+            dir_mode (DirectoryMode): The directory mode for which to set the changes.
+            sync_changes (list): A list of synchronization changes to be stored.
+        """
+        self.game._validate_dir_mode(dir_mode)
+        id_path = self.__get_path(dir_mode)
+        if id_path is None:
+            logger.debug(f"No ID path for {dir_mode.name}!")
+            return False
+
+        state_data = self.__read_content(id_path)
+        state_data["sync_changes"] = sync_changes
+        self.__write_content(dir_mode, state_data)
+        logger.debug(f"Set sync changes for {dir_mode.name}")
+
+    def get_sync_changes(self, dir_mode):
+        """
+        Get the synchronization changes for a specific directory mode.
+
+        Args:
+            dir_mode (DirectoryMode): The directory mode for which to retrieve the changes.
+
+        Returns:
+            list: A list of synchronization changes.
+        """
+        self.game._validate_dir_mode(dir_mode)
+        id_path = self.__get_path(dir_mode)
+        if id_path is None:
+            logger.debug(f"No ID path for {dir_mode.name}!")
+            return {}
+
+        state_data = self.__read_content(id_path)
+        return state_data.get("sync_changes", {})
 
     def __read_content(self, id_path):
         """Read and return the content of the ID file."""
