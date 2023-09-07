@@ -118,6 +118,8 @@ def get_image_for_file_extension(input_path):
         ".png": os.path.join(IMAGES_DIR_EXT, "image.ico"),
         ".vmt": os.path.join(IMAGES_DIR_EXT, "resource.ico"),
         ".vtf": os.path.join(IMAGES_DIR_EXT, "image.ico"),
+        ".ttf": os.path.join(IMAGES_DIR_EXT, "font.ico"),
+        ".otf": os.path.join(IMAGES_DIR_EXT, "font.ico"),
     }
 
     # Get the corresponding image path or return "warning.png"

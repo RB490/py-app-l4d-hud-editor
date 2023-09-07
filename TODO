@@ -3,6 +3,7 @@
 ✔ Feature: Menu: Run game option @done(23-09-07 15:12)
 ✔ Bug: Browser: 'todo' file without any file extension incorrectly has a folder image. 'credits' has this too @done(23-09-07 15:14)
 ✔ Feature: Browser: Add picture of files without a file extension @done(23-09-07 15:20)
+✔ Feature: Browser: Add image for font files: .otf, .ttf, and possibly more @done(23-09-07 15:21)
 
 
 Current:
@@ -10,7 +11,6 @@ Current:
 Todo:
 
 	
-	☐ Feature: Browser: Add image for font files: .otf, .ttf, and possibly more
 	
 	☐ Feature: Rename installer menu option? On start & editor context menu.
 	
