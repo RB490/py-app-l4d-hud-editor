@@ -156,18 +156,19 @@ class HudEditor:
 
     def stop_editing(self):
         """Unsync & stop editing hud"""
-        # unsync hud
-        self.syncer.unsync()
+
+        # remove hotkey
+        self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
 
         # clear variables
         self.clear_hud_info()
 
+        # unsync hud
+        self.syncer.unsync()
+
         # gui
         get_start_gui().clear_selection()
         get_browser_gui().gui_refresh()
-
-        # remove hotkey
-        self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
 
     def sync_in_thread(self):
         """Assign this to a hotkey to prevent sync() taking too long and the hotkey not being suppressed"""
@@ -256,7 +257,7 @@ class HudEditor:
 
         # verify variables
         if not self.get_dir() or not os.path.exists(self.get_dir()):
-            logger.warning(f"Can't retrieve files dictionary. Directory does not exist: {self.get_dir()}")
+            logger.debug(f"Can't retrieve files dictionary. Directory does not exist: {self.get_dir()}")
             return None
 
         root_folder = self.get_dir()

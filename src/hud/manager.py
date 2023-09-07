@@ -22,7 +22,6 @@ class HudManager:
         folder_path = prompt_for_folder("Add HUD: Select folder")
         if folder_path:
             self.data_manager.append("stored_huds", folder_path)
-            self.data_manager.save()
             return folder_path
         return False
 
@@ -31,7 +30,6 @@ class HudManager:
         folder_path = prompt_for_folder("Add HUD: Select folder")
         if folder_path:
             self.data_manager.append("stored_temp_huds", folder_path)
-            self.data_manager.save()
             return folder_path
         return False
 
@@ -40,7 +38,6 @@ class HudManager:
         folder_path = prompt_for_folder("New HUD: Select folder")
         if folder_path:
             self.data_manager.append("stored_huds", folder_path)
-            self.data_manager.save()
             copy_directory(NEW_HUD_DIR, folder_path)
             return folder_path
         return False

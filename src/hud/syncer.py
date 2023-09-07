@@ -201,7 +201,7 @@ class HudSyncer(metaclass=Singleton):
         logger.debug("Unsyncing...")
 
         if not self.is_synced():
-            logger.error("Unsync: No HUD to unsync!")
+            logger.debug("debug: No HUD to unsync!")
             return False
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")

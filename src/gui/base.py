@@ -279,6 +279,7 @@ class BaseGUI:
 
     def toggle_visibility(self):
         """Toggle window visibility between visible and hidden."""
+        self.__call_save_window_geometry()
         if self.is_hidden:
             self.show()
         else:

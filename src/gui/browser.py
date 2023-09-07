@@ -81,7 +81,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         hotkey_manager = HotkeyManager()
         hotkey_manager.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
 
-        self.treeview_refresh()
+        self.gui_refresh()
         self.treeview_sort_column("modified", True)
 
     def focus_search_box_if_first_row_selected(self, *event):
@@ -423,6 +423,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         if not called_by_editor_menu:
             self.editor_menu.create_and_refresh_menu(is_context_menu=False)
         self.root.config(menu=self.editor_menu.get_main_menu())
+        self.root.update_idletasks()  # fixes bug where resetting the menu resizes the gui some
 
         # treeview
         self.treeview_refresh()
