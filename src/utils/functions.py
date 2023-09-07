@@ -103,7 +103,7 @@ def get_image_for_file_extension(input_path):
     # Get the file extension
     file_extension = os.path.splitext(input_path)[1]
 
-    if not file_extension:
+    if os.path.isdir(input_path):
         return os.path.join(IMAGES_DIR_EXT, "folder.ico")
 
     # Define the file types and their corresponding icons
