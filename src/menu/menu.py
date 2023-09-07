@@ -325,7 +325,7 @@ class EditorMenuClass:
             label="Close",
             image=self.img.cross_black_circular_button,
             compound="left",
-            command=self.handler.editor_close_hud,
+            command=self.handler.editor_stop_editing_hud,
         )
         self.hud_menu.add_separator()
         self.hud_menu.add_command(label="Save", state="disabled")
@@ -952,7 +952,33 @@ class EditorMenuClass:
                     compound="left",
                 )
 
-    def create_give_items_menu(self, menubar):
+    def create_open_menu(self, menubar):
+        """Create open menu"""
+
+        self.open_menu = Menu(menubar, tearoff=0)
+
+        self.open_menu.add_command(label="Open", state="disabled", columnbreak=True)
+        self.open_menu.add_separator()
+        self.open_menu.add_command(
+            label="Game",
+            command=create_lambda_command(self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)),
+            image=self.img.folder_black_interface_symbol,
+            compound="left",
+        )
+        self.open_menu.add_command(
+            label="Script",
+            command=create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT),
+            image=self.img.folder_black_interface_symbol,
+            compound="left",
+        )
+        self.open_menu.add_cascade(
+            label="Hud",
+            image=self.img.paintbrush_design_tool_interface_symbol,
+            compound="left",
+            menu=self.load_hud_menu,
+        )
+
+    def create_give_items_menu(self, menu_bar):
         """Create give items menu"""
 
         give_items_dict = {
@@ -963,7 +989,7 @@ class EditorMenuClass:
         }
 
         # Add a "Give Items" menu item with sub-items for each item in the dictionary
-        self.give_items_menu = tk.Menu(menubar, tearoff=False)
+        self.give_items_menu = tk.Menu(menu_bar, tearoff=False)
         for label, action in give_items_dict.items():
             self.give_items_menu.add_command(
                 label=label,
@@ -1120,6 +1146,7 @@ class EditorMenuClass:
         self.create_help_menu(self.main_menu)
         self.create_give_items_menu(self.main_menu)
         self.create_clipboard_menu(self.main_menu)
+        self.create_open_menu(self.main_menu)
         self.create_developer_installer_menu(self.main_menu)
 
         # ----------------------------------
@@ -1170,6 +1197,7 @@ class EditorMenuClass:
             compound="left",
             command=self.handler.editor_open_start_gui,
         )
+        # only show browser option on context menu
         if is_context_menu:
             self.file_menu.add_command(
                 label="Browser",
@@ -1177,42 +1205,19 @@ class EditorMenuClass:
                 compound="left",
                 command=self.handler.editor_open_browser_gui,
             )
-        # self.file_menu.add_cascade( # doesn't really make any sense to have an installer option in here
-        #     label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
-        # )
+        self.file_menu.add_cascade(
+            label="Open", image=self.img.arrow_angle_pointing_to_right, compound="left", menu=self.open_menu
+        )
+        self.file_menu.add_cascade(
+            label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
+        )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
-        self.file_menu.add_command(
-            label="Close",
-            image=self.img.cross_black_circular_button,
-            compound="left",
-            command=self.handler.editor_finish_editing,
-        )
         self.file_menu.add_command(
             label="Exit",
             image=self.img.cross_black_circular_button,
             compound="left",
             command=self.handler.editor_save_and_exit_script,
-        )
-        self.file_menu.add_command(label="Open", state="disabled", columnbreak=True)
-        self.file_menu.add_separator()
-        self.file_menu.add_command(
-            label="Game",
-            command=create_lambda_command(self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)),
-            image=self.img.folder_black_interface_symbol,
-            compound="left",
-        )
-        self.file_menu.add_command(
-            label="Script",
-            command=create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT),
-            image=self.img.folder_black_interface_symbol,
-            compound="left",
-        )
-        self.file_menu.add_cascade(
-            label="Hud",
-            image=self.img.paintbrush_design_tool_interface_symbol,
-            compound="left",
-            menu=self.load_hud_menu,
         )
 
         # ----------------------------------

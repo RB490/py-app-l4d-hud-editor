@@ -51,7 +51,9 @@ class HudEditor:
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
-        # update browser title
+        # update browser (and thereby the start gui)
+        get_browser_gui().editor_menu_refresh()
+        get_browser_gui().treeview_refresh()
         get_browser_gui().set_title(f"{self.get_name()} {GUI_BROWSER_TITLE}")
 
         # hotkeys

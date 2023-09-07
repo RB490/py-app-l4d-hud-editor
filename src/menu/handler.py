@@ -344,7 +344,7 @@ class EditorMenuHandler:
         """Unsync hud"""
         self.hud.edit.unsync()
 
-    def editor_close_hud(self):
+    def editor_stop_editing_hud(self):
         """Unsync & close hud"""
         self.hud.edit.stop_editing()
 
