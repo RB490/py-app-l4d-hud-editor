@@ -442,9 +442,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
-        # also refresh menu incase gui start has modified stored huds for example
-        self.editor_menu_refresh()
-
         # variables
         treeview = self.treeview
         hud_dir = self.hud.edit.get_dir()

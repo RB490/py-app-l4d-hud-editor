@@ -1,32 +1,10 @@
+✔ Bug: Browser: Open hud -> Browser noticeably takes too long refreshing before the prompt 'do you want to start editing ingame' @done(23-09-07 15:04) removed editor menu refresh from browser treeview refresh method
 
-✔ Feature: Rename start to program name + version name @done(23-09-07 11:15)
-✔ Feature: Display hud name in browser title <hud name> Browser or Browser (<hud name>) @done(23-09-07 11:15)
-✔ Feature: Adjust start so it also displays which hud is being edited? @done(23-09-07 11:40)
-✔ Feature: Adjust start so it can also stop editing. Rename the edit button to 'stop editing' when selecting the edited hud & edit / disable as normal when selecting a different hud @done(23-09-07 11:41)
-✔ Feature: Menu: Hud: Close option: Unsync + Unload @done(23-09-07 12:25)
-✔ Feature: Menu: Sync option @done(23-09-07 12:25)
-✔ Bug: Menu: Unsync also semi-unloads the hud from the program as the active edited hud. Don't do that @done(23-09-07 12:25)
-✔ I could have a main function thing going on that determines whether a gui is open, if not, prompt to close or not or whatever @done(23-09-07 12:25)
-✔ Refactor: And simplify: All the different close related code and behaviour: Slosing start/browser and close/exit on the menu @done(23-09-07 12:25)
-	✔ Simplifyable: Don't close the browser @done(23-09-07 12:25)
-✔ Bug: I close the browser, then start gui, script exits. it should ask whether i want to @done(23-09-07 12:51)
-✔ Feature: Start: Display the currently edited hud somewhere on the gui @done(23-09-07 12:51)
-✔ Bug: All GUI's are hidden -> sync hotkey -> start game messagebox is behind other window @done(23-09-07 14:30)
-✔ Bug: Browser is hidden -> Sync hud hotkey -> Browser is opened @done(23-09-07 14:31)
-✔ Feature: If i prompt to start editing hud ingame yes/no & decline then i need an option to do so after the fact -- could be locked behind sync or another option @done(23-09-07 14:31)
-✔ Bug: No check for syncing to USER directory @done(23-09-07 14:31)
-✔ Bug: Hud is being edited -> I can start/repair/update/remove/switch dir mode @done(23-09-07 14:31)
-✔ Bug: Open hud -> Browser/Start aren't refreshed @done(23-09-07 14:51)
-✔ Feature: Menu: Move 'open' options to their own menu @done(23-09-07 14:50)
-✔ Refactor: Menu: File menu. Some options don't make sense @done(23-09-07 14:50)
-✔ Idea: Instead of binding menu->open hud->hud to start_editing, i could check if the game is running, and if it isn't i could open the hud in the program but don't sync it and run game and such. basically a new method which separates start_editing and something like open_hud @done(23-09-07 14:50)
 
 Current:
 
 Todo:
 
-	
-	☐ Bug: Browser: Open hud -> Browser noticeably takes too long refreshing before the prompt 'do you want to start editing ingame'
 	
 	☐ Feature: Menu: When adding or opening a new hud, automatically start editing it. automatically or first showing a prompt. don't do this in the start gui
 	
@@ -38,10 +16,21 @@ Todo:
 	☐ Feature: Rename installer menu option? On start & editor context menu.
 	
 	☐ Bug: Close hud -> Open hud -> browser refreshes -> prompt shows open hud ingame? -> close prompt -> browser resizes in height some?
+		- ^ this effect is also noticable when: debug browser gui -> select radio button all/added 
+		- ^ in fact this effect happens whenever resizing. so it'll be treeview refresh hitting
 
 	☐ Refactor: Add method doc to syncer class
 
 	
+
+
+
+
+
+
+
+
+
 	
 	
 	☐ Research: Ask GPT on how to properly test a program so it's ready for release
