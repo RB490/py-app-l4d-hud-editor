@@ -100,6 +100,14 @@ class BaseGUI:
         if not self.has_been_run:
             self.run()
 
+    def set_title(self, title):
+        """Set title"""
+        self.root.title(title)
+
+    def get_title(self):
+        """Get title"""
+        self.root.title()
+
     def is_visible(self):
         """Is visible?"""
         return not self.is_hidden

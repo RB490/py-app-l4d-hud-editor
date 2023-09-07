@@ -23,6 +23,7 @@ from shared_utils.shared_utils import Singleton, create_and_open_temp_file, show
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
+    GUI_BROWSER_TITLE,
     HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
@@ -51,7 +52,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         super().__init__(gui_type="sub", parent_root=parent_root)
         self.popup_gui = GuiEditorMenuPopup(self.root)
         self.descriptions_gui = GuiHudDescriptions(self.root)
-        self.root.title("Browser")
+        self.root.title(GUI_BROWSER_TITLE)
         self.root.minsize(300, 100)
         self.root.iconbitmap(APP_ICON)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
@@ -173,7 +174,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Create and configure the browserhronization hotkey button
         self.browser_hotkey_button = tk.Button(
             self.toolbar_frame,
-            text=f"Browser {HOTKEY_TOGGLE_BROWSER}",
+            text=f"{self.get_title()} {HOTKEY_TOGGLE_BROWSER}",
             justify="center",
             command=self.toggle_visibility,
             state="normal",
@@ -510,13 +511,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
 
-    def on_close(self):
-        """Runs on close"""
-        result = self.prompt_close_or_continue()
-        if not result:
-            return
-        save_and_exit_script()
-
     def prompt_close_or_continue(self):
         """Prompt to close. Then properly close"""
         result = show_message("Are you sure you want to exit?", "yesno")
@@ -593,7 +587,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             app = VDFModifierGUI(self.root, self.selected_full_path)
             app.show()
         except Exception:
-            logger.debug("Browser: Can't load VDF GUI!")
+            logger.debug("Can't load VDF GUI!")
 
     def action_recycle(self):
         "Treeview Handle 'Recycle' option"

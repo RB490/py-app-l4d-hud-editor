@@ -12,7 +12,7 @@ from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
-from utils.constants import DEBUG_MODE, HOTKEY_SYNC_HUD
+from utils.constants import DEBUG_MODE, GUI_BROWSER_TITLE, HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -39,7 +39,7 @@ class HudEditor:
             return True
         return False
 
-    def start_editing(self, hud_dir):
+    def start_editing(self, hud_dir, open_start_gui=False):
         """Perform all the actions needed to start hud editing"""
 
         print(f"Start editing: ({hud_dir})")
@@ -54,7 +54,9 @@ class HudEditor:
             self.game.dir.check_for_invalid_id_file_structure()
         except Exception as e_info:
             show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
-            show_start_gui()
+            
+            if open_start_gui:
+                show_start_gui()
             return False
 
         # prompt to start game during debug mode
@@ -65,7 +67,8 @@ class HudEditor:
                 title="Start editing HUD?",
             )
             if not result:
-                show_start_gui()
+                if open_start_gui:
+                    show_start_gui()
                 return False
 
         # is developer mode installed? - also checks for user directory
@@ -76,11 +79,15 @@ class HudEditor:
 
         # cancel if this hud is already being edited
         if self._is_already_being_edited():
-            show_start_gui()
+            if open_start_gui:
+                show_start_gui()
             return False
 
         # unsync previous hud
         self.syncer.unsync()
+
+        # update browser title
+        get_browser_gui().set_title(f"{self.get_name} {GUI_BROWSER_TITLE}")
 
         # Stop checking for game exit
         self.stop_game_exit_check()
@@ -89,7 +96,8 @@ class HudEditor:
         result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if not result:
             print("Could not activate developer mode")
-            show_start_gui()
+            if open_start_gui:
+                show_start_gui()
             return False
 
         # sync the hud to the game folder
@@ -108,7 +116,8 @@ class HudEditor:
         except Exception as e:
             self.unsync()
             show_message(f"failed to run game: {e}")
-            show_start_gui()
+            if open_start_gui:
+                show_start_gui()
             return False
 
         # refresh hud incase game has not restarted
@@ -135,6 +144,9 @@ class HudEditor:
         # unsync hud
         self.syncer.unsync()
 
+        # update browser title
+        get_browser_gui().set_title(f"{GUI_BROWSER_TITLE}")
+
         # remove hotkey
         self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
 
@@ -142,9 +154,10 @@ class HudEditor:
         self.clear_hud_info()
 
         # prompt close game
-        result = show_message("Also close game?", "yesno")
-        if result:
-            # enable user mode
+        if self.game.window.is_running():
+            if show_message("Also close the game?", "yesno"):
+                self.game.dir.set(DirectoryMode.USER)
+        else:
             self.game.dir.set(DirectoryMode.USER)
 
         # callback to the gui

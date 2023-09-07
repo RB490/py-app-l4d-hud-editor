@@ -556,3 +556,6 @@ Post:
 ✘ Feature: Browser/Start GUI: Add version #? @cancelled(23-09-06 16:28)
 ✔ Feature: Menu: Move about into the help menu @done(23-09-06 16:34)
 ✔ Feature: Browser & Start refreshing each other so they can be used side by side @done(23-09-06 17:26)
+✘ Unit testing: Game Dir module @cancelled(23-09-07 10:16)
+✘ Unit testing: ID Handler @cancelled(23-09-07 10:16)
+✘ Unit testing: HUD Description @cancelled(23-09-07 10:16)

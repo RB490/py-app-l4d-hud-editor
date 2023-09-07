@@ -2,9 +2,9 @@
 import os
 from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
-from loguru import logger
 
 import requests
+from loguru import logger
 
 
 def get_local_version_number():
@@ -19,6 +19,7 @@ def get_local_version_number():
         except Exception as e:
             print(f"An error occurred while reading the version file: {str(e)}")
             return None
+
 
 def get_github_version_number():
     """Retrieve github version number"""
@@ -38,13 +39,14 @@ def get_github_version_number():
     except requests.exceptions.RequestException as e:
         logger.error(f"An error occurred: {str(e)}")
 
+
 #####################################################
 # Path
 #####################################################
 
 # core
 DEBUG_MODE: bool = True
-PROGRAM_NAME: str = "Hud Editor for L4D2"
+PROGRAM_NAME: str = "HUD Editor for Left 4 Dead 2"
 PROGRAM_URL: str = "https://github.com/RB490"
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -53,6 +55,8 @@ VERSION_NO_URL: str = "https://raw.githubusercontent.com/RB490/py-app-l4d-hud-ed
 VERSION_NO_PATH: str = os.path.join(PROJECT_ROOT, "version.txt")
 VERSION_NO_GITHUB: str = get_github_version_number()
 VERSION_NO: str = get_local_version_number()
+VERSION_NO_PRETTY: str = f"v{VERSION_NO}"
+GUI_BROWSER_TITLE: str = "Browser"
 
 # main directories
 DEVELOPMENT_DIR: str = os.path.join(PROJECT_ROOT, "dev")
@@ -84,7 +88,7 @@ SNIPPETS_DIR: str = os.path.join(DATA_DIR, "snippets")
 NEW_HUD_DIR: str = os.path.join(DATA_DIR, "new_hud_template")
 EDITOR_AUTOEXEC_PATH: str = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
 DUMMY_ADDON_VPK_PATH: str = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
-PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, PROGRAM_NAME + ".json")
+PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, "persistent_data.json")
 HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json")
 
 #####################################################

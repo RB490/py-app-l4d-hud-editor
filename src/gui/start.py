@@ -13,7 +13,7 @@ from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
-from utils.constants import APP_ICON, IMAGES_DIR_128, ImageConstants
+from utils.constants import APP_ICON, GUI_BROWSER_TITLE, IMAGES_DIR_128, PROGRAM_NAME, VERSION_NO_PRETTY, ImageConstants
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -33,7 +33,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         super().__init__("main")
         self.browser = GuiHudBrowser(self.root, self)
         self.img = ImageConstants()
-        self.root.title("Select")
+        self.root.title(f"{PROGRAM_NAME} {VERSION_NO_PRETTY}")
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 500)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
@@ -57,6 +57,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def debug_show_browser_gui(self):
         """Used for debugging to automatically open the browser gui after starting mainloop"""
         self.browser.show()
+        self.browser.set_title(f"{self.hud.edit.get_name()} {GUI_BROWSER_TITLE}")
 
     def __create_widgets(self):
         # gui variables
@@ -354,7 +355,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             print("No HUD selected!")
             return
 
-        target_dir = filedialog.askdirectory(title="Select a target folder to copy contents into")
+        target_dir = filedialog.askdirectory(title="Export HUD as folder")
         if target_dir:
             copy_directory(self.selected_hud_dir, target_dir)
 
@@ -456,8 +457,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.hide()
 
         # edit hud
-        self.hud.edit.start_editing(self.selected_hud_dir)
+        self.hud.edit.start_editing(self.selected_hud_dir, open_start_gui=True)
 
     def on_close(self):
         """On close callback"""
-        save_and_exit_script()
+
+        if self.browser.is_visible():
+            self.hide()
+        else:
+            save_and_exit_script()
