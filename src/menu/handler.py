@@ -280,13 +280,18 @@ class EditorMenuHandler:
 
         # close browser
         browser = get_browser_gui()
-        is_visible = browser.is_visible()
+        open_browser_gui = browser.is_visible()
         browser.hide()
-        result = browser.prompt_close_or_continue()
+
+        # confirm close
+        result = show_message("Stop editing and return to start?", "yesno")
         if not result:
-            return
+            if open_browser_gui:
+                show_browser_gui()
+            return False
 
         # finish editing
+        browser.descriptions_gui.hide()
         self.hud.edit.finish_editing(open_start_gui=True)
 
     def editor_open_folder(self, input_dir):

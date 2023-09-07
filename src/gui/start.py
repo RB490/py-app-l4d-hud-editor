@@ -13,7 +13,14 @@ from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
-from utils.constants import APP_ICON, GUI_BROWSER_TITLE, IMAGES_DIR_128, PROGRAM_NAME, VERSION_NO_PRETTY, ImageConstants
+from utils.constants import (
+    APP_ICON,
+    GUI_BROWSER_TITLE,
+    IMAGES_DIR_128,
+    PROGRAM_NAME,
+    VERSION_NO_PRETTY,
+    ImageConstants,
+)
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -28,6 +35,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.data_manager = PersistentDataManager()
         self.game = Game()
         self.hud = Hud()
+        self.selected_hud_name = ""
+        self.selected_hud_dir = ""
 
         # gui
         super().__init__("main")
@@ -51,8 +60,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         self.editor_menu = EditorMenuClass(self, self.root)
 
-        # Configure the root window with the menubar
-        self.treeview_refresh()
+        self.gui_refresh()
 
     def debug_show_browser_gui(self):
         """Used for debugging to automatically open the browser gui after starting mainloop"""
@@ -67,8 +75,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # initialize variables
         self.picture_canvas_photo = None
-        self.selected_hud_name = ""
-        self.selected_hud_dir = ""
 
         # create a frame for all widgets
         self.frame = tk.Frame(self.root)
@@ -285,18 +291,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
 
-    def enable_buttons(self):
-        """Enable the following buttons: edit, export, open, remove"""
-
-        # Enable the export button
-        self.export_vpk_button.config(state="normal")
-        # Enable the open button
-        self.open_dir_button.config(state="normal")
-        # Enable the remove button
-        self.remove_button.config(state="normal")
-        # Enable the edit button
-        self.edit_button.config(state="normal")
-
     def show_tree_context_menu(self, event):
         """Show the context menu for the treeview item at the position of the mouse cursor."""
 
@@ -396,12 +390,34 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         if result:
             send2trash.send2trash(self.selected_hud_dir)
 
-    def treeview_refresh(self, called_by_browser=False):
-        """Clear treeview & load up-to-date content + update browser menu"""
+    def update_buttons(self):
+        """Enable the following buttons: edit, export, open, remove"""
+
+        # Enable buttons
+        if self.selected_hud_dir:
+            self.export_vpk_button.config(state="normal")
+            self.open_dir_button.config(state="normal")
+            self.remove_button.config(state="normal")
+            self.edit_button.config(state="normal")
+
+        # Rename edit button
+        if self.selected_hud_dir.lower() == self.hud.edit.get_dir().lower():
+            self.edit_button.config(text="Stop Editing")
+        else:
+            self.edit_button.config(text="Edit")
+
+    def gui_refresh(self, called_by_browser=False):
+        "Update treeview, browser treeview, buttons"
+
+        self.update_buttons()
+        self.treeview_refresh()
 
         # also update browser menu
         if not called_by_browser and self.browser.has_been_run and self.browser.is_visible():
             self.browser.editor_menu_refresh()
+
+    def treeview_refresh(self):
+        """Clear treeview & load up-to-date content + update browser menu"""
 
         # Clear the existing items in the Treeview
         self.treeview.delete(*self.treeview.get_children())
@@ -438,7 +454,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             image = os.path.join(self.selected_hud_dir, "addonimage.jpg")
 
             self.change_addon_image(image)
-            self.enable_buttons()
+            self.update_buttons()
 
     def prompt_add_hud(self):
         """Prompt user for hud folder to add"""
@@ -453,11 +469,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
 
-        # hide gui
-        self.hide()
-
-        # edit hud
-        self.hud.edit.start_editing(self.selected_hud_dir, open_start_gui=True)
+        if self.selected_hud_dir.lower() == self.hud.edit.get_dir().lower():
+            self.hud.edit.start_editing(self.selected_hud_dir, open_start_gui=True)
+            self.hide()
+        else:
+            self.hud.edit.finish_editing()
 
     def on_close(self):
         """On close callback"""

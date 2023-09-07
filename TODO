@@ -1,15 +1,14 @@
 
 ✔ Feature: Rename start to program name + version name @done(23-09-07 11:15)
 ✔ Feature: Display hud name in browser title <hud name> Browser or Browser (<hud name>) @done(23-09-07 11:15)
+✔ Feature: Adjust start so it also displays which hud is being edited? @done(23-09-07 11:40)
+✔ Feature: Adjust start so it can also stop editing. Rename the edit button to 'stop editing' when selecting the edited hud & edit / disable as normal when selecting a different hud @done(23-09-07 11:41)
 
 Current:
 	
 	
 Todo:
 
-	☐ Feature: Adjust start so it also displays which hud is being edited?
-	☐ Feature: Adjust start so it can also stop editing. Rename the edit button to 'stop editing' when selecting the edited hud & edit / disable as normal when selecting a different hud
-	☐ Feature: Adjust hud.edit so it
 
 
 	☐ I could have a main function thing going on that determines whether a gui is open, if not, prompt to close or not or whatever

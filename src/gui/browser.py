@@ -417,7 +417,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # also refresh start treeview
         if self.parent.has_been_run and self.parent.is_visible():
-            self.parent.treeview_refresh(called_by_browser=True)
+            self.parent.gui_refresh(called_by_browser=True)
 
         logger.debug("Refreshed editor menu!")
 
@@ -510,15 +510,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
-
-    def prompt_close_or_continue(self):
-        """Prompt to close. Then properly close"""
-        result = show_message("Are you sure you want to exit?", "yesno")
-        if not result:
-            show_browser_gui()
-            return False
-        self.descriptions_gui.hide()
-        return True
 
     def action_open_file(self):
         """Treeview Handle 'Open File' option"""
