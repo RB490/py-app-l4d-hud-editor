@@ -37,10 +37,11 @@ def configure_debug_logging():
     logger.remove()
     logger.add(sys.stderr, level="INFO")
     # logger.add(sys.stderr, level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")  # type: ignore
-    # logger.add(sys.stderr, filter=lambda record: "game.installer" in record["name"], level="DEBUG")  # type: ignore
-    # logger.add(sys.stderr, filter=lambda record: "hud.syncer" in record["name"], level="DEBUG")  # type: ignore
-    # logger.add(sys.stderr, filter=lambda record: "gui.browser" in record["name"], level="DEBUG")  # type: ignore
+    # logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")
+    # logger.add(sys.stderr, filter=lambda record: "game.installer" in record["name"], level="DEBUG")
+    # logger.add(sys.stderr, filter=lambda record: "hud.syncer" in record["name"], level="DEBUG")
+    # logger.add(sys.stderr, filter=lambda record: "gui.browser" in record["name"], level="DEBUG")
+    logger.add(sys.stderr, filter=lambda record: "shared_utils.hotkey_manager" in record["name"], level="DEBUG")
     logger.debug("Configured debug logging")
 
 

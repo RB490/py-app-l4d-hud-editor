@@ -6,6 +6,7 @@ import shutil
 from hud.hud import Hud
 from utils.constants import DEVELOPMENT_DIR
 
+
 def debug_hud_class():
     "debug hud class"
     h = get_hud_debug_instance()
@@ -22,13 +23,18 @@ def debug_unsync_hud_func():
     hud_ins.edit.syncer.unsync()
     print("finished: debug_unsync_hud_func")
 
+
 def get_hud_debug_instance():
     """Debug the hud class"""
     # pylint: disable=unused-variable
 
     debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
     h = Hud()
-    h.edit._set_hud_info(debug_hud_dir)
+
+    # set hud info. usually done by __set_hud_info inside the class
+    h.edit.hud_dir = debug_hud_dir
+    h.edit.hud_name = h.manager.retrieve_hud_name_for_dir(debug_hud_dir)
+
     return h
 
 

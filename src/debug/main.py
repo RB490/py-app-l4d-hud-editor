@@ -10,6 +10,7 @@ from debug.editor_menu import main_debug_editor_menu
 from debug.game import main_debug_game
 from debug.gui import main_debug_gui
 from debug.misc import main_misc_debug, setup_debugging_environment
+from shared_utils.shared_utils import show_message
 from tests.test_hud_syncer import unit_test_hud_syncer
 
 

@@ -421,9 +421,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         name_of_hud_thats_being_edited = self.hud.edit.get_name()
         gui_title = f"{PROGRAM_NAME} {VERSION_NO_PRETTY}"
         if name_of_hud_thats_being_edited:
-            gui_title = f"{gui_title} - Editing: {name_of_hud_thats_being_edited}"
+            if self.hud.edit.is_synced_and_being_edited():
+                gui_title = f"{gui_title} - Editing: {name_of_hud_thats_being_edited}"
+            else:
+                gui_title = f"{gui_title} - Opened: {name_of_hud_thats_being_edited}"
         self.root.title(gui_title)
-        
+
         self.update_buttons()
         self.treeview_refresh()
 
@@ -485,7 +488,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Start hud editing for selected hud"""
 
         if self.selected_hud_dir_is_being_edited():
-            self.hud.edit.start_editing(self.selected_hud_dir, open_start_gui=True)
+            self.hud.edit.start_editing(self.selected_hud_dir, called_by_start_gui=True)
             self.hide()
         else:
             self.hud.edit.finish_editing()

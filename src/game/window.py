@@ -2,6 +2,7 @@
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
 import subprocess
+from loguru import logger
 
 import win32gui
 
@@ -46,7 +47,7 @@ class GameWindow:
             # retrieve hwnd from process name
             self.hwnd = self.hwnd_utils.get_hwnd_from_process_name(self.get_exe())
 
-        print(f"Set hwnd to '{self.hwnd}'")
+        logger.debug(f"Set hwnd to '{self.hwnd}'")
         return self.hwnd
 
     def restore_saved_position(self):
@@ -68,7 +69,7 @@ class GameWindow:
             self.data_manager.set("game_pos", "Custom (Save)")
             self.data_manager.set("game_pos_custom_coord", custom_position_tuple)
 
-            print("Stored Custom Position Tuple:", custom_position_tuple)
+            logger.debug("Stored Custom Position Tuple:", custom_position_tuple)
             return custom_position_tuple
         else:
             return None
@@ -153,8 +154,7 @@ class GameWindow:
             start_new_session=True,  # Required for some platforms
         )
         if not result:
-            print("Unable to run game!")
-            return False
+            raise ValueError("Unable to run game!")
 
         # wait for game to fully open
         hwnd = self.hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage(

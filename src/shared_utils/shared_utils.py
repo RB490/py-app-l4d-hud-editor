@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tempfile
 import tkinter as tk
-from tkinter import Menu, messagebox
+from tkinter import Menu, Tk, messagebox
 from typing import Any, Callable, Dict, Type, TypeVar
 
 from ahk import AHK
@@ -284,8 +284,16 @@ def show_message(msg: str, msgbox_type: str = "info", title: str = "") -> Any:
         }
 
         if msgbox_type in valid_msgbox_types:
+            # Create a root window
+            root = Tk()
+            root.withdraw()  # Hide the root window
+
             # Capture the response of the messagebox
             response: Any = valid_msgbox_types[msgbox_type](title, msg)
+
+            # Make the messagebox always appear on top
+            root.attributes("-topmost", True)
+            root.update()
 
             # Return the response to the caller
             return response

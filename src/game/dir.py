@@ -84,7 +84,6 @@ class GameDir:
 
         return True
 
-
     def get_vanilla_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
 
@@ -158,7 +157,7 @@ class GameDir:
         logger.debug(f"No installation directory found for mode '{dir_mode}'.")
         return None
 
-    def _get_active_mode(self):
+    def get_active_mode(self):
         dev_dir = self.get(DirectoryMode.DEVELOPER)
         user_dir = self.get(DirectoryMode.USER)
         vanilla_dir = self.__get_vanilla_dir()

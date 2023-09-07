@@ -5,6 +5,8 @@ import threading
 from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
 
+from loguru import logger
+
 from game.constants import DirectoryMode
 from game.game import Game
 from hud.descriptions import HudDescriptions
@@ -12,7 +14,7 @@ from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
-from utils.constants import DEBUG_MODE, GUI_BROWSER_TITLE, HOTKEY_SYNC_HUD
+from utils.constants import GUI_BROWSER_TITLE, HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -39,15 +41,34 @@ class HudEditor:
             return True
         return False
 
-    def start_editing(self, hud_dir, open_start_gui=False):
+    def start_editing(self, hud_dir, called_by_start_gui=False):
         """Perform all the actions needed to start hud editing"""
 
-        print(f"Start editing: ({hud_dir})")
+        logger.info(f"Start editing: ({hud_dir})")
 
         # verify parameters
-        result = self._set_hud_info(hud_dir)
+        result = self.__set_hud_info(hud_dir)
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
+
+        # update browser title
+        get_browser_gui().set_title(f"{self.get_name()} {GUI_BROWSER_TITLE}")
+
+        # hotkeys
+        if not self.hotkey_manager.hotkey_exists(HOTKEY_SYNC_HUD):
+            self.hotkey_manager.add_hotkey(HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True)
+
+        # prompt to start game if not called by start gui and game isn't running
+        if not called_by_start_gui and not self.game.window.is_running():
+            result = show_message(
+                f"Start editing {self.get_name()} ingame?",
+                msgbox_type="yesno",
+                title="Start editing HUD?",
+            )
+            if not result:
+                if called_by_start_gui:
+                    show_start_gui()
+                return False
 
         # verify ID files (here in addition to on start because it might break after program starts)
         try:
@@ -55,21 +76,9 @@ class HudEditor:
         except Exception as e_info:
             show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
 
-            if open_start_gui:
+            if called_by_start_gui:
                 show_start_gui()
             return False
-
-        # prompt to start game during debug mode
-        if DEBUG_MODE and not self.game.window.is_running():
-            result = show_message(
-                f"Start editing {self.get_name()} ingame?",
-                msgbox_type="yesno",
-                title="Start editing HUD?",
-            )
-            if not result:
-                if open_start_gui:
-                    show_start_gui()
-                return False
 
         # is developer mode installed? - also checks for user directory
         if not self.game.installation_completed(DirectoryMode.DEVELOPER):
@@ -79,15 +88,12 @@ class HudEditor:
 
         # cancel if this hud is already being edited
         if self.is_synced_and_being_edited():
-            if open_start_gui:
+            if called_by_start_gui:
                 show_start_gui()
             return False
 
         # unsync previous hud
         self.syncer.unsync()
-
-        # update browser title
-        get_browser_gui().set_title(f"{self.get_name} {GUI_BROWSER_TITLE}")
 
         # Stop checking for game exit
         self.stop_game_exit_check()
@@ -96,19 +102,12 @@ class HudEditor:
         result = self.game.dir.set(DirectoryMode.DEVELOPER)
         if not result:
             print("Could not activate developer mode")
-            if open_start_gui:
+            if called_by_start_gui:
                 show_start_gui()
             return False
 
         # sync the hud to the game folder
-        self.syncer.sync(
-            self.get_dir(),
-            self.game.dir.get(DirectoryMode.DEVELOPER),
-            os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER)),
-        )
-
-        # hotkeys
-        self.hotkey_manager.add_hotkey(HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True)
+        self.sync(called_by_start_editing=True)
 
         # run the game
         try:
@@ -116,18 +115,18 @@ class HudEditor:
         except Exception as e:
             self.unsync()
             show_message(f"failed to run game: {e}")
-            if open_start_gui:
+            if called_by_start_gui:
                 show_start_gui()
             return False
+
+        # Open browser
+        show_browser_gui()
 
         # refresh hud incase game has not restarted
         self.game.command.execute("reload_all")
 
         # Start checking for game exit
         self.wait_for_game_exit_then_finish_editing()
-
-        # Open browser
-        show_browser_gui()
 
         return True
 
@@ -175,25 +174,31 @@ class HudEditor:
     def sync_in_thread(self):
         """Assign this to a hotkey to prevent sync() taking too long and the hotkey not being suppressed"""
         thread = threading.Thread(target=self.sync)
+
         thread.start()
 
-    def sync(self):
+    def sync(self, called_by_start_editing=False):
         """Sync hud"""
+
+        # if not currently being edited. For example when pressing the sync hotkey or manually selecting menu option
+        if not called_by_start_editing and not self.is_synced_and_being_edited():
+            self.start_editing(self.get_dir())
+            return
 
         hud_dir = self.get_dir()
         dev_game_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         main_dev_dir_basename = os.path.basename(self.game.dir.get_main_dir(DirectoryMode.DEVELOPER))
 
-        # print("hud_dir:", hud_dir)
-        # print("dev_game_dir:", dev_game_dir)
-        # print("main_dev_dir_basename:", main_dev_dir_basename)
+        # logger.debug("hud_dir:", hud_dir)
+        # logger.debug("dev_game_dir:", dev_game_dir)
+        # logger.debug("main_dev_dir_basename:", main_dev_dir_basename)
 
         try:
             self.syncer.sync(hud_dir, dev_game_dir, main_dev_dir_basename)
 
             self.game.command.execute(self.data_manager.get("hud_reload_mode"))
         except Exception as err_info:
-            print(f"Could not sync: {err_info}")
+            logger.error(f"Could not sync: {err_info}")
 
     def unsync(self):
         """Unsync hud"""
@@ -214,7 +219,7 @@ class HudEditor:
         else:
             return False
 
-    def _set_hud_info(self, directory):
+    def __set_hud_info(self, directory):
         """Get information"""
         self.hud_dir = directory
         if directory is None:
@@ -247,7 +252,7 @@ class HudEditor:
 
         # verify variables
         if not self.get_dir() or not os.path.exists(self.get_dir()):
-            print(f"Can't retrieve files dictionary. Directory does not exist: {self.get_dir()}")
+            logger.warning(f"Can't retrieve files dictionary. Directory does not exist: {self.get_dir()}")
             return None
 
         root_folder = self.get_dir()
@@ -294,7 +299,7 @@ class HudEditor:
             # Copy the contents of source_dir to target_dir
             copy_directory(source_dir, target_dir)
         except Exception as general_error:
-            print(f"An error occurred: {general_error}")
+            logger.error(f"An error occurred: {general_error}")
 
     def save_vpk_file(self):
         """Save hud as vpk file"""
@@ -315,9 +320,9 @@ class HudEditor:
             vpk_file_class = VPKClass()
             vpk_file_class.create(self.get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
 
-            print(f"VPK file saved at: {file_path}")
+            logger.debug(f"VPK file saved at: {file_path}")
         else:
-            print("Saving canceled.")
+            logger.debug("Saving canceled.")
 
     def wait_for_game_exit_then_finish_editing(self):
         """Used to finish editing when game closes"""

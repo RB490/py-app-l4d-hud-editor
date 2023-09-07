@@ -1,7 +1,7 @@
 {
     "BrowserGuiGeometry": "828x517+114+776",
-    "GuiGeometryBrowser": "644x400+1560+665",
-    "GuiGeometryStart": "865x500+1206+499",
+    "GuiGeometryBrowser": "644x360+1560+665",
+    "GuiGeometryStart": "865x500+697+613",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "875x425+159+110",
     "VDFGui_annotate": 1,
@@ -34,5 +34,7 @@
         "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source",
         "D:/Programming and projects/py-app-l4d-hud-editor/dev/debug/hud/workspace/debug_hud"
     ],
-    "stored_temp_huds": []
+    "stored_temp_huds": [
+        "D:/Downloads/my_temp_hud"
+    ]
 }

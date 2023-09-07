@@ -35,6 +35,18 @@ class HotkeyManager(metaclass=Singleton):
         self.hotkeys[hotkey] = callback
         logger.debug(f"Added hotkey: {hotkey}")
 
+    def hotkey_exists(self, hotkey):
+        """
+        Check if a hotkey is already registered.
+
+        Args:
+            hotkey (str): The hotkey to check.
+
+        Returns:
+            bool: True if the hotkey is already registered, False otherwise.
+        """
+        return hotkey in self.hotkeys
+
     def remove_hotkey(self, hotkey):
         """
         Remove a registered hotkey.

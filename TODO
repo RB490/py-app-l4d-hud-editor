@@ -11,22 +11,33 @@
 	✔ Simplifyable: Don't close the browser @done(23-09-07 12:25)
 ✔ Bug: I close the browser, then start gui, script exits. it should ask whether i want to @done(23-09-07 12:51)
 ✔ Feature: Start: Display the currently edited hud somewhere on the gui @done(23-09-07 12:51)
+✔ Bug: All GUI's are hidden -> sync hotkey -> start game messagebox is behind other window @done(23-09-07 14:30)
+✔ Bug: Browser is hidden -> Sync hud hotkey -> Browser is opened @done(23-09-07 14:31)
+✔ Feature: If i prompt to start editing hud ingame yes/no & decline then i need an option to do so after the fact -- could be locked behind sync or another option @done(23-09-07 14:31)
+✔ Bug: No check for syncing to USER directory @done(23-09-07 14:31)
+✔ Bug: Hud is being edited -> I can start/repair/update/remove/switch dir mode @done(23-09-07 14:31)
 
 Current:
-	
-	
+
 Todo:
 
-
-	
-	☐ Bug: Hud is being edited -> I can start/repair/update/remove/switch dir mode
 
 	☐ Refactor: Menu: File menu. Some options don't make sense
 		☐ Having an installer option
 		☐ A close & exit option // maybe rena
 
 	☐ Idea: Instead of binding menu->open hud->hud to start_editing, i could check if the game is running, and if it isn't i could open the hud in the program but don't sync it and run game and such. basically a new method which separates start_editing and something like open_hud
-		
+	
+	☐ Bug: Browser: Open hud -> Browser noticeably takes too long refreshing before the prompt 'do you want to start editing ingame'
+	
+	☐ Bug: Browser: 'todo' file without any file extension incorrectly has a folder image. 'credits' has this too
+
+	☐ Feature: Menu: When adding or opening a new hud, automatically open it (?)
+	
+	☐ Feature: Menu: Run game option
+
+	☐ Feature: Add image for font files: .otf, .ttf, and possibly more
+
 	☐ Refactor: Add method doc to syncer class
 
 	☐ Research: Ask GPT on how to properly test a program so it's ready for release
