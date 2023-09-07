@@ -1275,6 +1275,13 @@ class EditorMenuClass:
         self.game_menu.add_cascade(
             label="Mode", menu=self.game_mode_menu, image=self.img.switch_black_solid_symbol, compound="left"
         )
+        self.game_menu.add_command(
+            label="Restart",
+            columnbreak=False,
+            command=self.handler.editor_menu_game_restart,
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            compound="left",
+        )
 
         self.editor_menu_game_insecure_checkmark = tk.BooleanVar()
         self.game_menu.add_checkbutton(
@@ -1317,10 +1324,10 @@ class EditorMenuClass:
             self.editor_menu_game_mute_checkmark.set(0)
 
         self.game_menu.add_command(
-            label="Restart",
+            label="Run",
             columnbreak=False,
-            command=self.handler.editor_menu_game_restart,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            command=self.handler.editor_menu_game_run,
+            image=self.img.game_alt,
             compound="left",
         )
         self.game_menu.add_command(

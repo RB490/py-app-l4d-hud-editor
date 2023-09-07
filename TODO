@@ -1,14 +1,12 @@
 ✔ Bug: Browser: Open hud -> Browser noticeably takes too long refreshing before the prompt 'do you want to start editing ingame' @done(23-09-07 15:04) removed editor menu refresh from browser treeview refresh method
 ✔ Feature: Menu: When adding or opening a new hud, automatically start editing it. automatically or first showing a prompt. don't do this in the start gui @done(23-09-07 15:09)
+✔ Feature: Menu: Run game option @done(23-09-07 15:12)
 
 
 Current:
 
 Todo:
 
-	
-	
-	☐ Feature: Menu: Run game option
 	
 	☐ Bug: Browser: 'todo' file without any file extension incorrectly has a folder image. 'credits' has this too
 	☐ Feature: Browser: Add image for font files: .otf, .ttf, and possibly more

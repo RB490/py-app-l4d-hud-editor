@@ -147,6 +147,10 @@ class EditorMenuHandler:
         if messagebox.askyesno("Restart Game", message):
             self.editor_menu_game_restart()
 
+    def editor_menu_game_run(self):
+        """Method to handle the selected secure/insecure option in the menu."""
+        self.game.window.run(DirectoryMode.DEVELOPER)
+    
     def editor_menu_game_close(self):
         """Method to handle the selected secure/insecure option in the menu."""
         self.game.window.close()
