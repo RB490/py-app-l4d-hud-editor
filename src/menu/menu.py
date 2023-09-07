@@ -323,7 +323,7 @@ class EditorMenuClass:
         )
         self.hud_menu.add_command(
             label="Close",
-            image=self.img.close_arrow_shape_button_interface_symbol,
+            image=self.img.cross_black_circular_button,
             compound="left",
             command=self.handler.editor_close_hud,
         )
@@ -1174,7 +1174,7 @@ class EditorMenuClass:
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
         self.file_menu.add_command(
             label="Close",
-            image=self.img.save_black_diskette_interface_symbol,
+            image=self.img.cross_black_circular_button,
             compound="left",
             command=self.handler.editor_finish_editing,
         )

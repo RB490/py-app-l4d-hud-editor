@@ -6,7 +6,6 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 
 import send2trash
-from loguru import logger
 from PIL import Image, ImageTk
 
 from game.game import Game
@@ -43,7 +42,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         super().__init__("main")
         self.browser = GuiHudBrowser(self.root, self)
         self.img = ImageConstants()
-        self.root.title(f"{PROGRAM_NAME} {VERSION_NO_PRETTY}")
+        self.root.title("Start")
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 500)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
@@ -419,6 +418,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def gui_refresh(self, called_by_browser=False):
         "Update treeview, browser treeview, buttons"
 
+        name_of_hud_thats_being_edited = self.hud.edit.get_name()
+        gui_title = f"{PROGRAM_NAME} {VERSION_NO_PRETTY}"
+        if name_of_hud_thats_being_edited:
+            gui_title = f"{gui_title} - Editing: {name_of_hud_thats_being_edited}"
+        self.root.title(gui_title)
+        
         self.update_buttons()
         self.treeview_refresh()
 
@@ -501,4 +506,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         if self.browser.is_visible():
             self.hide()
         else:
-            save_and_exit_script()
+            if self.hud.edit.is_synced_and_being_edited():
+                self.hide()
+            else:
+                save_and_exit_script()
