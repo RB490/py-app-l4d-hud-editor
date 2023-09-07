@@ -128,7 +128,7 @@ class TestHudSyncer(unittest.TestCase):
 
     @patch("builtins.print")  # Mock the print function
     def test_unsync(self, mock_print):
-        os.startfile(self.fake_target_dir)
+        # os.startfile(self.fake_target_dir)
 
         # Set up syncer instance and attributes
         self.syncer.source_dir = self.fake_source_dir
@@ -147,7 +147,6 @@ class TestHudSyncer(unittest.TestCase):
         self.syncer.hud_items_previous = []  # clear hud items from testing sync earlier!
         self.syncer.sync_state = SyncState.NOT_SYNCED
         self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
-        logger.warning(f"sync stats = {self.syncer.is_synced()}")
         self.syncer.unsync()
 
         # Variable assertion

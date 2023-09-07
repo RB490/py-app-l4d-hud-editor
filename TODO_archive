@@ -597,3 +597,4 @@ Post:
 ✔ Refactor: Browser&Start rename gui_fresh to update_gui or something @done(23-09-07 15:46)
 ✔ Feature: Instead of disabling 'hud' menu when not opened -- remove it altogether @done(23-09-07 15:47)
 ✔ Bug: Debug browser method -> Browser opens with 2020hud loaded with a bunch of files -> close -> browser resizes a bit smaller. Note that after loading another hud & closing it, this doesn't happen. Code path: handler.py -> self.hud.edit.stop_editing() -> get_browser_gui().gui_refresh() (i tested with without .gui_refresh attached, nothing happens) -> self.root.config(menu=self.editor_menu.get_main_menu()). i don't think i can fix this @done(23-09-07 16:16)	- this doesn't happen when i have resized the gui manually at all. maybe a workaround is to adjust the gui by 1 pixel -> self.root.update_idletasks()  # fixes bug where resetting the menu resizes the gui some
+✔ Bug: Browser treeview refreshes pretty slow @done(23-09-07 16:20)

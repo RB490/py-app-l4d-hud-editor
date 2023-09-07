@@ -19,9 +19,9 @@ def main_debug():
 
     setup_debugging_environment()
 
-    # unit_test_hud_syncer()
+    unit_test_hud_syncer()
     # main_misc_debug()
-    main_debug_gui()
+    # main_debug_gui()
     # main_debug_editor_menu()
     # debug_vpk_class()
     # debug_id_handler()

@@ -1,5 +1,7 @@
 """Module providing hud syncing capability between a source dir and the game dir"""
+
 # pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
+
 import hashlib
 import os
 import shutil
@@ -40,27 +42,30 @@ def get_subdirectories_names(directory):
 
 
 class ChangeItem:
+    """Represents a change item with action, source, and target."""
+
     def __init__(self, action, source, target=None):
         self.action = action  # 'rename', 'create', or 'copy'
         self.source = source
         self.target = target
 
     def to_dict(self):
+        """Convert the ChangeItem to a dictionary."""
         return {
             "action": self.action,
             "source": self.source,
             "target": self.target,
         }
 
-    def __dict__(self):
-        return self.to_dict()
-
 
 class FileOperations:
+    """Handles file operations like renaming, creating, and copying."""
+
     def __init__(self, hud_syncer):
         self.hud_syncer = hud_syncer
 
     def perform_rename(self, hud_item, source_item, target_item):
+        """Rename a file or directory."""
         try:
             os.rename(source_item, target_item)
             change = ChangeItem("rename", source_item, target_item)
@@ -72,6 +77,7 @@ class FileOperations:
             raise Exception(error_message) from e
 
     def perform_create_dir(self, hud_item, source_item, target_item):
+        """Create a directory if it doesn't exist."""
         try:
             if not os.path.exists(target_item):
                 os.makedirs(target_item)
@@ -84,6 +90,7 @@ class FileOperations:
             raise Exception(error_message) from e
 
     def perform_copy(self, hud_item, source_item, target_item):
+        """Copy a file or directory."""
         try:
             if any(
                 change["action"] == "copy" and change["source"] == source_item and change["target"] == target_item
@@ -103,7 +110,14 @@ class FileOperations:
 
 
 class HudSyncer(metaclass=Singleton):
+    """The HudSyncer"""
+
     def __init__(self):
+        """
+        Initialize the HudSyncer.
+
+        Initializes various attributes and objects needed for synchronization.
+        """
         self.game = Game()
         self.sync_state = None
         self.source_dir = None
@@ -117,6 +131,13 @@ class HudSyncer(metaclass=Singleton):
         self.file_operations = FileOperations(self)
 
     def _record_item_change(self, hud_item, change):
+        """
+        Record a change for a HUD item.
+
+        Args:
+            hud_item (str): The HUD item to record the change for.
+            change (dict): A dictionary representing the change.
+        """
         if hud_item in self.item_changes:
             if change not in self.item_changes[hud_item]:
                 self.item_changes[hud_item].append(change)
@@ -124,15 +145,45 @@ class HudSyncer(metaclass=Singleton):
             self.item_changes[hud_item] = [change]
 
     def __perform_rename(self, hud_item, source_item, target_item):
+        """
+        Perform a rename operation for a HUD item.
+
+        Args:
+            hud_item (str): The HUD item to be renamed.
+            source_item (str): The source item path.
+            target_item (str): The target item path.
+        """
         self.file_operations.perform_rename(hud_item, source_item, target_item)
 
     def __perform_create_dir(self, hud_item, source_item, target_item):
+        """
+        Perform a directory creation operation for a HUD item.
+
+        Args:
+            hud_item (str): The HUD item to create a directory for.
+            source_item (str): The source directory path.
+            target_item (str): The target directory path.
+        """
         self.file_operations.perform_create_dir(hud_item, source_item, target_item)
 
     def __perform_copy(self, hud_item, source_item, target_item):
+        """
+        Perform a copy operation for a HUD item.
+
+        Args:
+            hud_item (str): The HUD item to be copied.
+            source_item (str): The source item path.
+            target_item (str): The target item path.
+        """
         self.file_operations.perform_copy(hud_item, source_item, target_item)
 
     def __undo_changes_for_item(self, item):
+        """
+        Undo changes for a specific HUD item.
+
+        Args:
+            item (str): The HUD item to undo changes for.
+        """
         logger.debug(f"Unsyncing: {item}")
         try:
             changes_for_item = self.item_changes.get(item)
@@ -169,6 +220,9 @@ class HudSyncer(metaclass=Singleton):
             raise Exception(error_message) from e
 
     def __undo_changes_for_all_items(self):
+        """
+        Undo changes for all HUD items.
+        """
         logger.debug("Undoing changes for all items...")
         for hud_item in self.item_changes:
             self.__undo_changes_for_item(hud_item)
@@ -177,13 +231,31 @@ class HudSyncer(metaclass=Singleton):
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
 
     def __set_sync_state(self, sync_state):
+        """
+        Set the synchronization state.
+
+        Args:
+            sync_state (SyncState): The synchronization state to set.
+        """
         self.sync_state = sync_state
         self.game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, sync_state)
 
     def get_source_dir(self):
+        """
+        Get the source directory.
+
+        Returns:
+            str: The source directory path.
+        """
         return self.source_dir
 
     def get_sync_status(self):
+        """
+        Get the synchronization status.
+
+        Returns:
+            SyncState: The synchronization state.
+        """
         if self.game.installation_exists(DirectoryMode.DEVELOPER):
             self.__set_sync_state(self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER))
         else:
@@ -192,12 +264,24 @@ class HudSyncer(metaclass=Singleton):
         return self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
 
     def is_synced(self):
+        """
+        Check if the HUD is fully synced.
+
+        Returns:
+            bool: True if fully synced, False otherwise.
+        """
         if self.get_sync_status() == SyncState.FULLY_SYNCED:
             return True
         else:
             return False
 
     def unsync(self):
+        """
+        Unsync the HUD.
+
+        Returns:
+            bool: True if successfully unsynced, False otherwise.
+        """
         logger.debug("Unsyncing...")
 
         if not self.is_synced():
@@ -212,6 +296,14 @@ class HudSyncer(metaclass=Singleton):
         return True
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
+        """
+        Sync the HUD.
+
+        Args:
+            source_dir (str): The source directory path.
+            target_dir (str): The target directory path.
+            target_dir_main_name (str): The main target directory name.
+        """
         logger.debug("Synching...")
         logger.debug(f"Source: {source_dir}")
         logger.debug(f"Target: {target_dir}")
@@ -256,6 +348,9 @@ class HudSyncer(metaclass=Singleton):
         logger.info("Synced!")
 
     def __backup_and_overwrite_target(self):
+        """
+        Backup and overwrite target directories and files.
+        """
         for target_sub_dir_name in self.target_sub_dir_names:
             for item in self.hud_items:
                 self.__backup_item(item, target_sub_dir_name)
@@ -264,6 +359,13 @@ class HudSyncer(metaclass=Singleton):
                     self.__overwrite_item(item, target_sub_dir_name)
 
     def __backup_item(self, item, target_sub_dir_name):
+        """
+        Backup a HUD item.
+
+        Args:
+            item (str): The HUD item to backup.
+            target_sub_dir_name (str): The target subdirectory name.
+        """
         target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
         target_item = item.replace(self.source_dir, target_sub_dir)
         target_item_backup = get_backup_path(target_item)
@@ -285,6 +387,13 @@ class HudSyncer(metaclass=Singleton):
             self.__perform_rename(item, target_item, target_item_backup)
 
     def __overwrite_item(self, item, target_sub_dir_name):
+        """
+        Overwrite a target HUD item.
+
+        Args:
+            item (str): The HUD item to overwrite.
+            target_sub_dir_name (str): The target subdirectory name.
+        """
         target_sub_dir = os.path.join(self.target_dir_root, target_sub_dir_name)
         target_item = item.replace(self.source_dir, target_sub_dir)
 
@@ -305,6 +414,9 @@ class HudSyncer(metaclass=Singleton):
             self.__perform_copy(item, item, target_item)
 
     def __unsync_deleted_source_items(self):
+        """
+        Unsync deleted source items.
+        """
         for item in self.hud_items_previous:
             if item not in self.hud_items:
                 self.__undo_changes_for_item(item)
