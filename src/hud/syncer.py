@@ -49,7 +49,7 @@ class ChangeItem:
         self.source = source
         self.target = target
 
-    def to_dict(self):
+    def as_dict(self):
         """Convert the ChangeItem to a dictionary."""
         return {
             "action": self.action,
@@ -69,7 +69,7 @@ class FileOperations:
         try:
             os.rename(source_item, target_item)
             change = ChangeItem("rename", source_item, target_item)
-            self.hud_syncer._record_item_change(hud_item, change.to_dict())
+            self.hud_syncer._record_item_change(hud_item, change.as_dict())
             logger.info(f"Renamed '{source_item}' to '{target_item}'")
         except Exception as e:
             error_message = f"Failed to rename '{source_item}' to '{target_item}': {e}"
@@ -82,7 +82,7 @@ class FileOperations:
             if not os.path.exists(target_item):
                 os.makedirs(target_item)
                 change = ChangeItem("create", source_item, target_item)
-                self.hud_syncer._record_item_change(hud_item, change.to_dict())
+                self.hud_syncer._record_item_change(hud_item, change.as_dict())
                 logger.info(f"Created folder '{target_item}'")
         except OSError as e:
             error_message = f"Failed to create folder '{target_item}': {e}"
@@ -101,7 +101,7 @@ class FileOperations:
 
             shutil.copy(source_item, target_item)
             change = ChangeItem("copy", source_item, target_item)
-            self.hud_syncer._record_item_change(hud_item, change.to_dict())  # Convert to dictionary
+            self.hud_syncer._record_item_change(hud_item, change.as_dict())  # Convert to dictionary
             logger.info(f"Copied '{source_item}' to '{target_item}'")
         except Exception as e:
             error_message = f"Failed to copy '{source_item}' to '{target_item}': {e}"

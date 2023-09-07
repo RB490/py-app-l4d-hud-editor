@@ -1,11 +1,11 @@
 ✔ Refactor: Add method doc to syncer class @done(23-09-07 16:33)
+✔ Refactor: Move GPT prompts somwhere else. maybe onenote. maybe a github repo + add a prompt for adding comments properly @done(23-09-07 16:38)
 
 Current:
 
 Todo:
 
 	
-	☐ Refactor: Move GPT prompts somwhere else. maybe onenote. maybe a github repo + add a prompt for adding comments properly
 
 	☐ Research: Ask GPT on how to properly test a program so it's ready for release
 	
