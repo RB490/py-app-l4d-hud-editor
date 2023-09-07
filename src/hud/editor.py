@@ -14,7 +14,7 @@ from hud.manager import HudManager
 from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
-from utils.constants import GUI_BROWSER_TITLE, HOTKEY_SYNC_HUD
+from utils.constants import HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -52,9 +52,7 @@ class HudEditor:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
         # update browser (and thereby the start gui)
-        get_browser_gui().editor_menu_refresh()
-        get_browser_gui().treeview_refresh()
-        get_browser_gui().set_title(f"{self.get_name()} {GUI_BROWSER_TITLE}")
+        get_browser_gui().gui_refresh()
 
         # hotkeys
         if not self.hotkey_manager.hotkey_exists(HOTKEY_SYNC_HUD):
@@ -166,9 +164,7 @@ class HudEditor:
 
         # gui
         get_start_gui().clear_selection()
-        get_browser_gui().set_title(f"{GUI_BROWSER_TITLE}")
-        get_browser_gui().editor_menu_refresh()
-        get_browser_gui().treeview_refresh()
+        get_browser_gui().gui_refresh()
 
         # remove hotkey
         self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
@@ -235,6 +231,12 @@ class HudEditor:
         self.hud_dir = None
         self.hud_name = None
         return True
+
+    def is_opened(self):
+        """Verify a hud is opened"""
+        if self.get_dir():
+            return True
+        return False
 
     def get_name(self):
         """Get information"""

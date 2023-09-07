@@ -11,20 +11,13 @@ from loguru import logger
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
-from shared_utils.shared_utils import add_empty_menu_separator, create_lambda_command
-from utils.constants import (
-    EDITOR_HUD_RELOAD_MODES,
-    GAME_POSITIONS,
-    HOTKEY_EDITOR_MENU,
-    HOTKEY_SYNC_HUD,
-    HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR_MISC,
-    MAP_CODES,
-    PROJECT_ROOT,
-    SNIPPETS_DIR,
-    TUTORIALS_DIR,
-    ImageConstants,
-)
+from shared_utils.shared_utils import (add_empty_menu_separator,
+                                       create_lambda_command)
+from utils.constants import (EDITOR_HUD_RELOAD_MODES, GAME_POSITIONS,
+                             HOTKEY_EDITOR_MENU, HOTKEY_SYNC_HUD,
+                             HOTKEY_TOGGLE_BROWSER, IMAGES_DIR_MISC, MAP_CODES,
+                             PROJECT_ROOT, SNIPPETS_DIR, TUTORIALS_DIR,
+                             ImageConstants)
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -1122,7 +1115,7 @@ class EditorMenuClass:
 
     def get_main_menu(self):
         """Retrieve main menu (for adding as menu bar)"""
-        # this line is replaced by 'editor_menu_refresh' in 'create_and_refresh_menu'
+        # this line is replaced by 'gui_refresh' in 'create_and_refresh_menu'
         #       self.create_and_refresh_menu(is_context_menu=False)
 
         return self.main_menu
@@ -1346,21 +1339,25 @@ class EditorMenuClass:
         # ----------------------------------
 
         if not is_context_menu:
+            # add without images
             self.main_menu.add_cascade(label="File", menu=self.file_menu)
-            self.main_menu.add_cascade(label="Hud", menu=self.hud_menu)
+            if self.hud.edit.is_opened():
+                self.main_menu.add_cascade(label="Hud", menu=self.hud_menu)
             self.main_menu.add_cascade(label="Mode", menu=self.reload_mode_menu)
             self.main_menu.add_cascade(label="Game", menu=self.game_menu)
             self.main_menu.add_cascade(label="Debug", menu=self.debug_menu)
         else:
+            # add with images
             self.main_menu.add_cascade(
                 label="File", image=self.img.file_black_rounded_symbol_1, compound="left", menu=self.file_menu
             )
-            self.main_menu.add_cascade(
-                label="Hud",
-                image=self.img.paintbrush_design_tool_interface_symbol,
-                compound="left",
-                menu=self.hud_menu,
-            )
+            if self.hud.edit.is_opened():
+                self.main_menu.add_cascade(
+                    label="Hud",
+                    image=self.img.paintbrush_design_tool_interface_symbol,
+                    compound="left",
+                    menu=self.hud_menu,
+                )
             self.main_menu.add_cascade(
                 label="Mode",
                 image=self.img.arrows_couple_counterclockwise_rotating_symbol,
@@ -1375,13 +1372,13 @@ class EditorMenuClass:
                 label="Close (ESC)", image=self.img.cross, compound="left", command=self.do_nothing
             )  # useful when displaying menu as popup
 
-        if not self.hud.edit.get_dir():
-            self.main_menu.entryconfig("Hud", state="disabled")
+        # if not self.hud.edit.is_opened():
+        #     self.main_menu.entryconfig("Hud", state="disabled")
 
         # call method to update menu
         if (
             self.parent.has_been_run()
-            and hasattr(self.parent, "editor_menu_refresh")
-            and callable(getattr(self.parent, "editor_menu_refresh"))
+            and hasattr(self.parent, "gui_refresh")
+            and callable(getattr(self.parent, "gui_refresh"))
         ):
-            self.parent.editor_menu_refresh(called_by_editor_menu=True)
+            self.parent.gui_refresh(called_by_editor_menu=True)

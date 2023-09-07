@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 
 import send2trash
+from loguru import logger
 from PIL import Image, ImageTk
 
 from game.game import Game
@@ -315,7 +316,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             # Open the source directory in the file explorer
             subprocess.Popen(["explorer", hud_dir])
         else:
-            print(f"Directory '{hud_dir}' does not exist.")
+            logger.debug(f"Directory '{hud_dir}' does not exist.")
 
     def selected_hud_export_vpk_or_folder(self):
         """Export the selected hud as a vpk file or directory"""
@@ -346,7 +347,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Export hud as folder"""
 
         if not self.selected_hud_dir:
-            print("No HUD selected!")
+            logger.debug("No HUD selected!")
             return
 
         target_dir = filedialog.askdirectory(title="Export HUD as folder")
@@ -361,7 +362,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         )
 
         if export_path:
-            print(export_path)
+            logger.debug(export_path)
             vpk_class = VPKClass()
             vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
             # vpk_class.create(self, input_dir, output_dir, output_file_name):
@@ -418,6 +419,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def gui_refresh(self, called_by_browser=False):
         "Update treeview, browser treeview, buttons"
 
+        # set title
         name_of_hud_thats_being_edited = self.hud.edit.get_name()
         gui_title = f"{PROGRAM_NAME} {VERSION_NO_PRETTY}"
         if name_of_hud_thats_being_edited:
@@ -427,12 +429,17 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
                 gui_title = f"{gui_title} - Opened: {name_of_hud_thats_being_edited}"
         self.root.title(gui_title)
 
+        # update buttons
         self.update_buttons()
+
+        # refresh treeview
         self.treeview_refresh()
 
-        # also update browser menu
+        # refresh browser gui
         if not called_by_browser and self.browser.has_been_run() and self.browser.is_visible():
-            self.browser.editor_menu_refresh()
+            self.browser.gui_refresh()
+
+        logger.debug("Refreshed Start GUI!")
 
     def treeview_refresh(self):
         """Clear treeview & load up-to-date content + update browser menu"""

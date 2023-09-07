@@ -10,12 +10,13 @@
 	✔ ^ in fact this effect happens whenever resizing. so it'll be treeview refresh hitting @done(23-09-07 15:26)
 ✔ Feature: Menu: Rename installer menu option? On start & editor context menu. @done(23-09-07 15:29)
 ✔ Feature: Menu: Refactor open menu @done(23-09-07 15:32)
+✔ Refactor: Browser: Editor_menu_refresh refactor into gui_refresh like on start gui @done(23-09-07 15:46)
+✔ Refactor: Browser&Start rename gui_fresh to update_gui or something @done(23-09-07 15:46)
 
 
 Current:
 
 Todo:
-
 
 
 	☐ Feature: Instead of disabling 'hud' menu when not opened -- remove it altogether

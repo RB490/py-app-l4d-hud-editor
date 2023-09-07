@@ -72,7 +72,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # editor menu
         self.editor_menu = EditorMenuClass(self, self.root)
-        self.editor_menu_refresh()
+        self.gui_refresh()
 
         # set hwnd
         self.hwnd = win32gui.GetParent(self.frame.winfo_id())
@@ -407,24 +407,31 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         if self.has_been_run() and self.descriptions_gui.is_visible():
             self.descriptions_gui.hide()
 
-    def editor_menu_refresh(self, called_by_editor_menu=False):
+    def gui_refresh(self, called_by_editor_menu=False):
         """Refresh the menu. Called by self.editor_menu
 
         Doing this when treeview refreshes because it captures every kind of refresh
         like for example simply when the gui takes focus"""
 
-        # refresh menu
+        # title
+        if self.hud.edit.is_opened():
+            self.set_title(f"{self.hud.edit.get_name()} {GUI_BROWSER_TITLE}")
+        else:
+            self.set_title(f"{GUI_BROWSER_TITLE}")
+
+        # editor menu
         if not called_by_editor_menu:
             self.editor_menu.create_and_refresh_menu(is_context_menu=False)
-
-        # update menu on gui
         self.root.config(menu=self.editor_menu.get_main_menu())
 
-        # also refresh start treeview
+        # treeview
+        self.treeview_refresh()
+
+        # refresh start gui
         if self.parent.has_been_run() and self.parent.is_visible():
             self.parent.gui_refresh(called_by_browser=True)
 
-        logger.debug("Refreshed editor menu!")
+        logger.debug(f"Refreshed {GUI_BROWSER_TITLE} GUI!")
 
     def treeview_refresh(self, search_term=None):
         """
