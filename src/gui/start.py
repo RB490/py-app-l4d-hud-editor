@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 
 import send2trash
+from loguru import logger
 from PIL import Image, ImageTk
 
 from game.game import Game
@@ -381,8 +382,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # remove from data
         self.data_manager.remove_item_from_list("stored_huds", hud_dir_json_format)
-        self.selected_hud_dir = ""
-        self.selected_hud_name = ""
+        self.clear_selection()
         self.treeview_refresh()
 
         # prompt move to trash
@@ -393,18 +393,28 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def update_buttons(self):
         """Enable the following buttons: edit, export, open, remove"""
 
-        # Enable buttons
+        # Toggle buttons
         if self.selected_hud_dir:
             self.export_vpk_button.config(state="normal")
             self.open_dir_button.config(state="normal")
             self.remove_button.config(state="normal")
             self.edit_button.config(state="normal")
+        else:
+            self.export_vpk_button.config(state="disabled")
+            self.open_dir_button.config(state="disabled")
+            self.remove_button.config(state="disabled")
+            self.edit_button.config(state="disabled")
 
         # Rename edit button
-        if self.selected_hud_dir.lower() == self.hud.edit.get_dir().lower():
+        if self.selected_hud_dir_is_being_edited():
             self.edit_button.config(text="Stop Editing")
         else:
             self.edit_button.config(text="Edit")
+
+    def clear_selection(self):
+        """Clear selected variables. Called by hud editing class so the gui can properly disable buttons"""
+        self.selected_hud_dir = ""
+        self.selected_hud_name = ""
 
     def gui_refresh(self, called_by_browser=False):
         "Update treeview, browser treeview, buttons"
@@ -413,7 +423,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview_refresh()
 
         # also update browser menu
-        if not called_by_browser and self.browser.has_been_run and self.browser.is_visible():
+        if not called_by_browser and self.browser.has_been_run() and self.browser.is_visible():
             self.browser.editor_menu_refresh()
 
     def treeview_refresh(self):
@@ -469,11 +479,21 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def edit_selected_hud(self):
         """Start hud editing for selected hud"""
 
-        if self.selected_hud_dir.lower() == self.hud.edit.get_dir().lower():
+        if self.selected_hud_dir_is_being_edited():
             self.hud.edit.start_editing(self.selected_hud_dir, open_start_gui=True)
             self.hide()
         else:
             self.hud.edit.finish_editing()
+
+    def selected_hud_dir_is_being_edited(self):
+        """Check if selected hud dir is being edited"""
+        selected_dir = self.selected_hud_dir
+        edited_dir = self.hud.edit.get_dir()
+
+        if selected_dir and edited_dir:
+            return selected_dir.lower() == edited_dir.lower()
+
+        return False
 
     def on_close(self):
         """On close callback"""

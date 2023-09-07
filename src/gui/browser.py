@@ -29,7 +29,7 @@ from utils.constants import (
     HOTKEY_TOGGLE_BROWSER,
     ImageConstants,
 )
-from utils.functions import get_image_for_file_extension, save_and_exit_script, show_browser_gui
+from utils.functions import get_image_for_file_extension
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -402,21 +402,26 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview_refresh()
         self.search_box.focus_set()
 
+    def on_hide(self):
+        """Callback on hide"""
+        if self.has_been_run() and self.descriptions_gui.is_visible():
+            self.descriptions_gui.hide()
+
     def editor_menu_refresh(self, called_by_editor_menu=False):
         """Refresh the menu. Called by self.editor_menu
 
         Doing this when treeview refreshes because it captures every kind of refresh
         like for example simply when the gui takes focus"""
-        
+
         # refresh menu
         if not called_by_editor_menu:
             self.editor_menu.create_and_refresh_menu(is_context_menu=False)
-        
+
         # update menu on gui
         self.root.config(menu=self.editor_menu.get_main_menu())
 
         # also refresh start treeview
-        if self.parent.has_been_run and self.parent.is_visible():
+        if self.parent.has_been_run() and self.parent.is_visible():
             self.parent.gui_refresh(called_by_browser=True)
 
         logger.debug("Refreshed editor menu!")

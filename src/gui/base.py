@@ -31,7 +31,7 @@ class BaseGUI:
         self.is_destroyed: bool = False
         self.is_hidden: bool = True
         self.is_resizable: bool = True
-        self.has_been_run: bool = False
+        self.has_been_run_status: bool = False
         self.parent_root = parent_root if parent_root else None
         self.root: Union[tk.Tk, tk.Toplevel]
 
@@ -55,6 +55,7 @@ class BaseGUI:
         self.__call_save_window_geometry()
         self.root.withdraw()
         self.is_hidden = True
+        self.__call_method_if_exists("on_hide")
 
     def minimize(self) -> None:
         """Minimize the window (iconify)."""
@@ -68,10 +69,10 @@ class BaseGUI:
 
     def run(self) -> None:
         """Run the mainloop."""
-        if self.has_been_run:
+        if self.has_been_run_status:
             raise ValueError(f"Called {self.get_quoted_title()} Run() while already running!")
 
-        self.has_been_run = True
+        self.has_been_run_status = True
         logger.debug(f"Running {self.get_quoted_title()} with gui_type: {self.gui_type}")
 
         # Toplevel GUIs don't need a mainloop because they get handled by the main mainloop
@@ -97,8 +98,12 @@ class BaseGUI:
         self.root.after(0, lambda: self.__delayed_show(callback))
         if hide:
             self.hide()
-        if not self.has_been_run:
+        if not self.has_been_run_status:
             self.run()
+
+    def has_been_run(self):
+        """Has GUI been ran?"""
+        return self.has_been_run_status
 
     def set_title(self, title):
         """Set title"""
@@ -156,10 +161,6 @@ class BaseGUI:
         """
         self.show()
         menu.post(x, y)
-
-    def has_ran(self) -> bool:
-        """Check if GUI has been run once."""
-        return self.has_been_run
 
     def get_mainloop_started(self) -> bool:
         """Check if the mainloop was started."""
@@ -252,7 +253,7 @@ class BaseGUI:
     def get_window_geometry(self) -> str:
         """Get window geometry if GUI is loaded and visible"""
 
-        if self.has_been_run:
+        if self.has_been_run_status:
             geometry = self.root.geometry()
             logger.debug(f"{self.get_quoted_title()} geometry: {geometry}")
             return geometry
@@ -312,7 +313,7 @@ class BaseGUI:
         self.__call_method_if_exists("on_close")
 
     def __call_save_window_geometry(self) -> None:
-        if self.has_been_run:
+        if self.has_been_run_status:
             self.__call_method_if_exists("save_window_geometry")
 
     def __call_method_if_exists(self, method_name: str) -> None:

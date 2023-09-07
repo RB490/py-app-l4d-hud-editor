@@ -310,10 +310,22 @@ class EditorMenuClass:
             self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
+            label=f"Sync ({HOTKEY_SYNC_HUD})",
+            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            compound="left",
+            command=self.handler.editor_sync_hud,
+        )
+        self.hud_menu.add_command(
             label="Unsync",
             image=self.img.arrows_couple_counterclockwise_rotating_symbol,
             compound="left",
             command=self.handler.editor_unsync_hud,
+        )
+        self.hud_menu.add_command(
+            label="Close",
+            image=self.img.close_arrow_shape_button_interface_symbol,
+            compound="left",
+            command=self.handler.editor_close_hud,
         )
         self.hud_menu.add_separator()
         self.hud_menu.add_command(label="Save", state="disabled")
@@ -339,7 +351,7 @@ class EditorMenuClass:
             compound="left",
         )
         self.hud_menu.add_command(
-            label="Hud (VS)",
+            label="Hud (VS Code)",
             command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
             image=self.img.vs_code,
             compound="left",
@@ -1343,7 +1355,7 @@ class EditorMenuClass:
 
         # call method to update menu
         if (
-            self.parent.has_been_run
+            self.parent.has_been_run()
             and hasattr(self.parent, "editor_menu_refresh")
             and callable(getattr(self.parent, "editor_menu_refresh"))
         ):

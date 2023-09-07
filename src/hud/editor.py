@@ -13,7 +13,7 @@ from hud.syncer import HudSyncer
 from shared_utils.hotkey_manager import HotkeyManager
 from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import DEBUG_MODE, GUI_BROWSER_TITLE, HOTKEY_SYNC_HUD
-from utils.functions import get_browser_gui, show_browser_gui, show_start_gui
+from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
 
@@ -54,7 +54,7 @@ class HudEditor:
             self.game.dir.check_for_invalid_id_file_structure()
         except Exception as e_info:
             show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
-            
+
             if open_start_gui:
                 show_start_gui()
             return False
@@ -141,17 +141,8 @@ class HudEditor:
         # close browser
         get_browser_gui().hide()
 
-        # unsync hud
-        self.syncer.unsync()
-
-        # update browser title
-        get_browser_gui().set_title(f"{GUI_BROWSER_TITLE}")
-
-        # remove hotkey
-        self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
-
-        # clear variables
-        self.clear_hud_info()
+        # stop editing hud
+        self.stop_editing()
 
         # prompt close game
         if self.game.window.is_running():
@@ -163,6 +154,23 @@ class HudEditor:
         # callback to the gui
         if open_start_gui:
             show_start_gui()
+
+    def stop_editing(self):
+        """Unsync & stop editing hud"""
+        # unsync hud
+        self.syncer.unsync()
+
+        # clear variables
+        self.clear_hud_info()
+
+        # gui
+        get_start_gui().clear_selection()
+        get_browser_gui().set_title(f"{GUI_BROWSER_TITLE}")
+        get_browser_gui().editor_menu_refresh()
+        get_browser_gui().treeview_refresh()
+
+        # remove hotkey
+        self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
 
     def sync_in_thread(self):
         """Assign this to a hotkey to prevent sync() taking too long and the hotkey not being suppressed"""
@@ -191,20 +199,13 @@ class HudEditor:
         """Unsync hud"""
 
         # unsync
-        self.syncer.unsync()
-
-        # clear variables
-        self._set_hud_info(None)
-
-        # refresh browser
-        get_browser_gui().treeview_refresh()
+        result = self.syncer.unsync()
+        # if not unsynced, don't update game
+        if not result:
+            return
 
         # refresh hud ingame
         self.game.command.execute("reload_all")
-
-    def synced(self):
-        "Verify if hud is loaded"
-        return self.syncer.is_synced()
 
     def is_synced(self):
         "Verify if hud is loaded"

@@ -291,7 +291,6 @@ class EditorMenuHandler:
             return False
 
         # finish editing
-        browser.descriptions_gui.hide()
         self.hud.edit.finish_editing(open_start_gui=True)
 
     def editor_open_folder(self, input_dir):
@@ -337,10 +336,17 @@ class EditorMenuHandler:
         else:
             self.game.command.execute("r_drawWorld 1; r_drawEntities 1")
 
-    @call_create_and_refresh_menu_after_method
+    def editor_sync_hud(self):
+        """Sync hud"""
+        self.hud.edit.sync()
+
     def editor_unsync_hud(self):
         """Unsync hud"""
         self.hud.edit.unsync()
+
+    def editor_close_hud(self):
+        """Unsync & close hud"""
+        self.hud.edit.stop_editing()
 
     def editor_save_as_vpk(self):
         """Export hud as vpk"""

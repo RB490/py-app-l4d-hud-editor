@@ -202,13 +202,14 @@ class HudSyncer(metaclass=Singleton):
 
         if not self.is_synced():
             logger.error("Unsync: No HUD to unsync!")
-            return
+            return False
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")
 
         self.__undo_changes_for_all_items()  # also sets sync status
 
         logger.info("Unsynced!")
+        return True
 
     def sync(self, source_dir: str, target_dir: str, target_dir_main_name: str) -> None:
         logger.debug("Synching...")
