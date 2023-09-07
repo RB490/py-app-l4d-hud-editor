@@ -23,7 +23,7 @@ class HudManager:
         if folder_path:
             self.data_manager.append("stored_huds", folder_path)
             self.data_manager.save()
-            return True
+            return folder_path
         return False
 
     def prompt_open_temp_hud(self):
@@ -32,7 +32,7 @@ class HudManager:
         if folder_path:
             self.data_manager.append("stored_temp_huds", folder_path)
             self.data_manager.save()
-            return True
+            return folder_path
         return False
 
     def prompt_create_new_hud(self):
@@ -42,7 +42,7 @@ class HudManager:
             self.data_manager.append("stored_huds", folder_path)
             self.data_manager.save()
             copy_directory(NEW_HUD_DIR, folder_path)
-            return True
+            return folder_path
         return False
 
     def remove_stored_hud(self, hud_dir):

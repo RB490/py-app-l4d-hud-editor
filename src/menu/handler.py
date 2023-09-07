@@ -212,14 +212,22 @@ class EditorMenuHandler:
         self.game.command.execute(action)
 
     @call_create_and_refresh_menu_after_method
-    def editor_add_existing_hud(self):
-        """Add exiting hud to the menu"""
-        self.hud.manager.prompt_add_existing_hud()
-
-    @call_create_and_refresh_menu_after_method
     def editor_create_new_hud(self):
         """Add exiting hud to the menu"""
-        self.hud.manager.prompt_create_new_hud()
+        hud_dir = self.hud.manager.prompt_create_new_hud()
+        if hud_dir:
+            result = show_message("Start editing HUD?", "yesno")
+            if result:
+                self.hud.edit.start_editing(hud_dir)
+
+    @call_create_and_refresh_menu_after_method
+    def editor_add_existing_hud(self):
+        """Add exiting hud to the menu"""
+        hud_dir = self.hud.manager.prompt_add_existing_hud()
+        if hud_dir:
+            result = show_message("Start editing HUD?", "yesno")
+            if result:
+                self.hud.edit.start_editing(hud_dir)
 
     @call_create_and_refresh_menu_after_method
     def editor_remove_stored_hud(self, hud_dir):
@@ -227,15 +235,19 @@ class EditorMenuHandler:
         self.hud.manager.remove_stored_hud(hud_dir)
 
     @call_create_and_refresh_menu_after_method
+    def editor_open_temp_hud(self):
+        """Open temporary hud in the menu"""
+        hud_dir = self.hud.manager.prompt_open_temp_hud()
+        if hud_dir:
+            result = show_message("Start editing HUD?", "yesno")
+            if result:
+                self.hud.edit.start_editing(hud_dir)
+
+    @call_create_and_refresh_menu_after_method
     def editor_remove_temp_hud(self, hud_dir):
         """Remove existing hud"""
         logger.debug(f"editor_remove_temp_hud: {hud_dir}")
         self.hud.manager.remove_temp_hud(hud_dir)
-
-    @call_create_and_refresh_menu_after_method
-    def editor_open_temp_hud(self):
-        """Open temporary hud in the menu"""
-        self.hud.manager.prompt_open_temp_hud()
 
     @call_create_and_refresh_menu_after_method
     def editor_edit_hud(self, hud_dir):
