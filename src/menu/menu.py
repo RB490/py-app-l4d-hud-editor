@@ -957,8 +957,17 @@ class EditorMenuClass:
 
         self.open_menu = Menu(menubar, tearoff=0)
 
-        self.open_menu.add_command(label="Open", state="disabled", columnbreak=True)
-        self.open_menu.add_separator()
+        # self.open_menu.add_command(label="Open", state="disabled", columnbreak=True)
+        # self.open_menu.add_separator()
+        self.open_menu.add_cascade(
+            label="Hud",
+            image=self.img.paintbrush_design_tool_interface_symbol,
+            compound="left",
+            menu=self.load_hud_menu,
+        )
+        # self.open_menu.add_separator()
+        # self.open_menu.add_command(label="Directories", state="disabled")
+        # self.open_menu.add_separator()
         self.open_menu.add_command(
             label="Game",
             command=create_lambda_command(self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)),
@@ -966,16 +975,10 @@ class EditorMenuClass:
             compound="left",
         )
         self.open_menu.add_command(
-            label="Script",
+            label="Program",
             command=create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT),
             image=self.img.folder_black_interface_symbol,
             compound="left",
-        )
-        self.open_menu.add_cascade(
-            label="Hud",
-            image=self.img.paintbrush_design_tool_interface_symbol,
-            compound="left",
-            menu=self.load_hud_menu,
         )
 
     def create_give_items_menu(self, menu_bar):

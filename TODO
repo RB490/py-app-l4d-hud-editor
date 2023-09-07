@@ -9,6 +9,7 @@
 	✔ ^ this effect is also noticable when: debug browser gui -> select radio button all/added @done(23-09-07 15:26)
 	✔ ^ in fact this effect happens whenever resizing. so it'll be treeview refresh hitting @done(23-09-07 15:26)
 ✔ Feature: Menu: Rename installer menu option? On start & editor context menu. @done(23-09-07 15:29)
+✔ Feature: Menu: Refactor open menu @done(23-09-07 15:32)
 
 
 Current:
@@ -16,7 +17,8 @@ Current:
 Todo:
 
 
-	☐ Feature: Menu: Refactor open menu
+
+	☐ Feature: Instead of disabling 'hud' menu when not opened -- remove it altogether
 	
 	☐ Bug: Browser treeview refreshes pretty slow
 
