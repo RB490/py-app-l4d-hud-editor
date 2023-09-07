@@ -5,6 +5,10 @@
 ✔ Feature: Browser: Add picture of files without a file extension @done(23-09-07 15:20)
 ✔ Feature: Browser: Add image for font files: .otf, .ttf, and possibly more @done(23-09-07 15:21)
 ✔ Feature: Add file extension for .disabled files @done(23-09-07 15:25)
+✔ Bug: Close hud -> Open hud -> browser refreshes -> prompt shows open hud ingame? -> close prompt -> browser resizes in height some? @done(23-09-07 15:26)
+	✔ ^ this effect is also noticable when: debug browser gui -> select radio button all/added @done(23-09-07 15:26)
+	✔ ^ in fact this effect happens whenever resizing. so it'll be treeview refresh hitting @done(23-09-07 15:26)
+✔ Feature: Menu: Rename installer menu option? On start & editor context menu. @done(23-09-07 15:29)
 
 
 Current:
@@ -12,11 +16,9 @@ Current:
 Todo:
 
 
-	☐ Feature: Rename installer menu option? On start & editor context menu.
+	☐ Feature: Menu: Refactor open menu
 	
-	☐ Bug: Close hud -> Open hud -> browser refreshes -> prompt shows open hud ingame? -> close prompt -> browser resizes in height some?
-		- ^ this effect is also noticable when: debug browser gui -> select radio button all/added 
-		- ^ in fact this effect happens whenever resizing. so it'll be treeview refresh hitting
+	☐ Bug: Browser treeview refreshes pretty slow
 
 	☐ Refactor: Add method doc to syncer class
 

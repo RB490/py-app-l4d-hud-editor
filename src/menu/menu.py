@@ -1209,7 +1209,7 @@ class EditorMenuClass:
             label="Open", image=self.img.arrow_angle_pointing_to_right, compound="left", menu=self.open_menu
         )
         self.file_menu.add_cascade(
-            label="Installer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
+            label="Developer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
         )
         self.file_menu.add_separator()
         self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
