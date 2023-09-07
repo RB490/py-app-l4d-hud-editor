@@ -28,7 +28,8 @@ def get_hud_debug_instance():
     """Debug the hud class"""
     # pylint: disable=unused-variable
 
-    debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
+    # debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
+    debug_hud_dir = "D:\\Programming and projects\\l4d-addons-huds\\4. l4d2-2020HUD\\source"
     h = Hud()
 
     # set hud info. usually done by __set_hud_info inside the class

@@ -2,6 +2,7 @@
 ✔ Feature: Menu: When adding or opening a new hud, automatically start editing it. automatically or first showing a prompt. don't do this in the start gui @done(23-09-07 15:09)
 ✔ Feature: Menu: Run game option @done(23-09-07 15:12)
 ✔ Bug: Browser: 'todo' file without any file extension incorrectly has a folder image. 'credits' has this too @done(23-09-07 15:14)
+✔ Feature: Browser: Add picture of files without a file extension @done(23-09-07 15:20)
 
 
 Current:

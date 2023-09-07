@@ -103,6 +103,9 @@ def get_image_for_file_extension(input_path):
     # Get the file extension
     file_extension = os.path.splitext(input_path)[1]
 
+    if not file_extension:
+        return os.path.join(IMAGES_DIR_EXT, "file_empty.ico")
+
     if os.path.isdir(input_path):
         return os.path.join(IMAGES_DIR_EXT, "folder.ico")
 
