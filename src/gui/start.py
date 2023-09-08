@@ -8,20 +8,14 @@ from tkinter import filedialog, ttk
 import send2trash
 from loguru import logger
 from PIL import Image, ImageTk
+from shared_gui.base import BaseGUI
 
 from game.game import Game
-from gui.base import BaseGUI
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, copy_directory, show_message
-from utils.constants import (
-    APP_ICON,
-    GUI_BROWSER_TITLE,
-    IMAGES_DIR_128,
-    PROGRAM_NAME,
-    VERSION_NO_PRETTY,
-    ImageConstants,
-)
+from utils.constants import (APP_ICON, GUI_BROWSER_TITLE, IMAGES_DIR_128,
+                             PROGRAM_NAME, VERSION_NO_PRETTY, ImageConstants)
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass

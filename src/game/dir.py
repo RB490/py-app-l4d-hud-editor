@@ -4,13 +4,14 @@ import os
 import shutil
 
 from loguru import logger
+from shared_gui.splash_gui import SplashGUI
+from shared_utils.shared_utils import copy_directory, verify_directory
 
 from game.constants import DirectoryMode, SyncState
 from game.dir_id_handler import GameIDHandler
 from hud.syncer import files_differ
-from shared_utils.shared_utils import copy_directory, verify_directory
-from shared_utils.splash_gui import SplashGUI
-from utils.functions import generate_random_string, get_backup_filename, get_backup_path, rename_with_timeout
+from utils.functions import (generate_random_string, get_backup_filename,
+                             get_backup_path, rename_with_timeout)
 from utils.steam_info_retriever import SteamInfoRetriever
 
 

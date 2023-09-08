@@ -9,26 +9,21 @@ import send2trash
 import win32gui
 from loguru import logger
 from PIL import Image, ImageTk
+from shared_gui.base import BaseGUI
 
 from game.constants import DirectoryMode
 from game.game import Game
-from gui.base import BaseGUI
 from gui.descriptions import GuiHudDescriptions
 from gui.popup import GuiEditorMenuPopup
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
 from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import Singleton, create_and_open_temp_file, show_message
-from utils.constants import (
-    APP_ICON,
-    BIG_CROSS_ICON,
-    GUI_BROWSER_TITLE,
-    HOTKEY_EDITOR_MENU,
-    HOTKEY_SYNC_HUD,
-    HOTKEY_TOGGLE_BROWSER,
-    ImageConstants,
-)
+from shared_utils.shared_utils import (Singleton, create_and_open_temp_file,
+                                       show_message)
+from utils.constants import (APP_ICON, BIG_CROSS_ICON, GUI_BROWSER_TITLE,
+                             HOTKEY_EDITOR_MENU, HOTKEY_SYNC_HUD,
+                             HOTKEY_TOGGLE_BROWSER, ImageConstants)
 from utils.functions import get_image_for_file_extension
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -43,6 +38,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.selected_full_path = None
         self.selected_file_name = None
         self.selected_relative_path = None
+        self.treeview_photo_images = []
         self.data_manager = PersistentDataManager()
         self.hud = Hud()
         self.game = Game()

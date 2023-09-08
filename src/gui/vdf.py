@@ -3,7 +3,8 @@
 import tkinter as tk
 from tkinter import scrolledtext
 
-from gui.base import BaseGUI
+from shared_gui.base import BaseGUI
+
 from shared_utils.shared_utils import show_message
 from utils.constants import APP_ICON, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager

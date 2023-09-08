@@ -31,10 +31,8 @@
     "reload_reopen_menu_on_reload": false,
     "steam_root_dir": "E:/games/steam",
     "stored_huds": [
-        "D:/Programming and projects/l4d-addons-huds/4. l4d2-2020HUD/source",
-        "D:/Programming and projects/py-app-l4d-hud-editor/dev/debug/hud/workspace/debug_hud"
+        "D:/projects/l4d-addons-huds/4. l4d2-2020HUD/source",
+        "D:/projects/py-app-l4d-hud-editor/dev/debug/hud/workspace/debug_hud"
     ],
-    "stored_temp_huds": [
-        "D:/Downloads/my_temp_hud"
-    ]
+    "stored_temp_huds": []
 }

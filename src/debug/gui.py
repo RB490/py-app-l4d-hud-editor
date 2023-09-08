@@ -6,19 +6,20 @@ import string
 import time
 import tkinter as tk
 
+from shared_gui.base import example_create_main_and_sub_gui
+from shared_gui.progress import ProgressGUI, debug_progress_gui
+
 from debug.hud import get_hud_debug_instance
 from game.constants import DirectoryMode
 from game.game import Game
 from gui import descriptions
 from gui.about import GuiAbout
-from gui.base import example_create_main_and_sub_gui
 from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
-from gui.progress import ProgressGUI
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
 from shared_utils.shared_utils import get_invisible_tkinter_root
-from shared_utils.splash_gui import splash_gui_example
+from shared_gui.splash_gui import splash_gui_example
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path, show_start_gui
 from utils.get_user_input import get_user_input
@@ -31,7 +32,7 @@ def main_debug_gui():
     # show_start_gui()
 
     # browser
-    debug_browser_gui()  # & also properly editor menu
+    # debug_browser_gui()  # & also properly editor menu
 
     # splash
     # splash_gui_example()
@@ -110,42 +111,6 @@ def debug_descriptions_gui():
     # descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("custom_hudlayout.res")
     # descriptions_gui.load_file("custom_hudlayout.res")
-
-
-def debug_progress_gui():
-    "debug installer gui"
-
-    # temp
-    # total_steps = 1
-    # gui = ProgressGUI("Uninstalling", 350, 60, total_steps)  # Create the GUI instance
-    # gui.show()
-    # return
-
-    total_steps = 150000
-    gui = ProgressGUI("Debugging", 250, 60, total_steps)  # Create the GUI instance
-    gui.show()
-
-    # gui.update_progress("asdf asdf asdf asdf ")
-    # gui.update_progress("asdf asdf asdf asdf ")
-
-    for step in range(total_steps):
-        random_length = random.randint(1, 3)
-        # random_length = random.randint(1, 10)
-        # random_length = random.randint(1, 100)
-        # random_length = random.randint(1, 500)
-        random_string = "".join(random.choices(string.ascii_letters + string.digits, k=random_length))
-        # gui.update_progress(f"step: {step + 1}: ..\\j3BVF1P\\left4dead2 {random_string}")
-        gui.update_progress(f"{random_string*10}")
-        # time.sleep(0.4)
-        # time.sleep(2)
-
-    # gui.update_progress("this is!")
-    # input("enter to cintieeiej")
-    # gui.update_progress(
-    #     "this is some text explaining the current stepthis is some text explaining the current stepthis is some text explaining the current step!"
-    # )
-    # gui.update_progress("this is some text explaining the current step!")
-
 
 def debug_vdf_gui():
     """Debug GUI"""

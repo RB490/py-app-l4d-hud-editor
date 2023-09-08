@@ -2,7 +2,8 @@
 import tkinter as tk
 from tkinter import font
 
-from gui.base import BaseGUI
+from loguru import logger
+from shared_gui.base import BaseGUI
 
 
 class UserInputWindow(BaseGUI):
@@ -54,18 +55,19 @@ class UserInputWindow(BaseGUI):
         submit_button = tk.Button(self.root, text="Submit", command=self.submit_input, font=submit_button_font)
         submit_button.pack(pady=5, padx=5)
 
-        # Focus on input box
-        self.input_box.focus()
-
     def submit_input(self, event=None) -> None:
         # pylint: disable=unused-argument
         """Submit the user's input and call the callback function (if provided)."""
         # Retrieve user input from entry box and store it in 'command' attribute
-        command = self.input_box.get()
+        user_input = self.input_box.get()
+        logger.info(f"User input: {user_input}")
         self.destroy()
         if self.callback:
-            self.callback(command)
+            self.callback(user_input)
 
+    def on_show(self):
+        # Focus on input box
+        self.input_box.focus()
 
 def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     """
@@ -78,6 +80,12 @@ def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     """
     # root = tk.Tk()
     # root.withdraw()  # Hide parent window
-    command_window = UserInputWindow(parent_root, title, prompt)
-    command_window.callback = callback
-    command_window.show()
+    input_win = UserInputWindow(parent_root, title, prompt)
+    input_win.callback = callback
+    input_win.show()
+
+if __name__ == "__main__":
+    from shared_utils.shared_utils import get_invisible_tkinter_root
+    root = get_invisible_tkinter_root()
+    get_user_input(root, "my title", "my prompt")
+    input('press enter to exit script!')

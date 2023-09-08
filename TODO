@@ -2,6 +2,11 @@ Current:
 
 Todo:
 
+	☐ Feature: Update gui base with icon setting capability. root.iconphoto(True, icon) sets it in gui & taskbar. self.root.iconbitmap is obsolete?
+
+
+	☐ Feature: Automatically remove invalid temp hud paths & maybe also stored hud paths
+
 	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
 		☐ Fix virtualbox being so laggy
 		☐ Fix virtualbox not having any animations

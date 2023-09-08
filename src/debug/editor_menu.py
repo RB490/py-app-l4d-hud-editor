@@ -1,5 +1,6 @@
 """Debug editor menu"""
-from gui.base import BaseGUI
+from shared_gui.base import BaseGUI
+
 from menu.menu import EditorMenuClass
 from shared_utils.shared_utils import Singleton, get_invisible_tkinter_root
 

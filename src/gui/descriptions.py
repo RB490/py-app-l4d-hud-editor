@@ -2,8 +2,9 @@
 import tkinter as tk
 from tkinter import simpledialog
 
+from shared_gui.base import BaseGUI
+
 from game.game import Game
-from gui.base import BaseGUI
 from hud.hud import Hud
 from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, ImageConstants
