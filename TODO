@@ -1,23 +1,19 @@
-✔ Refactor: Add method doc to syncer class @done(23-09-07 16:33)
-✔ Refactor: Move GPT prompts somwhere else. maybe onenote. maybe a github repo + add a prompt for adding comments properly @done(23-09-07 16:38)
-
 Current:
 
 Todo:
 
-	
+	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
+		☐ Fix virtualbox being so laggy
+		☐ Fix virtualbox not having any animations
+		- Amazingly the game did run, just whining about steam not running
+
+	☐ Apparently it's possible to export python as an executable after all? https://polymars.itch.io/flappuccino
 
 	☐ Research: Ask GPT on how to properly test a program so it's ready for release
 	
 	☐ Research: Ask GPT on how to properly prepare a python program for release
 	
-	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
-		☐ Fix virtualbox being so laggy
-		☐ Fix virtualbox not having any animations
-		- Amazingly the game did run, just whining about steam not running
-	
 	☐ Testing: Test the program by using it to edit HUD's
 
-		
 Release:
 	☐ Goal: Being able to have third parties (smug) run the program and have it 100% work on first try
