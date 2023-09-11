@@ -2,8 +2,8 @@
 import json
 
 from loguru import logger
+from shared_utils.functions import Singleton
 
-from shared_utils.shared_utils import Singleton
 from utils.constants import PERSISTENT_DATA_PATH
 
 

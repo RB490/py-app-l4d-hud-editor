@@ -10,6 +10,8 @@ import win32gui
 from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
+from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
+from shared_utils.hotkey_manager import HotkeyManager
 
 from game.constants import DirectoryMode
 from game.game import Game
@@ -18,12 +20,15 @@ from gui.popup import GuiEditorMenuPopup
 from gui.vdf import VDFModifierGUI
 from hud.hud import Hud
 from menu.menu import EditorMenuClass
-from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import (Singleton, create_and_open_temp_file,
-                                       show_message)
-from utils.constants import (APP_ICON, BIG_CROSS_ICON, GUI_BROWSER_TITLE,
-                             HOTKEY_EDITOR_MENU, HOTKEY_SYNC_HUD,
-                             HOTKEY_TOGGLE_BROWSER, ImageConstants)
+from utils.constants import (
+    APP_ICON,
+    BIG_CROSS_ICON,
+    GUI_BROWSER_TITLE,
+    HOTKEY_EDITOR_MENU,
+    HOTKEY_SYNC_HUD,
+    HOTKEY_TOGGLE_BROWSER,
+    ImageConstants,
+)
 from utils.functions import get_image_for_file_extension
 from utils.persistent_data_manager import PersistentDataManager
 
@@ -59,8 +64,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.treeview.bind("<<TreeviewSelect>>", self.treeview_set_selected_item)
         self.treeview.bind("<Button-3>", self.treeview_show_context_menu)
         self.treeview.bind("<Up>", self.focus_search_box_if_first_row_selected)
+        self.treeview.bind("<Return>", self.action_open_file)
         self.search_box.bind("<Tab>", self.toggle_focus_treeview_and_search)
         self.search_box.bind("<Down>", self.toggle_focus_treeview_and_search)
+        self.search_box.bind("<Return>", self.toggle_focus_treeview_and_search)
         self.root.bind("<Control-f>", lambda event: self.search_box.focus_set())
         self.root.bind("<Tab>", self.toggle_focus_treeview_and_search)
         self.root.bind("<Control-Tab>", self.toggle_focus_treeview_and_search)

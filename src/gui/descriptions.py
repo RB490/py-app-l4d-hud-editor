@@ -3,10 +3,10 @@ import tkinter as tk
 from tkinter import simpledialog
 
 from shared_gui.base import BaseGUI
+from shared_utils.functions import Singleton, show_message
 
 from game.game import Game
 from hud.hud import Hud
-from shared_utils.shared_utils import Singleton, show_message
 from utils.constants import APP_ICON, ImageConstants
 from utils.functions import show_browser_gui
 from utils.persistent_data_manager import PersistentDataManager

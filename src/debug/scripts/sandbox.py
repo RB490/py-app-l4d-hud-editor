@@ -1,1 +1,0 @@
-get_invisible_tkinter_root

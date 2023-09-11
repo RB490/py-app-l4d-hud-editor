@@ -1,8 +1,6 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, no-member, c-extension-no-member, bare-except
 """Functions used throughout the program"""
 import os
-import random
-import string
 import sys
 import time
 import tkinter as tk
@@ -11,9 +9,9 @@ from tkinter import filedialog
 import psutil
 import pyautogui
 from loguru import logger
+from shared_utils.functions import generate_minor_version_number_from_git, show_message
 
 from gui.about import GuiAbout
-from shared_utils.shared_utils import generate_version_number_from_git, show_message
 from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
@@ -21,7 +19,7 @@ from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
 def update_version_number_file():
     """Write version number to file"""
-    version = generate_version_number_from_git(major_version=0)
+    version = generate_minor_version_number_from_git(major_version=0)
     with open("version.txt", "w") as file:
         file.write(version)
 
@@ -128,12 +126,6 @@ def get_image_for_file_extension(input_path):
 
     logger.debug(f"Retrieved image for {input_path} -> {output_image_path}")
     return output_image_path
-
-
-def generate_random_string(length=8):
-    "Generate random string"
-    characters = string.ascii_letters + string.digits
-    return "".join(random.choice(characters) for _ in range(length))
 
 
 def rename_with_timeout(src, dst, timeout=5):

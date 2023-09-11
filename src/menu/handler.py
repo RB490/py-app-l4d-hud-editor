@@ -6,9 +6,9 @@ from tkinter import messagebox
 
 import pyperclip  # type: ignore
 from loguru import logger
+from shared_utils.functions import show_message
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
-from shared_utils.shared_utils import show_message
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import (
     get_browser_gui,
@@ -150,7 +150,7 @@ class EditorMenuHandler:
     def editor_menu_game_run(self):
         """Method to handle the selected secure/insecure option in the menu."""
         self.game.window.run(DirectoryMode.DEVELOPER)
-    
+
     def editor_menu_game_close(self):
         """Method to handle the selected secure/insecure option in the menu."""
         self.game.window.close()

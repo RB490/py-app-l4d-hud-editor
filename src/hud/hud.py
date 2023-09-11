@@ -2,9 +2,10 @@
 # pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel
 
 
+from shared_utils.functions import Singleton
+
 from hud.descriptions import HudDescriptions
 from utils.persistent_data_manager import PersistentDataManager
-from shared_utils.shared_utils import Singleton
 
 
 class Hud(metaclass=Singleton):

@@ -2,13 +2,11 @@
 import os
 
 import vdf  # type: ignore
+from shared_utils.functions import copy_directory
 
-from shared_utils.shared_utils import copy_directory
 from utils.constants import NEW_HUD_DIR
 from utils.functions import prompt_for_folder
-from utils.persistent_data_manager import (
-    PersistentDataManager,  # Assuming you have vdf library imported
-)
+from utils.persistent_data_manager import PersistentDataManager  # Assuming you have vdf library imported
 
 
 class HudManager:

@@ -11,15 +11,14 @@ import time
 
 from loguru import logger
 from shared_gui.progress import ProgressGUI
+from shared_utils.functions import copy_directory, show_message
 
 from game.constants import DirectoryMode, InstallationError, InstallationState
+
 # pylint: disable=unused-import
-from game.installer_prompts import (prompt_delete, prompt_start,
-                                    prompt_verify_game)
-from shared_utils.shared_utils import copy_directory, show_message
+from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
-from utils.functions import (count_files_and_dirs, get_backup_path,
-                             wait_process_close)
+from utils.functions import count_files_and_dirs, get_backup_path, wait_process_close
 from utils.vpk import VPKClass
 
 

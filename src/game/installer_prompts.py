@@ -1,7 +1,8 @@
 "Installer prompts"
+from shared_utils.functions import show_message
+
 from game.constants import DirectoryMode
 from game.game import Game
-from shared_utils.shared_utils import show_message
 from utils.functions import get_dir_size_in_gb
 
 

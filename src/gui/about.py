@@ -3,7 +3,8 @@ import tkinter as tk
 import webbrowser
 
 from shared_gui.base import BaseGUI
-from shared_utils.shared_utils import Singleton
+from shared_utils.functions import Singleton
+
 from utils.constants import APP_ICON, PROGRAM_NAME, PROGRAM_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager
 

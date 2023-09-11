@@ -2,13 +2,13 @@
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
 import subprocess
-from loguru import logger
 
 import win32gui
+from loguru import logger
+from shared_utils.functions import show_message
+from shared_utils.hwnd_window_manager import HwndWindowUtils
 
 from game.constants import InstallationState
-from shared_utils.hwnd_window_manager import HwndWindowUtils
-from shared_utils.shared_utils import show_message
 from utils.constants import GAME_POSITIONS
 from utils.persistent_data_manager import PersistentDataManager
 

@@ -8,6 +8,8 @@ import tkinter as tk
 
 from shared_gui.base import example_create_main_and_sub_gui
 from shared_gui.progress import ProgressGUI, debug_progress_gui
+from shared_gui.splash_gui import splash_gui_example
+from shared_utils.functions import get_invisible_tkinter_root
 
 from debug.hud import get_hud_debug_instance
 from game.constants import DirectoryMode
@@ -18,8 +20,6 @@ from gui.browser import GuiHudBrowser
 from gui.popup import GuiEditorMenuPopup
 from gui.start import GuiHudStart
 from gui.vdf import VDFModifierGUI
-from shared_utils.shared_utils import get_invisible_tkinter_root
-from shared_gui.splash_gui import splash_gui_example
 from utils.constants import DEVELOPMENT_DIR
 from utils.functions import get_backup_path, show_start_gui
 from utils.get_user_input import get_user_input
@@ -111,6 +111,7 @@ def debug_descriptions_gui():
     # descriptions_gui.show()
     # descriptions_gui.hud.desc.remove_entry("custom_hudlayout.res")
     # descriptions_gui.load_file("custom_hudlayout.res")
+
 
 def debug_vdf_gui():
     """Debug GUI"""

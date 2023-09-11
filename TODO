@@ -2,6 +2,9 @@ Current:
 
 Todo:
 
+	☐ Refactor: switch to send_keys_in_background from shared_utils
+	☐ Refactor: switch to send_keys_in_foreground from shared_utils
+
 	☐ Feature: Update gui base with icon setting capability. root.iconphoto(True, icon) sets it in gui & taskbar. self.root.iconbitmap is obsolete?
 
 

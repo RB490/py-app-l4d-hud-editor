@@ -69,6 +69,7 @@ class UserInputWindow(BaseGUI):
         # Focus on input box
         self.input_box.focus()
 
+
 def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     """
     Open a window to allow the user to enter text.
@@ -84,8 +85,10 @@ def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     input_win.callback = callback
     input_win.show()
 
+
 if __name__ == "__main__":
-    from shared_utils.shared_utils import get_invisible_tkinter_root
+    from shared_utils.functions import get_invisible_tkinter_root
+
     root = get_invisible_tkinter_root()
     get_user_input(root, "my title", "my prompt")
-    input('press enter to exit script!')
+    input("press enter to exit script!")

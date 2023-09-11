@@ -3,9 +3,9 @@
 import json
 
 from loguru import logger
+from shared_utils.functions import Singleton
 
 from game.game import Game
-from shared_utils.shared_utils import Singleton
 from utils.constants import HUD_DESCRIPTIONS_PATH
 
 

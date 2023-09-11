@@ -9,8 +9,8 @@ from typing import Any, Dict, List, Optional, Union
 import send2trash
 import vdf  # type: ignore
 from loguru import logger
+from shared_utils.functions import replace_text_between_quotes, show_message
 
-from shared_utils.shared_utils import replace_text_between_quotes, show_message
 from utils.constants import DEVELOPMENT_DIR
 
 

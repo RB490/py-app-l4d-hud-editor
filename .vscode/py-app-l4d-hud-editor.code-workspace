@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../python-files/shared/shared_packages"
+		}
+	],
+	"settings": {
+		"todo.embedded.include": [
+			"**/src/**"
+		],
+		"todo.embedded.exclude": [
+			"**/assets/**",
+			"**/dev/**"
+		]
+	}
+}

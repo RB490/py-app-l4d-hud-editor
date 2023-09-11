@@ -7,10 +7,10 @@ import os
 import shutil
 
 from loguru import logger
+from shared_utils.functions import Singleton
 
 from game.constants import DirectoryMode, SyncState
 from game.game import Game
-from shared_utils.shared_utils import Singleton
 from utils.functions import get_backup_path
 
 

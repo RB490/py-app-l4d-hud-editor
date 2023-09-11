@@ -3,7 +3,8 @@ import os
 import winreg
 from tkinter import filedialog
 
-from shared_utils.shared_utils import Singleton
+from shared_utils.functions import Singleton
+
 from utils.persistent_data_manager import PersistentDataManager
 
 

@@ -6,9 +6,9 @@ from enum import Enum
 from tkinter import filedialog
 
 from loguru import logger
+from shared_utils.functions import is_subdirectory, show_message
 
 from game.constants import DirectoryMode, InstallationState, SyncState
-from shared_utils.shared_utils import is_subdirectory, show_message
 
 
 def call_validate_dir_mode_before_method(func):

@@ -9,10 +9,10 @@ import pyautogui
 import win32api
 import win32con
 import win32gui
+from shared_utils.hwnd_window_manager import HwndWindowUtils
 
 from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
-from shared_utils.hwnd_window_manager import HwndWindowUtils
 from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
 from utils.functions import click_at
 from utils.persistent_data_manager import PersistentDataManager

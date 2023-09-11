@@ -7,17 +7,24 @@ import webbrowser
 from tkinter import Menu, PhotoImage
 
 from loguru import logger
+from shared_utils.functions import add_empty_menu_separator, create_lambda_command
 
 from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
-from shared_utils.shared_utils import (add_empty_menu_separator,
-                                       create_lambda_command)
-from utils.constants import (EDITOR_HUD_RELOAD_MODES, GAME_POSITIONS,
-                             HOTKEY_EDITOR_MENU, HOTKEY_SYNC_HUD,
-                             HOTKEY_TOGGLE_BROWSER, IMAGES_DIR_MISC, MAP_CODES,
-                             PROJECT_ROOT, SNIPPETS_DIR, TUTORIALS_DIR,
-                             ImageConstants)
+from utils.constants import (
+    EDITOR_HUD_RELOAD_MODES,
+    GAME_POSITIONS,
+    HOTKEY_EDITOR_MENU,
+    HOTKEY_SYNC_HUD,
+    HOTKEY_TOGGLE_BROWSER,
+    IMAGES_DIR_MISC,
+    MAP_CODES,
+    PROJECT_ROOT,
+    SNIPPETS_DIR,
+    TUTORIALS_DIR,
+    ImageConstants,
+)
 from utils.persistent_data_manager import PersistentDataManager
 
 

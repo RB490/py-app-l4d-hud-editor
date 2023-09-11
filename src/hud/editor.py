@@ -6,14 +6,14 @@ from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
 
 from loguru import logger
+from shared_utils.functions import copy_directory, show_message
+from shared_utils.hotkey_manager import HotkeyManager
 
 from game.constants import DirectoryMode
 from game.game import Game
 from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
-from shared_utils.hotkey_manager import HotkeyManager
-from shared_utils.shared_utils import copy_directory, show_message
 from utils.constants import HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
