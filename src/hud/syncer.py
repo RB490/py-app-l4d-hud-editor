@@ -2,30 +2,15 @@
 
 # pylint: disable=invalid-name, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
 
-import hashlib
 import os
 import shutil
 
 from loguru import logger
-from shared_utils.functions import Singleton
+from shared_utils.functions import Singleton, files_differ
 
 from game.constants import DirectoryMode, SyncState
 from game.game import Game
 from utils.functions import get_backup_path
-
-
-def calculate_md5_hash(file_path):
-    """Calculate MD5 hash of a file."""
-    hash_md5 = hashlib.md5()
-    with open(file_path, "rb") as file:
-        for chunk in iter(lambda: file.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
-
-
-def files_differ(file_path1, file_path2):
-    """Check if two files are different based on MD5 hash."""
-    return calculate_md5_hash(file_path1) != calculate_md5_hash(file_path2)
 
 
 def get_all_files_and_dirs(directory):

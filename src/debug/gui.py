@@ -35,7 +35,7 @@ def main_debug_gui():
     # debug_browser_gui()  # & also properly editor menu
 
     # splash
-    # splash_gui_example()
+    splash_gui_example()
 
     # popup
     # debug_popup_gui()

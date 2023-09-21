@@ -9,9 +9,10 @@ import unittest
 from unittest.mock import patch
 
 from loguru import logger
+from shared_utils.functions import calculate_md5_hash
 
 from game.constants import DirectoryMode, SyncState
-from hud.syncer import HudSyncer, calculate_md5_hash, files_differ, get_all_files_and_dirs, get_subdirectories_names
+from hud.syncer import HudSyncer, files_differ, get_all_files_and_dirs, get_subdirectories_names
 from utils.functions import get_backup_path
 
 

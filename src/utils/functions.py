@@ -9,19 +9,12 @@ from tkinter import filedialog
 import psutil
 import pyautogui
 from loguru import logger
-from shared_utils.functions import generate_minor_version_number_from_git, show_message
+from shared_utils.functions import show_message
 
 from gui.about import GuiAbout
 from utils.persistent_data_manager import PersistentDataManager
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
-
-
-def update_version_number_file():
-    """Write version number to file"""
-    version = generate_minor_version_number_from_git(major_version=0)
-    with open("version.txt", "w") as file:
-        file.write(version)
 
 
 def show_browser_gui():
