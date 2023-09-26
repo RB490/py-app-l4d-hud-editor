@@ -5,7 +5,7 @@ import webbrowser
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton
 
-from utils.constants import APP_ICON, PROGRAM_NAME, PROGRAM_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants
+from utils.constants import APP_ICON, APP_NAME, APP_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants
 from utils.persistent_data_manager import PersistentDataManager
 
 
@@ -15,7 +15,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
     def __init__(self, parent_root):
         # set variables
         self.settings_geometry_key = "GuiGeometryAbout"
-        self.project_url = PROGRAM_URL
+        self.project_url = APP_URL
         self.img = ImageConstants()
         self.data_manager = PersistentDataManager()
 
@@ -31,7 +31,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         # Create a label to display project information
         project_info_header = tk.Label(
             self.root,
-            text=f"{PROGRAM_NAME} (Version {VERSION_NO})",
+            text=f"{APP_NAME} (Version {VERSION_NO})",
             padx=10,
             pady=10,
             font=("Helvetica", 11),

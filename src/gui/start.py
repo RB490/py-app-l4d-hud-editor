@@ -14,14 +14,7 @@ from shared_utils.functions import Singleton, copy_directory, show_message
 from game.game import Game
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
-from utils.constants import (
-    APP_ICON,
-    GUI_BROWSER_TITLE,
-    IMAGES_DIR_128,
-    PROGRAM_NAME,
-    VERSION_NO_PRETTY,
-    ImageConstants,
-)
+from utils.constants import APP_ICON, APP_NAME, GUI_BROWSER_TITLE, IMAGES_DIR_128, VERSION_NO_PRETTY, ImageConstants
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
 from utils.vpk import VPKClass
@@ -421,7 +414,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # set title
         name_of_hud_thats_being_edited = self.hud.edit.get_name()
-        gui_title = f"{PROGRAM_NAME} {VERSION_NO_PRETTY}"
+        gui_title = f"{APP_NAME} {VERSION_NO_PRETTY}"
         if name_of_hud_thats_being_edited:
             if self.hud.edit.is_synced_and_being_edited():
                 gui_title = f"{gui_title} - Editing: {name_of_hud_thats_being_edited}"

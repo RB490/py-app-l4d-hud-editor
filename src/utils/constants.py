@@ -13,8 +13,8 @@ from shared_managers.version_number_manager import VersionNumberManager
 
 # core
 DEBUG_MODE: bool = True
-PROGRAM_NAME: str = "HUD Editor for Left 4 Dead 2"
-PROGRAM_URL: str = "https://github.com/RB490"
+APP_NAME: str = "HUD Editor for Left 4 Dead 2"
+APP_URL: str = "https://github.com/RB490"
 APP_VERSION_MAJOR = 0.0
 PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +29,7 @@ VERSION_NO_GITHUB: str = version_manager.get_from_url(VERSION_NO_URL)
 GUI_BROWSER_TITLE: str = "Browser"
 
 # Set the taskbar icon (uses whichever icon tkinter is set to)
-taskbar_ico_appid = f"rb.python.program.{PROGRAM_NAME}.{VERSION_NO}"
+taskbar_ico_appid = f"rb.python.program.{APP_NAME}.{VERSION_NO}"
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(taskbar_ico_appid)
 
 # main directories
