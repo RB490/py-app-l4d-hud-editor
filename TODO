@@ -2,10 +2,6 @@ Current:
 
 Todo:
 	
-	
-	
-	☐ feat: Use threading/asyncio during certain parts of the installation. Mainly extracting/merging vpk's to do all jobs at once in paralel
-	
 	☐ test: Test the program by using it to edit HUD's
 	
 	☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching

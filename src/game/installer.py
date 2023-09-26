@@ -7,6 +7,7 @@ Notes:
 """
 import os
 import shutil
+import threading
 import time
 
 from loguru import logger
@@ -290,8 +291,22 @@ class GameInstaller:
         vpk_class = VPKManager()
 
         pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
+
+        def extract_pak_thread(pak_dir, pak_path):
+            vpk_class.extract(pak_path, pak_dir)
+
+        # Create a list to hold thread objects
+        threads = []
+
         for pak01_dir, pak01_path in pak01_data:
-            vpk_class.extract(pak01_path, pak01_dir)
+            # Create a thread for each extraction task
+            thread = threading.Thread(target=extract_pak_thread, args=(pak01_dir, pak01_path))
+            threads.append(thread)
+            thread.start()
+
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
 
     def __enable_paks(self):
         logger.debug("Enabling pak01.vpk's")
