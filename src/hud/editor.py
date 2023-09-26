@@ -165,6 +165,9 @@ class HudEditor:
         # unsync hud
         self.syncer.unsync()
 
+        # refresh hud ingame
+        self.game.command.execute('reload_all')
+
         # gui
         get_start_gui().clear_selection()
         get_browser_gui().gui_refresh()

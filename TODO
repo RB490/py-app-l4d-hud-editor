@@ -1,7 +1,7 @@
 
 
 
-☐ feat: unsync hud ingame when stop editing
+
 
 ☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching
 
