@@ -6,6 +6,7 @@ from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
 
 from loguru import logger
+from shared_gui.splash_gui import SplashGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_managers.valve_vpk_manager import VPKManager
 from shared_utils.functions import copy_directory, show_message
@@ -43,86 +44,91 @@ class HudEditor:
     def start_editing(self, hud_dir, called_by_start_gui=False):
         """Perform all the actions needed to start hud editing"""
 
-        logger.info(f"Start editing: ({hud_dir})")
-
         # verify parameters
         result = self.__set_hud_info(hud_dir)
         if not result:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
-        # update browser (and thereby the start gui)
-        get_browser_gui().gui_refresh()
+        splash = SplashGUI(get_start_gui().root)
+        splash.splash("Loading...", "Loading HUD..")
+        logger.info(f"Start editing: ({hud_dir})")
 
-        # hotkeys
-        if not self.hotkey_manager.hotkey_exists(HOTKEY_SYNC_HUD):
-            self.hotkey_manager.add_hotkey(HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True)
+        try:
+            # update browser (and thereby the start gui)
+            get_browser_gui().gui_refresh()
 
-        # prompt to start game if not called by start gui and game isn't running
-        if not called_by_start_gui and not self.game.window.is_running():
-            result = show_message(
-                f"Start editing {self.get_name()} ingame?",
-                msgbox_type="yesno",
-                title="Start editing HUD?",
-            )
-            if not result:
+            # hotkeys
+            if not self.hotkey_manager.hotkey_exists(HOTKEY_SYNC_HUD):
+                self.hotkey_manager.add_hotkey(HOTKEY_SYNC_HUD, self.sync_in_thread, suppress=True)
+
+            # prompt to start game if not called by start gui and game isn't running
+            if not called_by_start_gui and not self.game.window.is_running():
+                result = show_message(
+                    f"Start editing {self.get_name()} ingame?",
+                    msgbox_type="yesno",
+                    title="Start editing HUD?",
+                )
+                if not result:
+                    if called_by_start_gui:
+                        show_start_gui()
+                    return False
+
+            # verify ID files (here in addition to on start because it might break after program starts)
+            try:
+                self.game.dir.check_for_invalid_id_file_structure()
+            except Exception as e_info:
+                show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
+
                 if called_by_start_gui:
                     show_start_gui()
                 return False
 
-        # verify ID files (here in addition to on start because it might break after program starts)
-        try:
-            self.game.dir.check_for_invalid_id_file_structure()
-        except Exception as e_info:
-            show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
-
-            if called_by_start_gui:
+            # is developer mode installed? - also checks for user directory
+            if not self.game.installation_completed(DirectoryMode.DEVELOPER):
+                show_message("Development mode not fully installed!", "error")
                 show_start_gui()
-            return False
+                return False
 
-        # is developer mode installed? - also checks for user directory
-        if not self.game.installation_completed(DirectoryMode.DEVELOPER):
-            show_message("Development mode not fully installed!", "error")
-            show_start_gui()
-            return False
+            # cancel if this hud is already being edited
+            if self.is_synced_and_being_edited():
+                if called_by_start_gui:
+                    show_start_gui()
+                return False
 
-        # cancel if this hud is already being edited
-        if self.is_synced_and_being_edited():
-            if called_by_start_gui:
-                show_start_gui()
-            return False
+            # unsync previous hud
+            self.syncer.unsync()
 
-        # unsync previous hud
-        self.syncer.unsync()
+            # Stop checking for game exit
+            self.stop_game_exit_check()
 
-        # Stop checking for game exit
-        self.stop_game_exit_check()
+            # enable dev mode
+            result = self.game.dir.set(DirectoryMode.DEVELOPER)
+            if not result:
+                print("Could not activate developer mode")
+                if called_by_start_gui:
+                    show_start_gui()
+                return False
 
-        # enable dev mode
-        result = self.game.dir.set(DirectoryMode.DEVELOPER)
-        if not result:
-            print("Could not activate developer mode")
-            if called_by_start_gui:
-                show_start_gui()
-            return False
+            # sync the hud to the game folder
+            self.sync(called_by_start_editing=True)
 
-        # sync the hud to the game folder
-        self.sync(called_by_start_editing=True)
+            # run the game
+            try:
+                self.game.window.run(DirectoryMode.DEVELOPER)
+            except Exception as e:
+                self.unsync()
+                show_message(f"failed to run game: {e}")
+                if called_by_start_gui:
+                    show_start_gui()
+                return False
 
-        # run the game
-        try:
-            self.game.window.run(DirectoryMode.DEVELOPER)
-        except Exception as e:
-            self.unsync()
-            show_message(f"failed to run game: {e}")
-            if called_by_start_gui:
-                show_start_gui()
-            return False
+            # refresh hud incase game has not restarted
+            self.game.command.execute("reload_all")
 
-        # Open browser
-        show_browser_gui()
-
-        # refresh hud incase game has not restarted
-        self.game.command.execute("reload_all")
+            # Open browser
+            show_browser_gui()
+        finally:
+            splash.hide()
 
         # Start checking for game exit
         self.wait_for_game_exit_then_finish_editing()
@@ -166,7 +172,7 @@ class HudEditor:
         self.syncer.unsync()
 
         # refresh hud ingame
-        self.game.command.execute('reload_all')
+        self.game.command.execute("reload_all")
 
         # gui
         get_start_gui().clear_selection()

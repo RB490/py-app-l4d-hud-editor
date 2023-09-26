@@ -477,7 +477,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             return
 
         # Clear existing items in the Treeview
-        self.treeview.delete(*self.treeview.get_children())
+        try:
+            self.treeview.delete(*self.treeview.get_children())
+        except Exception as e:
+            logger.error(f"Treeview items removal error: {e}")
         logger.debug("Cleared treeview!")
         
         # variables

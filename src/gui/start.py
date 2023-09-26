@@ -486,8 +486,8 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         if self.selected_hud_dir_is_being_edited():
             self.hud.edit.finish_editing()
         else:
-            self.hud.edit.start_editing(self.selected_hud_dir, called_by_start_gui=True)
             self.hide()
+            self.hud.edit.start_editing(self.selected_hud_dir, called_by_start_gui=True)
 
     def selected_hud_dir_is_being_edited(self):
         """Check if selected hud dir is being edited"""
