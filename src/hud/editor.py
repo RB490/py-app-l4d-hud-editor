@@ -50,7 +50,7 @@ class HudEditor:
             raise NotADirectoryError(f"The directory {hud_dir} is not valid.")
 
         splash = SplashGUI(get_start_gui().root)
-        splash.splash("Loading...", "Loading HUD..")
+        splash.splash("Loading...", f"Loading {self.hud_name}..")
         logger.info(f"Start editing: ({hud_dir})")
 
         try:
