@@ -21,21 +21,5 @@ os.system("cls")  # clear terminal
 #     Auto-execute
 # ====================================================================================================
 
-# ----------------------------------
-#     Load persistent data
-# ----------------------------------
-
-# ----------------------------------
-#     Do stuff
-# ----------------------------------
-
 preform_checks_to_prepare_program_start()
-
-# create initial singleton game class
 show_start_gui()
-
-# ----------------------------------
-#     Finish
-# ----------------------------------
-
-input("End of auto-execute (Press enter to exit)...")

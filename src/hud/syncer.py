@@ -204,7 +204,7 @@ class HudSyncer(metaclass=Singleton):
             logger.error(error_message)
             raise Exception(error_message) from e
 
-    def __undo_changes_for_all_items(self):
+    def undo_changes_for_all_items(self):
         """
         Undo changes for all HUD items.
         """
@@ -275,7 +275,7 @@ class HudSyncer(metaclass=Singleton):
         if self.hud_items is None:
             raise ValueError("Code tried to unsync without self.hud_items set!")
 
-        self.__undo_changes_for_all_items()  # also sets sync status
+        self.undo_changes_for_all_items()  # also sets sync status
 
         logger.info("Unsynced!")
         return True
@@ -298,7 +298,7 @@ class HudSyncer(metaclass=Singleton):
         self.target_dir_main_name = target_dir_main_name
         self.target_sub_dir_names = get_subdirectories_names(target_dir)
         self.hud_items = get_all_files_and_dirs(self.source_dir)
-        self.__undo_changes_for_all_items()  # cleanup previously not undone changes eg. program unexpected exit
+        self.undo_changes_for_all_items()  # cleanup previously not undone changes eg. program unexpected exit
         self.item_changes = {}
 
         if source_dir is None or not os.path.isdir(source_dir):

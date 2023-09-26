@@ -84,6 +84,7 @@ class GameInstaller:
         os.rmdir(path)
 
         rem_gui.update_progress(f"Deletion completed: {files_processed}/{total_files} files")
+        time.sleep(4) # show the deletion completed message for a little while before closing
         rem_gui.destroy()
 
     def update(self):
