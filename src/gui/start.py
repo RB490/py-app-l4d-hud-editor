@@ -233,7 +233,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             self.dev_and_edit_frame,
             text="Edit",
             height=25,
-            command=self.edit_selected_hud,
+            command=self.start_stop_edit_selected_hud,
             state="disabled",  # Disable the remove button
         )
         self.edit_button.config(image=self.img.get("paintbrush", 2), compound="left", padx=10)
@@ -294,7 +294,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def selected_hud_start_editing(self):
         """Edit the selected hud."""
-        self.edit_selected_hud()
+        self.start_stop_edit_selected_hud()
 
     def selected_hud_open_dir(self):
         """Open the directory of the selected hud."""
@@ -480,24 +480,24 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         if self.hud.manager.prompt_create_new_hud():
             self.treeview_refresh()
 
-    def edit_selected_hud(self):
+    def start_stop_edit_selected_hud(self):
         """Start hud editing for selected hud"""
 
         if self.selected_hud_dir_is_being_edited():
+            self.hud.edit.finish_editing()
+        else:
             self.hud.edit.start_editing(self.selected_hud_dir, called_by_start_gui=True)
             self.hide()
-        else:
-            self.hud.edit.finish_editing()
 
     def selected_hud_dir_is_being_edited(self):
         """Check if selected hud dir is being edited"""
         selected_dir = self.selected_hud_dir
         edited_dir = self.hud.edit.get_dir()
 
-        if selected_dir == edited_dir:
+        if selected_dir and edited_dir:
             return selected_dir.lower() == edited_dir.lower()
-
-        return False
+        else:
+            return False
 
     def on_close(self):
         """On close callback"""
