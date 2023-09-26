@@ -425,6 +425,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def on_show(self):
         """Callback on show"""
         self.treeview_refresh()
+        self.bring_to_front()
         self.search_box.focus_set()
 
     def on_hide(self):
@@ -545,16 +546,16 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
-    
+
     def action_add_file(self):
         """Treeview Handle 'Add File' option (add new file to hud)"""
         logger.debug("Method: action_add_file - Handle 'Add File' option (add new file to hud)")
-        
+
         # variables
         full_path = self.get_selected_full_path()
         rel_path = self.get_selected_relative_path()
         vanilla_file = self.game.dir.get_vanilla_file(rel_path)
-        
+
         # create directory if needed, and copy file
         logger.info(f"Adding new file: '{vanilla_file}' -> '{full_path}'")
         os.makedirs(os.path.dirname(full_path), exist_ok=True)

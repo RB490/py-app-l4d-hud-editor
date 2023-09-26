@@ -1,9 +1,8 @@
 
+☐ feat: really focus browser @ on_show. i added bring to front but the game is still focused -- it does work with other windows (might not even need bring_to_front for them)
+
 ☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching
 
-adding files to the hud:
-☐ fix: browser allows selecting options for files that aren't added to the hud. the only option they should have is 'add to hud'
-☐ feat: ability to add a file to the hud - in ahk i did this by switching to all files in the browser, then on double click or something
 
 
 ☐ test: Test the program by using it to edit HUD's

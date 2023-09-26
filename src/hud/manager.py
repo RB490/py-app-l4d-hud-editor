@@ -1,14 +1,14 @@
 """Handles storage, retrieval, and management of HUD-related data and folders."""
 import os
-from loguru import logger
 
-import vdf  # type: ignore
+from loguru import logger
+from shared_managers.valve_vdf_addoninfo_manager import ValveVdfAddoninfoManager
 from shared_utils.functions import copy_directory
 
 from src.utils.constants import DATA_MANAGER  # Assuming you have vdf library imported
 from src.utils.constants import NEW_HUD_DIR
 from src.utils.functions import prompt_for_folder
-from shared_managers.valve_vdf_addoninfo_manager import ValveVdfAddoninfoManager
+
 
 class HudManager:
     """Handles storage, retrieval, and management of HUD-related data and folders."""
@@ -65,5 +65,7 @@ class HudManager:
             if not hud_name:
                 logger.info(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
         else:
-            logger.info(f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
+            logger.info(
+                f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'"
+            )
         return hud_name

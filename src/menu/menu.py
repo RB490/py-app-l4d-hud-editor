@@ -1391,6 +1391,7 @@ class EditorMenuClass:
             self.parent.has_been_run()
             and hasattr(self.parent, "gui_refresh")
             and callable(getattr(self.parent, "gui_refresh"))
+            and not is_context_menu # don't update if showing a context menu. only if menu.handler is refreshing
         ):
             # self.parent.gui_refresh(called_by_editor_menu=True)
             gui_refresh_thread = threading.Thread(target=self.run_gui_refresh)

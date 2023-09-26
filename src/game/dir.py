@@ -10,7 +10,7 @@ from shared_utils.functions import copy_directory, generate_random_string, verif
 from src.game.constants import DirectoryMode, SyncState
 from src.game.dir_id_handler import GameIDHandler
 from src.hud.syncer import files_differ
-from src.utils.functions import get_backup_filename, get_backup_path, rename_with_timeout
+from src.utils.functions import get_backup_filename, get_backup_path, get_start_gui, rename_with_timeout
 from src.utils.steam_info_retriever import SteamInfoRetriever
 
 
@@ -234,7 +234,8 @@ class GameDir:
         logger.debug("Restoring developer game files")
 
         try:
-            splash = SplashGUI("Restoring...", "Restoring game files..")
+            splash = SplashGUI(get_start_gui().root)
+            splash.splash("Restoring...", "Restoring game files..")
 
             dev_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.DEVELOPER)
 
