@@ -40,7 +40,7 @@ def configure_debug_logging():
     # logger.add(sys.stderr, filter=lambda record: "hud.syncer" in record["name"], level="DEBUG")
     # logger.add(sys.stderr, filter=lambda record: "gui.browser" in record["name"], level="DEBUG")
     # logger.add(sys.stderr, filter=lambda record: "gui.start" in record["name"], level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "shared_managers.hotkey_manager" in record["name"], level="DEBUG")
+    logger.add(sys.stderr, filter=lambda record: "shared_managers.hotkey_manager" in record["name"], level="DEBUG")
     logger.debug("Configured debug logging")
 
 

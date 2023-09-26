@@ -218,8 +218,11 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             width=125,
             height=25,
             command=lambda: self.show_menu_on_button(
-                self.editor_menu_hotkey_button, self.editor_menu.get_context_menu_help()
+                self.editor_menu_help_button, self.editor_menu.get_context_menu_dev()
             ),
+            # command=lambda: self.show_menu_on_button(
+            #     self.editor_menu_help_button, self.editor_menu.get_context_menu_help()
+            # ),
         )
         self.editor_menu_help_button.pack(padx=5, pady=0, side="left")
 

@@ -4,8 +4,6 @@ import threading
 from loguru import logger
 from shared_managers.hotkey_manager import HotkeyManager
 
-from debug.gui import debug_browser_gui
-
 
 def enable_debug_hotkeys():
     """Debug hotkeys"""
@@ -30,6 +28,5 @@ def debugging_hotkey():
     "Debug hotkey"
     print("Hotkey debugging method!")
     # debug_popup_gui()
-    debug_browser_gui()
     # hotkey_manager = HotkeyManager()
     # print(hotkey_manager.list_hotkeys())
