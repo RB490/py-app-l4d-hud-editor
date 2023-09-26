@@ -2,6 +2,7 @@
 """Module for the hud browser gui class"""
 import os
 import shutil
+import time
 import timeit
 import tkinter as tk
 from datetime import datetime
@@ -13,7 +14,7 @@ from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
-from shared_utils.functions import Singleton, create_and_open_temp_file, show_message, loguru_setup_logging_filter
+from shared_utils.functions import Singleton, create_and_open_temp_file, loguru_setup_logging_filter, show_message
 
 from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
@@ -355,12 +356,11 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         logger.debug(f"Radio button clicked: {display_choice}")
         # self.treeview_refresh()
 
-        # todo speed up treeview refresh
         # Measure the execution time
         execution_time = timeit.timeit(stmt=self.treeview_refresh, number=1)
 
         # Print the execution time in seconds
-        logger.warning(f"Execution time: {execution_time:.6f} seconds")
+        logger.debug(f"Treeview refreshed in: {execution_time:.6f} seconds")
 
     def treeview_search(self, event):
         """Search treeview"""
@@ -482,7 +482,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         except Exception as e:
             logger.error(f"Treeview items removal error: {e}")
         logger.debug("Cleared treeview!")
-        
+
         # variables
         treeview = self.treeview
         hud_dir = self.hud.edit.get_dir()
@@ -504,7 +504,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         search_term_lower = search_term.lower() if search_term else None
 
         insert_items = []
-
         for file_name, (file_desc, file_relative_path) in data_dict.items():
             # Calculate file path
             file_path = os.path.join(hud_dir, file_relative_path)
@@ -528,14 +527,22 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             # Prepare item for insertion
             insert_items.append((file_name, file_desc, is_custom, last_modified, file_relative_path, image_path))
 
+
         # Store PhotoImage objects to prevent them from being garbage collected
         self.treeview_photo_images = []
 
-        # Insert items into the Treeview
+        
+        # First, load the images and create PhotoImage objects
+        image_photos = []
         for item in insert_items:
             file_name, file_desc, is_custom, last_modified, file_relative_path, image_path = item
             image = Image.open(image_path).resize((16, 16), Image.LANCZOS)
             photo = ImageTk.PhotoImage(image)
+            image_photos.append(photo)
+
+        # Now, insert the items into the Treeview using the preloaded images
+        for item, photo in zip(insert_items, image_photos):
+            file_name, file_desc, is_custom, last_modified, file_relative_path, _ = item
             self.treeview_photo_images.append(photo)
 
             # Insert the item into the Treeview
@@ -545,6 +552,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 values=(file_name, file_desc, is_custom, last_modified, file_relative_path),
                 image=photo,
             )
+
         logger.debug("Refreshed treeview!")
 
     def show_popup_gui(self):
@@ -569,7 +577,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         logger.info(f"Adding new file: '{vanilla_file}' -> '{full_path}'")
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         shutil.copyfile(vanilla_file, full_path)
-        
+
         # update treeview
         self.treeview_refresh()
 
@@ -681,5 +689,8 @@ def main():
 
 
 if __name__ == "__main__":
-    loguru_setup_logging_filter("DEBUG", "include", ["src.gui.browser"])
+    os.system("cls")
+    # loguru_setup_logging_filter("INFO")
+    loguru_setup_logging_filter("DEBUG")
+    # loguru_setup_logging_filter("DEBUG", "include", ["src.gui.browser"])
     main()

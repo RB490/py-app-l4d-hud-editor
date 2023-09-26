@@ -602,3 +602,4 @@ Post:
 ✔ Refactor: Move GPT prompts somwhere else. maybe onenote. maybe a github repo + add a prompt for adding comments properly @done(23-09-07 16:38)
 
 	✔ Feature: Update gui base with icon setting capability. root.iconphoto(True, icon) sets it in gui & taskbar. self.root.iconbitmap is obsolete? @done(23-09-26 13:11)
+✘ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching @cancelled(23-09-26 21:17)
