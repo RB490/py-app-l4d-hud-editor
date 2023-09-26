@@ -12,7 +12,6 @@ from loguru import logger
 from shared_utils.functions import show_message
 
 from src.gui.about import GuiAbout
-from src.utils.constants import DATA_MANAGER
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 

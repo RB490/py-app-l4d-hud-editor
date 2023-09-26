@@ -9,7 +9,7 @@ from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
 from debug.hud import get_hud_debug_instance
 from src.utils.constants import DATA_MANAGER
-
+from shared_utils.functions import loguru_setup_logging_filter
 
 def main_misc_debug():
     """Debug"""
@@ -33,14 +33,12 @@ def setup_debugging_environment():
 def configure_debug_logging():
     """Configure debug logging"""
     logger.remove()
-    logger.add(sys.stderr, level="INFO")
-    # logger.add(sys.stderr, level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "hud.descriptions" in record["name"], level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "game.installer" in record["name"], level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "hud.syncer" in record["name"], level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "gui.browser" in record["name"], level="DEBUG")
-    # logger.add(sys.stderr, filter=lambda record: "gui.start" in record["name"], level="DEBUG")
-    logger.add(sys.stderr, filter=lambda record: "shared_managers.hotkey_manager" in record["name"], level="DEBUG")
+    # loguru_setup_logging_filter("INFO")
+    loguru_setup_logging_filter("DEBUG")
+    
+    # filter_modules = ["compiler.compiler"]
+    # loguru_setup_logging_filter("DEBUG", "include", filter_modules)
+    
     logger.debug("Configured debug logging")
 
 

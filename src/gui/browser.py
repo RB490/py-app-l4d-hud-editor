@@ -1,6 +1,7 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, c-extension-no-member
 """Module for the hud browser gui class"""
 import os
+import timeit
 import tkinter as tk
 from datetime import datetime
 from tkinter import ttk
@@ -340,7 +341,14 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         display_choice = self.display_choice.get()
         # Do something with the selected choice, such as refreshing the UI
         logger.debug(f"Radio button clicked: {display_choice}")
-        self.treeview_refresh()
+        # self.treeview_refresh()
+        
+        # todo speed up treeview refresh
+        # Measure the execution time
+        execution_time = timeit.timeit(stmt=self.treeview_refresh, number=1)
+
+        # Print the execution time in seconds
+        logger.warning(f"Execution time: {execution_time:.6f} seconds")
 
     def treeview_search(self, event):
         """Search treeview"""
