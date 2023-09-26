@@ -1,8 +1,7 @@
 
-☐ feat: really focus browser @ on_show. i added bring to front but the game is still focused -- it does work with other windows (might not even need bring_to_front for them)
+
+☐ fix: hud file descriptions -> every file is in there under file name key but also relative path key?!
 
 ☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching
-
-
 
 ☐ test: Test the program by using it to edit HUD's
