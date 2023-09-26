@@ -17,7 +17,7 @@ from hud.syncer import HudSyncer
 from utils.constants import HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 from utils.persistent_data_manager import PersistentDataManager
-from utils.vpk import VPKClass
+from shared_managers.valve_vpk_manager import VPKManager
 
 
 class HudEditor:
@@ -322,7 +322,7 @@ class HudEditor:
             # Perform the VPK file saving logic here
             # You can use the chosen file_path variable to save the file
 
-            vpk_file_class = VPKClass()
+            vpk_file_class = VPKManager()
             vpk_file_class.create(self.get_dir(), os.path.dirname(file_path), os.path.basename(file_path))
 
             logger.debug(f"VPK file saved at: {file_path}")

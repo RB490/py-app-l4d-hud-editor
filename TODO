@@ -2,8 +2,6 @@ Current:
 
 Todo:
 
-	
-	☐ refactor: Use shared vpk manager
 	☐ refactor: Use shared persistent data manager
 
 	☐ refactor: switch to send_keys_in_background from shared_utils

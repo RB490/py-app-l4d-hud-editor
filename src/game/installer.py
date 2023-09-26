@@ -19,7 +19,7 @@ from game.constants import DirectoryMode, InstallationError, InstallationState
 from game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
 from utils.constants import MODS_DIR
 from utils.functions import count_files_and_dirs, get_backup_path, wait_process_close
-from utils.vpk import VPKClass
+from shared_managers.valve_vpk_manager import VPKManager
 
 
 class GameInstaller:
@@ -287,7 +287,7 @@ class GameInstaller:
         to their respective root directories."""
         logger.debug("Extracting pak01.vpk's")
 
-        vpk_class = VPKClass()
+        vpk_class = VPKManager()
 
         pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
         for pak01_dir, pak01_path in pak01_data:

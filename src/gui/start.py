@@ -17,7 +17,7 @@ from hud.hud import Hud
 from utils.constants import APP_ICON, APP_NAME, GUI_BROWSER_TITLE, IMAGES_DIR_128, VERSION_NO_PRETTY, ImageConstants
 from utils.functions import save_and_exit_script
 from utils.persistent_data_manager import PersistentDataManager
-from utils.vpk import VPKClass
+from shared_managers.valve_vpk_manager import VPKManager
 
 
 class GuiHudStart(BaseGUI, metaclass=Singleton):
@@ -356,7 +356,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         if export_path:
             logger.debug(export_path)
-            vpk_class = VPKClass()
+            vpk_class = VPKManager()
             vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
             # vpk_class.create(self, input_dir, output_dir, output_file_name):
 
