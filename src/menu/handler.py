@@ -421,7 +421,7 @@ class EditorMenuHandler:
 
     def editor_menu_disconnect(self):
         """Send input keys to game"""
-        self.game.command.send_keys_in_background("f11")
+        self.game.window.hwnd_utils.send_keys_in_background("f11")
 
     def editor_installer_open_user_dir(self):
         """This method returns the user directory."""

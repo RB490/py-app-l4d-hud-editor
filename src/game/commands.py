@@ -61,16 +61,17 @@ class GameCommands:
             file_handle.write(output_command)
 
         # close ui panel if needed
+        game_hwnd = self.game.window.get_hwnd()
         if self.previous_ui_panel in ["team", "info"]:
-            self.send_keys_in_foreground(["alt", "f4"])
+            self.hwnd_utils.send_keys_in_foreground(game_hwnd, ["alt", "f4"])
 
         # toggle inspect hud (vgui_drawtree)
         if self.is_inspect_hud_enabled:
-            self.send_keys_in_foreground(["alt", "f4"])
+            self.hwnd_utils.send_keys_in_foreground(game_hwnd, ["alt", "f4"])
             output_command += "; vgui_drawtree 1; wait; "
 
         # execute command
-        self.send_keys_in_background([HOTKEY_EXECUTE_AUTOEXEC])
+        self.hwnd_utils.send_keys_in_background(game_hwnd, [HOTKEY_EXECUTE_AUTOEXEC])
         print(f"Executed command: '{output_command}'")
 
         # perform mouse clicks
@@ -194,71 +195,3 @@ class GameCommands:
         self.show_ui_panel = panel
 
         print(f"set_ui_panel: {panel}")
-
-    def send_keys_in_foreground(self, keys):
-        # pylint: disable=c-extension-no-member
-        """
-        Send specified keys to game
-
-        Notes:
-            This works in menus, but not ingame. For example:
-            - Alt+F4 is detected great for closing vgui_drawtree
-            - Chat detects these keypresses. Also while in the 'escape' ingame main menu
-            - Normal commands like executing something bound to 'o' don't get detected
-        """
-        # Get window handle
-        game_hwnd = self.game.window.get_hwnd()
-
-        # Check if the window handle is valid
-        if not win32gui.IsWindow(game_hwnd):
-            return
-
-        # Save the handle of the currently focused window
-        focused_hwnd = self.hwnd_utils.save_focus_state()
-
-        self.hwnd_utils.focus(game_hwnd)
-        for key in keys:
-            win32api.keybd_event(KEY_MAP[key.lower()], 0, 0, 0)
-            # print(f"Holding down key: {KEY_MAP[key.lower()]}")
-        for key in reversed(keys):
-            win32api.keybd_event(KEY_MAP[key.lower()], 0, win32con.KEYEVENTF_KEYUP, 0)
-            # print(f"Releasing key: {KEY_MAP[key.lower()]}")
-
-        # Restore focus to the previously focused window
-        if game_hwnd is not focused_hwnd:
-            self.hwnd_utils.save_focus_state()
-
-    def send_keys_in_background(self, keys):
-        # pylint: disable=c-extension-no-member
-        """
-        Sends one or more key presses to the game window using the Windows API.
-
-        Notes:
-            This works ingame, but not in menus. For example:
-            - Sending alt+f4 to close vgui_drawtree 1 doesn't work
-            - Sending 'space' to jump does work
-
-        Sources:
-        - Key scancodes: https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-        - Keyup scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
-        - Keydown scancode: https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-        """
-
-        # Get window handle
-        hwnd = self.game.window.get_hwnd()
-
-        # Check if the window handle is valid
-        if not win32gui.IsWindow(hwnd):
-            return
-
-        wm_keydown = 0x100
-        wm_keyup = 0x101
-
-        for key in keys:
-            scancode = KEY_SCANCODES[key.lower()]
-            keydown_param = scancode << 16 | 1
-            ctypes.windll.user32.SendMessageW(hwnd, wm_keydown, 0, keydown_param)
-        for key in reversed(keys):
-            scancode = KEY_SCANCODES[key.lower()]
-            keyup_param = scancode << 16 | 1 | 0x20000000
-            ctypes.windll.user32.SendMessageW(hwnd, wm_keyup, 0, keyup_param)
