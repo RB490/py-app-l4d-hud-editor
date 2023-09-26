@@ -2,6 +2,7 @@
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
 
 import os
+import threading
 import tkinter as tk
 import webbrowser
 from tkinter import Menu, PhotoImage
@@ -1391,4 +1392,9 @@ class EditorMenuClass:
             and hasattr(self.parent, "gui_refresh")
             and callable(getattr(self.parent, "gui_refresh"))
         ):
-            self.parent.gui_refresh(called_by_editor_menu=True)
+            # self.parent.gui_refresh(called_by_editor_menu=True)
+            gui_refresh_thread = threading.Thread(target=self.run_gui_refresh)
+            gui_refresh_thread.start()
+
+    def run_gui_refresh(self):
+        self.parent.gui_refresh(called_by_editor_menu=True)

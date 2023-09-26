@@ -4,9 +4,7 @@ Todo:
 
 	☐ refactor: use shared logging setup
 
-	☐ fix: entire editor menu gets reloaded every time i toggle browser visibility causing lag
-		- point of interest: opening the menu with the hotkey F8 doesn't have this lag and reloading
-		- another point of interest: this doesn't happen with start->dev menu either
+
 	☐ fix: entire editor menu gets reloaded every time i open browser 'help' menu causing lag
 	☐ fix: browser menu is using images which should only happen in context menu mode
 

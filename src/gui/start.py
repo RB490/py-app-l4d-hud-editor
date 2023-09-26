@@ -509,3 +509,11 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
                 self.hide()
             else:
                 save_and_exit_script()
+
+def main():
+    "There can only be one main Tkinter GUI using root.mainloop() at oncee"
+    start_gui = GuiHudStart()
+    start_gui.show()
+
+if __name__ == "__main__":
+    main()
