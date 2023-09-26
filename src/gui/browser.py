@@ -438,7 +438,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         # refresh start gui
         if self.parent.has_been_run() and self.parent.is_visible():
-            self.parent.gui_refresh(called_by_browser=True)
+            self.parent.gui_refresh(called_by_editor_menu=False)
 
         logger.debug(f"Refreshed {GUI_BROWSER_TITLE} GUI!")
 
