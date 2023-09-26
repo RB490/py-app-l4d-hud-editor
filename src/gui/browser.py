@@ -1,6 +1,7 @@
 # pylint: disable=broad-exception-caught, import-outside-toplevel, c-extension-no-member
 """Module for the hud browser gui class"""
 import os
+import shutil
 import timeit
 import tkinter as tk
 from datetime import datetime
@@ -14,6 +15,7 @@ from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
 
+from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
 from src.game.game import Game
 from src.gui.descriptions import GuiHudDescriptions
@@ -21,7 +23,6 @@ from src.gui.popup import GuiEditorMenuPopup
 from src.gui.vdf_tool import VDFModifierGUI
 from src.hud.hud import Hud
 from src.menu.menu import EditorMenuClass
-from src.debug.hud import get_hud_debug_instance
 from src.utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
@@ -279,57 +280,69 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
     def __create_context_menu(self):
         """Context menu"""
+
+        if not self.selected_full_path or not os.path.isfile(self.selected_full_path):
+            is_new_file = True
+        else:
+            is_new_file = False
+
         # Create a context menu
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
-        self.context_menu.add_command(
-            label="Open File",
-            image=self.img.get("file", 2),
-            compound=tk.LEFT,
-            command=self.action_open_file,
-        )
-        self.context_menu.add_command(
-            label="Open vanilla File",
-            image=self.img.get("file", 2),
-            compound=tk.LEFT,
-            command=self.action_open_vanilla_file,
-        )
-        self.context_menu.add_command(
-            label="Open Folder",
-            image=self.img.get("folder", 2),
-            compound=tk.LEFT,
-            command=self.action_open_folder,
-        )
-        self.context_menu.add_command(
-            label="Open Game Folder",
-            image=self.img.get("folder", 2),
-            compound=tk.LEFT,
-            command=self.action_open_game_folder,
-        )
-        self.context_menu.add_separator()
-        self.context_menu.add_command(
-            label="Annotate",
-            image=self.img.get("pencil_black_square.png", 2),
-            compound=tk.LEFT,
-            command=self.action_annotate,
-        )
-        self.context_menu.add_command(
-            label="Description",
-            image=self.img.get("list_symbol_of_three_items_with_dots.png", 2),
-            compound=tk.LEFT,
-            command=self.action_description,
-        )
-        self.context_menu.add_separator()
-        self.context_menu.add_command(
-            label="Refresh",
-            image=self.img.get("reload", 2),
-            compound=tk.LEFT,
-            command=self.treeview_refresh,
-        )
-        self.context_menu.add_command(
-            label="Recycle", image=self.img.get("delete", 2), compound=tk.LEFT, command=self.action_recycle
-        )
-
-        # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)
+        if is_new_file:
+            self.context_menu.add_command(
+                label="Add File",
+                image=self.img.get("plus", 2),
+                compound=tk.LEFT,
+                command=self.action_add_file,
+            )
+        else:
+            self.context_menu.add_command(
+                label="Open File",
+                image=self.img.get("file", 2),
+                compound=tk.LEFT,
+                command=self.action_open_file,
+            )
+            self.context_menu.add_command(
+                label="Open vanilla File",
+                image=self.img.get("file", 2),
+                compound=tk.LEFT,
+                command=self.action_open_vanilla_file,
+            )
+            self.context_menu.add_command(
+                label="Open Folder",
+                image=self.img.get("folder", 2),
+                compound=tk.LEFT,
+                command=self.action_open_folder,
+            )
+            self.context_menu.add_command(
+                label="Open Game Folder",
+                image=self.img.get("folder", 2),
+                compound=tk.LEFT,
+                command=self.action_open_game_folder,
+            )
+            self.context_menu.add_separator()
+            self.context_menu.add_command(
+                label="Annotate",
+                image=self.img.get("pencil_black_square.png", 2),
+                compound=tk.LEFT,
+                command=self.action_annotate,
+            )
+            self.context_menu.add_command(
+                label="Description",
+                image=self.img.get("list_symbol_of_three_items_with_dots.png", 2),
+                compound=tk.LEFT,
+                command=self.action_description,
+            )
+            self.context_menu.add_separator()
+            self.context_menu.add_command(
+                label="Refresh",
+                image=self.img.get("reload", 2),
+                compound=tk.LEFT,
+                command=self.treeview_refresh,
+            )
+            self.context_menu.add_command(
+                label="Recycle", image=self.img.get("delete", 2), compound=tk.LEFT, command=self.action_recycle
+            )
 
     def dummy_handler(self):
         "Dummy method"
@@ -368,6 +381,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Select the item (optional, but it visually indicates the clicked item)
         if item:
             self.treeview.selection_set(item)
+            self.treeview_set_selected_item(item)
+
+            # refresh contexet menu
+            self.__create_context_menu()
 
             # Show the context menu at the event's coordinates
             self.context_menu.post(event.x_root, event.y_root)
@@ -528,6 +545,20 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
     def save_window_geometry(self):
         """Save size & position if GUI is loaded and visible"""
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
+    
+    def action_add_file(self):
+        """Treeview Handle 'Add File' option (add new file to hud)"""
+        logger.debug("Method: action_add_file - Handle 'Add File' option (add new file to hud)")
+        
+        # variables
+        full_path = self.get_selected_full_path()
+        rel_path = self.get_selected_relative_path()
+        vanilla_file = self.game.dir.get_vanilla_file(rel_path)
+        
+        # create directory if needed, and copy file
+        logger.info(f"Adding new file: '{vanilla_file}' -> '{full_path}'")
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+        shutil.copyfile(vanilla_file, full_path)
 
     def action_open_file(self):
         """Treeview Handle 'Open File' option"""
