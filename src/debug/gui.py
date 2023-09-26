@@ -11,15 +11,15 @@ from shared_gui.progress import ProgressGUI, debug_progress_gui
 from shared_gui.splash_gui import splash_gui_example
 from shared_utils.functions import get_invisible_tkinter_root
 
-from debug.hud import get_hud_debug_instance
-from gui import descriptions
+from src.gui import descriptions
+from src.gui.vdf_tool import VDFModifierGUI
+from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
 from src.game.game import Game
 from src.gui.about import GuiAbout
 from src.gui.browser import GuiHudBrowser
 from src.gui.popup import GuiEditorMenuPopup
 from src.gui.start import GuiHudStart
-from gui.vdf_tool import VDFModifierGUI
 from src.utils.constants import DEVELOPMENT_DIR
 from src.utils.functions import get_backup_path, show_start_gui
 from src.utils.get_user_input import get_user_input

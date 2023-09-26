@@ -13,8 +13,29 @@ from shared_utils.functions import show_message
 
 from src.gui.about import GuiAbout
 
-from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
+from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT, DATA_MANAGER
 
+def persistent_data_remove_invalid_paths_from_list(list_key):
+    stored_huds = DATA_MANAGER.get(list_key)
+    valid_huds = []
+
+    if not stored_huds:
+        return
+
+    for path in stored_huds:
+        if os.path.exists(path):
+            valid_huds.append(path)
+        else:
+            print(f"Invalid path: {path}")
+
+    for invalid_path in stored_huds:
+        if invalid_path not in valid_huds:
+            logger.warning(f"Removing invalid {list_key} path: {invalid_path}")
+            DATA_MANAGER.remove_item_from_list(list_key, invalid_path)
+
+def persistent_data_remove_invalid_hud_paths():
+    persistent_data_remove_invalid_paths_from_list("stored_huds")
+    persistent_data_remove_invalid_paths_from_list("temp_huds")
 
 def show_browser_gui():
     "Show the browser gui"
@@ -253,6 +274,9 @@ def preform_checks_to_prepare_program_start():
 
     g_game = Game()
     h_hud = Hud()
+
+    # clear invalid stored or temp hud paths
+    persistent_data_remove_invalid_hud_paths()
 
     # unsync previously not unsynced hud if needed
     h_hud.edit.syncer.__undo_changes_for_all_items()

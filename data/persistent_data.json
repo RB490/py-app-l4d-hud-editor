@@ -1,7 +1,5 @@
 {
     "BrowserGuiGeometry": "828x517+114+776",
-    "GuiGeometryBrowser": "577x316+2568+502",
-    "GuiGeometryStart": "865x500+697+613",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "875x425+159+110",
     "VDFGui_annotate": 1,
@@ -31,8 +29,7 @@
     "reload_reopen_menu_on_reload": false,
     "steam_root_dir": "E:/games/steam",
     "stored_huds": [
-        "D:/projects/l4d-addons-huds/4. l4d2-2020HUD/source",
-        "D:/projects/py-app-l4d-hud-editor/dev/debug/hud/workspace/debug_hud"
+        "D:/projects/l4d-addons-huds/4. l4d2-2020HUD/source"
     ],
     "stored_temp_huds": []
 }

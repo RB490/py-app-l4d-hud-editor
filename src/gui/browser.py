@@ -14,7 +14,6 @@ from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
 
-from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
 from src.game.game import Game
 from src.gui.descriptions import GuiHudDescriptions
@@ -22,6 +21,7 @@ from src.gui.popup import GuiEditorMenuPopup
 from src.gui.vdf_tool import VDFModifierGUI
 from src.hud.hud import Hud
 from src.menu.menu import EditorMenuClass
+from src.debug.hud import get_hud_debug_instance
 from src.utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
@@ -341,7 +341,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Do something with the selected choice, such as refreshing the UI
         logger.debug(f"Radio button clicked: {display_choice}")
         # self.treeview_refresh()
-        
+
         # todo speed up treeview refresh
         # Measure the execution time
         execution_time = timeit.timeit(stmt=self.treeview_refresh, number=1)

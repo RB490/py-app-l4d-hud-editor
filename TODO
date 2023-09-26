@@ -2,7 +2,7 @@ Current:
 
 Todo:
 	
-	☐ feat: Automatically remove invalid temp hud paths & maybe also stored hud paths
+	
 	
 	☐ feat: Use threading/asyncio during certain parts of the installation. Mainly extracting/merging vpk's to do all jobs at once in paralel
 	
