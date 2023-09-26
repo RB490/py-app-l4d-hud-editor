@@ -2,7 +2,6 @@ Current:
 
 Todo:
 	
-	☐ fix: entire editor menu gets reloaded every time i open browser 'help' menu causing lag
 	☐ fix: browser menu is using images which should only happen in context menu mode
 	
 	☐ refactor: switch to send_keys_in_background from shared_utils
