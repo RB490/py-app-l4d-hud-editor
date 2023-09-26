@@ -13,7 +13,7 @@ from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
-from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
+from shared_utils.functions import Singleton, create_and_open_temp_file, show_message, loguru_setup_logging_filter
 
 from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
@@ -669,4 +669,5 @@ def main():
 
 
 if __name__ == "__main__":
+    loguru_setup_logging_filter("DEBUG", "include", ["src.gui.browser"])
     main()

@@ -38,7 +38,8 @@ def configure_debug_logging():
     loguru_setup_logging_filter("DEBUG")
 
     # filter_modules = ["shared_utils.functions"]
-    # loguru_setup_logging_filter("DEBUG", "exclude", filter_modules)
+    filter_modules = ["src.gui.browser"]
+    loguru_setup_logging_filter("DEBUG", "include", filter_modules)
 
     logger.debug("Configured debug logging")
 
