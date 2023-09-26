@@ -2,8 +2,6 @@ Current:
 
 Todo:
 	
-	☐ fix: browser menu is using images which should only happen in context menu mode
-	
 	☐ refactor: switch to send_keys_in_background from shared_utils
 	
 	☐ feat: Automatically remove invalid temp hud paths & maybe also stored hud paths

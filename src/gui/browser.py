@@ -84,7 +84,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         hotkey_manager = HotkeyManager()
         hotkey_manager.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
 
-        self.gui_refresh()
         self.treeview_sort_column(self.treeview, "modified", True)
 
     def focus_search_box_if_first_row_selected(self, *event):
