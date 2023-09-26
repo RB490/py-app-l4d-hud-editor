@@ -9,7 +9,7 @@ import pyautogui
 import win32api
 import win32con
 import win32gui
-from shared_utils.hwnd_window_manager import HwndWindowUtils
+from shared_managers.hwnd_manager import HwndManager
 
 from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
@@ -28,7 +28,7 @@ class GameCommands:
     def __init__(self, game_class):
         self.game = game_class
         self.data_manager = PersistentDataManager()
-        self.hwnd_utils = HwndWindowUtils()
+        self.hwnd_utils = HwndManager()
 
         self.show_ui_panel = None
         self.previous_ui_panel = None

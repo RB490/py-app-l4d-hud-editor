@@ -6,8 +6,8 @@ from tkinter import filedialog
 from tkinter.filedialog import asksaveasfilename
 
 from loguru import logger
+from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import copy_directory, show_message
-from shared_utils.hotkey_manager import HotkeyManager
 
 from game.constants import DirectoryMode
 from game.game import Game

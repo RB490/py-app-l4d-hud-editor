@@ -1,10 +1,11 @@
 """Global constant variables"""
+import ctypes
 import os
 from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
 
 from loguru import logger
-from shared_utils.version_number_manager import VersionNumberManager
+from shared_managers.version_number_manager import VersionNumberManager
 
 #####################################################
 # Path
@@ -26,6 +27,10 @@ VERSION_NO = version_manager.get()
 VERSION_NO_PRETTY = version_manager.get(formatted=True)
 VERSION_NO_GITHUB: str = version_manager.get_from_url(VERSION_NO_URL)
 GUI_BROWSER_TITLE: str = "Browser"
+
+# Set the taskbar icon (uses whichever icon tkinter is set to)
+taskbar_ico_appid = f"rb.python.program.{PROGRAM_NAME}.{VERSION_NO}"
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(taskbar_ico_appid)
 
 # main directories
 DEVELOPMENT_DIR: str = os.path.join(PROJECT_ROOT, "dev")

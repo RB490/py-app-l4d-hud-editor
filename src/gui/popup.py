@@ -1,8 +1,8 @@
 """Module for the editor menu"""
 # pylint: disable=import-outside-toplevel
 from shared_gui.base import BaseGUI
+from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton
-from shared_utils.hotkey_manager import HotkeyManager
 
 from game.game import Game
 from hud.hud import Hud

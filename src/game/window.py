@@ -5,8 +5,8 @@ import subprocess
 
 import win32gui
 from loguru import logger
+from shared_managers.hwnd_manager import HwndManager
 from shared_utils.functions import show_message
-from shared_utils.hwnd_window_manager import HwndWindowUtils
 
 from game.constants import InstallationState
 from utils.constants import GAME_POSITIONS
@@ -19,7 +19,7 @@ class GameWindow:
     def __init__(self, game_class):
         self.game = game_class
         self.data_manager = PersistentDataManager()
-        self.hwnd_utils = HwndWindowUtils()
+        self.hwnd_utils = HwndManager()
 
         self.hwnd = None
         self.exe = "left4dead2.exe"

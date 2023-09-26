@@ -10,8 +10,8 @@ import win32gui
 from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
+from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
-from shared_utils.hotkey_manager import HotkeyManager
 
 from game.constants import DirectoryMode
 from game.game import Game
@@ -166,7 +166,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             justify="center",
             command=self.hud.edit.sync,
             state="normal",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -181,7 +181,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             justify="center",
             command=self.toggle_visibility,
             state="normal",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -198,7 +198,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 self.editor_menu_hotkey_button, self.editor_menu.get_context_menu_main()
             ),
             state="normal",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -213,7 +213,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             justify="center",
             # command=self.dummy_handler,
             state="normal",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -275,47 +275,50 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.context_menu = tk.Menu(self.treeview, tearoff=False)
         self.context_menu.add_command(
             label="Open File",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound=tk.LEFT,
             command=self.action_open_file,
         )
         self.context_menu.add_command(
             label="Open vanilla File",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound=tk.LEFT,
             command=self.action_open_vanilla_file,
         )
         self.context_menu.add_command(
             label="Open Folder",
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound=tk.LEFT,
             command=self.action_open_folder,
         )
         self.context_menu.add_command(
             label="Open Game Folder",
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound=tk.LEFT,
             command=self.action_open_game_folder,
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
-            label="Annotate", image=self.img.pencil_black_square, compound=tk.LEFT, command=self.action_annotate
+            label="Annotate",
+            image=self.img.get("pencil_black_square.png", 2),
+            compound=tk.LEFT,
+            command=self.action_annotate,
         )
         self.context_menu.add_command(
             label="Description",
-            image=self.img.list_symbol_of_three_items_with_dots,
+            image=self.img.get("list_symbol_of_three_items_with_dots.png", 2),
             compound=tk.LEFT,
             command=self.action_description,
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Refresh",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound=tk.LEFT,
             command=self.treeview_refresh,
         )
         self.context_menu.add_command(
-            label="Recycle", image=self.img.trash_can_black_symbol, compound=tk.LEFT, command=self.action_recycle
+            label="Recycle", image=self.img.get("delete", 2), compound=tk.LEFT, command=self.action_recycle
         )
 
         # self.context_menu.entryconfig("Recycle", image=self.delete_icon, compound=tk.LEFT)

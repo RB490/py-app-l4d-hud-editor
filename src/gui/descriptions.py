@@ -92,12 +92,12 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         add_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.add_control)
         add_ctrl_button.config(width=25, height=23)
-        add_ctrl_button.config(image=self.img.addition_sign, compound="center")
+        add_ctrl_button.config(image=self.img.get("plus", 2), compound="center")
         add_ctrl_button.pack(side="left", padx=self.pad_x, pady=self.pad_y)
 
         remove_ctrl_button = tk.Button(ctrl_button_frame, text="", justify="center", command=self.remove_control)
         remove_ctrl_button.config(width=25, height=23)
-        remove_ctrl_button.config(image=self.img.trash_can_black_symbol, compound="center")
+        remove_ctrl_button.config(image=self.img.get("delete", 2), compound="center")
         remove_ctrl_button.pack(side="left", padx=self.pad_x, pady=self.pad_y)
 
         ctrl_desc_frame = tk.Frame(ctrl_label_frame)
@@ -125,14 +125,14 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             width=self.ctrl_w,
             command=self.submit_gui_save_changes,
         )
-        save_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=self.pad_x)
+        save_button.config(image=self.img.get("save", 2), compound="left", padx=self.pad_x)
         save_button.pack(side="right", expand=True, fill="x", padx=self.pad_x, pady=(0, self.pad_y))
 
         remove_file_entry_button = tk.Button(
             save_button_frame, text="Remove", justify="center", command=self.remove_file_entry
         )
         remove_file_entry_button.config(width=70, height=25)
-        remove_file_entry_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=self.pad_x)
+        remove_file_entry_button.config(image=self.img.get("delete", 2), compound="left", padx=self.pad_x)
         remove_file_entry_button.pack(side="left", padx=self.pad_x, pady=(0, self.pad_y))
 
     def on_close(self):

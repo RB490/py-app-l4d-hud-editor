@@ -416,7 +416,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.selected_hud_dir = ""
         self.selected_hud_name = ""
 
-    def gui_refresh(self, called_by_browser=False):
+    def gui_refresh(self, called_by_editor_menu=False):
         "Update treeview, browser treeview, buttons"
 
         # set title
@@ -436,7 +436,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.treeview_refresh()
 
         # refresh browser gui
-        if not called_by_browser and self.browser.has_been_run() and self.browser.is_visible():
+        if not called_by_editor_menu and self.browser.has_been_run() and self.browser.is_visible():
             self.browser.gui_refresh()
 
         logger.debug("Refreshed Start GUI!")

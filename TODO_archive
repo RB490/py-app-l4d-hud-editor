@@ -485,7 +485,7 @@ Post:
 	✘ Tried threading for installer and while it does kind of work. start & progress gui are still set to not responding. and a lot of issues like show_message not working and the different methods not being able to properly return values. @cancelled(23-09-03 17:14)
 	✘ Tried it for uninstaller. Pretty decent, except that once again show_message doesn't work this just isn't worth it @cancelled(23-09-03 17:14)
 	✔ Bug: Log: Some logging printouts are printed twice. For example game dir switching (set) @done(23-09-03 20:44)
-		✔ Duplicate entries in game class: INFO:shared_utils.hwnd_window_manager:Closed False! -> log.info(f"Closed {self.get_process_name(hwnd)}!") @done(23-09-03 20:44)
+		✔ Duplicate entries in game class: INFO:shared_managers.hwnd_manager:Closed False! -> log.info(f"Closed {self.get_process_name(hwnd)}!") @done(23-09-03 20:44)
 		✔ Already messed with this for longer than an hour @done(23-09-03 20:44)
 		✔ Figured out that it only happens when actually switching dir modes. If calling the same thing it doesn't duplicate @done(23-09-03 20:44)
 		✔ Figured out that when actually switching modes log statements in debug->game.py also duplicate?! very confusing stuff -- in fact all the way down the stack also in main_debug() @done(23-09-03 20:44)

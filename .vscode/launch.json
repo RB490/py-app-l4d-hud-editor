@@ -5,20 +5,13 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "run_debug_main.py",
 			"type": "python",
 			"request": "launch",
-			"name": "Debug.py",
 			"program": "${workspaceFolder}/src/run_debug_main.py",
 		},
 		{
-			"type": "python",
-			"request": "launch",
-			"name": "Debug.py (External Terminal)",
-			"program": "${workspaceFolder}/src/run_debug_main.py",
-			"console": "externalTerminal",
-		},
-		{
-			"name": "Python: Current File",
+			"name": "Current File",
 			"type": "python",
 			"request": "launch",
 			"program": "${file}",
