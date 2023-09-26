@@ -2,31 +2,14 @@ Current:
 
 Todo:
 
-	☐ Refactor: Use shared image manager
-	☐ Refactor: Use shared vpk manager
-	☐ Refactor: Use shared persistent data manager
-
-	☐ Refactor: switch to send_keys_in_background from shared_utils
-	☐ Refactor: switch to send_keys_in_foreground from shared_utils
-
-	☐ Feature: Update gui base with icon setting capability. root.iconphoto(True, icon) sets it in gui & taskbar. self.root.iconbitmap is obsolete?
-
-	☐ Feature: Automatically remove invalid temp hud paths & maybe also stored hud paths
-
-	☐ Testing: Clean environment: Test the program in a virtual machine. Bonus points for getting the game to run through a shared folder
-		☐ Fix virtualbox being so laggy
-		☐ Fix virtualbox not having any animations
-		- Amazingly the game did run, just whining about steam not running
-
-	☐ Feat: Use threading/asyncio during certain parts of the installation. Mainly extracting/merging vpk's to do all jobs at once in paralel
-
-	☐ Apparently it's possible to export python as an executable after all? https://polymars.itch.io/flappuccino
-
-	☐ Research: Ask GPT on how to properly test a program so it's ready for release
 	
-	☐ Research: Ask GPT on how to properly prepare a python program for release
-	
-	☐ Testing: Test the program by using it to edit HUD's
+	☐ refactor: Use shared vpk manager
+	☐ refactor: Use shared persistent data manager
 
-Release:
-	☐ Goal: Being able to have third parties (smug) run the program and have it 100% work on first try
+	☐ refactor: switch to send_keys_in_background from shared_utils
+
+	☐ feat: Automatically remove invalid temp hud paths & maybe also stored hud paths
+
+	☐ feat: Use threading/asyncio during certain parts of the installation. Mainly extracting/merging vpk's to do all jobs at once in paralel
+
+	☐ test: Test the program by using it to edit HUD's

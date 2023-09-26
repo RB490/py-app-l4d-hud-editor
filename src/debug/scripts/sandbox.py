@@ -1,23 +1,15 @@
-import ctypes
 import tkinter as tk
-
-# Replace 'your_icon.ico' with the path to your custom icon file (.ico format)
-icon_path = "your_icon.ico"
-icon_path = r"D:\Downloads\py-app-content-manager-main\py-app-content-manager-main\Assets\Images\app.ico"
-
-import ctypes
-from tkinter import Tk
-
-# Define a unique identifier for your application
-myappid = 'rb.python.program.version'
-# Set the application and taskbar icon
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
+from shared_managers.image_manager import ImageManager
 
 # Create a Tkinter window
-window = Tk()
-window.title("My Application")
-window.iconbitmap(icon_path)
+root = tk.Tk()
+root.title("Window with Icon")
 
-# Run the Tkinter event loop
-window.mainloop()
+image_manager = ImageManager()
+
+# Load and set the window icon using root.iconphoto()
+icon_image = tk.PhotoImage(file=image_manager.get_image_path("folder"))  # Replace with the path to your .png file
+root.iconphoto(True, icon_image)
+
+# Run the Tkinter main loop
+root.mainloop()
