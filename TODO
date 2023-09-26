@@ -1,3 +1,55 @@
+☐ test: new code in is_running()
+☐ fix: bug in is_running something about invalid pid
+
+    def is_running(self, hwnd):
+        """Confirm whether hwnd is running. Also works if invisible. Sets & returns process name"""
+        if not hwnd:
+            logging.debug(f"is_running() did not receive a HWND! '{hwnd}'!")
+            return False
+
+        process_name = None  # Initialize the variable before the try block
+        try:
+            _, pid = win32process.GetWindowThreadProcessId(hwnd)
+            process = psutil.Process(pid)
+            is_running = psutil.pid_exists(pid)
+            process_name = process.name()
+            self.set_process_name(hwnd, process_name)
+            logger.debug(f"Process {process_name} is {'running!' if is_running else 'not running!'}")
+            return process_name
+        except psutil.NoSuchProcess:
+            logger.warning(f"Process {process_name} not found!")
+            return False
+
+Exception has occurred: ValueError
+pid must be a positive integer (got -232792352)
+  File "D:\projects\python-files\shared\shared_packages\shared_managers\hwnd_manager.py", line 411, in is_running
+    process = psutil.Process(pid)
+              ^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\py-app-l4d-hud-editor\src\game\window.py", line 33, in get_hwnd
+    if self.hwnd is None or not self.hwnd_utils.is_running(self.hwnd):
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\py-app-l4d-hud-editor\src\game\window.py", line 173, in is_running
+    return self.hwnd_utils.is_running(self.get_hwnd())
+                                      ^^^^^^^^^^^^^^^
+  File "D:\projects\py-app-l4d-hud-editor\src\hud\editor.py", line 343, in wait_for_game_exit_then_finish_editing
+    if not self.game.window.is_running():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: pid must be a positive integer (got -232792352)
+
+
+
+
+
+
+
+
+
+
+
+
+☐ test: start editing has a new splash gui -- test if the try:finally block works properly
+☐ feat: start editing splash gui: add hud title
+
 
 
 
@@ -6,3 +58,8 @@
 ☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching
 
 ☐ test: Test the program by using it to edit HUD's
+
+
+
+
+
