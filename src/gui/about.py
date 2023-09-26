@@ -5,9 +5,7 @@ import webbrowser
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton
 
-from utils.constants import APP_ICON, APP_NAME, APP_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants
-from utils.persistent_data_manager import PersistentDataManager
-
+from utils.constants import APP_ICON, APP_NAME, APP_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants, DATA_MANAGER
 
 class GuiAbout(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
@@ -17,7 +15,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         self.settings_geometry_key = "GuiGeometryAbout"
         self.project_url = APP_URL
         self.img = ImageConstants()
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
 
         # create gui
         super().__init__(gui_type="sub", parent_root=parent_root)

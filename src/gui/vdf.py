@@ -6,8 +6,7 @@ from tkinter import scrolledtext
 from shared_gui.base import BaseGUI
 from shared_utils.functions import show_message
 
-from utils.constants import APP_ICON, ImageConstants
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import APP_ICON, DATA_MANAGER, ImageConstants
 from utils.vdf import VDFModifier
 
 
@@ -23,7 +22,7 @@ class VDFModifierGUI(BaseGUI):
 
         # setup gui
         super().__init__(gui_type="sub", parent_root=parent_root)
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.img = ImageConstants()
         self.modifier = None  # vdf modifier class
         self.root.minsize(875, 425)

@@ -32,6 +32,31 @@ GUI_BROWSER_TITLE: str = "Browser"
 taskbar_ico_appid = f"rb.python.program.{APP_NAME}.{VERSION_NO}"
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(taskbar_ico_appid)
 
+DEFAULT_DATA = {
+    "BrowserGuiGeometry": "828x517+114+776",
+    "HudSelectGuiGeometry": "865x528+100+100",
+    "VDFGuiGeometry": "875x425+159+110",
+    "VDFGui_annotate": 1,
+    "VDFGui_indent_values": 1,
+    "VDFGui_modify_int": 1,
+    "VDFGui_sort_keys": 0,
+    "hud_reload_mode": "reload_hud",
+    "game_insecure": False,
+    "game_mode": "Coop",
+    "game_mute": True,
+    "game_pos": "Top Left",
+    "game_always_on_top": False,
+    "game_pos_custom_coord": None,
+    "game_res": [1600, 900],
+    "reload_mouse_clicks_coord_1": (10, 20),
+    "reload_mouse_clicks_coord_2": (30, 40),
+    "reload_mouse_clicks_enabled": False,
+    "reload_reopen_menu_on_reload": False,
+    "steam_root_dir": "E:/games/steam",
+    "stored_huds": ["D:/projects/l4d-addons-huds/4. l4d2-2020HUD/source"],
+    "stored_temp_huds": [],
+}
+
 # main directories
 DEVELOPMENT_DIR: str = os.path.join(PROJECT_ROOT, "dev")
 ASSETS_DIR: str = os.path.join(PROJECT_ROOT, "assets")
@@ -64,6 +89,13 @@ EDITOR_AUTOEXEC_PATH: str = os.path.join(DATA_DIR, "hud_editor_autoexec.cfg")
 DUMMY_ADDON_VPK_PATH: str = os.path.join(DATA_DIR, "dummy_addon_vpk.vpk")
 PERSISTENT_DATA_PATH: str = os.path.join(DATA_DIR, "persistent_data.json")
 HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json")
+
+#####################################################
+# Classes
+#####################################################
+
+from shared_managers.persistent_data_manager import PersistentDataManager
+DATA_MANAGER = PersistentDataManager(PERSISTENT_DATA_PATH, DEFAULT_DATA)
 
 #####################################################
 # General

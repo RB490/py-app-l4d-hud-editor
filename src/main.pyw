@@ -11,7 +11,6 @@
 import os
 
 from utils.functions import preform_checks_to_prepare_program_start, show_start_gui
-from utils.persistent_data_manager import PersistentDataManager
 
 # from packages.game.game import Game
 # from packages.utils.functions import load_data
@@ -25,8 +24,6 @@ os.system("cls")  # clear terminal
 # ----------------------------------
 #     Load persistent data
 # ----------------------------------
-
-data_manager = PersistentDataManager()  # type: ignore
 
 # ----------------------------------
 #     Do stuff

@@ -13,9 +13,8 @@ from shared_managers.hwnd_manager import HwndManager
 
 from game.constants import DirectoryMode
 from game.video_settings_modifier import VideoSettingsModifier
-from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
+from utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
 from utils.functions import click_at
-from utils.persistent_data_manager import PersistentDataManager
 
 
 class GameCommands:
@@ -27,7 +26,7 @@ class GameCommands:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.hwnd_utils = HwndManager()
 
         self.show_ui_panel = None

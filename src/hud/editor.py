@@ -7,6 +7,7 @@ from tkinter.filedialog import asksaveasfilename
 
 from loguru import logger
 from shared_managers.hotkey_manager import HotkeyManager
+from shared_managers.valve_vpk_manager import VPKManager
 from shared_utils.functions import copy_directory, show_message
 
 from game.constants import DirectoryMode
@@ -14,17 +15,15 @@ from game.game import Game
 from hud.descriptions import HudDescriptions
 from hud.manager import HudManager
 from hud.syncer import HudSyncer
-from utils.constants import HOTKEY_SYNC_HUD
+from utils.constants import DATA_MANAGER, HOTKEY_SYNC_HUD
 from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
-from utils.persistent_data_manager import PersistentDataManager
-from shared_managers.valve_vpk_manager import VPKManager
 
 
 class HudEditor:
     """Class to manage hud editing"""
 
     def __init__(self) -> None:
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.game = Game()
         self.syncer = HudSyncer()
         self.desc = HudDescriptions()

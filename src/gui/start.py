@@ -9,15 +9,22 @@ import send2trash
 from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
+from shared_managers.valve_vpk_manager import VPKManager
 from shared_utils.functions import Singleton, copy_directory, show_message
 
 from game.game import Game
 from gui.browser import GuiHudBrowser
 from hud.hud import Hud
-from utils.constants import APP_ICON, APP_NAME, GUI_BROWSER_TITLE, IMAGES_DIR_128, VERSION_NO_PRETTY, ImageConstants
+from utils.constants import (
+    APP_ICON,
+    APP_NAME,
+    DATA_MANAGER,
+    GUI_BROWSER_TITLE,
+    IMAGES_DIR_128,
+    VERSION_NO_PRETTY,
+    ImageConstants,
+)
 from utils.functions import save_and_exit_script
-from utils.persistent_data_manager import PersistentDataManager
-from shared_managers.valve_vpk_manager import VPKManager
 
 
 class GuiHudStart(BaseGUI, metaclass=Singleton):
@@ -26,7 +33,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def __init__(self):
         # variables
         self.settings_geometry_key = "GuiGeometryStart"
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.game = Game()
         self.hud = Hud()
         self.selected_hud_name = ""

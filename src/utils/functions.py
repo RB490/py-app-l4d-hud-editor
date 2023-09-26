@@ -12,7 +12,7 @@ from loguru import logger
 from shared_utils.functions import show_message
 
 from gui.about import GuiAbout
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
@@ -277,5 +277,4 @@ def save_and_exit_script():
     hud_instance = Hud()
     hud_instance.edit.finish_editing(open_start_gui=False)
 
-    PersistentDataManager().save()
     sys.exit()

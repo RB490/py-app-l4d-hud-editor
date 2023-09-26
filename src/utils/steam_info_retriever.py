@@ -5,7 +5,7 @@ from tkinter import filedialog
 
 from shared_utils.functions import Singleton
 
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER
 
 
 class SteamInfoRetriever(metaclass=Singleton):
@@ -26,7 +26,7 @@ class SteamInfoRetriever(metaclass=Singleton):
         Args:
             persistent_data (dict): A dictionary to store persistent data.
         """
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
 
         self.steam_info = {}
         self.print_debug_messages = False

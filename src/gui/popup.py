@@ -6,8 +6,7 @@ from shared_utils.functions import Singleton
 
 from game.game import Game
 from hud.hud import Hud
-from utils.constants import HOTKEY_EDITOR_MENU
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER, HOTKEY_EDITOR_MENU
 
 
 class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
@@ -47,7 +46,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         screen_height = self.root.winfo_screenheight()
         self.root.geometry(f"{screen_width}x{screen_height}")
 
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.game = Game()
         self.hud = Hud()
 

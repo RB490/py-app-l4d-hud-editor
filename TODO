@@ -2,7 +2,7 @@ Current:
 
 Todo:
 
-	☐ refactor: Use shared persistent data manager
+	☐ refactor: get rid of ImageConstants
 
 	☐ refactor: switch to send_keys_in_background from shared_utils
 

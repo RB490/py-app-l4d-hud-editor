@@ -9,8 +9,7 @@ from shared_managers.hwnd_manager import HwndManager
 from shared_utils.functions import show_message
 
 from game.constants import InstallationState
-from utils.constants import GAME_POSITIONS
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER, GAME_POSITIONS
 
 
 class GameWindow:
@@ -18,7 +17,7 @@ class GameWindow:
 
     def __init__(self, game_class):
         self.game = game_class
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.hwnd_utils = HwndManager()
 
         self.hwnd = None

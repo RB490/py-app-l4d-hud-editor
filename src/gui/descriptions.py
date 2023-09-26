@@ -7,9 +7,8 @@ from shared_utils.functions import Singleton, show_message
 
 from game.game import Game
 from hud.hud import Hud
-from utils.constants import APP_ICON, ImageConstants
+from utils.constants import APP_ICON, DATA_MANAGER, ImageConstants
 from utils.functions import show_browser_gui
-from utils.persistent_data_manager import PersistentDataManager
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
@@ -24,7 +23,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.unsaved_changes = False
         self.prev_file_desc_content = None
         self.prev_ctrl_desc_content = None
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.game = Game()
         self.hud = Hud()
         self.img = ImageConstants()

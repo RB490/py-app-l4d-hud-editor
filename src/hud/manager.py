@@ -4,16 +4,16 @@ import os
 import vdf  # type: ignore
 from shared_utils.functions import copy_directory
 
+from utils.constants import DATA_MANAGER  # Assuming you have vdf library imported
 from utils.constants import NEW_HUD_DIR
 from utils.functions import prompt_for_folder
-from utils.persistent_data_manager import PersistentDataManager  # Assuming you have vdf library imported
 
 
 class HudManager:
     """Handles storage, retrieval, and management of HUD-related data and folders."""
 
     def __init__(self):
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
 
     def prompt_add_existing_hud(self):
         """Prompt user for hud folder to add"""

@@ -13,6 +13,7 @@ from game.constants import DirectoryMode
 from game.game import Game
 from menu.handler import EditorMenuHandler
 from utils.constants import (
+    DATA_MANAGER,
     EDITOR_HUD_RELOAD_MODES,
     GAME_POSITIONS,
     HOTKEY_EDITOR_MENU,
@@ -25,7 +26,6 @@ from utils.constants import (
     TUTORIALS_DIR,
     ImageConstants,
 )
-from utils.persistent_data_manager import PersistentDataManager
 
 
 class EditorMenuClass:
@@ -34,7 +34,7 @@ class EditorMenuClass:
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
     def __init__(self, parent_instance, parent_root):
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.handler = EditorMenuHandler(self)
         self.root = parent_root
         self.parent = parent_instance

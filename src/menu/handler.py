@@ -9,7 +9,7 @@ from loguru import logger
 from shared_utils.functions import show_message
 
 from game.game import DirectoryMode, Game, VideoSettingsModifier
-from utils.constants import HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
+from utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
 from utils.functions import (
     get_browser_gui,
     get_mouse_position_on_click,
@@ -19,7 +19,6 @@ from utils.functions import (
     show_start_gui,
 )
 from utils.get_user_input import get_user_input
-from utils.persistent_data_manager import PersistentDataManager
 
 
 def call_create_and_refresh_menu_after_method(func):
@@ -39,7 +38,7 @@ class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
     def __init__(self, editor_menu_instance):
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.editor_menu = editor_menu_instance
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports

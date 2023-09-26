@@ -8,7 +8,7 @@ from loguru import logger
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
 from debug.hud import get_hud_debug_instance
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER
 
 
 def main_misc_debug():
@@ -48,13 +48,3 @@ def configure_debug_logging():
 def debug_function_variable_params(*args):
     """Debug"""
     print(f"debug_function args={args}")
-
-
-def debug_data_manager():
-    "debug data manager"
-    data_manager = PersistentDataManager()
-    PersistentDataManager().save()
-    result = data_manager.data
-    result = data_manager.print()
-    result = data_manager.get("game_mode")
-    print(f"result={result}")

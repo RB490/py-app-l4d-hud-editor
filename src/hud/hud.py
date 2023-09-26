@@ -5,14 +5,14 @@
 from shared_utils.functions import Singleton
 
 from hud.descriptions import HudDescriptions
-from utils.persistent_data_manager import PersistentDataManager
+from utils.constants import DATA_MANAGER
 
 
 class Hud(metaclass=Singleton):
     """Class to manage hud editing"""
 
     def __init__(self) -> None:
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         from hud.editor import HudEditor
         from hud.manager import HudManager
 

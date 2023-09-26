@@ -23,6 +23,7 @@ from menu.menu import EditorMenuClass
 from utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
+    DATA_MANAGER,
     GUI_BROWSER_TITLE,
     HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
@@ -30,7 +31,6 @@ from utils.constants import (
     ImageConstants,
 )
 from utils.functions import get_image_for_file_extension
-from utils.persistent_data_manager import PersistentDataManager
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -44,7 +44,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.selected_file_name = None
         self.selected_relative_path = None
         self.treeview_photo_images = []
-        self.data_manager = PersistentDataManager()
+        self.data_manager = DATA_MANAGER
         self.hud = Hud()
         self.game = Game()
         self.img = ImageConstants()
