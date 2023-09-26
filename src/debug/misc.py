@@ -8,7 +8,7 @@ from loguru import logger
 from debug.game import debug_game_set_states_synced_and_installed
 from debug.hotkeys import enable_debug_hotkeys
 from debug.hud import get_hud_debug_instance
-from utils.constants import DATA_MANAGER
+from src.utils.constants import DATA_MANAGER
 
 
 def main_misc_debug():

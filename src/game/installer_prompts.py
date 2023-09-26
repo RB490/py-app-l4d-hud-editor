@@ -1,9 +1,9 @@
 "Installer prompts"
 from shared_utils.functions import show_message
 
-from game.constants import DirectoryMode
-from game.game import Game
-from utils.functions import get_dir_size_in_gb
+from src.game.constants import DirectoryMode
+from src.game.game import Game
+from src.utils.functions import get_dir_size_in_gb
 
 
 def prompt_start(install_type, message_extra=""):

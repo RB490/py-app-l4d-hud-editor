@@ -11,8 +11,8 @@ import pyautogui
 from loguru import logger
 from shared_utils.functions import show_message
 
-from gui.about import GuiAbout
-from utils.constants import DATA_MANAGER
+from src.gui.about import GuiAbout
+from src.utils.constants import DATA_MANAGER
 
 from .constants import BACKUP_APPEND_STRING, IMAGES_DIR_EXT
 
@@ -26,8 +26,8 @@ def show_browser_gui():
 
 def get_browser_gui():
     """Retrieve browser GUI instance"""
-    from gui.browser import GuiHudBrowser
-    from gui.start import GuiHudStart
+    from src.gui.browser import GuiHudBrowser
+    from src.gui.start import GuiHudStart
 
     start_gui = GuiHudStart()
     if not start_gui.get_mainloop_started():
@@ -39,7 +39,7 @@ def get_browser_gui():
 
 def get_start_gui():
     """Retrieve start GUI"""
-    from gui.start import GuiHudStart
+    from src.gui.start import GuiHudStart
 
     start_gui = GuiHudStart()
     return start_gui
@@ -54,7 +54,7 @@ def show_start_gui():
 
 def show_about_gui():
     """Show about gui"""
-    from gui.start import GuiHudStart
+    from src.gui.start import GuiHudStart
 
     start_gui = GuiHudStart()
     if not start_gui.get_mainloop_started():
@@ -249,8 +249,8 @@ def get_mouse_position_on_click(callback):
 
 def preform_checks_to_prepare_program_start():
     """Run vital checks before starting program so i don't need to add them everywhere"""
-    from game.game import Game
-    from hud.hud import Hud
+    from src.game.game import Game
+    from src.hud.hud import Hud
 
     g_game = Game()
     h_hud = Hud()
@@ -272,7 +272,7 @@ def preform_checks_to_prepare_program_start():
 def save_and_exit_script():
     """Exit the script"""
     # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-    from hud.hud import Hud
+    from src.hud.hud import Hud
 
     hud_instance = Hud()
     hud_instance.edit.finish_editing(open_start_gui=False)

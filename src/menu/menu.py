@@ -7,25 +7,17 @@ import webbrowser
 from tkinter import Menu, PhotoImage
 
 from loguru import logger
-from shared_utils.functions import add_empty_menu_separator, create_lambda_command
+from shared_utils.functions import (add_empty_menu_separator,
+                                    create_lambda_command)
 
-from game.constants import DirectoryMode
-from game.game import Game
-from menu.handler import EditorMenuHandler
-from utils.constants import (
-    DATA_MANAGER,
-    EDITOR_HUD_RELOAD_MODES,
-    GAME_POSITIONS,
-    HOTKEY_EDITOR_MENU,
-    HOTKEY_SYNC_HUD,
-    HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR_MISC,
-    MAP_CODES,
-    PROJECT_ROOT,
-    SNIPPETS_DIR,
-    TUTORIALS_DIR,
-    ImageConstants,
-)
+from src.game.constants import DirectoryMode
+from src.game.game import Game
+from src.menu.handler import EditorMenuHandler
+from src.utils.constants import (DATA_MANAGER, EDITOR_HUD_RELOAD_MODES,
+                                 GAME_POSITIONS, HOTKEY_EDITOR_MENU,
+                                 HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER,
+                                 IMAGES_DIR_MISC, MAP_CODES, PROJECT_ROOT,
+                                 SNIPPETS_DIR, TUTORIALS_DIR)
 
 
 class EditorMenuClass:
@@ -38,11 +30,11 @@ class EditorMenuClass:
         self.handler = EditorMenuHandler(self)
         self.root = parent_root
         self.parent = parent_instance
-        self.img = ImageConstants()
+        self.img = self.parent.img
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
 
-        from hud.hud import Hud
+        from src.hud.hud import Hud
 
         self.hud = Hud()
         self.create_and_refresh_menu()
@@ -84,7 +76,7 @@ class EditorMenuClass:
         self.game_map_menu.add_command(
             label="Main Menu",
             command=self.handler.editor_menu_disconnect,
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound="left",
         )
         self.game_map_menu.add_separator()
@@ -93,19 +85,19 @@ class EditorMenuClass:
         self.game_map_menu.add_command(
             label="Hud Dev Map",
             command=lambda: self.handler.editor_menu_game_map("Hud Dev Map", "hud_dev_map"),
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound="left",
         )
         if self.game.get_version() == "L4D2":
             self.game_map_menu.add_command(
                 label="Curling Stadium",
-                image=self.img.black_map_folded_paper_symbol,
+                image=self.img.get("black_map_folded_paper_symbol.png", 2),
                 compound="left",
                 command=lambda: self.handler.editor_menu_game_map("Curling Stadium", "curling_stadium"),
             )
         self.game_map_menu.add_command(
             label="Tutorial Standards",
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound="left",
             command=lambda: self.handler.editor_menu_game_map("Tutorial Standards", "tutorial_standards"),
         )
@@ -117,13 +109,13 @@ class EditorMenuClass:
         self.game_map_menu.add_cascade(
             label="L4D1",
             menu=map_menu_l4d1,
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound=tk.LEFT,
         )
         self.game_map_menu.add_cascade(
             label="L4D2",
             menu=map_menu_l4d2,
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound=tk.LEFT,
         )
 
@@ -155,7 +147,7 @@ class EditorMenuClass:
                 campaign_submenu = tk.Menu(map_menu_l4d1, tearoff=0)
                 map_menu_l4d1.add_cascade(
                     label=campaign,
-                    image=self.img.black_map_folded_paper_symbol,
+                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
                     compound=tk.LEFT,
                     menu=campaign_submenu,
                 )
@@ -163,7 +155,7 @@ class EditorMenuClass:
                 campaign_submenu = tk.Menu(map_menu_l4d2, tearoff=0)
                 map_menu_l4d2.add_cascade(
                     label=campaign,
-                    image=self.img.black_map_folded_paper_symbol,
+                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
                     compound=tk.LEFT,
                     menu=campaign_submenu,
                 )
@@ -175,7 +167,7 @@ class EditorMenuClass:
                 campaign_submenu.add_command(
                     label=map_name,
                     command=create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code),
-                    image=self.img.black_map_folded_paper_symbol,
+                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
                     compound=tk.LEFT,
                 )
 
@@ -201,7 +193,7 @@ class EditorMenuClass:
         for res in res_4_3_list:
             res_4_3_menu.add_command(
                 label=res,
-                image=self.img.monitor_black_tool,
+                image=self.img.get("monitor_black_tool.png", 2),
                 compound="left",
                 command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
@@ -219,7 +211,7 @@ class EditorMenuClass:
         for res in res_16_9_list:
             res_16_9_menu.add_command(
                 label=res,
-                image=self.img.monitor_black_tool,
+                image=self.img.get("monitor_black_tool.png", 2),
                 compound="left",
                 command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
@@ -239,19 +231,19 @@ class EditorMenuClass:
         for res in res_16_10_list:
             res_16_10_menu.add_command(
                 label=res,
-                image=self.img.monitor_black_tool,
+                image=self.img.get("monitor_black_tool.png", 2),
                 compound="left",
                 command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
             )
 
         self.game_res_menu.add_cascade(
-            label="4:3", image=self.img.monitor_black_tool, compound="left", menu=res_4_3_menu
+            label="4:3", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_4_3_menu
         )
         self.game_res_menu.add_cascade(
-            label="16:9", image=self.img.monitor_black_tool, compound="left", menu=res_16_9_menu
+            label="16:9", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_16_9_menu
         )
         self.game_res_menu.add_cascade(
-            label="16:10", image=self.img.monitor_black_tool, compound="left", menu=res_16_10_menu
+            label="16:10", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_16_10_menu
         )
 
     def create_game_pos_menu(self, menubar):
@@ -266,7 +258,7 @@ class EditorMenuClass:
                 onvalue=True,
                 offvalue=False,
                 command=create_lambda_command(self.handler.editor_menu_game_pos, pos),
-                image=self.img.two_opposite_diagonal_arrows_in_black_square,
+                image=self.img.get("two_opposite_diagonal_arrows_in_black_square.png", 2),
                 compound="left",
             )
         game_pos = self.data_manager.get("game_pos")
@@ -286,7 +278,7 @@ class EditorMenuClass:
                 onvalue=True,
                 offvalue=False,
                 command=create_lambda_command(self.handler.editor_menu_game_mode, game_mode),
-                image=self.img.switch_black_solid_symbol,
+                image=self.img.get("switch", 2),
                 compound="left",
             )
         game_mode = self.data_manager.get("game_mode")
@@ -311,19 +303,19 @@ class EditorMenuClass:
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
             label=f"Sync ({HOTKEY_SYNC_HUD})",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             command=self.handler.editor_sync_hud,
         )
         self.hud_menu.add_command(
             label="Unsync",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             command=self.handler.editor_unsync_hud,
         )
         self.hud_menu.add_command(
             label="Close",
-            image=self.img.cross_black_circular_button,
+            image=self.img.get("close", 2),
             compound="left",
             command=self.handler.editor_stop_editing_hud,
         )
@@ -332,13 +324,13 @@ class EditorMenuClass:
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
             label="VPK",
-            image=self.img.save_black_diskette_interface_symbol,
+            image=self.img.get("save", 2),
             compound="left",
             command=self.handler.editor_save_as_vpk,
         )
         self.hud_menu.add_command(
             label="Folder",
-            image=self.img.save_black_diskette_interface_symbol,
+            image=self.img.get("save", 2),
             compound="left",
             command=self.handler.editor_save_as_folder,
         )
@@ -347,13 +339,13 @@ class EditorMenuClass:
         self.hud_menu.add_command(
             label="Hud",
             command=create_lambda_command(self.handler.editor_open_folder, self.hud.edit.get_dir()),
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound="left",
         )
         self.hud_menu.add_command(
             label="Hud (VS Code)",
             command=create_lambda_command(self.handler.editor_open_folder_in_vscode, self.hud.edit.get_dir()),
-            image=self.img.vs_code,
+            image=self.img.get("vs_code.png", 2),
             compound="left",
         )
 
@@ -378,7 +370,7 @@ class EditorMenuClass:
         remove_stored_hud_menu = tk.Menu(menubar, tearoff=0)
         self.load_hud_menu.add_cascade(
             label="Stored",
-            image=self.img.right_arrow_curved_black_symbol,
+            image=self.img.get("open", 2),
             compound="left",
             menu=stored_huds_submenu,
         )
@@ -390,32 +382,32 @@ class EditorMenuClass:
             self.load_hud_menu.add_command(
                 label=hud_name,
                 command=create_lambda_command(self.handler.editor_edit_hud, hud_dir),
-                image=self.img.paintbrush_design_tool_interface_symbol,
+                image=self.img.get("paintbrush", 2),
                 compound="left",
             )
             remove_stored_hud_menu.add_command(
                 label=hud_name,
-                image=self.img.minus_big_symbol,
+                image=self.img.get("minus", 2),
                 compound="left",
                 command=create_lambda_command(self.handler.editor_remove_stored_hud, hud_dir),
             )
         # stored huds - submenu - add stored hud
         stored_huds_submenu.add_command(
             label="New",
-            image=self.img.star_black_fivepointed_shape_symbol,
+            image=self.img.get("star", 2),
             compound="left",
             command=self.handler.editor_create_new_hud,
         )
         # stored huds - submenu - create new stored hud
         stored_huds_submenu.add_command(
             label="Add",
-            image=self.img.addition_sign,
+            image=self.img.get("plus", 2),
             compound="left",
             command=self.handler.editor_add_existing_hud,
         )
         # stored huds - submenu - remove stored hud
         stored_huds_submenu.add_cascade(
-            label="Remove", image=self.img.minus_big_symbol, compound="left", menu=remove_stored_hud_menu
+            label="Remove", image=self.img.get("minus", 2), compound="left", menu=remove_stored_hud_menu
         )
         if not self.data_manager.get("stored_huds"):
             stored_huds_submenu.entryconfigure("Remove", state="disabled")
@@ -428,7 +420,7 @@ class EditorMenuClass:
         remove_temp_hud_menu = tk.Menu(menubar, tearoff=0)
         self.load_hud_menu.add_cascade(
             label="Temporary",
-            image=self.img.right_arrow_curved_black_symbol,
+            image=self.img.get("open", 2),
             compound="left",
             menu=temp_huds_submenu,
         )
@@ -440,7 +432,7 @@ class EditorMenuClass:
             self.load_hud_menu.add_command(
                 label=hud_name,
                 command=create_lambda_command(self.handler.editor_edit_hud, hud_dir),
-                image=self.img.paintbrush_design_tool_interface_symbol,
+                image=self.img.get("paintbrush", 2),
                 compound="left",
             )
             remove_temp_hud_menu.add_command(
@@ -452,13 +444,13 @@ class EditorMenuClass:
         # stored huds - submenu - add temp hud
         temp_huds_submenu.add_command(
             label="Open",
-            image=self.img.addition_sign,
+            image=self.img.get("plus", 2),
             compound="left",
             command=self.handler.editor_open_temp_hud,
         )
         # stored huds - submenu - remove temp hud
         temp_huds_submenu.add_cascade(
-            label="Remove", image=self.img.minus_big_symbol, compound="left", menu=remove_temp_hud_menu
+            label="Remove", image=self.img.get("minus", 2), compound="left", menu=remove_temp_hud_menu
         )
         if not self.data_manager.get("stored_temp_huds"):
             temp_huds_submenu.entryconfigure("Remove", state="disabled")
@@ -539,7 +531,7 @@ class EditorMenuClass:
         self.voting_menu = tk.Menu(menubar)
 
         # Choose an image to use for all items from the provided list
-        selected_image = self.img.verify_black_square_interface_button_symbol
+        selected_image = self.img.get("verify_black_square_interface_button_symbol.png", 2)
 
         # iterate over the items in the data dictionary
         for section_name, section in voting_data.items():
@@ -627,14 +619,14 @@ class EditorMenuClass:
                     label=key,
                     command=command,
                     variable=self.show_panel_menu_selected_var,
-                    image=self.img.window_black_rounded_square_interface_symbol,
+                    image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
                     compound="left",
                 )
             else:
                 self.show_panel_menu.add_command(
                     label=key,
                     command=command,
-                    image=self.img.window_black_rounded_square_interface_symbol,
+                    image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
                     compound="left",
                 )
 
@@ -654,14 +646,14 @@ class EditorMenuClass:
                     label=key,
                     command=command,
                     variable=self.show_panel_menu_selected_var,
-                    image=self.img.window_black_rounded_square_interface_symbol,
+                    image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
                     compound="left",
                 )
             else:
                 self.show_panel_menu.add_command(
                     label=key,
                     command=command,
-                    image=self.img.window_black_rounded_square_interface_symbol,
+                    image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
                     compound="left",
                 )
 
@@ -700,7 +692,7 @@ class EditorMenuClass:
                 self.switch_menu.add_cascade(
                     label=character,
                     command=create_lambda_command(self.handler.editor_menu_execute_game_command, value),
-                    image=self.img.switch_black_solid_symbol,  # Set the selected image for the cascade label
+                    image=self.img.get("switch", 2),  # Set the selected image for the cascade label
                     compound="left",  # Set the image on the left side
                 )
 
@@ -715,19 +707,19 @@ class EditorMenuClass:
         self.hotkeys_menu.add_separator()
         self.hotkeys_menu.add_command(
             label="Sync Hud",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator=HOTKEY_SYNC_HUD,
         )
         self.hotkeys_menu.add_command(
             label="Browse Files",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator=HOTKEY_TOGGLE_BROWSER,
         )
         self.hotkeys_menu.add_command(
             label="Editor Menu",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator=HOTKEY_EDITOR_MENU,
         )
@@ -737,49 +729,49 @@ class EditorMenuClass:
         self.hotkeys_menu.add_separator()
         self.hotkeys_menu.add_command(
             label="Load Dead Center finale",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="O",
         )
         self.hotkeys_menu.add_command(
             label="Play credits (On a finale level)",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="P",
         )
         self.hotkeys_menu.add_command(
             label="Noclip",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="G",
         )
         self.hotkeys_menu.add_command(
             label="Pause",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="F8",
         )
         self.hotkeys_menu.add_command(
             label="Admin system menu",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="N",
         )
         self.hotkeys_menu.add_command(
             label="Slow-mo game speed",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="F9",
         )
         self.hotkeys_menu.add_command(
             label="Default game speed",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="F10",
         )
         self.hotkeys_menu.add_command(
             label="Last game cmd",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             accelerator="F11",
         )
@@ -804,19 +796,19 @@ class EditorMenuClass:
         self.help_menu.add_separator()
         self.help_menu.add_command(
             label=f"{self.game.get_title()} Commands",
-            image=self.img.link,
+            image=self.img.get("link", 2),
             compound="left",
             command=lambda: self.open_url(all_cvars_link),
         )
         self.help_menu.add_command(
             label="Script Readme",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound="left",
             command=lambda: self.open_file(readme_path),
         )
         self.help_menu.add_cascade(
             label="Hotkeys",
-            image=self.img.buttons,
+            image=self.img.get("buttons.png", 2),
             compound="left",
             menu=self.hotkeys_menu,
         )
@@ -826,19 +818,19 @@ class EditorMenuClass:
         self.help_menu.add_command(label="Tutorials", state="disabled")
         self.help_menu.add_command(
             label="TF2 Hud Editing Guide - DoodlesStuff",
-            image=self.img.link,
+            image=self.img.get("link", 2),
             compound="left",
             command=lambda: self.open_url(doodle_link),
         )
         self.help_menu.add_command(
             label="TF2 Hud Editing Guide - DoodlesStuff",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound="left",
             command=lambda: self.open_file(doodle_path),
         )
         self.help_menu.add_command(
             label="Flame's Guide to HUDs - flamehud by StefanB",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound="left",
             command=lambda: self.open_file(flame_path),
         )
@@ -849,7 +841,7 @@ class EditorMenuClass:
         self.help_menu.add_separator()
         self.help_menu.add_cascade(
             label="About",
-            image=self.img.star_black_fivepointed_shape_symbol,
+            image=self.img.get("star", 2),
             compound="left",
             command=self.handler.editor_show_about_menu,
         )
@@ -872,7 +864,7 @@ class EditorMenuClass:
                 variable=self.reload_mode_menu_hud_reload_mode,
                 value=idx + 1,  # Start from 1, not 0
                 command=create_lambda_command(self.handler.editor_menu_set_hud_reload_mode, f"{reload_code.lower()}"),
-                image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+                image=self.img.get("reload", 2),
                 compound="left",
             )
 
@@ -888,7 +880,7 @@ class EditorMenuClass:
             reload_once_menu.add_command(
                 label=reload_mode,
                 command=create_lambda_command(self.handler.editor_menu_reload_hud_once, f"{reload_code.lower()}"),
-                image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+                image=self.img.get("reload", 2),
                 compound="left",
             )
 
@@ -899,7 +891,7 @@ class EditorMenuClass:
             label="Reopen menu on reload",
             variable=self.reload_mode_menu_reopen_menu_checkmark,
             command=self.handler.editor_menu_reload_reopen_menu,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
         )
         self.reload_mode_menu_coord_clicks_checkmark = tk.BooleanVar()
@@ -907,7 +899,7 @@ class EditorMenuClass:
             label="Reload clicks",
             variable=self.reload_mode_menu_coord_clicks_checkmark,
             command=self.handler.editor_menu_reload_click,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
         )
         self.reload_mode_menu_coord_clicks_checkmark.set(self.data_manager.get("reload_mouse_clicks_enabled"))
@@ -919,20 +911,20 @@ class EditorMenuClass:
         label_coord_2 = f"Coord 2 - X: {coords_2[0]}, Y: {coords_2[1]}"
         self.reload_mode_menu.add_command(
             label=label_coord_1,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             command=self.handler.editor_menu_reload_click_coord1,
         )
         self.reload_mode_menu.add_command(
             label=label_coord_2,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
             command=self.handler.editor_menu_reload_click_coord2,
         )
         self.reload_mode_menu.add_cascade(
             label="Once",
             menu=reload_once_menu,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
         )
 
@@ -948,7 +940,7 @@ class EditorMenuClass:
                 self.clipboard_menu.add_command(
                     label=menu_name,
                     command=create_lambda_command(self.handler.editor_menu_copy_snippet, file_path),
-                    image=self.img.clipboard_black_square_interface_symbol,
+                    image=self.img.get("clipboard", 2),
                     compound="left",
                 )
 
@@ -961,7 +953,7 @@ class EditorMenuClass:
         # self.open_menu.add_separator()
         self.open_menu.add_cascade(
             label="Hud",
-            image=self.img.paintbrush_design_tool_interface_symbol,
+            image=self.img.get("paintbrush", 2),
             compound="left",
             menu=self.load_hud_menu,
         )
@@ -971,13 +963,13 @@ class EditorMenuClass:
         self.open_menu.add_command(
             label="Game",
             command=create_lambda_command(self.handler.editor_open_folder, self.game.dir.get(DirectoryMode.DEVELOPER)),
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound="left",
         )
         self.open_menu.add_command(
             label="Program",
             command=create_lambda_command(self.handler.editor_open_folder, PROJECT_ROOT),
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound="left",
         )
 
@@ -1012,14 +1004,14 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="User",
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_open_user_dir,
         )
 
         self.dev_install_menu.add_command(
             label="Dev",
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_open_dev_dir,
         )
@@ -1035,7 +1027,7 @@ class EditorMenuClass:
         enable_dev_mode_menu_name = DirectoryMode.DEVELOPER.name
         self.dev_install_menu.add_command(
             label=enable_dev_mode_menu_name,
-            image=self.img.paintbrush_design_tool_interface_symbol,
+            image=self.img.get("paintbrush", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_enable_dev_mode,
         )
@@ -1043,7 +1035,7 @@ class EditorMenuClass:
         disable_dev_mode_menu_name = DirectoryMode.USER.name
         self.dev_install_menu.add_command(
             label=disable_dev_mode_menu_name,
-            image=self.img.cup_trophy_silhouette,
+            image=self.img.get("cup_trophy_silhouette.png", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_disable_dev_mode,
         )
@@ -1056,7 +1048,7 @@ class EditorMenuClass:
         # currently_active_mode_name = f"Active: {self.game.dir.get_active_mode().name}"
         # currently_active_mode_name = f"{self.game.dir.get_active_mode().name}"
         # self.dev_install_menu.add_command(
-        #     label=currently_active_mode_name, image=self.img.link, compound=tk.LEFT, state=tk.DISABLED
+        #     label=currently_active_mode_name, image=self.img.get("link", 2), compound=tk.LEFT, state=tk.DISABLED
         # )
 
         # Empty Separator
@@ -1069,21 +1061,21 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Install",
-            image=self.img.paintbrush_design_tool_interface_symbol,
+            image=self.img.get("paintbrush", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_install,
         )
 
         self.dev_install_menu.add_command(
             label="Update",
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_update,
         )
 
         self.dev_install_menu.add_command(
             label="Repair",
-            image=self.img.wrench_black_silhouette,
+            image=self.img.get("settings", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_repair,
         )
@@ -1092,7 +1084,7 @@ class EditorMenuClass:
 
         self.dev_install_menu.add_command(
             label="Remove",
-            image=self.img.trash_can_black_symbol,
+            image=self.img.get("delete", 2),
             compound=tk.LEFT,
             command=self.handler.editor_installer_uninstall,
         )
@@ -1163,7 +1155,7 @@ class EditorMenuClass:
             variable=self.editor_menu_inspect_hud_checkmark,
             command=self.handler.editor_inspect_hud,
             columnbreak=False,
-            image=self.img.plus_sign_on_zoom_magnifier,
+            image=self.img.get("plus_sign_on_zoom_magnifier.png", 2),
             compound="left",
         )
         self.editor_menu_hide_world_checkmark = tk.BooleanVar()
@@ -1172,19 +1164,19 @@ class EditorMenuClass:
             variable=self.editor_menu_hide_world_checkmark,
             command=self.handler.editor_hide_game_world,
             columnbreak=False,
-            image=self.img.minus_big_symbol,
+            image=self.img.get("minus", 2),
             compound="left",
         )
         self.tools_menu.add_command(
             label="Chat Debug (WWWW)",
-            image=self.img.chat_oval_black_interface_symbol_with_text_lines,
+            image=self.img.get("chat_oval_black_interface_symbol_with_text_lines.png", 2),
             compound="left",
             command=self.handler.editor_chat_debug_spam_w,
             columnbreak=True,
         )
         self.tools_menu.add_cascade(
             label="Clipboard",
-            image=self.img.clipboard_black_square_interface_symbol,
+            image=self.img.get("clipboard", 2),
             compound="left",
             menu=self.clipboard_menu,
         )
@@ -1196,7 +1188,7 @@ class EditorMenuClass:
         self.file_menu = tk.Menu(self.main_menu, tearoff=0)
         self.file_menu.add_command(
             label="Start",
-            image=self.img.flag_black_cutted_shape,
+            image=self.img.get("flag_black_cutted_shape.png", 2),
             compound="left",
             command=self.handler.editor_open_start_gui,
         )
@@ -1204,21 +1196,24 @@ class EditorMenuClass:
         if is_context_menu:
             self.file_menu.add_command(
                 label="Browser",
-                image=self.img.book_black_opened_symbol,
+                image=self.img.get("book", 2),
                 compound="left",
                 command=self.handler.editor_open_browser_gui,
             )
         self.file_menu.add_cascade(
-            label="Open", image=self.img.arrow_angle_pointing_to_right, compound="left", menu=self.open_menu
+            label="Open",
+            image=self.img.get("arrow_angle_pointing_to_right.png", 2),
+            compound="left",
+            menu=self.open_menu,
         )
         self.file_menu.add_cascade(
-            label="Developer", image=self.img.wrench_black_silhouette, compound="left", menu=self.dev_install_menu
+            label="Developer", image=self.img.get("settings", 2), compound="left", menu=self.dev_install_menu
         )
         self.file_menu.add_separator()
-        self.file_menu.add_cascade(label="Help", image=self.img.questionmark, compound="left", menu=self.help_menu)
+        self.file_menu.add_cascade(label="Help", image=self.img.get("help", 2), compound="left", menu=self.help_menu)
         self.file_menu.add_command(
             label="Exit",
-            image=self.img.cross_black_circular_button,
+            image=self.img.get("close", 2),
             compound="left",
             command=self.handler.editor_save_and_exit_script,
         )
@@ -1229,28 +1224,31 @@ class EditorMenuClass:
 
         self.debug_menu = tk.Menu(self.main_menu, tearoff=0)
         self.debug_menu.add_command(
-            label="Game cmd", command=self.handler.editor_prompt_game_command, image=self.img.game_alt, compound="left"
+            label="Game cmd",
+            command=self.handler.editor_prompt_game_command,
+            image=self.img.get("game_alt.png", 2),
+            compound="left",
         )
         self.debug_menu.add_cascade(
             label="Show panel",
             menu=self.show_panel_menu,
-            image=self.img.window_black_rounded_square_interface_symbol,
+            image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
             compound="left",
         )
         self.debug_menu.add_cascade(
             label="Call vote",
             menu=self.voting_menu,
-            image=self.img.verify_black_square_interface_button_symbol,
+            image=self.img.get("window_black_rounded_square_interface_symbol.png", 2),
             compound="left",
         )
         self.debug_menu.add_cascade(
-            label="Switch", menu=self.switch_menu, image=self.img.switch_black_solid_symbol, compound="left"
+            label="Switch", menu=self.switch_menu, image=self.img.get("switch", 2), compound="left"
         )
         self.debug_menu.add_cascade(
-            label="Give items", menu=self.give_items_menu, image=self.img.giftbox, compound="left"
+            label="Give items", menu=self.give_items_menu, image=self.img.get("giftbox.png", 2), compound="left"
         )
         self.debug_menu.add_cascade(
-            label="Tools", menu=self.tools_menu, image=self.img.wrench_black_silhouette, compound="left"
+            label="Tools", menu=self.tools_menu, image=self.img.get("settings", 2), compound="left"
         )
 
         # ----------------------------------
@@ -1260,29 +1258,29 @@ class EditorMenuClass:
         self.game_menu.add_cascade(
             label="Position",
             menu=self.game_pos_menu,
-            image=self.img.two_opposite_diagonal_arrows_in_black_square,
+            image=self.img.get("two_opposite_diagonal_arrows_in_black_square.png", 2),
             compound="left",
         )
         self.game_menu.add_cascade(
             label="Resolution",
             menu=self.game_res_menu,
-            image=self.img.monitor_black_tool,
+            image=self.img.get("monitor_black_tool.png", 2),
             compound="left",
         )
         self.game_menu.add_cascade(
             label="Map",
             menu=self.game_map_menu,
-            image=self.img.black_map_folded_paper_symbol,
+            image=self.img.get("black_map_folded_paper_symbol.png", 2),
             compound="left",
         )
         self.game_menu.add_cascade(
-            label="Mode", menu=self.game_mode_menu, image=self.img.switch_black_solid_symbol, compound="left"
+            label="Mode", menu=self.game_mode_menu, image=self.img.get("switch", 2), compound="left"
         )
         self.game_menu.add_command(
             label="Restart",
             columnbreak=False,
             command=self.handler.editor_menu_game_restart,
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+            image=self.img.get("reload", 2),
             compound="left",
         )
 
@@ -1292,10 +1290,10 @@ class EditorMenuClass:
             variable=self.editor_menu_game_insecure_checkmark,
             command=self.handler.editor_menu_game_toggle_insecure,
             columnbreak=True,
-            image=self.img.unlocked_padlock,
+            image=self.img.get("unlocked_padlock.png", 2),
             compound="left",
         )
-        if self.data_manager.get("game_insecure") is True:
+        if self.data_manager.get("game_insecure.png") is True:
             self.editor_menu_game_insecure_checkmark.set(1)
         else:
             self.editor_menu_game_insecure_checkmark.set(0)
@@ -1305,7 +1303,7 @@ class EditorMenuClass:
             label="Topmost",
             variable=self.editor_menu_game_always_on_top_checkmark,
             command=self.handler.editor_menu_game_toggle_always_on_top,
-            image=self.img.up_arrow_button,
+            image=self.img.get("up_arrow_button.png", 2),
             compound="left",
         )
         if self.data_manager.get("game_always_on_top") is True:
@@ -1318,7 +1316,7 @@ class EditorMenuClass:
             label="Muted",
             variable=self.editor_menu_game_mute_checkmark,
             command=self.handler.editor_menu_game_toggle_mute,
-            image=self.img.mute_speaker_symbol_of_interface_with_a_cross,
+            image=self.img.get("mute", 2),
             compound="left",
         )
         if self.data_manager.get("game_mute"):
@@ -1330,14 +1328,14 @@ class EditorMenuClass:
             label="Run",
             columnbreak=False,
             command=self.handler.editor_menu_game_run,
-            image=self.img.game_alt,
+            image=self.img.get("game_alt.png", 2),
             compound="left",
         )
         self.game_menu.add_command(
             label="Close",
             columnbreak=False,
             command=self.handler.editor_menu_game_close,
-            image=self.img.cross_black_circular_button,
+            image=self.img.get("close", 2),
             compound="left",
         )
 
@@ -1356,27 +1354,32 @@ class EditorMenuClass:
         else:
             # add with images
             self.main_menu.add_cascade(
-                label="File", image=self.img.file_black_rounded_symbol_1, compound="left", menu=self.file_menu
+                label="File", image=self.img.get("file", 2), compound="left", menu=self.file_menu
             )
             if self.hud.edit.is_opened():
                 self.main_menu.add_cascade(
                     label="Hud",
-                    image=self.img.paintbrush_design_tool_interface_symbol,
+                    image=self.img.get("paintbrush", 2),
                     compound="left",
                     menu=self.hud_menu,
                 )
             self.main_menu.add_cascade(
                 label="Mode",
-                image=self.img.arrows_couple_counterclockwise_rotating_symbol,
+                image=self.img.get("reload", 2),
                 compound="left",
                 menu=self.reload_mode_menu,
             )
-            self.main_menu.add_cascade(label="Game", image=self.img.game_alt, compound="left", menu=self.game_menu)
             self.main_menu.add_cascade(
-                label="Debug", image=self.img.hot_or_burn_interface_symbol, compound="left", menu=self.debug_menu
+                label="Game", image=self.img.get("game_alt.png", 2), compound="left", menu=self.game_menu
+            )
+            self.main_menu.add_cascade(
+                label="Debug",
+                image=self.img.get("hot_or_burn_interface_symbol.png", 2),
+                compound="left",
+                menu=self.debug_menu,
             )
             self.main_menu.add_command(
-                label="Close (ESC)", image=self.img.cross, compound="left", command=self.do_nothing
+                label="Close (ESC)", image=self.img.get("cross", 2), compound="left", command=self.do_nothing
             )  # useful when displaying menu as popup
 
         # if not self.hud.edit.is_opened():

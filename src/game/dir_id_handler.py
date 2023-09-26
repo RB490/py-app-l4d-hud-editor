@@ -8,7 +8,7 @@ from tkinter import filedialog
 from loguru import logger
 from shared_utils.functions import is_subdirectory, show_message
 
-from game.constants import DirectoryMode, InstallationState, SyncState
+from src.game.constants import DirectoryMode, InstallationState, SyncState
 
 
 def call_validate_dir_mode_before_method(func):

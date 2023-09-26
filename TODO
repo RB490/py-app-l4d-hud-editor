@@ -2,7 +2,7 @@ Current:
 
 Todo:
 
-	☐ refactor: get rid of ImageConstants
+	☐ refactor: use shared logging setup
 
 	☐ refactor: switch to send_keys_in_background from shared_utils
 

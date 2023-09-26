@@ -1,5 +1,5 @@
 """Debug descriptions"""
-from hud.descriptions import HudDescriptions
+from src.hud.descriptions import HudDescriptions
 
 
 def debug_hud_descriptions_class():

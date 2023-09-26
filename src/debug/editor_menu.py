@@ -2,7 +2,7 @@
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton, get_invisible_tkinter_root
 
-from menu.menu import EditorMenuClass
+from src.menu.menu import EditorMenuClass
 
 
 class debug_editor_menu_class(BaseGUI, metaclass=Singleton):

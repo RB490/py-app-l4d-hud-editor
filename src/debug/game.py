@@ -1,8 +1,8 @@
 "debug game class"
 from loguru import logger
 
-from game.constants import DirectoryMode, InstallationState, SyncState
-from game.game import Game
+from src.game.constants import DirectoryMode, InstallationState, SyncState
+from src.game.game import Game
 
 
 def debug_game_set_states_synced_and_installed():

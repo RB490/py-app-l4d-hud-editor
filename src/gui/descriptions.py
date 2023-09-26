@@ -5,10 +5,10 @@ from tkinter import simpledialog
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton, show_message
 
-from game.game import Game
-from hud.hud import Hud
-from utils.constants import APP_ICON, DATA_MANAGER, ImageConstants
-from utils.functions import show_browser_gui
+from src.game.game import Game
+from src.hud.hud import Hud
+from src.utils.constants import APP_ICON, DATA_MANAGER
+from src.utils.functions import show_browser_gui
 
 
 class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
@@ -26,7 +26,6 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.data_manager = DATA_MANAGER
         self.game = Game()
         self.hud = Hud()
-        self.img = ImageConstants()
 
         # gui
         super().__init__(gui_type="sub", parent_root=parent_root)

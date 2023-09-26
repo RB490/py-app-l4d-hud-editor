@@ -5,7 +5,7 @@ from tkinter import filedialog
 
 from shared_utils.functions import Singleton
 
-from utils.constants import DATA_MANAGER
+from src.utils.constants import DATA_MANAGER
 
 
 class SteamInfoRetriever(metaclass=Singleton):

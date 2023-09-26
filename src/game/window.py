@@ -8,8 +8,8 @@ from loguru import logger
 from shared_managers.hwnd_manager import HwndManager
 from shared_utils.functions import show_message
 
-from game.constants import InstallationState
-from utils.constants import DATA_MANAGER, GAME_POSITIONS
+from src.game.constants import InstallationState
+from src.utils.constants import DATA_MANAGER, GAME_POSITIONS
 
 
 class GameWindow:

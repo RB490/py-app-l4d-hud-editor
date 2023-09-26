@@ -1,7 +1,7 @@
 """Debug"""
 # pylint: disable=unused-variable
-from game.constants import DirectoryMode, InstallationState, SyncState
-from game.game import Game
+from src.game.constants import DirectoryMode, InstallationState, SyncState
+from src.game.game import Game
 
 
 def debug_id_handler():

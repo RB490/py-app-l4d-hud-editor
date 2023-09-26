@@ -10,13 +10,13 @@ from shared_managers.hotkey_manager import HotkeyManager
 from shared_managers.valve_vpk_manager import VPKManager
 from shared_utils.functions import copy_directory, show_message
 
-from game.constants import DirectoryMode
-from game.game import Game
-from hud.descriptions import HudDescriptions
-from hud.manager import HudManager
-from hud.syncer import HudSyncer
-from utils.constants import DATA_MANAGER, HOTKEY_SYNC_HUD
-from utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
+from src.game.constants import DirectoryMode
+from src.game.game import Game
+from src.hud.descriptions import HudDescriptions
+from src.hud.manager import HudManager
+from src.hud.syncer import HudSyncer
+from src.utils.constants import DATA_MANAGER, HOTKEY_SYNC_HUD
+from src.utils.functions import get_browser_gui, get_start_gui, show_browser_gui, show_start_gui
 
 
 class HudEditor:

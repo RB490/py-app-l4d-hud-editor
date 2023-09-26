@@ -3,8 +3,8 @@
 import os
 import shutil
 
-from hud.hud import Hud
-from utils.constants import DEVELOPMENT_DIR
+from src.hud.hud import Hud
+from src.utils.constants import DEVELOPMENT_DIR
 
 
 def debug_hud_class():

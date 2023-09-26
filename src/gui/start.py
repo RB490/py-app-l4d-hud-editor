@@ -12,19 +12,11 @@ from shared_gui.base import BaseGUI
 from shared_managers.valve_vpk_manager import VPKManager
 from shared_utils.functions import Singleton, copy_directory, show_message
 
-from game.game import Game
-from gui.browser import GuiHudBrowser
-from hud.hud import Hud
-from utils.constants import (
-    APP_ICON,
-    APP_NAME,
-    DATA_MANAGER,
-    GUI_BROWSER_TITLE,
-    IMAGES_DIR_128,
-    VERSION_NO_PRETTY,
-    ImageConstants,
-)
-from utils.functions import save_and_exit_script
+from src.game.game import Game
+from src.gui.browser import GuiHudBrowser
+from src.hud.hud import Hud
+from src.utils.constants import APP_ICON, APP_NAME, DATA_MANAGER, GUI_BROWSER_TITLE, IMAGES_DIR_128, VERSION_NO_PRETTY
+from src.utils.functions import save_and_exit_script
 
 
 class GuiHudStart(BaseGUI, metaclass=Singleton):
@@ -42,7 +34,6 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # gui
         super().__init__("main")
         self.browser = GuiHudBrowser(self.root, self)
-        self.img = ImageConstants()
         self.root.title("Start")
         self.root.iconbitmap(APP_ICON)
         self.root.minsize(865, 500)
@@ -57,7 +48,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
-        from menu.menu import EditorMenuClass
+        from src.menu.menu import EditorMenuClass
 
         self.editor_menu = EditorMenuClass(self, self.root)
 
@@ -130,13 +121,13 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         # create a button above the picture frame
         self.add_button = tk.Button(self.new_or_add_frame, text="Add", height=25, command=self.prompt_add_hud)
-        self.add_button.config(image=self.img.addition_sign, compound="left", padx=10)
+        self.add_button.config(image=self.img.get("plus", 2), compound="left", padx=10)
         self.add_button.config(width=(self.right_panel_width / 2) - 5, height=25)
         self.add_button.pack(padx=(0, 0), pady=(0, self.pad_y), side="right")
 
         # create a button above the picture frame
         self.new_button = tk.Button(self.new_or_add_frame, text="New", height=25, command=self.prompt_new_hud)
-        self.new_button.config(image=self.img.star_black_fivepointed_shape_symbol, compound="left", padx=10)
+        self.new_button.config(image=self.img.get("star", 2), compound="left", padx=10)
         self.new_button.config(width=(self.right_panel_width / 2), height=25)
         self.new_button.pack(padx=(0, 5), pady=(0, self.pad_y), side="left")
 
@@ -176,9 +167,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_export_vpk_or_folder,
             state="disabled",  # Disable the remove button
         )
-        self.export_vpk_button.config(
-            image=self.img.save_black_diskette_interface_symbol, compound="left", padx=self.pad_x
-        )
+        self.export_vpk_button.config(image=self.img.get("save", 2), compound="left", padx=self.pad_x)
         self.export_vpk_button.config(width=55, height=25)
         self.export_vpk_button.pack(padx=0, pady=0, side="left")
 
@@ -190,7 +179,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_open_dir,
             state="disabled",  # Disable the remove button
         )
-        self.open_dir_button.config(image=self.img.folder_black_interface_symbol, compound="left", padx=self.pad_x)
+        self.open_dir_button.config(image=self.img.get("folder", 2), compound="left", padx=self.pad_x)
         self.open_dir_button.config(width=55, height=25)  # Adjust the width as needed
         self.open_dir_button.pack(padx=(5, 5), pady=0, side="left")
 
@@ -202,7 +191,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.selected_hud_remove_or_delete,
             state="disabled",  # Disable the remove button
         )
-        self.remove_button.config(image=self.img.trash_can_black_symbol, compound="left", padx=self.pad_x)
+        self.remove_button.config(image=self.img.get("delete", 2), compound="left", padx=self.pad_x)
         self.remove_button.config(width=55, height=25)
         self.remove_button.pack(padx=0, pady=0, side="left")
 
@@ -232,7 +221,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             justify="center",
             width=85,
             height=25,
-            image=self.img.wrench_black_silhouette,
+            image=self.img.get("settings", 2),
             compound="left",
             padx=self.pad_x,
             command=lambda: self.show_menu_on_button(developer_menu_button, self.editor_menu.get_context_menu_dev()),
@@ -247,7 +236,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             command=self.edit_selected_hud,
             state="disabled",  # Disable the remove button
         )
-        self.edit_button.config(image=self.img.paintbrush_design_tool_interface_symbol, compound="left", padx=10)
+        self.edit_button.config(image=self.img.get("paintbrush", 2), compound="left", padx=10)
         self.edit_button.pack(fill=tk.X, padx=0, pady=0)
 
     def __create_context_menu(self):
@@ -256,14 +245,14 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.context_menu.add_command(
             label="Edit",
             command=self.selected_hud_start_editing,
-            image=self.img.paintbrush_design_tool_interface_symbol,
+            image=self.img.get("paintbrush", 2),
             compound="left",
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Open directory",
             command=self.selected_hud_open_dir,
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound="left",
         )
 
@@ -271,20 +260,20 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         self.context_menu.add_command(
             label="Export as VPK",
             command=self.selected_hud_export_vpk,
-            image=self.img.save_black_diskette_interface_symbol,
+            image=self.img.get("save", 2),
             compound="left",
         )
         self.context_menu.add_command(
             label="Export as Folder",
             command=self.selected_hud_export_directory,
-            image=self.img.save_black_diskette_interface_symbol,
+            image=self.img.get("save", 2),
             compound="left",
         )
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Remove",
             command=self.selected_hud_remove_or_delete,
-            image=self.img.trash_can_black_symbol,
+            image=self.img.get("delete", 2),
             compound="left",
         )
 
@@ -329,14 +318,14 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         vpk_export_menu.add_command(
             label="VPK",
-            image=self.img.file_black_rounded_symbol_1,
+            image=self.img.get("file", 2),
             compound=tk.LEFT,
             command=self.selected_hud_export_vpk,
         )
 
         vpk_export_menu.add_command(
             label="Folder",
-            image=self.img.folder_black_interface_symbol,
+            image=self.img.get("folder", 2),
             compound=tk.LEFT,
             command=self.selected_hud_export_directory,
         )

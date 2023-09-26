@@ -10,7 +10,7 @@
 
 import os
 
-from utils.functions import preform_checks_to_prepare_program_start, show_start_gui
+from src.utils.functions import preform_checks_to_prepare_program_start, show_start_gui
 
 # from packages.game.game import Game
 # from packages.utils.functions import load_data

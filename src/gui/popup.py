@@ -4,9 +4,9 @@ from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton
 
-from game.game import Game
-from hud.hud import Hud
-from utils.constants import DATA_MANAGER, HOTKEY_EDITOR_MENU
+from src.game.game import Game
+from src.hud.hud import Hud
+from src.utils.constants import DATA_MANAGER, HOTKEY_EDITOR_MENU
 
 
 class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
@@ -50,7 +50,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.game = Game()
         self.hud = Hud()
 
-        from menu.menu import EditorMenuClass
+        from src.menu.menu import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self, self.root)
         self.enable_hotkey()

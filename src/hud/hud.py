@@ -4,8 +4,8 @@
 
 from shared_utils.functions import Singleton
 
-from hud.descriptions import HudDescriptions
-from utils.constants import DATA_MANAGER
+from src.hud.descriptions import HudDescriptions
+from src.utils.constants import DATA_MANAGER
 
 
 class Hud(metaclass=Singleton):
@@ -13,8 +13,8 @@ class Hud(metaclass=Singleton):
 
     def __init__(self) -> None:
         self.data_manager = DATA_MANAGER
-        from hud.editor import HudEditor
-        from hud.manager import HudManager
+        from src.hud.editor import HudEditor
+        from src.hud.manager import HudManager
 
         self.manager = HudManager()
         self.edit = HudEditor()

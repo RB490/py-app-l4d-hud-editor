@@ -8,9 +8,9 @@ import shutil
 from loguru import logger
 from shared_utils.functions import Singleton, files_differ
 
-from game.constants import DirectoryMode, SyncState
-from game.game import Game
-from utils.functions import get_backup_path
+from src.game.constants import DirectoryMode, SyncState
+from src.game.game import Game
+from src.utils.functions import get_backup_path
 
 
 def get_all_files_and_dirs(directory):

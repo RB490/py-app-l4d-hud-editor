@@ -8,9 +8,9 @@ import pyperclip  # type: ignore
 from loguru import logger
 from shared_utils.functions import show_message
 
-from game.game import DirectoryMode, Game, VideoSettingsModifier
-from utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
-from utils.functions import (
+from src.game.game import DirectoryMode, Game, VideoSettingsModifier
+from src.utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, UNIVERSAL_GAME_MAP
+from src.utils.functions import (
     get_browser_gui,
     get_mouse_position_on_click,
     save_and_exit_script,
@@ -18,7 +18,7 @@ from utils.functions import (
     show_browser_gui,
     show_start_gui,
 )
-from utils.get_user_input import get_user_input
+from src.utils.get_user_input import get_user_input
 
 
 def call_create_and_refresh_menu_after_method(func):
@@ -42,7 +42,7 @@ class EditorMenuHandler:
         self.editor_menu = editor_menu_instance
         self.game = Game()
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
-        from hud.hud import Hud
+        from src.hud.hud import Hud
 
         self.hud = Hud()
 

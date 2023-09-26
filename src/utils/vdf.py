@@ -11,15 +11,15 @@ import vdf  # type: ignore
 from loguru import logger
 from shared_utils.functions import replace_text_between_quotes, show_message
 
-from utils.constants import DEVELOPMENT_DIR
+from src.utils.constants import DEVELOPMENT_DIR
 
 
 class VDFModifier:
     """Class for modifying VDF files."""
 
     def __init__(self, vdf_path: str = "") -> None:
-        from game.game import Game
-        from hud.hud import Hud
+        from src.game.game import Game
+        from src.hud.hud import Hud
 
         self.game = Game()  # type: ignore
         self.hud = Hud()  # type: ignore

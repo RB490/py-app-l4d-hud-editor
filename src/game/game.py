@@ -5,10 +5,10 @@ import shutil
 
 from shared_utils.functions import Singleton
 
-from game.constants import DirectoryMode, DirModeError, InstallationState, TitleRetrievalError
-from game.video_settings_modifier import VideoSettingsModifier
-from utils.constants import DATA_MANAGER, DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
-from utils.steam_info_retriever import SteamInfoRetriever
+from src.game.constants import DirectoryMode, DirModeError, InstallationState, TitleRetrievalError
+from src.game.video_settings_modifier import VideoSettingsModifier
+from src.utils.constants import DATA_MANAGER, DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
+from src.utils.steam_info_retriever import SteamInfoRetriever
 
 # importing after the above enums and exceptions becaus they are needed for the subclasses
 
@@ -18,10 +18,10 @@ class Game(metaclass=Singleton):
 
     def __init__(self):
         self.data_manager = DATA_MANAGER
-        from game.commands import GameCommands
-        from game.dir import GameDir
-        from game.installer import GameInstaller
-        from game.window import GameWindow
+        from src.game.commands import GameCommands
+        from src.game.dir import GameDir
+        from src.game.installer import GameInstaller
+        from src.game.window import GameWindow
 
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)

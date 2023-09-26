@@ -6,8 +6,8 @@ from tkinter import scrolledtext
 from shared_gui.base import BaseGUI
 from shared_utils.functions import show_message
 
-from utils.constants import APP_ICON, DATA_MANAGER, ImageConstants
-from utils.vdf import VDFModifier
+from src.utils.constants import APP_ICON, DATA_MANAGER
+from src.utils.vdf import VDFModifier
 
 
 class VDFModifierGUI(BaseGUI):
@@ -23,7 +23,6 @@ class VDFModifierGUI(BaseGUI):
         # setup gui
         super().__init__(gui_type="sub", parent_root=parent_root)
         self.data_manager = DATA_MANAGER
-        self.img = ImageConstants()
         self.modifier = None  # vdf modifier class
         self.root.minsize(875, 425)
         self.root.iconbitmap(APP_ICON)
@@ -77,16 +76,16 @@ class VDFModifierGUI(BaseGUI):
         self.reload_button = tk.Button(self.right_side_frame, text="Reload", height=16, command=self.load_file)
         self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
         self.reload_button.config(
-            image=self.img.arrows_couple_counterclockwise_rotating_symbol, compound="left", padx=10
+            image=self.img.get("reload", 2), compound="left", padx=10
         )
 
         self.save_to_file_button = tk.Button(self.right_side_frame, text="Save", height=16, command=self.save_vdf)
         self.save_to_file_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.save_to_file_button.config(image=self.img.save_black_diskette_interface_symbol, compound="left", padx=10)
+        self.save_to_file_button.config(image=self.img.get("save", 2), compound="left", padx=10)
 
         self.process_button = tk.Button(self.right_side_frame, text="Modify", height=32, command=self.process)
         self.process_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.process_button.config(image=self.img.pencil_black_square, compound="left", padx=10)
+        self.process_button.config(image=self.img.get("pencil_black_square.png", 2), compound="left", padx=10)
 
         self.__create_modify_integers_frame()
         self.__create_other_options_frame()

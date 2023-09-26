@@ -13,14 +13,15 @@ from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton, create_and_open_temp_file, show_message
 
-from game.constants import DirectoryMode
-from game.game import Game
-from gui.descriptions import GuiHudDescriptions
-from gui.popup import GuiEditorMenuPopup
-from gui.vdf import VDFModifierGUI
-from hud.hud import Hud
-from menu.menu import EditorMenuClass
-from utils.constants import (
+from src.debug.hud import get_hud_debug_instance
+from src.game.constants import DirectoryMode
+from src.game.game import Game
+from src.gui.descriptions import GuiHudDescriptions
+from src.gui.popup import GuiEditorMenuPopup
+from src.gui.vdf_tool import VDFModifierGUI
+from src.hud.hud import Hud
+from src.menu.menu import EditorMenuClass
+from src.utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
     DATA_MANAGER,
@@ -28,9 +29,8 @@ from utils.constants import (
     HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
-    ImageConstants,
 )
-from utils.functions import get_image_for_file_extension
+from src.utils.functions import get_image_for_file_extension
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -47,7 +47,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.data_manager = DATA_MANAGER
         self.hud = Hud()
         self.game = Game()
-        self.img = ImageConstants()
 
         # create gui
         super().__init__(gui_type="sub", parent_root=parent_root)
@@ -85,7 +84,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         hotkey_manager.add_hotkey(HOTKEY_TOGGLE_BROWSER, self.toggle_visibility, suppress=True)
 
         self.gui_refresh()
-        self.treeview_sort_column("modified", True)
+        self.treeview_sort_column(self.treeview, "modified", True)
 
     def focus_search_box_if_first_row_selected(self, *event):
         """Focus search box if first row is selected"""
@@ -101,7 +100,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         current_focus = self.root.focus_get()
         logger.debug(f"current_focus = {current_focus}")
         if current_focus == self.search_box:
-            self.focus_treeview(self.treeview)
+            self.treeview_focus(self.treeview)
             logger.debug("Focused treeview")
         else:
             self.search_box.focus_set()
@@ -198,7 +197,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 self.editor_menu_hotkey_button, self.editor_menu.get_context_menu_main()
             ),
             state="normal",
-            image=self.img.get("reload", 2),
+            image=self.img.get("book", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -213,7 +212,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             justify="center",
             # command=self.dummy_handler,
             state="normal",
-            image=self.img.get("reload", 2),
+            image=self.img.get("help", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -236,22 +235,28 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
         self.treeview.heading("#0", text="")
         self.treeview.heading(
-            "file", text="File", anchor="w", command=lambda: self.treeview_sort_column("file", False)
+            "file", text="File", anchor="w", command=lambda: self.treeview_sort_column(self.treeview, "file", False)
         )
         self.treeview.heading(
             "description",
             text="Description",
             anchor="w",
-            command=lambda: self.treeview_sort_column("description", False),
+            command=lambda: self.treeview_sort_column(self.treeview, "description", False),
         )
         self.treeview.heading(
-            "custom", text="Custom", anchor="w", command=lambda: self.treeview_sort_column("custom", False)
+            "custom",
+            text="Custom",
+            anchor="w",
+            command=lambda: self.treeview_sort_column(self.treeview, "custom", False),
         )
         self.treeview.heading(
-            "modified", text="Modified", anchor="w", command=lambda: self.treeview_sort_column("modified", False)
+            "modified",
+            text="Modified",
+            anchor="w",
+            command=lambda: self.treeview_sort_column(self.treeview, "modified", False),
         )
         self.treeview.heading(
-            "path", text="Path", anchor="w", command=lambda: self.treeview_sort_column("path", False)
+            "path", text="Path", anchor="w", command=lambda: self.treeview_sort_column(self.treeview, "path", False)
         )
         self.treeview.column("#0", width=40, minwidth=40, stretch=False)
         self.treeview.column("file", width=260, stretch=False)
@@ -333,19 +338,6 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Do something with the selected choice, such as refreshing the UI
         logger.debug(f"Radio button clicked: {display_choice}")
         self.treeview_refresh()
-
-    def treeview_sort_column(self, col, reverse):
-        """Sort selected treeview column"""
-        # pylint: disable=unused-variable
-        sorted_items = [(self.treeview.set(k, col), k) for k in self.treeview.get_children("")]
-        sorted_items.sort(reverse=reverse)
-
-        # rearrange items in sorted positions
-        for index, (val, k) in enumerate(sorted_items):
-            self.treeview.move(k, "", index)
-
-        # reverse sort next time
-        self.treeview.heading(col, command=lambda: self.treeview_sort_column(col, not reverse))
 
     def treeview_search(self, event):
         """Search treeview"""
@@ -609,3 +601,30 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
 
         send2trash.send2trash(full_path)
         self.treeview_refresh()
+
+
+def main():
+    "debug_gui_browser"
+    # pylint: disable=unused-variable
+    from src.gui.start import GuiHudStart
+
+    print("debug_browser")
+    hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
+
+    # root = get_invisible_tkinter_root()
+
+    # game_class = Game()
+    # game_class.window.run(DirectoryMode.DEVELOPER)
+
+    # browser = GuiHudBrowser(root)
+    # browser.show()
+    start_instance = GuiHudStart()
+    # start_instance.browser.show()
+    start_instance.show(hide=True, callback="debug_show_browser_gui")  # start mainloop
+    # start_instance.show(hide=False, callback="debug_show_browser_gui")  # start mainloop
+
+    return
+
+
+if __name__ == "__main__":
+    main()

@@ -11,10 +11,10 @@ import win32con
 import win32gui
 from shared_managers.hwnd_manager import HwndManager
 
-from game.constants import DirectoryMode
-from game.video_settings_modifier import VideoSettingsModifier
-from utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
-from utils.functions import click_at
+from src.game.constants import DirectoryMode
+from src.game.video_settings_modifier import VideoSettingsModifier
+from src.utils.constants import DATA_MANAGER, HOTKEY_EXECUTE_AUTOEXEC, KEY_MAP, KEY_SCANCODES
+from src.utils.functions import click_at
 
 
 class GameCommands:

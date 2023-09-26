@@ -1,13 +1,14 @@
 """Handles storage, retrieval, and management of HUD-related data and folders."""
 import os
+from loguru import logger
 
 import vdf  # type: ignore
 from shared_utils.functions import copy_directory
 
-from utils.constants import DATA_MANAGER  # Assuming you have vdf library imported
-from utils.constants import NEW_HUD_DIR
-from utils.functions import prompt_for_folder
-
+from src.utils.constants import DATA_MANAGER  # Assuming you have vdf library imported
+from src.utils.constants import NEW_HUD_DIR
+from src.utils.functions import prompt_for_folder
+from shared_managers.valve_vdf_addoninfo_manager import ValveVdfAddoninfoManager
 
 class HudManager:
     """Handles storage, retrieval, and management of HUD-related data and folders."""
@@ -59,12 +60,10 @@ class HudManager:
         addoninfo_path = os.path.normpath(os.path.join(hud_dir, "addoninfo.txt"))
 
         if os.path.exists(addoninfo_path):
-            addon_info = vdf.load(open(addoninfo_path, encoding="utf-8"))
-            if addon_info.get("AddonInfo", {}).get("addontitle"):
-                hud_name = addon_info["AddonInfo"]["addontitle"]
-                # print(f"Hud name: Retrieved '{hud_name}' @ '{addoninfo_path}'")
-            else:
-                print(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
+            addinfo_instance = ValveVdfAddoninfoManager(addoninfo_path)
+            hud_name = addinfo_instance.get("addontitle")
+            if not hud_name:
+                logger.info(f"Hud name: Addoninfo.txt does not have addontitle set! @ '{addoninfo_path}'")
         else:
-            print(f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
+            logger.info(f"Hud name: Addoninfo.txt does not exist @ '{addoninfo_path}' setting hud_name to '{hud_name}'")
         return hud_name

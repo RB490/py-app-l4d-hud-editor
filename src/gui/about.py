@@ -5,7 +5,8 @@ import webbrowser
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton
 
-from utils.constants import APP_ICON, APP_NAME, APP_URL, VERSION_NO, VERSION_NO_GITHUB, ImageConstants, DATA_MANAGER
+from src.utils.constants import APP_ICON, APP_NAME, APP_URL, DATA_MANAGER, VERSION_NO, VERSION_NO_GITHUB
+
 
 class GuiAbout(BaseGUI, metaclass=Singleton):
     """Class for the hud browser gui"""
@@ -14,7 +15,6 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         # set variables
         self.settings_geometry_key = "GuiGeometryAbout"
         self.project_url = APP_URL
-        self.img = ImageConstants()
         self.data_manager = DATA_MANAGER
 
         # create gui
@@ -51,7 +51,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
             justify="center",
             command=self.open_main_page,
             state="normal",
-            image=self.img.link,
+            image=self.img.get("link.png", 2),
             compound="left",
             padx=10,
             width=125,
@@ -63,3 +63,15 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         """Open main page"""
         main_page_url = self.project_url
         webbrowser.open(main_page_url)
+
+
+def main():
+    root = tk.Tk()
+    root.withdraw()
+    gui = GuiAbout(root)
+    gui.show()
+    input("Press enter to exit program...")
+
+
+if __name__ == "__main__":
+    main()

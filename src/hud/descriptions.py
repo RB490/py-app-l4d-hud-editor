@@ -5,8 +5,8 @@ import json
 from loguru import logger
 from shared_utils.functions import Singleton
 
-from game.game import Game
-from utils.constants import HUD_DESCRIPTIONS_PATH
+from src.game.game import Game
+from src.utils.constants import HUD_DESCRIPTIONS_PATH
 
 
 class HudDescriptions(metaclass=Singleton):
