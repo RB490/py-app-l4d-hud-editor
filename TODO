@@ -1,6 +1,7 @@
 
 
-☐ fix: hud file descriptions -> every file is in there under file name key but also relative path key?!
+
+☐ feat: unsync hud ingame when stop editing
 
 ☐ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching
 

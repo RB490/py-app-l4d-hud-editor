@@ -476,13 +476,18 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             logger.debug("Not refreshing browser treeview! Mainloop has not been started")
             return
 
+        # Clear existing items in the Treeview
+        self.treeview.delete(*self.treeview.get_children())
+        logger.debug("Cleared treeview!")
+        
         # variables
         treeview = self.treeview
         hud_dir = self.hud.edit.get_dir()
 
-        # Clear existing items in the Treeview
-        self.treeview.delete(*self.treeview.get_children())
-        logger.debug("Cleared treeview!")
+        # verify input
+        if not hud_dir or not os.path.isdir(hud_dir):
+            logger.debug(f"Not refreshing treeview. No hud dir available: {hud_dir}")
+            return
 
         # Retrieve data based on display choice
         display_choice = self.display_choice.get().lower()
@@ -492,6 +497,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             return
 
         # Determine if game is in developer mode
+        search_term = self.search_box.get("1.0", "end-1c")
         search_term_lower = search_term.lower() if search_term else None
 
         insert_items = []
@@ -560,6 +566,9 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         logger.info(f"Adding new file: '{vanilla_file}' -> '{full_path}'")
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         shutil.copyfile(vanilla_file, full_path)
+        
+        # update treeview
+        self.treeview_refresh()
 
     def action_open_file(self):
         """Treeview Handle 'Open File' option"""
