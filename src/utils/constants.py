@@ -1,10 +1,7 @@
 """Global constant variables"""
-import ctypes
 import os
-from tkinter import PhotoImage
 from typing import Dict, List, Optional, Tuple
 
-from loguru import logger
 from shared_managers.version_number_manager import VersionNumberManager
 
 #####################################################

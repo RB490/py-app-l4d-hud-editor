@@ -2,7 +2,6 @@
 """Module for the hud browser gui class"""
 import os
 import shutil
-import time
 import timeit
 import tkinter as tk
 from datetime import datetime
@@ -33,7 +32,7 @@ from src.utils.constants import (
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
 )
-from src.utils.functions import get_image_for_file_extension
+from src.utils.functions import get_image_for_file_extension, preform_checks_to_prepare_program_start
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -47,6 +46,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.selected_file_name = None
         self.selected_relative_path = None
         self.treeview_photo_images = []
+        self.treeview_photo_images_cache = {}
         self.data_manager = DATA_MANAGER
         self.hud = Hud()
         self.game = Game()
@@ -56,7 +56,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.popup_gui = GuiEditorMenuPopup(self.root)
         self.descriptions_gui = GuiHudDescriptions(self.root)
         self.set_title(GUI_BROWSER_TITLE)
-        self.set_minimum_size()(300, 100)
+        self.set_minimum_size(300, 100)
         self.set_icon(APP_ICON)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
@@ -527,17 +527,26 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             # Prepare item for insertion
             insert_items.append((file_name, file_desc, is_custom, last_modified, file_relative_path, image_path))
 
-
         # Store PhotoImage objects to prevent them from being garbage collected
         self.treeview_photo_images = []
 
-        
         # First, load the images and create PhotoImage objects
+        # (this process is quite slow and caching speeds it up to almost instantaneous)
+        # Create a dictionary to store loaded images for each path
         image_photos = []
         for item in insert_items:
             file_name, file_desc, is_custom, last_modified, file_relative_path, image_path = item
-            image = Image.open(image_path).resize((16, 16), Image.LANCZOS)
-            photo = ImageTk.PhotoImage(image)
+            
+            # Check if the image has already been loaded
+            if image_path in self.treeview_photo_images_cache:
+                photo = self.treeview_photo_images_cache[image_path]
+            else:
+                # If not, load the image, resize it, and store it in the cache
+                image = Image.open(image_path).resize((16, 16), Image.LANCZOS)
+                photo = ImageTk.PhotoImage(image)
+                self.treeview_photo_images_cache[image_path] = photo
+                logger.warning(f"adding image to cache: {image_path}")
+            
             image_photos.append(photo)
 
         # Now, insert the items into the Treeview using the preloaded images
@@ -690,7 +699,8 @@ def main():
 
 if __name__ == "__main__":
     os.system("cls")
-    # loguru_setup_logging_filter("INFO")
-    loguru_setup_logging_filter("DEBUG")
+    preform_checks_to_prepare_program_start()
+    loguru_setup_logging_filter("INFO")
+    # loguru_setup_logging_filter("DEBUG")
     # loguru_setup_logging_filter("DEBUG", "include", ["src.gui.browser"])
     main()
