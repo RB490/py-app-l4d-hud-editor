@@ -24,9 +24,9 @@ class VDFModifierGUI(BaseGUI):
         super().__init__(gui_type="sub", parent_root=parent_root)
         self.data_manager = DATA_MANAGER
         self.modifier = None  # vdf modifier class
-        self.root.minsize(875, 425)
-        self.root.iconbitmap(APP_ICON)
-        self.root.title("VDF Modifier")
+        self.set_minimum_size(875, 425)
+        self.set_icon(APP_ICON)
+        self.set_title("VDF Modifier")
         self.control_options = ["xpos", "ypos", "wide", "tall", "visible", "enabled"]
         self.selected_control = tk.StringVar(value=self.control_options[0])
         self.previous_output = None

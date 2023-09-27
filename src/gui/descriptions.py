@@ -29,8 +29,8 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
 
         # gui
         super().__init__(gui_type="sub", parent_root=parent_root)
-        self.root.title("File")
-        self.root.iconbitmap(APP_ICON)
+        self.set_title("File")
+        self.set_icon(APP_ICON)
         self.set_always_on_top(True)
         # self.root.minsize(450, 400)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))

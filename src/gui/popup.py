@@ -35,8 +35,8 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.hotkey_manager = HotkeyManager()
 
         # root
-        self.root.title("Editor Context Menu Popup")
         self.debug_instantly_show_menu = debug_instantly_show_menu
+        self.set_title("Editor Context Menu Popup")
         self.set_transparency(0.3)  # fully transparent makes it less reliable somehow
         self.set_decorations(False)
         self.set_always_on_top(False)  # not setting this because it causes prompts to be behind the gui
@@ -44,7 +44,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         # Set size to entire screen because set_fullscreen has a 0.1 visible delay ;-)
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        self.root.geometry(f"{screen_width}x{screen_height}")
+        self.set_window_geometry(f"{screen_width}x{screen_height}")
 
         self.data_manager = DATA_MANAGER
         self.game = Game()

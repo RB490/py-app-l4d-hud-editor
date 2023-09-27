@@ -34,9 +34,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # gui
         super().__init__("main")
         self.browser = GuiHudBrowser(self.root, self)
-        self.root.title("Start")
-        self.root.iconbitmap(APP_ICON)
-        self.root.minsize(865, 500)
+        self.set_title("Start")
+        self.set_icon(APP_ICON)
+        self.set_minimum_size(865, 500)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
         self.__create_context_menu()
