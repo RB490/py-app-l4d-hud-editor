@@ -28,10 +28,6 @@ VERSION_NO_PRETTY = version_manager.get(formatted=True)
 VERSION_NO_GITHUB: str = version_manager.get_from_url(VERSION_NO_URL)
 GUI_BROWSER_TITLE: str = "Browser"
 
-# Set the taskbar icon (uses whichever icon tkinter is set to)
-taskbar_ico_appid = f"rb.python.program.{APP_NAME}.{VERSION_NO}"
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(taskbar_ico_appid)
-
 DEFAULT_DATA = {
     "BrowserGuiGeometry": "828x517+114+776",
     "HudSelectGuiGeometry": "865x528+100+100",

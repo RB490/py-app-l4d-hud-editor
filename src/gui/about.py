@@ -19,9 +19,9 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
 
         # create gui
         super().__init__(gui_type="sub", parent_root=parent_root)
-        self.root.title("About")
+        self.set_title("About")
         self.set_resizable(False)
-        self.root.iconbitmap(APP_ICON)
+        self.set_icon(APP_ICON)
         self.set_window_geometry(self.data_manager.get(self.settings_geometry_key))
         self.__create_widgets()
 
