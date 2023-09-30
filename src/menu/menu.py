@@ -8,17 +8,25 @@ import webbrowser
 from tkinter import Menu, PhotoImage
 
 from loguru import logger
-from shared_utils.functions import (add_empty_menu_separator,
-                                    create_lambda_command)
+from shared_gui.base import BaseGUI
+from shared_utils.functions import Singleton, add_empty_menu_separator, create_lambda_command
 
 from src.game.constants import DirectoryMode
 from src.game.game import Game
 from src.menu.handler import EditorMenuHandler
-from src.utils.constants import (DATA_MANAGER, EDITOR_HUD_RELOAD_MODES,
-                                 GAME_POSITIONS, HOTKEY_EDITOR_MENU,
-                                 HOTKEY_SYNC_HUD, HOTKEY_TOGGLE_BROWSER,
-                                 IMAGES_DIR_MISC, MAP_CODES, PROJECT_ROOT,
-                                 SNIPPETS_DIR, TUTORIALS_DIR)
+from src.utils.constants import (
+    DATA_MANAGER,
+    EDITOR_HUD_RELOAD_MODES,
+    GAME_POSITIONS,
+    HOTKEY_EDITOR_MENU,
+    HOTKEY_SYNC_HUD,
+    HOTKEY_TOGGLE_BROWSER,
+    IMAGES_DIR_MISC,
+    MAP_CODES,
+    PROJECT_ROOT,
+    SNIPPETS_DIR,
+    TUTORIALS_DIR,
+)
 
 
 class EditorMenuClass:
@@ -1391,7 +1399,7 @@ class EditorMenuClass:
             self.parent.has_been_run()
             and hasattr(self.parent, "gui_refresh")
             and callable(getattr(self.parent, "gui_refresh"))
-            and not is_context_menu # don't update if showing a context menu. only if menu.handler is refreshing
+            and not is_context_menu  # don't update if showing a context menu. only if menu.handler is refreshing
         ):
             # self.parent.gui_refresh(called_by_editor_menu=True)
             gui_refresh_thread = threading.Thread(target=self.run_gui_refresh)
@@ -1399,3 +1407,33 @@ class EditorMenuClass:
 
     def run_gui_refresh(self):
         self.parent.gui_refresh(called_by_editor_menu=True)
+
+
+class debug_editor_menu_class(BaseGUI, metaclass=Singleton):
+    """Debug editor menu"""
+
+    def __init__(self, parent_root):
+        super().__init__(gui_type="sub", parent_root=parent_root)
+        self.root.title("main_debug_editor_menu")
+        self.root.minsize(width=400, height=10)
+        self.root.maxsize(width=400, height=10)
+
+        self.editor_menu = EditorMenuClass(self, self.root)
+        self.root.config(menu=self.editor_menu.get_main_menu())
+
+        context_menu = self.editor_menu.get_context_menu_main()
+        # context_menu = self.editor_menu.get_context_menu_dev()
+
+        pos_x, pos_y = self.root.winfo_pointerxy()
+        self.show_post_menu(context_menu, pos_x, pos_y)
+
+
+def main():
+    """Debug editor menu"""
+    root = tk.Tk()
+    root.withdraw()
+    debug_editor_menu_class(root)
+
+
+if __name__ == "__main__":
+    main()

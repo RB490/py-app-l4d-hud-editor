@@ -333,3 +333,20 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
                 self.save_changes()
             else:
                 self.set_unsaved_changes(False)
+
+
+def main():
+    root = tk.Tk()
+    root.withdraw()
+    descriptions_gui = GuiHudDescriptions(root)
+    descriptions_gui.load_file("hudlayout.res", "scripts\\hudlayout.res")
+    # descriptions_gui.show()
+    # descriptions_gui.hud.desc.remove_entry("custom_hudlayout.res")
+
+    # descriptions_gui.load_file("custom_hudlayout.res")
+
+    input("Press enter to exit script...")
+
+
+if __name__ == "__main__":
+    main()

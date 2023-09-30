@@ -1,5 +1,7 @@
 """Module for the editor menu"""
 # pylint: disable=import-outside-toplevel
+import tkinter as tk
+
 from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton
@@ -84,3 +86,20 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         # hide gui after context menu closed
         self.hide()
         print(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")
+
+
+def main():
+    """Debug gui class"""
+    # pylint: disable=unused-variable
+    root = tk.Tk()
+    root.withdraw()
+    # app = GuiEditorMenuPopup(root)
+    app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
+    app.show(hide=True)
+    # app.show(hidden=True)
+    
+    input("Press enter to exit script...")
+
+
+if __name__ == "__main__":
+    main()

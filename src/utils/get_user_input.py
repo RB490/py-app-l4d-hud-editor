@@ -17,7 +17,7 @@ class UserInputWindow(BaseGUI):
         callback (callable): The function to call with the user's input after it has been submitted.
     """
 
-    def __init__(self, parent_root, title: str, prompt: str) -> None:
+    def __init__(self, parent_root, title: str, prompt: str, callback=None) -> None:
         """
         Initialize a new UserInputWindow.
 
@@ -29,7 +29,7 @@ class UserInputWindow(BaseGUI):
         self.root.title(title)
         self.prompt = prompt
         # self.input_box = None
-        self.callback = None
+        self.callback = callback
 
         self.create_widgets()
 
@@ -81,14 +81,29 @@ def get_user_input(parent_root, title: str, prompt: str, callback=None) -> None:
     """
     # root = tk.Tk()
     # root.withdraw()  # Hide parent window
-    input_win = UserInputWindow(parent_root, title, prompt)
-    input_win.callback = callback
+    input_win = UserInputWindow(parent_root, title, prompt, callback)
     input_win.show()
 
 
-if __name__ == "__main__":
-    from shared_utils.functions import get_invisible_tkinter_root
+def main():
+    class DebuggingGui(object):
+        """docstring for DebugSettingsGui."""
 
-    root = get_invisible_tkinter_root()
-    get_user_input(root, "my title", "my prompt")
-    input("press enter to exit script!")
+        def __init__(self):
+            self.root = tk.Tk()
+            self.root.withdraw()
+
+    parent_class = DebuggingGui()
+
+    def handle_user_input(result):
+        """Handle user input"""
+        print("User entered:", result)
+        # Your code here
+
+    get_user_input(parent_class.root, "Enter Name", "What is your name?", handle_user_input)
+
+    input("Press enter to exit program...")
+
+
+if __name__ == "__main__":
+    main()

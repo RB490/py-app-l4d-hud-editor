@@ -1,12 +1,15 @@
 """GUI Class for modifying VDF files."""
 # pylint: disable=broad-exception-caught
+import os
+import shutil
 import tkinter as tk
 from tkinter import scrolledtext
 
 from shared_gui.base import BaseGUI
 from shared_utils.functions import show_message
 
-from src.utils.constants import APP_ICON, DATA_MANAGER
+from src.utils.constants import APP_ICON, DATA_MANAGER, DEVELOPMENT_DIR
+from src.utils.functions import create_temp_file
 from src.utils.vdf import VDFModifier
 
 
@@ -75,9 +78,7 @@ class VDFModifierGUI(BaseGUI):
 
         self.reload_button = tk.Button(self.right_side_frame, text="Reload", height=16, command=self.load_file)
         self.reload_button.pack(fill=tk.X, padx=(1, 10), pady=(0, 10))
-        self.reload_button.config(
-            image=self.img.get("reload", 2), compound="left", padx=10
-        )
+        self.reload_button.config(image=self.img.get("reload", 2), compound="left", padx=10)
 
         self.save_to_file_button = tk.Button(self.right_side_frame, text="Save", height=16, command=self.save_vdf)
         self.save_to_file_button.pack(side=tk.BOTTOM, fill=tk.X, padx=(1, 10), pady=(0, 10))
@@ -254,3 +255,26 @@ class VDFModifierGUI(BaseGUI):
         """Save size & position if GUI is loaded and visible"""
 
         self.data_manager.set(self.settings_geometry_key, self.get_window_geometry())
+
+
+def main():
+    """Debug GUI"""
+
+    # vdf file
+    vdf_path = os.path.join(
+        DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
+    )
+    # vdf_path = os.path.join(DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res")
+
+    # vdf file backup
+    temp_vdf = create_temp_file(vdf_path)
+
+    root = tk.Tk()
+    root.withdraw()
+    app = VDFModifierGUI(root, temp_vdf)
+    app.show()
+    input("Press enter to exit script...")
+
+
+if __name__ == "__main__":
+    main()

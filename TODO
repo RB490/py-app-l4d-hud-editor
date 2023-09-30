@@ -1,1 +1,8 @@
+☐ refactor: shared functions -> create_and_open_temp_file -> get_temp_file()
+
+☐ todo: import todo's from microsoft todo & make new task to do the todos now in this todo file (very meta)
+
+
+
+
 ☐ test: Test the program by using it to edit HUD's
