@@ -5,7 +5,7 @@ import json
 import os
 
 from loguru import logger
-from shared_utils.functions import Singleton, is_valid_file_name
+from shared_utils.functions import Singleton, is_valid_file_name_format, is_valid_file_path_format
 
 from src.game.game import Game
 from src.utils.constants import HUD_DESCRIPTIONS_PATH
@@ -16,12 +16,17 @@ def raise_exception_if_invalid_file_name(func):
 
     @functools.wraps(func)
     def wrapper(self, file_name, *args, **kwargs):
-        if not is_valid_file_name(file_name):
+        if not is_valid_file_name_format(file_name):
             raise ValueError(f"Invalid file name: {file_name}")
         return func(self, file_name, *args, **kwargs)
 
     return wrapper
 
+def ensure_file_entry_exists_or_create(func):
+    def wrapper(self, file_name, *args, **kwargs):
+        self._ensure_file_entry_exists_or_create(file_name)
+        return func(self, file_name, *args, **kwargs)
+    return wrapper
 
 class HudDescriptions(metaclass=Singleton):
     """Subclass of the hud class. Manages everything related to hud file descriptions"""
@@ -33,10 +38,10 @@ class HudDescriptions(metaclass=Singleton):
         logger.debug("Initialized HudDescriptions instance")
 
     @raise_exception_if_invalid_file_name
+    @ensure_file_entry_exists_or_create
     def add_control(self, file_name, input_control):
         """Set information"""
         if input_control is not None:
-            self._add_entry_if_new(file_name)
             self.data[file_name]["file_control_descriptions"][input_control] = ""
             self.save_to_disk()
             logger.debug(f"Added control '{input_control}' for file name '{file_name}'")
@@ -61,26 +66,24 @@ class HudDescriptions(metaclass=Singleton):
             logger.warning(f"No entry found for file name '{file_name}'")
 
     @raise_exception_if_invalid_file_name
-    def _add_entry_if_new(self, file_name):
+    def _ensure_file_entry_exists_or_create(self, file_name):
         """Create a new entry in data if file_name doesn't exist"""
         if file_name not in self.data:
-            is_custom_file = self.game.dir.is_custom_file(file_name)
-
             self.data[file_name] = {
                 "file_control_descriptions": {},
                 "file_description": "",
                 "file_name": file_name,
                 "file_relative_path": "",
-                "file_is_custom": is_custom_file,
+                "file_is_custom": "",
             }
             logger.debug(f"Added new description entry:\n{self.data[file_name]}")
             self.save_to_disk()
 
     @raise_exception_if_invalid_file_name
+    @ensure_file_entry_exists_or_create
     def set_control_description(self, file_name, input_control, control_desc):
         """Save control description for a given file name and control"""
         if control_desc:
-            self._add_entry_if_new(file_name)
             self.data[file_name]["file_control_descriptions"][input_control] = control_desc
             self.save_to_disk()
             logger.debug(f"Saved description for control '{input_control}' in file name '{file_name}'")
@@ -88,14 +91,15 @@ class HudDescriptions(metaclass=Singleton):
             logger.warning("Cannot save an empty control description")
 
     @raise_exception_if_invalid_file_name
+    @ensure_file_entry_exists_or_create
     def set_file_description(self, file_name, file_desc):
         """Set file description for a given file name"""
-        self._add_entry_if_new(file_name)
         self.data[file_name]["file_description"] = file_desc
         self.save_to_disk()
         logger.debug(f"Saved file description for file name '{file_name}'")
 
     @raise_exception_if_invalid_file_name
+    @ensure_file_entry_exists_or_create
     def set_file_relative_path(self, file_name, relative_path):
         """
         Set the file_relative_path for a given file name.
@@ -103,10 +107,25 @@ class HudDescriptions(metaclass=Singleton):
         file_name (str): The name of the file.
         relative_path (str): The relative path to set.
         """
-        self._add_entry_if_new(file_name)
         self.data[file_name]["file_relative_path"] = relative_path
         self.save_to_disk()
         logger.debug(f"Set file_relative_path '{relative_path}' for file name '{file_name}'")
+        self._set_file_is_custom_status(file_name)
+
+    @raise_exception_if_invalid_file_name
+    @ensure_file_entry_exists_or_create
+    def _set_file_is_custom_status(self, file_name):
+        """Is this a custom file?"""
+        # verify we have a relative file path
+        relative_file_path = self.get_file_relative_path(file_name)
+        if not is_valid_file_path_format(relative_file_path):
+            raise ValueError(f"Invalid path: {relative_file_path}")
+
+        # set custom status
+        is_custom_file = self.game.dir.is_custom_file(relative_file_path)
+        self.data[file_name]["file_is_custom"] = is_custom_file
+        self.save_to_disk()
+        logger.debug(f"Set file_is_custom '{is_custom_file}' for file name '{file_name}'")
 
     def get_all_descriptions(self):
         """
@@ -235,7 +254,7 @@ def test():
     # Test get_file_description
     retrieved_file_desc = descr.get_file_description(file_name)
     assert retrieved_file_desc == file_desc
-    
+
     # Test get_file_relative_path
     retrieved_rela_path = descr.get_file_relative_path(file_name)
     assert rela_path == retrieved_rela_path
@@ -262,7 +281,7 @@ def test():
     retrieved_file_desc = descr.get_file_description(file_name)
     assert retrieved_file_desc == ""  # File should be removed
 
-    print("All HudDescriptions methods tested successfully!")
+    logger.info("All HudDescriptions methods tested successfully!")
 
 
 if __name__ == "__main__":

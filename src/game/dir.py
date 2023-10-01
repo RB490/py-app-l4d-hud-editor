@@ -6,7 +6,7 @@ import shutil
 
 from loguru import logger
 from shared_gui.splash_gui import SplashGUI
-from shared_utils.functions import copy_directory, generate_random_string, verify_directory
+from shared_utils.functions import copy_directory, generate_random_string, is_valid_file_path_format, verify_directory
 
 from src.game.constants import DirectoryMode, SyncState
 from src.game.dir_id_handler import GameIDHandler
@@ -20,11 +20,12 @@ def raise_exception_if_invalid_path(func):
 
     @functools.wraps(func)
     def wrapper(self, relative_file_path, *args, **kwargs):
-        if not os.path.isabs(relative_file_path):
+        if not is_valid_file_path_format(relative_file_path):
             raise ValueError(f"Invalid path: {relative_file_path}")
         return func(self, relative_file_path, *args, **kwargs)
 
     return wrapper
+
 
 class GameDir:
     "Game class directory methods"
