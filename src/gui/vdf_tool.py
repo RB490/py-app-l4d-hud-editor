@@ -8,7 +8,7 @@ from shared_gui.base import BaseGUI
 from shared_utils.functions import create_temp_file, show_message
 
 from src.utils.constants import APP_ICON, DATA_MANAGER, DEVELOPMENT_DIR
-from src.utils.vdf_modifier import VDFModifier
+from src.utils.vdf_modifier import VDFModifier, get_debug_vdf_file_path
 
 
 class VDFModifierGUI(BaseGUI):
@@ -259,11 +259,7 @@ def main():
     """Debug GUI"""
 
     # vdf file
-    vdf_path = os.path.join(
-        DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
-    )
-    # vdf_path = os.path.join(DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res")
-
+    vdf_path = get_debug_vdf_file_path()
     # vdf file backup
     temp_vdf = create_temp_file(vdf_path)
 

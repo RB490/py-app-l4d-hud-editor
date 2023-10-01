@@ -457,24 +457,33 @@ class VDFModifier:
 
         return "\n".join(result_lines)
 
+def get_debug_vdf_file_path():
+    vdf_path = os.path.join(
+        DEVELOPMENT_DIR, "debug", "vdf", "tiny hudlayout.res nested key-value definition", "hudlayout.res"
+    )
+    # vdf_path = os.path.join(
+    #     DEVELOPMENT_DIR, "debug", "vdf", "large scoreboard.res BackgroundImage Control.res", "scoreboard.res"
+    # )
+    return vdf_path
 
 def main():
     """Debug the VDFModifier class."""
-    vdf_path = os.path.join(
-        DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
-    )
-    # vdf_path = os.path.join(
-    #     DEVELOPMENT_DIR, "debug", "vdf", "large_scoreboard - [$X360] BackgroundImage Control.res"
-    # )
 
+    # variables
+    vdf_path = get_debug_vdf_file_path()
+    m_i = VDFModifier(vdf_path)
+
+    # method
     modifier = "plus"  # or "minus"
     amount = 15000
     key_to_modify = "xpos"
+    # modified_vdf_obj = m_i.modify_integers(modifier, amount, key_to_modify)
 
-    modifier_instance = VDFModifier(vdf_path)
-    modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
-    modifier_instance.save_vdf(modified_vdf_obj, "output.vdf", align_value_indentation=True)
-    # modifier_instance.print_current_vdf()
+    modified_vdf_obj = m_i.annotate(m_i.get_obj())
+
+    # m_i.save_vdf(modified_vdf_obj, "output.vdf", align_value_indentation=True)
+    m_i.print_current_vdf()
+    input("Press enter to exit script...")
 
 
 if __name__ == "__main__":
