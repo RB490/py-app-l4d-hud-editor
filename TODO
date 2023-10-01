@@ -1,8 +1,12 @@
 
 
+☐ fix: descriptions: i never set file relative path
+
 ☐ fix: descriptions: is_custom_file called with file_name
 
 ☐ refactor: shared functions -> create_and_open_temp_file -> get_temp_file()
+
+☐ feat: test version manager without internet - 99% sure an internet check is needed for 'get version from github' because it was slow as hell without one
 
 ☐ todo: import todo's from microsoft todo & make new task to do the todos now in this todo file (very meta)
 

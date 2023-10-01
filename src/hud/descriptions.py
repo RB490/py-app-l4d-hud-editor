@@ -32,6 +32,7 @@ class HudDescriptions(metaclass=Singleton):
         self.read_from_disk()
         logger.debug("Initialized HudDescriptions instance")
 
+    @raise_exception_if_invalid_file_name
     def add_control(self, file_name, input_control):
         """Set information"""
         if input_control is not None:
@@ -42,12 +43,14 @@ class HudDescriptions(metaclass=Singleton):
         else:
             logger.warning("Cannot add control with None name")
 
+    @raise_exception_if_invalid_file_name
     def remove_control(self, file_name, input_control):
         """Set information"""
         del self.data[file_name]["file_control_descriptions"][input_control]
         self.save_to_disk()
         logger.debug(f"Removed control '{input_control}' for file name '{file_name}'")
 
+    @raise_exception_if_invalid_file_name
     def remove_entry(self, file_name):
         """Remove an entire entry based on the provided file name"""
         if file_name in self.data:
@@ -57,6 +60,7 @@ class HudDescriptions(metaclass=Singleton):
         else:
             logger.warning(f"No entry found for file name '{file_name}'")
 
+    @raise_exception_if_invalid_file_name
     def _add_entry_if_new(self, file_name):
         """Create a new entry in data if file_name doesn't exist"""
         if file_name not in self.data:
@@ -72,6 +76,7 @@ class HudDescriptions(metaclass=Singleton):
             logger.debug(f"Added new description entry:\n{self.data[file_name]}")
             self.save_to_disk()
 
+    @raise_exception_if_invalid_file_name
     def set_control_description(self, file_name, input_control, control_desc):
         """Save control description for a given file name and control"""
         if control_desc:
@@ -90,6 +95,7 @@ class HudDescriptions(metaclass=Singleton):
         self.save_to_disk()
         logger.debug(f"Saved file description for file name '{file_name}'")
 
+    @raise_exception_if_invalid_file_name
     def set_file_relative_path(self, file_name, relative_path):
         """
         Set the file_relative_path for a given file name.
@@ -118,12 +124,14 @@ class HudDescriptions(metaclass=Singleton):
         logger.debug("Retrieved all file descriptions")
         return all_descriptions
 
+    @raise_exception_if_invalid_file_name
     def get_control_description(self, file_name, input_control):
         """Get information"""
         description = self.data.get(file_name, {}).get("file_control_descriptions", {}).get(input_control)
         logger.debug(f"Retrieved description for control '{input_control}' in file name '{file_name}': {description}")
         return description
 
+    @raise_exception_if_invalid_file_name
     def get_file_description(self, file_name):
         """
         Get file description for given file name.
@@ -133,12 +141,14 @@ class HudDescriptions(metaclass=Singleton):
         logger.debug(f"Retrieved file description for '{file_name}': {description}")
         return description
 
+    @raise_exception_if_invalid_file_name
     def get_file_relative_path(self, file_name):
         """Get information"""
         relative_path = self.data.get(file_name, {}).get("file_relative_path", "")
         logger.debug(f"Retrieved relative path for file name '{file_name}': {relative_path}")
         return relative_path
 
+    @raise_exception_if_invalid_file_name
     def get_custom_file_status(self, file_name):
         """
         Check if a file has a custom status based on the given file name.
@@ -148,6 +158,7 @@ class HudDescriptions(metaclass=Singleton):
         logger.debug(f"Retrieved custom status for file name '{file_name}': {is_custom}")
         return is_custom
 
+    @raise_exception_if_invalid_file_name
     def get_controls(self, file_name):
         """
         Get a list of file control descriptions for the given file name.
@@ -214,6 +225,9 @@ def test():
     # Test set_file_description
     descr.set_file_description(file_name, file_desc)
 
+    # Test set_file_relative_path
+    descr.set_file_relative_path(file_name, rela_path)
+
     # Test get_control_description
     retrieved_control_desc = descr.get_control_description(file_name, input_control)
     assert retrieved_control_desc == control_desc
@@ -221,6 +235,10 @@ def test():
     # Test get_file_description
     retrieved_file_desc = descr.get_file_description(file_name)
     assert retrieved_file_desc == file_desc
+    
+    # Test get_file_relative_path
+    retrieved_rela_path = descr.get_file_relative_path(file_name)
+    assert rela_path == retrieved_rela_path
 
     # Test get_custom_file_status
     custom_status = descr.get_custom_file_status(file_name)
