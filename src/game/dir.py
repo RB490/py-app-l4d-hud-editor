@@ -1,5 +1,6 @@
 "Game class directory methods"
 # pylint: disable=protected-access, broad-exception-caught, broad-exception-raised, logging-fstring-interpolation
+import functools
 import os
 import shutil
 
@@ -13,6 +14,17 @@ from src.hud.syncer import files_differ
 from src.utils.functions import get_backup_filename, get_backup_path, get_start_gui, rename_with_timeout
 from src.utils.steam_info_retriever import SteamInfoRetriever
 
+
+def raise_exception_if_invalid_path(func):
+    "Check if hwnd is running"
+
+    @functools.wraps(func)
+    def wrapper(self, relative_file_path, *args, **kwargs):
+        if not os.path.isabs(relative_file_path):
+            raise ValueError(f"Invalid path: {relative_file_path}")
+        return func(self, relative_file_path, *args, **kwargs)
+
+    return wrapper
 
 class GameDir:
     "Game class directory methods"
@@ -84,6 +96,7 @@ class GameDir:
 
         return True
 
+    @raise_exception_if_invalid_path
     def get_vanilla_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
 
@@ -112,11 +125,11 @@ class GameDir:
         logger.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
         return False
 
+    @raise_exception_if_invalid_path
     def is_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file
 
         Note: use description's get_custom_file_status for cached result. Should be a lot faster"""
-
         vanilla_file = self.get_vanilla_file(relative_file_path)
         if vanilla_file:
             logger.debug(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")

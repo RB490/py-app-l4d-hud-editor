@@ -1,12 +1,26 @@
 """Subclass of the hud class. Manages everything related to hud file descriptions"""
 # pylint: disable=logging-fstring-interpolation
+import functools
 import json
+import os
 
 from loguru import logger
-from shared_utils.functions import Singleton
+from shared_utils.functions import Singleton, is_valid_file_name
 
 from src.game.game import Game
 from src.utils.constants import HUD_DESCRIPTIONS_PATH
+
+
+def raise_exception_if_invalid_file_name(func):
+    "Check if hwnd is running"
+
+    @functools.wraps(func)
+    def wrapper(self, file_name, *args, **kwargs):
+        if not is_valid_file_name(file_name):
+            raise ValueError(f"Invalid file name: {file_name}")
+        return func(self, file_name, *args, **kwargs)
+
+    return wrapper
 
 
 class HudDescriptions(metaclass=Singleton):
@@ -46,7 +60,7 @@ class HudDescriptions(metaclass=Singleton):
     def _add_entry_if_new(self, file_name):
         """Create a new entry in data if file_name doesn't exist"""
         if file_name not in self.data:
-            is_custom_file = bool(self.game.dir.is_custom_file(file_name))
+            is_custom_file = self.game.dir.is_custom_file(file_name)
 
             self.data[file_name] = {
                 "file_control_descriptions": {},
@@ -68,6 +82,7 @@ class HudDescriptions(metaclass=Singleton):
         else:
             logger.warning("Cannot save an empty control description")
 
+    @raise_exception_if_invalid_file_name
     def set_file_description(self, file_name, file_desc):
         """Set file description for a given file name"""
         self._add_entry_if_new(file_name)
@@ -197,7 +212,7 @@ def test():
     descr.set_control_description(file_name, input_control, control_desc)
 
     # Test set_file_description
-    descr.set_file_description(rela_path, file_desc)
+    descr.set_file_description(file_name, file_desc)
 
     # Test get_control_description
     retrieved_control_desc = descr.get_control_description(file_name, input_control)

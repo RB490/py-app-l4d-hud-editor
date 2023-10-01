@@ -1,16 +1,14 @@
 """GUI Class for modifying VDF files."""
 # pylint: disable=broad-exception-caught
 import os
-import shutil
 import tkinter as tk
 from tkinter import scrolledtext
 
 from shared_gui.base import BaseGUI
-from shared_utils.functions import show_message
+from shared_utils.functions import create_temp_file, show_message
 
 from src.utils.constants import APP_ICON, DATA_MANAGER, DEVELOPMENT_DIR
-from src.utils.functions import create_temp_file
-from src.utils.vdf import VDFModifier
+from src.utils.vdf_modifier import VDFModifier
 
 
 class VDFModifierGUI(BaseGUI):

@@ -15,13 +15,12 @@ from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton, create_temp_file, loguru_setup_logging_filter, show_message
 
-from src.debug.hud import get_hud_debug_instance
 from src.game.constants import DirectoryMode
 from src.game.game import Game
 from src.gui.descriptions import GuiHudDescriptions
 from src.gui.popup import GuiEditorMenuPopup
 from src.gui.vdf_tool import VDFModifierGUI
-from src.hud.hud import Hud
+from src.hud.hud import Hud, get_hud_debug_instance
 from src.menu.menu import EditorMenuClass
 from src.utils.constants import (
     APP_ICON,
@@ -536,7 +535,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         image_photos = []
         for item in insert_items:
             file_name, file_desc, is_custom, last_modified, file_relative_path, image_path = item
-            
+
             # Check if the image has already been loaded
             if image_path in self.treeview_photo_images_cache:
                 photo = self.treeview_photo_images_cache[image_path]
@@ -546,7 +545,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 photo = ImageTk.PhotoImage(image)
                 self.treeview_photo_images_cache[image_path] = photo
                 logger.warning(f"adding image to cache: {image_path}")
-            
+
             image_photos.append(photo)
 
         # Now, insert the items into the Treeview using the preloaded images

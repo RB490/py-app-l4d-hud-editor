@@ -458,7 +458,7 @@ class VDFModifier:
         return "\n".join(result_lines)
 
 
-def debug_vdf_class():
+def main():
     """Debug the VDFModifier class."""
     vdf_path = os.path.join(
         DEVELOPMENT_DIR, "debug", "vdf", "tiny_hudlayout - [$X360] nested key-value definition.res"
@@ -475,3 +475,7 @@ def debug_vdf_class():
     modified_vdf_obj = modifier_instance.modify_integers(modifier, amount, key_to_modify)
     modifier_instance.save_vdf(modified_vdf_obj, "output.vdf", align_value_indentation=True)
     # modifier_instance.print_current_vdf()
+
+
+if __name__ == "__main__":
+    main()

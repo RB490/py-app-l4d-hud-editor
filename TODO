@@ -1,7 +1,10 @@
+
+
+☐ fix: descriptions: is_custom_file called with file_name
+
 ☐ refactor: shared functions -> create_and_open_temp_file -> get_temp_file()
 
 ☐ todo: import todo's from microsoft todo & make new task to do the todos now in this todo file (very meta)
-
 
 
 
