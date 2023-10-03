@@ -38,6 +38,10 @@ class EditorMenuHandler:
     """Class containing editor menu methods for GuiEditorMenu to keep things organized"""
 
     def __init__(self, editor_menu_instance):
+        instance_param_name = type(editor_menu_instance).__name__
+        if instance_param_name is not "EditorMenuClass":
+            raise ValueError("Specified param is not an instance of the editor menu class!")
+
         self.data_manager = DATA_MANAGER
         self.editor_menu = editor_menu_instance
         self.game = Game()

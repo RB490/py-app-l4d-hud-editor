@@ -5,10 +5,10 @@ import tkinter as tk
 from tkinter import Menu
 
 from loguru import logger
+from shared_gui.base import BaseGUI
 from shared_gui.menu_debug import menu_debug_gui
 
 from src.game.game import Game
-from src.menu.handler import EditorMenuHandler
 from src.menu.sub.clipboard import MenuClipboard
 from src.menu.sub.dev_install import MenuDevInstall
 from src.menu.sub.game_map import MenuGameMap
@@ -34,6 +34,10 @@ class EditorMenuClass:
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
     def __init__(self, parent_gui):
+        from src.menu.handler import EditorMenuHandler
+        if not isinstance(parent_gui, BaseGUI):
+            raise ValueError("Parent GUI is not an instance of the base gui!")
+
         self.data_manager = DATA_MANAGER
         self.handler = EditorMenuHandler(self)
         self.parent_gui = parent_gui
