@@ -4,12 +4,11 @@
 import os
 import threading
 import tkinter as tk
-import webbrowser
 from tkinter import Menu, PhotoImage
 
 from loguru import logger
 from shared_gui.base import BaseGUI
-from shared_utils.functions import Singleton, add_empty_menu_separator, create_lambda_command
+from shared_utils.functions import Singleton, add_empty_menu_separator, create_lambda_command, open_file, open_url
 
 from src.game.constants import DirectoryMode
 from src.game.game import Game
@@ -47,23 +46,6 @@ class EditorMenuClass:
 
         self.hud = Hud()
         self.create_and_refresh_menu()
-
-    def open_file(self, path):
-        """Open file"""
-        logger.debug("Opening file: {path}")
-        os.startfile(path)
-
-    def open_url(self, url):
-        """Open url"""
-        webbrowser.open(url)
-        logger.debug("Opening URL: {url}")
-
-    def do_nothing(self, *args):
-        # pylint: disable=unused-argument, unnecessary-pass
-        """
-        A dummy function that does nothing.
-        """
-        pass
 
     def create_game_map_menu(self, menubar):
         """Create game map menu"""
@@ -807,13 +789,13 @@ class EditorMenuClass:
             label=f"{self.game.get_title()} Commands",
             image=self.img.get("link", 2),
             compound="left",
-            command=lambda: self.open_url(all_cvars_link),
+            command=lambda: open_url(all_cvars_link),
         )
         self.help_menu.add_command(
             label="Script Readme",
             image=self.img.get("file", 2),
             compound="left",
-            command=lambda: self.open_file(readme_path),
+            command=lambda: open_file(readme_path),
         )
         self.help_menu.add_cascade(
             label="Hotkeys",
@@ -829,19 +811,19 @@ class EditorMenuClass:
             label="TF2 Hud Editing Guide - DoodlesStuff",
             image=self.img.get("link", 2),
             compound="left",
-            command=lambda: self.open_url(doodle_link),
+            command=lambda: open_url(doodle_link),
         )
         self.help_menu.add_command(
             label="TF2 Hud Editing Guide - DoodlesStuff",
             image=self.img.get("file", 2),
             compound="left",
-            command=lambda: self.open_file(doodle_path),
+            command=lambda: open_file(doodle_path),
         )
         self.help_menu.add_command(
             label="Flame's Guide to HUDs - flamehud by StefanB",
             image=self.img.get("file", 2),
             compound="left",
-            command=lambda: self.open_file(flame_path),
+            command=lambda: open_file(flame_path),
         )
         self.help_menu.add_separator()
 
@@ -1388,7 +1370,7 @@ class EditorMenuClass:
                 menu=self.debug_menu,
             )
             self.main_menu.add_command(
-                label="Close (ESC)", image=self.img.get("cross", 2), compound="left", command=self.do_nothing
+                label="Close (ESC)", image=self.img.get("cross", 2), compound="left", command=None
             )  # useful when displaying menu as popup
 
         # if not self.hud.edit.is_opened():
@@ -1406,6 +1388,7 @@ class EditorMenuClass:
             gui_refresh_thread.start()
 
     def run_gui_refresh(self):
+        """Refresh gui"""
         self.parent.gui_refresh(called_by_editor_menu=True)
 
 
