@@ -54,7 +54,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
 
         from src.menu.menu import EditorMenuClass
 
-        self.my_editor_menu = EditorMenuClass(self, self.root)
+        self.my_editor_menu = EditorMenuClass(self)
         self.enable_hotkey()
 
         if self.debug_instantly_show_menu:
@@ -97,7 +97,7 @@ def main():
     app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
     app.show(hide=True)
     # app.show(hidden=True)
-    
+
     input("Press enter to exit script...")
 
 

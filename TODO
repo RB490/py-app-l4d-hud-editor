@@ -1,1 +1,7 @@
+☐ feat: menu: verify input params eg isinstance BaseGUI & EditorMenuGUI & IsEditorMenuConfigClass
+☐ feat: menu: automatically set all the required variables in the EditorMenuGUI sub creator classes, various ways to do this. possibly create a config class like sourcemod script compiler and use that in the main menu and creator menus
+☐ feat: menu: also do the main() debugging code in such a way there isnt so much duplicate code
+☐ feat: menu: probably make the menu creation methods generic eg instead of create_game_res_menu just have it be create_menu because it gets called with something like this: self.game_map_menu = self.menu_creator_game_map.create_game_map_menu(menubar)
+☐ feat: menu: main menu: create_and_refresh_menu & similar methods. possibly return an actual menu of directly modifying it? similar to how create_menu for the create menu classes returns a menu
+
 ☐ test: Test the program by using it to edit HUD's

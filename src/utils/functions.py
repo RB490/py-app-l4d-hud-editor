@@ -16,6 +16,7 @@ from src.gui.about import GuiAbout
 from .constants import BACKUP_APPEND_STRING, DATA_MANAGER, IMAGES_DIR_EXT
 
 
+
 def persistent_data_remove_invalid_paths_from_list(list_key):
     """Clear invalid paths"""
     stored_huds = DATA_MANAGER.get(list_key)

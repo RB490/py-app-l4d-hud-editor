@@ -1,17 +1,18 @@
-# pylint: disable=attribute-defined-outside-init, broad-exception-caught, too-many-lines
+# pylint: disable=attribute-defined-outside-init
 """Module containing editor menu methods for GuiEditorMenu to keep things organized"""
-
 import os
 import threading
 import tkinter as tk
-from tkinter import Menu, PhotoImage
+from tkinter import Menu
 
 from loguru import logger
-from shared_gui.base import BaseGUI
-from shared_utils.functions import Singleton, add_empty_menu_separator, create_lambda_command, open_file, open_url
+from shared_gui.menu_debug import menu_debug_gui
+from shared_utils.functions import add_empty_menu_separator, create_lambda_command, open_file, open_url
 
 from src.game.constants import DirectoryMode
 from src.game.game import Game
+from src.menu.create_menu_game_map import GameMapMenuCreator
+from src.menu.create_menu_game_res import GameResMenuCreator
 from src.menu.handler import EditorMenuHandler
 from src.utils.constants import (
     DATA_MANAGER,
@@ -20,8 +21,6 @@ from src.utils.constants import (
     HOTKEY_EDITOR_MENU,
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
-    IMAGES_DIR_MISC,
-    MAP_CODES,
     PROJECT_ROOT,
     SNIPPETS_DIR,
     TUTORIALS_DIR,
@@ -33,13 +32,15 @@ class EditorMenuClass:
 
     using this in the main gui because a context menu hotkey doesn't work right in python"""
 
-    def __init__(self, parent_instance, parent_root):
+    def __init__(self, parent_gui):
         self.data_manager = DATA_MANAGER
         self.handler = EditorMenuHandler(self)
-        self.root = parent_root
-        self.parent = parent_instance
-        self.img = self.parent.img
+        self.parent_gui = parent_gui
+        self.img = self.parent_gui.img
         self.game = Game()
+
+        self.menu_creator_game_map = GameMapMenuCreator(self)
+        self.menu_creator_game_res = GameResMenuCreator(self)
         # pylint: disable=import-outside-toplevel # importing outside top level to avoid circular imports
 
         from src.hud.hud import Hud
@@ -50,192 +51,12 @@ class EditorMenuClass:
     def create_game_map_menu(self, menubar):
         """Create game map menu"""
 
-        self.game_map_menu = tk.Menu(menubar, tearoff=0)
-        # self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
-
-        self.map_menu_l4d1_icon = PhotoImage(
-            # file=BIG_CROSS_ICON
-            file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_small_grayscale.png")
-        ).subsample(1, 1)
-        # self.map_menu_l4d2_icon = PhotoImage(
-        #     file=os.path.join(IMAGES_DIR, "Left 4 Dead 2 small grayscale.png")
-        # ).subsample(1, 1)
-
-        self.map_menu_l4d2_icon = PhotoImage(file=os.path.join(IMAGES_DIR_MISC, "left_4_dead_2_small_grayscale.png"))
-
-        # main menu
-        self.game_map_menu.add_command(
-            label="Main Menu",
-            command=self.handler.editor_menu_disconnect,
-            image=self.img.get("black_map_folded_paper_symbol.png", 2),
-            compound="left",
-        )
-        self.game_map_menu.add_separator()
-
-        # misc maps
-        self.game_map_menu.add_command(
-            label="Hud Dev Map",
-            command=lambda: self.handler.editor_menu_game_map("Hud Dev Map", "hud_dev_map"),
-            image=self.img.get("black_map_folded_paper_symbol.png", 2),
-            compound="left",
-        )
-        if self.game.get_version() == "L4D2":
-            self.game_map_menu.add_command(
-                label="Curling Stadium",
-                image=self.img.get("black_map_folded_paper_symbol.png", 2),
-                compound="left",
-                command=lambda: self.handler.editor_menu_game_map("Curling Stadium", "curling_stadium"),
-            )
-        self.game_map_menu.add_command(
-            label="Tutorial Standards",
-            image=self.img.get("black_map_folded_paper_symbol.png", 2),
-            compound="left",
-            command=lambda: self.handler.editor_menu_game_map("Tutorial Standards", "tutorial_standards"),
-        )
-        self.game_map_menu.add_separator()
-
-        # Create the L4D1 and L4D2 submenus
-        map_menu_l4d1 = tk.Menu(self.game_map_menu, tearoff=0)
-        map_menu_l4d2 = tk.Menu(self.game_map_menu, tearoff=0)
-        self.game_map_menu.add_cascade(
-            label="L4D1",
-            menu=map_menu_l4d1,
-            image=self.img.get("black_map_folded_paper_symbol.png", 2),
-            compound=tk.LEFT,
-        )
-        self.game_map_menu.add_cascade(
-            label="L4D2",
-            menu=map_menu_l4d2,
-            image=self.img.get("black_map_folded_paper_symbol.png", 2),
-            compound=tk.LEFT,
-        )
-
-        # Separate L4D1 and L4D2 campaigns
-        l4d1_campaigns = [
-            "No Mercy",
-            "Crash Course",
-            "Death Toll",
-            "Dead Air",
-            "Blood Harvest",
-            "The Sacrifice",
-            "The Last Stand",
-        ]
-        # pylint: disable=unused-variable
-        l4d2_campaigns = [
-            "Dead Center",
-            "Dark Carnival",
-            "Swamp Fever",
-            "Hard Rain",
-            "The Parish",
-            "The Passing",
-            "Cold Stream",
-        ]
-
-        # Loop through each campaign in MAP_CODES
-        for campaign, maps in MAP_CODES.items():
-            # Create a submenu for the campaign
-            if campaign in l4d1_campaigns:
-                campaign_submenu = tk.Menu(map_menu_l4d1, tearoff=0)
-                map_menu_l4d1.add_cascade(
-                    label=campaign,
-                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
-                    compound=tk.LEFT,
-                    menu=campaign_submenu,
-                )
-            else:
-                campaign_submenu = tk.Menu(map_menu_l4d2, tearoff=0)
-                map_menu_l4d2.add_cascade(
-                    label=campaign,
-                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
-                    compound=tk.LEFT,
-                    menu=campaign_submenu,
-                )
-
-            # Add each map to the campaign submenu
-            for map_info in maps:
-                map_name = map_info["name"]
-                map_code = map_info["code"]
-                campaign_submenu.add_command(
-                    label=map_name,
-                    command=create_lambda_command(self.handler.editor_menu_game_map, map_name, map_code),
-                    image=self.img.get("black_map_folded_paper_symbol.png", 2),
-                    compound=tk.LEFT,
-                )
+        self.game_map_menu = self.menu_creator_game_map.create_game_map_menu(menubar)
 
     def create_game_res_menu(self, menubar):
         """Create game resolution menu"""
 
-        self.game_res_menu = tk.Menu(menubar, tearoff=0)
-        res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_9_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_10_menu = tk.Menu(self.game_res_menu, tearoff=0)
-
-        res_4_3_list = [
-            "640x480",
-            "720x576",
-            "800x600",
-            "1024x768",
-            "1152x864",
-            "1280x960",
-            "1400x1050",
-            "1600x1200",
-            "2048x1536",
-        ]
-        for res in res_4_3_list:
-            res_4_3_menu.add_command(
-                label=res,
-                image=self.img.get("monitor_black_tool.png", 2),
-                compound="left",
-                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
-            )
-
-        res_16_9_list = [
-            "852x480",
-            "1280x720",
-            "1360x768",
-            "1366x768",
-            "1600x900",
-            "1920x1080",
-            "2560x1440",
-            "3840x2160",
-        ]
-        for res in res_16_9_list:
-            res_16_9_menu.add_command(
-                label=res,
-                image=self.img.get("monitor_black_tool.png", 2),
-                compound="left",
-                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
-            )
-
-        res_16_10_list = [
-            "720x480",
-            "1280x768",
-            "1280x800",
-            "1440x900",
-            "1600x1024",
-            "1680x1050",
-            "1920x1200",
-            "2560x1600",
-            "3840x2400",
-            "7680x4800",
-        ]
-        for res in res_16_10_list:
-            res_16_10_menu.add_command(
-                label=res,
-                image=self.img.get("monitor_black_tool.png", 2),
-                compound="left",
-                command=create_lambda_command(self.handler.editor_menu_game_resolution, res),
-            )
-
-        self.game_res_menu.add_cascade(
-            label="4:3", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_4_3_menu
-        )
-        self.game_res_menu.add_cascade(
-            label="16:9", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_16_9_menu
-        )
-        self.game_res_menu.add_cascade(
-            label="16:10", image=self.img.get("monitor_black_tool.png", 2), compound="left", menu=res_16_10_menu
-        )
+        self.game_res_menu = self.menu_creator_game_res.create_game_res_menu(menubar)
 
     def create_game_pos_menu(self, menubar):
         """Create game position menu"""
@@ -1119,7 +940,7 @@ class EditorMenuClass:
 
         self.data_manager.save()
 
-        self.main_menu = Menu(self.root, tearoff=False)
+        self.main_menu = Menu(self.parent_gui.root, tearoff=False)
 
         self.create_reload_mode_menu(self.main_menu)
         self.create_hud_menu(self.main_menu)
@@ -1378,44 +1199,28 @@ class EditorMenuClass:
 
         # call method to update menu
         if (
-            self.parent.has_been_run()
-            and hasattr(self.parent, "gui_refresh")
-            and callable(getattr(self.parent, "gui_refresh"))
+            self.parent_gui.has_been_run()
+            and hasattr(self.parent_gui, "gui_refresh")
+            and callable(getattr(self.parent_gui, "gui_refresh"))
             and not is_context_menu  # don't update if showing a context menu. only if menu.handler is refreshing
         ):
-            # self.parent.gui_refresh(called_by_editor_menu=True)
+            # self.parent_gui.gui_refresh(called_by_editor_menu=True)
             gui_refresh_thread = threading.Thread(target=self.run_gui_refresh)
             gui_refresh_thread.start()
 
     def run_gui_refresh(self):
         """Refresh gui"""
-        self.parent.gui_refresh(called_by_editor_menu=True)
-
-
-class debug_editor_menu_class(BaseGUI, metaclass=Singleton):
-    """Debug editor menu"""
-
-    def __init__(self, parent_root):
-        super().__init__(gui_type="sub", parent_root=parent_root)
-        self.root.title("main_debug_editor_menu")
-        self.root.minsize(width=400, height=10)
-        self.root.maxsize(width=400, height=10)
-
-        self.editor_menu = EditorMenuClass(self, self.root)
-        self.root.config(menu=self.editor_menu.get_main_menu())
-
-        context_menu = self.editor_menu.get_context_menu_main()
-        # context_menu = self.editor_menu.get_context_menu_dev()
-
-        pos_x, pos_y = self.root.winfo_pointerxy()
-        self.show_post_menu(context_menu, pos_x, pos_y)
+        self.parent_gui.gui_refresh(called_by_editor_menu=True)
 
 
 def main():
-    """Debug editor menu"""
-    root = tk.Tk()
-    root.withdraw()
-    debug_editor_menu_class(root)
+    """debug"""
+    gui = menu_debug_gui()
+    editor_menu_instance = EditorMenuClass(gui)
+    # main_menu = tk.Menu(gui.root, tearoff=False)
+    menu = EditorMenuClass(gui).get_main_menu()
+    gui.debug_menu(menu)
+    gui.show()
 
 
 if __name__ == "__main__":
