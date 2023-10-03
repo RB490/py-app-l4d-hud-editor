@@ -5,22 +5,18 @@ import tkinter as tk
 
 from shared_gui.menu_debug import menu_debug_gui
 
+from src.menu.base import EditorMenuBase
 from src.utils.constants import IMAGES_DIR_MISC, MAP_CODES
 
 
-class GameMapMenuCreator:
-    """Create game map menu"""
+class MenuGameMap(EditorMenuBase):
+    """Menu"""
 
     def __init__(self, editor_menu_instance):
-        self.editor_menu_instance = editor_menu_instance
-        self.data_manager = self.editor_menu_instance.data_manager
-        self.parent_gui = self.editor_menu_instance.parent_gui
-        self.handler = self.editor_menu_instance.handler
-        self.img = self.editor_menu_instance.img
-        self.game = self.editor_menu_instance.game
+        super().__init__(editor_menu_instance)
 
-    def create_game_map_menu(self, menubar):
-        """Create game map menu"""
+    def get(self, menubar):
+        """get menu"""
 
         self.game_map_menu = tk.Menu(menubar, tearoff=0)
         # self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
@@ -143,12 +139,12 @@ class GameMapMenuCreator:
 
 def main():
     """debug"""
-    from src.menu.menu import EditorMenuClass
+    from menu.main import EditorMenuClass
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
     main_menu = tk.Menu(gui.root, tearoff=False)
-    menu = GameMapMenuCreator(editor_menu_instance).create_game_map_menu(main_menu)
+    menu = MenuGameMap(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()
 

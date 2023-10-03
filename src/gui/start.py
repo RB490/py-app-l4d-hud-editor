@@ -48,7 +48,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
-        from src.menu.menu import EditorMenuClass
+        from menu.main import EditorMenuClass
 
         self.editor_menu = EditorMenuClass(self, self.root)
 

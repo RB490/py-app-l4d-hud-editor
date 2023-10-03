@@ -52,7 +52,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
         self.game = Game()
         self.hud = Hud()
 
-        from src.menu.menu import EditorMenuClass
+        from menu.main import EditorMenuClass
 
         self.my_editor_menu = EditorMenuClass(self)
         self.enable_hotkey()

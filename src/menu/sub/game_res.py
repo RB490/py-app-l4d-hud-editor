@@ -5,20 +5,17 @@ import tkinter as tk
 from shared_gui.menu_debug import menu_debug_gui
 from shared_utils.functions import create_lambda_command
 
+from src.menu.base import EditorMenuBase
 
-class GameResMenuCreator:
-    """Create game map menu"""
+
+class MenuGameRes(EditorMenuBase):
+    """Menu"""
 
     def __init__(self, editor_menu_instance):
-        self.editor_menu_instance = editor_menu_instance
-        self.data_manager = self.editor_menu_instance.data_manager
-        self.parent_gui = self.editor_menu_instance.parent_gui
-        self.handler = self.editor_menu_instance.handler
-        self.img = self.editor_menu_instance.img
-        self.game = self.editor_menu_instance.game
+        super().__init__(editor_menu_instance)
 
-    def create_game_res_menu(self, menubar):
-        """Create game resolution menu"""
+    def get(self, menubar):
+        """get menu"""
 
         self.game_res_menu = tk.Menu(menubar, tearoff=0)
         res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=0)
@@ -97,12 +94,12 @@ class GameResMenuCreator:
 
 def main():
     """debug"""
-    from src.menu.menu import EditorMenuClass
+    from src.menu.main import EditorMenuClass
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
     main_menu = tk.Menu(gui.root, tearoff=False)
-    menu = GameResMenuCreator(editor_menu_instance).create_game_res_menu(main_menu)
+    menu = MenuGameRes(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()
 

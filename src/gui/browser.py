@@ -21,7 +21,7 @@ from src.gui.descriptions import GuiHudDescriptions
 from src.gui.popup import GuiEditorMenuPopup
 from src.gui.vdf_tool import VDFModifierGUI
 from src.hud.hud import Hud, get_hud_debug_instance
-from src.menu.menu import EditorMenuClass
+from menu.main import EditorMenuClass
 from src.utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
