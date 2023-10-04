@@ -4,7 +4,6 @@ import os
 import shutil
 
 from loguru import logger
-
 from shared_utils.functions import Singleton
 
 from src.game.constants import DirectoryMode, DirModeError, InstallationState, SyncState, TitleRetrievalError
@@ -22,7 +21,7 @@ class Game(metaclass=Singleton):
         self.data_manager = DATA_MANAGER
         from src.game.commands import GameCommands
         from src.game.dir import GameDir
-        from src.game.installer import GameInstaller
+        from src.game.installer.installer import GameInstaller
         from src.game.window import GameWindow
 
         self.window = GameWindow(self)
@@ -137,6 +136,7 @@ class Game(metaclass=Singleton):
         else:
             return True
 
+
 def debug_game_class_set_states_synced_and_installed():
     """Debug"""
     game_class = Game()
@@ -228,6 +228,7 @@ def main():
     # Result
     ###########################
     print(f"result = {result}")
+
 
 if __name__ == "__main__":
     main()

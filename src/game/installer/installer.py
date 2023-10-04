@@ -18,7 +18,7 @@ from shared_utils.functions import copy_directory, show_message
 from src.game.constants import DirectoryMode, InstallationError, InstallationState
 
 # pylint: disable=unused-import
-from src.game.installer_prompts import prompt_delete, prompt_start, prompt_verify_game
+from src.game.installer.prompts import prompt_delete, prompt_start, prompt_verify_game
 from src.utils.constants import MODS_DIR
 from src.utils.functions import count_files_and_dirs, get_backup_path, wait_process_close
 
@@ -42,12 +42,12 @@ class GameInstaller:
         if not prompt_delete():
             return False
 
-        self.__perform_uninstall()
+        self._perform_uninstall()
 
         # finished
         show_message("Finished uninstalling!", "info")
 
-    def __perform_uninstall(self):
+    def _perform_uninstall(self):
         # set deletion state
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.PENDING_DELETION)
 
@@ -84,7 +84,7 @@ class GameInstaller:
         os.rmdir(path)
 
         rem_gui.update_progress(f"Deletion completed: {files_processed}/{total_files} files")
-        time.sleep(4) # show the deletion completed message for a little while before closing
+        time.sleep(4)  # show the deletion completed message for a little while before closing
         rem_gui.destroy()
 
     def update(self):
@@ -158,28 +158,28 @@ class GameInstaller:
                 extra_message = "Consider if you want to try to repair the installation instead of deleting it"
                 if not prompt_delete(extra_message):
                     return False
-                self.__perform_uninstall()
+                self._perform_uninstall()
 
         # activate developer mode
         if self.game.installation_exists(DirectoryMode.DEVELOPER):
             self.game.dir.set(DirectoryMode.DEVELOPER)
 
         # enable paks
-        self.__enable_paks()
+        self._enable_paks()
 
         # set resume state
         self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, resume_state)
 
         # perform installation steps
         try:
-            self.__process_installation_steps(resume_state, action_description)
+            self._process_installation_steps(resume_state, action_description)
             show_message(f"Finished {action_description.lower()}!", "info")
             return True
         except Exception as err_info:
             show_message(f"{action_description} error: {err_info}", "error")
             return False
 
-    def __process_installation_steps(self, resume_state, action_description):
+    def _process_installation_steps(self, resume_state, action_description):
         installation_steps = [
             InstallationState.CREATE_DEV_DIR,
             InstallationState.COPYING_FILES,
@@ -206,7 +206,7 @@ class GameInstaller:
             for _, state in enumerate(installation_steps[last_completed_index:]):
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
                 p_gui.update_progress(state.name)
-                self.__perform_installation_step(state)
+                self._perform_installation_step(state)
                 time.sleep(2)  # artifically was some amount of time so very short steps are still visible in gui
 
             # close progress gui
@@ -219,27 +219,27 @@ class GameInstaller:
             p_gui.destroy()
             raise InstallationError(f"Installation step error: {err_info}") from err_info
 
-    def __perform_installation_step(self, state):
+    def _perform_installation_step(self, state):
         "perform"
         logger.debug(f"Performing installation step with state: {state}")
 
         if state == InstallationState.CREATE_DEV_DIR:
-            self.__create_dev_dir()
+            self._create_dev_dir()
         elif state == InstallationState.COPYING_FILES:
-            self.__copy_game_files()
+            self._copy_game_files()
         elif state == InstallationState.VERIFYING_GAME:
-            self.__prompt_verify_game()
+            self._prompt_verify_game()
         elif state == InstallationState.EXTRACTING_PAKS:
-            self.__extract_paks()
-            self.__disable_paks()
+            self._extract_paks()
+            self._disable_paks()
         elif state == InstallationState.MAIN_DIR_BACKUP:
             self._main_dir_backup()
         elif state == InstallationState.INSTALLING_MODS:
-            self.__install_mods()
+            self._install_mods()
         elif state == InstallationState.REBUILDING_AUDIO:
-            self.__rebuild_audio()
+            self._rebuild_audio()
 
-    def __create_dev_dir(self):
+    def _create_dev_dir(self):
         logger.debug("Creating developer directory")
 
         dev_dir = self.game.dir._get_random_dir_name_for(DirectoryMode.DEVELOPER)
@@ -260,7 +260,7 @@ class GameInstaller:
         self.game.dir.set(DirectoryMode.DEVELOPER)
         return
 
-    def __copy_game_files(self):
+    def _copy_game_files(self):
         user_dir = self.game.dir.get(DirectoryMode.USER)
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
         user_id_file_name = self.game.dir.id.get_file_name(DirectoryMode.USER)
@@ -280,11 +280,11 @@ class GameInstaller:
             if os.path.isdir(src_subfolder):
                 copy_directory(src_subfolder, dest_subfolder)
 
-    def __prompt_verify_game(self):
+    def _prompt_verify_game(self):
         logger.debug("Prompting user to verify game")
         prompt_verify_game()
 
-    def __extract_paks(self):
+    def _extract_paks(self):
         """Extract all files from the pak01_dir.vpk files located in the specified game directory
         to their respective root directories."""
         logger.debug("Extracting pak01.vpk's")
@@ -309,7 +309,7 @@ class GameInstaller:
         for thread in threads:
             thread.join()
 
-    def __enable_paks(self):
+    def _enable_paks(self):
         logger.debug("Enabling pak01.vpk's")
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
 
@@ -325,7 +325,7 @@ class GameInstaller:
             os.rename(source_filepath, target_filepath)
             logger.debug(f"Renaming file {source_filepath} -> {target_filepath}")
 
-    def __disable_paks(self):
+    def _disable_paks(self):
         logger.debug("Disabling pak01.vpk's")
 
         pak01_data = self.game.dir._get_pak01_dirs_with_files(DirectoryMode.DEVELOPER)
@@ -363,7 +363,7 @@ class GameInstaller:
                 materials_backup_dir,
             )
 
-    def __install_mods(self):
+    def _install_mods(self):
         logger.debug("Installing mods")
 
         # variables
@@ -387,7 +387,7 @@ class GameInstaller:
         copy_directory(mods_addons_dir, main_dir)
         copy_directory(mods_sourcemod_dir, main_dir)
 
-    def __rebuild_audio(self):
+    def _rebuild_audio(self):
         logger.debug("Rebuilding audio")
 
         # variables
@@ -408,3 +408,17 @@ class GameInstaller:
 
         # write default config so manually running the game doesn't rebuild audiocache -> exit
         self.game.write_config()
+
+
+def main():
+    from src.game.game import Game
+
+    game = Game()
+    installer = GameInstaller(game)
+    # installer.install()
+    installer._prompt_verify_game()
+    print("this is a test!")
+
+
+if __name__ == "__main__":
+    main()

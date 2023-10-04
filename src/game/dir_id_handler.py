@@ -39,7 +39,6 @@ class GameIDHandler:
 
     @call_validate_dir_mode_before_method
     def get_file_name(self, dir_mode):
-        self.game._validate_dir_mode(dir_mode)
         return self.id_file_names[dir_mode]
 
     def __get_path(self, dir_mode):
@@ -60,8 +59,6 @@ class GameIDHandler:
         logger.info(f"Manually setting directory for: {dir_mode.name}")
 
         try:
-            self.game._validate_dir_mode(dir_mode)
-
             # prompt - manually select location?
             message = (
                 f"Could not find {self.game.get_title()} ID file for the {dir_mode.name} installation directory!\n\n"

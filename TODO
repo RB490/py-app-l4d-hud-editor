@@ -1,6 +1,1 @@
-☐ refactor: menu: i think i should modify create_and_refresh_menu, both the title, and maybe also the fact that it calls the gui backwards?
-    ☐ feat: menu: main menu: create_and_refresh_menu & similar methods. possibly return an actual menu of directly modifying it? similar to how create_menu for the create menu classes returns a menu
-
-
-
 ☐ test: Test the program by using it to edit HUD's
