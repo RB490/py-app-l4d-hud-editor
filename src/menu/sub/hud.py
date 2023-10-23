@@ -6,7 +6,7 @@ from shared_gui.menu_debug import menu_debug_gui
 from shared_utils.functions import create_lambda_command
 
 from src.menu.base import EditorMenuBase
-from src.utils.constants import GAME_POSITIONS, HOTKEY_SYNC_HUD
+from src.utils.constants import HOTKEY_SYNC_HUD
 
 
 class MenuHud(EditorMenuBase):
@@ -21,7 +21,7 @@ class MenuHud(EditorMenuBase):
         self.hud_menu = tk.Menu(menubar, tearoff=True)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
         if self.hud.edit.is_synced():
-            self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
+            self.hud_menu.entryconfigure(1, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
         self.hud_menu.add_separator()
         self.hud_menu.add_command(
             label=f"Sync ({HOTKEY_SYNC_HUD})",
