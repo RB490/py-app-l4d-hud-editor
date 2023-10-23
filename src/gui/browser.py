@@ -581,10 +581,19 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         rel_path = self.get_selected_relative_path()
         vanilla_file = self.game.dir.get_vanilla_file(rel_path)
 
+        # verify variables
+        if not rel_path:
+            raise ValueError(f"Relative path '{rel_path}' is not available")
+
+        if not vanilla_file or not os.path.exists(vanilla_file):
+            raise FileNotFoundError(f"Vanilla file '{vanilla_file}' is None or does not exist")
+
         # create directory if needed, and copy file
         logger.info(f"Adding new file: '{vanilla_file}' -> '{full_path}'")
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         shutil.copyfile(vanilla_file, full_path)
+        if not full_path or not os.path.exists(full_path):
+            raise FileNotFoundError(f"Full path '{full_path}' is None or does not exist")
 
         # update treeview
         self.treeview_refresh()

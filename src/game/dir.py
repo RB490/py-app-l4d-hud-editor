@@ -15,7 +15,7 @@ from src.utils.functions import get_backup_filename, get_backup_path, get_start_
 from src.utils.steam_info_retriever import SteamInfoRetriever
 
 
-def raise_exception_if_invalid_path(func):
+def raise_exception_if_invalid_path_format(func):
     "Check if hwnd is running"
 
     @functools.wraps(func)
@@ -97,7 +97,7 @@ class GameDir:
 
         return True
 
-    @raise_exception_if_invalid_path
+    @raise_exception_if_invalid_path_format
     def get_vanilla_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file"""
 
@@ -112,11 +112,20 @@ class GameDir:
         # add backup directory last so it's searched last so the code preferably returns file in the main directory
         game_file_directories.append(get_backup_path(self.get_main_dir(DirectoryMode.DEVELOPER)))
 
+        # verify variables
+        if not game_dir or not os.path.exists(game_dir):
+            raise FileNotFoundError(f"Game dir '{game_dir}' is None or does not exist")
+
+        if len(game_file_directories) < 1:
+            raise ValueError(f"The list game_file_directories must contain at least one item: {game_file_directories}")
+
         # search game folders for relative file path
         for game_dir in game_file_directories:
             file_path = os.path.join(game_dir, relative_file_path)
             if is_synced:
-                file_path = get_backup_path(file_path)
+                backup_file_path = get_backup_path(file_path)
+                if os.path.isfile(backup_file_path):
+                    file_path = backup_file_path
 
             if os.path.isfile(file_path):
                 logger.debug(f"Get vanilla file: '{relative_file_path}'")
@@ -126,7 +135,7 @@ class GameDir:
         logger.debug(f"No vanilla file available, custom file: '{relative_file_path}'")
         return False
 
-    @raise_exception_if_invalid_path
+    @raise_exception_if_invalid_path_format
     def is_custom_file(self, relative_file_path):
         """Search all game directories including the backup folder to find the file
 

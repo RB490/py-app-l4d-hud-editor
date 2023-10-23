@@ -10,6 +10,8 @@
 
 import os
 
+from shared_utils.functions import loguru_setup_logging_filter
+
 from src.utils.functions import preform_checks_to_prepare_program_start, show_start_gui
 
 # from packages.game.game import Game
@@ -21,5 +23,6 @@ os.system("cls")  # clear terminal
 #     Auto-execute
 # ====================================================================================================
 
+loguru_setup_logging_filter("DEBUG", "exclude", ["shared_managers.hwnd_manager"])
 preform_checks_to_prepare_program_start()
 show_start_gui()
