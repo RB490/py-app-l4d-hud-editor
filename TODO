@@ -1,4 +1,3 @@
-☐ fix: hwnd manager: send keys in foreground doesn't work for left 4 dead (or is this not fixable?) it does work correctly for other programs
-    - ^ probably remove this task? just how the game is coded, surely
+
 
 ☐ test: Test the program by using it to edit HUD's

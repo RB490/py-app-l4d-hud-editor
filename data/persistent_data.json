@@ -1,8 +1,8 @@
 {
     "BrowserGuiGeometry": "828x517+114+776",
-    "GuiGeometryBrowser": "761x269+56+615",
+    "GuiGeometryBrowser": "761x289+56+615",
     "GuiGeometryDescriptions": "200x200+130+130",
-    "GuiGeometryStart": "865x700+576+640",
+    "GuiGeometryStart": "865x720+221+555",
     "GuiGeometryVDF": "1170x576+946+434",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "875x425+159+110",

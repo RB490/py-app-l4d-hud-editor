@@ -501,7 +501,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         selected_dir = self.selected_hud_dir
         edited_dir = self.hud.edit.get_dir()
 
-        if selected_dir and edited_dir:
+        if selected_dir and edited_dir and self.hud.edit.is_being_edited():
             return selected_dir.lower() == edited_dir.lower()
         else:
             return False

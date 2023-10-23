@@ -32,6 +32,7 @@ class HudEditor:
         self.hotkey_manager = HotkeyManager()
         self.hud_dir = None
         self.hud_name = None
+        self.is_being_edited_status = False
         self.threaded_timer_game_exit = None
 
     def is_synced_and_being_edited(self):
@@ -40,6 +41,9 @@ class HudEditor:
         if self.syncer.is_synced() and self.syncer.get_source_dir() == self.get_dir():
             return True
         return False
+
+    def is_being_edited(self):
+        return self.is_being_edited_status
 
     def start_editing(self, hud_dir, called_by_start_gui=False):
         """Perform all the actions needed to start hud editing"""
@@ -54,6 +58,9 @@ class HudEditor:
         logger.info(f"Start editing: ({hud_dir})")
 
         try:
+            # Update edited status (set to True at the end of start_editing)
+            self.is_being_edited_status = False
+            
             # update browser (and thereby the start gui)
             get_browser_gui().gui_refresh()
 
@@ -127,6 +134,9 @@ class HudEditor:
 
             # Open browser
             show_browser_gui()
+            
+            # Update edited status
+            self.is_being_edited_status = True
         finally:
             splash.hide()
 
@@ -161,6 +171,9 @@ class HudEditor:
 
     def stop_editing(self):
         """Unsync & stop editing hud"""
+
+        # Update edited status
+        self.is_being_edited_status = False
 
         # remove hotkey
         self.hotkey_manager.remove_hotkey(HOTKEY_SYNC_HUD)
