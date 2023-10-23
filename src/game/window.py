@@ -1,12 +1,12 @@
 # pylint: disable=broad-exception-caught, c-extension-no-member
 "Game class window methods"
 # pylint: disable=protected-access, broad-exception-raised
-import subprocess
+
 
 import win32gui
 from loguru import logger
 from shared_managers.hwnd_manager import HwndManager
-from shared_utils.functions import show_message
+from shared_utils.functions import run_subprocess, show_message
 
 from src.game.constants import InstallationState
 from src.utils.constants import DATA_MANAGER, GAME_POSITIONS
@@ -105,7 +105,7 @@ class GameWindow:
         else:
             self.hwnd_utils.set_always_on_top(self.game.window.get_hwnd(), False)
 
-    def run(self, dir_mode, write_config=True):
+    def run(self, dir_mode, write_config=True, restore_pos=False):
         """Start the game
         'write_config' param is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
 
@@ -146,14 +146,10 @@ class GameWindow:
         steam_exe = self.game.steam.get_exe_path()
         steam_command = f'"{steam_exe}" {steam_args} {" ".join(game_args)}'
 
-        result = subprocess.Popen(
-            steam_command,
-            shell=True,
-            creationflags=subprocess.DETACHED_PROCESS,
-            start_new_session=True,  # Required for some platforms
-        )
-        if not result:
-            raise ValueError("Unable to run game!")
+        try:
+            run_subprocess(steam_command)
+        except Exception as e:
+            raise ValueError(f"Unable to run game: {e}") from e
 
         # wait for game to fully open
         hwnd = self.hwnd_utils.get_hwnd_from_process_name_with_timeout_and_optionally_ram_usage(
@@ -163,7 +159,8 @@ class GameWindow:
         # set hwnd
         if hwnd:
             self.__set_hwnd(hwnd)
-            self.restore_saved_position()
+            if restore_pos:
+                self.restore_saved_position()
             return True
         else:
             return False

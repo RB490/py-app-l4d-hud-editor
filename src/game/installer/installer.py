@@ -406,7 +406,7 @@ class GameInstaller:
 
         # run game to rebuild audio
         self.game.window.close()
-        result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False)  # don't overwrite valve.rc
+        result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False, restore_pos=False)  # don't overwrite valve.rc & don't restore position as this hangs the code while rebuilding audio cache until after the game is closed
 
         logger.debug("debug: game is fully running!")
         if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
