@@ -9,7 +9,7 @@ import send2trash
 from loguru import logger
 from PIL import Image, ImageTk
 from shared_gui.base import BaseGUI
-from shared_managers.valve_vpk_manager import VPKManager
+from shared_managers.valve_vpk_manager import VPKManager  # type: ignore
 from shared_utils.functions import Singleton, copy_directory, show_message
 
 from src.game.game import Game

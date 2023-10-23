@@ -181,6 +181,7 @@ class GameDir:
         return None
 
     def get_active_mode(self):
+        """User or developer mode is active"""
         dev_dir = self.get(DirectoryMode.DEVELOPER)
         user_dir = self.get(DirectoryMode.USER)
         vanilla_dir = self.__get_vanilla_dir()

@@ -1,6 +1,5 @@
 
 
-☐ fix: start gui is incorrectly being detected as having a menu attached to it by base gui, and therefore getting +20 height pixels
 
 ☐ fix: add 'scripts' folder to the backup
 
