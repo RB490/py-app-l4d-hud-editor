@@ -12,7 +12,7 @@ import time
 
 from loguru import logger
 from shared_gui.progress import ProgressGUI
-from shared_managers.valve_vpk_manager import VPKManager
+from shared_managers.valve_vpk_manager import VPKManager  # type: ignore
 from shared_utils.functions import copy_directory, show_message
 
 from src.game.constants import DirectoryMode, InstallationError, InstallationState
@@ -344,9 +344,11 @@ class GameInstaller:
 
             resource_dir = self.game.dir.get_subdir(pak01_dir, "resource")
             materials_dir = self.game.dir.get_subdir(pak01_dir, "materials")
+            scripts_dir = self.game.dir.get_subdir(pak01_dir, "scripts")
 
             resource_backup_dir = os.path.join(get_backup_path(pak01_dir), "resource")
             materials_backup_dir = os.path.join(get_backup_path(pak01_dir), "materials")
+            scripts_backup_dir = os.path.join(get_backup_path(pak01_dir), "scripts")
 
             # remove old backup dir
             if os.path.isdir(backup_dir):
@@ -361,6 +363,10 @@ class GameInstaller:
             copy_directory(
                 materials_dir,
                 materials_backup_dir,
+            )
+            copy_directory(
+                scripts_dir,
+                scripts_backup_dir,
             )
 
     def _install_mods(self):
@@ -411,6 +417,7 @@ class GameInstaller:
 
 
 def main():
+    """main"""
     from src.game.game import Game
 
     game = Game()
