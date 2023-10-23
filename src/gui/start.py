@@ -48,9 +48,9 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         # Bind the function to the selection event
         self.treeview.bind("<<TreeviewSelect>>", self.tree_set_selected_item)
 
-        from menu.main import EditorMenuClass
+        from src.menu.main import EditorMenuClass
 
-        self.editor_menu = EditorMenuClass(self, self.root)
+        self.editor_menu = EditorMenuClass(self)
 
         self.gui_refresh()
 
@@ -241,7 +241,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
     def __create_context_menu(self):
         # Create a context menu for the treeview
-        self.context_menu = tk.Menu(self.treeview, tearoff=0)
+        self.context_menu = tk.Menu(self.treeview, tearoff=True)
         self.context_menu.add_command(
             label="Edit",
             command=self.selected_hud_start_editing,
@@ -267,6 +267,13 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             label="Export as Folder",
             command=self.selected_hud_export_directory,
             image=self.img.get("save", 2),
+            compound="left",
+        )
+        self.context_menu.add_separator()
+        self.context_menu.add_command(
+            label="Refresh",
+            command=self.treeview_refresh,
+            image=self.img.get("reload", 2),
             compound="left",
         )
         self.context_menu.add_separator()
@@ -311,7 +318,7 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
         """Export the selected hud as a vpk file or directory"""
 
         # Create the menu
-        vpk_export_menu = tk.Menu(self.root, tearoff=0)
+        vpk_export_menu = tk.Menu(self.root, tearoff=True)
 
         # vpk_export_menu.add_command(label="Export", state=tk.DISABLED, command=lambda: None)
         # vpk_export_menu.add_separator()
@@ -510,10 +517,12 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
             else:
                 save_and_exit_script()
 
+
 def main():
     "There can only be one main Tkinter GUI using root.mainloop() at oncee"
     start_gui = GuiHudStart()
     start_gui.show()
+
 
 if __name__ == "__main__":
     main()

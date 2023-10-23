@@ -18,8 +18,8 @@ class MenuReloadMode(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.reload_mode_menu = tk.Menu(menubar, tearoff=0)
-        reload_once_menu = tk.Menu(menubar, tearoff=0)
+        self.reload_mode_menu = tk.Menu(menubar, tearoff=True)
+        reload_once_menu = tk.Menu(menubar, tearoff=True)
 
         self.reload_mode_menu.add_command(label="Modes", state="disabled")
         self.reload_mode_menu.add_separator()
@@ -106,7 +106,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuReloadMode(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

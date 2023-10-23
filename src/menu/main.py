@@ -99,7 +99,7 @@ class EditorMenuClass:
 
         self.data_manager.save()
 
-        self.main_menu = Menu(self.parent_gui.root, tearoff=False)
+        self.main_menu = Menu(self.parent_gui.root, tearoff=True)
 
         self.reload_mode_menu = self.menu_reload_mode.get(self.main_menu)
         self.hud_menu = self.menu_hud.get(self.main_menu)
@@ -122,7 +122,7 @@ class EditorMenuClass:
         #       Parent tools menu
         # ----------------------------------
 
-        self.tools_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.tools_menu = tk.Menu(self.main_menu, tearoff=True)
         self.editor_menu_inspect_hud_checkmark = tk.BooleanVar()
         self.tools_menu.add_checkbutton(
             label="Inspect",
@@ -159,7 +159,7 @@ class EditorMenuClass:
         #       Parent File menu
         # ----------------------------------
 
-        self.file_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.file_menu = tk.Menu(self.main_menu, tearoff=True)
         self.file_menu.add_command(
             label="Start",
             image=self.img.get("flag_black_cutted_shape.png", 2),
@@ -196,7 +196,7 @@ class EditorMenuClass:
         #       Parent Tools menu
         # ----------------------------------
 
-        self.debug_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.debug_menu = tk.Menu(self.main_menu, tearoff=True)
         self.debug_menu.add_command(
             label="Game cmd",
             command=self.handler.editor_prompt_game_command,
@@ -228,7 +228,7 @@ class EditorMenuClass:
         # ----------------------------------
         #       Parent Game menu
         # ----------------------------------
-        self.game_menu = tk.Menu(self.main_menu, tearoff=0)
+        self.game_menu = tk.Menu(self.main_menu, tearoff=True)
 
         self.game_menu.add_cascade(
             label="Position",

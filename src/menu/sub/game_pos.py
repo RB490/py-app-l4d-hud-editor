@@ -18,7 +18,7 @@ class MenuGamePos(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.game_pos_menu = tk.Menu(menubar, tearoff=0)
+        self.game_pos_menu = tk.Menu(menubar, tearoff=True)
         self.game_pos_vars = {}
         for pos in GAME_POSITIONS:
             self.game_pos_vars[pos] = tk.BooleanVar()
@@ -43,7 +43,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuGamePos(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

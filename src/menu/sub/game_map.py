@@ -18,8 +18,8 @@ class MenuGameMap(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.game_map_menu = tk.Menu(menubar, tearoff=0)
-        # self.game_map_menu = tk.Menu(self.game_menu, tearoff=0)
+        self.game_map_menu = tk.Menu(menubar, tearoff=True)
+        # self.game_map_menu = tk.Menu(self.game_menu, tearoff=True)
 
         self.map_menu_l4d1_icon = tk.PhotoImage(
             # file=BIG_CROSS_ICON
@@ -65,8 +65,8 @@ class MenuGameMap(EditorMenuBase):
         self.game_map_menu.add_separator()
 
         # Create the L4D1 and L4D2 submenus
-        map_menu_l4d1 = tk.Menu(self.game_map_menu, tearoff=0)
-        map_menu_l4d2 = tk.Menu(self.game_map_menu, tearoff=0)
+        map_menu_l4d1 = tk.Menu(self.game_map_menu, tearoff=True)
+        map_menu_l4d2 = tk.Menu(self.game_map_menu, tearoff=True)
         self.game_map_menu.add_cascade(
             label="L4D1",
             menu=map_menu_l4d1,
@@ -105,7 +105,7 @@ class MenuGameMap(EditorMenuBase):
         for campaign, maps in MAP_CODES.items():
             # Create a submenu for the campaign
             if campaign in l4d1_campaigns:
-                campaign_submenu = tk.Menu(map_menu_l4d1, tearoff=0)
+                campaign_submenu = tk.Menu(map_menu_l4d1, tearoff=True)
                 map_menu_l4d1.add_cascade(
                     label=campaign,
                     image=self.img.get("black_map_folded_paper_symbol.png", 2),
@@ -113,7 +113,7 @@ class MenuGameMap(EditorMenuBase):
                     menu=campaign_submenu,
                 )
             else:
-                campaign_submenu = tk.Menu(map_menu_l4d2, tearoff=0)
+                campaign_submenu = tk.Menu(map_menu_l4d2, tearoff=True)
                 map_menu_l4d2.add_cascade(
                     label=campaign,
                     image=self.img.get("black_map_folded_paper_symbol.png", 2),
@@ -143,7 +143,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuGameMap(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

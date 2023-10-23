@@ -21,7 +21,7 @@ from src.gui.descriptions import GuiHudDescriptions
 from src.gui.popup import GuiEditorMenuPopup
 from src.gui.vdf_tool import VDFModifierGUI
 from src.hud.hud import Hud, get_hud_debug_instance
-from menu.main import EditorMenuClass
+from src.menu.main import EditorMenuClass
 from src.utils.constants import (
     APP_ICON,
     BIG_CROSS_ICON,
@@ -75,7 +75,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         self.search_box.bind("<KeyRelease>", self.treeview_search)
 
         # editor menu
-        self.editor_menu = EditorMenuClass(self, self.root)
+        self.editor_menu = EditorMenuClass(self)
         self.gui_refresh()
 
         # set hwnd
@@ -287,7 +287,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
             is_new_file = False
 
         # Create a context menu
-        self.context_menu = tk.Menu(self.treeview, tearoff=False)
+        self.context_menu = tk.Menu(self.treeview, tearoff=True)
         if is_new_file:
             self.context_menu.add_command(
                 label="Add File",

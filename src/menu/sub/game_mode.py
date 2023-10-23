@@ -18,7 +18,7 @@ class MenuGameMode(EditorMenuBase):
         """get menu"""
 
         game_modes = ["Coop", "Survival", "Versus", "Scavenge"]
-        self.game_mode_menu = tk.Menu(menubar, tearoff=0)
+        self.game_mode_menu = tk.Menu(menubar, tearoff=True)
         self.game_mode_vars = {}
         for game_mode in game_modes:
             self.game_mode_vars[game_mode] = tk.BooleanVar()
@@ -43,7 +43,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuGameMode(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

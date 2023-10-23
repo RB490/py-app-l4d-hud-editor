@@ -17,10 +17,10 @@ class MenuGameRes(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.game_res_menu = tk.Menu(menubar, tearoff=0)
-        res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_9_menu = tk.Menu(self.game_res_menu, tearoff=0)
-        res_16_10_menu = tk.Menu(self.game_res_menu, tearoff=0)
+        self.game_res_menu = tk.Menu(menubar, tearoff=True)
+        res_4_3_menu = tk.Menu(self.game_res_menu, tearoff=True)
+        res_16_9_menu = tk.Menu(self.game_res_menu, tearoff=True)
+        res_16_10_menu = tk.Menu(self.game_res_menu, tearoff=True)
 
         res_4_3_list = [
             "640x480",
@@ -98,7 +98,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuGameRes(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

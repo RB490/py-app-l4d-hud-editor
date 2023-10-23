@@ -18,13 +18,13 @@ class MenuLoadHud(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.load_hud_menu = tk.Menu(menubar, tearoff=0)
+        self.load_hud_menu = tk.Menu(menubar, tearoff=True)
 
         #######################################################################
         # stored huds
         #######################################################################
-        stored_huds_submenu = tk.Menu(menubar, tearoff=0)
-        remove_stored_hud_menu = tk.Menu(menubar, tearoff=0)
+        stored_huds_submenu = tk.Menu(menubar, tearoff=True)
+        remove_stored_hud_menu = tk.Menu(menubar, tearoff=True)
         self.load_hud_menu.add_cascade(
             label="Stored",
             image=self.img.get("open", 2),
@@ -73,8 +73,8 @@ class MenuLoadHud(EditorMenuBase):
         #######################################################################
         # temp huds
         #######################################################################
-        temp_huds_submenu = tk.Menu(menubar, tearoff=0)
-        remove_temp_hud_menu = tk.Menu(menubar, tearoff=0)
+        temp_huds_submenu = tk.Menu(menubar, tearoff=True)
+        remove_temp_hud_menu = tk.Menu(menubar, tearoff=True)
         self.load_hud_menu.add_cascade(
             label="Temporary",
             image=self.img.get("open", 2),
@@ -123,7 +123,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuLoadHud(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

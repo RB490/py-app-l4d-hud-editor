@@ -21,7 +21,7 @@ class MenuDevInstall(EditorMenuBase):
         """get menu"""
 
         # Create the menu
-        self.dev_install_menu = tk.Menu(menubar, tearoff=0)
+        self.dev_install_menu = tk.Menu(menubar, tearoff=True)
 
         # Directory Actions
         # -----------------
@@ -132,7 +132,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuDevInstall(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

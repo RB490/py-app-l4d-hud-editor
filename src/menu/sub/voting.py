@@ -138,7 +138,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuVoting(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

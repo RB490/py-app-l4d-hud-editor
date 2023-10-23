@@ -18,7 +18,7 @@ class MenuHud(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.hud_menu = tk.Menu(menubar, tearoff=0)
+        self.hud_menu = tk.Menu(menubar, tearoff=True)
         self.hud_menu.add_command(label="<hud_name>", state="disabled")
         if self.hud.edit.is_synced():
             self.hud_menu.entryconfigure(0, label=self.hud.manager.retrieve_hud_name_for_dir(self.hud.edit.get_dir()))
@@ -89,7 +89,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuHud(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

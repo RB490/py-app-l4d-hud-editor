@@ -54,7 +54,7 @@ class MenuShowPanel(EditorMenuBase):
 
         # Create general menu and add common options
         self.show_panel_menu_selected_var = tk.BooleanVar()
-        self.show_panel_menu = tk.Menu(menubar, tearoff=0)
+        self.show_panel_menu = tk.Menu(menubar, tearoff=True)
         for key, value in show_panel_dict["general"].items():
             command = create_lambda_command(self.handler.editor_menu_show_panel, value)
 
@@ -113,7 +113,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuShowPanel(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()

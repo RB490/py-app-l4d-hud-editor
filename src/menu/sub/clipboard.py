@@ -19,7 +19,7 @@ class MenuClipboard(EditorMenuBase):
     def get(self, menubar):
         """get menu"""
 
-        self.clipboard_menu = tk.Menu(menubar, tearoff=0)
+        self.clipboard_menu = tk.Menu(menubar, tearoff=True)
 
         for file_name in os.listdir(SNIPPETS_DIR):
             file_path = os.path.join(SNIPPETS_DIR, file_name)
@@ -41,7 +41,7 @@ def main():
 
     gui = menu_debug_gui()
     editor_menu_instance = EditorMenuClass(gui)
-    main_menu = tk.Menu(gui.root, tearoff=False)
+    main_menu = tk.Menu(gui.root, tearoff=True)
     menu = MenuClipboard(editor_menu_instance).get(main_menu)
     gui.debug_menu(menu)
     gui.show()
