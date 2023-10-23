@@ -1,8 +1,8 @@
 {
     "BrowserGuiGeometry": "828x517+114+776",
-    "GuiGeometryBrowser": "761x369+56+615",
-    "GuiGeometryDescriptions": "200x200+130+130",
-    "GuiGeometryStart": "865x565+221+555",
+    "GuiGeometryBrowser": "761x429+70+859",
+    "GuiGeometryDescriptions": "503x507+487+358",
+    "GuiGeometryStart": "865x565+1046+495",
     "GuiGeometryVDF": "1170x576+946+434",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "875x425+159+110",
@@ -17,8 +17,8 @@
     "game_pos": "Top Left",
     "game_pos_custom_coord": null,
     "game_res": [
-        1024,
-        768
+        800,
+        600
     ],
     "hud_reload_mode": "reload_hud",
     "reload_mouse_clicks_coord_1": [

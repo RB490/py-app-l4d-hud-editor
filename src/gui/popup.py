@@ -96,6 +96,7 @@ def main():
     # app = GuiEditorMenuPopup(root)
     app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
     app.show(hide=True)
+    # app.show(hide=False)
     # app.show(hidden=True)
 
     input("Press enter to exit script...")
