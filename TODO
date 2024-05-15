@@ -1,3 +1,19 @@
+☐ bug: run browser.py -> Exception has occurred: TclError
+image "pyimage2" doesn't exist
+  File "D:\projects\py-app-l4d-hud-editor\src\menu\sub\reload_mode.py", line 30, in get
+    self.reload_mode_menu.add_radiobutton(
+  File "D:\projects\py-app-l4d-hud-editor\src\menu\main.py", line 104, in create_and_refresh_menu
+    self.reload_mode_menu = self.menu_reload_mode.get(self.main_menu)
 
+    - info: gets fixed when disabling: preform_checks_to_prepare_program_start()
+
+    - the issue: the tkinter msgbox that shows when dev installation is out of date
+        if g_game.dir.dev_out_of_date():
+            show_message("Developer directory is out of date!\nConsider updating it", "warning")
+    - solution: no idea
+
+☐ bug: steam is not started -> edit 2020hud -> game runs fine with hud synced, but game startup was not detected by script. infinite '2020hud loading' status
+
+☐ bug: load 2020hud -> open vanilla file -> doesn't open
 
 ☐ test: Test the program by using it to edit HUD's

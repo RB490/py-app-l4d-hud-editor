@@ -96,7 +96,6 @@ class MenuReloadMode(EditorMenuBase):
             compound="left",
         )
 
-
         return self.reload_mode_menu
 
 
@@ -114,9 +113,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-

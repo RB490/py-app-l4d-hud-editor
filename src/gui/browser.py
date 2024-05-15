@@ -541,7 +541,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
                 photo = self.treeview_photo_images_cache[image_path]
             else:
                 # If not, load the image, resize it, and store it in the cache
-                image = Image.open(image_path).resize((16, 16), Image.LANCZOS)
+                # (updating python from 3.11.1 to 3.12.1)) // removed: , Image.LANCZOS)
+                image = Image.open(image_path).resize((16, 16))
                 photo = ImageTk.PhotoImage(image)
                 self.treeview_photo_images_cache[image_path] = photo
                 logger.warning(f"adding image to cache: {image_path}")
