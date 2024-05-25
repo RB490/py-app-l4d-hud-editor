@@ -25,12 +25,12 @@ def persistent_data_remove_invalid_paths_from_list(list_key):
     if not stored_huds:
         return
 
+    # build a list of valid hud paths
     for path in stored_huds:
         if os.path.exists(path):
             valid_huds.append(path)
-        else:
-            print(f"Invalid path: {path}")
 
+    # remove invalid paths
     for invalid_path in stored_huds:
         if invalid_path not in valid_huds:
             logger.warning(f"Removing invalid {list_key} path: {invalid_path}")

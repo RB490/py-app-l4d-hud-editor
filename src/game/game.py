@@ -90,7 +90,7 @@ class Game(metaclass=Singleton):
         video_modifier = VideoSettingsModifier(config_dir)
         video_modifier.set_fullscreen(0)
 
-        print(autoexec_name)
+        logger.debug(autoexec_name)
 
     def _disable_addons(self):
         # variables
@@ -111,7 +111,7 @@ class Game(metaclass=Singleton):
                         open(file_path, "w", encoding="utf-8").close()
                     if file.endswith(".vpk"):
                         shutil.copy(DUMMY_ADDON_VPK_PATH, file_path)
-                        # print(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
+                        # logger.debug(f"'{DUMMY_ADDON_VPK_PATH}' -> '{file_path}'.")
 
     def _validate_dir_mode(self, dir_mode):
         "Validate the dir_mode parameter"
@@ -122,10 +122,10 @@ class Game(metaclass=Singleton):
         "Is mode installed?"
 
         if self.dir.id.get_installation_state(dir_mode) == InstallationState.COMPLETED:
-            print(f"{dir_mode.name} is fully installed!")
+            logger.debug(f"{dir_mode.name} is fully installed!")
             return True
         else:
-            print(f"{dir_mode.name} is not fully installed!")
+            logger.debug(f"{dir_mode.name} is not fully installed!")
             return False
 
     def installation_exists(self, dir_mode):
@@ -152,7 +152,7 @@ def debug_game_class_set_states_synced_and_installed():
 
 def main():
     "debug game class"
-    print("debug game class")
+    logger.debug("debug game class")
 
     # debug_game_class_set_states_synced_and_installed()
     gamez = Game()
@@ -172,7 +172,7 @@ def main():
     # result = gamez.installer.repair()
     # result = gamez.installer._main_dir_backup()
     # result = gamez.installer._main_dir_backup()
-    # print("hi there!")
+    # logger.debug("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
     # result = gamez.command.execute("noclip")
     result = gamez.command.execute("noclip")
@@ -228,7 +228,7 @@ def main():
     ###########################
     # Result
     ###########################
-    print(f"result = {result}")
+    logger.debug(f"result = {result}")
 
 
 if __name__ == "__main__":

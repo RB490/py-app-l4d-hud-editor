@@ -424,7 +424,7 @@ def main():
     installer = GameInstaller(game)
     # installer.install()
     installer._prompt_verify_game()
-    print("this is a test!")
+    logger.info("this is a test!")
 
 
 if __name__ == "__main__":

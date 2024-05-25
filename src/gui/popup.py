@@ -2,6 +2,8 @@
 # pylint: disable=import-outside-toplevel
 import tkinter as tk
 
+from loguru import logger
+
 from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
 from shared_utils.functions import Singleton
@@ -85,7 +87,7 @@ class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
 
         # hide gui after context menu closed
         self.hide()
-        print(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")
+        logger.debug(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")
 
 
 def main():

@@ -5,6 +5,7 @@ import ctypes
 import os
 import time
 
+from loguru import logger
 import pyautogui
 import win32api
 import win32con
@@ -37,7 +38,7 @@ class GameCommands:
         """Execute game commands"""
 
         if not self.game.window.is_running():
-            print("Not executing command! Game isn't running.")
+            logger.debug("Not executing command! Game isn't running.")
             return
         if not input_command:
             raise ValueError("No input command available!")
@@ -72,7 +73,7 @@ class GameCommands:
 
         # execute command
         self.hwnd_utils.send_keys_in_background(game_hwnd, [HOTKEY_EXECUTE_AUTOEXEC])
-        print(f"Executed command: '{output_command}'")
+        logger.info(f"Executed command: '{output_command}'")
 
         # perform mouse clicks
         if self.data_manager.get("reload_mouse_clicks_enabled"):
@@ -181,10 +182,10 @@ class GameCommands:
     def set_inspect_hud(self, status: bool) -> None:
         """Set inspect hud status for usage in the execute method"""
         if status:
-            print("HUD inspection enabled.")
+            logger.debug("HUD inspection enabled.")
             self.is_inspect_hud_enabled = True
         else:
-            print("HUD inspection disabled.")
+            logger.debug("HUD inspection disabled.")
             self.is_inspect_hud_enabled = False
         self.execute("vgui_drawtree 1")
 
@@ -194,4 +195,4 @@ class GameCommands:
         # set panel to be shown
         self.show_ui_panel = panel
 
-        print(f"set_ui_panel: {panel}")
+        logger.debug(f"set_ui_panel: {panel}")

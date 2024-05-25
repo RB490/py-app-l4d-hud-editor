@@ -1,8 +1,5 @@
-☐ todo: look at my sync/unsync code (taking program crashes and such into account, i had a persistent file??)
-
-☐ feature: replace last remaining 'print' statements
-
 ☐ bug: steam is not started -> edit 2020hud -> game runs fine with hud synced, but game startup was not detected by script. infinite '2020hud loading' status
 
+☐ feature: rewrite SteamInfoRetriever including in-file-testing
 
 ☐ test: Test the program by using it to edit HUD's

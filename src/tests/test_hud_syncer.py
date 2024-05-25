@@ -59,7 +59,6 @@ class TestHudSyncer(unittest.TestCase):
         self._create_file(os.path.join(self.fake_target_sub_dir_dlc1, "scripts", "hudlayout.res"))
 
     @patch("game.game.Game")  # Patch the instantiation of Game class: mock_game_class
-    @patch("builtins.print")  # Mock the print function: mock_print
     def setUp(self, mock_game_class, mock_print):
         self.syncer = HudSyncer()
         self.syncer.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, {})
@@ -83,7 +82,6 @@ class TestHudSyncer(unittest.TestCase):
         # shutil.rmtree(self.test_dir)
         pass
 
-    @patch("builtins.print")  # Mock the print function
     def test_sync(self, mock_print):
         self.syncer.sync_state = SyncState.NOT_SYNCED
 
@@ -127,7 +125,6 @@ class TestHudSyncer(unittest.TestCase):
         for file_path in check_files_not_exist:
             self.assertFalse(os.path.exists(file_path))
 
-    @patch("builtins.print")  # Mock the print function
     def test_unsync(self, mock_print):
         # os.startfile(self.fake_target_dir)
 
@@ -143,7 +140,7 @@ class TestHudSyncer(unittest.TestCase):
         # Perform sync and unsync
         # input(f"ress enter to sync: {self.fake_source_dir}")
         # self.syncer.sync(self.fake_source_dir, self.fake_target_dir, self.fake_main_name)
-        print(f"custom items: {self.syncer.hud_items_custom}")
+        logger.info(f"custom items: {self.syncer.hud_items_custom}")
 
         self.syncer.hud_items_previous = []  # clear hud items from testing sync earlier!
         self.syncer.sync_state = SyncState.NOT_SYNCED

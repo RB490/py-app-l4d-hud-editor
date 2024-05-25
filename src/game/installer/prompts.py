@@ -1,4 +1,5 @@
 "Installer prompts"
+from loguru import logger
 from shared_utils.functions import show_message
 
 from src.game.constants import DirectoryMode
@@ -56,7 +57,7 @@ def prompt_delete(message_extra=""):
 
 def prompt_verify_game():
     "Prompt user to verify game"
-    print("Prompting user to verify game")
+    logger.debug("Prompting user to verify game")
 
     game_class = Game()
     game_title = game_class.get_title()

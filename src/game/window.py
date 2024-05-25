@@ -111,7 +111,7 @@ class GameWindow:
 
         self.game._validate_dir_mode(dir_mode)
 
-        print(f"directory mode: {dir_mode.name}")
+        logger.info(f"directory mode: {dir_mode.name}")
 
         # confirm dir mode isn't being deleted
         if self.game.dir.id.get_installation_state(dir_mode) == InstallationState.PENDING_DELETION:

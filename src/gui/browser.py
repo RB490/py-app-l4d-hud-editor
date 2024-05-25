@@ -358,7 +358,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         # Measure the execution time
         execution_time = timeit.timeit(stmt=self.treeview_refresh, number=1)
 
-        # Print the execution time in seconds
+        # Printout the execution time in seconds
         logger.debug(f"Treeview refreshed in: {execution_time:.6f} seconds")
 
     def treeview_search(self, event):
@@ -688,7 +688,7 @@ def main():
     # pylint: disable=unused-variable
     from src.gui.start import GuiHudStart
 
-    print("debug_browser")
+    logger.debug("debug_browser")
     hud_inc = get_hud_debug_instance()  # set active debug hud to load files into browser
 
     # root = get_invisible_tkinter_root()

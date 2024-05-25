@@ -619,5 +619,7 @@ image "pyimage2" doesn't exist
 ✔ bug: hud -> unsync -> hud gets unsynced, but game doesnt reload hud @done(24-05-26 00:02)
   - the isse is related to VideoConfig. when reloading changes ingame something goes wrong with it
   ^ improve debug logging here because its not obvious to me where this fails? or wait, enable 'debug' log messages instead of info?
-
   gamez.command.execute -> _get_mapped_command -> _get_reload_fonts_command -> VideoSettingsModifier
+☐ todo: look at my sync/unsync code (taking program crashes and such into account, i had a persistent file??)
+  - i use the id handler class to write 'sync changes' to the id file (in the game main directory) this is a list of all the changes i make and i can then undo
+✔ feature: replace last remaining 'print' statements @done(24-05-26 00:31)

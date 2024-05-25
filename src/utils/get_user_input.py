@@ -97,7 +97,7 @@ def main():
 
     def handle_user_input(result):
         """Handle user input"""
-        print("User entered:", result)
+        logger.info(f"User entered: {result}")
         # Your code here
 
     get_user_input(parent_class.root, "Enter Name", "What is your name?", handle_user_input)

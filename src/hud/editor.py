@@ -111,7 +111,7 @@ class HudEditor:
             # enable dev mode
             result = self.game.dir.set(DirectoryMode.DEVELOPER)
             if not result:
-                print("Could not activate developer mode")
+                logger.warning("Could not activate developer mode")
                 if called_by_start_gui:
                     show_start_gui()
                 return False
@@ -147,7 +147,7 @@ class HudEditor:
 
     def finish_editing(self, open_start_gui=True):
         """Perform all the actions needed to finish hud editing"""
-        print("finish_editing")
+        logger.info("finish_editing")
 
         # Stop checking for game exit
         self.stop_game_exit_check()

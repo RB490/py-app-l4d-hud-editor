@@ -2,6 +2,8 @@
 import tkinter as tk
 from tkinter import simpledialog
 
+from loguru import logger
+
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton, show_message
 
@@ -170,12 +172,12 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.unsaved_changes = True
             self.file_desc_text.edit_modified(True)
             self.ctrl_desc_text.edit_modified(True)
-            print("Set unsaved changes to true!")
+            logger.debug("Set unsaved changes to true!")
         else:
             self.unsaved_changes = False
             self.file_desc_text.edit_modified(False)
             self.ctrl_desc_text.edit_modified(False)
-            print("Set unsaved changes to false!")
+            logger.debug("Set unsaved changes to false!")
 
     def load_file(self, file_name, relative_path):
         """Load description for hud file into the gui"""
@@ -264,7 +266,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         self.save_control_description()
 
         # load selected control
-        print("You selected:", input_ctrl)
+        logger.debug("You selected:", input_ctrl)
         self.load_control(input_ctrl)
 
     def add_control(self):
@@ -281,7 +283,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
             self.hud.desc.add_control(self.file_name, new_control)
             self.load_controls()
             self.load_control(new_control)
-            print(f"Added {new_control}")
+            logger.debug(f"Added {new_control}")
 
     def remove_file_entry(self):
         """Remove control"""
@@ -310,7 +312,7 @@ class GuiHudDescriptions(BaseGUI, metaclass=Singleton):
         # Reset unsaved_changes flag
         self.set_unsaved_changes(False)
 
-        print(f"Saved descriptions for '{self.file_name}'")
+        logger.debug(f"Saved descriptions for '{self.file_name}'")
 
     def submit_gui_save_changes(self):
         """Submit gui"""

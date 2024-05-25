@@ -3,6 +3,8 @@ import os
 import winreg
 from tkinter import filedialog
 
+from loguru import logger
+
 from shared_utils.functions import Singleton
 
 from src.utils.constants import DATA_MANAGER
@@ -33,7 +35,7 @@ class SteamInfoRetriever(metaclass=Singleton):
 
     def __print_if_debug(self, message):
         if self.print_debug_messages:
-            print(message)
+            logger.debug(message)
 
     def _check_path(self, path, file_name):
         """

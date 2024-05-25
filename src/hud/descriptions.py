@@ -213,14 +213,14 @@ class HudDescriptions(metaclass=Singleton):
 
 def debug_hud_descriptions_class():
     """Debug descriptions"""
-    print("hi there!")
+    logger.debug("hi there!")
     desc = HudDescriptions()
     # file_name = "hudlayout.res"
     file_name = "debug_file.txt"
     # result = desc.get_control_description(file_name, "HudWeaponSelection")
     result = desc.set_file_relative_path(file_name, "some\\path")
 
-    print(f"desc result = {result}")
+    logger.debug(f"desc result = {result}")
 
 
 def test():

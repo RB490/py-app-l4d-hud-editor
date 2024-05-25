@@ -211,7 +211,7 @@ def main():
     sync_state = game.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
     installation_state = game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
-    print("finished debug_id_handler")
+    logger.debug("finished debug_id_handler")
 
 
 def test():
@@ -236,16 +236,16 @@ def test():
     # Get installation state for developer directory
     retrieved_installation_state = game_id_handler.get_installation_state(dir_mode)
     if retrieved_installation_state:
-        print("Retrieved Installation State:", retrieved_installation_state.name)
+        logger.debug("Retrieved Installation State:", retrieved_installation_state.name)
     else:
-        print("Installation State not found.")
+        logger.debug("Installation State not found.")
 
     # Get sync state for developer directory
     retrieved_sync_state = game_id_handler.get_sync_state(dir_mode)
     if retrieved_sync_state:
-        print("Retrieved Sync State:", retrieved_sync_state.name)
+        logger.debug("Retrieved Sync State:", retrieved_sync_state.name)
     else:
-        print("Sync State not found.")
+        logger.debug("Sync State not found.")
 
 if __name__ == "__main__":
     test()
