@@ -4,6 +4,7 @@ import os
 import sys
 import time
 import tkinter as tk
+from datetime import datetime
 from tkinter import filedialog
 
 import psutil
@@ -14,7 +15,6 @@ from shared_utils.functions import show_message
 from src.gui.about import GuiAbout
 
 from .constants import BACKUP_APPEND_STRING, DATA_MANAGER, IMAGES_DIR_EXT
-
 
 
 def persistent_data_remove_invalid_paths_from_list(list_key):
@@ -288,8 +288,21 @@ def preform_checks_to_prepare_program_start():
     h_hud.edit.syncer.undo_changes_for_all_items()
 
     # warn about dev being out of date
-    if g_game.dir.dev_out_of_date():
-        show_message("Developer directory is out of date!\nConsider updating it", "warning")
+    today = datetime.today().date()
+    last_dev_uptodate_check_date_str = DATA_MANAGER.get("last_dev_uptodate_check_date")
+    last_dev_uptodate_check_date = (
+        datetime.strptime(last_dev_uptodate_check_date_str, "%Y-%m-%d").date()
+        if last_dev_uptodate_check_date_str
+        else None
+)
+    # Perform the check only if it's a new day
+    if last_dev_uptodate_check_date != today:
+        # Check if the developer directory is out of date and show a warning if it is
+        if g_game.dir.dev_out_of_date():
+            show_message("Developer directory is out of date!\nConsider updating it", "warning")
+
+        # Update the last dev directory check date in DATA_MANAGER
+        DATA_MANAGER.set("last_dev_uptodate_check_date", today.strftime("%Y-%m-%d"))
 
     # verify validity of ID file structure
     try:

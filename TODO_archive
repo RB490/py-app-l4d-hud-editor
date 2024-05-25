@@ -603,3 +603,16 @@ Post:
 
 	✔ Feature: Update gui base with icon setting capability. root.iconphoto(True, icon) sets it in gui & taskbar. self.root.iconbitmap is obsolete? @done(23-09-26 13:11)
 ✘ feat: use threading to speed up refreshing the browser refresh. especially noticeable when toggling gui visiblity/ toggling radio all/added and searching @cancelled(23-09-26 21:17)
+☐ bug: run browser.py -> Exception has occurred: TclError
+image "pyimage2" doesn't exist
+  File "X:\projects\py-app-l4d-hud-editor\src\menu\sub\reload_mode.py", line 30, in get
+    self.reload_mode_menu.add_radiobutton(
+  File "X:\projects\py-app-l4d-hud-editor\src\menu\main.py", line 104, in create_and_refresh_menu
+    self.reload_mode_menu = self.menu_reload_mode.get(self.main_menu)
+
+    - info: gets fixed when disabling: preform_checks_to_prepare_program_start()
+
+    - the issue: the tkinter msgbox that shows when dev installation is out of date
+        if g_game.dir.dev_out_of_date():
+            show_message("Developer directory is out of date!\nConsider updating it", "warning")
+    - solution: no idea

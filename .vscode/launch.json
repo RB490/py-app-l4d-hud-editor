@@ -8,13 +8,7 @@
 			"name": "main.py",
 			"type": "python",
 			"request": "launch",
-			"program": "${workspaceFolder}/src/main.py",
-		},
-		{
-			"name": "run_debug_main.py",
-			"type": "python",
-			"request": "launch",
-			"program": "${workspaceFolder}/src/run_debug_main.py",
+			"program": "${workspaceFolder}/main.py",
 		},
 		{
 			"name": "Current File",
