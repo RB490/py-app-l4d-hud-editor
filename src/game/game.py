@@ -175,6 +175,7 @@ def main():
     # print("hi there!")
     # result = gamez.window.run(DirectoryMode.DEVELOPER)
     # result = gamez.command.execute("noclip")
+    result = gamez.command.execute("noclip")
     # result = gamez.command._get_reload_fonts_command()
     # result = gamez.command.execute()
     # result = gamez.command.execute()

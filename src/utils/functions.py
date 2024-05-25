@@ -288,27 +288,31 @@ def preform_checks_to_prepare_program_start():
     h_hud.edit.syncer.undo_changes_for_all_items()
 
     # warn about dev being out of date
+    check_dev_directory_out_of_date(g_game)
+
+    # verify validity of ID file structure
+    try:
+        g_game.dir.check_for_invalid_id_file_structure()
+    except Exception as e_info:
+        show_message(f"Invalid ID file structure! Fix it before running program: {e_info}")
+        # raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
+
+def check_dev_directory_out_of_date(game_instance):
     today = datetime.today().date()
     last_dev_uptodate_check_date_str = DATA_MANAGER.get("last_dev_uptodate_check_date")
     last_dev_uptodate_check_date = (
         datetime.strptime(last_dev_uptodate_check_date_str, "%Y-%m-%d").date()
         if last_dev_uptodate_check_date_str
         else None
-)
+    )
     # Perform the check only if it's a new day
     if last_dev_uptodate_check_date != today:
         # Check if the developer directory is out of date and show a warning if it is
-        if g_game.dir.dev_out_of_date():
+        if game_instance.dir.dev_out_of_date():
             show_message("Developer directory is out of date!\nConsider updating it", "warning")
 
         # Update the last dev directory check date in DATA_MANAGER
         DATA_MANAGER.set("last_dev_uptodate_check_date", today.strftime("%Y-%m-%d"))
-
-    # verify validity of ID file structure
-    try:
-        g_game.dir.check_for_invalid_id_file_structure()
-    except Exception as e_info:
-        raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
 
 
 def save_and_exit_script():
