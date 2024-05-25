@@ -1,8 +1,8 @@
 {
     "BrowserGuiGeometry": "828x517+114+776",
-    "GuiGeometryBrowser": "748x449+382+316",
+    "GuiGeometryBrowser": "748x489+244+385",
     "GuiGeometryDescriptions": "503x507+487+358",
-    "GuiGeometryStart": "865x565+1272+421",
+    "GuiGeometryStart": "865x565+1001+322",
     "GuiGeometryVDF": "1170x576+946+434",
     "HudSelectGuiGeometry": "865x528+100+100",
     "VDFGuiGeometry": "875x425+159+110",
@@ -20,7 +20,7 @@
         800,
         600
     ],
-    "hud_reload_mode": "reload_hud",
+    "hud_reload_mode": "reload_all",
     "last_dev_uptodate_check_date": "2024-05-25",
     "reload_mouse_clicks_coord_1": [
         10,
@@ -33,6 +33,8 @@
     "reload_mouse_clicks_enabled": false,
     "reload_reopen_menu_on_reload": false,
     "steam_root_dir": "E:/games/steam",
-    "stored_huds": [],
+    "stored_huds": [
+        "C:/Users/willi/AppData/Local/Temp/2020hud_debug/4. l4d2-2020HUD/source"
+    ],
     "stored_temp_huds": []
 }

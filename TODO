@@ -1,8 +1,8 @@
 
 
+☐ todo: look at my sync/unsync code (taking program crashes and such into account, i had a persistent file??)
 
 ☐ bug: steam is not started -> edit 2020hud -> game runs fine with hud synced, but game startup was not detected by script. infinite '2020hud loading' status
 
-☐ bug: load 2020hud -> open vanilla file -> doesn't open
 
 ☐ test: Test the program by using it to edit HUD's

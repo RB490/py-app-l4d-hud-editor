@@ -614,10 +614,10 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         vanilla_path = self.game.dir.get_vanilla_file(rel_path)
 
         if vanilla_path:
-            logger.debug(f"Opening vanilla file: '{vanilla_path}'")
+            temp_vanilla_path = create_temp_file(vanilla_path)
+            logger.debug(f"Opening (temporary) vanilla file: '{temp_vanilla_path}'")
 
-            create_temp_file(vanilla_path)
-
+            os.startfile(temp_vanilla_path)
         else:
             logger.debug("Vanilla file unavailable")
 
