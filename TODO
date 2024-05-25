@@ -1,13 +1,3 @@
-✔ bug: hud -> unsync -> hud gets unsynced, but game doesnt reload hud @done(24-05-26 00:02)
-  - the isse is related to VideoConfig. when reloading changes ingame something goes wrong with it
-  ^ improve debug logging here because its not obvious to me where this fails? or wait, enable 'debug' log messages instead of info?
-
-  gamez.command.execute -> _get_mapped_command -> _get_reload_fonts_command -> VideoSettingsModifier
-
-☐ bug: browser gui: 'none' button 
-
-☐ bug: on script startup: 2024-05-25 23:05:49.487 | ERROR    | shared_managers.version_number_manager:_get_github_version_number:88 - An error occurred: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Read timed out. (read timeout=0.05)
-
 ☐ todo: look at my sync/unsync code (taking program crashes and such into account, i had a persistent file??)
 
 ☐ feature: replace last remaining 'print' statements

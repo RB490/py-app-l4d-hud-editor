@@ -616,3 +616,8 @@ image "pyimage2" doesn't exist
         if g_game.dir.dev_out_of_date():
             show_message("Developer directory is out of date!\nConsider updating it", "warning")
     - solution: no idea
+✔ bug: hud -> unsync -> hud gets unsynced, but game doesnt reload hud @done(24-05-26 00:02)
+  - the isse is related to VideoConfig. when reloading changes ingame something goes wrong with it
+  ^ improve debug logging here because its not obvious to me where this fails? or wait, enable 'debug' log messages instead of info?
+
+  gamez.command.execute -> _get_mapped_command -> _get_reload_fonts_command -> VideoSettingsModifier

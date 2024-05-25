@@ -174,14 +174,14 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
         self.sync_hotkey_button.pack(padx=0, pady=0, side="left")
 
-        # Create and configure the browserhronization hotkey button
+        # Create and configure the hud toggle button
         self.browser_hotkey_button = tk.Button(
             self.toolbar_frame,
             text=f"{self.get_title()} {HOTKEY_TOGGLE_BROWSER}",
             justify="center",
             command=self.toggle_visibility,
             state="normal",
-            image=self.img.get("reload", 2),
+            image=self.img.get("switch", 2),
             compound="left",
             padx=btn_img_padx,
             width=125,
@@ -189,7 +189,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
         self.browser_hotkey_button.pack(padx=5, pady=0, side="left")
 
-        # Create and configure the editor_menuhronization hotkey button
+        # Create and configure the menu button
         self.editor_menu_hotkey_button = tk.Button(
             self.toolbar_frame,
             text=f"Menu {HOTKEY_EDITOR_MENU}",
@@ -206,7 +206,7 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         )
         self.editor_menu_hotkey_button.pack(padx=5, pady=0, side="left")
 
-        # Create and configure the editor_menuhronization help button
+        # Create and configure the help button
         self.editor_menu_help_button = tk.Button(
             self.toolbar_frame,
             text="Help",
