@@ -17,12 +17,13 @@ from src.utils.functions import preform_checks_to_prepare_program_start, show_st
 # from packages.game.game import Game
 # from packages.utils.functions import load_data
 
-os.system("cls")  # clear terminal
-
 # ====================================================================================================
 #     Auto-execute
 # ====================================================================================================
 
-loguru_setup_logging_filter("DEBUG", "exclude", ["shared_managers.hwnd_manager"])
+# these lines prevent python from running without console with pythonw
+# loguru_setup_logging_filter("DEBUG", "exclude", ["shared_managers.hwnd_manager"])
+
+
 preform_checks_to_prepare_program_start()
 show_start_gui()

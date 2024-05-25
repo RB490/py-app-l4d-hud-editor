@@ -109,6 +109,13 @@ class GameWindow:
         """Start the game
         'write_config' param is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
 
+        # cancel if steam is not running
+        # running the game without steam running is possible but has unwanted side effects such as steam closing immediately
+        # after the game closes and python somehow not detecting the game's executable as a running process
+        steam_running = self.hwnd_utils.get_hwnd_from_process_name("steam.exe")
+        if not steam_running:
+            raise Exception("Steam is not running!")
+
         self.game._validate_dir_mode(dir_mode)
 
         logger.info(f"directory mode: {dir_mode.name}")
