@@ -51,7 +51,7 @@ class SteamInfoRetriever(metaclass=Singleton):
         self.__print_if_debug(f"Checking path: {path}")
         return os.path.isfile(os.path.join(path, file_name))
 
-    def _find_directory_in_paths(self, paths, target_file_name):
+    def _search_directory_list_for_executable(self, paths, target_file_name):
         """
         Search for a directory containing a specific file in a list of paths.
 
@@ -77,7 +77,7 @@ class SteamInfoRetriever(metaclass=Singleton):
         Returns:
             str: Path to the Steam directory, or None if not found.
         """
-        return self._find_directory_in_paths(self.DEFAULT_STEAM_PATHS, self.STEAM_EXECUTABLE)
+        return self._search_directory_list_for_executable(self.DEFAULT_STEAM_PATHS, self.STEAM_EXECUTABLE)
 
     def _get_steam_directory_from_registry(self):
         """

@@ -150,7 +150,7 @@ class GameWindow:
 
         # run the game through steam to prevent steam issues
         steam_args = f"-applaunch {str(self.game.get_app_id())}"
-        steam_exe = self.game.steam.get_exe_path()
+        steam_exe = self.game.steam.get_executable_path()
         steam_command = f'"{steam_exe}" {steam_args} {" ".join(game_args)}'
 
         try:

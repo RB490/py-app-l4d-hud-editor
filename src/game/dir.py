@@ -12,7 +12,7 @@ from src.game.constants import DirectoryMode, SyncState
 from src.game.dir_id_handler import GameIDHandler
 from src.hud.syncer import files_differ
 from src.utils.functions import get_backup_filename, get_backup_path, get_start_gui, rename_with_timeout
-from src.utils.steam_info_retriever import SteamInfoRetriever
+from src.utils.steam_info_retriever import SteamPathHandler
 
 
 def raise_exception_if_invalid_path_format(func):
@@ -34,7 +34,7 @@ class GameDir:
         self.game = game_class
 
         self.id = GameIDHandler(self.game)
-        self.steam = SteamInfoRetriever()
+        self.steam = SteamPathHandler()
 
     def _get_random_dir_name_for(self, dir_mode):
         random_string = generate_random_string()

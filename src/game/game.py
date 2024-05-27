@@ -9,7 +9,7 @@ from shared_utils.functions import Singleton
 from src.game.constants import DirectoryMode, DirModeError, InstallationState, SyncState, TitleRetrievalError
 from src.game.video_settings_modifier import VideoSettingsModifier
 from src.utils.constants import DATA_MANAGER, DUMMY_ADDON_VPK_PATH, EDITOR_AUTOEXEC_PATH
-from src.utils.steam_info_retriever import SteamInfoRetriever
+from src.utils.steam_path_handler import SteamPathHandler
 
 # importing after the above enums and exceptions becaus they are needed for the subclasses
 
@@ -27,7 +27,7 @@ class Game(metaclass=Singleton):
         self.window = GameWindow(self)
         self.installer = GameInstaller(self)
         self.command = GameCommands(self)
-        self.steam = SteamInfoRetriever()
+        self.steam = SteamPathHandler()
         self.dir = GameDir(self)
 
         self.title = "Left 4 Dead 2"

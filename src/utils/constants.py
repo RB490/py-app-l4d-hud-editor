@@ -22,6 +22,7 @@ version_manager = VersionNumberManager(PROJECT_ROOT, APP_VERSION_MAJOR)
 version_manager.set()
 VERSION_NO = version_manager.get()
 VERSION_NO_PRETTY = version_manager.get(formatted=True)
+# todo: enable VERSION_NO_GITHUB after 'run once a day' code
 VERSION_NO_GITHUB: str = version_manager.get_from_url(VERSION_NO_URL)
 GUI_BROWSER_TITLE: str = "Browser"
 

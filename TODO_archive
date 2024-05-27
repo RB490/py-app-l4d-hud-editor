@@ -625,3 +625,5 @@ image "pyimage2" doesn't exist
 ✔ feature: replace last remaining 'print' statements @done(24-05-26 00:31)
     ✔ bug: steam is not started -> edit 2020hud -> game runs fine with hud synced, but game startup was not detected by script. infinite '2020hud loading' status @done(24-05-26 01:02)
     ✔ cheap version of this would be to check if steam is running, and if not abort & tell the user to start steam, and the reason for that being the code getting fucky wucky @done(24-05-26 01:02)
+✔ feature: redo SteamInfoRetriever. used outside class: get_games_dir, get_exe_path @ SteamPathHandle @done(24-05-27 21:56)
+	- should i handle cases where functions like get_exe_path cant find exe? 
