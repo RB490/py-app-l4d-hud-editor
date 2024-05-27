@@ -5,7 +5,7 @@ import webbrowser
 from shared_gui.base import BaseGUI
 from shared_utils.functions import Singleton
 
-from src.utils.constants import APP_ICON, APP_NAME, APP_URL, DATA_MANAGER, VERSION_NO, VERSION_NO_GITHUB
+from src.utils.constants import APP_ICON, APP_NAME, APP_URL, DATA_MANAGER, VERSION_MANAGER, VERSION_NO, VERSION_NO_URL
 
 
 class GuiAbout(BaseGUI, metaclass=Singleton):
@@ -16,6 +16,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
         self.settings_geometry_key = "GuiGeometryAbout"
         self.project_url = APP_URL
         self.data_manager = DATA_MANAGER
+        self.version_no_github = VERSION_MANAGER.get_from_url(VERSION_NO_URL)  # used in 'about' to compare local vs online
 
         # create gui
         super().__init__(gui_type="sub", parent_root=parent_root)
@@ -38,7 +39,7 @@ class GuiAbout(BaseGUI, metaclass=Singleton):
 
         project_info_latest_version_label = tk.Label(
             self.root,
-            text=f"Github Version: {VERSION_NO_GITHUB}",
+            text=f"Github Version: {self.version_no_github}",
             padx=10,
             pady=10,
         )

@@ -1,8 +1,9 @@
 """Global constant variables"""
+
 import os
 from typing import Dict, List, Optional, Tuple
 
-from shared_managers.version_number_manager import VersionNumberManager
+from shared_managers.version_number_manager import GitVersionNumberManager
 
 #####################################################
 # Path
@@ -18,12 +19,10 @@ SCRIPT_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPT_FILE_NAME: str = os.path.basename(PROJECT_ROOT)
 VERSION_NO_URL: str = "https://raw.githubusercontent.com/RB490/py-app-l4d-hud-editor/main/version.txt"
 VERSION_NO_PATH: str = os.path.join(PROJECT_ROOT, "version.txt")
-version_manager = VersionNumberManager(PROJECT_ROOT, APP_VERSION_MAJOR)
-version_manager.set()
-VERSION_NO = version_manager.get()
-VERSION_NO_PRETTY = version_manager.get(formatted=True)
-# todo: enable VERSION_NO_GITHUB after 'run once a day' code
-VERSION_NO_GITHUB: str = version_manager.get_from_url(VERSION_NO_URL)
+VERSION_MANAGER = GitVersionNumberManager(PROJECT_ROOT, APP_VERSION_MAJOR)
+VERSION_MANAGER.set()
+VERSION_NO = VERSION_MANAGER.get()
+VERSION_NO_PRETTY = VERSION_MANAGER.get(formatted=True)
 GUI_BROWSER_TITLE: str = "Browser"
 
 DEFAULT_DATA = {
@@ -47,7 +46,7 @@ DEFAULT_DATA = {
     "reload_mouse_clicks_enabled": False,
     "reload_reopen_menu_on_reload": False,
     "steam_root_dir": "E:/games/steam",
-    "stored_huds": ["D:/projects/l4d-addons-huds/4. l4d2-2020HUD/source"],
+    "stored_huds": ["X:/projects/l4d-addons-huds/4. l4d2-2020HUD/source"],
     "stored_temp_huds": [],
 }
 
@@ -89,6 +88,7 @@ HUD_DESCRIPTIONS_PATH: str = os.path.join(DATA_DIR, "hud_file_descriptions.json"
 #####################################################
 
 from shared_managers.persistent_data_manager import PersistentDataManager
+
 DATA_MANAGER = PersistentDataManager(PERSISTENT_DATA_PATH, DEFAULT_DATA)
 
 #####################################################

@@ -1,11 +1,5 @@
 current: 
 
-    'run once a day' code:
-        ☐ feature: upgrade the run once a day code check and make it available in shared managers (keep in mind that it's shared code and save it based on program name or w/e)
-            ☐ have an optional argument where i specify the amount of time in minutes or hours and default it to 24 hours
-
-        ☐ feature: use the shared 'run once a day' code for updating version number from git (version number code was shared aswell possibly integrate it right in)
-            - ^ use timing code to test how much time this takes first, this might not be needed. although might be nice to do anyway
 
 testing:
 
