@@ -10,6 +10,7 @@ from tkinter import filedialog
 import psutil
 import pyautogui
 from loguru import logger
+from shared_managers.duration_check_manager import DurationCheckManager
 from shared_utils.functions import show_message
 
 from src.gui.about import GuiAbout
@@ -298,22 +299,11 @@ def preform_checks_to_prepare_program_start():
         # raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
 
 def check_dev_directory_out_of_date(game_instance):
-    today = datetime.today().date()
-    last_dev_uptodate_check_date_str = DATA_MANAGER.get("last_dev_uptodate_check_date")
-    last_dev_uptodate_check_date = (
-        datetime.strptime(last_dev_uptodate_check_date_str, "%Y-%m-%d").date()
-        if last_dev_uptodate_check_date_str
-        else None
-    )
-    # Perform the check only if it's a new day
-    if last_dev_uptodate_check_date != today:
+    dev_duration_checker = DurationCheckManager("last_dev_uptodate_check_date", 1, "days")
+    if dev_duration_checker.is_duration_passed():
         # Check if the developer directory is out of date and show a warning if it is
         if game_instance.dir.dev_out_of_date():
             show_message("Developer directory is out of date!\nConsider updating it", "warning")
-
-        # Update the last dev directory check date in DATA_MANAGER
-        DATA_MANAGER.set("last_dev_uptodate_check_date", today.strftime("%Y-%m-%d"))
-
 
 def save_and_exit_script():
     """Exit the script"""
