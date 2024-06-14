@@ -453,7 +453,15 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
     def change_addon_image(self, path):
         """Load specified image into the image control"""
         # pylint: disable=attribute-defined-outside-init
-        image = Image.open(path)
+        try:
+            image = Image.open(path)
+        except FileNotFoundError:
+            logger.info(f"Addon image not found @ {path}")
+            return
+        except Exception as e:
+            logger.info(f"An error occurred: {e}")
+            return
+
         self.picture_canvas_photo = ImageTk.PhotoImage(image)
 
         # Calculate the center coordinates based on the canvas size
