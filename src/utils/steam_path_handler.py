@@ -124,7 +124,8 @@ class SteamPathHandler(metaclass=Singleton):
         Get the Steam executable path.
         """
         logger.debug("Getting Steam executable path...")
-        executable_path = self._get_root_dir()
+        root_dir = self._get_root_dir()
+        executable_path = os.path.join(root_dir, "steam.exe")
         logger.debug(f"Retrieved Steam executable path: {executable_path}")
         return executable_path
 
@@ -153,5 +154,6 @@ if __name__ == "__main__":
     # result = steam_path_handler._get_steam_directory_from_default_locations()
     # result = steam_path_handler._get_steam_directory_from_saved_data()
     # result = steam_path_handler._get_steam_directory_from_user()
-    result = steam_path_handler._get_root_dir()
+    # result = steam_path_handler._get_root_dir()
+    result = steam_path_handler.get_executable_path()
     logger.debug(f"result = {result}")

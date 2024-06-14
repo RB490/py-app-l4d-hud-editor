@@ -12,7 +12,7 @@ from src.game.constants import DirectoryMode, SyncState
 from src.game.dir_id_handler import GameIDHandler
 from src.hud.syncer import files_differ
 from src.utils.functions import get_backup_filename, get_backup_path, get_start_gui, rename_with_timeout
-from src.utils.steam_info_retriever import SteamPathHandler
+from src.utils.steam_path_handler import SteamPathHandler
 
 
 def raise_exception_if_invalid_path_format(func):
