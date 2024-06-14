@@ -325,10 +325,10 @@ class GameDir:
             Exception: If more than one of the same ID file is found in different folders.
         """
         if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.warning("Unable to check if any pak01s are enabled: Developer mode is not installed!")
+            logger.warning("Developer mode is not installed! (Unable to check if any pak01s are enabled)")
             return None
         if not self.game.installation_exists(DirectoryMode.USER):
-            logger.warning("Unable to check if any pak01s are enabled: User mode is not installed!")
+            logger.warning("User mode is not installed! (Unable to check if any pak01s are enabled)")
             return None
         steam_game_dir = self.steam.get_games_dir()
 

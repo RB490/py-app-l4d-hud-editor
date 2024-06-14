@@ -48,7 +48,7 @@ def get_hud_debug_instance():
 
     # debug_hud_dir = os.path.join(DEVELOPMENT_DIR, "debug", "hud", "Workspace", "debug_hud")
     # debug_hud_dir = r"D:\\projects\\l4d-addons-huds\\4. l4d2-2020HUD\\source"
-    debug_hud_dir = r"X:\projects\l4d-addons-huds\5. l4d2-new-hud\source"
+    debug_hud_dir = r"C:\Users\willi\projects\l4d-addons-huds\5. l4d2-new-hud\source"
     h = Hud()
 
     # set hud info. usually done by __set_hud_info inside the class

@@ -1,9 +1,10 @@
 """Module for the hud select gui class"""
+
 # pylint: disable=broad-exception-caught, import-outside-toplevel, arguments-differ, broad-exception-raised
 import os
 import subprocess
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
 import send2trash
 from loguru import logger
@@ -339,16 +340,25 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         self.show_menu_on_button(self.export_vpk_button, vpk_export_menu)
 
+
     def selected_hud_export_directory(self):
         """Export hud as folder"""
 
         if not self.selected_hud_dir:
-            logger.debug("No HUD selected!")
+            error_message = "No HUD selected!"
+            logger.debug(error_message)
+            messagebox.showerror("Selection Error", error_message)
             return
 
         target_dir = filedialog.askdirectory(title="Export HUD as folder")
         if target_dir:
-            copy_directory(self.selected_hud_dir, target_dir)
+            try:
+                copy_directory(self.selected_hud_dir, target_dir)
+                logger.info(f"Successfully exported HUD to {target_dir}")
+            except Exception as e:
+                error_message = f"Error copying directory: {e}"
+                logger.error(error_message)
+                messagebox.showerror("Export Error", error_message)
 
     def selected_hud_export_vpk(self):
         """Export the selected hud as a vpk file."""
@@ -359,9 +369,23 @@ class GuiHudStart(BaseGUI, metaclass=Singleton):
 
         if export_path:
             logger.debug(export_path)
-            vpk_class = VPKManager()
-            vpk_class.create(self.selected_hud_dir, os.path.dirname(export_path), os.path.basename(export_path))
-            # vpk_class.create(self, input_dir, output_dir, output_file_name):
+
+            if not os.path.isdir(self.selected_hud_dir):
+                error_message = f"Selected HUD directory does not exist: '{self.selected_hud_dir}'"
+                logger.error(error_message)
+                messagebox.showerror("Directory Error", error_message)
+                return
+
+            export_dir = os.path.dirname(export_path)
+            export_file_name = os.path.basename(export_path)
+
+            try:
+                vpk_class = VPKManager()
+                vpk_class.create(self.selected_hud_dir, target_file_name=export_file_name, target_dir=export_dir)
+                logger.info(f"Successfully exported HUD as VPK to {export_path}")
+            except ValueError as ve:
+                logger.error(str(ve))
+                messagebox.showerror("Export Error", str(ve))
 
     def selected_hud_remove_or_delete(self):
         """Remove the selected hud."""

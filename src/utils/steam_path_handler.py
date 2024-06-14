@@ -119,6 +119,7 @@ class SteamPathHandler(metaclass=Singleton):
         logger.debug(f"Verify Steam directory '{steam_directory}' result: {is_valid_dir}")
         return is_valid_dir
 
+
     def get_executable_path(self):
         """
         Get the Steam executable path.
@@ -126,8 +127,9 @@ class SteamPathHandler(metaclass=Singleton):
         logger.debug("Getting Steam executable path...")
         root_dir = self._get_root_dir()
         executable_path = os.path.join(root_dir, "steam.exe")
-        logger.debug(f"Retrieved Steam executable path: {executable_path}")
-        return executable_path
+        normalized_path = os.path.normpath(executable_path)
+        logger.debug(f"Retrieved Steam executable path: {normalized_path}")
+        return normalized_path
 
     def get_games_dir(self):
         """
