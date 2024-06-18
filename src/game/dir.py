@@ -143,10 +143,10 @@ class GameDir:
         vanilla_file = self.get_vanilla_file(relative_file_path)
         if vanilla_file:
             logger.debug(f"Vanilla file is available. Not a custom file: '{relative_file_path}'")
-            return True
+            return False
         else:
             logger.debug(f"Vanilla file is not available. Custom file: '{relative_file_path}'")
-            return False
+            return True
 
     def get_pak01_vpk_in(self, directory):
         "Verify if this is a game files directory by checking if it contains a pak01_dir.vpk file"

@@ -165,7 +165,7 @@
     },
     "clientscheme.res": {
         "file_control_descriptions": {},
-        "file_description": "Defines (custom) fonts, borders and colours\r\n\r\nCredits main header font: 'InstructorTitle'\r\nCredits stats 'survivors': 'OuttroStatsCrawlUnderline'\r\nCredits stats 'gameplay stats': OuttroStatsCrawlTitles\r\nCredits stats text: 'OuttroStatsCrawl'\r\nCredits 'space bar - return to lobby': 'DefaultLarge'\r\n\r\nGame instructor popup font: 'InstructorTitle'\r\nRadial: DefaultDropShadowBold\r\nRadial selected: 'DefaultLargeDropShadowBold'\r\nRadial font colour: 'White'\r\nSurvivor head overlay font: 'TargetID'. This font has outline hardcoded by default. enabling it again applies it twice and can cause strange effects\r\n\r\nFont options\r\nNAME:\t\tfont name as defined under 'CustomFonts' or installed on the operating system\r\nTALL:\t\tfont size\r\nWEIGHT:\t\tthe thickness of the font. This can be one of; 0, 100, 200, 300, 400, 500, 600, 700, 800 or 900. Some fonts are limited in how thin or thick they can be\r\nITALIC:\t\titalics\r\nADDITIVE:\tseems to make the font slightly transparent and change colour based on the background\r\nRANGE:\t\tthis is a hexadecimal range for defined for the range of characters we want to use. If you don't know much about font files, don't worry about this, just leave it for existing fonts and don't bother adding it for custom fonts\r\nYRES:\t\trange between x and y to use this font at\r\nDROPSHADOW:\tblack shadow behind the font\r\nOUTLINE:\toutline around the entire font\r\nANTIALIAS:\tantialias the edges",
+        "file_description": "Defines (custom) fonts, borders and colours\r\n\r\nCredits main header font: 'InstructorTitle'\r\nCredits stats 'survivors': 'OuttroStatsCrawlUnderline'\r\nCredits stats 'gameplay stats': OuttroStatsCrawlTitles\r\nCredits stats text: 'OuttroStatsCrawl'\r\nCredits 'space bar - return to lobby': 'DefaultLarge'\r\n\r\nGame instructor popup font: 'InstructorTitle'\r\nRadial: DefaultDropShadowBold\r\nRadial selected: 'DefaultLargeDropShadowBold'\r\nRadial font colour: 'White'\r\nSurvivor head overlay font: 'TargetID'. This font has outline hardcoded by default. enabling it again applies it twice and can cause strange effects\r\n\r\nFont options\r\nNAME:\t\tfont name as defined under 'CustomFonts' or installed on the operating system\r\nTALL:\t\tfont size\r\nWEIGHT:\t\tthe thickness of the font. This can be one of; 0, 100, 200, 300, 400, 500, 600, 700, 800 or 900. Some fonts are limited in how thin or thick they can be\r\nITALIC:\t\titalics\r\nADDITIVE:\tseems to make the font slightly transparent and change colour based on the background\r\nRANGE:\t\tthis is a hexadecimal range for defined for the range of characters we want to use. If you don't know much about font files, don't worry about this, just leave it for existing fonts and don't bother adding it for custom fonts\r\nYRES:\t\trange between x and y to use this font at\r\nDROPSHADOW:\tblack shadow behind the font\r\nOUTLINE:\toutline around the entire font\r\nANTIALIAS:\tantialias the edges\n\nCustom font information\n- Custom fonts do NOT get loaded into the game, unless they are installed into the operating system.\n\t- Console will also have an error pointing this out eg: \"Couldn't find custom font file 'resource/marlett.ttf'\"\n",
         "file_is_custom": false,
         "file_name": "clientscheme.res",
         "file_relative_path": "resource\\clientscheme.res"
@@ -179,7 +179,7 @@
     },
     "createlobbyflyout.res": {
         "file_control_descriptions": {},
-        "file_description": "Create lobby drop down menu",
+        "file_description": "(L4D1) Create lobby drop down menu",
         "file_is_custom": true,
         "file_name": "createlobbyflyout.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\createlobbyflyout.res"
@@ -242,7 +242,7 @@
     },
     "foundgroupgames.res": {
         "file_control_descriptions": {},
-        "file_description": "Join steam group friends game or lobby menu",
+        "file_description": "(L4D1) Join steam group friends game or lobby menu",
         "file_is_custom": true,
         "file_name": "foundgroupgames.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\foundgroupgames.res"
@@ -263,7 +263,7 @@
     },
     "fullscreenholdoutmodescoreboard.res": {
         "file_control_descriptions": {},
-        "file_description": "Survival scoreboard",
+        "file_description": "(L4D1) Survival scoreboard",
         "file_is_custom": true,
         "file_name": "fullscreenholdoutmodescoreboard.res",
         "file_relative_path": "resource\\ui\\fullscreenholdoutmodescoreboard.res"
@@ -305,21 +305,21 @@
     },
     "gamesettings_campaigncreate.res": {
         "file_control_descriptions": {},
-        "file_description": "Create campaign menu",
+        "file_description": "(L4D1) Create campaign menu",
         "file_is_custom": true,
         "file_name": "gamesettings_campaigncreate.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaigncreate.res"
     },
     "gamesettings_campaignedit.res": {
         "file_control_descriptions": {},
-        "file_description": "Lobby settings menu",
+        "file_description": "(L4D1) Lobby settings menu",
         "file_is_custom": true,
         "file_name": "gamesettings_campaignedit.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaignedit.res"
     },
     "gamesettings_campaignsearch.res": {
         "file_control_descriptions": {},
-        "file_description": "Create singleplayer campaign menu",
+        "file_description": "(L4D1) Create singleplayer campaign menu",
         "file_is_custom": true,
         "file_name": "gamesettings_campaignsearch.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\gamesettings_campaignsearch.res"
@@ -375,21 +375,21 @@
     },
     "holdoutmodescoreboard.res": {
         "file_control_descriptions": {},
-        "file_description": "Survival scoreboard",
+        "file_description": "(L4D1) Survival scoreboard",
         "file_is_custom": true,
         "file_name": "holdoutmodescoreboard.res",
         "file_relative_path": "resource\\ui\\holdoutmodescoreboard.res"
     },
     "holdoutmodescoreboardentry.res": {
         "file_control_descriptions": {},
-        "file_description": "Survival scoreboard player row",
+        "file_description": "(L4D1) Survival scoreboard player row",
         "file_is_custom": true,
         "file_name": "holdoutmodescoreboardentry.res",
         "file_relative_path": "resource\\ui\\holdoutmodescoreboardentry.res"
     },
     "holdoutmodeshutdown.res": {
         "file_control_descriptions": {},
-        "file_description": "Survival server shutting down",
+        "file_description": "(L4D1) Survival server shutting down",
         "file_is_custom": true,
         "file_name": "holdoutmodeshutdown.res",
         "file_relative_path": "resource\\ui\\holdoutmodeshutdown.res"
@@ -410,7 +410,7 @@
     },
     "hudholdouttimer.res": {
         "file_control_descriptions": {},
-        "file_description": "Survival round timer",
+        "file_description": "(L4D1) Survival round timer",
         "file_is_custom": true,
         "file_name": "hudholdouttimer.res",
         "file_relative_path": "resource\\ui\\hud\\hudholdouttimer.res"
@@ -424,7 +424,7 @@
             "CHudVote": "Vote hud",
             "CHudZombieTeamDisplay": "Infected teammate panels",
             "HudChat": "Unused by the game. Overwritten by basechat.res",
-            "HudCloseCaption": "Closed captions",
+            "HudCloseCaption": "Closed captions. After reloading fonts they will be invisible until a map load or game restart",
             "HudCrosshair": "Infected crosshair properties",
             "HudFinaleMeter": "'Rescue countdown' Unused panel but does show during hud_reloadscheme with lower host_timescale. Can be moved offscreen",
             "HudFrustrationMeter": "Tank frustration meter",
@@ -809,14 +809,14 @@
     "scriptedmodelistitem.res": {
         "file_control_descriptions": {},
         "file_description": "Mutation menu table row",
-        "file_is_custom": true,
+        "file_is_custom": false,
         "file_name": "scriptedmodelistitem.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\scriptedmodelistitem.res"
     },
     "scriptedmodes.res": {
         "file_control_descriptions": {},
         "file_description": "Mutation menu",
-        "file_is_custom": true,
+        "file_is_custom": false,
         "file_name": "scriptedmodes.res",
         "file_relative_path": "resource\\ui\\l4d360ui\\scriptedmodes.res"
     },
