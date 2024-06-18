@@ -1,106 +1,99 @@
-"""Module for the editor menu"""
-# pylint: disable=import-outside-toplevel
+import time
 import tkinter as tk
-
+from tkinter import Menu
 from loguru import logger
-
 from shared_gui.base import BaseGUI
 from shared_managers.hotkey_manager import HotkeyManager
+from shared_managers.hwnd_manager import HwndManager
 from shared_utils.functions import Singleton
-
 from src.game.game import Game
 from src.hud.hud import Hud
 from src.utils.constants import DATA_MANAGER, HOTKEY_EDITOR_MENU
 
 
+def do_nothing():
+    pass
+
+
 class GuiEditorMenuPopup(BaseGUI, metaclass=Singleton):
-    """
-    A class representing a toggle window with hotkey functionality and a menu bar.
-
-    Attributes:
-        root (tkinter.Tk): The main window of the application.
-        is_hidden (bool): A flag indicating whether the window is currently hidden.
-
-    Methods:
-        __init__(self): Initializes the ToggleWindow instance and runs the main event loop.
-        toggle_visibility(self): Toggles the visibility of the window.
-        setup_hotkey(self): Sets up the hotkey for toggling window visibility.
-        create_menu(self): Creates the menu bar for the application.
-        do_nothing(self): A dummy function that does nothing.
-    """
-
-    def __init__(self, parent_root, debug_instantly_show_menu=False):
-        """
-        Initializes a new instance of the ToggleWindow class and runs the main event loop.
-
-        Create a fully transparent GUI the size of the entire screen so clicking out of the context menu closes it
-        """
-        super().__init__(gui_type="sub", parent_root=parent_root)
+    def __init__(self, parent_root, debugging_mode_enabled=False):
+        if debugging_mode_enabled:
+            self.debug_menu = Menu(parent_root, tearoff=0)
+            self.debug_menu.add_command(label="Option 1", command=do_nothing)
+            self.debug_menu.add_command(label="Option 2", command=do_nothing)
+            self.debug_menu.add_command(label="Option 3", command=do_nothing)
+            super().__init__(gui_type="main")
+        else:
+            super().__init__(gui_type="sub", parent_root=parent_root)
         self.hotkey_manager = HotkeyManager()
-
-        # root
-        self.debug_instantly_show_menu = debug_instantly_show_menu
+        self.hwnd_tools = HwndManager()
+        self.debugging_mode_enabled = debugging_mode_enabled
         self.set_title("Editor Context Menu Popup")
-        self.set_transparency(0.3)  # fully transparent makes it less reliable somehow
+        self.set_transparency(0.3)
         self.set_decorations(False)
-        self.set_always_on_top(False)  # not setting this because it causes prompts to be behind the gui
-
-        # Set size to entire screen because set_fullscreen has a 0.1 visible delay ;-)
+        self.set_always_on_top(False)
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         self.set_window_geometry(f"{screen_width}x{screen_height}")
-
         self.data_manager = DATA_MANAGER
         self.game = Game()
         self.hud = Hud()
+        if not self.debugging_mode_enabled:
+            from src.menu.main import EditorMenuClass
 
-        from src.menu.main import EditorMenuClass
-
-        self.my_editor_menu = EditorMenuClass(self)
+            self.my_editor_menu = EditorMenuClass(self)
         self.enable_hotkey()
 
-        if self.debug_instantly_show_menu:
-            self.show_popup()
-
     def enable_hotkey(self):
-        """Enable hotkey"""
         self.hotkey_manager.add_hotkey(HOTKEY_EDITOR_MENU, self.show_popup, suppress=False)
 
     def disable_hotkey(self):
-        """Disable hotkey"""
-        self.hotkey_manager.remove_hotkey(HOTKEY_EDITOR_MENU)  # prevent it from being pressed while menu is open
+        self.hotkey_manager.remove_hotkey(HOTKEY_EDITOR_MENU)
+
+    def on_menu_close(self):
+        print("Menu closed")
+        logger.debug("Menu closed")
+        self.hide()
+        self.hwnd_tools.restore_focus_state()
+
+    def check_menu_closed(self):
+        if not self.is_popup_visible():
+            self.on_menu_close()
+        else:
+            self.root.after(100, self.check_menu_closed)
+
+    def is_popup_visible(self):
+        try:
+            return (
+                self.debug_menu.winfo_ismapped()
+                if self.debugging_mode_enabled
+                else self.my_editor_menu.main_menu.winfo_ismapped()
+            )
+        except:
+            return False
 
     def show_popup(self):
-        """Show menu at mouse cursor"""
+        self.root.after(0, self._show_popup)
 
-        # Show gui so context menu can be closed by clicking out & Resize the GUI to the entire screen
-        self.maximize()  # not setting fullscreen because it disables alt+tab
-
-        # get coordinates
+    def _show_popup(self):
+        self.hwnd_tools.save_focus_state()
+        self.show(hide=False)
         pos_x, pos_y = self.root.winfo_pointerxy()
-
-        # show menu
-        # self.dev_context_menu = self.my_editor_menu.get_developer_installer_menu(self.root)
-        # self.dev_context_menu.post(pos_x, pos_y)
-        self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
-        self.show_post_menu(self.my_editor_menu.main_menu, pos_x, pos_y)
-
-        # hide gui after context menu closed
-        self.hide()
+        if self.debugging_mode_enabled:
+            self.debug_menu.post(pos_x, pos_y)
+        else:
+            self.my_editor_menu.create_and_refresh_menu(is_context_menu=True)
+            self.my_editor_menu.main_menu.post(pos_x, pos_y)
+        self.root.after(100, self.check_menu_closed)
         logger.debug(f"show_editor_menu_popup_gui_at_cursor: end hidden = {self.is_hidden}")
 
 
 def main():
-    """Debug gui class"""
-    # pylint: disable=unused-variable
     root = tk.Tk()
     root.withdraw()
-    # app = GuiEditorMenuPopup(root)
-    app = GuiEditorMenuPopup(root, debug_instantly_show_menu=True)
+    app = GuiEditorMenuPopup(root, debugging_mode_enabled=True)
     app.show(hide=True)
-    # app.show(hide=False)
-    # app.show(hidden=True)
-
+    # app.show(hide=True, callback="show_popup") # show_popup callback immediately shows the menu
     input("Press enter to exit script...")
 
 

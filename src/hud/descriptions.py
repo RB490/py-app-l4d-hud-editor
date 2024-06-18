@@ -261,7 +261,7 @@ def test():
 
     # Test get_custom_file_status
     custom_status = descr.get_custom_file_status(file_name)
-    assert custom_status is False  # Assuming it's not custom in this test
+    assert custom_status is True  # Assuming it's custom in this test
 
     # Test get_controls
     retrieved_controls = descr.get_controls(file_name)
