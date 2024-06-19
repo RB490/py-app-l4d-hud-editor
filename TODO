@@ -1,3 +1,5 @@
+✔ Finish reworking 'installation_exists' @done(24-06-19 12:23)
+
 installation issue:
     - Installation cancelled halfway, then resumed, id file broken
         - Reproduce: dev mode entirely not installed. script says 'not fully installed' also in the 'dev' context menu 'dev' options aren't grayed out
@@ -28,9 +30,15 @@ current:
         - I should possibly set INSTALLATION_STATE to UNKNOWN same as i did with sync. 
         - Installer already handled UNKNOWN installation state
 
-    ☐ Sync states: Refactor:
-        ☐ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED
-        ☐ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state
+    ☐ id file: refactor: Game.Dir has 'check_for_invalid_id_file_structure' which looks like it should be part of id file class(?)
+
+    ☐ id file: idea: create get/set keys for retrieving which mode that id file is, similar to the others get_sync get_install_state and use that throughout the program. eg: game.dir.get() uses the id file name right now, might be  better to do it like this
+
+    ☐ Sync class inspect 'get_sync_status' it sets sync state before getting it? doesnt that defeat the point
+
+    ✔ Sync states: Refactor: @done(24-06-19 12:21)
+        ✔ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED @done(24-06-19 12:21)
+        ✔ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state @done(24-06-19 12:21)
 
     ☐ Fixed shared logging filter. Couldnt filter hwnd utility shared manager
 

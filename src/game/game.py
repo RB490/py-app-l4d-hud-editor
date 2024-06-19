@@ -118,7 +118,7 @@ class Game(metaclass=Singleton):
         if not isinstance(dir_mode, DirectoryMode):
             raise DirModeError("Invalid dir_mode parameter. It should be a DirectoryMode enum value.")
 
-    def installation_completed(self, dir_mode):
+    def is_installed(self, dir_mode):
         "Is mode installed?"
 
         if self.dir.id.get_installation_state(dir_mode) == InstallationState.INSTALLED:
@@ -127,15 +127,6 @@ class Game(metaclass=Singleton):
         else:
             logger.debug(f"{dir_mode.name} is not fully installed!")
             return False
-
-    def installation_exists(self, dir_mode):
-        "Is mode installed?"
-
-        if self.dir.id.get_installation_state(dir_mode) == InstallationState.NOT_INSTALLED:
-            return False
-        else:
-            return True
-
 
 def debug_game_class_set_states_synced_and_installed():
     """Debug"""
@@ -166,7 +157,7 @@ def main():
     ###########################
     # Installer
     ###########################
-    # result = gamez.installation_completed(DirectoryMode.DEVELOPER)
+    # result = gamez.is_installed(DirectoryMode.DEVELOPER)
     # result = gamez.installer.uninstall()
     # result = gamez.installer.install()
     # result = gamez.installer.repair()

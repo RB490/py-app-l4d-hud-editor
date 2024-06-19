@@ -636,8 +636,8 @@ class GuiHudBrowser(BaseGUI, metaclass=Singleton):
         "Treeview Handle 'Open Game Folder' option"
         logger.debug("Method: treeview_open_game_folder - Handle 'Open Game Folder' option")
 
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.debug("Unable to open game directory. Developer directory is not installed.")
+        if not self.game.is_installed(DirectoryMode.DEVELOPER):
+            logger.debug("Unable to open game directory. Developer directory is not fully installed.")
             return
 
         rel_path = self.get_selected_full_path()

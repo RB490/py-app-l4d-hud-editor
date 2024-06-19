@@ -241,7 +241,8 @@ class HudSyncer(metaclass=Singleton):
         Returns:
             SyncState: The synchronization state.
         """
-        if self.game.installation_exists(DirectoryMode.DEVELOPER):
+        # todo: this was previously 'if self.game.installation_exists(DirectoryMode.DEVELOPER):'. also whats going on here
+        if self.game.dir.get(DirectoryMode.DEVELOPER):
             self.__set_sync_state(self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER))
         else:
             self.__set_sync_state(SyncState.UNKNOWN)

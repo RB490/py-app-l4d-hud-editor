@@ -1,4 +1,5 @@
 """Class to manage hud editing"""
+
 # pylint: disable=broad-exception-raised, broad-exception-caught, import-outside-toplevel, invalid-name
 import os
 import threading
@@ -60,7 +61,7 @@ class HudEditor:
         try:
             # Update edited status (set to True at the end of start_editing)
             self.is_being_edited_status = False
-            
+
             # update browser (and thereby the start gui)
             get_browser_gui().gui_refresh()
 
@@ -91,7 +92,7 @@ class HudEditor:
                 return False
 
             # is developer mode installed? - also checks for user directory
-            if not self.game.installation_completed(DirectoryMode.DEVELOPER):
+            if not self.game.is_installed(DirectoryMode.DEVELOPER):
                 show_message("Development mode not fully installed!", "error")
                 show_start_gui()
                 return False
@@ -134,7 +135,7 @@ class HudEditor:
 
             # Open browser
             show_browser_gui()
-            
+
             # Update edited status
             self.is_being_edited_status = True
         finally:

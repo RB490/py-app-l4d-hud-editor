@@ -34,7 +34,7 @@ class GameInstaller:
         logger.debug("Uninstalling..")
 
         # is dev installed?
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+        if not self.game.is_installed(DirectoryMode.DEVELOPER):
             show_message("Not installed!", "info")
             return True
 
@@ -119,7 +119,7 @@ class GameInstaller:
             return False
 
         # get user directory
-        if not self.game.installation_exists(DirectoryMode.USER):
+        if not self.game.is_installed(DirectoryMode.USER):
             try:
                 self.game.dir.id.set_path(DirectoryMode.USER)
             except Exception as err_info:
@@ -127,7 +127,7 @@ class GameInstaller:
                 return False
 
         # prompt to select potentially existing dev directory (for example incase broken id file)
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+        if not self.game.dir.get(DirectoryMode.DEVELOPER):
             try:
                 result = self.game.dir.id.set_path(DirectoryMode.DEVELOPER)
                 # if developer directory was located, check if installation is already completed
@@ -161,7 +161,7 @@ class GameInstaller:
                 self._perform_uninstall()
 
         # activate developer mode
-        if self.game.installation_exists(DirectoryMode.DEVELOPER):
+        if self.game.dir.get(DirectoryMode.DEVELOPER):
             self.game.dir.set(DirectoryMode.DEVELOPER)
 
         # enable paks

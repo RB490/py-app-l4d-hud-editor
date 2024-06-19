@@ -292,7 +292,7 @@ class GameDir:
         """Check if developer directory has any pak01's enabled"""
         logger.debug("Disabling all pak01_dir.vpk's...")
 
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
+        if not self.game.is_installed(DirectoryMode.DEVELOPER):
             logger.warning("Unable to disable pak01_dir.vpk's: Developer mode is not installed!")
             return None
 
@@ -324,11 +324,11 @@ class GameDir:
             Exception: If two ID files are found in the same folder.
             Exception: If more than one of the same ID file is found in different folders.
         """
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.warning("Developer mode is not installed! (Unable to check if any pak01s are enabled)")
+        if not self.game.is_installed(DirectoryMode.DEVELOPER):
+            logger.warning("Developer mode is not fully installed! (Unable to check if any pak01s are enabled)")
             return None
-        if not self.game.installation_exists(DirectoryMode.USER):
-            logger.warning("User mode is not installed! (Unable to check if any pak01s are enabled)")
+        if not self.game.is_installed(DirectoryMode.USER):
+            logger.warning("User mode is not fully installed! (Unable to check if any pak01s are enabled)")
             return None
         steam_game_dir = self.steam.get_games_dir()
 
@@ -376,8 +376,8 @@ class GameDir:
         "Check if the developer directory is out of date by comparing it agains the user directory"
         logger.debug("Checking if developer directory is outdated...")
 
-        if not self.game.installation_exists(DirectoryMode.DEVELOPER):
-            logger.debug("Unable to check outdated state: Developer mode is not installed!")
+        if not self.game.is_installed(DirectoryMode.DEVELOPER):
+            logger.debug("Unable to check outdated state: Developer mode is not fully installed!")
             return None
 
         user_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.USER)

@@ -40,7 +40,7 @@ class GameIDHandler:
 
         self.default_values = {
             "directory_mode": None,
-            "installation_state": InstallationState.NOT_INSTALLED.name,
+            "installation_state": InstallationState.UNKNOWN.name,
             "sync_state": SyncState.UNKNOWN.name,
             "sync_changes": {},
         }
@@ -101,7 +101,7 @@ class GameIDHandler:
             if dir_mode == DirectoryMode.DEVELOPER:
                 message = f"Is {dir_mode.name} mode fully installed?"
                 is_fully_installed = show_message(message, "yesno", "SCRIPT_NAME")
-                install_state = InstallationState.INSTALLED if is_fully_installed else InstallationState.NOT_INSTALLED
+                install_state = InstallationState.INSTALLED if is_fully_installed else InstallationState.UNKNOWN
             else:
                 install_state = InstallationState.INSTALLED
 
@@ -122,7 +122,7 @@ class GameIDHandler:
 
     @call_validate_dir_mode_before_method
     def get_installation_state(self, dir_mode):
-        state_name = self.__get_key(dir_mode, "installation_state", InstallationState.NOT_INSTALLED.name)
+        state_name = self.__get_key(dir_mode, "installation_state", InstallationState.UNKNOWN.name)
         return InstallationState[state_name]
 
     @call_validate_dir_mode_before_method
