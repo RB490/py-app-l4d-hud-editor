@@ -1,4 +1,5 @@
 """Handles game ID information for different directory modes."""
+
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
 import json
 import os
@@ -6,10 +7,10 @@ from enum import Enum
 from tkinter import filedialog
 
 from loguru import logger
-from src.game.game import Game
 from shared_utils.functions import is_subdirectory, show_message
 
 from src.game.constants import DirectoryMode, InstallationState, SyncState
+from src.game.game import Game
 
 
 def call_validate_dir_mode_before_method(func):
@@ -35,6 +36,13 @@ class GameIDHandler:
         self.id_file_names = {
             DirectoryMode.USER: "_hud_editor_id_file__user_directory.DoNotDelete",
             DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
+        }
+
+        self.default_values = {
+            "directory_mode": None,
+            "installation_state": InstallationState.NOT_INSTALLED.name,
+            "sync_state": SyncState.UNKNOWN.name,
+            "sync_changes": {},
         }
 
     @call_validate_dir_mode_before_method
@@ -102,6 +110,7 @@ class GameIDHandler:
                 "directory_mode": dir_mode.name,
                 "installation_state": install_state.name,
                 "sync_state": SyncState.UNKNOWN.name,
+                "sync_changes": {},
             }
 
             id_path = os.path.join(id_dir, self.get_file_name(dir_mode))
@@ -197,11 +206,12 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Unable to create ID file: {err_info}") from err_info
 
+
 def main():
     "Debug"
     game = Game()
 
-    sync_state = game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.FULLY_SYNCED)
+    sync_state = game.dir.id.set_sync_state(DirectoryMode.DEVELOPER, SyncState.SYNCED)
 
     # my_obj = {"mykey1": "value1", "mykey2": "value2", "mykey3": "value3"}
     my_obj = {}
@@ -230,7 +240,7 @@ def test():
     game_id_handler.set_installation_state(dir_mode, installation_state)
 
     # Set sync state for developer directory
-    sync_state = SyncState.FULLY_SYNCED
+    sync_state = SyncState.SYNCED
     game_id_handler.set_sync_state(dir_mode, sync_state)
 
     # Get installation state for developer directory
@@ -246,6 +256,7 @@ def test():
         logger.debug("Retrieved Sync State:", retrieved_sync_state.name)
     else:
         logger.debug("Sync State not found.")
+
 
 if __name__ == "__main__":
     test()

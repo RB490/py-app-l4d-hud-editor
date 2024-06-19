@@ -1,4 +1,38 @@
+installation issue:
+    - Installation cancelled halfway, then resumed, id file broken
+        - Reproduce: dev mode entirely not installed. script says 'not fully installed' also in the 'dev' context menu 'dev' options aren't grayed out
+        ☐ Todo: test install in the same way. no dev volder, cancel halfway, resume to find a fix
+        ☐ Fix: 
+
+    - After installation finished ending up with id file broken the script didnt handle that
+        - Reproduce: edit hud > sync hud > error issue (had to manually resolve ID file)
+        
+        ☐ Fix: improve id file handler by detecting whether requested keys are present at all (for ALL get methods, because when id file is written the keys are all written to file with default values @ 'initial_data' in set_path), and throw an exception if not.
+            - Various ways to do this. Some ideas: modify the __get method to have the check and/or have one of those @function_called_before_method things
+
+            ☐ ^ raise exception if __get() can't get a default value for a key
+
+            ☐ ^ use modern calls instead of that {} format?
+
+            ☐  make todo to combine these todo improvements and apply them to any other classes that could use them. might not be that many as this is fairly specific. possibly Settings() classes/my shared settings class
+
+		Confirm test changes with tests
+
 current: 
+
+    ✔ Id file: refactor: The __get function has a default parameter but the default values are already set by initial_data in set_path. This is redundant (?) should i keep both, what is best practice. Yes because in case of the id file being modified or corrupted in some way the script wont crash. @done(24-06-19 03:59)
+    ☐ id file: refactor: im currently setting default values for each key in set_path>initial_data and also in the __get_key default_value param. This can be improved by having a single data structure both use instead
+    ☐ id file: various places return an empty object {} like __read_data and __get_data as a fallback. what happens in these cases?
+
+    ☐ id file handler/installation: what happens if i install hud dev mode partially, then delete the id file, restart the program, point it to the partially installed folder? and what should happen?    
+        - I should possibly set INSTALLATION_STATE to UNKNOWN same as i did with sync. 
+        - Installer already handled UNKNOWN installation state
+
+    ☐ Sync states: Refactor:
+        ☐ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED
+        ☐ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state
+
+    ☐ Fixed shared logging filter. Couldnt filter hwnd utility shared manager
 
 
 testing:

@@ -207,7 +207,7 @@ class GameInstaller:
                 self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, state)
                 p_gui.update_progress(state.name)
                 self._perform_installation_step(state)
-                time.sleep(2)  # artifically was some amount of time so very short steps are still visible in gui
+                time.sleep(2)  # artifically wait small amount of time so very short steps are still visible in gui
 
             # close progress gui
             p_gui.destroy()

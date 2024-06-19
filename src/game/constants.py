@@ -25,7 +25,7 @@ class DirectoryMode(Enum):
 class SyncState(Enum):
     """Enumeration representing sync states"""
 
-    FULLY_SYNCED = auto()
+    SYNCED = auto()
     NOT_SYNCED = auto()
     UNKNOWN = auto()
 

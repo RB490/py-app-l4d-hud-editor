@@ -102,7 +102,7 @@ class GameDir:
         """Search all game directories including the backup folder to find the file"""
 
         is_synced = False
-        if self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER) == SyncState.FULLY_SYNCED:
+        if self.game.dir.id.get_sync_state(DirectoryMode.DEVELOPER) == SyncState.SYNCED:
             is_synced = True
 
         # variables

@@ -92,7 +92,7 @@ class TestHudSyncer(unittest.TestCase):
         self.assertEqual(self.syncer.target_dir_root, self.fake_target_dir)
         self.assertEqual(self.syncer.target_dir_main_name, self.fake_main_name)
         self.assertIn(self.fake_main_name, self.syncer.target_sub_dir_names)
-        self.assertEqual(self.syncer.sync_state, SyncState.FULLY_SYNCED)
+        self.assertEqual(self.syncer.sync_state, SyncState.SYNCED)
 
         # Assertions for directory structure
         required_dirs = [

@@ -255,7 +255,7 @@ class HudSyncer(metaclass=Singleton):
         Returns:
             bool: True if fully synced, False otherwise.
         """
-        if self.get_sync_status() == SyncState.FULLY_SYNCED:
+        if self.get_sync_status() == SyncState.SYNCED:
             return True
         else:
             return False
@@ -327,7 +327,7 @@ class HudSyncer(metaclass=Singleton):
         # self.__overwrite_target()
         self.__unsync_deleted_source_items()
 
-        self.__set_sync_state(SyncState.FULLY_SYNCED)
+        self.__set_sync_state(SyncState.SYNCED)
         self.game.dir.id.set_sync_changes(DirectoryMode.DEVELOPER, self.item_changes)
 
         logger.info("Synced!")
