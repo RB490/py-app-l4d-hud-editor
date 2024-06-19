@@ -44,7 +44,7 @@ class GameIDHandler:
             DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
         }
 
-        self.default_values = {
+        self.default_data = {
             "installation_state": InstallationState.UNKNOWN.name,
             "sync_state": SyncState.UNKNOWN.name,
             "sync_changes": {},
@@ -111,7 +111,7 @@ class GameIDHandler:
                 install_state = InstallationState.INSTALLED
 
             # write ID file
-            initial_data = self.default_values.copy()
+            initial_data = self.default_data.copy()
             initial_data["installation_state"] = install_state.name
 
             id_path = os.path.join(id_dir, self.get_file_name(dir_mode))
@@ -154,7 +154,7 @@ class GameIDHandler:
         self.__set_key(dir_mode, "sync_changes", sync_changes)
 
     def __get_key(self, dir_mode, key):
-        default_value = self.default_values.get(key)
+        default_value = self.default_data.get(key)
         if default_value is None:
             raise KeyRetrievalError(f"Default value for key '{key}' is not available.")
 
@@ -181,7 +181,7 @@ class GameIDHandler:
     def __get_data(self, dir_mode):
         id_path = self.__get_path(dir_mode)
         if id_path is None:
-            return {}
+            return self.default_data.copy()
 
         data = self.__read_data(id_path)
         return data
@@ -193,7 +193,7 @@ class GameIDHandler:
                     return json.load(file_handle)
         except Exception as err:
             logger.error(f"Error reading ID content: {err}")
-        return {}  # Fallback to empty json
+        return self.default_data.copy()  # Fallback to default values
 
     def __write_data(self, id_path, data):
         try:

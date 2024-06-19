@@ -627,3 +627,29 @@ image "pyimage2" doesn't exist
     ✔ cheap version of this would be to check if steam is running, and if not abort & tell the user to start steam, and the reason for that being the code getting fucky wucky @done(24-05-26 01:02)
 ✔ feature: redo SteamInfoRetriever. used outside class: get_games_dir, get_exe_path @ SteamPathHandle @done(24-05-27 21:56)
 	- should i handle cases where functions like get_exe_path cant find exe? 
+    ✔ Finish reworking 'installation_exists' @done(24-06-19 12:23)
+
+✔ Sync states: Refactor: @done(24-06-19 12:21)
+	✔ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED @done(24-06-19 12:21)
+	✔ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state @done(24-06-19 12:21)
+
+✔ Id file: refactor: The __get function has a default parameter but the default values are already set by initial_data in set_path. This is redundant (?) should i keep both, what is best practice. Yes because in case of the id file being modified or corrupted in some way the script wont crash. @done(24-06-19 03:59)
+
+✔ Installation cancelled halfway, then resumed, id file broken @done(24-06-19 12:46)
+	✔ Reproduce: dev mode entirely not installed. script says 'not fully installed' also in the 'dev' context menu 'dev' options aren't grayed out @done(24-06-19 12:46)
+	✔ Todo: test install in the same way. no dev volder, cancel halfway, resume to find a fix @done(24-06-19 12:46)
+	✔ Fix: @done(24-06-19 12:46)
+
+✔ After installation finished ending up with id file broken the script didnt handle that @done(24-06-19 12:46)
+	✔ Reproduce: edit hud > sync hud > error issue (had to manually resolve ID file) @done(24-06-19 12:46)
+	
+	✔ Fix: improve id file handler by detecting whether requested keys are present at all (for ALL get methods, because when id file is written the keys are all written to file with default values @ 'initial_data' in set_path), and throw an exception if not. @done(24-06-19 12:46)
+		✔ Various ways to do this. Some ideas: modify the __get method to have the check and/or have one of those @function_called_before_method things @done(24-06-19 12:46)
+
+		✔ ^ raise exception if __get() can't get a default value for a key @done(24-06-19 12:45)
+
+		✔ ^ use modern calls instead of that {} format? @done(24-06-19 12:45)
+
+		✔  make todo to combine these todo improvements and apply them to any other classes that could use them. might not be that many as this is fairly specific. possibly Settings() classes/my shared settings class @done(24-06-19 12:45)
+✔ id file: refactor: im currently setting default values for each key in set_path>initial_data and also in the __get_key default_value param. This can be improved by having a single data structure both use instead @done(24-06-19 12:44)
+✔ id file: __get_data & __read_data use default_data as a fallback instead of empty json @done(24-06-19 12:57)
