@@ -121,7 +121,7 @@ class Game(metaclass=Singleton):
     def installation_completed(self, dir_mode):
         "Is mode installed?"
 
-        if self.dir.id.get_installation_state(dir_mode) == InstallationState.COMPLETED:
+        if self.dir.id.get_installation_state(dir_mode) == InstallationState.INSTALLED:
             logger.debug(f"{dir_mode.name} is fully installed!")
             return True
         else:
@@ -144,10 +144,10 @@ def debug_game_class_set_states_synced_and_installed():
         DirectoryMode.DEVELOPER, SyncState.NOT_SYNCED
     )  # Prevent restore_developer_directory from activating
     game_class.dir.id.set_installation_state(
-        DirectoryMode.DEVELOPER, InstallationState.COMPLETED
+        DirectoryMode.DEVELOPER, InstallationState.INSTALLED
     )  # Prevent restore_developer_directory from activating
 
-    logger.debug("Wrote states: SyncState.NOT_SYNCED & InstallationState.COMPLETED")
+    logger.debug("Wrote states: SyncState.NOT_SYNCED & InstallationState.INSTALLED")
 
 
 def main():
@@ -198,7 +198,7 @@ def main():
     # result = gamez.dir.id.get_installation_state(DirectoryMode.USER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.DEVELOPER)
     # result = gamez.dir.id.get_sync_state(DirectoryMode.USER)
-    # result = SyncState["COMPLETED"]
+    # result = SyncState["INSTALLED"]
 
     ###########################
     # Directory

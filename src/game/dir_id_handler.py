@@ -101,9 +101,9 @@ class GameIDHandler:
             if dir_mode == DirectoryMode.DEVELOPER:
                 message = f"Is {dir_mode.name} mode fully installed?"
                 is_fully_installed = show_message(message, "yesno", "SCRIPT_NAME")
-                install_state = InstallationState.COMPLETED if is_fully_installed else InstallationState.NOT_INSTALLED
+                install_state = InstallationState.INSTALLED if is_fully_installed else InstallationState.NOT_INSTALLED
             else:
-                install_state = InstallationState.COMPLETED
+                install_state = InstallationState.INSTALLED
 
             # write ID file
             initial_data = {
@@ -236,7 +236,7 @@ def test():
     game_id_handler.set_path(dir_mode)
 
     # Set installation state for developer directory
-    installation_state = InstallationState.COMPLETED
+    installation_state = InstallationState.INSTALLED
     game_id_handler.set_installation_state(dir_mode, installation_state)
 
     # Set sync state for developer directory

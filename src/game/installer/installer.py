@@ -111,10 +111,10 @@ class GameInstaller:
         current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
 
         # confirm action is possible
-        if (action == "repair" or action == "update") and current_state != InstallationState.COMPLETED:
+        if (action == "repair" or action == "update") and current_state != InstallationState.INSTALLED:
             show_message(f"Can't {action}! Developer mode is not fully installed", "error", action_description)
             return False
-        elif action == "install" and current_state == InstallationState.COMPLETED:
+        elif action == "install" and current_state == InstallationState.INSTALLED:
             show_message(f"Can't {action}! Developer mode is already installed!", "error", action_description)
             return False
 
@@ -133,7 +133,7 @@ class GameInstaller:
                 # if developer directory was located, check if installation is already completed
                 if result:
                     current_state = self.game.dir.id.get_installation_state(DirectoryMode.DEVELOPER)
-                    if current_state == InstallationState.COMPLETED:
+                    if current_state == InstallationState.INSTALLED:
                         logger.debug(f"Successfully selected the developer directory. Finished {action_description}.")
                         return True
             except Exception as err_info:
@@ -213,7 +213,7 @@ class GameInstaller:
             p_gui.destroy()
 
             # Update installation state to completed
-            self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.COMPLETED)
+            self.game.dir.id.set_installation_state(DirectoryMode.DEVELOPER, InstallationState.INSTALLED)
             return True
         except Exception as err_info:
             p_gui.destroy()
@@ -406,7 +406,9 @@ class GameInstaller:
 
         # run game to rebuild audio
         self.game.window.close()
-        result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False, restore_pos=False)  # don't overwrite valve.rc & don't restore position as this hangs the code while rebuilding audio cache until after the game is closed
+        result = self.game.window.run(
+            DirectoryMode.DEVELOPER, write_config=False, restore_pos=False
+        )  # don't overwrite valve.rc & don't restore position as this hangs the code while rebuilding audio cache until after the game is closed
 
         logger.debug("debug: game is fully running!")
         if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
