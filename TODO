@@ -1,7 +1,6 @@
 current: 
 
-    ☐ Sync class inspect 'get_sync_status' it sets sync state before getting it? doesnt that defeat the point. with that said, syncing code seems to work amazing. how?
-
+    ☐ fix: test_hud_syncer
     
 testing:        
     ☐ testing: Test the program by using it to edit HUD's

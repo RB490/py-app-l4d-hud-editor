@@ -233,3 +233,6 @@ def unit_test_hud_syncer():
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
+
+if __name__ == "__main__":
+    unit_test_hud_syncer()
