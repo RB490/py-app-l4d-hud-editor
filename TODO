@@ -1,27 +1,9 @@
-exceptions:
-    ✔ game.window.run() @done(24-06-19 17:21)
-    ✔ game.dir.set() @done(24-06-19 17:21)
-
-
-installation issue:
-
 current: 
 
-    ☐ id file: idea: create get/set keys for retrieving which mode that id file is, similar to the others get_sync get_install_state and use that throughout the program. eg: game.dir.get() uses the id file name right now, might be  better to do it like this
-        - can find these instances with: id.get_file_name
+    ☐ Sync class inspect 'get_sync_status' it sets sync state before getting it? doesnt that defeat the point. with that said, syncing code seems to work amazing. how?
 
-    ☐ id file: refactor: installation is writing id file. im 99% sure this isnt best practice. improve this by moving it to the id file class
-        # write id file
-        id_path = os.path.join(dev_dir, self.game.dir.id.get_file_name(DirectoryMode.DEVELOPER))
-
-    ☐ Sync class inspect 'get_sync_status' it sets sync state before getting it? doesnt that defeat the point
-
+    
+testing:        
+    ☐ testing: Test the program by using it to edit HUD's
+    
     ☐ testing: installer/id_file: perform new installation of dev folder in the same way it broke before. Which means installing about halfway then cancelling, and resuming
-
-    ☐ setting user director should be done manually. if found a pre existing path, use that (parent folder) to open the folder select interface. this is because i will have multiple l4d2 installations for modding, dont want to randomly pick one
-
-    ☐ Fixed shared logging filter. Couldnt filter hwnd utility shared manager
-
-testing:
-
-    ☐ test: Test the program by using it to edit HUD's

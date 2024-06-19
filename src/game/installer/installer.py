@@ -269,14 +269,14 @@ class GameInstaller:
     def _copy_game_files(self):
         user_dir = self.game.dir.get(DirectoryMode.USER)
         dev_dir = self.game.dir.get(DirectoryMode.DEVELOPER)
-        user_id_file_name = self.game.dir.id.get_file_name(DirectoryMode.USER)
+        id_file_ext = self.game.dir.id.get_file_extension()
 
-        # Copy all files from the root folder to the developer folder (except user ID file)
+        # Copy all files from the root folder to the developer folder (except files with the specified extension)
         for item in os.listdir(user_dir):
             src_item = os.path.join(user_dir, item)
             dest_item = os.path.join(dev_dir, item)
 
-            if os.path.isfile(src_item) and os.path.basename(src_item) != user_id_file_name:
+            if os.path.isfile(src_item) and not src_item.endswith(id_file_ext):
                 shutil.copy2(src_item, dest_item)
 
         # Loop through subfolders and call copy_directory

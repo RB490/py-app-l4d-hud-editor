@@ -1,11 +1,11 @@
 """Handles game ID information for different directory modes."""
 
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
-from collections import defaultdict
 import json
 import os
-from enum import Enum
 import sys
+from collections import defaultdict
+from enum import Enum
 from tkinter import filedialog
 
 from loguru import logger
@@ -41,11 +41,11 @@ class GameIDHandler:
         """Initialize the GameIDHandler with the associated game class."""
         self.game = game_class
 
-        self.id_file_extension = "l4d_hud_editor"
+        self.id_file_extension = ".l4d_hud_editor"
 
         self.id_file_names = {
-            DirectoryMode.USER: f"user_dir.DoNotDelete{self.id_file_extension}",
-            DirectoryMode.DEVELOPER: f"dev_dir.DoNotDelete{self.id_file_extension}",
+            DirectoryMode.USER: f"user_dir{self.id_file_extension}",
+            DirectoryMode.DEVELOPER: f"dev_dir{self.id_file_extension}",
         }
 
         self.default_data = {
@@ -54,10 +54,14 @@ class GameIDHandler:
             "sync_changes": {},
         }
 
+    def get_file_extension(self):
+        return self.id_file_extension
+
     @call_validate_dir_mode_before_method
     def get_file_name(self, dir_mode):
         return self.id_file_names[dir_mode]
 
+    @call_validate_dir_mode_before_method
     def __get_path(self, dir_mode):
         """Get the path of the ID file for a specific directory mode."""
         mode_dir = self.game.dir.get(dir_mode)
@@ -286,6 +290,9 @@ def main():
 
 def test():
     "Test ID handler"
+    from shared_utils.functions import loguru_setup_logging_filter
+
+    loguru_setup_logging_filter("DEBUG", "exclude", ["shared_managers.hwnd_manager"])
     game_class = Game()
 
     game_id_handler = game_class.dir.id
@@ -309,14 +316,14 @@ def test():
     # Get installation state for developer directory
     retrieved_installation_state = game_id_handler.get_installation_state(dir_mode)
     if retrieved_installation_state:
-        logger.debug("Retrieved Installation State:", retrieved_installation_state.name)
+        logger.debug(f"Retrieved Installation State: retrieved_installation_state.name")
     else:
         logger.debug("Installation State not found.")
 
     # Get sync state for developer directory
     retrieved_sync_state = game_id_handler.get_sync_state(dir_mode)
     if retrieved_sync_state:
-        logger.debug("Retrieved Sync State:", retrieved_sync_state.name)
+        logger.debug(f"Retrieved Sync State: {retrieved_sync_state.name}")
     else:
         logger.debug("Sync State not found.")
 

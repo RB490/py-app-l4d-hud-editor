@@ -667,3 +667,11 @@ image "pyimage2" doesn't exist
 ✔ id file: user + dev id file deleted. installer handles it okay: dev context menu: install/update/repair/remove @done(24-06-19 17:56)
 	✔ open directory user/dev doesn't @done(24-06-19 17:56)
 	✔ activate mode user/dev doesn't @done(24-06-19 17:56)
+
+    ✔ Update game.dir.get() to use file extension & directory mode independent of file name @done(24-06-20 00:24)
+        ✔ ^ issue: id handler uses __get_path which uses game.dir.get() to find the right id file. which would cause an infinite loop. ask chatgpt about it and/or just keep identifying with file names. in that case i should remove the extra relevant methods added to the id handler class @done(24-06-20 00:24)☐
+        ✔ ^ this just doesn't seem worth it on multiple levels. added code complexity without any benefit. @done(24-06-20 00:24)
+            ✔ multiple additional redundant methods for get/set directory mode with path instead of 'dir_mode' like the rest of get/set @done(24-06-20 00:24)
+            ✔ additional entry to directorymode.unknown @done(24-06-20 00:24)
+            ✔ weird code for retrieving directory mode from id file based on just extension rather than file name @ game.dir.get() @done(24-06-20 00:24)
+        ✔ I added DirectorMode.UNKNOWN because i needed a default setting for dir_id_handler. Does this require any kind of changes outside of the id handler class @done(24-06-20 00:24)
