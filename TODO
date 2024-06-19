@@ -1,30 +1,41 @@
-✔ Finish reworking 'installation_exists' @done(24-06-19 12:23)
+    ✔ Finish reworking 'installation_exists' @done(24-06-19 12:23)
+
+    ✔ Sync states: Refactor: @done(24-06-19 12:21)
+        ✔ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED @done(24-06-19 12:21)
+        ✔ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state @done(24-06-19 12:21)
+
+    ✔ Id file: refactor: The __get function has a default parameter but the default values are already set by initial_data in set_path. This is redundant (?) should i keep both, what is best practice. Yes because in case of the id file being modified or corrupted in some way the script wont crash. @done(24-06-19 03:59)
+
+    ✔ Installation cancelled halfway, then resumed, id file broken @done(24-06-19 12:46)
+        ✔ Reproduce: dev mode entirely not installed. script says 'not fully installed' also in the 'dev' context menu 'dev' options aren't grayed out @done(24-06-19 12:46)
+        ✔ Todo: test install in the same way. no dev volder, cancel halfway, resume to find a fix @done(24-06-19 12:46)
+        ✔ Fix: @done(24-06-19 12:46)
+
+    ✔ After installation finished ending up with id file broken the script didnt handle that @done(24-06-19 12:46)
+        ✔ Reproduce: edit hud > sync hud > error issue (had to manually resolve ID file) @done(24-06-19 12:46)
+        
+        ✔ Fix: improve id file handler by detecting whether requested keys are present at all (for ALL get methods, because when id file is written the keys are all written to file with default values @ 'initial_data' in set_path), and throw an exception if not. @done(24-06-19 12:46)
+            ✔ Various ways to do this. Some ideas: modify the __get method to have the check and/or have one of those @function_called_before_method things @done(24-06-19 12:46)
+
+            ✔ ^ raise exception if __get() can't get a default value for a key @done(24-06-19 12:45)
+
+            ✔ ^ use modern calls instead of that {} format? @done(24-06-19 12:45)
+
+            ✔  make todo to combine these todo improvements and apply them to any other classes that could use them. might not be that many as this is fairly specific. possibly Settings() classes/my shared settings class @done(24-06-19 12:45)
+
 
 installation issue:
-    - Installation cancelled halfway, then resumed, id file broken
-        - Reproduce: dev mode entirely not installed. script says 'not fully installed' also in the 'dev' context menu 'dev' options aren't grayed out
-        ☐ Todo: test install in the same way. no dev volder, cancel halfway, resume to find a fix
-        ☐ Fix: 
 
-    - After installation finished ending up with id file broken the script didnt handle that
-        - Reproduce: edit hud > sync hud > error issue (had to manually resolve ID file)
-        
-        ☐ Fix: improve id file handler by detecting whether requested keys are present at all (for ALL get methods, because when id file is written the keys are all written to file with default values @ 'initial_data' in set_path), and throw an exception if not.
-            - Various ways to do this. Some ideas: modify the __get method to have the check and/or have one of those @function_called_before_method things
-
-            ☐ ^ raise exception if __get() can't get a default value for a key
-
-            ☐ ^ use modern calls instead of that {} format?
-
-            ☐  make todo to combine these todo improvements and apply them to any other classes that could use them. might not be that many as this is fairly specific. possibly Settings() classes/my shared settings class
 
 		Confirm test changes with tests
 
 current: 
 
-    ✔ Id file: refactor: The __get function has a default parameter but the default values are already set by initial_data in set_path. This is redundant (?) should i keep both, what is best practice. Yes because in case of the id file being modified or corrupted in some way the script wont crash. @done(24-06-19 03:59)
-    ☐ id file: refactor: im currently setting default values for each key in set_path>initial_data and also in the __get_key default_value param. This can be improved by having a single data structure both use instead
+
+    ✔ id file: refactor: im currently setting default values for each key in set_path>initial_data and also in the __get_key default_value param. This can be improved by having a single data structure both use instead @done(24-06-19 12:44)
     ☐ id file: various places return an empty object {} like __read_data and __get_data as a fallback. what happens in these cases?
+
+    ☐ id file: replace those weird lines where i use {}? or is that best practice
 
     ☐ id file handler/installation: what happens if i install hud dev mode partially, then delete the id file, restart the program, point it to the partially installed folder? and what should happen?    
         - I should possibly set INSTALLATION_STATE to UNKNOWN same as i did with sync. 
@@ -33,15 +44,18 @@ current:
     ☐ id file: refactor: Game.Dir has 'check_for_invalid_id_file_structure' which looks like it should be part of id file class(?)
 
     ☐ id file: idea: create get/set keys for retrieving which mode that id file is, similar to the others get_sync get_install_state and use that throughout the program. eg: game.dir.get() uses the id file name right now, might be  better to do it like this
+        - can find these instances with: id.get_file_name
+        - ^ this might or might not be a good idea. in any case if i do add 'UNKNOWN' state i would have to look through the rest of my code to see where changes need to be made
+
+    ☐ id file: refactor: installation is writing id file. im 99% sure this isnt best practice. improve this by moving it to the id file class
+        # write id file
+        id_path = os.path.join(dev_dir, self.game.dir.id.get_file_name(DirectoryMode.DEVELOPER))
 
     ☐ Sync class inspect 'get_sync_status' it sets sync state before getting it? doesnt that defeat the point
 
-    ✔ Sync states: Refactor: @done(24-06-19 12:21)
-        ✔ Review which sync states i have and only keep necessary. 'SYNCED' seems weird because i don't support syncing halfway? Do i? I think it maybe should just be IS_SYNCED and NOT_SYNCED @done(24-06-19 12:21)
-        ✔ Do i need syn_state at all? Considering i already have 'sync_changes'. Optionally i could have the methods inside id file handler use sync_changes as a way to retrieve get_sync_state @done(24-06-19 12:21)
+
 
     ☐ Fixed shared logging filter. Couldnt filter hwnd utility shared manager
-
 
 testing:
 

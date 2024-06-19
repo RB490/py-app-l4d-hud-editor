@@ -26,6 +26,12 @@ def call_validate_dir_mode_before_method(func):
     return wrapper
 
 
+class KeyRetrievalError(Exception):
+    """Custom exception for key retrieval errors."""
+
+    pass
+
+
 class GameIDHandler:
     """Handles game ID information for different directory modes."""
 
@@ -39,7 +45,6 @@ class GameIDHandler:
         }
 
         self.default_values = {
-            "directory_mode": None,
             "installation_state": InstallationState.UNKNOWN.name,
             "sync_state": SyncState.UNKNOWN.name,
             "sync_changes": {},
@@ -106,12 +111,8 @@ class GameIDHandler:
                 install_state = InstallationState.INSTALLED
 
             # write ID file
-            initial_data = {
-                "directory_mode": dir_mode.name,
-                "installation_state": install_state.name,
-                "sync_state": SyncState.UNKNOWN.name,
-                "sync_changes": {},
-            }
+            initial_data = self.default_values.copy()
+            initial_data["installation_state"] = install_state.name
 
             id_path = os.path.join(id_dir, self.get_file_name(dir_mode))
             self._create_file(id_path)
@@ -122,7 +123,7 @@ class GameIDHandler:
 
     @call_validate_dir_mode_before_method
     def get_installation_state(self, dir_mode):
-        state_name = self.__get_key(dir_mode, "installation_state", InstallationState.UNKNOWN.name)
+        state_name = self.__get_key(dir_mode, "installation_state")
         return InstallationState[state_name]
 
     @call_validate_dir_mode_before_method
@@ -141,18 +142,22 @@ class GameIDHandler:
 
     @call_validate_dir_mode_before_method
     def get_sync_state(self, dir_mode):
-        state_name = self.__get_key(dir_mode, "sync_state", SyncState.UNKNOWN.name)
+        state_name = self.__get_key(dir_mode, "sync_state")
         return SyncState[state_name]
 
     @call_validate_dir_mode_before_method
     def get_sync_changes(self, dir_mode):
-        return self.__get_key(dir_mode, "sync_changes", {})
+        return self.__get_key(dir_mode, "sync_changes")
 
     @call_validate_dir_mode_before_method
     def set_sync_changes(self, dir_mode, sync_changes):
         self.__set_key(dir_mode, "sync_changes", sync_changes)
 
-    def __get_key(self, dir_mode, key, default_value):
+    def __get_key(self, dir_mode, key):
+        default_value = self.default_values.get(key)
+        if default_value is None:
+            raise KeyRetrievalError(f"Default value for key '{key}' is not available.")
+
         data = self.__get_data(dir_mode)
         return data.get(key, default_value)
 
