@@ -8,9 +8,7 @@ installation issue:
 current: 
 
 
-    ☐ id file: user + dev id file deleted. installer handles it okay: dev context menu: install/update/repair/remove
-        - open directory user/dev doesn't
-        - activate mode user/dev doesn't
+
     
     ☐ refactor: use exceptions rather than true/false
 

@@ -83,7 +83,7 @@ class HudEditor:
 
             # is developer mode installed? - also checks for user directory
             if not self.game.is_installed(DirectoryMode.DEVELOPER):
-                show_message("Development mode not fully installed!", "error")
+                show_message("Development mode not (fully) installed!", "error")
                 show_start_gui()
                 return False
 

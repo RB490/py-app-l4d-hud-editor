@@ -340,7 +340,7 @@ class GameDir:
         logger.debug("Checking if developer directory is outdated...")
 
         if not self.game.is_installed(DirectoryMode.DEVELOPER):
-            logger.debug("Unable to check outdated state: Developer mode is not fully installed!")
+            logger.debug("Unable to check outdated state: Developer mode is not (fully) installed!")
             return None
 
         user_pak01_subdirs = self._get_pak01_vpk_subdirs(DirectoryMode.USER)

@@ -112,7 +112,7 @@ class GameInstaller:
 
         # confirm action is possible
         if (action == "repair" or action == "update") and current_state != InstallationState.INSTALLED:
-            show_message(f"Can't {action}! Developer mode is not fully installed", "error", action_description)
+            show_message(f"Can't {action}! Developer mode is not (fully) installed", "error", action_description)
             return False
         elif action == "install" and current_state == InstallationState.INSTALLED:
             show_message(f"Can't {action}! Developer mode is already installed!", "error", action_description)

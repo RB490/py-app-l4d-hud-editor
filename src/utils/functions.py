@@ -291,6 +291,9 @@ def run_startup_checks_and_actions():
     # warn about dev being out of date
     check_dev_directory_out_of_date(g_game)
 
+    # check id files
+    g_game.dir.id.quit_if_invalid_id_file_structure()
+
 
 def check_dev_directory_out_of_date(game_instance):
     dev_duration_checker = DurationCheckManager("last_dev_uptodate_check_date", 1, "days")

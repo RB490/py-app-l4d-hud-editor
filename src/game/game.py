@@ -125,8 +125,9 @@ class Game(metaclass=Singleton):
             logger.debug(f"{dir_mode.name} is fully installed!")
             return True
         else:
-            logger.debug(f"{dir_mode.name} is not fully installed!")
+            logger.debug(f"{dir_mode.name} is not (fully) installed!")
             return False
+
 
 def debug_game_class_set_states_synced_and_installed():
     """Debug"""

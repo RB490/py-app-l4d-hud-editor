@@ -50,13 +50,6 @@ class GameIDHandler:
             "sync_changes": {},
         }
 
-        # Perform initial validation
-        try:
-            self.__check_for_invalid_id_file_structure()
-        except Exception as e:
-            show_message(f"Invalid ID file structure ({e}). This is currently unhandled and needs to be fixed. Closing...")
-            quit()
-
     @call_validate_dir_mode_before_method
     def get_file_name(self, dir_mode):
         return self.id_file_names[dir_mode]
@@ -218,7 +211,7 @@ class GameIDHandler:
         except Exception as err_info:
             raise Exception(f"Unable to create ID file: {err_info}") from err_info
 
-    def _check_for_invalid_id_file_structure(self):
+    def quit_if_invalid_id_file_structure(self):
         """
         Check for invalid ID file structures in the Steam game directory.
 
@@ -230,10 +223,10 @@ class GameIDHandler:
             Exception: If more than one of the same ID file is found in different folders.
         """
         if not self.game.is_installed(DirectoryMode.DEVELOPER):
-            logger.warning("Developer mode is not fully installed! Unable to check id file structure")
+            logger.warning("Developer mode is not (fully) installed! Unable to check id file structure")
             return None
         if not self.game.is_installed(DirectoryMode.USER):
-            logger.warning("User mode is not fully installed! Unable to check id file structure")
+            logger.warning("User mode is not (fully) installed! Unable to check id file structure")
             return None
         steam_game_dir = self.game.steam.get_games_dir()
 
@@ -259,21 +252,28 @@ class GameIDHandler:
                 if id_files_in_game_dir:
                     id_files_in_folders[game_dir] = id_files_in_game_dir
 
-        # Check for two ID files in the same folder
-        for folder, id_files in id_files_in_folders.items():
-            if len(id_files) > 1:
-                raise Exception(f"Multiple ID files found in folder '{folder}': {', '.join(id_files)}")
+                # Perform initial validation
+        try:
+            # Check for two ID files in the same folder
+            for folder, id_files in id_files_in_folders.items():
+                if len(id_files) > 1:
+                    raise Exception(f"Multiple ID files found in folder '{folder}': {', '.join(id_files)}")
 
-        # Check for more than one of the same ID file in any folder
-        id_counts = {}
-        for id_files in id_files_in_folders.values():
-            for id_file in id_files:
-                if id_file not in id_counts:
-                    id_counts[id_file] = 1
-                else:
-                    id_counts[id_file] += 1
-                    if id_counts[id_file] > 1:
-                        raise Exception(f"More than one '{id_file}' file found in different folders")
+            # Check for more than one of the same ID file in any folder
+            id_counts = {}
+            for id_files in id_files_in_folders.values():
+                for id_file in id_files:
+                    if id_file not in id_counts:
+                        id_counts[id_file] = 1
+                    else:
+                        id_counts[id_file] += 1
+                        if id_counts[id_file] > 1:
+                            raise Exception(f"More than one '{id_file}' file found in different folders")
+        except Exception as e:
+            show_message(
+                f"Invalid ID file structure: {e}. \n\nThis is currently unhandled and needs to be fixed.  \n\nClosing..."
+            )
+            quit()
 
         logger.debug("Verified ID file structure!")
 
@@ -307,7 +307,7 @@ def test():
     game_id_handler.set_path(dir_mode)
 
     # Validate the ID file structure
-    game_id_handler._check_for_invalid_id_file_structure()
+    game_id_handler.quit_if_invalid_id_file_structure()
 
     # Set installation state for developer directory
     installation_state = InstallationState.INSTALLED

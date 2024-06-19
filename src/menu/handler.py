@@ -435,7 +435,7 @@ class EditorMenuHandler:
             os.startfile(directory)
         except Exception as err_info:
             logger.debug(f"Could not open user directory: {err_info}")
-            show_message("Directory does not exist!", "error")
+            show_message("Directory does not exist!\n\nTry repairing installation", "error")
 
     def editor_installer_open_dev_dir(self):
         """
@@ -447,7 +447,7 @@ class EditorMenuHandler:
             os.startfile(directory)
         except Exception as err_info:
             logger.debug(f"Could not open developer directory: {err_info}")
-            show_message("Directory does not exist!", "error")
+            show_message("Directory does not exist!\n\nTry repairing installation", "error")
 
     @call_create_and_refresh_menu_after_method
     def editor_installer_enable_dev_mode(self):
@@ -459,8 +459,10 @@ class EditorMenuHandler:
             self.game.dir.set(DirectoryMode.DEVELOPER)
             show_message(f"Enabled {DirectoryMode.DEVELOPER.name} mode!", "info")
         except Exception as e:
-            logger.error(f"An error occurred while enabling developer mode: {e}")
-            show_message(f"An error occurred while enabling developer mode: {str(e)}", "error")
+            logger.error(f"An error occurred while enabling developer mode: {e} (Try repairing installation)")
+            show_message(
+                f"An error occurred while enabling developer mode:\n{str(e)}\n\nTry repairing installation", "error"
+            )
 
     @call_create_and_refresh_menu_after_method
     def editor_installer_disable_dev_mode(self):
@@ -472,8 +474,8 @@ class EditorMenuHandler:
             self.game.dir.set(DirectoryMode.USER)
             show_message(f"Enabled {DirectoryMode.USER.name} mode!", "info")
         except Exception as e:
-            logger.error(f"An error occurred while disabling developer mode: {e}")
-            show_message(f"An error occurred while disabling developer mode: {str(e)}", "error")
+            logger.error(f"An error occurred while disabling developer mode: {e} (Try repairing installation)")
+            show_message(f"An error occurred while disabling developer mode: {str(e)}\n\nTry repairing installation", "error")
 
     def editor_installer_install(self):
         """
