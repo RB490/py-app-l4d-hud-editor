@@ -162,7 +162,10 @@ class GameInstaller:
 
         # activate developer mode
         if self.game.dir.get(DirectoryMode.DEVELOPER):
-            self.game.dir.set(DirectoryMode.DEVELOPER)
+            try:
+                self.game.dir.set(DirectoryMode.DEVELOPER)
+            except Exception as e:
+                raise InstallationError("Could not activate developer directory: {e}")
 
         # enable paks
         self._enable_paks()
@@ -257,7 +260,10 @@ class GameInstaller:
         shutil.copy2(source_exe_path, target_exe_path)
 
         # activate directory
-        self.game.dir.set(DirectoryMode.DEVELOPER)
+        try:
+            self.game.dir.set(DirectoryMode.DEVELOPER)
+        except Exception as e:
+            raise InstallationError("Could not activate developer directory: {e}")
         return
 
     def _copy_game_files(self):
@@ -401,18 +407,24 @@ class GameInstaller:
         valverc_path = os.path.join(cfg_dir, "valve.rc")
 
         # write .rc file
-        with open(valverc_path, "w", encoding="utf-8") as file_handle:
-            file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
+        try:
+            with open(valverc_path, "w", encoding="utf-8") as file_handle:
+                file_handle.write("mat_setvideomode 800 600 1 0; snd_rebuildaudiocache; exit")
+        except IOError as e:
+            logger.error("Failed to write valve.rc file: %s", e)
+            raise InstallationError("Failed to write valve.rc file")
 
         # run game to rebuild audio
-        self.game.window.close()
-        result = self.game.window.run(
-            DirectoryMode.DEVELOPER, write_config=False, restore_pos=False
-        )  # don't overwrite valve.rc & don't restore position as this hangs the code while rebuilding audio cache until after the game is closed
+        try:
+            self.game.window.close()
+            result = self.game.window.run(DirectoryMode.DEVELOPER, write_config=False, restore_pos=False)
+        except Exception as e:
+            logger.error("Failed to run the game: %s", e)
+            raise InstallationError("Failed to run the game and rebuild audio cache: {e}")
 
-        logger.debug("debug: game is fully running!")
-        if not result or not wait_process_close(self.game.get_exe(), 300):  # Account for audio rebuilding
-            raise InstallationError("Failed to run the game and rebuild audio cache!")
+        logger.debug("Debug: game is fully running!")
+        if not result or not wait_process_close(self.game.get_exe(), 300):
+            raise InstallationError("Timed out waiting for game to close after rebuilding audio cache: {e}")
 
         # write default config so manually running the game doesn't rebuild audiocache -> exit
         self.game.write_config()

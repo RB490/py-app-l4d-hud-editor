@@ -12,7 +12,7 @@ import os
 
 from shared_utils.functions import loguru_setup_logging_filter
 
-from src.utils.functions import preform_checks_to_prepare_program_start, show_start_gui
+from src.utils.functions import run_startup_checks_and_actions, show_start_gui
 
 # from packages.game.game import Game
 # from packages.utils.functions import load_data
@@ -25,5 +25,5 @@ from src.utils.functions import preform_checks_to_prepare_program_start, show_st
 # loguru_setup_logging_filter("DEBUG", "exclude", ["shared_managers.hwnd_manager"])
 
 
-preform_checks_to_prepare_program_start()
+run_startup_checks_and_actions()
 show_start_gui()

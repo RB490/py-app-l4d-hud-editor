@@ -8,7 +8,7 @@ from loguru import logger
 from shared_managers.hwnd_manager import HwndManager
 from shared_utils.functions import run_subprocess, show_message
 
-from src.game.constants import InstallationState
+from src.game.constants import DirectoryMode, InstallationState
 from src.utils.constants import DATA_MANAGER, GAME_POSITIONS
 
 
@@ -108,6 +108,7 @@ class GameWindow:
     def run(self, dir_mode, write_config=True, restore_pos=False):
         """Start the game
         'write_config' param is used by installation when rebuilding audio so valve.rc doesnt get overwritten"""
+        logger.info(f"directory mode: {dir_mode.name}")
 
         # cancel if steam is not running
         # running the game without steam running is possible but has unwanted side effects such as steam closing immediately
@@ -116,34 +117,44 @@ class GameWindow:
         if not steam_running:
             raise Exception("Steam is not running!")
 
-        self.game._validate_dir_mode(dir_mode)
+        # validate dir_mode enum
+        try:
+            self.game._validate_dir_mode(dir_mode)
+        except Exception as e:
+            raise Exception(f"Failed to validate directory mode: {e}")
 
-        logger.info(f"directory mode: {dir_mode.name}")
-
-        # confirm dir mode isn't being deleted
-        if self.game.dir.id.get_installation_state(dir_mode) == InstallationState.PENDING_DELETION:
-            show_message(f"{dir_mode} is partially deleted!\n\nRe-install before running", "error")
-            return False
+        # confirm dir mode is installed
+        if not self.game.is_installed(dir_mode):
+            raise Exception(f"{dir_mode} is not (fully) installed! Re-install before running.")
 
         # activate selected dir_mode
-        result = self.game.dir.set(dir_mode)
-        if not result:
-            return False
+        try:
+            self.game.dir.set(dir_mode)
+        except Exception as e:
+            raise Exception(f"Failed to activate the selected directory mode: {e}")
 
-        # run game
+        # if game already running, perform hooks
         if self.is_running():
-            self.__set_hwnd()
-            self.apply_always_on_top_setting()
-            self.restore_saved_position()
+            try:
+                self.__set_hwnd()
+                self.apply_always_on_top_setting()
+                self.restore_saved_position()
+            except Exception as e:
+                raise Exception(f"Error during running game hooks: {e}")
             return True
 
-        # disable any enabled pak01s
-        self.game.dir.disable_any_enabled_pak01s()
+        # modify developer directory before running
+        if dir_mode == DirectoryMode.DEVELOPER:
+            try:
+                # disable any enabled pak01s
+                self.game.dir.disable_any_enabled_pak01s()
 
-        # setup
-        self.game._disable_addons()
-        if write_config:
-            self.game.write_config()
+                # setup
+                self.game._disable_addons()
+                if write_config:
+                    self.game.write_config()
+            except Exception as e:
+                raise Exception(f"Error during developer directory modifications: {e}")
 
         # build game argument params
         game_args = ["-novid", "-console"]  # novid=Skip intro videos  # consoleEnable developer console
@@ -165,12 +176,15 @@ class GameWindow:
 
         # set hwnd
         if hwnd:
-            self.__set_hwnd(hwnd)
-            if restore_pos:
-                self.restore_saved_position()
+            try:
+                self.__set_hwnd(hwnd)
+                if restore_pos:
+                    self.restore_saved_position()
+            except Exception as e:
+                raise Exception(f"Error setting window handle: {e}")
             return True
         else:
-            return False
+            raise Exception("Failed to obtain window handle for the game.")
 
     def is_running(self):
         """Checks if the game is running"""

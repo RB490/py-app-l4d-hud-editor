@@ -455,11 +455,12 @@ class EditorMenuHandler:
         This method enables developer mode.
         """
         logger.debug("Enabling developer mode")
-        result = self.game.dir.set(DirectoryMode.DEVELOPER)
-        if result:
+        try:
+            self.game.dir.set(DirectoryMode.DEVELOPER)
             show_message(f"Enabled {DirectoryMode.DEVELOPER.name} mode!", "info")
-        else:
-            show_message(f"Failed to set {DirectoryMode.DEVELOPER.name} mode!", "info")
+        except Exception as e:
+            logger.error(f"An error occurred while enabling developer mode: {e}")
+            show_message(f"An error occurred while enabling developer mode: {str(e)}", "error")
 
     @call_create_and_refresh_menu_after_method
     def editor_installer_disable_dev_mode(self):
@@ -467,11 +468,12 @@ class EditorMenuHandler:
         This method disables developer mode.
         """
         logger.debug("Disabling developer mode")
-        result = self.game.dir.set(DirectoryMode.USER)
-        if result:
+        try:
+            self.game.dir.set(DirectoryMode.USER)
             show_message(f"Enabled {DirectoryMode.USER.name} mode!", "info")
-        else:
-            show_message(f"Failed to set {DirectoryMode.USER.name} mode!", "info")
+        except Exception as e:
+            logger.error(f"An error occurred while disabling developer mode: {e}")
+            show_message(f"An error occurred while disabling developer mode: {str(e)}", "error")
 
     def editor_installer_install(self):
         """

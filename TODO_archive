@@ -542,7 +542,7 @@ Post:
 ✔ Bug: Installer: Install -> 023-09-06 13:09:00.977 | ERROR    | game.dir_id_handler:__read_data:183 - Error reading ID content: Expecting value: line 1 column 1 (char 0) @done(23-09-06 13:23)
 ✔ Bug: Installer: Install -> No left 4 dead 2 folder existing: Renaming E:\games\steam\steamapps\common\Left 4 Dead 2 -> E:\games\steam\steamapps\common\Left 4 Dead 2yfr5pCKe with timeout: 6 @done(23-09-06 13:32)
 ✔ Bug: GameDir: Can't activate user mode with dev mode uninstalled. Could modify dir.set @done(23-09-06 13:32)
-✔ Bug: VSCode: main.py aka the main script isn't searched: preform_checks_to_prepare_program_start @done(23-09-06 13:35) *.py*
+✔ Bug: VSCode: main.py aka the main script isn't searched: run_startup_checks_and_actions @done(23-09-06 13:35) *.py*
 ✔ Feature: Program: Rename to L4D2 HUD Editor or something like that. HUD Editor for L4D2 @done(23-09-06 13:37)
 ✔ Bug: Browser isn't visible -> unsync hud -> browser opens to clear treeview @done(23-09-06 13:43)
 ✔ Feature: Version #: Automatically increase the # based on git commits or something else? @done(23-09-06 13:54)
@@ -610,7 +610,7 @@ image "pyimage2" doesn't exist
   File "C:\Users\willi\projects\py-app-l4d-hud-editor\src\menu\main.py", line 104, in create_and_refresh_menu
     self.reload_mode_menu = self.menu_reload_mode.get(self.main_menu)
 
-    - info: gets fixed when disabling: preform_checks_to_prepare_program_start()
+    - info: gets fixed when disabling: run_startup_checks_and_actions()
 
     - the issue: the tkinter msgbox that shows when dev installation is out of date
         if g_game.dir.dev_out_of_date():
@@ -653,3 +653,7 @@ image "pyimage2" doesn't exist
 		✔  make todo to combine these todo improvements and apply them to any other classes that could use them. might not be that many as this is fairly specific. possibly Settings() classes/my shared settings class @done(24-06-19 12:45)
 ✔ id file: refactor: im currently setting default values for each key in set_path>initial_data and also in the __get_key default_value param. This can be improved by having a single data structure both use instead @done(24-06-19 12:44)
 ✔ id file: __get_data & __read_data use default_data as a fallback instead of empty json @done(24-06-19 12:57)
+✔ id file handler/installation: what happens if i install hud dev mode partially, then delete the id file, restart the program, point it to the partially installed folder? and what should happen? @done(24-06-19 12:57)
+    ✔ I should possibly set INSTALLATION_STATE to UNKNOWN same as i did with sync. @done(24-06-19 12:57)
+    ✔ Installer already handled UNKNOWN installation state @done(24-06-19 12:57)
+    ✔ ^ installer handles this gracefully @done(24-06-19 12:57)

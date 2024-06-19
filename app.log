@@ -1,0 +1,35 @@
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred
+ERROR:root:Exception occurred
+Traceback (most recent call last):
+  File "C:\Users\willi\Downloads\exception_test.py", line 10, in cause_exception
+    raise ValueError("An unexpected error occurred")
+ValueError: An unexpected error occurred

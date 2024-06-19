@@ -15,6 +15,24 @@ from src.utils.functions import get_backup_filename, get_backup_path, get_start_
 from src.utils.steam_path_handler import SteamPathHandler
 
 
+class DirectorySettingError(Exception):
+    """Base exception for directory setting errors."""
+
+    pass
+
+
+class DirectoryVerificationError(DirectorySettingError):
+    """Raised when directory verification fails."""
+
+    pass
+
+
+class RenameTimeoutError(DirectorySettingError):
+    """Raised when renaming a directory times out."""
+
+    pass
+
+
 def raise_exception_if_invalid_path_format(func):
     "Check if hwnd is running"
 
@@ -50,7 +68,11 @@ class GameDir:
         Args:
             dir_mode (DirectoryMode): The target directory mode to set.
         Returns:
-            bool: True if the directory was successfully set; False otherwise.
+            bool: True if the directory was successfully set.
+        Raises:
+            DirectoryVerificationError: If directory verification fails.
+            RenameTimeoutError: If renaming a directory times out.
+            DirectorySettingError: For other directory setting errors.
         """
         self.game._validate_dir_mode(dir_mode)
         logger.debug(f"Setting mode: {dir_mode.name}")
@@ -66,7 +88,7 @@ class GameDir:
 
         # Verify target directory
         if not verify_directory(target_dir, "Could not retrieve target directory!"):
-            return False
+            raise DirectoryVerificationError("Could not retrieve target directory!")
 
         # Check if the target directory is already active
         if vanilla_dir and os.path.exists(vanilla_dir) and os.path.samefile(target_dir, vanilla_dir):
@@ -81,19 +103,19 @@ class GameDir:
             random_string = generate_random_string()
             vanilla_dir_renamed = vanilla_dir + random_string
             if not rename_with_timeout(vanilla_dir, vanilla_dir_renamed, rename_timeout):
-                return False
+                raise RenameTimeoutError("Renaming vanilla directory timed out!")
 
         # Verify and rename source directory if source_dir == vanilla_dir
         if source_dir == vanilla_dir:
             if vanilla_dir and not verify_directory(vanilla_dir, "Could not retrieve vanilla directory!"):
-                return False
+                raise DirectoryVerificationError("Could not retrieve vanilla directory!")
             source_dir_backup = self._get_random_dir_name_for(source_mode)
             if not rename_with_timeout(source_dir, source_dir_backup, rename_timeout):
-                return False
+                raise RenameTimeoutError("Renaming source directory timed out!")
 
         # Activate the target mode
         if not rename_with_timeout(target_dir, vanilla_dir, rename_timeout):
-            return False
+            raise RenameTimeoutError("Renaming target directory timed out!")
 
         return True
 
@@ -325,10 +347,10 @@ class GameDir:
             Exception: If more than one of the same ID file is found in different folders.
         """
         if not self.game.is_installed(DirectoryMode.DEVELOPER):
-            logger.warning("Developer mode is not fully installed! (Unable to check if any pak01s are enabled)")
+            logger.warning("Developer mode is not fully installed! Unable to check id file structure")
             return None
         if not self.game.is_installed(DirectoryMode.USER):
-            logger.warning("User mode is not fully installed! (Unable to check if any pak01s are enabled)")
+            logger.warning("User mode is not fully installed! Unable to check id file structure")
             return None
         steam_game_dir = self.steam.get_games_dir()
 

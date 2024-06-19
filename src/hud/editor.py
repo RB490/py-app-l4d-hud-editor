@@ -110,9 +110,10 @@ class HudEditor:
             self.stop_game_exit_check()
 
             # enable dev mode
-            result = self.game.dir.set(DirectoryMode.DEVELOPER)
-            if not result:
-                logger.warning("Could not activate developer mode")
+            try:
+                self.game.dir.set(DirectoryMode.DEVELOPER)
+            except Exception as e:
+                show_message(f"An error occurred while enabling developer mode: {str(e)}", "error")
                 if called_by_start_gui:
                     show_start_gui()
                 return False
@@ -125,7 +126,7 @@ class HudEditor:
                 self.game.window.run(DirectoryMode.DEVELOPER)
             except Exception as e:
                 self.unsync()
-                show_message(f"failed to run game: {e}")
+                show_message(f"Failed to run game: {e}")
                 if called_by_start_gui:
                     show_start_gui()
                 return False

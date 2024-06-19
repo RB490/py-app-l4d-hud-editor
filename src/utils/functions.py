@@ -274,7 +274,7 @@ def get_mouse_position_on_click(callback):
     root.mainloop()
 
 
-def preform_checks_to_prepare_program_start():
+def run_startup_checks_and_actions():
     """Run vital checks before starting program so i don't need to add them everywhere"""
     from src.game.game import Game
     from src.hud.hud import Hud
@@ -297,6 +297,8 @@ def preform_checks_to_prepare_program_start():
     except Exception as e_info:
         show_message(f"Invalid ID file structure! Fix it before running program: {e_info}")
         # raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
+        quit()
+
 
 def check_dev_directory_out_of_date(game_instance):
     dev_duration_checker = DurationCheckManager("last_dev_uptodate_check_date", 1, "days")
@@ -304,6 +306,7 @@ def check_dev_directory_out_of_date(game_instance):
         # Check if the developer directory is out of date and show a warning if it is
         if game_instance.dir.dev_out_of_date():
             show_message("Developer directory is out of date!\nConsider updating it", "warning")
+
 
 def save_and_exit_script():
     """Exit the script"""

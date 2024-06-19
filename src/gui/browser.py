@@ -31,7 +31,7 @@ from src.utils.constants import (
     HOTKEY_SYNC_HUD,
     HOTKEY_TOGGLE_BROWSER,
 )
-from src.utils.functions import get_image_for_file_extension, preform_checks_to_prepare_program_start
+from src.utils.functions import get_image_for_file_extension, run_startup_checks_and_actions
 
 
 class GuiHudBrowser(BaseGUI, metaclass=Singleton):
@@ -708,7 +708,7 @@ def main():
 
 if __name__ == "__main__":
     os.system("cls")
-    preform_checks_to_prepare_program_start()
+    run_startup_checks_and_actions()
     loguru_setup_logging_filter("INFO")
     # loguru_setup_logging_filter("DEBUG")
     # loguru_setup_logging_filter("DEBUG", "include", ["src.gui.browser"])

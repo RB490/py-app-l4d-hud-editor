@@ -40,8 +40,8 @@ class GameIDHandler:
         self.game = game_class
 
         self.id_file_names = {
-            DirectoryMode.USER: "_hud_editor_id_file__user_directory.DoNotDelete",
-            DirectoryMode.DEVELOPER: "_hud_editor_id_file__dev_directory.DoNotDelete",
+            DirectoryMode.USER: "user_dir.DoNotDelete.l4d_hud_editor",
+            DirectoryMode.DEVELOPER: "dev_dir.DoNotDelete.l4d_hud_editor",
         }
 
         self.default_data = {
