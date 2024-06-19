@@ -335,65 +335,6 @@ class GameDir:
         logger.debug("All developer directory pak01_dir.vpk's are disabled!")
         return False
 
-    def check_for_invalid_id_file_structure(self):
-        """
-        Check for invalid ID file structures in the Steam game directory.
-
-        This method searches for ID files (user and developer) within subdirectories of
-        the Steam game directory and performs checks for invalid file structures.
-
-        Raises:
-            Exception: If two ID files are found in the same folder.
-            Exception: If more than one of the same ID file is found in different folders.
-        """
-        if not self.game.is_installed(DirectoryMode.DEVELOPER):
-            logger.warning("Developer mode is not fully installed! Unable to check id file structure")
-            return None
-        if not self.game.is_installed(DirectoryMode.USER):
-            logger.warning("User mode is not fully installed! Unable to check id file structure")
-            return None
-        steam_game_dir = self.steam.get_games_dir()
-
-        user_id_file_name = self.game.dir.id.get_file_name(DirectoryMode.USER)
-        dev_id_file_name = self.game.dir.id.get_file_name(DirectoryMode.DEVELOPER)
-
-        id_files_in_folders = {}  # Dictionary to store ID files in each folder
-
-        for game_dir in os.listdir(steam_game_dir):
-            game_dir_path = os.path.join(steam_game_dir, game_dir)
-
-            if os.path.isdir(game_dir_path):
-                id_files_in_game_dir = []
-
-                # Search for user and dev ID files in the current game directory
-                for subdir_item in os.listdir(game_dir_path):
-                    subdir_item_path = os.path.join(game_dir_path, subdir_item)
-
-                    if os.path.isfile(subdir_item_path):
-                        if subdir_item == user_id_file_name or subdir_item == dev_id_file_name:
-                            id_files_in_game_dir.append(subdir_item)
-
-                if id_files_in_game_dir:
-                    id_files_in_folders[game_dir] = id_files_in_game_dir
-
-        # Check for two ID files in the same folder
-        for folder, id_files in id_files_in_folders.items():
-            if len(id_files) > 1:
-                raise Exception(f"Multiple ID files found in folder '{folder}': {', '.join(id_files)}")
-
-        # Check for more than one of the same ID file in any folder
-        id_counts = {}
-        for id_files in id_files_in_folders.values():
-            for id_file in id_files:
-                if id_file not in id_counts:
-                    id_counts[id_file] = 1
-                else:
-                    id_counts[id_file] += 1
-                    if id_counts[id_file] > 1:
-                        raise Exception(f"More than one '{id_file}' file found in different folders")
-
-        logger.debug("Verified ID file structure!")
-
     def dev_out_of_date(self):
         "Check if the developer directory is out of date by comparing it agains the user directory"
         logger.debug("Checking if developer directory is outdated...")

@@ -657,3 +657,9 @@ image "pyimage2" doesn't exist
     ✔ I should possibly set INSTALLATION_STATE to UNKNOWN same as i did with sync. @done(24-06-19 12:57)
     ✔ Installer already handled UNKNOWN installation state @done(24-06-19 12:57)
     ✔ ^ installer handles this gracefully @done(24-06-19 12:57)
+    ✔ id file: refactor: Game.Dir has 'check_for_invalid_id_file_structure' which looks like it should be part of id file class(?) @done(24-06-19 17:39)
+        ✔ it can/could gbe part of id_handler __get_path(). i just need to consider what happens if i throw an exception there. i'm pretty sure when i set/get most values i don't handle exceptions @done(24-06-19 17:39)
+        ✔ could use messagebox.showerror("Error", str(e)) and then quit() after @done(24-06-19 17:39)
+        ✔ could also move 'check_for_invalid_id_file_structure' to the id_handler class & make the invalid files checking some internal function(s) which are used by __get_path and 'check_for_invalid_id_file_structure'. __get_path() definetly needs to confirm valid id file structure paths regardless @done(24-06-19 17:39)
+
+        ✔ ^ also, check_for_invalid_id_file_structure is used in many places. this would clean it up by a lot. just perform the checks inside dir_id_handler and if there's an issue, quit the program because this is an edge case anyways @done(24-06-19 17:39)

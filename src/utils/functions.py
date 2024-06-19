@@ -291,14 +291,6 @@ def run_startup_checks_and_actions():
     # warn about dev being out of date
     check_dev_directory_out_of_date(g_game)
 
-    # verify validity of ID file structure
-    try:
-        g_game.dir.check_for_invalid_id_file_structure()
-    except Exception as e_info:
-        show_message(f"Invalid ID file structure! Fix it before running program: {e_info}")
-        # raise ValueError(f"Invalid ID file structure! Fix it before running program: {e_info}") from e_info
-        quit()
-
 
 def check_dev_directory_out_of_date(game_instance):
     dev_duration_checker = DurationCheckManager("last_dev_uptodate_check_date", 1, "days")

@@ -81,16 +81,6 @@ class HudEditor:
                         show_start_gui()
                     return False
 
-            # verify ID files (here in addition to on start because it might break after program starts)
-            try:
-                self.game.dir.check_for_invalid_id_file_structure()
-            except Exception as e_info:
-                show_message(f"Invalid ID file structure! Can't start HUD editing! {e_info}", "error")
-
-                if called_by_start_gui:
-                    show_start_gui()
-                return False
-
             # is developer mode installed? - also checks for user directory
             if not self.game.is_installed(DirectoryMode.DEVELOPER):
                 show_message("Development mode not fully installed!", "error")
