@@ -7,14 +7,8 @@ installation issue:
 
 current: 
 
-
-
-    
-    ☐ refactor: use exceptions rather than true/false
-
     ☐ id file: idea: create get/set keys for retrieving which mode that id file is, similar to the others get_sync get_install_state and use that throughout the program. eg: game.dir.get() uses the id file name right now, might be  better to do it like this
         - can find these instances with: id.get_file_name
-        - ^ this might or might not be a good idea. in any case if i do add 'UNKNOWN' state i would have to look through the rest of my code to see where changes need to be made
 
     ☐ id file: refactor: installation is writing id file. im 99% sure this isnt best practice. improve this by moving it to the id file class
         # write id file

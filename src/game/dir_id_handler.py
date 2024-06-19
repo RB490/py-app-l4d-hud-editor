@@ -1,9 +1,11 @@
 """Handles game ID information for different directory modes."""
 
 # pylint: disable=protected-access, broad-exception-raised, broad-exception-caught, logging-fstring-interpolation
+from collections import defaultdict
 import json
 import os
 from enum import Enum
+import sys
 from tkinter import filedialog
 
 from loguru import logger
@@ -39,9 +41,11 @@ class GameIDHandler:
         """Initialize the GameIDHandler with the associated game class."""
         self.game = game_class
 
+        self.id_file_extension = "l4d_hud_editor"
+
         self.id_file_names = {
-            DirectoryMode.USER: "user_dir.DoNotDelete.l4d_hud_editor",
-            DirectoryMode.DEVELOPER: "dev_dir.DoNotDelete.l4d_hud_editor",
+            DirectoryMode.USER: f"user_dir.DoNotDelete{self.id_file_extension}",
+            DirectoryMode.DEVELOPER: f"dev_dir.DoNotDelete{self.id_file_extension}",
         }
 
         self.default_data = {
@@ -213,68 +217,53 @@ class GameIDHandler:
 
     def quit_if_invalid_id_file_structure(self):
         """
-        Check for invalid ID file structures in the Steam game directory.
+        Check for invalid ID file structures in the Steam game directory. And quit when invalid
 
-        This method searches for ID files (user and developer) within subdirectories of
-        the Steam game directory and performs checks for invalid file structures.
+        This method searches for ID files within subdirectories of
+        the Steam game directory (one level deep) and performs checks for invalid file structures.
 
         Raises:
             Exception: If two ID files are found in the same folder.
-            Exception: If more than one of the same ID file is found in different folders.
+            Exception: If one kind of ID file (identified by full name & extension) is found in more than one folder.
         """
-        if not self.game.is_installed(DirectoryMode.DEVELOPER):
-            logger.warning("Developer mode is not (fully) installed! Unable to check id file structure")
-            return None
-        if not self.game.is_installed(DirectoryMode.USER):
-            logger.warning("User mode is not (fully) installed! Unable to check id file structure")
-            return None
         steam_game_dir = self.game.steam.get_games_dir()
 
-        user_id_file_name = self.get_file_name(DirectoryMode.USER)
-        dev_id_file_name = self.get_file_name(DirectoryMode.DEVELOPER)
+        # Dictionary to track ID files in each folder
+        id_files_in_folders = defaultdict(list)
+        # Dictionary to track folders for each kind of ID file
+        id_files_in_directories = defaultdict(list)
 
-        id_files_in_folders = {}  # Dictionary to store ID files in each folder
-
-        for game_dir in os.listdir(steam_game_dir):
-            game_dir_path = os.path.join(steam_game_dir, game_dir)
-
-            if os.path.isdir(game_dir_path):
-                id_files_in_game_dir = []
-
-                # Search for user and dev ID files in the current game directory
-                for subdir_item in os.listdir(game_dir_path):
-                    subdir_item_path = os.path.join(game_dir_path, subdir_item)
-
-                    if os.path.isfile(subdir_item_path):
-                        if subdir_item == user_id_file_name or subdir_item == dev_id_file_name:
-                            id_files_in_game_dir.append(subdir_item)
-
-                if id_files_in_game_dir:
-                    id_files_in_folders[game_dir] = id_files_in_game_dir
-
-                # Perform initial validation
         try:
-            # Check for two ID files in the same folder
-            for folder, id_files in id_files_in_folders.items():
-                if len(id_files) > 1:
-                    raise Exception(f"Multiple ID files found in folder '{folder}': {', '.join(id_files)}")
+            # Iterate over subdirectories in the Steam game directory
+            for subdir in os.listdir(steam_game_dir):
+                subdir_path = os.path.join(steam_game_dir, subdir)
 
-            # Check for more than one of the same ID file in any folder
-            id_counts = {}
-            for id_files in id_files_in_folders.values():
-                for id_file in id_files:
-                    if id_file not in id_counts:
-                        id_counts[id_file] = 1
-                    else:
-                        id_counts[id_file] += 1
-                        if id_counts[id_file] > 1:
-                            raise Exception(f"More than one '{id_file}' file found in different folders")
+                if os.path.isdir(subdir_path):
+                    # List all files in the subdirectory
+                    files = os.listdir(subdir_path)
+
+                    # Find ID files in the current subdirectory
+                    id_files = [f for f in files if f.endswith(self.id_file_extension)]
+
+                    # Check if there are multiple ID files in the same folder
+                    if len(id_files) > 1:
+                        raise Exception(f"Multiple ID files found in directory: {subdir_path}")
+
+                    # Track ID files and their corresponding directories
+                    for id_file in id_files:
+                        id_files_in_folders[subdir_path].append(id_file)
+                        id_files_in_directories[id_file].append(subdir_path)
+
+            # Check if the same kind of ID file is found in more than one folder
+            for id_file, directories in id_files_in_directories.items():
+                if len(directories) > 1:
+                    raise Exception(f"ID file '{id_file}' found in multiple directories: {directories}")
+
         except Exception as e:
             show_message(
                 f"Invalid ID file structure: {e}. \n\nThis is currently unhandled and needs to be fixed.  \n\nClosing..."
             )
-            quit()
-
+            sys.exit(1)
         logger.debug("Verified ID file structure!")
 
 
